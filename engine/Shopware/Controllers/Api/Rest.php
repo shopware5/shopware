@@ -22,20 +22,23 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\Api\Resource;
+use Shopware\Components\Api\Resource\Resource as AbstractResource;
 
 class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 {
+    /**
+     * @var string
+     */
     protected $apiBaseUrl;
 
     /**
-     * @var Resource\Resource
+     * @var AbstractResource
      */
     protected $resource;
 
     public function preDispatch()
     {
-        if (($this->resource instanceof Resource\Resource) && $this->container->initialized('auth')) {
+        if (($this->resource instanceof AbstractResource) && $this->container->initialized('auth')) {
             $this->resource->setAcl($this->container->get('acl'));
             $this->resource->setRole($this->container->get('auth')->getIdentity()->role);
         }
@@ -74,6 +77,8 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
      * Controller Action for the batchAction
      *
      * @throws RuntimeException
+     *
+     * @return void
      */
     public function batchAction()
     {
@@ -85,9 +90,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
 
         $params = $this->Request()->getPost();
 
-        $this->resource->setResultMode(
-            Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
-        );
+        $this->resource->setResultMode(AbstractResource::HYDRATE_ARRAY);
         $result = $this->resource->batch($params);
 
         $this->View()->assign(['success' => true, 'data' => $result]);
@@ -97,6 +100,8 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
      * Controller Action for the batchDelete
      *
      * @throws RuntimeException
+     *
+     * @return void
      */
     public function batchDeleteAction()
     {
@@ -112,9 +117,7 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
         // Remove stack-related parameters
         unset($params['module'], $params['controller'], $params['action']);
 
-        $this->resource->setResultMode(
-            Shopware\Components\Api\Resource\Resource::HYDRATE_ARRAY
-        );
+        $this->resource->setResultMode(AbstractResource::HYDRATE_ARRAY);
         $result = $this->resource->batchDelete($params);
 
         $this->View()->assign(['success' => true, 'data' => $result]);

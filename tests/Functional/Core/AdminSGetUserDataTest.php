@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,14 +24,19 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Core;
+
+use Enlight_Components_Session_Namespace;
+use Enlight_Controller_Request_RequestTestCase;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Models\Customer\Customer;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class sAdminSGetUserDataTest extends TestCase
+class AdminSGetUserDataTest extends TestCase
 {
+    use ContainerTrait;
     use CustomerLoginTrait;
     use DatabaseTransactionBehaviour;
 
@@ -38,9 +45,7 @@ class sAdminSGetUserDataTest extends TestCase
         $sql = file_get_contents(__DIR__ . '/fixtures/user_address_change.sql');
         static::assertIsString($sql);
 
-        Shopware()->Container()->get('dbal_connection')->exec($sql);
-
-        parent::setUp();
+        $this->getContainer()->get('dbal_connection')->executeStatement($sql);
     }
 
     public function testSGetUserDataWithPreselectedShippingAddress(): void
@@ -54,11 +59,14 @@ class sAdminSGetUserDataTest extends TestCase
             '2021-07-09 07:08:11'
         );
 
-        $session = Shopware()->Container()->get('session');
-        static::assertInstanceOf(\Enlight_Components_Session_Namespace::class, $session);
+        $session = $this->getContainer()->get('session');
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setControllerName('checkout');
+        $this->getContainer()->get('front')->setRequest($request);
+        static::assertInstanceOf(Enlight_Components_Session_Namespace::class, $session);
         $session->offsetSet('checkoutShippingAddressId', $countryId);
 
-        $result = Shopware()->Modules()->Admin()->sGetUserData();
+        $result = $this->getContainer()->get('modules')->Admin()->sGetUserData();
         static::assertIsArray($result);
 
         $this->logOutCustomer();
@@ -72,8 +80,8 @@ class sAdminSGetUserDataTest extends TestCase
     {
         $shippingAddress = 701;
 
-        $sql = 'UPDATE s_user_addresses SET user_id = 4 WHERE id = 701';
-        Shopware()->Container()->get('dbal_connection')->exec($sql);
+        $sql = 'UPDATE s_user_addresses SET user_id = 1 WHERE id = 701';
+        $this->getContainer()->get('dbal_connection')->executeStatement($sql);
 
         $this->loginCustomer(
             'f375fe1b4ad9c6f2458844226831463f',
@@ -82,11 +90,13 @@ class sAdminSGetUserDataTest extends TestCase
             '2021-07-09 07:08:11'
         );
 
-        $session = Shopware()->Container()->get('session');
-        static::assertInstanceOf(\Enlight_Components_Session_Namespace::class, $session);
+        $session = $this->getContainer()->get('session');
+        static::assertInstanceOf(Enlight_Components_Session_Namespace::class, $session);
         $session->offsetSet('checkoutShippingAddressId', $shippingAddress);
-
-        $result = Shopware()->Modules()->Admin()->sGetUserData();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setControllerName('checkout');
+        $this->getContainer()->get('front')->setRequest($request);
+        $result = $this->getContainer()->get('modules')->Admin()->sGetUserData();
         static::assertIsArray($result);
 
         $this->logOutCustomer();
@@ -107,9 +117,8 @@ class sAdminSGetUserDataTest extends TestCase
             '2021-07-09 07:08:11'
         );
 
-        /** @var CustomerServiceInterface $customerService */
-        $customerService = Shopware()->Container()->get('shopware_account.customer_service');
-        $customerRepository = Shopware()->Container()->get('models')->getRepository(Customer::class);
+        $customerService = $this->getContainer()->get('shopware_account.customer_service');
+        $customerRepository = $this->getContainer()->get('models')->getRepository(Customer::class);
         $customer = $customerRepository->find($customerId);
 
         static::assertInstanceOf(Customer::class, $customer);
@@ -123,7 +132,7 @@ class sAdminSGetUserDataTest extends TestCase
          * still has the old value of '2021-07-09 07:08:11', so sCheckUser
          * should fail.
          */
-        static::assertFalse(Shopware()->Modules()->Admin()->sCheckUser());
+        static::assertFalse($this->getContainer()->get('modules')->Admin()->sCheckUser());
 
         $this->loginCustomer(
             '2af1572ba5d04d6cbb916cce10f31d2b',
@@ -132,6 +141,6 @@ class sAdminSGetUserDataTest extends TestCase
             $customer->getPasswordChangeDate()->format('Y-m-d H:i:s')
         );
 
-        static::assertTrue(Shopware()->Modules()->Admin()->sCheckUser());
+        static::assertTrue($this->getContainer()->get('modules')->Admin()->sCheckUser());
     }
 }

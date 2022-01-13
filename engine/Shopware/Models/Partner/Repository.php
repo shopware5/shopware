@@ -25,8 +25,11 @@
 namespace Shopware\Models\Partner;
 
 use DateTimeInterface;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Order\Order;
 
 /**
  * Repository for the Partner model (Shopware\Models\Partner\Partner).
@@ -42,11 +45,11 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select the partners for the backend list
      *
-     * @param array|null $order
-     * @param int|null   $offset
-     * @param int|null   $limit
+     * @param array<array{property: string, direction: string}>|null $order
+     * @param int|null                                               $offset
+     * @param int|null                                               $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getListQuery($order = null, $offset = null, $limit = null)
     {
@@ -65,7 +68,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array $order
+     * @param array<array{property: string, direction: string}>|null $order
      *
      * @return QueryBuilder
      */
@@ -82,7 +85,7 @@ class Repository extends ModelRepository
                 '(' . $this->getDatePartListDQL('o') . ') as yearlyAmount',
                 '(' . $this->getDatePartListDQL('om', true) . ') as monthlyAmount',
             ])
-            ->from(\Shopware\Models\Partner\Partner::class, 'partner');
+            ->from(Partner::class, 'partner');
 
         if (!empty($order)) {
             $builder->addOrderBy($order);
@@ -96,7 +99,7 @@ class Repository extends ModelRepository
      *
      * @param array $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getDetailQuery($filter)
     {
@@ -134,7 +137,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface $toDate
      * @param float|int         $userCurrencyFactor
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getStatisticListQuery($order, $offset, $limit, $partnerId, $summary, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
@@ -151,12 +154,12 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getStatisticListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null        $order
-     * @param int               $partnerId
-     * @param bool              $summary
-     * @param DateTimeInterface $fromDate
-     * @param DateTimeInterface $toDate
-     * @param float|int         $userCurrencyFactor
+     * @param array<array{property: string, direction: string}>|null $order
+     * @param int                                                    $partnerId
+     * @param bool                                                   $summary
+     * @param DateTimeInterface                                      $fromDate
+     * @param DateTimeInterface                                      $toDate
+     * @param float|int                                              $userCurrencyFactor
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -180,7 +183,7 @@ class Repository extends ModelRepository
                 'orderState.name as orderStatus',
                 'orderState.id as orderStatusId',
             ])
-            ->from(\Shopware\Models\Order\Order::class, 'o')
+            ->from(Order::class, 'o')
             ->leftJoin('o.partner', 'partner')
             ->leftJoin('o.orderStatus', 'orderState')
             ->leftJoin('o.customer', 'customer')
@@ -214,7 +217,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface $toDate
      * @param float|int         $userCurrencyFactor
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getStatisticChartQuery($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
@@ -243,7 +246,7 @@ class Repository extends ModelRepository
                 'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
                 'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
             ])
-            ->from(\Shopware\Models\Order\Order::class, 'o')
+            ->from(Order::class, 'o')
             ->leftJoin('o.partner', 'partner')
             ->where('partner.id = ?0')
             ->andWhere('o.status != 4')
@@ -267,7 +270,7 @@ class Repository extends ModelRepository
      *
      * @deprecated since 5.6.3, will be removed with 5.8
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getCustomerForMappingQuery($mappingValue)
     {
@@ -296,7 +299,7 @@ class Repository extends ModelRepository
             'billing.company as company',
             'customer.email as email',
         ]);
-        $builder->from(\Shopware\Models\Customer\Customer::class, 'customer')
+        $builder->from(Customer::class, 'customer')
                 ->leftJoin('customer.defaultBillingAddress', 'billing')
                 ->where('customer.accountMode = 0')
                 ->andWhere('customer.email = ?0')
@@ -315,7 +318,7 @@ class Repository extends ModelRepository
      * @param string $trackingCode
      * @param int    $partnerId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getValidateTrackingCodeQuery($trackingCode, $partnerId)
     {
@@ -337,7 +340,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['partner.id'])
-            ->from(\Shopware\Models\Partner\Partner::class, 'partner')
+            ->from(Partner::class, 'partner')
             ->where('partner.idCode = ?1')
             ->andWhere('partner.id != ?2')
             ->setParameter(1, $trackingCode)
@@ -357,7 +360,7 @@ class Repository extends ModelRepository
     private function getDatePartListDQL($alias, $monthlyAmount = false)
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->from(\Shopware\Models\Order\Order::class, $alias)
+        $builder->from(Order::class, $alias)
                 ->select(['SUM(' . $alias . '.invoiceAmountNet - ' . $alias . '.invoiceShippingNet)'])
                 ->where('DATE_FORMAT(CURRENT_DATE(),\'%Y\') = DATE_FORMAT(' . $alias . '.orderTime,\'%Y\')')
                 ->andWhere($alias . '.status NOT IN(\'4\', \'-1\')')

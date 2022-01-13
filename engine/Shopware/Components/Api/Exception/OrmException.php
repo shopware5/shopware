@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,10 +27,13 @@
 namespace Shopware\Components\Api\Exception;
 
 use Enlight_Exception;
+use Exception;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * API Exception
- */
-class OrmException extends Enlight_Exception
+class OrmException extends Enlight_Exception implements ApiException
 {
+    public function __construct(string $message, Exception $previous = null)
+    {
+        parent::__construct($message, Response::HTTP_INTERNAL_SERVER_ERROR, $previous);
+    }
 }

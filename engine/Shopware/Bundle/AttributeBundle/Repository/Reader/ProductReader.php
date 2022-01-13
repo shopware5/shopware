@@ -36,21 +36,12 @@ use Shopware\Models\Shop\Shop;
 
 class ProductReader extends GenericReader
 {
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
+    private ContextServiceInterface $contextService;
 
-    /**
-     * @var AdditionalTextServiceInterface
-     */
-    private $additionalTextService;
+    private AdditionalTextServiceInterface $additionalTextService;
 
-    /**
-     * @param string $entity
-     */
     public function __construct(
-        $entity,
+        string $entity,
         ModelManager $entityManager,
         ContextServiceInterface $contextService,
         AdditionalTextServiceInterface $additionalTextService
@@ -60,11 +51,6 @@ class ProductReader extends GenericReader
         $this->additionalTextService = $additionalTextService;
     }
 
-    /**
-     * @param int[]|string[] $identifiers
-     *
-     * @return array[]
-     */
     public function getList($identifiers)
     {
         $products = parent::getList($identifiers);
@@ -75,9 +61,6 @@ class ProductReader extends GenericReader
         return $products;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createListQuery()
     {
         $query = $this->entityManager->createQueryBuilder();
@@ -106,24 +89,19 @@ class ProductReader extends GenericReader
         return $query;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function getIdentifierField()
     {
         return 'variant.number';
     }
 
     /**
-     * @param array[] $products
+     * @param array<array<string, mixed>> $products
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
-    private function assignAdditionalText(array $products)
+    private function assignAdditionalText(array $products): array
     {
-        $shopRepo = $this->entityManager->getRepository(Shop::class);
-
-        $shop = $shopRepo->getActiveDefault();
+        $shop = $this->entityManager->getRepository(Shop::class)->getActiveDefault();
 
         $context = $this->contextService->createShopContext(
             $shop->getId(),
@@ -146,11 +124,11 @@ class ProductReader extends GenericReader
     }
 
     /**
-     * @param array[] $products
+     * @param array<array<string, mixed>> $products
      *
      * @return ListProduct[]
      */
-    private function buildListProducts(array $products)
+    private function buildListProducts(array $products): array
     {
         $listProducts = [];
         foreach ($products as $product) {
@@ -162,7 +140,12 @@ class ProductReader extends GenericReader
         return $listProducts;
     }
 
-    private function assignCategoryIds(array $products)
+    /**
+     * @param array<array<string, mixed>> $products
+     *
+     * @return array<array<string, mixed>>
+     */
+    private function assignCategoryIds(array $products): array
     {
         $ids = array_column($products, 'articleId');
 
@@ -187,7 +170,12 @@ class ProductReader extends GenericReader
         return $products;
     }
 
-    private function assignPrice(array $products)
+    /**
+     * @param array<array<string, mixed>> $products
+     *
+     * @return array<array<string, mixed>>
+     */
+    private function assignPrice(array $products): array
     {
         $ids = array_column($products, 'articleId');
         $variantIds = array_column($products, 'variantId');

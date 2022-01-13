@@ -237,10 +237,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @deprecated - Will be private in Shopware 5.8
      * This class has its own OrderStatusQuery as we need to get rid of states with status.id = -1
      *
-     * @param array<array<string, mixed>>|null $filter
-     * @param array<array<string, mixed>>|null $order
-     * @param int|null                         $offset
-     * @param int|null                         $limit
+     * @param array<array{property: string, value: mixed, expression?: string}>|null $filter
+     * @param array<array{property: string, direction: string}>|null                 $order
+     * @param int|null                                                               $offset
+     * @param int|null                                                               $limit
      *
      * @return Query
      */

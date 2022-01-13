@@ -85,6 +85,10 @@ parameters:
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*Statement\|int#'
 
+        # PHPStan can not correctly interfer our own ModelManager and QueryBuilder: see https://github.com/phpstan/phpstan-doctrine/issues/243
+        - '#Method Shopware.*::.*\(\) should return Shopware\\Components\\Model\\QueryBuilder but returns Doctrine\\ORM\\QueryBuilder#'
+        - '#Parameter .* expects Shopware\\Components\\Model\\QueryBuilder, Doctrine\\ORM\\QueryBuilder given#'
+
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: engine/Shopware/Controllers/Backend/Config.php

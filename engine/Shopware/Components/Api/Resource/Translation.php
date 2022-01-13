@@ -34,6 +34,7 @@ use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
+use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Country\Country;
@@ -128,10 +129,12 @@ class Translation extends Resource implements BatchInterface
     /**
      * Returns a list of translation objects.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int                                                                                     $offset
+     * @param int                                                                                     $limit
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $criteria
+     * @param array<array{property: string, direction: string}>                                       $orderBy
      *
-     * @return array
+     * @return array{data: array<array<string, mixed>>, total: int}
      */
     public function getList(
         $offset = 0,
@@ -384,8 +387,10 @@ class Translation extends Resource implements BatchInterface
     /**
      * Helper function which creates the query builder for the getList function.
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int                                                                                     $offset
+     * @param int                                                                                     $limit
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $criteria
+     * @param array<array{property: string, direction: string}>                                       $orderBy
      *
      * @return QueryBuilder
      */
@@ -922,7 +927,7 @@ class Translation extends Resource implements BatchInterface
             'name',
             $numbers[1]
         );
-        if (!$option) {
+        if (!$option instanceof ConfiguratorOption) {
             throw new NotFoundException(sprintf('Configurator option by name %s not found', $numbers[1]));
         }
 

@@ -54,7 +54,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<Price>
+     * @var ArrayCollection<array-key, Price>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Price", mappedBy="detail", orphanRemoval=true, cascade={"persist"})
      */
@@ -82,7 +82,7 @@ class Detail extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var ArrayCollection<Option>
+     * @var ArrayCollection<array-key, Option>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="articles")
      * @ORM\JoinTable(name="s_article_configurator_option_relations",
@@ -117,7 +117,7 @@ class Detail extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var ArrayCollection<Image>
+     * @var ArrayCollection<array-key, Image>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Image", mappedBy="articleDetail", orphanRemoval=true, cascade={"persist"})
      * @ORM\OrderBy({"position" = "ASC"})
@@ -581,7 +581,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Price>
+     * @return ArrayCollection<array-key, Price>
      */
     public function getPrices()
     {
@@ -589,7 +589,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param Price[]|null $prices
+     * @param ArrayCollection<array-key, Price>|array<Price>|null $prices
      *
      * @return Detail
      */
@@ -900,7 +900,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Option>
+     * @return ArrayCollection<array-key, Option>
      */
     public function getConfiguratorOptions()
     {
@@ -908,7 +908,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<Option> $configuratorOptions
+     * @param ArrayCollection<array-key, Option> $configuratorOptions
      */
     public function setConfiguratorOptions($configuratorOptions)
     {
@@ -932,7 +932,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Image>
+     * @return ArrayCollection<array-key, Image>
      */
     public function getImages()
     {
@@ -940,7 +940,7 @@ class Detail extends ModelEntity
     }
 
     /**
-     * @param ArrayCollection<Image>|Image[]|null $images
+     * @param ArrayCollection<array-key, Image>|array<Image>|null $images
      *
      * @return Detail
      */

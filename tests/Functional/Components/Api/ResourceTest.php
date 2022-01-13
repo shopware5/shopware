@@ -33,10 +33,7 @@ use Shopware_Components_Acl;
 
 class ResourceTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * @var resource
-     */
-    private $resource;
+    private Resource $resource;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -82,13 +79,9 @@ class ResourceTest extends Enlight_Components_Test_TestCase
         $this->expectException(PrivilegeException::class);
         $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
-        $aclMock
-                ->method('has')
-                ->willReturn(true);
+        $aclMock->method('has')->willReturn(true);
 
-        $aclMock
-                ->method('isAllowed')
-                ->willReturn(false);
+        $aclMock->method('isAllowed')->willReturn(false);
 
         $this->resource->setRole('dummy');
         $this->resource->setAcl($aclMock);
@@ -100,12 +93,10 @@ class ResourceTest extends Enlight_Components_Test_TestCase
     {
         $aclMock = $this->createMock(Shopware_Components_Acl::class);
 
-        $aclMock
-                ->method('isAllowed')
-                ->willReturn(true);
+        $aclMock->expects(static::once())->method('isAllowed')->willReturn(true);
 
         $this->resource->setRole('dummy');
         $this->resource->setAcl($aclMock);
-        static::assertNull($this->resource->checkPrivilege('test'));
+        $this->resource->checkPrivilege('test');
     }
 }

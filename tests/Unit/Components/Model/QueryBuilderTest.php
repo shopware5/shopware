@@ -339,7 +339,7 @@ class QueryBuilderTest extends TestCase
     /**
      * @dataProvider getInvalidFilterDataProvider
      *
-     * @param array<string, string|int> $filter
+     * @param array{property: string, value: int, expression: string} $filter
      */
     public function testInvalidOperatorsThrowException(array $filter): void
     {
@@ -350,7 +350,7 @@ class QueryBuilderTest extends TestCase
     }
 
     /**
-     * @return array<array<array<string, string|int>>>
+     * @return array<array<array{property: string, value: int, expression: string}>>
      */
     public function getInvalidFilterDataProvider(): array
     {

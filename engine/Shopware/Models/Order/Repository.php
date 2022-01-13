@@ -168,7 +168,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which .....
      *
      * @param array<array{property: string, value: mixed, expression?: string}>|null $filters
-     * @param string|array|null                                                      $orderBy
+     * @param string|array<array{property: string, direction: string}>|null          $orderBy
      * @param int|null                                                               $offset
      * @param int|null                                                               $limit
      *
@@ -190,7 +190,7 @@ class Repository extends ModelRepository
      * This function can be hooked to modify the query builder of the query object.
      *
      * @param array<array{property: string, value: mixed, expression?: string}>|null $filters
-     * @param string|array|null                                                      $orderBy
+     * @param string|array<array{property: string, direction: string}>|null          $orderBy
      *
      * @return QueryBuilder
      */
@@ -557,7 +557,7 @@ class Repository extends ModelRepository
      * @param int|null                                                          $offset
      * @param int|null                                                          $limit
      * @param array<array{property: string, value: mixed, expression?: string}> $filters
-     * @param array[]                                                           $sortings
+     * @param array<array{property: string, direction: string}>                 $sortings
      *
      * @return array{total: int, orders: array<array{id: int}>}
      */
@@ -565,7 +565,6 @@ class Repository extends ModelRepository
     {
         /** @var ModelManager $em */
         $em = $this->getEntityManager();
-        /** @var QueryBuilder $builder */
         $builder = $em->createQueryBuilder();
 
         $builder->select(['orders.id']);
@@ -595,8 +594,8 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param QueryBuilder $builder
-     * @param array[]      $sortings
+     * @param QueryBuilder                                      $builder
+     * @param array<array{property: string, direction: string}> $sortings
      *
      * @return QueryBuilder
      */

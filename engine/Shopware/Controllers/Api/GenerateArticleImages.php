@@ -23,6 +23,7 @@
  */
 
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 use Shopware\Components\Api\Resource\Article as ArticleResource;
 use Shopware\Models\Article\Article;
 
@@ -80,7 +81,7 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
      */
     public function batchAction()
     {
-        throw new ApiException\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
+        throw new BatchInterfaceNotImplementedException();
     }
 
     /**
@@ -91,6 +92,6 @@ class Shopware_Controllers_Api_GenerateArticleImages extends Shopware_Controller
      */
     public function batchDeleteAction()
     {
-        throw new ApiException\BatchInterfaceNotImplementedException('Batch operations not implemented by this resource');
+        throw new BatchInterfaceNotImplementedException();
     }
 }

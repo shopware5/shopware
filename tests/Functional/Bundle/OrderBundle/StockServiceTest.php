@@ -24,12 +24,13 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\OrderBundle\Service;
+namespace Shopware\Tests\Functional\Bundle\OrderBundle;
 
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Models\Article\Detail as ProductVariant;
+use Shopware\Models\Article\Price;
 use Shopware\Models\Attribute\Order as OrderAttributes;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Dispatch\Dispatch;
@@ -93,7 +94,6 @@ class StockServiceTest extends TestCase
         static::assertNotNull($dispatch);
         $order->setDispatch($dispatch);
 
-        /** @var Customer $customer */
         $customer = $modelManager->find(Customer::class, 1);
         static::assertNotNull($customer);
         $order->setCustomer($customer);
@@ -184,7 +184,6 @@ class StockServiceTest extends TestCase
         $detail->setTaxRate($taxRate);
         $detail->setEsdArticle(0);
 
-        /** @var DetailStatus $detailStatus */
         $detailStatus = $modelManager->find(DetailStatus::class, 0);
         static::assertNotNull($detailStatus);
         $detail->setStatus($detailStatus);
@@ -197,6 +196,7 @@ class StockServiceTest extends TestCase
         $detail->setArticleName($name);
 
         $detail->setArticleNumber($ordernumber);
+        static::assertInstanceOf(Price::class, $articleDetail->getPrices()->first());
         $detail->setPrice($articleDetail->getPrices()->first()->getPrice());
         $detail->setQuantity($quantity);
         $detail->setShipped(0);

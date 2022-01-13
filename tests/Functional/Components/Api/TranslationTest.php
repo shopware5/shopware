@@ -91,10 +91,8 @@ class TranslationTest extends TestCase
                 'value' => Shopware()->Db()->fetchOne("SELECT objectkey FROM s_core_translations WHERE objecttype='article' LIMIT 1"),
             ],
             [
-                [
-                    'property' => 'translation.shopId',
-                    'value' => 2,
-                ],
+                'property' => 'translation.shopId',
+                'value' => 2,
             ],
         ]);
 

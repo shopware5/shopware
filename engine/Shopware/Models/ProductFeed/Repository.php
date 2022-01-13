@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\ProductFeed;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -42,10 +43,11 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of defined
      * product feeds.
      *
-     * @param int|null $offset
-     * @param int|null $limit
+     * @param array<array{property: string, direction: string}>|null $orderBy
+     * @param int|null                                               $offset
+     * @param int|null                                               $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getListQuery($orderBy = null, $offset = null, $limit = null)
     {
@@ -60,6 +62,8 @@ class Repository extends ModelRepository
     /**
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
+     *
+     * @param array<array{property: string, direction: string}>|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -78,7 +82,7 @@ class Repository extends ModelRepository
                 'productFeed.lastExport as lastExport',
             ]
         );
-        $builder->from(\Shopware\Models\ProductFeed\ProductFeed::class, 'productFeed');
+        $builder->from(ProductFeed::class, 'productFeed');
         if (!empty($orderBy)) {
             $builder->addOrderBy($orderBy);
         }
@@ -90,7 +94,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of active
      * product feeds.
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getActiveListQuery()
     {
@@ -124,7 +128,7 @@ class Repository extends ModelRepository
      *
      * @param int $feedId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getDetailQuery($feedId)
     {
@@ -145,7 +149,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['feeds', 'suppliers', 'categories', 'articles'])
-                ->from(\Shopware\Models\ProductFeed\ProductFeed::class, 'feeds')
+                ->from(ProductFeed::class, 'feeds')
                 ->leftJoin('feeds.categories', 'categories')
                 ->leftJoin('feeds.suppliers', 'suppliers')
                 ->leftJoin('feeds.articles', 'articles')
@@ -161,7 +165,7 @@ class Repository extends ModelRepository
      *
      * @param int $productFeedId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getAttributesQuery($productFeedId)
     {

@@ -24,6 +24,7 @@
 
 use Shopware\Components\Api\Exception\BatchInterfaceNotImplementedException;
 use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NonUniqueIdentifierUsedException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\OrmException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
@@ -142,6 +143,7 @@ return array_replace_recursive([
             // \Shopware\Components\CSRFTokenValidationException::class
             BatchInterfaceNotImplementedException::class,
             CustomValidationException::class,
+            NonUniqueIdentifierUsedException::class,
             NotFoundException::class,
             OrmException::class,
             ParameterMissingException::class,

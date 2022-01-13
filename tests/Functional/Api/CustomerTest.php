@@ -28,22 +28,26 @@ namespace Shopware\Tests\Functional\Api;
 
 use DateTime;
 use DateTimeInterface;
+use Doctrine\DBAL\Connection;
 use Enlight_Controller_Response_ResponseTestCase;
-use Exception;
+use Shopware\Components\Api\Resource\Customer as CustomerResource;
 use Shopware\Models\Customer\Customer;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @covers \Shopware_Controllers_Api_Customers
- */
 class CustomerTest extends AbstractApiTestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
     public function testRequestWithoutAuthenticationShouldReturnError(): void
     {
         $this->client->request('GET', '/api/customers/');
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(401, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(401, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -62,8 +66,8 @@ class CustomerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('GET', '/api/customers/' . $id);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(404, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(404, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -75,67 +79,15 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostCustomersShouldBeSuccessful(): int
+    public function testPostCustomersShouldBeSuccessful(): void
     {
-        $date = new DateTime();
-        $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ATOM);
-
-        $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ATOM);
-
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
-        static::assertInstanceOf(DateTimeInterface::class, $birthday);
-        $birthday = $birthday->format(DateTime::ATOM);
-
-        $requestData = [
-            'password' => 'fooobar',
-            'active' => true,
-            'email' => uniqid('', true) . 'test@foobar.com',
-
-            'firstlogin' => $firstlogin,
-            'lastlogin' => $lastlogin,
-            'paymentId' => 2,
-
-            'salutation' => 'mr',
-            'firstname' => 'Max',
-            'lastname' => 'Mustermann',
-            'birthday' => $birthday,
-
-            'billing' => [
-                'salutation' => 'Mr',
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'country' => 2,
-                'street' => 'Fakesreet 123',
-                'city' => 'City',
-                'zipcode' => 55555,
-            ],
-
-            'shipping' => [
-                'salutation' => 'Mr',
-                'company' => 'Widgets Inc.',
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'country' => 2,
-                'street' => 'Fakesreet 123',
-                'city' => 'City',
-                'zipcode' => 55555,
-            ],
-
-            'debit' => [
-                'account' => 'Fake Account',
-                'bankCode' => '55555555',
-                'bankName' => 'Fake Bank',
-                'accountHolder' => 'Max Mustermann',
-            ],
-        ];
+        $requestData = $this->getCustomerRequestData();
 
         $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(201, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(201, $response->getStatusCode());
         static::assertArrayHasKey('location', $response->headers->all());
 
         $result = $response->getContent();
@@ -151,151 +103,27 @@ class CustomerTest extends AbstractApiTestCase
         $identifier = (int) array_pop($locationPars);
 
         static::assertGreaterThan(0, $identifier);
-
-        return $identifier;
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPostCustomersWithDebitShouldCreatePaymentData(): void
     {
-        $date = new DateTime();
-        $date->modify('-10 days');
-        $firstLogin = $date->format(DateTime::ATOM);
+        $customerId = $this->createNewCustomerWithResource();
 
-        $date->modify('+2 day');
-        $lastLogin = $date->format(DateTime::ATOM);
-
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
-        static::assertInstanceOf(DateTimeInterface::class, $birthday);
-        $birthday = $birthday->format(DateTime::ATOM);
-
-        $requestData = [
-            'password' => 'fooobar',
-            'active' => true,
-            'email' => uniqid('', true) . 'test@foobar.com',
-
-            'firstlogin' => $firstLogin,
-            'lastlogin' => $lastLogin,
-
-            'salutation' => 'mr',
-            'firstname' => 'Max',
-            'lastname' => 'Mustermann',
-            'birthday' => $birthday,
-
-            'billing' => [
-                'salutation' => 'Mr',
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'country' => 2,
-                'street' => 'Fakesreet 123',
-                'city' => 'City',
-                'zipcode' => 55555,
-            ],
-
-            'shipping' => [
-                'salutation' => 'Mr',
-                'company' => 'Widgets Inc.',
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'country' => 2,
-                'street' => 'Fakesreet 123',
-                'city' => 'City',
-                'zipcode' => 55555,
-            ],
-
-            'debit' => [
-                'account' => 'Fake Account',
-                'bankCode' => '55555555',
-                'bankName' => 'Fake Bank',
-                'accountHolder' => 'Max Mustermann',
-            ],
-        ];
-
-        $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
-        $response = $this->client->getResponse();
-
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(201, $response->getStatusCode());
-        static::assertArrayHasKey('location', $response->headers->all());
-
-        $result = $response->getContent();
-        static::assertIsString($result);
-        $result = json_decode($result, true);
-
-        static::assertArrayHasKey('success', $result);
-        static::assertTrue($result['success']);
-
-        $location = $response->headers->get('location');
-        static::assertIsString($location);
-        $locationPars = explode('/', $location);
-        $identifier = (int) array_pop($locationPars);
-
-        static::assertGreaterThan(0, $identifier);
-
-        $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
+        $customer = $this->getContainer()->get('models')->getRepository(Customer::class)->find($customerId);
         static::assertInstanceOf(Customer::class, $customer);
         $payments = $customer->getPaymentData()->toArray();
         $paymentData = array_shift($payments);
 
         static::assertNotNull($paymentData);
-        static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
-        static::assertEquals('Fake Account', $paymentData->getAccountNumber());
-        static::assertEquals('Fake Bank', $paymentData->getBankName());
-        static::assertEquals('55555555', $paymentData->getBankCode());
+        static::assertSame('Max Mustermann', $paymentData->getAccountHolder());
+        static::assertSame('Fake Account', $paymentData->getAccountNumber());
+        static::assertSame('Fake Bank', $paymentData->getBankName());
+        static::assertSame('55555555', $paymentData->getBankCode());
     }
 
-    /**
-     * @throws Exception
-     */
     public function testPostCustomersWithDebitPaymentDataShouldCreateDebitData(): void
     {
-        $date = new DateTime();
-        $date->modify('-10 days');
-        $firstlogin = $date->format(DateTime::ATOM);
-
-        $date->modify('+2 day');
-        $lastlogin = $date->format(DateTime::ATOM);
-
-        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
-        static::assertInstanceOf(DateTimeInterface::class, $birthday);
-        $birthday = $birthday->format(DateTime::ATOM);
-
-        $requestData = [
-            'password' => 'fooobar',
-            'active' => true,
-            'email' => uniqid('', true) . 'test@foobar.com',
-
-            'firstlogin' => $firstlogin,
-            'lastlogin' => $lastlogin,
-
-            'salutation' => 'mr',
-            'firstname' => 'Max',
-            'lastname' => 'Mustermann',
-            'birthday' => $birthday,
-
-            'billing' => [
-                'salutation' => 'Mr',
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'country' => 2,
-                'street' => 'Fakesreet 123',
-                'city' => 'City',
-                'zipcode' => 55555,
-            ],
-
-            'shipping' => [
-                'salutation' => 'Mr',
-                'company' => 'Widgets Inc.',
-                'firstName' => 'Max',
-                'lastName' => 'Mustermann',
-                'country' => 2,
-                'street' => 'Fakesreet 123',
-                'city' => 'City',
-                'zipcode' => 55555,
-            ],
-
+        $customerId = $this->createNewCustomerWithResource(null, [
             'paymentData' => [
                 [
                     'paymentMeanId' => 2,
@@ -305,39 +133,18 @@ class CustomerTest extends AbstractApiTestCase
                     'accountHolder' => 'Max Mustermann',
                 ],
             ],
-        ];
+        ]);
 
-        $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
-        $response = $this->client->getResponse();
-
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(201, $response->getStatusCode());
-        static::assertArrayHasKey('location', $response->headers->all());
-
-        $result = $response->getContent();
-        static::assertIsString($result);
-        $result = json_decode($result, true);
-
-        static::assertArrayHasKey('success', $result);
-        static::assertTrue($result['success']);
-
-        $location = $response->headers->get('Location');
-        static::assertIsString($location);
-        $locationPars = explode('/', $location);
-        $identifier = (int) array_pop($locationPars);
-
-        static::assertGreaterThan(0, $identifier);
-
-        $customer = Shopware()->Models()->getRepository(Customer::class)->find($identifier);
+        $customer = $this->getContainer()->get('models')->getRepository(Customer::class)->find($customerId);
         static::assertInstanceOf(Customer::class, $customer);
         $payments = $customer->getPaymentData()->toArray();
         $paymentData = array_shift($payments);
 
         static::assertNotNull($paymentData);
-        static::assertEquals('Max Mustermann', $paymentData->getAccountHolder());
-        static::assertEquals('Fake Account', $paymentData->getAccountNumber());
-        static::assertEquals('Fake Bank', $paymentData->getBankName());
-        static::assertEquals('55555555', $paymentData->getBankCode());
+        static::assertSame('Max Mustermann', $paymentData->getAccountHolder());
+        static::assertSame('Fake Account', $paymentData->getAccountNumber());
+        static::assertSame('Fake Bank', $paymentData->getBankName());
+        static::assertSame('55555555', $paymentData->getBankCode());
     }
 
     public function testPostCustomersWithInvalidDataShouldReturnError(): void
@@ -354,8 +161,8 @@ class CustomerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('POST', '/api/customers/', [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(400, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(400, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -366,16 +173,15 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    /**
-     * @depends testPostCustomersShouldBeSuccessful
-     */
-    public function testGetCustomersWithIdShouldBeSuccessful(int $id): void
+    public function testGetCustomersWithIdShouldBeSuccessful(): void
     {
-        $this->authenticatedApiRequest('GET', '/api/customers/' . $id);
+        $customerId = $this->createNewCustomerWithResource();
+
+        $this->authenticatedApiRequest('GET', '/api/customers/' . $customerId);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(200, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(200, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -396,10 +202,10 @@ class CustomerTest extends AbstractApiTestCase
 
         $paymentInfo = array_shift($data['paymentData']);
 
-        static::assertEquals('Max Mustermann', $paymentInfo['accountHolder']);
-        static::assertEquals('55555555', $paymentInfo['bankCode']);
-        static::assertEquals('Fake Bank', $paymentInfo['bankName']);
-        static::assertEquals('Fake Account', $paymentInfo['accountNumber']);
+        static::assertSame('Max Mustermann', $paymentInfo['accountHolder']);
+        static::assertSame('55555555', $paymentInfo['bankCode']);
+        static::assertSame('Fake Bank', $paymentInfo['bankName']);
+        static::assertSame('Fake Account', $paymentInfo['accountNumber']);
     }
 
     public function testPutBatchCustomersShouldFail(): void
@@ -412,8 +218,8 @@ class CustomerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('PUT', '/api/customers/', [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(405, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(405, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -421,24 +227,23 @@ class CustomerTest extends AbstractApiTestCase
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
-        static::assertEquals('This resource has no support for batch operations.', $result['message']);
+        static::assertSame('This resource has no support for batch operations', $result['message']);
     }
 
-    /**
-     * @depends testPostCustomersShouldBeSuccessful
-     */
-    public function testPutCustomersWithInvalidDataShouldReturnError(int $id): void
+    public function testPutCustomersWithInvalidDataShouldReturnError(): void
     {
+        $customerId = $this->createNewCustomerWithResource();
+
         $requestData = [
             'active' => true,
             'email' => 'invalid',
         ];
 
-        $this->authenticatedApiRequest('PUT', '/api/customers/' . $id, [], $requestData);
+        $this->authenticatedApiRequest('PUT', '/api/customers/' . $customerId, [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(400, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(400, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -450,12 +255,11 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    /**
-     * @depends testPostCustomersShouldBeSuccessful
-     */
-    public function testPutCustomersShouldBeSuccessful(int $id): int
+    public function testPutCustomersShouldBeSuccessful(): int
     {
-        $customer = Shopware()->Models()->getRepository(Customer::class)->find($id);
+        $customerId = $this->createNewCustomerWithResource();
+
+        $customer = $this->getContainer()->get('models')->getRepository(Customer::class)->find($customerId);
         static::assertInstanceOf(Customer::class, $customer);
 
         $requestData = [
@@ -463,11 +267,11 @@ class CustomerTest extends AbstractApiTestCase
             'email' => $customer->getEmail(),
         ];
 
-        $this->authenticatedApiRequest('PUT', '/api/customers/' . $id, [], $requestData);
+        $this->authenticatedApiRequest('PUT', '/api/customers/' . $customerId, [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals(200, $response->getStatusCode());
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull(
             $response->headers->get('location'),
             'There should be no location header set.'
@@ -480,19 +284,18 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        return $id;
+        return $customerId;
     }
 
-    /**
-     * @depends testPostCustomersShouldBeSuccessful
-     */
-    public function testDeleteCustomersShouldBeSuccessful(int $id): int
+    public function testDeleteCustomersShouldBeSuccessful(): int
     {
-        $this->authenticatedApiRequest('DELETE', '/api/customers/' . $id);
+        $customerId = $this->createNewCustomerWithResource();
+
+        $this->authenticatedApiRequest('DELETE', '/api/customers/' . $customerId);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(200, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(200, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -501,7 +304,7 @@ class CustomerTest extends AbstractApiTestCase
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        return $id;
+        return $customerId;
     }
 
     public function testDeleteCustomersWithInvalidIdShouldReturnMessage(): void
@@ -511,8 +314,8 @@ class CustomerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('DELETE', '/api/customers/' . $id);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(404, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(404, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -531,8 +334,8 @@ class CustomerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('PUT', '/api/customers/' . $id);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(404, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(404, $response->getStatusCode());
 
         $result = $response->getContent();
         static::assertIsString($result);
@@ -550,8 +353,8 @@ class CustomerTest extends AbstractApiTestCase
         $response = $this->client->getResponse();
         static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(200, $response->getStatusCode());
+        static::assertSame('application/json', $response->getHeader('Content-Type'));
+        static::assertSame(200, $response->getStatusCode());
 
         $response = $response->getContent();
         static::assertIsString($response);
@@ -567,5 +370,131 @@ class CustomerTest extends AbstractApiTestCase
 
         $data = $response['data'];
         static::assertIsArray($data);
+    }
+
+    public function testGetCustomerWithNumberAsIdWithDuplicateNumberThrowsException(): void
+    {
+        $existingCustomer = $this->getContainer()->get(Connection::class)->createQueryBuilder()
+            ->select(['id', 'customernumber'])
+            ->from('s_user')
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchAllKeyValue();
+        $existingCustomerId = array_key_first($existingCustomer);
+        $existingCustomerNumber = $existingCustomer[$existingCustomerId];
+
+        $newCustomerId = $this->createNewCustomerWithResource($existingCustomerNumber);
+
+        $customersWithSameNumber = $this->getContainer()->get(Connection::class)->createQueryBuilder()
+            ->select('id')
+            ->from('s_user')
+            ->where('customernumber = ' . $existingCustomerNumber)
+            ->execute()
+            ->fetchFirstColumn();
+
+        static::assertCount(2, $customersWithSameNumber);
+
+        $this->authenticatedApiRequest('DELETE', sprintf('/api/customers/%d?useNumberAsId=1', $existingCustomerNumber));
+        $response = $this->client->getResponse();
+
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
+
+        static::assertSame('application/json', $response->getHeader('Content-Type'));
+        static::assertSame(Response::HTTP_CONFLICT, $response->getStatusCode());
+
+        $response = $response->getContent();
+        static::assertIsString($response);
+        $response = json_decode($response, true);
+
+        static::assertFalse($response['success']);
+        static::assertSame(
+            sprintf(
+                "Identifier 'number' with value '%s' for entity 'Shopware\Models\Customer\Customer' is not unique.",
+                $existingCustomerNumber
+            ),
+            $response['message']
+        );
+
+        static::assertContains($existingCustomerId, $response['foundIds']);
+        static::assertContains($newCustomerId, $response['foundIds']);
+    }
+
+    /**
+     * @param array<string, array<array<string, int|string>>>|null $paymentData
+     */
+    private function createNewCustomerWithResource(?string $customerNumber = null, ?array $paymentData = null): int
+    {
+        $requestData = $this->getCustomerRequestData($customerNumber, $paymentData);
+
+        return $this->getContainer()->get(CustomerResource::class)->create($requestData)->getId();
+    }
+
+    /**
+     * @param array<string, array<array<string, int|string>>>|null $paymentData
+     *
+     * @return array<string, mixed>
+     */
+    private function getCustomerRequestData(?string $customerNumber = null, ?array $paymentData = null): array
+    {
+        $date = new DateTime();
+        $date->modify('-10 days');
+        $firstlogin = $date->format(DateTime::ATOM);
+
+        $date->modify('+2 day');
+        $lastlogin = $date->format(DateTime::ATOM);
+
+        $birthday = DateTime::createFromFormat('Y-m-d', '1986-12-20');
+        static::assertInstanceOf(DateTimeInterface::class, $birthday);
+        $birthday = $birthday->format(DateTime::ATOM);
+
+        $requestData = [
+            'password' => 'superSecurePassword',
+            'number' => $customerNumber,
+            'active' => true,
+            'email' => 'test@foobar.com',
+
+            'firstlogin' => $firstlogin,
+            'lastlogin' => $lastlogin,
+            'paymentId' => 2,
+
+            'salutation' => 'mr',
+            'firstname' => 'Max',
+            'lastname' => 'Mustermann',
+            'birthday' => $birthday,
+
+            'billing' => [
+                'salutation' => 'Mr',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fake street 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
+
+            'shipping' => [
+                'salutation' => 'Mr',
+                'company' => 'Widgets Inc.',
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'country' => 2,
+                'street' => 'Fake street 123',
+                'city' => 'City',
+                'zipcode' => 55555,
+            ],
+        ];
+
+        if (\is_array($paymentData)) {
+            $requestData = array_merge($requestData, $paymentData);
+        } else {
+            $requestData['debit'] = [
+                'account' => 'Fake Account',
+                'bankCode' => '55555555',
+                'bankName' => 'Fake Bank',
+                'accountHolder' => 'Max Mustermann',
+            ];
+        }
+
+        return $requestData;
     }
 }

@@ -51,7 +51,7 @@ class Set extends ModelEntity
     protected $groups;
 
     /**
-     * @var ArrayCollection<Option>
+     * @var ArrayCollection<array-key, Option>
      *
      * @ORM\ManyToMany(targetEntity="Shopware\Models\Article\Configurator\Option", inversedBy="sets", cascade={"persist"})
      * @ORM\JoinTable(name="s_article_configurator_set_option_relations",
@@ -218,7 +218,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @return ArrayCollection<Option>
+     * @return ArrayCollection<array-key, Option>
      */
     public function getOptions()
     {
@@ -226,7 +226,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param Option[] $options
+     * @param ArrayCollection<array-key, Option>|array<Option> $options
      *
      * @return Set
      */

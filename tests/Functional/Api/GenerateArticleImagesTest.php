@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,20 +26,21 @@
 
 namespace Shopware\Tests\Functional\Api;
 
-/**
- * @covers \Shopware_Controllers_Api_GenerateArticleImages
- */
+use Enlight_Controller_Response_ResponseTestCase;
+
 class GenerateArticleImagesTest extends AbstractApiTestCase
 {
-    public function testRequestWithoutAuthenticationShouldReturnError()
+    public function testRequestWithoutAuthenticationShouldReturnError(): void
     {
         $this->client->request('GET', '/api/generateArticleImages');
         $response = $this->client->getResponse();
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
 
-        static::assertEquals('application/json', $response->getHeader('Content-Type'));
-        static::assertEquals(401, $response->getStatusCode());
+        static::assertSame('application/json', $response->getHeader('Content-Type'));
+        static::assertSame(401, $response->getStatusCode());
 
         $result = $response->getBody();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
@@ -50,32 +53,34 @@ class GenerateArticleImagesTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('DELETE', '/api/generateArticleImages');
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull($response->headers->get('Set-Cookie'));
-        static::assertEquals(405, $response->getStatusCode());
+        static::assertSame(405, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
-        static::assertEquals('This resource has no support for batch operations.', $result['message']);
+        static::assertSame('This resource has no support for batch operations', $result['message']);
     }
 
-    public function testBatchPutShouldFail()
+    public function testBatchPutShouldFail(): void
     {
         $this->authenticatedApiRequest('PUT', '/api/generateArticleImages');
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('content-type'));
+        static::assertSame('application/json', $response->headers->get('content-type'));
         static::assertNull($response->headers->get('set-cookie'));
-        static::assertEquals(405, $response->getStatusCode());
+        static::assertSame(405, $response->getStatusCode());
 
         $result = $response->getContent();
+        static::assertIsString($result);
         $result = json_decode($result, true);
 
         static::assertArrayHasKey('success', $result);
         static::assertFalse($result['success']);
-        static::assertEquals('This resource has no support for batch operations.', $result['message']);
+        static::assertSame('This resource has no support for batch operations', $result['message']);
     }
 }

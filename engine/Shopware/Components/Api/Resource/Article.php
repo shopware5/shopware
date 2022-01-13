@@ -25,7 +25,6 @@
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\ORMException;
 use Exception;
 use RuntimeException;
@@ -1395,7 +1394,7 @@ class Article extends Resource implements BatchInterface
             'seoCategories',
             true
         );
-        /** @var Collection<array-key, Category> $categories */
+        /** @var ArrayCollection<array-key, Category> $categories */
         $categories = $data['categories'];
 
         foreach ($data['seoCategories'] as $categoryData) {
@@ -2356,15 +2355,17 @@ class Article extends Resource implements BatchInterface
             }
         }
 
-        $hasMain = $this->getCollectionElementByProperty(
+        $mainImage = $this->getCollectionElementByProperty(
             $images,
             'main',
             1
         );
 
-        if (!$hasMain) {
+        if (!$mainImage instanceof Image) {
             $image = $images->get(0);
-            $image->setMain(1);
+            if ($image instanceof Image) {
+                $image->setMain(1);
+            }
         }
         unset($data['images']);
 

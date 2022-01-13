@@ -997,7 +997,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      * @param string $alias
      * @param array  $whiteList
      *
-     * @return array
+     * @return array<array{property: string, direction: string}>
      */
     protected function getSortConditions($sort, $model, $alias, $whiteList = [])
     {

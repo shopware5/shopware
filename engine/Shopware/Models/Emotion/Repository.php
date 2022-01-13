@@ -26,6 +26,7 @@ namespace Shopware\Models\Emotion;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Attribute\Emotion as EmotionAttribute;
@@ -39,8 +40,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param string $filter
-     * @param array  $orderBy
+     * @param string                                                        $filter
+     * @param string|array<array{property: string, direction: string}>|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -49,7 +50,7 @@ class Repository extends ModelRepository
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions', 'categories'])
-            ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
+            ->from(Emotion::class, 'emotions')
             ->leftJoin('emotions.categories', 'categories');
 
         // Filter the displayed columns with the passed filter string
@@ -198,7 +199,7 @@ class Repository extends ModelRepository
      * @param int       $offset
      * @param int       $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getNameListQuery($filter = null, $orderBy = null, $offset = null, $limit = null)
     {
@@ -215,8 +216,8 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getLandingPageListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param bool  $filter
-     * @param array $orderBy
+     * @param bool                                                          $filter
+     * @param string|array<array{property: string, direction: string}>|null $orderBy
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -225,7 +226,7 @@ class Repository extends ModelRepository
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions.id', 'emotions.name'])
-            ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions');
+            ->from(Emotion::class, 'emotions');
 
         if ($filter === true) {
             $builder->where('emotions.isLandingPage = :isLandingPage')
@@ -248,7 +249,7 @@ class Repository extends ModelRepository
      *
      * @param int $emotionId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getEmotionDetailQuery($emotionId)
     {
@@ -269,7 +270,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['emotions', 'elements', 'component', 'fields', 'attribute', 'categories', 'shops', 'template'])
-            ->from(\Shopware\Models\Emotion\Emotion::class, 'emotions')
+            ->from(Emotion::class, 'emotions')
             ->leftJoin('emotions.template', 'template')
             ->leftJoin('emotions.elements', 'elements')
             ->leftJoin('emotions.attribute', 'attribute')
@@ -289,7 +290,7 @@ class Repository extends ModelRepository
      * @param int $elementId
      * @param int $componentId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getElementDataQuery($elementId, $componentId)
     {
@@ -325,7 +326,7 @@ class Repository extends ModelRepository
     /**
      * @param int[] $elementIds
      *
-     * @return array[] indexed by elementId
+     * @return array<int, list<array<string, mixed>>> indexed by elementId
      */
     public function getElementsViewports($elementIds)
     {
@@ -335,7 +336,7 @@ class Repository extends ModelRepository
         $viewports = [];
 
         foreach ($viewportsData as $viewport) {
-            $elementId = $viewport['elementId'];
+            $elementId = (int) $viewport['elementId'];
             $viewports[$elementId][] = $viewport;
         }
 
@@ -347,7 +348,7 @@ class Repository extends ModelRepository
      *
      * @param int $emotionId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getEmotionAttributesQuery($emotionId)
     {
@@ -378,7 +379,7 @@ class Repository extends ModelRepository
     /**
      * @param int $categoryId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getCategoryBaseEmotionsQuery($categoryId)
     {

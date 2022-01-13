@@ -40,6 +40,8 @@ use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Download;
+use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Attribute\ArticleImage;
 use Shopware\Models\Category\Category;
@@ -1650,8 +1652,11 @@ class ArticleTest extends TestCase
         ];
         $options = $this->resource->update($article->getId(), $updateArticle)->getConfiguratorSet()->getOptions();
 
+        static::assertInstanceOf(Option::class, $options[0]);
         static::assertSame(0, $options[0]->getPosition());
+        static::assertInstanceOf(Option::class, $options[1]);
         static::assertSame(1, $options[1]->getPosition());
+        static::assertInstanceOf(Option::class, $options[2]);
         static::assertSame(2, $options[2]->getPosition());
 
         try {
@@ -1694,8 +1699,11 @@ class ArticleTest extends TestCase
         ];
         $options = $this->resource->update($article->getId(), $updateArticle)->getConfiguratorSet()->getOptions();
 
+        static::assertInstanceOf(Option::class, $options[0]);
         static::assertSame(5, $options[0]->getPosition());
+        static::assertInstanceOf(Option::class, $options[1]);
         static::assertSame(6, $options[1]->getPosition());
+        static::assertInstanceOf(Option::class, $options[2]);
         static::assertSame(11, $options[2]->getPosition());
 
         try {
@@ -1738,7 +1746,9 @@ class ArticleTest extends TestCase
         ];
         $options = $this->resource->update($article->getId(), $updateArticle)->getConfiguratorSet()->getOptions();
 
+        static::assertInstanceOf(Option::class, $options[0]);
         static::assertSame(5, $options[0]->getPosition());
+        static::assertInstanceOf(Option::class, $options[1]);
         static::assertSame(11, $options[1]->getPosition());
 
         try {
@@ -2442,6 +2452,7 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(ProductModel::class, $product);
 
         $price = $product->getMainDetail()->getPrices()->first();
+        static::assertInstanceOf(Price::class, $price);
 
         static::assertEquals(
             400 / (((float) $product->getTax()->getTax() + 100) / 100),
@@ -2507,6 +2518,7 @@ class ArticleTest extends TestCase
 
         static::assertCount(1, $product->getDownloads());
 
+        static::assertInstanceOf(Download::class, $product->getDownloads()->first());
         $downloads = [
             ['id' => $product->getDownloads()->first()->getId()],
             ['link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'],
@@ -2563,6 +2575,7 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(ProductModel::class, $article);
 
         $price = $article->getMainDetail()->getPrices()->first();
+        static::assertInstanceOf(Price::class, $price);
 
         $net = 400 / (((float) $article->getTax()->getTax() + 100) / 100);
 

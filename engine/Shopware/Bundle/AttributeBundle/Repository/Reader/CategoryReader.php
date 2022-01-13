@@ -29,31 +29,26 @@ use PDO;
 
 class CategoryReader extends GenericReader
 {
-    /**
-     * @param int[]|string[] $identifiers
-     *
-     * @return array[]
-     */
     public function getList($identifiers)
     {
-        $data = parent::getList($identifiers);
-        $parents = $this->getParents($data);
+        $categories = parent::getList($identifiers);
+        $parents = $this->getParents($categories);
 
-        foreach ($data as &$row) {
+        foreach ($categories as &$row) {
             $path = array_reverse(array_filter(explode('|', $row['path'])));
             $row['parents'] = $this->getPathParents($parents, $path);
         }
 
-        return $data;
+        return $categories;
     }
 
     /**
-     * @param string[] $parents
-     * @param string[] $path
+     * @param array<string> $parents
+     * @param string[]      $path
      *
-     * @return array
+     * @return array<string>
      */
-    private function getPathParents($parents, $path)
+    private function getPathParents(array $parents, array $path): array
     {
         $categories = [];
         foreach ($path as $id) {
@@ -64,14 +59,14 @@ class CategoryReader extends GenericReader
     }
 
     /**
-     * @param array[] $data
+     * @param array<array<string, mixed>> $data
      *
-     * @return string[]
+     * @return array<int, string>
      */
-    private function getParents($data)
+    private function getParents(array $data): array
     {
         $parents = [];
-        foreach ($data as $id => $row) {
+        foreach ($data as $row) {
             $parents = array_merge($parents, explode('|', $row['path']));
         }
         $parents = array_values(array_unique(array_filter($parents)));

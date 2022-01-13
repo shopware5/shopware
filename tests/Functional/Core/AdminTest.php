@@ -121,6 +121,7 @@ class AdminTest extends TestCase
         static::assertEquals($this->config->get('defaultPayment'), $customer->getPaymentId());
 
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -269,6 +270,7 @@ class AdminTest extends TestCase
         );
 
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -418,6 +420,7 @@ class AdminTest extends TestCase
         );
 
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -461,6 +464,7 @@ class AdminTest extends TestCase
         static::assertArrayHasKey('minimumordersurcharge', $this->session->offsetGet('sUserGroupData'));
 
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -1188,6 +1192,7 @@ class AdminTest extends TestCase
         Shopware()->Db()->delete('s_order', 'id = ' . $orderId);
         Shopware()->Db()->delete('s_order', 'id = ' . $oldOrderId);
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -1218,6 +1223,7 @@ class AdminTest extends TestCase
         );
 
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -1439,6 +1445,7 @@ class AdminTest extends TestCase
         $this->assertArray($expectedData, $result);
 
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
@@ -2005,6 +2012,7 @@ class AdminTest extends TestCase
 
         Shopware()->Db()->delete('s_order', 'id = ' . $orderId);
         $this->deleteDummyCustomer($customer);
+        $this->session->offsetSet('sUserId', null);
     }
 
     /**
