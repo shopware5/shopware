@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ConfiguratorServiceInterface
 {
@@ -34,9 +37,9 @@ interface ConfiguratorServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
-     * @return Struct\Configurator\Group[]
+     * @return Group[]|null
      */
-    public function getProductConfiguration(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function getProductConfiguration(BaseProduct $product, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -44,11 +47,11 @@ interface ConfiguratorServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::getList()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
+     * @return array<string, array<Group>> Each array element contains a Struct\Configurator\Group[] array. The first level is indexed with the product number
      */
-    public function getProductsConfigurations($products, Struct\ShopContextInterface $context);
+    public function getProductsConfigurations($products, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -56,7 +59,9 @@ interface ConfiguratorServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::get()
      *
-     * @return Struct\Configurator\Set
+     * @param array<int, int> $selection
+     *
+     * @return Set
      */
-    public function getProductConfigurator(Struct\BaseProduct $product, Struct\ShopContextInterface $context, array $selection);
+    public function getProductConfigurator(BaseProduct $product, ShopContextInterface $context, array $selection);
 }

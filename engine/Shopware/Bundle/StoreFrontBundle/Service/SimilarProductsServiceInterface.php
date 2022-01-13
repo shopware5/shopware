@@ -30,11 +30,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 interface SimilarProductsServiceInterface
 {
     /**
-     * @see Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::get()
+     * @see \Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface::get()
      *
      * @param ListProduct[] $products
      *
-     * @return array indexed with the product number, the values are a list of ListProduct structs
+     * @return array<string, array<string, ListProduct>> indexed with the product number, the values are a list of ListProduct structs
      */
     public function getList($products, ProductContextInterface $context);
 
@@ -53,7 +53,7 @@ interface SimilarProductsServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
-     * @return ListProduct[] indexed by the product order number
+     * @return array<string, ListProduct>|null indexed by the product order number
      */
     public function get(ListProduct $product, ProductContextInterface $context);
 }

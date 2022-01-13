@@ -38,8 +38,8 @@ interface ProductNumberServiceInterface
      * 3. Returns the first available order number
      * 4. Returns the first active order number
      *
-     * @param string $number
-     * @param array  $selection Key - value array, key contains the configurator group id, value contains the configurator option id
+     * @param string          $number
+     * @param array<int, int> $selection Key - value array, key contains the configurator group id, value contains the configurator option id
      *
      * @return string
      */

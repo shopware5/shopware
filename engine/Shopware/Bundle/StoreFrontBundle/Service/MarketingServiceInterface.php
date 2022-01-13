@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\MarketingAttribute;
 
 interface MarketingServiceInterface
 {
@@ -32,7 +33,7 @@ interface MarketingServiceInterface
      * Builds a \Shopware\Bundle\StoreFrontBundle\Struct\Product\MarketingAttribute object,
      * which contains additionally marketing data about the product.
      *
-     * @return Struct\Product\MarketingAttribute
+     * @return MarketingAttribute
      */
-    public function getProductAttribute(Struct\ListProduct $product);
+    public function getProductAttribute(ListProduct $product);
 }

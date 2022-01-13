@@ -35,6 +35,8 @@ interface VariantListingPriceServiceInterface
      * in the listing, to the specific variant price. Refer also to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface::get()
+     *
+     * @return void
      */
     public function updatePrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context);
 }

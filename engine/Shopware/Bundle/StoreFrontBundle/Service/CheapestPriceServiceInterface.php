@@ -35,7 +35,7 @@ interface CheapestPriceServiceInterface
      *
      * @param ListProduct[] $products
      *
-     * @return PriceRule[] Indexed by product number
+     * @return array<string, PriceRule> Indexed by product number
      */
     public function getList($products, ProductContextInterface $context);
 
@@ -50,7 +50,7 @@ interface CheapestPriceServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
      *
-     * @return PriceRule
+     * @return PriceRule|null
      */
     public function get(ListProduct $product, ProductContextInterface $context);
 }

@@ -34,7 +34,7 @@ interface BaseProductFactoryServiceInterface
      *
      * @param string $number
      *
-     * @return BaseProduct
+     * @return BaseProduct|null
      */
     public function createBaseProduct($number);
 
@@ -44,7 +44,7 @@ interface BaseProductFactoryServiceInterface
      *
      * @param string[] $numbers
      *
-     * @return BaseProduct[]
+     * @return array<string, BaseProduct>
      */
     public function createBaseProducts($numbers);
 }
