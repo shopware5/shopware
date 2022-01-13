@@ -25,31 +25,25 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
+class ProductMediaGateway implements ProductMediaGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Hydrator\MediaHydrator
-     */
-    private $hydrator;
+    private MediaHydrator $hydrator;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\MediaHydrator $hydrator
+        MediaHydrator $hydrator
     ) {
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
@@ -59,7 +53,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $media = $this->getList([$product], $context);
 
@@ -69,7 +63,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getCover(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getCover(BaseProduct $product, ShopContextInterface $context)
     {
         $covers = $this->getCovers([$product], $context);
 
@@ -79,7 +73,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -95,15 +89,12 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
             ->addOrderBy('image.position')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($data as $row) {
-            $productId = $row['__image_articleID'];
-            $imageId = $row['__image_id'];
+            $productId = (int) $row['__image_articleID'];
+            $imageId = (int) $row['__image_id'];
 
             $result[$productId][$imageId] = $this->hydrator->hydrateProductImage($row);
         }
@@ -114,7 +105,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getCovers($products, Struct\ShopContextInterface $context)
+    public function getCovers($products, ShopContextInterface $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -128,13 +119,11 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
             ->andWhere('image.articleID IN (:products)')
             ->setParameter(':products', $ids, Connection::PARAM_INT_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $covers = [];
         foreach ($data as $row) {
-            $id = $row['__image_articleID'];
+            $id = (int) $row['__image_articleID'];
 
             $covers[$id] = $this->hydrator->hydrateProductImage($row);
         }
@@ -143,11 +132,14 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
     }
 
     /**
-     * @param Struct\BaseProduct[] $products
+     * @template TMedia of mixed
      *
-     * @return array
+     * @param array<int, TMedia> $media
+     * @param BaseProduct[]      $products
+     *
+     * @return array<string, TMedia>
      */
-    private function assignProductMedia(array $media, array $products)
+    private function assignProductMedia(array $media, array $products): array
     {
         $result = [];
         foreach ($products as $product) {
@@ -169,12 +161,7 @@ class ProductMediaGateway implements Gateway\ProductMediaGatewayInterface
         return $result;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getQuery(Struct\ShopContextInterface $context)
+    private function getQuery(ShopContextInterface $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 

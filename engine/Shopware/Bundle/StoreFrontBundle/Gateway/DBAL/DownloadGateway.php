@@ -26,15 +26,14 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\DownloadHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class DownloadGateway implements Gateway\DownloadGatewayInterface
+class DownloadGateway implements DownloadGatewayInterface
 {
-    /**
-     * @var Hydrator\DownloadHydrator
-     */
-    private $downloadHydrator;
+    private DownloadHydrator $downloadHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,20 +45,15 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\DownloadHydrator $downloadHydrator
+        DownloadHydrator $downloadHydrator
     ) {
         $this->connection = $connection;
         $this->downloadHydrator = $downloadHydrator;
@@ -69,7 +63,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $downloads = $this->getList([$product], $context);
 
@@ -79,7 +73,7 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -99,17 +93,13 @@ class DownloadGateway implements Gateway\DownloadGatewayInterface
 
         $this->fieldHelper->addDownloadTranslation($query, $context);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $downloads = [];
         foreach ($data as $row) {
             $key = $row['__download_articleID'];
 
-            $download = $this->downloadHydrator->hydrate($row);
-            $downloads[$key][] = $download;
+            $downloads[$key][] = $this->downloadHydrator->hydrate($row);
         }
 
         $result = [];

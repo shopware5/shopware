@@ -26,15 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ShopPageHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ShopPageGateway implements Gateway\ShopPageGatewayInterface
+class ShopPageGateway implements ShopPageGatewayInterface
 {
-    /**
-     * @var Hydrator\ShopPageHydrator
-     */
-    private $shopPageHydrator;
+    private ShopPageHydrator $shopPageHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,20 +44,15 @@ class ShopPageGateway implements Gateway\ShopPageGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\ShopPageHydrator $shopPageHydrator
+        ShopPageHydrator $shopPageHydrator
     ) {
         $this->connection = $connection;
         $this->shopPageHydrator = $shopPageHydrator;
@@ -69,7 +62,7 @@ class ShopPageGateway implements Gateway\ShopPageGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -83,10 +76,7 @@ class ShopPageGateway implements Gateway\ShopPageGatewayInterface
 
         $this->fieldHelper->addShopPageTranslation($query, $context);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
 
         return array_map([$this->shopPageHydrator, 'hydrate'], $data);
     }

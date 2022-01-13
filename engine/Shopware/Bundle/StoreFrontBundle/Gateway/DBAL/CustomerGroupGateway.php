@@ -26,14 +26,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerGroupHydrator;
 
-class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
+class CustomerGroupGateway implements CustomerGroupGatewayInterface
 {
-    /**
-     * @var Hydrator\CustomerGroupHydrator
-     */
-    private $customerGroupHydrator;
+    private CustomerGroupHydrator $customerGroupHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -45,20 +43,15 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\CustomerGroupHydrator $customerGroupHydrator
+        CustomerGroupHydrator $customerGroupHydrator
     ) {
         $this->customerGroupHydrator = $customerGroupHydrator;
         $this->connection = $connection;
@@ -88,14 +81,11 @@ class CustomerGroupGateway implements Gateway\CustomerGroupGatewayInterface
             ->where('customerGroup.groupkey IN (:keys)')
             ->setParameter(':keys', $keys, Connection::PARAM_STR_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $customerGroups = [];
         foreach ($data as $group) {
-            $key = $group['__customerGroup_groupkey'];
+            $key = (string) $group['__customerGroup_groupkey'];
             $customerGroups[$key] = $this->customerGroupHydrator->hydrate($group);
         }
 

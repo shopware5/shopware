@@ -25,8 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ListProductQueryHelperInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
 class ListProductQueryHelper implements ListProductQueryHelperInterface
@@ -41,20 +42,12 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    protected $fieldHelper;
+    protected FieldHelper $fieldHelper;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    protected $config;
+    protected Shopware_Components_Config $config;
 
-    /**
-     * @var Connection
-     */
-    protected $connection;
+    protected Connection $connection;
 
     public function __construct(FieldHelper $fieldHelper, Shopware_Components_Config $config, Connection $connection)
     {
@@ -64,9 +57,9 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
     }
 
     /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
-    public function getQuery(array $numbers, Struct\ShopContextInterface $context)
+    public function getQuery(array $numbers, ShopContextInterface $context)
     {
         $esdQuery = $this->getEsdQuery();
         $customerGroupQuery = $this->getCustomerGroupQuery();
@@ -121,12 +114,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
         return $query;
     }
 
-    /**
-     * @param string $key
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getPriceCountQuery($key)
+    private function getPriceCountQuery(string $key): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
@@ -151,10 +139,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
         return $query;
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getEsdQuery()
+    private function getEsdQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('1')
@@ -165,10 +150,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
         return $query;
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getCustomerGroupQuery()
+    private function getCustomerGroupQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select("GROUP_CONCAT(customerGroups.customergroupId SEPARATOR '|')")
@@ -178,10 +160,7 @@ class ListProductQueryHelper implements ListProductQueryHelperInterface
         return $query;
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getHasAvailableVariantQuery()
+    private function getHasAvailableVariantQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('COUNT(availableVariant.id)')

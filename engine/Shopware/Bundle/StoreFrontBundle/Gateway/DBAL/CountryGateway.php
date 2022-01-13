@@ -27,12 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Struct;
 
-class CountryGateway implements Gateway\CountryGatewayInterface
+class CountryGateway implements CountryGatewayInterface
 {
     private CountryHydrator $countryHydrator;
 
@@ -108,8 +108,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
             ->where('countryArea.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $statement = $query->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $areas = [];
         foreach ($data as $row) {
@@ -139,8 +138,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
 
         $this->fieldHelper->addCountryTranslation($query, $context);
 
-        $statement = $query->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $countries = [];
         foreach ($data as $row) {
@@ -165,8 +163,7 @@ class CountryGateway implements Gateway\CountryGatewayInterface
         $query->where('countryState.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $statement = $query->execute();
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $states = [];
         foreach ($data as $row) {

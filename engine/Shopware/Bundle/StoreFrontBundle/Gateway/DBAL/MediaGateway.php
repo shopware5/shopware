@@ -25,31 +25,24 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\MediaGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class MediaGateway implements Gateway\MediaGatewayInterface
+class MediaGateway implements MediaGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Hydrator\MediaHydrator
-     */
-    private $hydrator;
+    private MediaHydrator $hydrator;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\MediaHydrator $hydrator
+        MediaHydrator $hydrator
     ) {
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
@@ -59,7 +52,7 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get($id, Struct\ShopContextInterface $context)
+    public function get($id, ShopContextInterface $context)
     {
         $media = $this->getList([$id], $context);
 
@@ -69,30 +62,24 @@ class MediaGateway implements Gateway\MediaGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($ids, Struct\ShopContextInterface $context)
+    public function getList($ids, ShopContextInterface $context)
     {
         $query = $this->getQuery($context);
 
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $result = [];
         foreach ($data as $row) {
-            $mediaId = $row['__media_id'];
+            $mediaId = (int) $row['__media_id'];
             $result[$mediaId] = $this->hydrator->hydrate($row);
         }
 
         return $result;
     }
 
-    /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
-    private function getQuery(Struct\ShopContextInterface $context)
+    private function getQuery(ShopContextInterface $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 

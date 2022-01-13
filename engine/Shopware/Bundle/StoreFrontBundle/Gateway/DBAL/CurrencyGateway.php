@@ -32,20 +32,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
 
 class CurrencyGateway implements CurrencyGatewayInterface
 {
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var CurrencyHydrator
-     */
-    private $hydrator;
+    private CurrencyHydrator $hydrator;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         CurrencyHydrator $hydrator,
@@ -77,9 +68,9 @@ class CurrencyGateway implements CurrencyGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
-    private function getCurrencies($ids)
+    private function getCurrencies(array $ids): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->addSelect($this->fieldHelper->getCurrencyFields())

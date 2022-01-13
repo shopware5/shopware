@@ -26,30 +26,23 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\VoteHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
-class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
+class VoteAverageGateway implements VoteAverageGatewayInterface
 {
-    /**
-     * @var Hydrator\VoteHydrator
-     */
-    private $voteHydrator;
+    private VoteHydrator $voteHydrator;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(
         Connection $connection,
-        Hydrator\VoteHydrator $voteHydrator,
+        VoteHydrator $voteHydrator,
         Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
@@ -60,7 +53,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $votes = $this->getList([$product], $context);
 
@@ -70,7 +63,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -99,10 +92,7 @@ class VoteAverageGateway implements Gateway\VoteAverageGatewayInterface
             $query->setParameter(':shopId', $context->getShop()->getId());
         }
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_GROUP);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         $result = [];
         foreach ($products as $product) {

@@ -26,15 +26,15 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
+class GraduatedPricesGateway implements GraduatedPricesGatewayInterface
 {
-    /**
-     * @var Hydrator\PriceHydrator
-     */
-    private $priceHydrator;
+    private PriceHydrator $priceHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,20 +46,15 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PriceHydrator $priceHydrator
+        PriceHydrator $priceHydrator
     ) {
         $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
@@ -70,9 +65,9 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
      * {@inheritdoc}
      */
     public function get(
-        Struct\ListProduct $product,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup
+        ListProduct $product,
+        ShopContextInterface $context,
+        Group $customerGroup
     ) {
         $prices = $this->getList([$product], $context, $customerGroup);
 
@@ -82,7 +77,7 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup)
+    public function getList($products, ShopContextInterface $context, Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -109,15 +104,12 @@ class GraduatedPricesGateway implements Gateway\GraduatedPricesGatewayInterface
 
         $this->fieldHelper->addPriceTranslation($query, $context);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $prices = [];
         foreach ($data as $row) {
-            $product = $row['number'];
-            $prices[$product][] = $this->priceHydrator->hydratePriceRule($row);
+            $productNumber = (string) $row['number'];
+            $prices[$productNumber][] = $this->priceHydrator->hydratePriceRule($row);
         }
 
         return $prices;

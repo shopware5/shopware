@@ -29,14 +29,14 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
-class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGatewayInterface
+class VariantCheapestPriceGateway implements VariantCheapestPriceGatewayInterface
 {
     private PriceHydrator $priceHydrator;
 
@@ -132,16 +132,21 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
 
         $prices = [];
         foreach ($data as $row) {
-            $product = $row['__variant_ordernumber'];
+            $product = (string) $row['__variant_ordernumber'];
             $prices[$product]['price'] = $this->priceHydrator->hydrateCheapestPrice($row);
             $prices[$product]['price']->setCustomerGroup($customerGroup);
 
-            $prices[$product]['different_price_count'] = $row['__different_price_count'];
+            $prices[$product]['different_price_count'] = (int) $row['__different_price_count'];
         }
 
         return $prices;
     }
 
+    /**
+     * @deprecated - Will be private in Shopware 5.8
+     *
+     * @return string
+     */
     public function joinVariantCondition(
         QueryBuilder $mainQuery,
         QueryBuilder $cheapestPriceIdQuery,
@@ -150,7 +155,7 @@ class VariantCheapestPriceGateway implements Gateway\VariantCheapestPriceGateway
     ) {
         $tableKey = $condition->getName();
 
-        $suffix = md5(json_encode($condition));
+        $suffix = md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         $where = [];
 

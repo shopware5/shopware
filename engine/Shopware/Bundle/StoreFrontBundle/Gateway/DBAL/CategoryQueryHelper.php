@@ -26,10 +26,10 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CategoryQueryHelperInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CategoryQueryHelper implements Gateway\CategoryQueryHelperInterface
+class CategoryQueryHelper implements CategoryQueryHelperInterface
 {
     /**
      * The FieldHelper class is used for the
@@ -41,15 +41,10 @@ class CategoryQueryHelper implements Gateway\CategoryQueryHelperInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
@@ -59,7 +54,7 @@ class CategoryQueryHelper implements Gateway\CategoryQueryHelperInterface
         $this->fieldHelper = $fieldHelper;
     }
 
-    public function getQuery(array $ids, Struct\ShopContextInterface $context): QueryBuilder
+    public function getQuery(array $ids, ShopContextInterface $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 

@@ -26,15 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
+class SimilarProductsGateway implements SimilarProductsGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -44,7 +42,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $numbers = $this->getList([$product], $context);
 
@@ -54,7 +52,7 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -72,14 +70,11 @@ class SimilarProductsGateway implements Gateway\SimilarProductsGatewayInterface
             ->where('product.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_GROUP);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         $related = [];
         foreach ($data as $productId => $row) {
-            $related[$productId] = array_column($row, 'number');
+            $related[(int) $productId] = array_column($row, 'number');
         }
 
         return $related;

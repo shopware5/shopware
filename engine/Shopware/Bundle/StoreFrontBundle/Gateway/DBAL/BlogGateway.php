@@ -25,16 +25,15 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\BlogHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class BlogGateway implements Gateway\BlogGatewayInterface
+class BlogGateway implements BlogGatewayInterface
 {
-    /**
-     * @var Hydrator\BlogHydrator
-     */
-    private $blogHydrator;
+    private BlogHydrator $blogHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,20 +45,15 @@ class BlogGateway implements Gateway\BlogGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\BlogHydrator $blogHydrator
+        BlogHydrator $blogHydrator
     ) {
         $this->connection = $connection;
         $this->blogHydrator = $blogHydrator;
@@ -69,13 +63,13 @@ class BlogGateway implements Gateway\BlogGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $blogIds, Struct\ShopContextInterface $context)
+    public function getList(array $blogIds, ShopContextInterface $context)
     {
         $data = $this->getQuery($blogIds, $context)
             ->execute()
             ->fetchAll(PDO::FETCH_ASSOC);
 
-        $articles = $this->getArticlesQuery(array_column($data, '__blog_id'))
+        $articles = $this->getProductsQuery(array_column($data, '__blog_id'))
             ->execute()
             ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
 
@@ -85,7 +79,7 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
         $blogs = [];
         foreach ($data as $row) {
-            $id = $row['__blog_id'];
+            $id = (int) $row['__blog_id'];
 
             $blog = $this->blogHydrator->hydrate($row);
 
@@ -105,10 +99,8 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
     /**
      * @param int[] $ids
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getQuery(array $ids, Struct\ShopContextInterface $context)
+    private function getQuery(array $ids, ShopContextInterface $context): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -133,10 +125,8 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
     /**
      * @param int[] $blogIds
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getArticlesQuery(array $blogIds)
+    private function getProductsQuery(array $blogIds): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 
@@ -151,10 +141,8 @@ class BlogGateway implements Gateway\BlogGatewayInterface
 
     /**
      * @param int[] $blogIds
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
      */
-    private function getMediaQuery(array $blogIds)
+    private function getMediaQuery(array $blogIds): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
 

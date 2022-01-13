@@ -26,11 +26,11 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PaymentHydrator;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PaymentGateway implements Gateway\PaymentGatewayInterface
+class PaymentGateway implements PaymentGatewayInterface
 {
     /**
      * The FieldHelper class is used for the
@@ -42,20 +42,12 @@ class PaymentGateway implements Gateway\PaymentGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var PaymentHydrator
-     */
-    private $paymentHydrator;
+    private PaymentHydrator $paymentHydrator;
 
     public function __construct(
         Connection $connection,
@@ -70,7 +62,7 @@ class PaymentGateway implements Gateway\PaymentGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $paymentIds, Struct\ShopContextInterface $context)
+    public function getList(array $paymentIds, ShopContextInterface $context)
     {
         $paymentIds = array_unique($paymentIds);
 
@@ -87,14 +79,11 @@ class PaymentGateway implements Gateway\PaymentGatewayInterface
 
         $this->fieldHelper->addPaymentTranslation($query, $context);
 
-        /** @var \Doctrine\DBAL\Driver\Statement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $payments = [];
         foreach ($data as $row) {
-            $id = $row['__payment_id'];
+            $id = (int) $row['__payment_id'];
             $payments[$id] = $this->paymentHydrator->hydrate($row);
         }
 
