@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ConfiguratorGatewayInterface
 {
@@ -45,9 +48,9 @@ interface ConfiguratorGatewayInterface
      * - Option position
      * - Option name
      *
-     * @return Struct\Configurator\Set
+     * @return Set
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 
     /**
      * Selects the first possible product image for the provided product configurator.
@@ -55,12 +58,9 @@ interface ConfiguratorGatewayInterface
      * The image mapping defines which product image should be displayed for which configurator selection.
      * Returns for each configurator option the first possible image
      *
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct          $product
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
-     *
-     * @return Struct\Media[] indexed by the configurator option id
+     * @return array<int, Media> indexed by the configurator option id
      */
-    public function getConfiguratorMedia(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function getConfiguratorMedia(BaseProduct $product, ShopContextInterface $context);
 
     /**
      * Returns all possible configurator combinations for the provided product.
@@ -83,7 +83,7 @@ interface ConfiguratorGatewayInterface
      *     'red'   => array()
      * )
      *
-     * @return array Indexed by the option id
+     * @return array<int, array<string>> Indexed by the option id
      */
-    public function getProductCombinations(Struct\BaseProduct $product);
+    public function getProductCombinations(BaseProduct $product);
 }

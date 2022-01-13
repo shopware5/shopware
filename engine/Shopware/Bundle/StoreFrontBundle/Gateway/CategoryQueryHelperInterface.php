@@ -25,14 +25,16 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CategoryQueryHelperInterface
 {
     /**
+     * @param array<int> $numbers Category IDs
+     *
      * @return QueryBuilder
      */
-    public function getQuery(array $numbers, Struct\ShopContextInterface $context);
+    public function getQuery(array $numbers, ShopContextInterface $context);
 
     /**
      * @param int[] $ids

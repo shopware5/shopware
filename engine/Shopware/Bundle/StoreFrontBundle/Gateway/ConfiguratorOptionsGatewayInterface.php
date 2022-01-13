@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ConfiguratorOptionsGatewayInterface
@@ -31,7 +32,9 @@ interface ConfiguratorOptionsGatewayInterface
     /**
      * Get groups with options by option-ids
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group[]
+     * @param array<int> $optionIds
+     *
+     * @return Group[]
      */
     public function getOptions(array $optionIds, ShopContextInterface $context);
 }

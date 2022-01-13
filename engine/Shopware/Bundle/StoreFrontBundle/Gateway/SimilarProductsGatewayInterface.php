@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface SimilarProductsGatewayInterface
 {
@@ -44,11 +45,11 @@ interface SimilarProductsGatewayInterface
      *    '456' => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array Indexed by the product number
+     * @return array<int, array<string>> Indexed by the product id
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -56,7 +57,7 @@ interface SimilarProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @return array Array of order numbers
+     * @return array<string>|null Array of order numbers
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 }

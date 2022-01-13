@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
 interface RelatedProductsGatewayInterface
 {
@@ -40,13 +40,13 @@ interface RelatedProductsGatewayInterface
      *
      * Result:
      * array(
-     *    'SW100' => array('SW101', 'SW102')
-     *    'SW200' => array('SW201', 'SW202')
+     *    100 => array('SW101', 'SW102')
+     *    200 => array('SW201', 'SW202')
      * )
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array indexed by the product number
+     * @return array<int, array<string>> indexed by the product id
      */
     public function getList($products);
 
@@ -56,7 +56,7 @@ interface RelatedProductsGatewayInterface
      *
      * Example result: array('SW101', 'SW102')
      *
-     * @return array Array of order numbers
+     * @return array<string>|null Array of order numbers
      */
-    public function get(Struct\BaseProduct $product);
+    public function get(BaseProduct $product);
 }

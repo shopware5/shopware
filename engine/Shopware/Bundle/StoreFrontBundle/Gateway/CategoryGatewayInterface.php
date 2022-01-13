@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CategoryGatewayInterface
 {
@@ -34,9 +36,11 @@ interface CategoryGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface::get()
      *
-     * @return Struct\Category[] Indexed by the category id
+     * @param array<int> $ids
+     *
+     * @return Category[] Indexed by the category id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Category requires the following data:
@@ -45,14 +49,16 @@ interface CategoryGatewayInterface
      * - Assigned media object
      * - Core attribute of the media object
      *
-     * @return Struct\Category
+     * @param int $id
+     *
+     * @return Category|null
      */
-    public function get($id, Struct\ShopContextInterface $context);
+    public function get($id, ShopContextInterface $context);
 
     /**
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array Indexed by product number, contains all categories of a product
+     * @return array<string, array<Category>> Indexed by product number, contains all categories of a product
      */
-    public function getProductsCategories(array $products, Struct\ShopContextInterface $context);
+    public function getProductsCategories(array $products, ShopContextInterface $context);
 }

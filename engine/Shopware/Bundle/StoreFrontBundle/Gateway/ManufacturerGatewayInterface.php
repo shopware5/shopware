@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ManufacturerGatewayInterface
 {
@@ -34,9 +35,11 @@ interface ManufacturerGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @return Struct\Product\Manufacturer[] Indexed by the manufacturer id
+     * @param array<int> $ids
+     *
+     * @return array<int, Manufacturer> Indexed by the manufacturer id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Manufacturer requires the following data:
@@ -48,7 +51,7 @@ interface ManufacturerGatewayInterface
      *
      * @param int $id
      *
-     * @return Struct\Product\Manufacturer
+     * @return Manufacturer|null
      */
-    public function get($id, Struct\ShopContextInterface $context);
+    public function get($id, ShopContextInterface $context);
 }

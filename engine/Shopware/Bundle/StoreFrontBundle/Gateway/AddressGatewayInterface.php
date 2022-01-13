@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Address;
+
 interface AddressGatewayInterface
 {
     /**
      * @param int[] $ids
      *
-     * @return array
+     * @return array<Address>
      */
     public function getList($ids);
 }

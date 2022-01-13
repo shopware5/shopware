@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductPropertyGatewayInterface
 {
@@ -34,11 +36,11 @@ interface ProductPropertyGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return Struct\Property\Set[] Indexed by the product order number
+     * @return array<string, Set> Indexed by the product order number
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set requires the following data:
@@ -59,7 +61,7 @@ interface ProductPropertyGatewayInterface
      * - Sort mode equals to 3, the values are sorted by the position
      * - In all other cases the values are sorted by their alphanumeric value
      *
-     * @return Struct\Property\Set
+     * @return Set|null
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 }

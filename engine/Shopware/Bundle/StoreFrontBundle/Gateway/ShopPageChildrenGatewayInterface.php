@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
 
 interface ShopPageChildrenGatewayInterface
 {
@@ -38,7 +39,7 @@ interface ShopPageChildrenGatewayInterface
      *
      * @param int[] $ids
      *
-     * @return Struct\ShopPage[] Indexed by the shop page id
+     * @return array<int, ShopPage> Indexed by the shop page id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 }
