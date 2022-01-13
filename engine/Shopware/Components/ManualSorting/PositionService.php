@@ -146,18 +146,25 @@ ON DUPLICATE KEY UPDATE
     }
 
     /**
-     * @return CustomSorting[]
+     * @return array<int, CustomSorting>|null
      */
-    private function getSortings(int $categoryId): array
+    private function getSortings(int $categoryId): ?array
     {
         $context = $this->contextService->getShopContext();
 
-        return current($this->customSortingService->getSortingsOfCategories([$categoryId], $context));
+        $customSortings = $this->customSortingService->getSortingsOfCategories([$categoryId], $context);
+
+        return array_shift($customSortings);
     }
 
     private function getSorting(int $categoryId, int $sortingId): ?CustomSorting
     {
-        foreach ($this->getSortings($categoryId) as $sorting) {
+        $sortings = $this->getSortings($categoryId);
+        if (!\is_array($sortings)) {
+            return null;
+        }
+
+        foreach ($sortings as $sorting) {
             if ($sorting->getId() === $sortingId) {
                 return $sorting;
             }

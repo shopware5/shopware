@@ -26,10 +26,11 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Thumbnail\Manager;
@@ -1190,7 +1191,7 @@ class sExport implements Enlight_Hook
 
                     if (!empty($row['group_ordernumber'])) {
                         foreach ($row['group_ordernumber'] as $orderNumber) {
-                            $product = new StoreFrontBundle\Struct\ListProduct(
+                            $product = new ListProduct(
                                 (int) $row['articleID'],
                                 (int) $row['articledetailsID'],
                                 $orderNumber
@@ -1209,7 +1210,7 @@ class sExport implements Enlight_Hook
                         }
                     }
                 }
-                $product = new StoreFrontBundle\Struct\ListProduct(
+                $product = new ListProduct(
                     (int) $row['articleID'],
                     (int) $row['articledetailsID'],
                     $row['ordernumber']
@@ -1224,9 +1225,13 @@ class sExport implements Enlight_Hook
 
                 $configurationGroups = $this->configuratorService->getProductConfiguration($product, $context);
 
-                foreach ($configurationGroups as $configurationGroup) {
-                    $option = current($configurationGroup->getOptions());
-                    $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
+                if (\is_array($configurationGroups)) {
+                    foreach ($configurationGroups as $configurationGroup) {
+                        $option = current($configurationGroup->getOptions());
+                        if ($option instanceof Option) {
+                            $row['configurator_options'][$configurationGroup->getName()] = $option->getName();
+                        }
+                    }
                 }
             }
             $rows[] = $row;

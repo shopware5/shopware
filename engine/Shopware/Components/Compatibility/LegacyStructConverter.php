@@ -34,6 +34,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
 use Shopware_Components_Config;
@@ -389,10 +390,7 @@ class LegacyStructConverter
         $data['unitID'] = null;
         $data['sUnit'] = ['unit' => '', 'description' => ''];
         $data['unit_attributes'] = [];
-
-        if ($price->getUnit()) {
-            $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
-        }
+        $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Product_Price', $data, [
             'price' => $price,
@@ -685,7 +683,7 @@ class LegacyStructConverter
     /**
      * @return array
      */
-    public function convertUnitStruct(StoreFrontBundle\Struct\Product\Unit $unit)
+    public function convertUnitStruct(Unit $unit)
     {
         $data = [
             'minpurchase' => $unit->getMinPurchase(),

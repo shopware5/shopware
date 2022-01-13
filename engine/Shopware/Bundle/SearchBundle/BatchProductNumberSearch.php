@@ -104,10 +104,7 @@ class BatchProductNumberSearch
         return array_merge($items, $this->getBaseProductsRange($key, $baseProducts, $missingItems));
     }
 
-    /**
-     * @return array
-     */
-    private function getBaseProductsByCriteriaList(array $criteriaList, ShopContextInterface $context)
+    private function getBaseProductsByCriteriaList(array $criteriaList, ShopContextInterface $context): array
     {
         $products = [];
         $optimizedCriteriaList = $this->getOptimizedCriteriaList($criteriaList);
@@ -135,7 +132,7 @@ class BatchProductNumberSearch
      *
      * @return array<array{criteria: Criteria, requests: array<array{criteria: Criteria, key: int}>}>
      */
-    private function getOptimizedCriteriaList(array $criteriaList)
+    private function getOptimizedCriteriaList(array $criteriaList): array
     {
         $optimizedCriteriaList = [];
 
@@ -176,7 +173,6 @@ class BatchProductNumberSearch
         foreach ($criteriaList as $index => $existingCriteria) {
             $existingCriteria = $this->getComparableCriteria($existingCriteria['criteria']);
 
-            /* @noinspection TypeUnsafeComparisonInspection */
             if ($comparableCriteria == $existingCriteria) {
                 return $index;
             }
@@ -185,10 +181,7 @@ class BatchProductNumberSearch
         return false;
     }
 
-    /**
-     * @return Criteria
-     */
-    private function getComparableCriteria(Criteria $criteria)
+    private function getComparableCriteria(Criteria $criteria): Criteria
     {
         $conditions = $criteria->getConditions();
         $sortings = $criteria->getSortings();
@@ -210,9 +203,9 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @return BaseProduct[]
+     * @return array<string, BaseProduct>
      */
-    private function getBaseProductsByProductNumberRequest(BatchProductNumberSearchRequest $request)
+    private function getBaseProductsByProductNumberRequest(BatchProductNumberSearchRequest $request): array
     {
         $baseProductList = [];
 

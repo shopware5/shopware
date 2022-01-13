@@ -31,6 +31,7 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
+use Shopware\Bundle\SearchBundle\ProductSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\ReleaseDateSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -1163,13 +1164,11 @@ class sArticles implements Enlight_Hook
             $categoryId = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId($id);
         }
 
-        $legacyProduct = $this->getLegacyProduct(
+        return $this->getLegacyProduct(
             $product,
             $categoryId,
             $selection
         );
-
-        return $legacyProduct;
     }
 
     /**
@@ -2379,7 +2378,7 @@ class sArticles implements Enlight_Hook
      * @param int|null $category
      * @param string   $number
      *
-     * @return array|bool
+     * @return array|false
      */
     private function getPromotion($category, $number)
     {
@@ -2484,11 +2483,11 @@ class sArticles implements Enlight_Hook
      * Helper function which loads a full product struct and converts the product struct
      * to the shopware 3 array structure.
      *
-     * @param int $categoryId
+     * @param array<int, int> $selection
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getLegacyProduct(Product $product, $categoryId, array $selection)
+    private function getLegacyProduct(Product $product, int $categoryId, array $selection): array
     {
         $data = $this->legacyStructConverter->convertProductStruct($product);
         $data['categoryID'] = $categoryId;
@@ -2563,7 +2562,7 @@ class sArticles implements Enlight_Hook
 
         $service = Shopware()->Container()->get(VariantListingPriceServiceInterface::class);
 
-        $result = new SearchBundle\ProductSearchResult(
+        $result = new ProductSearchResult(
             [$product->getNumber() => $product],
             1,
             [],
@@ -2579,9 +2578,7 @@ class sArticles implements Enlight_Hook
 
         $data['price'] = $product->getListingPrice()->getCalculatedPrice();
 
-        $data = $this->legacyEventManager->fireArticleByIdEvents($data, $this);
-
-        return $data;
+        return $this->legacyEventManager->fireArticleByIdEvents($data, $this);
     }
 
     /**
@@ -2661,9 +2658,11 @@ class sArticles implements Enlight_Hook
      * Array elements of the configuration selection can be empty, if the user resets the
      * different group selections.
      *
-     * @return array
+     * @param array<int|string, int|string> $selection
+     *
+     * @return array<int, int>
      */
-    private function getCurrentSelection(array $selection)
+    private function getCurrentSelection(array $selection): array
     {
         if (empty($selection) && $this->frontController->Request()->has('group')) {
             $selection = $this->frontController->Request()->getParam('group');

@@ -28,8 +28,8 @@ use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
-use Shopware\Models\Article\Configurator\Option;
 
 class VariantSearch implements ProductSearchInterface
 {
