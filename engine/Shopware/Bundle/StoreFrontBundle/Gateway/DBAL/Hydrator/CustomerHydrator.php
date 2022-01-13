@@ -29,15 +29,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
-    /**
-     * @var CustomerGroupHydrator
-     */
-    private $customerGroupHydrator;
+    private CustomerGroupHydrator $customerGroupHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator, CustomerGroupHydrator $customerGroupHydrator)
     {
@@ -45,6 +39,11 @@ class CustomerHydrator extends Hydrator
         $this->customerGroupHydrator = $customerGroupHydrator;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return Customer
+     */
     public function hydrate(array $data)
     {
         $customer = new Customer();

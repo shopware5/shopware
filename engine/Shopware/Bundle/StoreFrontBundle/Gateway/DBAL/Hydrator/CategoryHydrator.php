@@ -24,24 +24,15 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 class CategoryHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
-    /**
-     * @var MediaHydrator
-     */
-    private $mediaHydrator;
+    private MediaHydrator $mediaHydrator;
 
-    /**
-     * @var ProductStreamHydrator
-     */
-    private $productStreamHydrator;
+    private ProductStreamHydrator $productStreamHydrator;
 
     public function __construct(
         AttributeHydrator $attributeHydrator,
@@ -54,11 +45,11 @@ class CategoryHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Category
+     * @return Category
      */
     public function hydrate(array $data)
     {
-        $category = new Struct\Category();
+        $category = new Category();
         $translation = $this->getTranslation($data, '__category');
         $data = array_merge($data, $translation);
 
@@ -87,7 +78,7 @@ class CategoryHydrator extends Hydrator
         return $category;
     }
 
-    private function assignCategoryData(Struct\Category $category, array $data)
+    private function assignCategoryData(Category $category, array $data)
     {
         if (isset($data['__category_id'])) {
             $category->setId((int) $data['__category_id']);
@@ -157,8 +148,7 @@ class CategoryHydrator extends Hydrator
         }
 
         if (isset($data['__category_customer_groups'])) {
-            /** @var int[] $categoryCustomerGroups */
-            $categoryCustomerGroups = explode(',', $data['__category_customer_groups']);
+            $categoryCustomerGroups = array_map('\intval', explode(',', $data['__category_customer_groups']));
             $category->setBlockedCustomerGroupIds($categoryCustomerGroups);
         }
 

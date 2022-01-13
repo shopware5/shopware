@@ -30,10 +30,7 @@ use Shopware\Components\LogawareReflectionHelper;
 
 class CustomListingHydrator extends Hydrator
 {
-    /**
-     * @var LogawareReflectionHelper
-     */
-    private $reflector;
+    private LogawareReflectionHelper $reflector;
 
     public function __construct(LogawareReflectionHelper $reflector)
     {

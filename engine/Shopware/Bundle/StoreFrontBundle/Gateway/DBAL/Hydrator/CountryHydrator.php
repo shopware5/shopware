@@ -24,14 +24,13 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 
 class CountryHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -39,11 +38,11 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Country\Area
+     * @return Area
      */
     public function hydrateArea(array $data)
     {
-        $area = new Struct\Country\Area();
+        $area = new Area();
         $area->setId((int) $data['__countryArea_id']);
         $area->setName($data['__countryArea_name']);
 
@@ -51,11 +50,11 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Country
+     * @return Country
      */
     public function hydrateCountry(array $data)
     {
-        $country = new Struct\Country();
+        $country = new Country();
         $id = (int) $data['__country_id'];
 
         $translation = $this->getTranslation($data, '__country', [], $id);
@@ -119,11 +118,11 @@ class CountryHydrator extends Hydrator
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Country\State
+     * @return State
      */
     public function hydrateState(array $data)
     {
-        $state = new Struct\Country\State();
+        $state = new State();
 
         $id = (int) $data['__countryState_id'];
 

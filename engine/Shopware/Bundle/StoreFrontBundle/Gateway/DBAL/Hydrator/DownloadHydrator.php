@@ -24,14 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Download;
 
 class DownloadHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -41,11 +38,11 @@ class DownloadHydrator extends Hydrator
     /**
      * Creates a new Struct\Product\Download struct with the passed data.
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download
+     * @return Download
      */
     public function hydrate(array $data)
     {
-        $download = new Struct\Product\Download();
+        $download = new Download();
         $download->setId((int) $data['__download_id']);
         $download->setDescription($data['__download_description']);
         $download->setFile($data['__download_filename']);

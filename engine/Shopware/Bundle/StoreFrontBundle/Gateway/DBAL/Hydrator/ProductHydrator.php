@@ -25,34 +25,20 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use DateTime;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 
 class ProductHydrator extends Hydrator
 {
-    /**
-     * @var ManufacturerHydrator
-     */
-    private $manufacturerHydrator;
+    private ManufacturerHydrator $manufacturerHydrator;
 
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
-    /**
-     * @var TaxHydrator
-     */
-    private $taxHydrator;
+    private TaxHydrator $taxHydrator;
 
-    /**
-     * @var UnitHydrator
-     */
-    private $unitHydrator;
+    private UnitHydrator $unitHydrator;
 
-    /**
-     * @var EsdHydrator
-     */
-    private $esdHydrator;
+    private EsdHydrator $esdHydrator;
 
     public function __construct(
         AttributeHydrator $attributeHydrator,
@@ -72,11 +58,11 @@ class ProductHydrator extends Hydrator
      * Hydrates the passed data and converts the ORM
      * array values into a Struct\ListProduct class.
      *
-     * @return Struct\ListProduct
+     * @return ListProduct
      */
     public function hydrateListProduct(array $data)
     {
-        $product = new Struct\ListProduct(
+        $product = new ListProduct(
             (int) $data['__product_id'],
             (int) $data['__variant_id'],
             $data['__variant_ordernumber']
@@ -98,7 +84,7 @@ class ProductHydrator extends Hydrator
             return $translation;
         }
 
-        $result = $this->convertArrayKeys($translation, [
+        return $this->convertArrayKeys($translation, [
             'metaTitle' => '__product_metaTitle',
             'txtArtikel' => '__product_name',
             'txtshortdescription' => '__product_description',
@@ -108,14 +94,9 @@ class ProductHydrator extends Hydrator
             'txtkeywords' => '__product_keywords',
             'txtpackunit' => '__unit_packunit',
         ]);
-
-        return $result;
     }
 
-    /**
-     * @return Struct\ListProduct
-     */
-    private function assignData(Struct\ListProduct $product, array $data)
+    private function assignData(ListProduct $product, array $data): ListProduct
     {
         $translation = $this->getProductTranslation($data);
         $data = array_merge($data, $translation);
@@ -151,10 +132,10 @@ class ProductHydrator extends Hydrator
         return $product;
     }
 
-    private function assignPriceGroupData(Struct\ListProduct $product, array $data)
+    private function assignPriceGroupData(ListProduct $product, array $data): void
     {
         if (!empty($data['__priceGroup_id'])) {
-            $product->setPriceGroup(new Struct\Product\PriceGroup());
+            $product->setPriceGroup(new PriceGroup());
             $product->getPriceGroup()->setId((int) $data['__priceGroup_id']);
             $product->getPriceGroup()->setName($data['__priceGroup_description']);
         }
@@ -164,7 +145,7 @@ class ProductHydrator extends Hydrator
      * Helper function which assigns the shopware article
      * data to the product. (data of s_articles)
      */
-    private function assignProductData(Struct\ListProduct $product, array $data)
+    private function assignProductData(ListProduct $product, array $data): void
     {
         $product->setName($data['__product_name']);
         $product->setShortDescription($data['__product_description']);
@@ -231,7 +212,7 @@ class ProductHydrator extends Hydrator
     /**
      * Iterates the attribute data and assigns the attribute struct to the product.
      */
-    private function assignAttributeData(Struct\ListProduct $product, array $data)
+    private function assignAttributeData(ListProduct $product, array $data): void
     {
         $translation = $this->getProductTranslation($data);
         $translation = $this->extractFields('__attribute_', $translation);

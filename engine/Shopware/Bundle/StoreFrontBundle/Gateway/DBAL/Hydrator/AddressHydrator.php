@@ -28,15 +28,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Address;
 
 class AddressHydrator extends Hydrator
 {
-    /**
-     * @var CountryHydrator
-     */
-    private $countryHydrator;
+    private CountryHydrator $countryHydrator;
 
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(CountryHydrator $countryHydrator, AttributeHydrator $attributeHydrator)
     {

@@ -24,14 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Link;
 
 class LinkHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -39,11 +36,11 @@ class LinkHydrator extends Hydrator
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link
+     * @return Link
      */
     public function hydrate(array $data)
     {
-        $link = new Struct\Product\Link();
+        $link = new Link();
         $link->setId((int) $data['__link_id']);
         $link->setDescription($data['__link_description']);
         $link->setLink($data['__link_link']);

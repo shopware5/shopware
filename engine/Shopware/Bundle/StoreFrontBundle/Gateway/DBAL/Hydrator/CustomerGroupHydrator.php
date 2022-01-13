@@ -24,14 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 
 class CustomerGroupHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -39,11 +36,11 @@ class CustomerGroupHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Customer\Group
+     * @return Group
      */
     public function hydrate(array $data)
     {
-        $customerGroup = new Struct\Customer\Group();
+        $customerGroup = new Group();
 
         $customerGroup->setId((int) $data['__customerGroup_id']);
 

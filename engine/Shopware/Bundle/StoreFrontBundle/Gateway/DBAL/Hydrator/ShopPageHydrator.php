@@ -25,14 +25,11 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use DateTime;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
 
 class ShopPageHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -40,11 +37,11 @@ class ShopPageHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\ShopPage
+     * @return ShopPage
      */
     public function hydrate(array $data)
     {
-        $page = new Struct\ShopPage();
+        $page = new ShopPage();
 
         $translation = $this->getTranslation($data, '__page');
         $data = array_merge($data, $translation);
@@ -54,7 +51,10 @@ class ShopPageHydrator extends Hydrator
         return $page;
     }
 
-    private function assignData(Struct\ShopPage $shopPage, array $data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function assignData(ShopPage $shopPage, array $data): void
     {
         $shopPage->setId((int) $data['__page_id']);
         $shopPage->setTpl1Variable($data['__page_tpl1variable']);

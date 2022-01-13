@@ -24,14 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
 
 class BlogHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -39,14 +36,14 @@ class BlogHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Blog\Blog
+     * @return Blog
      */
     public function hydrate(array $data)
     {
         $translation = $this->getBlogTranslation($data);
         $data = array_merge($data, $translation);
 
-        $blog = new Struct\Blog\Blog();
+        $blog = new Blog();
 
         $blog->setId((int) $data['__blog_id']);
         $blog->setTitle($data['__blog_title']);
