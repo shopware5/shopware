@@ -25,6 +25,9 @@
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Download;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Link;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 
 class Product extends ListProduct
@@ -92,7 +95,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media[] $media
+     * @param Media[] $media
      */
     public function setMedia($media)
     {
@@ -100,7 +103,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media[]
+     * @return Media[]
      */
     public function getMedia()
     {
@@ -124,7 +127,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set $propertySet
+     * @param Set $propertySet
      */
     public function setPropertySet($propertySet)
     {
@@ -132,7 +135,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Set|null
+     * @return Set|null
      */
     public function getPropertySet()
     {
@@ -140,7 +143,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote[] $votes
+     * @param Vote[] $votes
      */
     public function setVotes($votes)
     {
@@ -148,7 +151,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote[]
+     * @return Vote[]
      */
     public function getVotes()
     {
@@ -156,7 +159,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $relatedProducts
+     * @param ListProduct[] $relatedProducts
      */
     public function setRelatedProducts($relatedProducts)
     {
@@ -164,7 +167,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     * @return ListProduct[]
      */
     public function getRelatedProducts()
     {
@@ -172,7 +175,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ProductStream[]
+     * @return ProductStream[]
      */
     public function getRelatedProductStreams()
     {
@@ -180,7 +183,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ProductStream[] $relatedProductStreams
+     * @param ProductStream[] $relatedProductStreams
      */
     public function setRelatedProductStreams($relatedProductStreams)
     {
@@ -188,7 +191,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[] $similarProducts
+     * @param ListProduct[] $similarProducts
      */
     public function setSimilarProducts($similarProducts)
     {
@@ -196,7 +199,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct[]
+     * @return ListProduct[]
      */
     public function getSimilarProducts()
     {
@@ -204,7 +207,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download[] $downloads
+     * @param Download[] $downloads
      */
     public function setDownloads($downloads)
     {
@@ -212,7 +215,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Download[]
+     * @return Download[]
      */
     public function getDownloads()
     {
@@ -220,7 +223,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link[] $links
+     * @param Link[] $links
      */
     public function setLinks($links)
     {
@@ -228,7 +231,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link[]
+     * @return Link[]
      */
     public function getLinks()
     {
@@ -236,7 +239,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group[] $configuration
+     * @param Group[] $configuration
      */
     public function setConfiguration($configuration)
     {
@@ -244,7 +247,7 @@ class Product extends ListProduct
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group[]
+     * @return Group[]
      */
     public function getConfiguration()
     {
@@ -260,7 +263,7 @@ class Product extends ListProduct
      * This function is required to load different product variations on the product
      * detail page via order number.
      *
-     * @return array
+     * @return array<int, int>
      */
     public function getSelectedOptions()
     {
