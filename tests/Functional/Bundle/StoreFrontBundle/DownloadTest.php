@@ -42,6 +42,7 @@ class DownloadTest extends TestCase
         $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($product);
         $downloads = Shopware()->Container()->get(ProductDownloadServiceInterface::class)->get($product, $context);
+        static::assertIsArray($downloads);
 
         static::assertCount(2, $downloads);
 

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,11 +26,13 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Models\Article\Detail;
 
 class TranslationTest extends TestCase
 {
-    public function testListProductTranslation()
+    public function testListProductTranslation(): void
     {
         $number = 'Translation-Test';
         $context = $this->getContext();
@@ -56,7 +60,7 @@ class TranslationTest extends TestCase
         static::assertEquals('Dummy Translation', $listProduct->getUnit()->getPackUnit());
     }
 
-    public function testManufacturerTranslation()
+    public function testManufacturerTranslation(): void
     {
         $number = 'Translation-Test';
         $context = $this->getContext();
@@ -79,7 +83,7 @@ class TranslationTest extends TestCase
         static::assertEquals('Dummy Translation', $manufacturer->getMetaDescription());
     }
 
-    public function testUnitTranslation()
+    public function testUnitTranslation(): void
     {
         $number = 'Unit-Translation';
         $context = $this->getContext();
@@ -135,6 +139,7 @@ class TranslationTest extends TestCase
             $context
         );
 
+        static::assertInstanceOf(Unit::class, $listProduct->getUnit());
         static::assertEquals('Dummy Translation', $listProduct->getUnit()->getUnit());
         static::assertEquals('Dummy Translation', $listProduct->getUnit()->getName());
 
@@ -143,11 +148,12 @@ class TranslationTest extends TestCase
             static::assertEquals('Dummy Translation', $price->getUnit()->getName());
         }
 
+        static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
         static::assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getUnit());
         static::assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getName());
     }
 
-    public function testPropertyTranslation()
+    public function testPropertyTranslation(): void
     {
         $number = 'Property-Translation';
         $context = $this->getContext();
@@ -175,7 +181,7 @@ class TranslationTest extends TestCase
         }
     }
 
-    public function testConfiguratorTranslation()
+    public function testConfiguratorTranslation(): void
     {
         $number = 'Configurator-Translation';
         $context = $this->getContext();
@@ -221,7 +227,7 @@ class TranslationTest extends TestCase
         }
     }
 
-    protected function getContext($shopId = 1)
+    protected function getContext($shopId = 1): TestContext
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup();

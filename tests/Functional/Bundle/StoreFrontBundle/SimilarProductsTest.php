@@ -72,6 +72,7 @@ class SimilarProductsTest extends TestCase
         $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($product);
         $similarProducts = Shopware()->Container()->get(SimilarProductsServiceInterface::class)->get($product, $context);
+        static::assertIsArray($similarProducts);
 
         static::assertCount(4, $similarProducts);
 
@@ -151,6 +152,7 @@ class SimilarProductsTest extends TestCase
         $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($product);
         $similar = Shopware()->Container()->get(SimilarProductsServiceInterface::class)->get($product, $context);
+        static::assertIsArray($similar);
 
         static::assertCount(3, $similar);
 

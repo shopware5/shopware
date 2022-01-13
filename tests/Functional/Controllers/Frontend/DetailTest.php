@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
@@ -35,7 +36,7 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
     }
 
     public function testDefaultVariant()

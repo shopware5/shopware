@@ -112,6 +112,7 @@ class ProductMediaTest extends TestCase
 
             static::assertCount(1, $media);
             $media = array_shift($media);
+            static::assertInstanceOf(Media::class, $media);
             static::assertTrue($media->isPreview());
         }
     }
