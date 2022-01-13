@@ -24,18 +24,16 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DownloadGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ProductDownloadServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ProductDownloadService implements Service\ProductDownloadServiceInterface
+class ProductDownloadService implements ProductDownloadServiceInterface
 {
-    /**
-     * @var Gateway\DownloadGatewayInterface
-     */
-    private $gateway;
+    private DownloadGatewayInterface $gateway;
 
-    public function __construct(Gateway\DownloadGatewayInterface $gateway)
+    public function __construct(DownloadGatewayInterface $gateway)
     {
         $this->gateway = $gateway;
     }
@@ -43,7 +41,7 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         return $this->gateway->get($product, $context);
     }
@@ -51,7 +49,7 @@ class ProductDownloadService implements Service\ProductDownloadServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         return $this->gateway->getList($products, $context);
     }

@@ -25,16 +25,13 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Gateway\CategoryGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Service;
+use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class CategoryService implements Service\CategoryServiceInterface
+class CategoryService implements CategoryServiceInterface
 {
-    /**
-     * @var CategoryGatewayInterface
-     */
-    private $categoryGateway;
+    private CategoryGatewayInterface $categoryGateway;
 
     public function __construct(CategoryGatewayInterface $categoryGateway)
     {
@@ -81,7 +78,7 @@ class CategoryService implements Service\CategoryServiceInterface
      *
      * @return Category[] $categories Indexed by the category id
      */
-    private function filterValidCategories($categories, ShopContextInterface $context)
+    private function filterValidCategories(array $categories, ShopContextInterface $context): array
     {
         $customerGroup = $context->getCurrentCustomerGroup();
 

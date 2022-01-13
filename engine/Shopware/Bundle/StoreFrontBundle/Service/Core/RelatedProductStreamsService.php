@@ -24,27 +24,24 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductStreamsGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class RelatedProductStreamsService implements Service\RelatedProductStreamsServiceInterface
+class RelatedProductStreamsService implements RelatedProductStreamsServiceInterface
 {
-    /**
-     * @var Gateway\RelatedProductStreamsGatewayInterface
-     */
-    private $gateway;
+    private RelatedProductStreamsGatewayInterface $gateway;
 
-    public function __construct(
-        Gateway\RelatedProductStreamsGatewayInterface $gateway
-    ) {
+    public function __construct(RelatedProductStreamsGatewayInterface $gateway)
+    {
         $this->gateway = $gateway;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $related = $this->getList([$product], $context);
 
@@ -54,7 +51,7 @@ class RelatedProductStreamsService implements Service\RelatedProductStreamsServi
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $productStreams = $this->gateway->getList($products, $context);
 

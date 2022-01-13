@@ -25,16 +25,15 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use DateTime;
+use DateTimeInterface;
 use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\MarketingAttribute;
 use Shopware_Components_Config;
 
 class MarketingService implements Service\MarketingServiceInterface
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(Shopware_Components_Config $config)
     {
@@ -44,19 +43,22 @@ class MarketingService implements Service\MarketingServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getProductAttribute(Struct\ListProduct $product)
+    public function getProductAttribute(ListProduct $product)
     {
-        $attribute = new Struct\Product\MarketingAttribute();
+        $attribute = new MarketingAttribute();
 
         $today = new DateTime();
 
-        $diff = $today->diff($product->getCreatedAt());
+        $attribute->setIsNew(false);
 
-        $marker = (int) $this->config->get('markAsNew');
+        if ($product->getCreatedAt() instanceof DateTimeInterface) {
+            $diff = $today->diff($product->getCreatedAt());
+            $marker = (int) $this->config->get('markAsNew');
 
-        $attribute->setIsNew(
-            $diff->days <= $marker || $product->getCreatedAt() > $today
-        );
+            $attribute->setIsNew(
+                $diff->days <= $marker || $product->getCreatedAt() > $today
+            );
+        }
 
         $attribute->setComingSoon(
             $product->getReleaseDate() && $product->getReleaseDate() > $today

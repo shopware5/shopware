@@ -24,26 +24,20 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing\RouterInterface;
 
-class ManufacturerService implements Service\ManufacturerServiceInterface
+class ManufacturerService implements ManufacturerServiceInterface
 {
-    /**
-     * @var Gateway\ManufacturerGatewayInterface
-     */
-    private $manufacturerGateway;
+    private ManufacturerGatewayInterface $manufacturerGateway;
 
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
     public function __construct(
-        Gateway\ManufacturerGatewayInterface $manufacturerGateway,
+        ManufacturerGatewayInterface $manufacturerGateway,
         RouterInterface $router
     ) {
         $this->manufacturerGateway = $manufacturerGateway;
@@ -53,7 +47,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($id, Struct\ShopContextInterface $context)
+    public function get($id, ShopContextInterface $context)
     {
         $manufacturers = $this->getList([$id], $context);
 
@@ -63,7 +57,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $manufacturers = $this->manufacturerGateway->getList($ids, $context);
 
@@ -72,7 +66,7 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
         $urls = $this->router->generateList($links);
         foreach ($manufacturers as $manufacturer) {
             if (\array_key_exists($manufacturer->getId(), $urls)) {
-                $manufacturer->setLink($urls[$manufacturer->getId()]);
+                $manufacturer->setLink((string) $urls[$manufacturer->getId()]);
             }
         }
 
@@ -82,9 +76,9 @@ class ManufacturerService implements Service\ManufacturerServiceInterface
     /**
      * @param Manufacturer[] $manufacturers
      *
-     * @return array[]
+     * @return array<int, array{controller: string, action: string, sSupplier: int}>
      */
-    private function collectLinks(array $manufacturers)
+    private function collectLinks(array $manufacturers): array
     {
         $links = [];
         foreach ($manufacturers as $manufacturer) {
