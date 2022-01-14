@@ -390,7 +390,10 @@ class LegacyStructConverter
         $data['unitID'] = null;
         $data['sUnit'] = ['unit' => '', 'description' => ''];
         $data['unit_attributes'] = [];
-        $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
+
+        if ($price->getUnit() instanceof Unit) {
+            $data = array_merge($data, $this->convertUnitStruct($price->getUnit()));
+        }
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Product_Price', $data, [
             'price' => $price,
