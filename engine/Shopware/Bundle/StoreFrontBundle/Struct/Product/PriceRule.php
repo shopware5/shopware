@@ -68,7 +68,7 @@ class PriceRule extends Extendable
     protected $customerGroup;
 
     /**
-     * @var Unit
+     * @var Unit|null
      */
     protected $unit;
 
@@ -177,7 +177,7 @@ class PriceRule extends Extendable
     }
 
     /**
-     * @return Unit
+     * @return Unit|null
      */
     public function getUnit()
     {

@@ -144,11 +144,13 @@ class TranslationTest extends TestCase
         static::assertEquals('Dummy Translation', $listProduct->getUnit()->getName());
 
         foreach ($listProduct->getPrices() as $price) {
+            static::assertInstanceOf(Unit::class, $price->getUnit());
             static::assertEquals('Dummy Translation', $price->getUnit()->getUnit());
             static::assertEquals('Dummy Translation', $price->getUnit()->getName());
         }
 
         static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
+        static::assertInstanceOf(Unit::class, $listProduct->getCheapestPrice()->getUnit());
         static::assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getUnit());
         static::assertEquals('Dummy Translation 2', $listProduct->getCheapestPrice()->getUnit()->getName());
     }

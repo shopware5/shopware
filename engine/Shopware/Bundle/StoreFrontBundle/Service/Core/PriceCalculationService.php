@@ -24,12 +24,14 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
+use RuntimeException;
 use Shopware\Bundle\StoreFrontBundle\Exception\StructNotFoundException;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculatorInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
@@ -99,15 +101,18 @@ class PriceCalculationService implements PriceCalculationServiceInterface
         PriceRule $priceRule,
         ShopContextInterface $context
     ): Price {
-        $priceRule->setPrice(
-            $priceRule->getUnit()->getMinPurchase() * $priceRule->getPrice()
-        );
-        $priceRule->getUnit()->setPurchaseUnit(
-            $priceRule->getUnit()->getMinPurchase() * $priceRule->getUnit()->getPurchaseUnit()
-        );
-        $priceRule->setPseudoPrice(
-            $priceRule->getUnit()->getMinPurchase() * $priceRule->getPseudoPrice()
-        );
+        if ($priceRule->getUnit() instanceof Unit) {
+            $priceRule->setPrice(
+                $priceRule->getUnit()->getMinPurchase() * $priceRule->getPrice()
+            );
+            $priceRule->getUnit()->setPurchaseUnit(
+                $priceRule->getUnit()->getMinPurchase() * $priceRule->getUnit()->getPurchaseUnit()
+            );
+            $priceRule->setPseudoPrice(
+                $priceRule->getUnit()->getMinPurchase() * $priceRule->getPseudoPrice()
+            );
+        }
+
         $tax = $context->getTaxRule($product->getTax()->getId());
         if (!$tax instanceof Tax) {
             throw new StructNotFoundException(Tax::class, $product->getTax()->getId());
@@ -140,7 +145,7 @@ class PriceCalculationService implements PriceCalculationServiceInterface
         );
 
         // Check if the product has unit definitions and calculate the reference price for the unit.
-        if ($price->getUnit()->getPurchaseUnit()) {
+        if ($price->getUnit() instanceof Unit && $price->getUnit()->getPurchaseUnit()) {
             $price->setCalculatedReferencePrice($this->calculateReferencePrice($price));
         }
 
@@ -153,6 +158,9 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      */
     private function calculateReferencePrice(Price $price): float
     {
+        if (!$price->getUnit() instanceof Unit) {
+            throw new RuntimeException('Price must have a unit at this point. Is checked before calling this private method.');
+        }
         $value = $price->getCalculatedPrice() / $price->getUnit()->getPurchaseUnit() * $price->getUnit()->getReferenceUnit();
 
         return round($value, 2);

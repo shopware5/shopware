@@ -138,7 +138,7 @@ class Price extends Extendable
     }
 
     /**
-     * @return Unit
+     * @return Unit|null
      */
     public function getUnit()
     {
