@@ -31,37 +31,21 @@ use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware_Components_Config;
 
 class SimilarProductsService implements SimilarProductsServiceInterface
 {
-    /**
-     * @var SimilarProductsGatewayInterface
-     */
-    private $gateway;
+    private SimilarProductsGatewayInterface $gateway;
 
-    /**
-     * @var ListProductServiceInterface
-     */
-    private $listProductService;
+    private ListProductServiceInterface $listProductService;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var ProductSearchInterface
-     */
-    private $search;
+    private ProductSearchInterface $search;
 
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $factory;
+    private StoreFrontCriteriaFactoryInterface $factory;
 
     public function __construct(
         SimilarProductsGatewayInterface $gateway,
@@ -132,7 +116,6 @@ class SimilarProductsService implements SimilarProductsServiceInterface
         }
 
         $fallbackResult = [];
-        /** @var ListProduct $product */
         foreach ($fallback as $product) {
             $criteria = $this->factory->createBaseCriteria([$context->getShop()->getCategory()->getId()], $context);
             $criteria->limit($limit);
@@ -143,7 +126,6 @@ class SimilarProductsService implements SimilarProductsServiceInterface
             $criteria->addSorting(new PopularitySorting());
             $criteria->setFetchCount(false);
 
-            /** @var \Shopware\Bundle\SearchBundle\ProductSearchResult $searchResult */
             $searchResult = $this->search->search($criteria, $context);
 
             $fallbackResult[$product->getNumber()] = $searchResult->getProducts();
@@ -153,11 +135,12 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     }
 
     /**
-     * @param BaseProduct[] $products
+     * @param array<string, ListProduct> $products
+     * @param array<string>              $numbers
      *
-     * @return BaseProduct[]
+     * @return array<string, ListProduct>
      */
-    private function getProductsByNumbers($products, array $numbers)
+    private function getProductsByNumbers(array $products, array $numbers): array
     {
         $result = [];
 
@@ -171,11 +154,11 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     }
 
     /**
-     * @param array<string, string[]> $numbers
+     * @param array<int, array<string>> $numbers
      *
-     * @return array
+     * @return array<string>
      */
-    private function extractNumbers($numbers)
+    private function extractNumbers(array $numbers): array
     {
         // Collect all numbers to send a single list product request.
         $related = [];

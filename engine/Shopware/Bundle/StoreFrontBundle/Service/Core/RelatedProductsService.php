@@ -25,22 +25,17 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductsGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 
-class RelatedProductsService implements Service\RelatedProductsServiceInterface
+class RelatedProductsService implements RelatedProductsServiceInterface
 {
-    /**
-     * @var RelatedProductsGatewayInterface
-     */
-    private $gateway;
+    private RelatedProductsGatewayInterface $gateway;
 
-    /**
-     * @var ListProductServiceInterface
-     */
-    private $listProductService;
+    private ListProductServiceInterface $listProductService;
 
     public function __construct(
         RelatedProductsGatewayInterface $gateway,
@@ -96,12 +91,12 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @param BaseProduct[] $products
+     * @param ListProduct[] $products
      * @param string[]      $numbers
      *
-     * @return BaseProduct[]
+     * @return array<string, ListProduct>
      */
-    private function getProductsByNumbers($products, array $numbers)
+    private function getProductsByNumbers(array $products, array $numbers): array
     {
         $result = [];
 
@@ -115,11 +110,11 @@ class RelatedProductsService implements Service\RelatedProductsServiceInterface
     }
 
     /**
-     * @param array<string, string[]> $numbers
+     * @param array<int, array<string>> $numbers
      *
-     * @return array
+     * @return array<string>
      */
-    private function extractNumbers($numbers)
+    private function extractNumbers(array $numbers): array
     {
         // Collect all numbers to send a single list product request.
         $related = [];

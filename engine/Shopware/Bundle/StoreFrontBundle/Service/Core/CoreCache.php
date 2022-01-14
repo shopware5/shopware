@@ -29,10 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CacheInterface;
 
 class CoreCache implements CacheInterface
 {
-    /**
-     * @var Cache
-     */
-    private $cache;
+    private Cache $cache;
 
     /**
      * {@inheritdoc}

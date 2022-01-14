@@ -24,7 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 interface TaxGatewayInterface
 {
@@ -40,12 +44,7 @@ interface TaxGatewayInterface
      *  - State
      * - The above rules are prioritized, from first to last.
      *
-     * @return Struct\Tax[] Indexed by 'tax_' + id
+     * @return array<string, Tax> Indexed by 'tax_' + id
      */
-    public function getRules(
-        Struct\Customer\Group $customerGroup,
-        Struct\Country\Area $area = null,
-        Struct\Country $country = null,
-        Struct\Country\State $state = null
-    );
+    public function getRules(Group $customerGroup, Area $area = null, Country $country = null, State $state = null);
 }

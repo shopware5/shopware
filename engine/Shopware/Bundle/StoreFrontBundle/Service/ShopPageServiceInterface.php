@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
 
 interface ShopPageServiceInterface
 {
@@ -34,7 +35,9 @@ interface ShopPageServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface::getList()
      *
-     * @return Struct\ShopPage[] Indexed by the shop page id
+     * @param array<int> $ids
+     *
+     * @return array<int, ShopPage> Indexed by the shop page id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 }

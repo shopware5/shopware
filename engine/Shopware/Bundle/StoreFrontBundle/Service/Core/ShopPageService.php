@@ -24,31 +24,26 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageChildrenGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ShopPageServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
 
-class ShopPageService implements Service\ShopPageServiceInterface
+class ShopPageService implements ShopPageServiceInterface
 {
-    /**
-     * @var Gateway\ShopPageGatewayInterface
-     */
-    private $shopPageGateway;
+    private ShopPageGatewayInterface $shopPageGateway;
 
-    /**
-     * @var Gateway\ShopGatewayInterface
-     */
-    private $shopGateway;
+    private ShopGatewayInterface $shopGateway;
 
-    /**
-     * @var Gateway\ShopPageChildrenGatewayInterface
-     */
-    private $shopPageChildrenGateway;
+    private ShopPageChildrenGatewayInterface $shopPageChildrenGateway;
 
     public function __construct(
-        Gateway\ShopPageGatewayInterface $shopPageGateway,
-        Gateway\ShopGatewayInterface $shopGateway,
-        Gateway\ShopPageChildrenGatewayInterface $shopPageChildrenGateway
+        ShopPageGatewayInterface $shopPageGateway,
+        ShopGatewayInterface $shopGateway,
+        ShopPageChildrenGatewayInterface $shopPageChildrenGateway
     ) {
         $this->shopPageGateway = $shopPageGateway;
         $this->shopGateway = $shopGateway;
@@ -58,7 +53,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $shopPages = $this->shopPageGateway->getList($ids, $context);
 
@@ -70,9 +65,9 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[] $shopPages
+     * @param array<int, ShopPage> $shopPages
      */
-    private function resolveShops(array $shopPages)
+    private function resolveShops(array $shopPages): void
     {
         $shopIds = [];
         foreach ($shopPages as $page) {
@@ -82,7 +77,7 @@ class ShopPageService implements Service\ShopPageServiceInterface
         $shops = $this->shopGateway->getList(array_keys(array_flip($shopIds)));
 
         foreach ($shopPages as $page) {
-            $pageShops = array_filter($shops, function (Struct\Shop $shop) use ($page) {
+            $pageShops = array_filter($shops, function (Shop $shop) use ($page) {
                 return \array_key_exists($shop->getId(), $page->getShopIds());
             });
 
@@ -91,11 +86,11 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[] $shopPages
+     * @param array<int, ShopPage> $shopPages
      */
-    private function resolveChildren(array $shopPages, Struct\ShopContextInterface $context)
+    private function resolveChildren(array $shopPages, ShopContextInterface $context): void
     {
-        $ids = array_map(function (Struct\ShopPage $page) {
+        $ids = array_map(function (ShopPage $page) {
             return $page->getId();
         }, $shopPages);
 
@@ -116,9 +111,9 @@ class ShopPageService implements Service\ShopPageServiceInterface
     }
 
     /**
-     * @param Struct\ShopPage[] $shopPages
+     * @param array<int, ShopPage> $shopPages
      */
-    private function resolveParents(array $shopPages, Struct\ShopContextInterface $context)
+    private function resolveParents(array $shopPages, ShopContextInterface $context): void
     {
         $parentIds = array_map(function ($page) {
             return $page->getParentId();

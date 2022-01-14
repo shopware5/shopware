@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface PriceGroupDiscountGatewayInterface
 {
@@ -33,10 +35,7 @@ interface PriceGroupDiscountGatewayInterface
      * - Price group base data
      * - Price group discounts for the provided customer group
      *
-     * @return Struct\Product\PriceGroup[] Indexed by the price group id
+     * @return array<int, PriceGroup> Indexed by the price group id
      */
-    public function getPriceGroups(
-        Struct\Customer\Group $customerGroup,
-        Struct\ShopContextInterface $context
-    );
+    public function getPriceGroups(Group $customerGroup, ShopContextInterface $context);
 }

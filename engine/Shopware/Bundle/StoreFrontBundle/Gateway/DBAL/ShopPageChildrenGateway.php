@@ -28,19 +28,13 @@ use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageChildrenGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopPageGatewayInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ShopPageChildrenGateway implements ShopPageChildrenGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var ShopPageGatewayInterface
-     */
-    private $shopPageGateway;
+    private ShopPageGatewayInterface $shopPageGateway;
 
     public function __construct(
         Connection $connection,
@@ -53,7 +47,7 @@ class ShopPageChildrenGateway implements ShopPageChildrenGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $query = $this->connection->createQueryBuilder();
 

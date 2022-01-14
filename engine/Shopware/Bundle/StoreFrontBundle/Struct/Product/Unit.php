@@ -44,7 +44,7 @@ class Unit extends Extendable
     protected $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $unit;
 
@@ -153,7 +153,7 @@ class Unit extends Extendable
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getUnit()
     {

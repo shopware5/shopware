@@ -35,7 +35,7 @@ interface GraduatedPricesServiceInterface
      *
      * @param ListProduct[] $products
      *
-     * @return array indexed by the product number, each array element contains a PriceRule array
+     * @return array<string, array<PriceRule>> indexed by the product number, each array element contains a PriceRule array
      */
     public function getList($products, ProductContextInterface $context);
 
@@ -53,7 +53,7 @@ interface GraduatedPricesServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @return PriceRule[]
+     * @return array<PriceRule>|null
      */
     public function get(ListProduct $product, ProductContextInterface $context);
 }

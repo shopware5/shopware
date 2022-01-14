@@ -31,15 +31,9 @@ use Zend_Cache_Core as Cache;
 
 class CachedHrefLangService implements HrefLangServiceInterface
 {
-    /**
-     * @var HrefLangServiceInterface
-     */
-    private $hrefLangService;
+    private HrefLangServiceInterface $hrefLangService;
 
-    /**
-     * @var Cache
-     */
-    private $cache;
+    private Cache $cache;
 
     public function __construct(HrefLangServiceInterface $hrefLangService, Cache $cache)
     {

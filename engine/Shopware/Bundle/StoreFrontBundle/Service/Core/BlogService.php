@@ -24,24 +24,19 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\BlogGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\BlogServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Blog\Blog;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class BlogService implements Service\BlogServiceInterface
+class BlogService implements BlogServiceInterface
 {
-    /**
-     * @var Gateway\BlogGatewayInterface
-     */
-    private $blogGateway;
+    private BlogGatewayInterface $blogGateway;
 
-    /**
-     * @var Service\MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    public function __construct(Gateway\BlogGatewayInterface $blogGateway, Service\MediaServiceInterface $mediaService)
+    public function __construct(BlogGatewayInterface $blogGateway, MediaServiceInterface $mediaService)
     {
         $this->blogGateway = $blogGateway;
         $this->mediaService = $mediaService;
@@ -50,7 +45,7 @@ class BlogService implements Service\BlogServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context)
+    public function getList(array $ids, ShopContextInterface $context)
     {
         $result = [];
         $blogs = $this->blogGateway->getList($ids, $context);
@@ -69,9 +64,9 @@ class BlogService implements Service\BlogServiceInterface
     }
 
     /**
-     * @param Blog[] $blogs
+     * @param array<int, Blog> $blogs
      */
-    private function resolveMedias(array $blogs, Struct\ShopContextInterface $context)
+    private function resolveMedias(array $blogs, ShopContextInterface $context): void
     {
         $mediaIds = [];
         foreach ($blogs as $blog) {

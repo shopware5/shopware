@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface GraduatedPricesGatewayInterface
 {
@@ -34,11 +37,11 @@ interface GraduatedPricesGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
      *
-     * @param Struct\ListProduct[] $products
+     * @param ListProduct[] $products
      *
-     * @return array indexed by the product order number, each array element contains a Struct\Product\PriceRule array
+     * @return array<string, array<PriceRule>> indexed by the product order number, each array element contains a PriceRule array
      */
-    public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);
+    public function getList($products, ShopContextInterface $context, Group $customerGroup);
 
     /**
      * The \Struct\Product\PriceRule requires the following data:
@@ -48,7 +51,7 @@ interface GraduatedPricesGatewayInterface
      * Required conditions for the selection:
      * - Sorted ascending with the \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule::from property.
      *
-     * @return Struct\Product\PriceRule[]
+     * @return array<PriceRule>|null
      */
-    public function get(Struct\ListProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup);
+    public function get(ListProduct $product, ShopContextInterface $context, Group $customerGroup);
 }

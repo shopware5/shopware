@@ -28,7 +28,8 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 use Shopware_Components_Config;
 
 class VoteTest extends TestCase
@@ -46,10 +47,10 @@ class VoteTest extends TestCase
         $listProduct = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($listProduct);
         $votes = Shopware()->Container()->get(VoteServiceInterface::class)->get($listProduct, $context);
+        static::assertIsArray($votes);
 
         static::assertCount(5, $votes);
 
-        /** @var Vote $vote */
         foreach ($votes as $vote) {
             static::assertEquals('Bert Bewerter', $vote->getName());
         }
@@ -212,6 +213,7 @@ class VoteTest extends TestCase
         //load product struct
         $factory = Shopware()->Container()->get('shopware_storefront.base_product_factory');
         $product = $factory->createBaseProduct($number);
+        static::assertInstanceOf(BaseProduct::class, $product);
         $service = Shopware()->Container()->get(VoteServiceInterface::class);
 
         //iterate all expected shop votes/averages
@@ -221,17 +223,20 @@ class VoteTest extends TestCase
             //validate vote count of provided shop
             if (\array_key_exists('count', $data)) {
                 $votes = $service->get($product, $context);
+                static::assertIsArray($votes);
                 static::assertCount($data['count'], $votes, sprintf('Vote count %s for shop %s of product %s not match', $data['count'], $shopId, $product->getNumber()));
             }
 
             //validates provided average value of provided shop
             if (\array_key_exists('average', $data)) {
                 $average = $service->getAverage($product, $context);
+                static::assertInstanceOf(VoteAverage::class, $average);
                 static::assertEquals($data['average'], $average->getAverage(), sprintf('Vote average %s for shop %s of product %s not match', $data['average'], $shopId, $product->getNumber()));
             }
 
             if (\array_key_exists('points', $data)) {
                 $average = $service->getAverage($product, $context);
+                static::assertInstanceOf(VoteAverage::class, $average);
 
                 $actual = [];
                 foreach ($average->getPointCount() as $row) {

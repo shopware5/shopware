@@ -89,7 +89,7 @@ class Group extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Property\Option[] $options
+     * @param Option[] $options
      *
      * @return $this
      */
@@ -101,7 +101,7 @@ class Group extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Option[]
+     * @return Option[]
      */
     public function getOptions()
     {

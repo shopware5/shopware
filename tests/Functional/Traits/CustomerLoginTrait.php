@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,9 +31,6 @@ use RuntimeException;
 
 trait CustomerLoginTrait
 {
-    /**
-     * Logged in a customer
-     */
     public function loginCustomer(
         string $sessionId = 'sessionId',
         int $customerId = 1,
@@ -49,14 +48,12 @@ trait CustomerLoginTrait
         }
 
         if ($passwordChangeDate === null) {
-            $result = Shopware()->Container()->get('dbal_connection')->fetchFirstColumn(
+            $passwordChangeDate = Shopware()->Container()->get('dbal_connection')->fetchOne(
                 'SELECT `password_change_date` FROM `s_user` WHERE `id` = :customerId;',
                 [
                     'customerId' => $customerId,
                 ]
             );
-
-            $passwordChangeDate = array_pop($result);
         }
 
         $session->offsetSet('sessionId', $sessionId);

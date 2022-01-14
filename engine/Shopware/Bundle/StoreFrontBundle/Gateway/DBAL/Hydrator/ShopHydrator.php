@@ -28,35 +28,17 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class ShopHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
-    /**
-     * @var TemplateHydrator
-     */
-    private $templateHydrator;
+    private TemplateHydrator $templateHydrator;
 
-    /**
-     * @var CategoryHydrator
-     */
-    private $categoryHydrator;
+    private CategoryHydrator $categoryHydrator;
 
-    /**
-     * @var LocaleHydrator
-     */
-    private $localeHydrator;
+    private LocaleHydrator $localeHydrator;
 
-    /**
-     * @var CurrencyHydrator
-     */
-    private $currencyHydrator;
+    private CurrencyHydrator $currencyHydrator;
 
-    /**
-     * @var CustomerGroupHydrator
-     */
-    private $customerGroupHydrator;
+    private CustomerGroupHydrator $customerGroupHydrator;
 
     public function __construct(
         AttributeHydrator $attributeHydrator,

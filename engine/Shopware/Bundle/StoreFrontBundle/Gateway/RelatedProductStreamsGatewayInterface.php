@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductStream;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface RelatedProductStreamsGatewayInterface
 {
@@ -37,15 +39,15 @@ interface RelatedProductStreamsGatewayInterface
      *
      * Result:
      * array(
-     *    'SW100' => array({Struct\ProductStream}, {Struct\ProductStream})
-     *    'SW200' => array({Struct\ProductStream}, {Struct\ProductStream})
+     *    123 => array({Struct\ProductStream}, {Struct\ProductStream})
+     *    124 => array({Struct\ProductStream}, {Struct\ProductStream})
      * )
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array indexed by the product number
+     * @return array<int, array<ProductStream>> indexed by the product id
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * Returns an array which contains the order number of
@@ -53,7 +55,7 @@ interface RelatedProductStreamsGatewayInterface
      *
      * Example result: array({Struct\ProductStream}, {Struct\ProductStream})
      *
-     * @return array Array of order numbers
+     * @return array<ProductStream>|null Array of product stream structs
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 }

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ListProductGatewayInterface
 {
@@ -34,9 +35,11 @@ interface ListProductGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ListProductGatewayInterface::get()
      *
-     * @return Struct\ListProduct[] Indexed by the product order number
+     * @param array<string> $numbers
+     *
+     * @return ListProduct[] Indexed by the product order number
      */
-    public function getList(array $numbers, Struct\ShopContextInterface $context);
+    public function getList(array $numbers, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\ListProduct requires the following data:
@@ -60,7 +63,7 @@ interface ListProductGatewayInterface
      *
      * @param string $number
      *
-     * @return Struct\ListProduct
+     * @return ListProduct|null
      */
-    public function get($number, Struct\ShopContextInterface $context);
+    public function get($number, ShopContextInterface $context);
 }

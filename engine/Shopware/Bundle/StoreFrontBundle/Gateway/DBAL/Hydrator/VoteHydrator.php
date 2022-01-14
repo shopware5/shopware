@@ -25,16 +25,17 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use DateTime;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
 
 class VoteHydrator extends Hydrator
 {
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage
+     * @return VoteAverage
      */
     public function hydrateAverage(array $data)
     {
-        $struct = new Struct\Product\VoteAverage();
+        $struct = new VoteAverage();
 
         $points = 0;
         $total = 0;
@@ -54,11 +55,11 @@ class VoteHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Product\Vote
+     * @return Vote
      */
     public function hydrate(array $data)
     {
-        $struct = new Struct\Product\Vote();
+        $struct = new Vote();
 
         if (isset($data['__vote_id'])) {
             $struct->setId((int) $data['__vote_id']);
@@ -103,10 +104,7 @@ class VoteHydrator extends Hydrator
         return $struct;
     }
 
-    /**
-     * @param array $data
-     */
-    private function sortByPointsDescending($data)
+    private function sortByPointsDescending(array $data): void
     {
         usort($data, function ($a, $b) {
             if ($a['points'] == $b['points']) {

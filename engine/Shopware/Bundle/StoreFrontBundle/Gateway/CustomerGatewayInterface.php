@@ -31,7 +31,7 @@ interface CustomerGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return Customer[]
+     * @return array<int, Customer> indexed by customer id
      */
     public function getList($ids);
 }

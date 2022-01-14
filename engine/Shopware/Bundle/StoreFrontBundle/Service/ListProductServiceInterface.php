@@ -35,7 +35,9 @@ interface ListProductServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
      *
-     * @return ListProduct[] indexed by the product order number
+     * @param array<string> $numbers
+     *
+     * @return array<string, ListProduct> indexed by the product order number
      */
     public function getList(array $numbers, ProductContextInterface $context);
 

@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface PropertyGatewayInterface
 {
@@ -47,7 +48,10 @@ interface PropertyGatewayInterface
      *  - Sort mode equals to 3, the values are sorted by the position
      *  - In all other cases the values are sorted by their alphanumeric value
      *
-     * @return Struct\Property\Set[] Each array element (set, group, option) is indexed by his id
+     * @param array<int> $valueIds
+     * @param array<int> $filterGroupIds
+     *
+     * @return array<int, Set> Each array element (set, group, option) is indexed by its id
      */
-    public function getList(array $valueIds, Struct\ShopContextInterface $context, array $filterGroupIds = []);
+    public function getList(array $valueIds, ShopContextInterface $context, array $filterGroupIds = []);
 }

@@ -24,14 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Payment;
 
 class PaymentHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -39,11 +36,11 @@ class PaymentHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Payment
+     * @return Payment
      */
     public function hydrate(array $data)
     {
-        $payment = new Struct\Payment();
+        $payment = new Payment();
 
         $translation = $this->getTranslation($data, '__payment', [], $data['__payment_id']);
         $data = array_merge($data, $translation);

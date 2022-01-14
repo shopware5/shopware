@@ -38,38 +38,28 @@ use Shopware_Components_Config as Config;
 
 class HrefLangService implements HrefLangServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
+
+    private RouterInterface $rewriteRouter;
+
+    private RouterInterface $defaultRouter;
+
+    private Config $config;
 
     /**
-     * @var RouterInterface
+     * @var array<int, Context>
      */
-    private $rewriteRouter;
+    private array $contextCache = [];
 
-    /**
-     * @var RouterInterface
-     */
-    private $defaultRouter;
+    private ModelManager $modelManager;
 
-    /**
-     * @var Config
-     */
-    private $config;
-
-    /**
-     * @var array
-     */
-    private $contextCache = [];
-
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
-
-    public function __construct(Connection $connection, RouterInterface $rewriteRouter, RouterInterface $defaultRouter, Config $config, ModelManager $modelManager)
-    {
+    public function __construct(
+        Connection $connection,
+        RouterInterface $rewriteRouter,
+        RouterInterface $defaultRouter,
+        Config $config,
+        ModelManager $modelManager
+    ) {
         $this->connection = $connection;
         $this->rewriteRouter = $rewriteRouter;
         $this->config = $config;
@@ -91,7 +81,7 @@ class HrefLangService implements HrefLangServiceInterface
 
         $hrefs = [];
 
-        foreach ($shops as $key => $languageShop) {
+        foreach ($shops as $languageShop) {
             $shop = $this->getDetachedShop($languageShop['id']);
 
             $config->setShop($shop);
@@ -100,7 +90,7 @@ class HrefLangService implements HrefLangServiceInterface
             $href->setShopId($languageShop['id']);
             $href->setLocale($languageShop['locale']);
             $routingContext = $this->getContext($shop, $config);
-            $href->setLink($this->filterUrl($this->rewriteRouter->assemble($parameters, $routingContext), $parameters));
+            $href->setLink($this->filterUrl((string) $this->rewriteRouter->assemble($parameters, $routingContext), $parameters));
 
             if (!$config->get('hrefLangCountry')) {
                 $href->setLocale(explode('-', $languageShop['locale'])[0]);
@@ -125,7 +115,8 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param string $url
+     * @param array<string, mixed> $parameters
+     * @param string               $url
      *
      * @return bool
      */
@@ -145,7 +136,8 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @param string $url
+     * @param array<string, mixed> $parameters
+     * @param string               $url
      *
      * @return string
      */
@@ -166,6 +158,8 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
+     * @param array<string, mixed> $parameters
+     *
      * @return bool
      */
     protected function isCategoryLink(array $parameters)
@@ -177,9 +171,9 @@ class HrefLangService implements HrefLangServiceInterface
     }
 
     /**
-     * @return array
+     * @return array<array{id: int, locale: string}>
      */
-    private function getLanguageShops(Shop $shop)
+    private function getLanguageShops(Shop $shop): array
     {
         $parentId = $shop->getParentId() ?: $shop->getId();
 
@@ -196,10 +190,7 @@ class HrefLangService implements HrefLangServiceInterface
             ->fetchAll();
     }
 
-    /**
-     * @return Context
-     */
-    private function getContext(ShopModel $shop, Config $config)
+    private function getContext(ShopModel $shop, Config $config): Context
     {
         if (!isset($this->contextCache[$shop->getId()])) {
             $this->contextCache[$shop->getId()] = Context::createFromShop($shop, $config);
@@ -218,6 +209,9 @@ class HrefLangService implements HrefLangServiceInterface
         return $shopModel;
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     private function isUrlHome(array $parameters): bool
     {
         if (!$parameters) {

@@ -33,58 +33,33 @@ use Shopware\Bundle\StoreFrontBundle\Service\MarketingServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
 class ListProductService implements ListProductServiceInterface
 {
-    /**
-     * @var ListProductGatewayInterface
-     */
-    private $productGateway;
+    private ListProductGatewayInterface $productGateway;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    /**
-     * @var CheapestPriceServiceInterface
-     */
-    private $cheapestPriceService;
+    private CheapestPriceServiceInterface $cheapestPriceService;
 
-    /**
-     * @var GraduatedPricesServiceInterface
-     */
-    private $graduatedPricesService;
+    private GraduatedPricesServiceInterface $graduatedPricesService;
 
-    /**
-     * @var PriceCalculationServiceInterface
-     */
-    private $priceCalculationService;
+    private PriceCalculationServiceInterface $priceCalculationService;
 
-    /**
-     * @var MarketingServiceInterface
-     */
-    private $marketingService;
+    private MarketingServiceInterface $marketingService;
 
-    /**
-     * @var VoteServiceInterface
-     */
-    private $voteService;
+    private VoteServiceInterface $voteService;
 
-    /**
-     * @var CategoryServiceInterface
-     */
-    private $categoryService;
+    private CategoryServiceInterface $categoryService;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     public function __construct(
         ListProductGatewayInterface $productGateway,
@@ -168,7 +143,7 @@ class ListProductService implements ListProductServiceInterface
                 $product->setCategories($categories[$number]);
             }
 
-            if (isset($manufacturerCovers[$product->getManufacturer()->getCoverId()])) {
+            if ($product->getManufacturer() && isset($manufacturerCovers[$product->getManufacturer()->getCoverId()])) {
                 $product->getManufacturer()->setCoverMedia($manufacturerCovers[$product->getManufacturer()->getCoverId()]);
             }
 
@@ -183,7 +158,7 @@ class ListProductService implements ListProductServiceInterface
             $product->setListingPrice($product->getCheapestUnitPrice());
             $product->setDisplayFromPrice(\count($product->getPrices()) > 1 || $product->hasDifferentPrices());
             $product->setAllowBuyInListing($this->allowBuyInListing($product));
-            if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            if ($this->config->get('calculateCheapestPriceWithMinPurchase') && $product->getCheapestPrice() instanceof Price) {
                 $product->setListingPrice($product->getCheapestPrice());
             }
             $result[$number] = $product;
@@ -195,10 +170,8 @@ class ListProductService implements ListProductServiceInterface
     /**
      * Checks if the provided product is allowed to display in the store front for
      * the provided context.
-     *
-     * @return bool
      */
-    private function isProductValid(ListProduct $product, ShopContextInterface $context)
+    private function isProductValid(ListProduct $product, ShopContextInterface $context): bool
     {
         if (\in_array($context->getCurrentCustomerGroup()->getId(), $product->getBlockedCustomerGroupIds())) {
             return false;
@@ -213,33 +186,35 @@ class ListProductService implements ListProductServiceInterface
             return false;
         }
 
-        $ids = array_map(function (Struct\Category $category) {
+        $ids = array_map(function (Category $category) {
             return $category->getId();
         }, $product->getCategories());
 
         return \in_array($context->getShop()->getCategory()->getId(), $ids);
     }
 
-    /**
-     * @return bool
-     */
-    private function allowBuyInListing(ListProduct $product)
+    private function allowBuyInListing(ListProduct $product): bool
     {
         return !$product->hasConfigurator()
             && $product->isAvailable()
+            && $product->getUnit()
             && $product->getUnit()->getMinPurchase() <= 1
             && !$product->displayFromPrice();
     }
 
     /**
-     * @param Struct\ListProduct[] $products
+     * @param ListProduct[] $products
      *
-     * @return array
+     * @return array<int>
      */
-    private function getManufacturerCoverIds($products)
+    private function getManufacturerCoverIds(array $products): array
     {
-        $ids = array_map(function (Struct\ListProduct $product) {
-            return $product->getManufacturer()->getCoverId();
+        $ids = array_map(function (ListProduct $product) {
+            if ($product->getManufacturer() instanceof Manufacturer) {
+                return $product->getManufacturer()->getCoverId();
+            }
+
+            return null;
         }, $products);
 
         return array_filter($ids);

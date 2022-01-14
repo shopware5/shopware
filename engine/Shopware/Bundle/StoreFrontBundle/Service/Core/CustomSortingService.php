@@ -30,10 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomSortingService implements CustomSortingServiceInterface
 {
-    /**
-     * @var CustomSortingGatewayInterface
-     */
-    private $gateway;
+    private CustomSortingGatewayInterface $gateway;
 
     public function __construct(CustomSortingGatewayInterface $gateway)
     {

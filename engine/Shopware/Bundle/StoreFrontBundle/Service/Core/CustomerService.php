@@ -27,19 +27,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 use Shopware\Bundle\StoreFrontBundle\Gateway\AddressGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomerServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 
 class CustomerService implements CustomerServiceInterface
 {
-    /**
-     * @var CustomerGatewayInterface
-     */
-    private $customerGateway;
+    private CustomerGatewayInterface $customerGateway;
 
-    /**
-     * @var AddressGatewayInterface
-     */
-    private $addressGateway;
+    private AddressGatewayInterface $addressGateway;
 
     public function __construct(
         CustomerGatewayInterface $customerGateway,
@@ -49,11 +42,6 @@ class CustomerService implements CustomerServiceInterface
         $this->addressGateway = $addressGateway;
     }
 
-    /**
-     * @param int[] $customerIds
-     *
-     * @return Customer[]
-     */
     public function getList($customerIds)
     {
         $customers = $this->customerGateway->getList($customerIds);

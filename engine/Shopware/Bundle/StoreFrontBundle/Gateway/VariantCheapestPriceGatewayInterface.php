@@ -25,7 +25,10 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface VariantCheapestPriceGatewayInterface
 {
@@ -35,11 +38,11 @@ interface VariantCheapestPriceGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array ['price' => Struct\Product\PriceRule, 'different_price_count' => int] Indexed by the ordernumber
+     * @return array<string, array{price: PriceRule, different_price_count: int}> Indexed by the ordernumber
      */
-    public function getList($products, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup, Criteria $criteria);
+    public function getList($products, ShopContextInterface $context, Group $customerGroup, Criteria $criteria);
 
     /**
      * The cheapest product price is only selected for the provided customer group.
@@ -61,7 +64,7 @@ interface VariantCheapestPriceGatewayInterface
      *  - The variants has to be active
      *  - Closeout variants can only be selected if the stock > min purchase
      *
-     * @return array ['price' => Struct\Product\PriceRule, 'different_price_count' => int]
+     * @return array{price: PriceRule, different_price_count: int}|null
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context, Struct\Customer\Group $customerGroup, Criteria $criteria);
+    public function get(BaseProduct $product, ShopContextInterface $context, Group $customerGroup, Criteria $criteria);
 }

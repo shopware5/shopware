@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Link;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface LinkGatewayInterface
 {
@@ -34,19 +36,18 @@ interface LinkGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\LinkGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[]                                          $products
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface $context
+     * @param BaseProduct[] $products
      *
-     * @return array Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link array
+     * @return array<string, list<Link>> Indexed by the product order number. Each element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link array
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Product\Link requires the following data:
      * - Link base data
      * - Core attribute of the link
      *
-     * @return Struct\Product\Link[]
+     * @return list<Link>|null
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 }

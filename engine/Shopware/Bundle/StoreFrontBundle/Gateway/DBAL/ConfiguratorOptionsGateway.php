@@ -26,11 +26,11 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorOptionsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ConfiguratorOptionsGateway implements Gateway\ConfiguratorOptionsGatewayInterface
+class ConfiguratorOptionsGateway implements ConfiguratorOptionsGatewayInterface
 {
     private ConfiguratorHydrator $hydrator;
 

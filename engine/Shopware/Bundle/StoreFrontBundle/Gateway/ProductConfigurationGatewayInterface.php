@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductConfigurationGatewayInterface
 {
@@ -34,11 +36,11 @@ interface ProductConfigurationGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array indexed by the product order number, each array element contains a Struct\Configurator\Group array
+     * @return array<string, array<Group>> indexed by the product order number, each array element contains a Struct\Configurator\Group array
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group requires the following data:
@@ -49,7 +51,7 @@ interface ProductConfigurationGatewayInterface
      * - Configurator groups
      * - Configurator options
      *
-     * @return Struct\Configurator\Group[]
+     * @return Group[]|null
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 }

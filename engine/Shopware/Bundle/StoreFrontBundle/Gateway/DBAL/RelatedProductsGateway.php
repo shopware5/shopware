@@ -26,15 +26,12 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductsGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 
-class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
+class RelatedProductsGateway implements RelatedProductsGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -44,7 +41,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product)
+    public function get(BaseProduct $product)
     {
         $numbers = $this->getList([$product]);
 
@@ -73,10 +70,7 @@ class RelatedProductsGateway implements Gateway\RelatedProductsGatewayInterface
             ->where('product.id IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_GROUP);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         $related = [];
         foreach ($data as $productId => $row) {

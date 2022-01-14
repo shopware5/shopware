@@ -24,7 +24,10 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Vote;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface VoteServiceInterface
 {
@@ -34,9 +37,9 @@ interface VoteServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface::get()
      *
-     * @return Struct\Product\VoteAverage
+     * @return VoteAverage|null
      */
-    public function getAverage(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function getAverage(BaseProduct $product, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -44,11 +47,11 @@ interface VoteServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Vote array
+     * @return array<string, array<Vote>> indexed by the product order number, each array element contains a \Shopware\Bundle\StoreFrontBundle\Struct\Vote array
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -56,9 +59,9 @@ interface VoteServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface::get()
      *
-     * @return Struct\Product\Vote[]
+     * @return array<Vote>|null
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -66,9 +69,9 @@ interface VoteServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return Struct\Product\VoteAverage[] Indexed by the product order number
+     * @return array<string, VoteAverage> Indexed by the product order number
      */
-    public function getAverages($products, Struct\ShopContextInterface $context);
+    public function getAverages($products, ShopContextInterface $context);
 }

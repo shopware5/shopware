@@ -25,26 +25,18 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\AddressGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\AddressHydrator;
 
 class AddressGateway implements AddressGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var AddressHydrator
-     */
-    private $hydrator;
+    private AddressHydrator $hydrator;
 
     public function __construct(Connection $connection, FieldHelper $fieldHelper, AddressHydrator $hydrator)
     {
@@ -79,7 +71,7 @@ class AddressGateway implements AddressGatewayInterface
         return $addresses;
     }
 
-    private function createQuery()
+    private function createQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();
         $query->addSelect($this->fieldHelper->getAddressFields());

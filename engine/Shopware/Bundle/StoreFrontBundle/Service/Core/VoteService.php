@@ -24,25 +24,21 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
-use Shopware\Bundle\StoreFrontBundle\Gateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\VoteGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class VoteService implements Service\VoteServiceInterface
 {
-    /**
-     * @var Gateway\VoteGatewayInterface
-     */
-    private $voteGateway;
+    private VoteGatewayInterface $voteGateway;
 
-    /**
-     * @var Gateway\VoteAverageGatewayInterface
-     */
-    private $voteAverageGateway;
+    private VoteAverageGatewayInterface $voteAverageGateway;
 
     public function __construct(
-        Gateway\VoteGatewayInterface $voteGateway,
-        Gateway\VoteAverageGatewayInterface $voteAverageGateway
+        VoteGatewayInterface $voteGateway,
+        VoteAverageGatewayInterface $voteAverageGateway
     ) {
         $this->voteGateway = $voteGateway;
         $this->voteAverageGateway = $voteAverageGateway;
@@ -51,7 +47,7 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         return $this->voteGateway->get($product, $context);
     }
@@ -59,7 +55,7 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         return $this->voteGateway->getList($products, $context);
     }
@@ -67,7 +63,7 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAverage(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function getAverage(BaseProduct $product, ShopContextInterface $context)
     {
         return $this->voteAverageGateway->get($product, $context);
     }
@@ -75,7 +71,7 @@ class VoteService implements Service\VoteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAverages($products, Struct\ShopContextInterface $context)
+    public function getAverages($products, ShopContextInterface $context)
     {
         return $this->voteAverageGateway->getList($products, $context);
     }

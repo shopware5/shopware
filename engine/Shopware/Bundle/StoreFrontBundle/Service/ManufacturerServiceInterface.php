@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ManufacturerServiceInterface
 {
@@ -34,9 +35,11 @@ interface ManufacturerServiceInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ManufacturerGatewayInterface::get()
      *
-     * @return Struct\Product\Manufacturer[] Indexed by the manufacturer id
+     * @param array<int> $ids
+     *
+     * @return array<int, Manufacturer> Indexed by the manufacturer id
      */
-    public function getList(array $ids, Struct\ShopContextInterface $context);
+    public function getList(array $ids, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -46,7 +49,7 @@ interface ManufacturerServiceInterface
      *
      * @param int $id
      *
-     * @return Struct\Product\Manufacturer
+     * @return Manufacturer|null
      */
-    public function get($id, Struct\ShopContextInterface $context);
+    public function get($id, ShopContextInterface $context);
 }

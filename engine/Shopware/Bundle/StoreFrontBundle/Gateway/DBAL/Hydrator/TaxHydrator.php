@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class TaxHydrator extends Hydrator
 {
@@ -32,11 +32,11 @@ class TaxHydrator extends Hydrator
      * Creates a new tax struct and assigns the passed
      * data array.
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
+     * @return Tax
      */
     public function hydrate(array $data)
     {
-        $tax = new Struct\Tax();
+        $tax = new Tax();
 
         $tax->setId((int) $data['__tax_id']);
         $tax->setName($data['__tax_description']);
@@ -49,11 +49,11 @@ class TaxHydrator extends Hydrator
      * Creates a new tax struct and assigns the passed
      * data array.
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Tax
+     * @return Tax
      */
     public function hydrateRule(array $data)
     {
-        $tax = new Struct\Tax();
+        $tax = new Tax();
 
         $tax->setId((int) $data['__taxRule_groupID']);
         $tax->setName($data['__taxRule_name']);

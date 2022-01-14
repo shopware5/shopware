@@ -96,6 +96,7 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
 
         $valueIds = array_column($propertyData, 'id');
         $filterGroupIds = array_keys(array_flip(array_column($propertyData, 'filterGroupId')));
+        $filterGroupIds = array_map('\intval', $filterGroupIds);
 
         if (empty($valueIds)) {
             return null;

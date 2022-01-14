@@ -26,7 +26,9 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware_Components_Config;
 
 /**
@@ -34,20 +36,14 @@ use Shopware_Components_Config;
  */
 class CheapestPriceESGateway extends CheapestPriceGateway
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PriceHydrator $priceHydrator,
+        PriceHydrator $priceHydrator,
         Shopware_Components_Config $config
     ) {
         parent::__construct($connection, $fieldHelper, $priceHydrator, $config);
@@ -60,11 +56,11 @@ class CheapestPriceESGateway extends CheapestPriceGateway
      * This method misses the laststock subquery where-condition as laststock-products would be indexed without prices otherwise
      * what would lead to broken price filters when ES is used
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array
+     * @return array<int>
      */
-    protected function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
+    protected function getCheapestPriceIds($products, Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -148,8 +144,6 @@ class CheapestPriceESGateway extends CheapestPriceGateway
             ->groupBy('outerPrices.articleID')
             ->having('priceId IS NOT NULL');
 
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 }

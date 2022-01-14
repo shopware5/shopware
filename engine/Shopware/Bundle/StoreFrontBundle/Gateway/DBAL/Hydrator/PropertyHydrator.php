@@ -24,19 +24,15 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option;
+use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 
 class PropertyHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
-    /**
-     * @var MediaHydrator
-     */
-    private $mediaHydrator;
+    private MediaHydrator $mediaHydrator;
 
     public function __construct(
         AttributeHydrator $attributeHydrator,
@@ -47,13 +43,12 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Property\Set[]
+     * @return Set[]
      */
     public function hydrateValues(array $data)
     {
         $this->sortGroups($data);
 
-        /** @var Struct\Property\Set[] $sets */
         $sets = [];
 
         foreach ($data as $row) {
@@ -75,9 +70,7 @@ class PropertyHydrator extends Hydrator
             }
 
             $options = $group->getOptions();
-            $option = $this->hydrateOption($row);
-
-            $options[$optionId] = $option;
+            $options[$optionId] = $this->hydrateOption($row);
             $groups[$groupId] = $group;
             $sets[$setId] = $set;
 
@@ -97,11 +90,11 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Property\Group
+     * @return Group
      */
     public function hydrateGroup(array $data)
     {
-        $group = new Struct\Property\Group();
+        $group = new Group();
         $translation = $this->getTranslation($data, '__propertyGroup', ['optionName' => 'name']);
         $data = array_merge($data, $translation);
 
@@ -117,11 +110,11 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Property\Option
+     * @return Option
      */
     public function hydrateOption(array $data)
     {
-        $option = new Struct\Property\Option();
+        $option = new Option();
         $translation = $this->getTranslation($data, '__propertyOption', ['optionValue' => 'value']);
         $data = array_merge($data, $translation);
 
@@ -142,12 +135,9 @@ class PropertyHydrator extends Hydrator
         return $option;
     }
 
-    /**
-     * @return Struct\Property\Set
-     */
-    private function hydrateSet(array $data)
+    private function hydrateSet(array $data): Set
     {
-        $set = new Struct\Property\Set();
+        $set = new Set();
         $translation = $this->getTranslation($data, '__propertySet', ['groupName' => 'name']);
         $data = array_merge($data, $translation);
 
@@ -166,7 +156,7 @@ class PropertyHydrator extends Hydrator
     /**
      * Sort groups by position in set
      */
-    private function sortGroups(array &$data)
+    private function sortGroups(array &$data): void
     {
         usort($data, function ($a, $b) {
             if ($a['__relations_position'] == $b['__relations_position']) {
@@ -178,18 +168,17 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param Struct\Property\Option[] $options
-     * @param int                      $sortMode
+     * @param Option[] $options
      */
-    private function sortOptions(&$options, $sortMode)
+    private function sortOptions(array &$options, int $sortMode)
     {
-        if ($sortMode == Struct\Property\Set::SORT_POSITION) {
+        if ($sortMode === Set::SORT_POSITION) {
             $this->sortOptionsByPosition($options);
 
             return;
         }
 
-        if ($sortMode == Struct\Property\Set::SORT_NUMERIC) {
+        if ($sortMode === Set::SORT_NUMERIC) {
             $this->sortOptionsNumercialValue($options);
 
             return;
@@ -199,11 +188,11 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param Struct\Property\Option[] $options
+     * @param Option[] $options
      */
-    private function sortOptionsByPosition(&$options)
+    private function sortOptionsByPosition(array &$options)
     {
-        usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
+        usort($options, function (Option $a, Option $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return 0;
             }
@@ -213,28 +202,28 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param Struct\Property\Option[] $options
+     * @param Option[] $options
      */
-    private function sortOptionsNumercialValue(&$options)
+    private function sortOptionsNumercialValue(array &$options)
     {
-        usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
-            $a = (float) str_replace(',', '.', $a->getName());
-            $b = (float) str_replace(',', '.', $b->getName());
+        usort($options, function (Option $a, Option $b) {
+            $aValue = (float) str_replace(',', '.', $a->getName());
+            $bValue = (float) str_replace(',', '.', $b->getName());
 
-            if ($a == $b) {
+            if ($aValue == $bValue) {
                 return 0;
             }
 
-            return ($a < $b) ? -1 : 1;
+            return ($aValue < $bValue) ? -1 : 1;
         });
     }
 
     /**
-     * @param Struct\Property\Option[] $options
+     * @param Option[] $options
      */
-    private function sortOptionsAlphanumeric(&$options)
+    private function sortOptionsAlphanumeric(array &$options): void
     {
-        usort($options, function (Struct\Property\Option $a, Struct\Property\Option $b) {
+        usort($options, function (Option $a, Option $b) {
             return strnatcasecmp($a->getName(), $b->getName());
         });
     }

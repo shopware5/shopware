@@ -26,15 +26,14 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInterface
+class PriceGroupDiscountGateway implements PriceGroupDiscountGatewayInterface
 {
-    /**
-     * @var Hydrator\PriceHydrator
-     */
-    private $priceHydrator;
+    private PriceHydrator $priceHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,33 +45,23 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PriceHydrator $priceHydrator
+        PriceHydrator $priceHydrator
     ) {
         $this->connection = $connection;
         $this->priceHydrator = $priceHydrator;
         $this->fieldHelper = $fieldHelper;
     }
 
-    /**
-     * @return array|Struct\Product\PriceGroup[]
-     */
-    public function getPriceGroups(
-        Struct\Customer\Group $customerGroup,
-        Struct\ShopContextInterface $context
-    ) {
+    public function getPriceGroups(Group $customerGroup, ShopContextInterface $context)
+    {
         $query = $this->connection->createQueryBuilder();
 
         $query->addSelect('priceGroupDiscount.groupID')
@@ -87,10 +76,7 @@ class PriceGroupDiscountGateway implements Gateway\PriceGroupDiscountGatewayInte
             ->addOrderBy('priceGroupDiscount.discountstart')
             ->setParameter(':customerGroup', $customerGroup->getId());
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_GROUP);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         $priceGroups = [];
 

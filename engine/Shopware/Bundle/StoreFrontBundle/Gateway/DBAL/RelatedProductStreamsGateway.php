@@ -26,30 +26,23 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ProductStreamHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\RelatedProductStreamsGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatewayInterface
+class RelatedProductStreamsGateway implements RelatedProductStreamsGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Hydrator\ProductStreamHydrator
-     */
-    private $hydrator;
+    private ProductStreamHydrator $hydrator;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\ProductStreamHydrator $hydrator
+        ProductStreamHydrator $hydrator
     ) {
         $this->connection = $connection;
         $this->fieldHelper = $fieldHelper;
@@ -59,7 +52,7 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
     /**
      * {@inheritdoc}
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $numbers = $this->getList([$product], $context);
 
@@ -69,7 +62,7 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
     /**
      * {@inheritdoc}
      */
-    public function getList($products, Struct\ShopContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -90,10 +83,7 @@ class RelatedProductStreamsGateway implements Gateway\RelatedProductStreamsGatew
 
         $this->fieldHelper->addProductStreamTranslation($query, $context);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_GROUP);
+        $data = $query->execute()->fetchAll(PDO::FETCH_GROUP);
 
         $related = [];
         foreach ($data as $productId => $productData) {

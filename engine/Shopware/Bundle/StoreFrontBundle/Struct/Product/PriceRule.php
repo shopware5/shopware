@@ -153,7 +153,7 @@ class PriceRule extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group $customerGroup
+     * @param Group $customerGroup
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -161,7 +161,7 @@ class PriceRule extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
+     * @return Group
      */
     public function getCustomerGroup()
     {
@@ -169,7 +169,7 @@ class PriceRule extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit $unit
+     * @param Unit $unit
      */
     public function setUnit($unit)
     {
@@ -177,7 +177,7 @@ class PriceRule extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit
+     * @return Unit
      */
     public function getUnit()
     {

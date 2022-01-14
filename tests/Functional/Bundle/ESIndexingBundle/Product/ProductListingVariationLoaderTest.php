@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -54,6 +56,7 @@ class ProductListingVariationLoaderTest extends TestCase
             return $detail->getNumber();
         }, $productData->getDetails()->getValues());
         $numbers[] = $productData->getMainDetail()->getNumber();
+        $numbers = array_filter($numbers);
 
         $products = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($numbers, $context);
         $variantConfiguration = Shopware()->Container()->get('shopware_storefront.configurator_service')->getProductsConfigurations($products, $context);
@@ -82,6 +85,7 @@ class ProductListingVariationLoaderTest extends TestCase
             return $detail->getNumber();
         }, $productData->getDetails()->getValues());
         $numbers[] = $productData->getMainDetail()->getNumber();
+        $numbers = array_filter($numbers);
 
         $products = Shopware()->Container()->get('shopware_storefront.list_product_service')->getList($numbers, $context);
         $variantConfiguration = Shopware()->Container()->get('shopware_storefront.configurator_service')->getProductsConfigurations($products, $context);

@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 
 interface CustomerGroupGatewayInterface
 {
@@ -34,7 +34,9 @@ interface CustomerGroupGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface::get()
      *
-     * @return Struct\Customer\Group[] Indexed by the customer group key
+     * @param array<string> $keys
+     *
+     * @return array<string, Group> Indexed by the customer group key
      */
     public function getList(array $keys);
 
@@ -45,7 +47,7 @@ interface CustomerGroupGatewayInterface
      *
      * @param string $key
      *
-     * @return Struct\Customer\Group
+     * @return Group|null
      */
     public function get($key);
 }

@@ -26,16 +26,16 @@ namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\PriceHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
-class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
+class CheapestPriceGateway implements CheapestPriceGatewayInterface
 {
-    /**
-     * @var Hydrator\PriceHydrator
-     */
-    private $priceHydrator;
+    private PriceHydrator $priceHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -47,25 +47,17 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\PriceHydrator $priceHydrator,
+        PriceHydrator $priceHydrator,
         Shopware_Components_Config $config
     ) {
         $this->connection = $connection;
@@ -78,9 +70,9 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      * {@inheritdoc}
      */
     public function get(
-        Struct\BaseProduct $product,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup
+        BaseProduct $product,
+        ShopContextInterface $context,
+        Group $customerGroup
     ) {
         $prices = $this->getList([$product], $context, $customerGroup);
 
@@ -92,8 +84,8 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
      */
     public function getList(
         $products,
-        Struct\ShopContextInterface $context,
-        Struct\Customer\Group $customerGroup
+        ShopContextInterface $context,
+        Group $customerGroup
     ) {
         /**
          * Contains the cheapest price logic which product price should be selected.
@@ -118,10 +110,7 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
         $this->fieldHelper->addVariantTranslation($query, $context);
         $this->fieldHelper->addPriceTranslation($query, $context);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $prices = [];
         foreach ($data as $row) {
@@ -135,11 +124,11 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
     /**
      * Pre selection of the cheapest prices ids.
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array
+     * @return array<int>
      */
-    protected function getCheapestPriceIds($products, Struct\Customer\Group $customerGroup)
+    protected function getCheapestPriceIds($products, Group $customerGroup)
     {
         $ids = [];
         foreach ($products as $product) {
@@ -237,8 +226,6 @@ class CheapestPriceGateway implements Gateway\CheapestPriceGatewayInterface
             ->groupBy('outerPrices.articleID')
             ->having('priceId IS NOT NULL');
 
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 }

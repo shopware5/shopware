@@ -25,16 +25,18 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
-use Shopware\Bundle\StoreFrontBundle\Gateway;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\TaxHydrator;
+use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 
-class TaxGateway implements Gateway\TaxGatewayInterface
+class TaxGateway implements TaxGatewayInterface
 {
-    /**
-     * @var Hydrator\TaxHydrator
-     */
-    private $taxHydrator;
+    private TaxHydrator $taxHydrator;
 
     /**
      * The FieldHelper class is used for the
@@ -46,20 +48,15 @@ class TaxGateway implements Gateway\TaxGatewayInterface
      * Additionally the field helper reduce the work, to
      * select in a second step the different required
      * attribute tables for a parent table.
-     *
-     * @var FieldHelper
      */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\TaxHydrator $taxHydrator
+        TaxHydrator $taxHydrator
     ) {
         $this->connection = $connection;
         $this->taxHydrator = $taxHydrator;
@@ -69,17 +66,12 @@ class TaxGateway implements Gateway\TaxGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getRules(
-        Struct\Customer\Group $customerGroup,
-        Struct\Country\Area $area = null,
-        Struct\Country $country = null,
-        Struct\Country\State $state = null
-    ) {
+    public function getRules(Group $customerGroup, Area $area = null, Country $country = null, State $state = null)
+    {
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getTaxFields())
             ->from('s_core_tax', 'tax');
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
         $statement = $query->execute();
         $data = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -95,7 +87,6 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         foreach ($data as $tax) {
             $query->setParameter(':taxId', $tax['__tax_id']);
 
-            /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
             $statement = $query->execute();
 
             $area = $statement->fetch(PDO::FETCH_ASSOC);
@@ -114,20 +105,12 @@ class TaxGateway implements Gateway\TaxGatewayInterface
         return $rules;
     }
 
-    /**
-     * @param Struct\Customer\Group $customerGroup
-     * @param Struct\Country\Area   $area
-     * @param Struct\Country        $country
-     * @param Struct\Country\State  $state
-     *
-     * @return \Doctrine\DBAL\Query\QueryBuilder
-     */
     private function getAreaQuery(
-        Struct\Customer\Group $customerGroup = null,
-        Struct\Country\Area $area = null,
-        Struct\Country $country = null,
-        Struct\Country\State $state = null
-    ) {
+        Group $customerGroup,
+        Area $area = null,
+        Country $country = null,
+        State $state = null
+    ): QueryBuilder {
         $areaId = $area ? $area->getId() : null;
         $countryId = $country ? $country->getId() : null;
         $stateId = $state ? $state->getId() : null;

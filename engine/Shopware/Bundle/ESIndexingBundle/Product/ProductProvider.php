@@ -226,7 +226,7 @@ class ProductProvider implements ProviderInterface
 
             $product->setHasStock($product->getStock() >= $product->getUnit()->getMinPurchase());
 
-            if ($variantFacet) {
+            if ($variantFacet && $variantConfiguration) {
                 $this->addVariantSearchDetails($product, $configurations, $variantFacet, $variantConfiguration, $combinations, $listingPrices, $availability);
             } elseif (!$product->isMainVariant()) {
                 continue;

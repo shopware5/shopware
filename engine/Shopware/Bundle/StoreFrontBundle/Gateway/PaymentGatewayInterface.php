@@ -24,12 +24,15 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Payment;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface PaymentGatewayInterface
 {
     /**
-     * @return array Indexed by the payment id. Each elements contains a Struct\Payment array.
+     * @param array<int> $paymentIds
+     *
+     * @return array<int, Payment> Indexed by the payment id. Each elements contains a Struct\Payment array.
      */
     public function getList(array $paymentIds, ShopContextInterface $context);
 }

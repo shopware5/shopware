@@ -25,9 +25,9 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Models\Banner\Banner;
@@ -772,7 +772,7 @@ SQL;
         );
 
         foreach ($variantsData as $variantData) {
-            $product = new StoreFrontBundle\Struct\ListProduct(
+            $product = new ListProduct(
                 $productId,
                 $variantData['id'],
                 $variantData['ordernumber']
@@ -793,13 +793,13 @@ SQL;
             }
 
             $product->setAdditional($variantData['additionaltext']);
-            $products[$variantData['ordernumber']] = $product;
+            $products[(string) $variantData['ordernumber']] = $product;
         }
 
         $products = $this->additionalTextService->buildAdditionalTextLists($products, $context);
 
         return array_map(
-            function (StoreFrontBundle\Struct\ListProduct $elem) {
+            function (ListProduct $elem) {
                 return [
                     'ordernumber' => $elem->getNumber(),
                     'additionaltext' => $elem->getAdditional(),

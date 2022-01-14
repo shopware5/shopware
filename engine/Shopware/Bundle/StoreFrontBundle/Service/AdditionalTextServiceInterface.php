@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface AdditionalTextServiceInterface
 {
@@ -37,18 +38,18 @@ interface AdditionalTextServiceInterface
      *
      * This behaviour can be optionally disabled using the backend settings
      *
-     * @return Struct\ListProduct $product
+     * @return ListProduct $product
      */
-    public function buildAdditionalText(Struct\ListProduct $product, Struct\ShopContextInterface $context);
+    public function buildAdditionalText(ListProduct $product, ShopContextInterface $context);
 
     /**
      * Determines the 'additional text' value for multiple ListProduct.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::buildAdditionalText()
      *
-     * @param Struct\ListProduct[] $products
+     * @param array<string, ListProduct> $products
      *
-     * @return Struct\ListProduct[] $products
+     * @return array<string, ListProduct> $products
      */
-    public function buildAdditionalTextLists($products, Struct\ShopContextInterface $context);
+    public function buildAdditionalTextLists($products, ShopContextInterface $context);
 }

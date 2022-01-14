@@ -24,19 +24,15 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set;
 
 class ConfiguratorHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
-    /**
-     * @var MediaHydrator
-     */
-    private $mediaHydrator;
+    private MediaHydrator $mediaHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
     {
@@ -45,18 +41,18 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Configurator\Set
+     * @return Set
      */
     public function hydrate(array $data)
     {
-        $set = $this->createSet($data[0]);
+        $set = $this->createSet($data[0] ?? []);
         $set->setGroups($this->hydrateGroups($data));
 
         return $set;
     }
 
     /**
-     * @return Struct\Configurator\Group[]
+     * @return Group[]
      */
     public function hydrateGroups(array $data)
     {
@@ -81,13 +77,11 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
-     * @return Struct\Configurator\Set
+     * @param array<string, mixed> $data
      */
-    private function createSet($data)
+    private function createSet(array $data): Set
     {
-        $set = new Struct\Configurator\Set();
+        $set = new Set();
         $set->setId((int) $data['__configuratorSet_id']);
         $set->setName($data['__configuratorSet_name']);
         $set->setType((int) $data['__configuratorSet_type']);
@@ -96,13 +90,11 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
-     * @return Struct\Configurator\Group
+     * @param array<string, mixed> $data
      */
-    private function createGroup($data)
+    private function createGroup(array $data): Group
     {
-        $group = new Struct\Configurator\Group();
+        $group = new Group();
         $translation = $this->getTranslation($data, '__configuratorGroup');
         $data = array_merge($data, $translation);
 
@@ -118,13 +110,11 @@ class ConfiguratorHydrator extends Hydrator
     }
 
     /**
-     * @param array $data
-     *
-     * @return Struct\Configurator\Option
+     * @param array<string, mixed> $data
      */
-    private function createOption($data)
+    private function createOption(array $data): Option
     {
-        $option = new Struct\Configurator\Option();
+        $option = new Option();
 
         $translation = $this->getTranslation($data, '__configuratorOption');
         $data = array_merge($data, $translation);

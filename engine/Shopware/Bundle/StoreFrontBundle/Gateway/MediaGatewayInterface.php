@@ -24,7 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface MediaGatewayInterface
 {
@@ -34,11 +35,11 @@ interface MediaGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
      *
-     * @param array $ids
+     * @param array<int> $ids
      *
-     * @return Struct\Media[] Indexed by the media id
+     * @return array<int, Media> Indexed by the media id
      */
-    public function getList($ids, Struct\ShopContextInterface $context);
+    public function getList($ids, ShopContextInterface $context);
 
     /**
      * To get detailed information about the selection conditions, structure and content of the returned object,
@@ -48,7 +49,7 @@ interface MediaGatewayInterface
      *
      * @param int $id
      *
-     * @return Struct\Media
+     * @return Media|null
      */
-    public function get($id, Struct\ShopContextInterface $context);
+    public function get($id, ShopContextInterface $context);
 }

@@ -24,14 +24,11 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\ProductStream;
 
 class ProductStreamHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -39,11 +36,11 @@ class ProductStreamHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\ProductStream
+     * @return ProductStream
      */
     public function hydrate(array $data)
     {
-        $productStream = new Struct\ProductStream();
+        $productStream = new ProductStream();
         $translation = $this->getTranslation($data, '__stream');
         $data = array_merge($data, $translation);
 

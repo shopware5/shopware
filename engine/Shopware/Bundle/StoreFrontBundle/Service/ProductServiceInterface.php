@@ -34,7 +34,7 @@ interface ProductServiceInterface extends ListProductServiceInterface
      *
      * @param string[] $numbers
      *
-     * @return Product[] Indexed by the product order number
+     * @return array<string, Product> Indexed by the product order number
      */
     public function getList(array $numbers, ProductContextInterface $context);
 

@@ -29,19 +29,14 @@ use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\LocationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class LocationService implements LocationServiceInterface
 {
-    /**
-     * @var CountryGatewayInterface
-     */
-    private $gateway;
+    private CountryGatewayInterface $gateway;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(CountryGatewayInterface $gateway, Connection $connection)
     {
@@ -49,11 +44,6 @@ class LocationService implements LocationServiceInterface
         $this->connection = $connection;
     }
 
-    /**
-     * Returns all available countries for the provided shop context
-     *
-     * @return Country[] indexed by id
-     */
     public function getCountries(ShopContextInterface $context)
     {
         $ids = $this->getCountryIds();
@@ -82,7 +72,7 @@ class LocationService implements LocationServiceInterface
     /**
      * @return int[]
      */
-    private function getCountryIds()
+    private function getCountryIds(): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->select('id');
@@ -92,13 +82,13 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * @param Country\State[] $countryStates
+     * @param State[] $countryStates
      *
-     * @return Country\State[]
+     * @return State[]
      */
-    private function sortStates($countryStates)
+    private function sortStates(array $countryStates): array
     {
-        uasort($countryStates, function (Country\State $a, Country\State $b) {
+        uasort($countryStates, function (State $a, State $b) {
             if ($a->getPosition() == $b->getPosition()) {
                 return strnatcasecmp($a->getName(), $b->getName());
             }
@@ -110,11 +100,11 @@ class LocationService implements LocationServiceInterface
     }
 
     /**
-     * @param Country[] $countries
+     * @param array<int, Country> $countries
      *
-     * @return Country[]
+     * @return array<int, Country>
      */
-    private function sortCountries($countries)
+    private function sortCountries(array $countries): array
     {
         uasort($countries, function (Country $a, Country $b) {
             if ($a->getPosition() == $b->getPosition()) {

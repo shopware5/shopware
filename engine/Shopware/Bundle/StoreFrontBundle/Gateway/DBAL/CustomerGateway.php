@@ -31,20 +31,11 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CustomerHydrator;
 
 class CustomerGateway implements CustomerGatewayInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var FieldHelper
-     */
-    private $fieldHelper;
+    private FieldHelper $fieldHelper;
 
-    /**
-     * @var CustomerHydrator
-     */
-    private $hydrator;
+    private CustomerHydrator $hydrator;
 
     public function __construct(Connection $connection, FieldHelper $fieldHelper, CustomerHydrator $hydrator)
     {
@@ -74,9 +65,9 @@ class CustomerGateway implements CustomerGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    private function fetchCustomers($ids)
+    private function fetchCustomers(array $ids): array
     {
         $query = $this->connection->createQueryBuilder();
         $query->addSelect($this->fieldHelper->getCustomerFields());

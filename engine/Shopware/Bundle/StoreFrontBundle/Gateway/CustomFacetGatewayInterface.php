@@ -32,17 +32,19 @@ interface CustomFacetGatewayInterface
     /**
      * @param int[] $ids
      *
-     * @return CustomFacet[] indexed by id
+     * @return array<int, CustomFacet> indexed by id
      */
     public function getList(array $ids, ShopContextInterface $context);
 
     /**
-     * @return array indexed by category id, each element contains a list of CustomFacet
+     * @param array<int> $categoryIds
+     *
+     * @return array<int, array<int, CustomFacet>> indexed by category id, each element contains a list of CustomFacet
      */
     public function getFacetsOfCategories(array $categoryIds, ShopContextInterface $context);
 
     /**
-     * @return CustomFacet[]
+     * @return array<int, CustomFacet> indexed by custom facet id
      */
     public function getAllCategoryFacets(ShopContextInterface $context);
 }

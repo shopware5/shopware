@@ -32,6 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\ProductStream\CriteriaFactoryInterface;
 use Shopware\Components\ProductStream\Repository;
@@ -213,14 +214,15 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
         $context = $this->container->get(ContextServiceInterface::class)->getShopContext();
 
         $category = $this->container->get(CategoryGateway::class)->get($categoryId, $context);
+        if ($category instanceof Category) {
+            $productStream = $category->getProductStream();
 
-        $productStream = $category->getProductStream();
+            if ($productStream) {
+                $result = $this->fetchStreamListing($categoryId, $productStream->getId());
+                $this->setSearchResultResponse($result);
 
-        if ($productStream) {
-            $result = $this->fetchStreamListing($categoryId, $productStream->getId());
-            $this->setSearchResultResponse($result);
-
-            return;
+                return;
+            }
         }
 
         $result = $this->fetchCategoryListing();

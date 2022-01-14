@@ -31,7 +31,7 @@ interface CustomerServiceInterface
     /**
      * @param int[] $customerIds
      *
-     * @return Customer[]
+     * @return array<int, Customer> indexed by customer id
      */
     public function getList($customerIds);
 }

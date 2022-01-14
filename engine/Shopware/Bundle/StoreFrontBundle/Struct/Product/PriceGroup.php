@@ -76,7 +76,7 @@ class PriceGroup extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount[]
+     * @return PriceDiscount[]
      */
     public function getDiscounts()
     {
@@ -84,7 +84,7 @@ class PriceGroup extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount[] $discounts
+     * @param PriceDiscount[] $discounts
      */
     public function setDiscounts($discounts)
     {

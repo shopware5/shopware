@@ -31,7 +31,9 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\VariantCheapestPriceGatewayInterfac
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculationServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
@@ -74,7 +76,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
         $this->loadPrices($criteria, $result, $context);
     }
 
-    private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context)
+    private function loadPrices(Criteria $criteria, ProductSearchResult $result, ShopContextInterface $context): void
     {
         $cheapestPriceData = $this->variantCheapestPriceGateway->getList($result->getProducts(), $context, $context->getCurrentCustomerGroup(), $criteria);
 
@@ -97,7 +99,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
             $this->priceCalculationService->calculateProduct($product, $context);
 
             $product->setListingPrice($product->getCheapestUnitPrice());
-            if ($this->config->get('calculateCheapestPriceWithMinPurchase')) {
+            if ($this->config->get('calculateCheapestPriceWithMinPurchase') && $product->getCheapestPrice() instanceof Price) {
                 $product->setListingPrice($product->getCheapestPrice());
             }
 
@@ -105,14 +107,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
         }
     }
 
-    /**
-     * @param ListProduct          $product
-     * @param PriceRule            $price
-     * @param ShopContextInterface $context
-     *
-     * @return PriceRule
-     */
-    private function calculatePriceGroupDiscounts($product, $price, $context)
+    private function calculatePriceGroupDiscounts(ListProduct $product, PriceRule $price, ShopContextInterface $context): PriceRule
     {
         if (!$product->isPriceGroupActive()) {
             return $price;
@@ -120,7 +115,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
 
         $discount = $this->getHighestQuantityDiscount($product, $context, $price->getFrom());
 
-        if (!$discount) {
+        if (!$discount instanceof PriceDiscount) {
             return $price;
         }
         $price->setPrice($price->getPrice() / 100 * (100 - $discount->getPercent()));
@@ -134,26 +129,26 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
      * The price groups are stored in the provided context object.
      * If the product has no configured price group or the price group has no discount defined for the
      * current customer group, the function returns null.
-     *
-     * @param int $quantity
-     *
-     * @return PriceDiscount|null
      */
-    private function getHighestQuantityDiscount(ListProduct $product, ShopContextInterface $context, $quantity)
+    private function getHighestQuantityDiscount(ListProduct $product, ShopContextInterface $context, int $quantity): ?PriceDiscount
     {
         $priceGroups = $context->getPriceGroups();
         if (empty($priceGroups)) {
             return null;
         }
 
-        $id = $product->getPriceGroup()->getId();
+        $productPriceGroup = $product->getPriceGroup();
+        if (!$productPriceGroup instanceof PriceGroup) {
+            return null;
+        }
+
+        $id = $productPriceGroup->getId();
         if (!isset($priceGroups[$id])) {
             return null;
         }
 
         $priceGroup = $priceGroups[$id];
 
-        /** @var PriceDiscount|null $highest */
         $highest = null;
         foreach ($priceGroup->getDiscounts() as $discount) {
             if ($discount->getQuantity() > $quantity && !$this->config->get('useLastGraduationForCheapestPrice')) {

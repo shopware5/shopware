@@ -30,10 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CustomFacetService implements CustomFacetServiceInterface
 {
-    /**
-     * @var CustomFacetGatewayInterface
-     */
-    private $gateway;
+    private CustomFacetGatewayInterface $gateway;
 
     public function __construct(CustomFacetGatewayInterface $gateway)
     {

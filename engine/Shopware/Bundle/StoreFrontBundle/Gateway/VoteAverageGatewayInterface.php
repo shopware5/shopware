@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\VoteAverage;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface VoteAverageGatewayInterface
 {
@@ -34,11 +36,11 @@ interface VoteAverageGatewayInterface
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\VoteAverageGatewayInterface::get()
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return array<string, Struct\Product\VoteAverage> Indexed by the product order number
+     * @return array<string, VoteAverage> Indexed by the product order number
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 
     /**
      * The \Shopware\Bundle\StoreFrontBundle\Struct\VoteAverage requires the following data:
@@ -48,7 +50,7 @@ interface VoteAverageGatewayInterface
      * Required conditions for the selection:
      * - Only activated votes
      *
-     * @return Struct\Product\VoteAverage
+     * @return VoteAverage|null
      */
-    public function get(Struct\BaseProduct $product, Struct\ShopContextInterface $context);
+    public function get(BaseProduct $product, ShopContextInterface $context);
 }

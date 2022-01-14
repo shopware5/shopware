@@ -29,13 +29,11 @@ use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use UnexpectedValueException;
 
 class AdditionalTextService implements AdditionalTextServiceInterface
 {
-    /**
-     * @var ConfiguratorServiceInterface
-     */
-    private $configuratorService;
+    private ConfiguratorServiceInterface $configuratorService;
 
     public function __construct(ConfiguratorServiceInterface $configuratorService)
     {
@@ -47,9 +45,14 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     public function buildAdditionalText(ListProduct $product, ShopContextInterface $context)
     {
-        $products = $this->buildAdditionalTextLists([$product], $context);
+        $products = $this->buildAdditionalTextLists([$product->getNumber() => $product], $context);
 
-        return array_shift($products);
+        $product = array_shift($products);
+        if (!$product instanceof ListProduct) {
+            throw new UnexpectedValueException(sprintf('Expect instance of "%s", got "%s" instead', ListProduct::class, \gettype($product)));
+        }
+
+        return $product;
     }
 
     /**
@@ -57,7 +60,6 @@ class AdditionalTextService implements AdditionalTextServiceInterface
      */
     public function buildAdditionalTextLists($products, ShopContextInterface $context)
     {
-        /** @var ListProduct[] $required */
         $required = [];
         foreach ($products as &$product) {
             if (!$product->getAdditional()) {

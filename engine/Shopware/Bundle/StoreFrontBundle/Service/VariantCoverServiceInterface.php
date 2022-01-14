@@ -24,7 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface VariantCoverServiceInterface
 {
@@ -32,9 +34,9 @@ interface VariantCoverServiceInterface
      * Returns a list of variant specified covers.
      * The list is indexed by the product number.
      *
-     * @param Struct\BaseProduct[] $products
+     * @param BaseProduct[] $products
      *
-     * @return Struct\Media[] indexed by product number
+     * @return array<string, Media> indexed by product number
      */
-    public function getList($products, Struct\ShopContextInterface $context);
+    public function getList($products, ShopContextInterface $context);
 }

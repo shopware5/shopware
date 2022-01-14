@@ -31,10 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 
 class CategoryDepthService implements CategoryDepthServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -65,7 +62,7 @@ class CategoryDepthService implements CategoryDepthServiceInterface
         $ids = array_keys($paths);
         $plain = array_values($paths);
 
-        if (\count($plain) > 0 && strpos($plain[0], '|') !== false) {
+        if (\count($plain) > 0 && str_contains($plain[0], '|')) {
             $rootPath = explode('|', $plain[0]);
             $rootPath = array_filter(array_unique($rootPath));
             $ids = array_merge($ids, $rootPath);

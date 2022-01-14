@@ -288,7 +288,7 @@ class ListProduct extends BaseProduct
     protected $tax;
 
     /**
-     * @var Manufacturer
+     * @var Manufacturer|null
      */
     protected $manufacturer;
 

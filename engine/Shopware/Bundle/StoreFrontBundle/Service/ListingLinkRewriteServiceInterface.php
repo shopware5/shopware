@@ -29,5 +29,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ListingLinkRewriteServiceInterface
 {
+    /**
+     * @param array<array<string, mixed>> $articles
+     * @param int|null                    $categoryId
+     *
+     * @return array<array<string, mixed>>
+     */
     public function rewriteLinks(Criteria $criteria, array $articles, ShopContextInterface $context, $categoryId = null);
 }

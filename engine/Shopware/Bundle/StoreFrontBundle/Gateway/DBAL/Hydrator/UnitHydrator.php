@@ -24,16 +24,16 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 
 class UnitHydrator extends Hydrator
 {
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit
+     * @return Unit
      */
     public function hydrate(array $data)
     {
-        $unit = new Struct\Product\Unit();
+        $unit = new Unit();
 
         $this->assignUnitData($unit, $data);
 
@@ -43,7 +43,7 @@ class UnitHydrator extends Hydrator
     /**
      * Assigns the passed data array to the passed unit instance.
      */
-    private function assignUnitData(Struct\Product\Unit $unit, array $data)
+    private function assignUnitData(Unit $unit, array $data)
     {
         $id = (int) $data['__unit_id'];
         $translation = $this->getTranslation($data, '__unit', [], $id);

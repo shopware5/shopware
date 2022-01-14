@@ -25,24 +25,18 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 
 class ManufacturerHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
+
+    private MediaServiceInterface $mediaService;
 
     /**
-     * @var MediaServiceInterface
+     * @var array<string, string>
      */
-    private $mediaService;
-
-    /**
-     * @var array
-     */
-    private $mapping = [
+    private array $mapping = [
         'metaTitle' => 'meta_title',
         'metaDescription' => 'meta_description',
         'metaKeywords' => 'meta_keywords',
@@ -55,17 +49,17 @@ class ManufacturerHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Product\Manufacturer
+     * @return Manufacturer
      */
     public function hydrate(array $data)
     {
-        $manufacturer = new Struct\Product\Manufacturer();
+        $manufacturer = new Manufacturer();
         $this->assignData($manufacturer, $data);
 
         return $manufacturer;
     }
 
-    private function assignData(Struct\Product\Manufacturer $manufacturer, array $data)
+    private function assignData(Manufacturer $manufacturer, array $data)
     {
         $translation = $this->getTranslation($data, '__manufacturer', $this->mapping);
         $data = array_merge($data, $translation);

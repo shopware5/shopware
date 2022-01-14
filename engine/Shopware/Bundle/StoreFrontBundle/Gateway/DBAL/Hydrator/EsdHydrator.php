@@ -25,14 +25,11 @@
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
 use DateTime;
-use Shopware\Bundle\StoreFrontBundle\Struct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Esd;
 
 class EsdHydrator extends Hydrator
 {
-    /**
-     * @var AttributeHydrator
-     */
-    private $attributeHydrator;
+    private AttributeHydrator $attributeHydrator;
 
     public function __construct(AttributeHydrator $attributeHydrator)
     {
@@ -40,11 +37,11 @@ class EsdHydrator extends Hydrator
     }
 
     /**
-     * @return Struct\Product\Esd
+     * @return Esd
      */
     public function hydrate(array $data)
     {
-        $esd = new Struct\Product\Esd();
+        $esd = new Esd();
 
         if (isset($data['__esd_id'])) {
             $esd->setId((int) $data['__esd_id']);

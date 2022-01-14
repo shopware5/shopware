@@ -125,7 +125,7 @@ class Price extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule
+     * @return PriceRule
      */
     public function getRule()
     {
@@ -138,7 +138,7 @@ class Price extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit|null
+     * @return Unit
      */
     public function getUnit()
     {

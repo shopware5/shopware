@@ -35,15 +35,9 @@ use Shopware\Components\Routing\RouterInterface;
 
 class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
 {
-    /**
-     * @var ConfiguratorServiceInterface
-     */
-    private $configuratorService;
+    private ConfiguratorServiceInterface $configuratorService;
 
-    /**
-     * @var RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
     public function __construct(ConfiguratorServiceInterface $configuratorService, RouterInterface $router)
     {
@@ -62,8 +56,8 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
             return $condition->expandVariants();
         });
 
-        $products = array_map(function (array $article) {
-            return new BaseProduct($article['articleID'], $article['articleDetailsID'], $article['ordernumber']);
+        $products = array_map(function (array $product) {
+            return new BaseProduct($product['articleID'], $product['articleDetailsID'], $product['ordernumber']);
         }, $articles);
 
         $configurations = [];
@@ -92,15 +86,12 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         foreach ($articles as &$product) {
             $number = $product['ordernumber'];
 
-            $config = [];
-            if (isset($configurations[$number])) {
-                $config = $configurations[$number];
-            }
+            $config = $configurations[$number] ?? [];
 
             if (!empty($config)) {
                 $variantLink = $this->buildListingVariantLink($number, $config, $conditions);
 
-                if (strpos($product['linkDetails'], '?') !== false) {
+                if (str_contains($product['linkDetails'], '?')) {
                     $product['linkDetails'] .= '&' . $variantLink;
                 } else {
                     $product['linkDetails'] .= '?' . $variantLink;
@@ -111,7 +102,11 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         return $articles;
     }
 
-    private function buildListingVariantLink($number, array $config, array $conditions)
+    /**
+     * @param array<Group>            $config
+     * @param array<VariantCondition> $conditions
+     */
+    private function buildListingVariantLink(string $number, array $config, array $conditions): string
     {
         $groupIds = array_map(function (VariantCondition $condition) {
             return $condition->getGroupId();
@@ -126,7 +121,6 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         }
 
         $keys = [];
-        /** @var Group $group */
         foreach ($filtered as $group) {
             $keys['group'][$group->getId()] = $group->getOptions()[0]->getId();
         }

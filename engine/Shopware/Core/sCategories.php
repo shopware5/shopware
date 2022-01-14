@@ -254,12 +254,10 @@ class sCategories implements Enlight_Hook
             LIMIT 1
         ';
 
-        $id = (int) $this->db->fetchOne($sql, [
+        return (int) $this->db->fetchOne($sql, [
             '%|' . $parentId . '|%',
             $articleId,
         ]);
-
-        return $id;
     }
 
     /**
