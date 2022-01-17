@@ -18,7 +18,13 @@
 
     <xsd:complexType name="singleType">
         <xsd:sequence>
-            <xsd:element name="typeName" type="xsd:string"/>
+            <xsd:element name="typeName">
+                <xsd:simpleType>
+                    <xsd:restriction base="xsd:string">
+                        <xsd:pattern value="[A-z]+"/>
+                    </xsd:restriction>
+                </xsd:simpleType>
+            </xsd:element>
             <xsd:element name="name" type="xsd:string"/>
             <xsd:element name="showInFrontend" type="xsd:boolean" minOccurs="0" default="false"/>
             <xsd:element name="menuIcon" type="xsd:string" minOccurs="0" default="sprite-application-block"/>
