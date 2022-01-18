@@ -43,7 +43,7 @@ class DefaultLayer implements ConfigurationLayerInterface
 
     public function readValues(string $pluginName, ?int $shopId): array
     {
-        $pluginNameKey = 'pluginName' . crc32($pluginName);
+        $pluginNameKey = 'pluginName' . abs(crc32($pluginName));
         $builder = $this->connection->createQueryBuilder();
 
         $values = $builder->from('s_core_config_elements', 'coreConfigElements')

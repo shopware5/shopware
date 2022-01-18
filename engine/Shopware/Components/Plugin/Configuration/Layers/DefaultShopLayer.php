@@ -35,8 +35,8 @@ class DefaultShopLayer extends AbstractShopConfigurationLayer
 
     protected function configureQuery(QueryBuilder $builder, ?int $shopId, string $pluginName): QueryBuilder
     {
-        $shopIdKey = 'shopId' . crc32((string) $shopId);
-        $pluginNameKey = 'pluginName' . crc32($pluginName);
+        $shopIdKey = 'shopId' . abs(crc32((string) $shopId));
+        $pluginNameKey = 'pluginName' . abs(crc32($pluginName));
 
         return $builder
             ->andWhere($builder->expr()->eq('corePlugins.name', ':' . $pluginNameKey))
