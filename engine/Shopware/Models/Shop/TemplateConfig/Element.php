@@ -44,7 +44,7 @@ class Element extends ModelEntity
     protected $template;
 
     /**
-     * @var ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Value>
+     * @var ArrayCollection<Value>
      *
      * @ORM\OneToMany(
      *     targetEntity="Shopware\Models\Shop\TemplateConfig\Value",
@@ -210,7 +210,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Template $template
+     * @param Template $template
      */
     public function setTemplate($template)
     {
@@ -218,7 +218,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Template
+     * @return Template
      */
     public function getTemplate()
     {
@@ -274,22 +274,22 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Value[]|null $values
+     * @param Value[]|null $values
      *
-     * @return \Shopware\Components\Model\ModelEntity
+     * @return ModelEntity
      */
     public function setValues($values)
     {
         return $this->setOneToMany(
             $values,
-            \Shopware\Models\Shop\TemplateConfig\Value::class,
+            Value::class,
             'values',
             'element'
         );
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\TemplateConfig\Value>
+     * @return ArrayCollection<Value>
      */
     public function getValues()
     {
@@ -358,7 +358,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Layout $container
+     * @param Layout $container
      */
     public function setContainer($container)
     {
@@ -366,7 +366,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\TemplateConfig\Layout
+     * @return Layout
      */
     public function getContainer()
     {

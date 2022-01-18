@@ -1429,9 +1429,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * @return Paginator<Template>
      */
-    private function getQueryPaginator(Query $query, int $hydrationMode = AbstractQuery::HYDRATE_ARRAY): Paginator
+    private function getQueryPaginator(Query $query): Paginator
     {
-        $query->setHydrationMode($hydrationMode);
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         return $this->getModelManager()->createPaginator($query);
     }

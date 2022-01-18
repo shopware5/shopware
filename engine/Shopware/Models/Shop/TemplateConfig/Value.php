@@ -79,7 +79,7 @@ class Value extends ModelEntity
     private $value;
 
     /**
-     * @param \Shopware\Models\Shop\TemplateConfig\Element $element
+     * @param Element $element
      */
     public function setElement($element)
     {
@@ -87,7 +87,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\TemplateConfig\Element
+     * @return Element
      */
     public function getElement()
     {
@@ -111,7 +111,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param Shop $shop
      */
     public function setShop($shop)
     {
@@ -119,7 +119,7 @@ class Value extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop|null
+     * @return Shop|null
      */
     public function getShop()
     {

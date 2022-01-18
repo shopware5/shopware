@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <requirements>
     <requirement>
-        <name>php</name><group>core</group><required>7.4.2</required><maxCompatibleVersion>8.0.99</maxCompatibleVersion>
+        <name>php</name><group>core</group><required>7.4.2</required><maxCompatibleVersion>8.1.99</maxCompatibleVersion>
     </requirement>
     <requirement>
         <name>mod_rewrite</name><group>core</group><required>1</required>

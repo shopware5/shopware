@@ -2,9 +2,24 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.8
+
+[View all changes from v5.7.7...v5.7.8](https://github.com/shopware/shopware/compare/v5.7.7...v5.7.8)
+
+### Deprecations
+
+### Additions
+
+### Changes
+
+* Update `doctrine/common` to version 3.2.1
+* Update `doctrine/orm` to version 2.11.0
+
+### Removals
+
 ## 5.7.7
 
-[View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
+[View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.6...v5.7.7)
 
 ### Deprecations
 
@@ -145,7 +160,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.2
 
-[View all changes from v5.7.10...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.10...v5.7.2)
+[View all changes from v5.7.1...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.1...v5.7.2)
 
 ### Changes
 
@@ -170,7 +185,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.0
 
-[View all changes from v5.6.1...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.1...v5.7.0)
+[View all changes from v5.6.10...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.10...v5.7.0)
 
 ### Breaks
 

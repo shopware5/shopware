@@ -1103,6 +1103,8 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
     /**
      * Helper function to create the query builder paginator.
      *
+     * @phpstan-param AbstractQuery::HYDRATE_* $hydrationMode
+     *
      * @param int $hydrationMode
      *
      * @return Paginator<TEntityClass|array>
