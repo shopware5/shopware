@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,23 +31,17 @@ use Shopware\Tests\Functional\Components\CheckoutTest;
 
 class FloatTaxCalculationTest extends CheckoutTest
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var int
-     */
-    private $taxId;
+    private int $taxId;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->connection->beginTransaction();
         $this->connection->insert('s_core_tax', ['tax' => 7.75, 'description' => '7.75 %']);
-        $this->taxId = $this->connection->lastInsertId();
+        $this->taxId = (int) $this->connection->lastInsertId();
     }
 
     public function tearDown(): void
@@ -54,7 +50,7 @@ class FloatTaxCalculationTest extends CheckoutTest
         $this->connection->rollBack();
     }
 
-    public function testCartWithVoucher()
+    public function testCartWithVoucher(): void
     {
         Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 7.75), 1);
         $voucherCode = $this->createVoucher(10, $this->taxId);
@@ -67,7 +63,7 @@ class FloatTaxCalculationTest extends CheckoutTest
         $this->hasBasketItem($sBasket['content'], 'Gutschein 10 %', -10.00, -9.281, $voucherCode);
     }
 
-    public function testCartWithVoucherProportional()
+    public function testCartWithVoucherProportional(): void
     {
         $this->setConfig('proportionalTaxCalculation', true);
 

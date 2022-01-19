@@ -29,8 +29,9 @@ use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_TestCase;
 use Exception;
 use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
+use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
-use Shopware\Bundle\CustomerSearchBundleDBAL\CustomerNumberSearch;
+use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 
 class TestCase extends Enlight_Components_Test_TestCase
@@ -47,7 +48,7 @@ class TestCase extends Enlight_Components_Test_TestCase
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         if (!$this->debug) {
             $this->connection->beginTransaction();
         }
@@ -86,12 +87,9 @@ class TestCase extends Enlight_Components_Test_TestCase
             $ids[] = $this->createCustomer($customer);
         }
 
-        /** @var CustomerNumberSearch $search */
-        $search = Shopware()->Container()->get(\Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface::class);
+        $search = Shopware()->Container()->get(CustomerNumberSearchInterface::class);
 
-        /** @var \Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexer $indexer */
-        $indexer = Shopware()->Container()->get(\Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface::class);
-        $indexer->clearIndex();
+        $indexer = Shopware()->Container()->get(SearchIndexerInterface::class);
         $indexer->populate($ids);
 
         $result = $search->search($criteria);
@@ -116,7 +114,7 @@ class TestCase extends Enlight_Components_Test_TestCase
             $customer['addresses'] = [['country_id' => 2]];
         }
 
-        $userId = $this->insert('s_user', array_merge([
+        $customerId = $this->insert('s_user', array_merge([
             'firstname' => 'example',
             'lastname' => 'example',
             'customergroup' => 'EK',
@@ -129,7 +127,7 @@ class TestCase extends Enlight_Components_Test_TestCase
 
         if (\array_key_exists('addresses', $customer)) {
             foreach ($customer['addresses'] as $address) {
-                $address['user_id'] = $userId;
+                $address['user_id'] = $customerId;
                 $addressId = $this->insert('s_user_addresses', $address);
 
                 $this->connection->update(
@@ -138,7 +136,7 @@ class TestCase extends Enlight_Components_Test_TestCase
                         'default_billing_address_id' => $addressId,
                         'default_shipping_address_id' => $addressId,
                     ],
-                    ['id' => $userId]
+                    ['id' => $customerId]
                 );
             }
         }
@@ -157,7 +155,7 @@ class TestCase extends Enlight_Components_Test_TestCase
                         ['ordernumber' => 'SW10235', 'modus' => 0],
                     ];
                 }
-                $order['userID'] = $userId;
+                $order['userID'] = $customerId;
                 $orderId = $this->insert('s_order', $order);
 
                 if (\array_key_exists('details', $order)) {
@@ -182,25 +180,19 @@ class TestCase extends Enlight_Components_Test_TestCase
         }
 
         if (\array_key_exists('attribute', $customer)) {
-            /** @var DataPersisterInterface $persister */
-            $persister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface::class);
-            $persister->persist($customer['attribute'], 's_user_attributes', $userId);
+            $persister = Shopware()->Container()->get(DataPersisterInterface::class);
+            $persister->persist($customer['attribute'], 's_user_attributes', $customerId);
         }
 
-        return $userId;
+        return $customerId;
     }
 
-    /**
-     * @param string $table
-     *
-     * @return string
-     */
-    private function insert($table, array $data)
+    private function insert(string $table, array $data): int
     {
         $data = $this->filterData($data, $table);
         $this->connection->insert($table, $data);
 
-        return $this->connection->lastInsertId($table);
+        return (int) $this->connection->lastInsertId($table);
     }
 
     /**

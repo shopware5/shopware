@@ -47,7 +47,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
 
     private Connection $connection;
 
-    private string $userId;
+    private int $userId;
 
     private Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin;
 
@@ -394,7 +394,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
             'birthday' => '1990-01-01',
         ]);
 
-        $this->userId = $this->connection->lastInsertId('s_user');
+        $this->userId = (int) $this->connection->lastInsertId('s_user');
 
         $addressData = array_merge(['user_id' => $this->userId], $addressData);
         $this->connection->insert('s_user_addresses', $addressData);

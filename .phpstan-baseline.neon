@@ -20526,31 +20526,6 @@ parameters:
 			path: engine/Shopware/Components/Log/Formatter/HtmlFormatter.php
 
 		-
-			message: "#^Cannot access offset 'channel' on array\\|bool\\|int\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
-
-		-
-			message: "#^Cannot access offset 'context' on array\\|bool\\|int\\|string\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
-
-		-
-			message: "#^Cannot access offset 'extra' on array\\|bool\\|int\\|string\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
-
-		-
-			message: "#^Cannot access offset 'level' on array\\|bool\\|int\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
-
-		-
-			message: "#^Cannot access offset 'message' on array\\|bool\\|int\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Log\\\\Formatter\\\\WildfireFormatter\\:\\:encodeObject\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
@@ -20567,11 +20542,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Log\\\\Formatter\\\\WildfireFormatter\\:\\:encodeTrace\\(\\) should return array but returns array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Log\\\\Formatter\\\\WildfireFormatter\\:\\:format\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
 
@@ -20611,24 +20581,9 @@ parameters:
 			path: engine/Shopware/Components/Log/Handler/DoctrineDBALHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Log\\\\Handler\\\\DoctrineDBALHandler\\:\\:write\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Handler/DoctrineDBALHandler.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Log\\\\Handler\\\\DoctrineDBALHandler\\:\\:\\$columnMap type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Log/Handler/DoctrineDBALHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Log\\\\Handler\\\\EnlightMailHandler\\:\\:send\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Handler/EnlightMailHandler.php
-
-		-
-			message: "#^Parameter \\#1 \\$level of method Monolog\\\\Handler\\\\AbstractHandler\\:\\:__construct\\(\\) expects int\\|string, bool\\|int given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Handler/EnlightMailHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Log\\\\Parser\\\\LogfileParser\\:\\:parseLogFile\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -20652,16 +20607,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property object\\:\\:\\$roleID\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Processor/ShopwareEnvironmentProcessor.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Log\\\\Processor\\\\ShopwareEnvironmentProcessor\\:\\:__invoke\\(\\) has parameter \\$record with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Processor/ShopwareEnvironmentProcessor.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Log\\\\Processor\\\\ShopwareEnvironmentProcessor\\:\\:__invoke\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Log/Processor/ShopwareEnvironmentProcessor.php
 
@@ -20694,11 +20639,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\LogawareReflectionHelper\\:\\:unserialize\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/LogawareReflectionHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Logger\\:\\:addRecord\\(\\) has parameter \\$context with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Logger.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Logger\\:\\:table\\(\\) has no return type specified\\.$#"
@@ -46338,26 +46278,6 @@ parameters:
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedProductOfManufacturerConditionHandlerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedWithDeliveryConditionHandlerTest\\:\\:testSingleDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithDeliveryConditionHandlerTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedWithDeliveryConditionHandlerTest\\:\\:\\$dispatchId \\(int\\) does not accept string\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithDeliveryConditionHandlerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedWithPaymentConditionHandlerTest\\:\\:testSinglePayment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithPaymentConditionHandlerTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\OrderedWithPaymentConditionHandlerTest\\:\\:\\$paymentId \\(int\\) does not accept string\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/OrderedWithPaymentConditionHandlerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\SalutationConditionHandlerTest\\:\\:testFemaleCustomer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/SalutationConditionHandlerTest.php
@@ -49173,21 +49093,6 @@ parameters:
 			path: tests/Functional/Components/Cart/CartRaceConditionTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\FloatTaxCalculationTest\\:\\:testCartWithVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/FloatTaxCalculationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\FloatTaxCalculationTest\\:\\:testCartWithVoucherProportional\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/FloatTaxCalculationTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\FloatTaxCalculationTest\\:\\:\\$taxId \\(int\\) does not accept string\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/FloatTaxCalculationTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\PaymentTokenServiceTest\\:\\:paymentTokenProviders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Cart/PaymentTokenServiceTest.php
@@ -50106,71 +50011,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\IpAnonymizerTest\\:\\:testIpAnonymizer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Privacy/IpAnonymizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:createBasket\\(\\) should return int but returns string\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:getBasketsByUserIdFromDb\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:getOrdersByUserIdFromDb\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:getUserFromDb\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:testCleanupCanceledBasketsShouldBeDeleted\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:testCleanupCanceledOrdersShouldBeDeleted\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:testCleanupUserWithCanceledAndValidOrdersShouldNotBeDeleted\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:testCleanupUserWithCanceledOrderShouldBeDeleted\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:testCleanupUserWithoutOrdersShouldBeDeleted\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:testCleanupUserWithoutOrdersShouldNotBeDeleted\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$id of method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:getUserFromDb\\(\\) expects string, int given\\.$#"
-			count: 4
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$userId of method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:getBasketsByUserIdFromDb\\(\\) expects string, int given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$userId of method Shopware\\\\tests\\\\Functional\\\\Components\\\\Privacy\\\\PrivacyServiceTest\\:\\:getOrdersByUserIdFromDb\\(\\) expects string, int given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Components\\\\RandomTest\\:\\:testGeneratePassword\\(\\) has no return type specified\\.$#"

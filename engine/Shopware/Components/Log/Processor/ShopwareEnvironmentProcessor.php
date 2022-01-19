@@ -25,12 +25,12 @@
 
 namespace Shopware\Components\Log\Processor;
 
-class ShopwareEnvironmentProcessor
+use Monolog\Processor\ProcessorInterface;
+
+class ShopwareEnvironmentProcessor implements ProcessorInterface
 {
     /**
      * Adds request, shop and session info
-     *
-     * @return array
      */
     public function __invoke(array $record)
     {

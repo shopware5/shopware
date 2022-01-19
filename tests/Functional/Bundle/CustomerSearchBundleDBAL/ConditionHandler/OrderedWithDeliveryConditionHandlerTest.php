@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,10 +32,7 @@ use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
 class OrderedWithDeliveryConditionHandlerTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $dispatchId;
+    private int $dispatchId;
 
     protected function setUp(): void
     {
@@ -41,10 +40,10 @@ class OrderedWithDeliveryConditionHandlerTest extends TestCase
         $this->connection->insert('s_premium_dispatch', [
             'name' => 'unittest',
         ]);
-        $this->dispatchId = $this->connection->lastInsertId('s_premium_dispatch');
+        $this->dispatchId = (int) $this->connection->lastInsertId('s_premium_dispatch');
     }
 
-    public function testSingleDispatch()
+    public function testSingleDispatch(): void
     {
         $criteria = new Criteria();
         $criteria->addCondition(

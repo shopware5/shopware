@@ -24,17 +24,16 @@
 
 namespace Shopware\Components\Escaper;
 
+use Laminas\Escaper\Escaper as LaminasEscaper;
+
 /**
- * @see https://github.com/laminas/laminas-escaper/blob/master/src/Escaper.php
+ * @see https://github.com/laminas/laminas-escaper/blob/2.9.x/src/Escaper.php
  */
 class Escaper implements EscaperInterface
 {
-    /**
-     * @var \Laminas\Escaper\Escaper
-     */
-    private $escaper;
+    private LaminasEscaper $escaper;
 
-    public function __construct(\Laminas\Escaper\Escaper $escaper)
+    public function __construct(LaminasEscaper $escaper)
     {
         $this->escaper = $escaper;
     }

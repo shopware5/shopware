@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Functional\Components\Privacy;
+namespace Shopware\Tests\Functional\Components\Privacy;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
@@ -51,7 +53,7 @@ class PrivacyServiceTest extends TestCase
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
 
         $this->privacyService = Shopware()->Container()->get('shopware.components.privacy.privacy_service');
     }
@@ -59,19 +61,19 @@ class PrivacyServiceTest extends TestCase
     /**
      * Creates a user without an order, who should be deleted
      */
-    public function testCleanupUserWithoutOrdersShouldBeDeleted()
+    public function testCleanupUserWithoutOrdersShouldBeDeleted(): void
     {
         $userId = $this->createCustomer(3);
 
         $this->privacyService->cleanupGuestUsers(3);
 
-        static::assertEmpty($this->getUserFromDb($userId));
+        static::assertFalse($this->getUserFromDb($userId));
     }
 
     /**
      * Creates a user without an order, who should not be deleted because of month
      */
-    public function testCleanupUserWithoutOrdersShouldNotBeDeleted()
+    public function testCleanupUserWithoutOrdersShouldNotBeDeleted(): void
     {
         $userId = $this->createCustomer(3);
 
@@ -83,7 +85,7 @@ class PrivacyServiceTest extends TestCase
     /**
      * Creates a user with a canceled order, who should be deleted
      */
-    public function testCleanupUserWithCanceledOrderShouldBeDeleted()
+    public function testCleanupUserWithCanceledOrderShouldBeDeleted(): void
     {
         $userId = $this->createCustomer(3);
 
@@ -97,7 +99,7 @@ class PrivacyServiceTest extends TestCase
     /**
      * Creates a user with canceled and valid orders, who should not be deleted
      */
-    public function testCleanupUserWithCanceledAndValidOrdersShouldNotBeDeleted()
+    public function testCleanupUserWithCanceledAndValidOrdersShouldNotBeDeleted(): void
     {
         $userId = $this->createCustomer(3);
 
@@ -112,7 +114,7 @@ class PrivacyServiceTest extends TestCase
     /**
      * Creates canceled orders, which should be deleted
      */
-    public function testCleanupCanceledOrdersShouldBeDeleted()
+    public function testCleanupCanceledOrdersShouldBeDeleted(): void
     {
         $userId = $this->createCustomer(3);
 
@@ -121,13 +123,13 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupCanceledOrders(3);
 
-        static::assertEmpty($this->getOrdersByUserIdFromDb($userId));
+        static::assertEmpty($this->getOrdersByCustomerIdFromDb($userId));
     }
 
     /**
      * Creates canceled baskets, which should be deleted
      */
-    public function testCleanupCanceledBasketsShouldBeDeleted()
+    public function testCleanupCanceledBasketsShouldBeDeleted(): void
     {
         $userId = $this->createCustomer(3);
 
@@ -136,43 +138,37 @@ class PrivacyServiceTest extends TestCase
 
         $this->privacyService->cleanupCanceledOrders(3);
 
-        static::assertEmpty($this->getBasketsByUserIdFromDb($userId));
+        static::assertEmpty($this->getBasketsByCustomerIdFromDb($userId));
     }
 
     /**
      * Reads a user from the database
      *
-     * @param string $id
-     *
-     * @return array
+     * @return array<string, mixed>|false
      */
-    private function getUserFromDb($id)
+    private function getUserFromDb(int $id)
     {
-        return $this->connection->query('SELECT id FROM s_user WHERE id = ' . $id)->fetch();
+        return $this->connection->executeQuery('SELECT id FROM s_user WHERE id = ' . $id)->fetchAssociative();
     }
 
     /**
      * Reads orders of a user from the database
      *
-     * @param string $userId
-     *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    private function getOrdersByUserIdFromDb($userId)
+    private function getOrdersByCustomerIdFromDb(int $customerId): array
     {
-        return $this->connection->query('SELECT id FROM s_order WHERE userID = "' . $userId . '"')->fetchAll();
+        return $this->connection->executeQuery('SELECT id FROM s_order WHERE userID = "' . $customerId . '"')->fetchAllAssociative();
     }
 
     /**
      * Reads baskets of a user from the database
      *
-     * @param string $userId
-     *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    private function getBasketsByUserIdFromDb($userId)
+    private function getBasketsByCustomerIdFromDb(int $customerId): array
     {
-        return $this->connection->query('SELECT id FROM s_order_basket WHERE userID = "' . $userId . '"')->fetchAll();
+        return $this->connection->executeQuery('SELECT id FROM s_order_basket WHERE userID = "' . $customerId . '"')->fetchAllAssociative();
     }
 
     /**
@@ -182,9 +178,9 @@ class PrivacyServiceTest extends TestCase
      *
      * @return int id of the customer
      */
-    private function createCustomer($sinceMonth)
+    private function createCustomer(int $sinceMonth): int
     {
-        $sqlDate = $this->connection->fetchColumn('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
+        $sqlDate = $this->connection->fetchOne('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
         $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_user', [
@@ -207,17 +203,16 @@ class PrivacyServiceTest extends TestCase
     }
 
     /**
-     * Creates a order in the database
+     * Creates an order in the database
      *
-     * @param int $userId     user id of the order
-     * @param int $status     status of the order
-     * @param int $sinceMonth
+     * @param int $userId user id of the order
+     * @param int $status status of the order
      *
      * @return int id of the order
      */
-    private function createOrder($userId, $status, $sinceMonth)
+    private function createOrder(int $userId, int $status, int $sinceMonth): int
     {
-        $sqlDate = $this->connection->fetchColumn('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
+        $sqlDate = $this->connection->fetchOne('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
         $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_order', [
@@ -232,21 +227,20 @@ class PrivacyServiceTest extends TestCase
     /**
      * Creates a basket in the database
      *
-     * @param int $userId     user id of the basket
-     * @param int $sinceMonth
+     * @param int $customerId user id of the basket
      *
      * @return int id of the basket
      */
-    private function createBasket($sinceMonth, $userId)
+    private function createBasket(int $sinceMonth, int $customerId): int
     {
-        $sqlDate = $this->connection->fetchColumn('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
+        $sqlDate = $this->connection->fetchOne('SELECT NOW() - INTERVAL ' . $sinceMonth . ' MONTH');
         $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_order_basket', [
-            'userID' => $userId,
+            'userID' => $customerId,
             'datum' => $date,
         ]);
 
-        return $this->connection->lastInsertId();
+        return (int) $this->connection->lastInsertId();
     }
 }

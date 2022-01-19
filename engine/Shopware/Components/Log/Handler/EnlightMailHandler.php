@@ -28,8 +28,13 @@ use Enlight_Components_Mail;
 use Exception;
 use Monolog\Handler\MailHandler;
 use Monolog\Logger;
+use Psr\Log\LogLevel;
 use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 
+/**
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
+ */
 class EnlightMailHandler extends MailHandler
 {
     /**
@@ -39,8 +44,10 @@ class EnlightMailHandler extends MailHandler
 
     /**
      * @param Enlight_Components_Mail $mailer The mailer to use
-     * @param bool|int                $level  The minimum logging level at which this handler will be triggered
-     * @param bool                    $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param int|string              $level  The minimum logging level at which this handler will be triggered
+     * @phpstan-param Level|LevelName|LogLevel::* $level
+     *
+     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct(Enlight_Components_Mail $mailer, $level = Logger::ERROR, $bubble = true)
     {
