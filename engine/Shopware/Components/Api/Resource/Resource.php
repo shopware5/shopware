@@ -27,6 +27,7 @@ namespace Shopware\Components\Api\Resource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\AbstractQuery;
 use Exception;
 use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
@@ -52,14 +53,14 @@ abstract class Resource implements ContainerAwareInterface
 {
     /* Hydration mode constants */
     /**
-     * Hydrates an object graph. This is the default behavior.
+     * Hydrates an object graph.
      */
-    public const HYDRATE_OBJECT = 1;
+    public const HYDRATE_OBJECT = AbstractQuery::HYDRATE_OBJECT;
 
     /**
-     * Hydrates an array graph.
+     * Hydrates an array graph. This is the default behavior.
      */
-    public const HYDRATE_ARRAY = 2;
+    public const HYDRATE_ARRAY = AbstractQuery::HYDRATE_ARRAY;
 
     /**
      * Contains the Shopware model manager
@@ -74,6 +75,8 @@ abstract class Resource implements ContainerAwareInterface
     protected $autoFlush = true;
 
     /**
+     * @phpstan-var Resource::HYDRATE_*
+     *
      * @var int
      */
     protected $resultMode = self::HYDRATE_ARRAY;
@@ -222,6 +225,8 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
+     * @phpstan-param Resource::HYDRATE_* $resultMode
+     *
      * @param int $resultMode
      *
      * @return void
@@ -232,6 +237,8 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
+     * @phpstan-return Resource::HYDRATE_*
+     *
      * @return int
      */
     public function getResultMode()

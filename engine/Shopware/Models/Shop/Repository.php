@@ -342,6 +342,8 @@ class Repository extends ModelRepository
     /**
      * Returns the active shops
      *
+     * @phpstan-param AbstractQuery::HYDRATE_* $hydrationMode
+     *
      * @param int $hydrationMode
      *
      * @return array

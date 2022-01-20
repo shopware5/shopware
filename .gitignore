@@ -18,6 +18,7 @@ Thumbs.db
 /composer.phar
 /vendor/*
 !/vendor/.htaccess
+/vendor-bin/cs-fixer/vendor
 
 # User installed plugins
 /engine/Shopware/Plugins/Community/Backend/*

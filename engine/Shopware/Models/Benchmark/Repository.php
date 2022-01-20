@@ -28,6 +28,7 @@ use DateTime;
 use DateTimeZone;
 use PDO;
 use Ramsey\Uuid\Uuid;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -88,6 +89,7 @@ class Repository extends ModelRepository
 
     public function save(BenchmarkConfig $config)
     {
+        /** @var ModelManager $em */
         $em = $this->getEntityManager();
 
         $em->merge($config);

@@ -25,16 +25,21 @@
 namespace Shopware\Components\Log\Handler;
 
 use DateTime;
+use Doctrine\DBAL\Connection;
 use Monolog\Handler\AbstractProcessingHandler;
 use Monolog\Logger;
+use Psr\Log\LogLevel;
 
 /**
- * @deprecated in 5.6, will be removed in 5.7 without replacement
+ * @deprecated in 5.6, will be removed in 5.8 without replacement
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
 class DoctrineDBALHandler extends AbstractProcessingHandler
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     protected $conn;
 
@@ -49,11 +54,13 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
     protected $table;
 
     /**
-     * @param string $table
-     * @param int    $level
-     * @param bool   $bubble
+     * @param string     $table
+     * @param int|string $level
+     * @phpstan-param Level|LevelName|LogLevel::* $level
+     *
+     * @param bool $bubble
      */
-    public function __construct(\Doctrine\DBAL\Connection $conn, $table, array $columnMap, $level = Logger::DEBUG, $bubble = true)
+    public function __construct(Connection $conn, $table, array $columnMap, $level = Logger::DEBUG, $bubble = true)
     {
         $this->conn = $conn;
         $this->table = $table;

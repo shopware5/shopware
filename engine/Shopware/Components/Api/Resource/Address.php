@@ -25,7 +25,7 @@
 namespace Shopware\Components\Api\Resource;
 
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
-use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Exception\ValidationException;
@@ -34,6 +34,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
+use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\AddressRepository;
 use Shopware\Models\Customer\Customer as CustomerModel;
 use Shopware\Models\Shop\Shop as ShopModel;
@@ -58,16 +59,16 @@ class Address extends Resource
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Customer\Address::class);
+        return $this->getManager()->getRepository(AddressModel::class);
     }
 
     /**
      * @param int $id
      *
-     * @throws ParameterMissingException
      * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return array|\Shopware\Models\Customer\Address
+     * @return array|AddressModel
      */
     public function getOne($id)
     {
@@ -79,7 +80,6 @@ class Address extends Resource
 
         $query = $this->getRepository()->getOne($id);
 
-        /** @var \Shopware\Models\Customer\Address|null $address $address */
         $address = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$address) {
@@ -114,10 +114,10 @@ class Address extends Resource
     }
 
     /**
-     * @throws ApiException\CustomValidationException
      * @throws NotFoundException
+     * @throws CustomValidationException
      *
-     * @return \Shopware\Models\Customer\Address
+     * @return AddressModel
      */
     public function create(array $params)
     {
@@ -134,12 +134,12 @@ class Address extends Resource
         $this->setupContext($customer->getShop()->getId());
 
         if (!$params['country']) {
-            throw new ApiException\CustomValidationException('A country is required.');
+            throw new CustomValidationException('A country is required.');
         }
 
         $params = $this->prepareAddressData($params);
 
-        $address = new \Shopware\Models\Customer\Address();
+        $address = new AddressModel();
         $address->fromArray($params);
 
         $this->addressService->create($address, $customer);
@@ -158,11 +158,11 @@ class Address extends Resource
     /**
      * @param int $id
      *
-     * @throws ValidationException
      * @throws NotFoundException
      * @throws ParameterMissingException
+     * @throws ValidationException
      *
-     * @return \Shopware\Models\Customer\Address
+     * @return AddressModel
      */
     public function update($id, array $params)
     {
@@ -172,7 +172,6 @@ class Address extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
@@ -200,10 +199,10 @@ class Address extends Resource
     /**
      * @param int $id
      *
-     * @throws ParameterMissingException
      * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Customer\Address
+     * @return AddressModel
      */
     public function delete($id)
     {
@@ -213,7 +212,6 @@ class Address extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Customer\Address|null $address */
         $address = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$address) {
@@ -228,16 +226,14 @@ class Address extends Resource
     /**
      * Sets the correct context for e.g. validation
      *
-     * @param int $shopId
-     *
      * @throws ModelNotFoundException
      */
-    private function setupContext($shopId)
+    private function setupContext(int $shopId): void
     {
         $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
 
         $shop = $shopRepository->getActiveById($shopId);
-        if (!$shop) {
+        if (!$shop instanceof ShopModel) {
             throw new ModelNotFoundException(ShopModel::class, $shopId);
         }
 
@@ -247,15 +243,10 @@ class Address extends Resource
     /**
      * Resolves ids to models
      *
-     * @param int|null $customerId
-     * @param bool     $filter
-     *
-     * @throws NotFoundException                      if the given customer id in the data array is invalid
-     * @throws ApiException\CustomValidationException when attempting to change a customer id on an address
-     *
-     * @return array
+     * @throws CustomValidationException when attempting to change a customer id on an address
+     * @throws NotFoundException         if the given customer id in the data array is invalid
      */
-    private function prepareAddressData(array $data, $customerId = null, $filter = false)
+    private function prepareAddressData(array $data, ?int $customerId = null, bool $filter = false): array
     {
         /*
          * Check if the API user tries to set an address to a *different* customer
@@ -270,7 +261,7 @@ class Address extends Resource
             }
 
             if ($customerId !== null && $data['customer'] !== $customerId) {
-                throw new ApiException\CustomValidationException('Changing a customer id on addresses is not supported');
+                throw new CustomValidationException('Changing a customer id on addresses is not supported');
             }
 
             unset($data['customer']);

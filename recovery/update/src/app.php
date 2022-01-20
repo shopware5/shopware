@@ -22,22 +22,27 @@
  * our trademarks remain entirely with us.
  */
 
+use Pimple\Container as PimpleContainer;
+use Shopware\Components\Theme\Installer;
+use Shopware\Recovery\Common\SystemLocker;
+use Shopware\Recovery\Common\Utils as CommonUtils;
 use Shopware\Recovery\Update\DependencyInjection\Container;
 use Shopware\Recovery\Update\PluginCheck;
 use Shopware\Recovery\Update\Utils;
+use Slim\Slim;
 
 date_default_timezone_set('Europe/Berlin');
 ini_set('display_errors', 1);
 error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 
 $config = require __DIR__ . '/../config/config.php';
-$container = new Container(new \Pimple\Container(), $config);
+$container = new Container(new PimpleContainer(), $config);
 
-/** @var \Slim\Slim $app */
+/** @var Slim $app */
 $app = $container->get('app');
 
 $app->hook('slim.before.dispatch', function () use ($app, $container) {
-    $baseUrl = \Shopware\Recovery\Common\Utils::getBaseUrl($app);
+    $baseUrl = CommonUtils::getBaseUrl($app);
 
     $lang = null;
     if (!UPDATE_IS_MANUAL) {
@@ -166,12 +171,12 @@ $app->map('/clearCache', function () use ($container) {
 $app->map('/done', function () use ($app, $container) {
     $container->get('shopware.update.chmod')->changePermissions();
 
-    /** @var \Shopware\Components\Theme\Installer $themeService */
+    /** @var Installer $themeService */
     $themeService = $container->get('shopware.theme_installer');
     $themeService->synchronize();
 
     if (is_dir(SW_PATH . '/recovery/install')) {
-        /** @var \Shopware\Recovery\Common\SystemLocker $systemLocker */
+        /** @var SystemLocker $systemLocker */
         $systemLocker = $container->get('system.locker');
         $systemLocker();
     }
@@ -191,7 +196,7 @@ $app->get('/redirect/:target', function ($target) use ($app) {
 
     $url = str_replace('/index.php', '', $app->request()->getRootUri());
     $url = str_replace('/recovery/update', '/', $url);
-    if ($target == 'backend') {
+    if ($target === 'backend') {
         $url .= 'backend';
     }
 

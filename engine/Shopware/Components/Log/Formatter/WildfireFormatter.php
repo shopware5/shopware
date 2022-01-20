@@ -27,6 +27,7 @@ namespace Shopware\Components\Log\Formatter;
 use Monolog\Formatter\WildfireFormatter as BaseWildfireFormatter;
 use Monolog\Logger;
 use ReflectionClass;
+use UnexpectedValueException;
 
 /**
  * Serializes a log message according to Wildfire's header requirements
@@ -90,6 +91,9 @@ class WildfireFormatter extends BaseWildfireFormatter
         }
 
         $record = $this->normalize($record);
+        if (!\is_array($record)) {
+            throw new UnexpectedValueException('Variable $record must be an array');
+        }
 
         $message = ['message' => $record['message']];
         $handleError = false;
@@ -105,15 +109,15 @@ class WildfireFormatter extends BaseWildfireFormatter
             $message = reset($message);
         }
 
-        if (isset($record['context']['table'])) {
+        if (\is_array($record['context']) && isset($record['context']['table'])) {
             $type = 'TABLE';
             $label = $record['message'];
             $message = $record['context']['table'];
-        } elseif (isset($record['context']['dump'])) {
+        } elseif (\is_array($record['context']) && isset($record['context']['dump'])) {
             $type = 'INFO';
             $label = $record['message'];
             $message = $this->encodeObject($record['context']['dump']);
-        } elseif (isset($record['context']['trace'])) {
+        } elseif (\is_array($record['context']) && isset($record['context']['trace'])) {
             $type = 'TRACE';
             $label = $record['message'];
 
@@ -134,7 +138,7 @@ class WildfireFormatter extends BaseWildfireFormatter
         }
 
         // Create JSON object describing the appearance of the message in the console
-        $json = $this->toJson(
+        return $this->toJson(
             [
                 [
                     'Type' => $type,
@@ -146,8 +150,6 @@ class WildfireFormatter extends BaseWildfireFormatter
             ],
             $handleError
         );
-
-        return $json;
     }
 
     /**

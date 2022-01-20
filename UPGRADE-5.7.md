@@ -2,9 +2,66 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.8
+
+[View all changes from v5.7.7...v5.7.8](https://github.com/shopware/shopware/compare/v5.7.7...v5.7.8)
+
+### Deprecations
+
+### Additions
+
+* Added missing dependency `google/cloud-storage`, which was an indirect dependency before
+* Added missing dependency `psr/log`, which was an indirect dependency before
+* Added missing dependency `psr/link`, which was an indirect dependency before
+
+### Changes
+
+* Updated `bcremer/line-reader` to version 1.2.0
+* Updated `beberlei/assert` to version 3.3.2
+* Updated `cocur/slugify` to version 4.1.0
+* Updated `doctrine/common` to version 3.2.1
+* Updated `doctrine/dbal` to version 2.13.7
+* Updated `doctrine/orm` to version 2.11.0
+* Updated `elasticsearch/elasticsearch` to version 7.16.0
+* Updated `fig/link-util` to version 1.1.2
+* Updated `guzzlehttp/guzzle` to version 7.4.1
+* Updated `guzzlehttp/psr7` to version 2.1.0
+* Updated `laminas/laminas-code` to version 4.5.1
+* Updated `league/flysystem` to version 1.1.9
+* Updated `league/flysystem-aws-s3-v3` to version 1.0.29
+* Updated `monolog/monolog` to version 2.3.5
+* Updated `mpdf/mpdf` to version 8.0.15
+* Updated `symfony/config` to version 4.4.36
+* Updated `symfony/console` to version 4.4.36
+* Updated `symfony/dependency-injection` to version 4.4.36
+* Updated `symfony/finder` to version 4.4.36
+* Updated `symfony/form` to version 4.4.36
+* Updated `symfony/http-foundation` to version 4.4.36
+* Updated `symfony/http-kernel` to version 4.4.36
+* Updated `symfony/polyfill-php80` to version 1.24.0
+* Updated `symfony/polyfill-php81` to version 1.24.0
+* Updated `symfony/process` to version 4.4.36
+* Updated `symfony/serializer` to version 5.4.2
+* Updated `symfony/validator` to version 4.4.36
+* Updated `behat/behat` to version 3.10.0
+* Updated `behat/gherkin` to version 4.9.0
+* Updated `behat/mink` to version 1.9.0
+* Updated `behat/mink-selenium2-driver` to version 1.5.0
+* Updated `friends-of-behat/mink-extension` to version 2.6.1
+* Updated `phpspec/prophecy` to version 1.15.0
+* Updated `phpunit/phpunit` to version 9.5.11
+* Updated `sensiolabs/behat-page-object-extension` to version 2.3.4
+* Updated `symfony/dom-crawler` to version 4.4.36
+* Updated several indirect dependencies
+
+### Removals
+* Removed unused dependency `composer/package-versions-deprecated`
+* Removed unused dependency `ocramius/proxy-manager`
+* Removed unused dependency `psr/http-message`. It is now an indirect dependency.
+
 ## 5.7.7
 
-[View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
+[View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.6...v5.7.7)
 
 ### Deprecations
 
@@ -145,7 +202,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.2
 
-[View all changes from v5.7.10...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.10...v5.7.2)
+[View all changes from v5.7.1...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.1...v5.7.2)
 
 ### Changes
 
@@ -170,7 +227,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.0
 
-[View all changes from v5.6.1...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.1...v5.7.0)
+[View all changes from v5.6.10...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.10...v5.7.0)
 
 ### Breaks
 

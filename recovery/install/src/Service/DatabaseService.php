@@ -310,6 +310,8 @@ EOL;
             $sql .= " WHERE SCHEMA_NAME NOT IN($in)";
         }
 
+        $sql .= ' ORDER BY name';
+
         $stmt = $this->connection->prepare($sql);
 
         foreach ($omit as $key => $value) {

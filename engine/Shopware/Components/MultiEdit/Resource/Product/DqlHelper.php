@@ -444,7 +444,7 @@ class DqlHelper
                     'precision' => \array_key_exists('precision', $config) ? $config['precision'] : 10,
                     'scale' => \array_key_exists('scale', $config) ? $config['scale'] : 3,
                     'nullable' => \array_key_exists('nullable', $config) ? (bool) $config['nullable'] : false,
-                    'columnName' => \array_key_exists('columnName', $mapping) ? $mapping['columnName'] : '',
+                    'columnName' => $mapping['columnName'],
                     'table' => $metadata->getTableName(),
                     'alias' => $alias,
                     'show' => \in_array($alias, $shownColumns),

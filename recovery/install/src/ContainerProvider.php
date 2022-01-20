@@ -27,6 +27,8 @@ namespace Shopware\Recovery\Install;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use RuntimeException;
+use Shopware\Components\Theme\Installer;
+use Shopware\Kernel;
 use Shopware\Recovery\Common\DumpIterator;
 use Shopware\Recovery\Common\HttpClient\CurlClient;
 use Shopware\Recovery\Common\Service\Notification;
@@ -114,7 +116,7 @@ class ContainerProvider implements ServiceProviderInterface
         $container['shopware.container'] = function (Container $c) {
             require_once SW_PATH . '/autoload.php';
 
-            $kernel = new \Shopware\Kernel('production', false);
+            $kernel = new Kernel('production', false);
             $kernel->boot();
 
             $container = $kernel->getContainer();
@@ -126,7 +128,7 @@ class ContainerProvider implements ServiceProviderInterface
         $container['shopware.theme_installer'] = function ($c) {
             $shopwareContainer = $c['shopware.container'];
 
-            /* @var \Shopware\Components\Theme\Installer $themeInstaller */
+            /* @var Installer $themeInstaller */
             return $shopwareContainer->get('theme_installer');
         };
 

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,10 +32,7 @@ use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 
 class OrderedWithPaymentConditionHandlerTest extends TestCase
 {
-    /**
-     * @var int
-     */
-    private $paymentId;
+    private int $paymentId;
 
     protected function setUp(): void
     {
@@ -42,10 +41,10 @@ class OrderedWithPaymentConditionHandlerTest extends TestCase
             'name' => 'unittest',
         ]);
 
-        $this->paymentId = $this->connection->lastInsertId('s_core_paymentmeans');
+        $this->paymentId = (int) $this->connection->lastInsertId('s_core_paymentmeans');
     }
 
-    public function testSinglePayment()
+    public function testSinglePayment(): void
     {
         $criteria = new Criteria();
         $criteria->addCondition(
