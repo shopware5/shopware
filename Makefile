@@ -115,6 +115,7 @@ debug-config-test: .make.config.build.debug
 	@echo "Read additional variables from $(ENV_FILE)"
 	composer install
 	composer install -d recovery/common
+	composer bin all install
 	./bin/console sw:database:setup --steps=drop,create,import,importDemodata
 	./bin/console sw:cache:clear
 	./bin/console sw:database:setup --steps=setupShop --shop-url=http://$(SW_HOST)$(SW_BASE_PATH)
