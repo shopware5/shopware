@@ -157,14 +157,8 @@
     "scripts": {
         "cs-check": "make check-php-cs-fixer",
         "cs-fix": "make fix-code-style",
-        "post-install-cmd": [
-            "./build/composer-post-install-cmd.sh",
-            "@composer bin all install --ansi"
-        ],
-        "post-update-cmd": [
-            "./build/composer-post-update-cmd.sh",
-            "@composer bin all update --ansi"
-        ],
+        "post-install-cmd": "./build/composer-post-install-cmd.sh",
+        "post-update-cmd": "./build/composer-post-update-cmd.sh",
         "test": "phpunit -c tests/ --colors=always",
         "test-unit": "phpunit -c tests/phpunit_unit.xml.dist --colors=always"
     }
