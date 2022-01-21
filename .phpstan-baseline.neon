@@ -29046,11 +29046,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
-			message: "#^Parameter \\#2 \\$pieces of function implode expects array, array\\<int, string\\>\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
