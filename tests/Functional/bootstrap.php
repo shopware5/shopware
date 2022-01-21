@@ -25,51 +25,6 @@
 
 require __DIR__ . '/../../autoload.php';
 
-use Shopware\Components\Model\ModelManager;
-use Shopware\Components\ShopRegistrationServiceInterface;
-use Shopware\Kernel;
-use Shopware\Models\Shop\Shop;
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Shopware\Tests\Functional\KernelStorage;
 
-class TestKernel extends Kernel
-{
-    private static TestKernel $kernel;
-
-    /**
-     * Static method to start boot kernel without leaving local scope in test helper
-     */
-    public static function start(): void
-    {
-        self::$kernel = new self('testing', true);
-        self::$kernel->boot();
-
-        $container = self::$kernel->getContainer();
-        $container->get('plugins')->Core()->ErrorHandler()->registerErrorHandler(E_ALL | E_STRICT);
-
-        $shop = $container->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
-        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
-
-        $_SERVER['HTTP_HOST'] = $shop->getHost();
-    }
-
-    public static function getKernel(): TestKernel
-    {
-        return self::$kernel;
-    }
-
-    protected function getConfigPath(): string
-    {
-        return __DIR__ . '/config.php';
-    }
-
-    protected function prepareContainer(ContainerBuilder $container): void
-    {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__));
-        $loader->load('services_test.xml');
-        parent::prepareContainer($container);
-    }
-}
-
-TestKernel::start();
+KernelStorage::receive();

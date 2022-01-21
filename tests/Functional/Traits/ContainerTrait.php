@@ -27,14 +27,14 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Traits;
 
 use Shopware\Components\DependencyInjection\Container;
-use TestKernel;
+use Shopware\Tests\Functional\KernelStorage;
 use UnexpectedValueException;
 
 trait ContainerTrait
 {
     public function getContainer(): Container
     {
-        $container = TestKernel::getKernel()->getContainer();
+        $container = KernelStorage::receive()->getContainer();
 
         if (!$container instanceof Container) {
             throw new UnexpectedValueException('Container not found');

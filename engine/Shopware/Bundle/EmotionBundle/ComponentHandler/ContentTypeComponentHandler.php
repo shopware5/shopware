@@ -36,9 +36,16 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
 {
     private const COMPONENT_NAME = 'emotion-components-content-type';
 
-    private const MODE_NEWEST = 0;
-    private const MODE_RANDOM = 1;
-    private const MODE_SELECTED = 2;
+    public const CONTENT_TYPE_KEY = 'content_type';
+    public const MODE_KEY = 'mode';
+    public const IDS_KEY = 'ids';
+    public const ID_SEPERATOR = '|';
+    public const ITEMS_KEY = 'sItems';
+    public const TYPE_KEY = 'sType';
+
+    public const MODE_NEWEST = 0;
+    public const MODE_RANDOM = 1;
+    public const MODE_SELECTED = 2;
 
     private ContainerInterface $container;
 
@@ -59,9 +66,9 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context): void
     {
         /** @var RepositoryInterface $repository */
-        $repository = $this->container->get('shopware.bundle.content_type.' . $element->getConfig()->get('content_type'));
+        $repository = $this->container->get('shopware.bundle.content_type.' . $element->getConfig()->get(self::CONTENT_TYPE_KEY));
 
-        $mode = (int) $element->getConfig()->get('mode');
+        $mode = (int) $element->getConfig()->get(self::MODE_KEY);
 
         $criteria = new Criteria();
         $criteria->limit = 5;
@@ -86,14 +93,14 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
             $criteria->filter = [
                 [
                     'property' => 'id',
-                    'value' => array_filter(explode('|', $element->getConfig()->get('ids'))),
+                    'value' => array_filter(explode(self::ID_SEPERATOR, $element->getConfig()->get(self::IDS_KEY))),
                 ],
             ];
         }
 
         $result = $repository->findAll($criteria);
 
-        $element->getData()->set('sItems', $result->items);
-        $element->getData()->set('sType', json_decode((string) json_encode($result->type), true));
+        $element->getData()->set(self::ITEMS_KEY, $result->items);
+        $element->getData()->set(self::TYPE_KEY, json_decode((string) json_encode($result->type), true));
     }
 }
