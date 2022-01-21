@@ -18,7 +18,10 @@ Thumbs.db
 /composer.phar
 /vendor/*
 !/vendor/.htaccess
-/vendor-bin/cs-fixer/vendor
+/vendor-bin/*
+!/vendor-bin/.htaccess
+!/vendor-bin/*/composer.json
+!/vendor-bin/*/composer.lock
 
 # User installed plugins
 /engine/Shopware/Plugins/Community/Backend/*
