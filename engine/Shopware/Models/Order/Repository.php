@@ -31,7 +31,6 @@ use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use PDO;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Article;
@@ -563,7 +562,6 @@ class Repository extends ModelRepository
      */
     public function search($offset = null, $limit = null, $filters = [], $sortings = [])
     {
-        /** @var ModelManager $em */
         $em = $this->getEntityManager();
         $builder = $em->createQueryBuilder();
 

@@ -29,7 +29,6 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Events;
 use Exception;
 use Shopware\Bundle\EsBackendBundle\Struct\Backlog;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail as Variant;
 use Shopware\Models\Article\Price;
@@ -117,7 +116,6 @@ class OrmBacklogSubscriber implements EventSubscriber
 
     private function trace(OnFlushEventArgs $eventArgs): void
     {
-        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 

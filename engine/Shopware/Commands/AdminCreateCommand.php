@@ -28,6 +28,7 @@ use DateTime;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\User\Role;
 use Shopware\Models\User\User;
@@ -119,11 +120,7 @@ class AdminCreateCommand extends ShopwareCommand
         return 0;
     }
 
-    /**
-     * @param string $field
-     * @param string $label
-     */
-    private function fillOption($field, $label, InputInterface $input, OutputInterface $output)
+    private function fillOption(string $field, string $label, InputInterface $input, OutputInterface $output): void
     {
         $io = new SymfonyStyle($input, $output);
 
@@ -133,27 +130,17 @@ class AdminCreateCommand extends ShopwareCommand
         );
     }
 
-    /**
-     * @return Role
-     */
-    private function getAdminRole()
+    private function getAdminRole(): Role
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $role = $this->container->get(ModelManager::class)->getRepository(Role::class)->findOneBy(['name' => 'local_admins']);
+        if (!$role instanceof Role) {
+            throw new ModelNotFoundException(Role::class, 'local_admins', 'name');
+        }
 
-        /** @var Role $return */
-        $return = $em->getRepository(\Shopware\Models\User\Role::class)
-            ->findOneBy(['name' => 'local_admins']);
-
-        return $return;
+        return $role;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return int
-     */
-    private function getLocaleIdFromLocale($locale)
+    private function getLocaleIdFromLocale(string $locale): int
     {
         $locales = [
             'de_de' => 1,
@@ -169,15 +156,11 @@ class AdminCreateCommand extends ShopwareCommand
         throw new RuntimeException(sprintf('Backend Locale "%s" not supported', $locale));
     }
 
-    /**
-     * @param string $plainPassword
-     */
-    private function setPassword(User $user, $plainPassword)
+    private function setPassword(User $user, string $plainPassword): void
     {
-        /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
-        $passworEncoderRegistry = $this->getContainer()->get('passwordencoder');
-        $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
-        $encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
+        $passwordEncoderRegistry = $this->getContainer()->get('passwordencoder');
+        $defaultEncoderName = $passwordEncoderRegistry->getDefaultPasswordEncoderName();
+        $encoder = $passwordEncoderRegistry->getEncoderByName($defaultEncoderName);
 
         $user->setPassword($encoder->encodePassword($plainPassword));
         $user->setEncoder($encoder->getName());
@@ -186,18 +169,14 @@ class AdminCreateCommand extends ShopwareCommand
     /**
      * @throws Exception
      */
-    private function persistUser(User $user)
+    private function persistUser(User $user): void
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->container->get(ModelManager::class);
         $em->persist($user);
         $em->flush($user);
     }
 
-    /**
-     * @return User
-     */
-    private function createAdminUser()
+    private function createAdminUser(): User
     {
         $adminRole = $this->getAdminRole();
 
@@ -208,7 +187,7 @@ class AdminCreateCommand extends ShopwareCommand
         return $user;
     }
 
-    private function validateInput(InputInterface $input)
+    private function validateInput(InputInterface $input): void
     {
         $option = $input->getOption('email');
         if (empty($option)) {

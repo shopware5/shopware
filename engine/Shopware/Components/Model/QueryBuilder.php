@@ -309,7 +309,6 @@ class QueryBuilder extends BaseQueryBuilder
     {
         $query = parent::getQuery();
 
-        /** @var ModelManager $em */
         $em = $this->getEntityManager();
 
         if ($em->isDebugModeEnabled() && $this->getType() === self::SELECT) {
@@ -317,5 +316,10 @@ class QueryBuilder extends BaseQueryBuilder
         }
 
         return $query;
+    }
+
+    public function getEntityManager(): ModelManager
+    {
+        return parent::getEntityManager();
     }
 }

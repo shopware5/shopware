@@ -70,6 +70,8 @@ class ModelRepository extends EntityRepository implements Enlight_Hook
      *      )));
      * </code>
      *
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filter
+     *
      * @return QueryBuilder
      */
     public function addFilter(QueryBuilder $builder, array $filter)
@@ -87,10 +89,17 @@ class ModelRepository extends EntityRepository implements Enlight_Hook
      *      )));
      * </code>
      *
+     * @param array<array{property: string, direction: string}> $orderBy
+     *
      * @return QueryBuilder
      */
     public function addOrderBy(QueryBuilder $builder, array $orderBy)
     {
         return $builder->addOrderBy($orderBy);
+    }
+
+    protected function getEntityManager(): ModelManager
+    {
+        return parent::getEntityManager();
     }
 }

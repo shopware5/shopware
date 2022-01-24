@@ -1161,7 +1161,7 @@ class sRewriteTable implements Enlight_Hook
             return $context;
         }
 
-        if (Shopware()->Container()->has('shop')) {
+        if (Shopware()->Container()->initialized('shop')) {
             $shop = Shopware()->Container()->get('shop');
 
             return $this->contextService->createShopContext($shop->getId());

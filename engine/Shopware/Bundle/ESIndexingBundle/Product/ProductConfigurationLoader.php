@@ -28,6 +28,7 @@ use Doctrine\DBAL\Connection;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\ConfiguratorHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
@@ -103,16 +104,13 @@ class ProductConfigurationLoader
 
         $query->setParameter(':articleIds', $articleIds, Connection::PARAM_STR_ARRAY);
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
+        return $query->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_COLUMN);
     }
 
     /**
      * Fetches  all groups with all options for provided products
      *
-     * @return array<int, array<\Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group>>
+     * @return array<int, array<Group>>
      */
     public function getConfigurations(array $articleIds, ShopContextInterface $context)
     {

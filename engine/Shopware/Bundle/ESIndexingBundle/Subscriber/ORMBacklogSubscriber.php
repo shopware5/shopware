@@ -29,7 +29,6 @@ use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Events;
 use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Detail as VariantModel;
 use Shopware\Models\Article\Price as PriceModel;
@@ -108,7 +107,6 @@ class ORMBacklogSubscriber implements EventSubscriber
 
     public function onFlush(OnFlushEventArgs $eventArgs)
     {
-        /** @var ModelManager $em */
         $em = $eventArgs->getEntityManager();
         $uow = $em->getUnitOfWork();
 

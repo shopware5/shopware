@@ -105,10 +105,9 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->container->get(ModelManager::class);
 
-        $repository = $em->getRepository(\Shopware\Models\Plugin\Plugin::class);
+        $repository = $em->getRepository(Plugin::class);
         $builder = $repository->createQueryBuilder('plugin');
         $builder->andWhere('plugin.capabilityEnable = true');
         $builder->addOrderBy('plugin.active', 'desc');

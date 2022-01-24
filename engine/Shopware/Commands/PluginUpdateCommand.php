@@ -27,6 +27,7 @@ namespace Shopware\Commands;
 use Exception;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Plugin\Plugin;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 use Symfony\Component\Console\Input\InputArgument;
@@ -95,8 +96,7 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        $pluginManager = $this->container->get(InstallerService::class);
         if (!$input->getOption('no-refresh')) {
             $pluginManager->refreshPluginList();
             $output->writeln('Successfully refreshed');
@@ -129,10 +129,9 @@ EOF
      */
     private function batchUpdate(InstallerService $pluginManager, $batchUpdate, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->container->get(ModelManager::class);
 
-        $repository = $em->getRepository(\Shopware\Models\Plugin\Plugin::class);
+        $repository = $em->getRepository(Plugin::class);
         $builder = $repository->createQueryBuilder('plugin');
         $builder->andWhere('plugin.capabilityEnable = true');
         $builder->addOrderBy('plugin.active', 'desc');
@@ -151,7 +150,6 @@ EOF
             $builder->andWhere('plugin.installed is NULL');
         }
 
-        /** @var \Shopware\Models\Plugin\Plugin[] $plugins */
         $plugins = $builder->getQuery()->execute();
 
         if (empty($plugins)) {

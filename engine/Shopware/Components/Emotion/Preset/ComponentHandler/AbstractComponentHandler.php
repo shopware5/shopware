@@ -47,8 +47,7 @@ abstract class AbstractComponentHandler implements ComponentHandlerInterface
         $this->mediaService = $mediaService;
         $this->mediaResource = $mediaResource;
         $this->mediaResource->setContainer($container);
-        /** @var ModelManager $modelManager */
-        $modelManager = $container->get(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $container->get(ModelManager::class);
         $this->mediaResource->setManager($modelManager);
     }
 

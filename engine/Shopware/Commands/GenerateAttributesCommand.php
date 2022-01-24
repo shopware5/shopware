@@ -46,8 +46,7 @@ class GenerateAttributesCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var ModelManager $em */
-        $em = $this->container->get(\Shopware\Components\Model\ModelManager::class);
+        $em = $this->container->get(ModelManager::class);
 
         $em->generateAttributeModels();
 

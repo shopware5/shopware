@@ -35,7 +35,7 @@ class Locale
     public function factory(Container $container)
     {
         $locale = 'de_DE';
-        if ($container->has('shop')) {
+        if ($container->initialized('shop')) {
             $locale = $container->get('shop')->getLocale()->getLocale();
         }
 

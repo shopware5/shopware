@@ -152,7 +152,6 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
      */
     protected function getMediaAlbums($albumId)
     {
-        /** @var ModelManager $em */
         $em = $this->getContainer()->get(ModelManager::class);
 
         $builder = $em->createQueryBuilder();

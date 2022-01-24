@@ -2011,11 +2011,6 @@ parameters:
 			path: engine/Library/Enlight/Event/EventManager.php
 
 		-
-			message: "#^Array \\(array\\<Enlight_Event_Handler\\>\\) does not accept array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
 			message: "#^Cannot access offset int on array\\{\\}\\|Enlight_Event_Handler\\.$#"
 			count: 2
 			path: engine/Library/Enlight/Event/EventManager.php
@@ -2102,6 +2097,11 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|Enlight_Event_Handler given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Event/EventManager.php
+
+		-
+			message: "#^Property Enlight_Event_EventManager\\:\\:\\$listeners \\(array\\<Enlight_Event_Handler\\>\\) does not accept array\\<array\\|Enlight_Event_Handler\\>\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventManager.php
 
@@ -3182,11 +3182,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getTranslation\\(\\) on string\\|Zend_Locale\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.translate.php
-
-		-
-			message: "#^Function smarty_modifier_translate\\(\\) should return string\\|null but returns string\\|false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/modifier.translate.php
 
@@ -14166,27 +14161,7 @@ parameters:
 			path: engine/Shopware/Commands/AdminCreateCommand.php
 
 		-
-			message: "#^Method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:fillOption\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:interact\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:persistUser\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:setPassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/AdminCreateCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\AdminCreateCommand\\:\\:validateInput\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/AdminCreateCommand.php
 
@@ -14971,11 +14946,6 @@ parameters:
 			path: engine/Shopware/Commands/StoreListUpdatesCommand.php
 
 		-
-			message: "#^Argument of an invalid type array\\<Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\>\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StreamIndexPopulateCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\StreamIndexPopulateCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/StreamIndexPopulateCommand.php
@@ -14987,11 +14957,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\StreamIndexPopulateCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/StreamIndexPopulateCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\StreamIndexPopulateCommand\\:\\:getStreams\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/StreamIndexPopulateCommand.php
 
@@ -21131,16 +21096,6 @@ parameters:
 			path: engine/Shopware/Components/Model/ModelManager.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\ModelRepository\\:\\:addFilter\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelRepository.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\ModelRepository\\:\\:addOrderBy\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelRepository.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\ProxyAwareRepositoryFactory\\:\\:createRepository\\(\\) return type with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ProxyAwareRepositoryFactory.php
@@ -21729,7 +21684,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:filterJoinEntities\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
-
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:getFilterQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
@@ -36536,7 +36490,6 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Banner/Repository.php
 
-
 		-
 			message: "#^Parameter \\#1 \\$categoryId of method Shopware\\\\Models\\\\Banner\\\\Repository\\:\\:getBannerIds\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
@@ -38253,6 +38206,16 @@ parameters:
 			path: engine/Shopware/Models/Document/Order.php
 
 		-
+			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_billing \\(ArrayObject\\|null\\) does not accept array\\<string, ArrayObject\\<string, mixed\\>\\>\\|ArrayObject\\.$#"
+			count: 2
+			path: engine/Shopware/Models/Document/Order.php
+
+		-
+			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_billing \\(ArrayObject\\|null\\) does not accept array\\<string, array\\>\\|ArrayObject\\.$#"
+			count: 1
+			path: engine/Shopware/Models/Document/Order.php
+
+		-
 			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_billing with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Shopware/Models/Document/Order.php
@@ -38289,6 +38252,21 @@ parameters:
 
 		-
 			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_positions with generic class ArrayObject does not specify its types\\: TKey, TValue$#"
+			count: 1
+			path: engine/Shopware/Models/Document/Order.php
+
+		-
+			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_shipping \\(ArrayObject\\|null\\) does not accept array\\<string, ArrayObject\\<string, mixed\\>\\>\\|ArrayObject\\.$#"
+			count: 2
+			path: engine/Shopware/Models/Document/Order.php
+
+		-
+			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_shipping \\(ArrayObject\\|null\\) does not accept array\\<string, array\\>\\|ArrayObject\\.$#"
+			count: 1
+			path: engine/Shopware/Models/Document/Order.php
+
+		-
+			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_shipping \\(ArrayObject\\|null\\) does not accept array\\<string, mixed\\>\\|ArrayObject\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Document/Order.php
 
@@ -39071,11 +39049,6 @@ parameters:
 			message: "#^Property Shopware\\\\Models\\\\Mail\\\\Mail\\:\\:\\$translation type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Mail/Mail.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\Query\\:\\:getQuery\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Mail/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Mail\\\\Repository\\:\\:getMailListQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
@@ -41522,7 +41495,6 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Shop/Repository.php
 
-
 		-
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getListQuery\\(\\) has parameter \\$filterBy with no value type specified in iterable type array\\.$#"
 			count: 1
@@ -41582,8 +41554,6 @@ parameters:
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getLocalesListQueryBuilder\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Shop/Repository.php
-
-
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getShopArrayByHostAlias\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -42469,19 +42439,6 @@ parameters:
 			message: "#^Property Shopware\\\\Models\\\\User\\\\Privilege\\:\\:\\$requirements with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/User/Privilege.php
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\User\\\\Repository\\:\\:getUsersQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"

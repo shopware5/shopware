@@ -100,11 +100,11 @@ class StreamIndexPopulateCommand extends ShopwareCommand implements CompletionAw
     }
 
     /**
-     * @param array $ids
+     * @param array<int> $ids
      *
-     * @return CustomerStream[]|false
+     * @return CustomerStream[]
      */
-    private function getStreams($ids = [])
+    private function getStreams(array $ids = []): array
     {
         $query = $this->container->get(ModelManager::class)->createQueryBuilder();
         $query->select(['stream']);

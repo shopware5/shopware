@@ -24,6 +24,8 @@
 
 namespace Shopware\Commands;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
 use Exception;
 use PDO;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
@@ -48,7 +50,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     private $columns;
 
     /**
-     * @var \Doctrine\DBAL\Driver\Statement
+     * @var Statement
      */
     private $updateStatement;
 
@@ -69,7 +71,7 @@ class MigrateArticleAttributeTranslationsCommand extends ShopwareCommand
     {
         $io = new SymfonyStyle($input, $output);
 
-        $this->connection = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = $this->container->get(Connection::class);
         $this->updateStatement = $this->connection->prepare('UPDATE s_core_translations SET objectdata=:data WHERE id=:id');
         $this->columns = $this->getColumns();
 

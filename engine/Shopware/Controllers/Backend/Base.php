@@ -23,7 +23,6 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
@@ -651,9 +650,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->setFirstResult($this->Request()->getParam('start'))
             ->setMaxResults($this->Request()->getParam('limit'));
 
-        /** @var ResultStatement $statement */
-        $statement = $builder->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $result = $builder->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $total = (int) $builder->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
 
@@ -667,11 +664,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
      * Each user has the following fields:
      * <code>
      *    [int]      id
-     *    [int]        roleId
+     *    [int]      roleId
      *    [string]   username
      *    [string]   password
      *    [int]      localeId
-     *       [string]   sessionId
+     *    [string]   sessionId
      *    [date]     lastLogin
      *    [string]   name
      *    [string]   email

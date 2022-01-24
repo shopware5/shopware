@@ -32,6 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
@@ -250,10 +251,8 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
 
     public function confirmValidationAction()
     {
-        /** @var Connection $connection */
         $connection = $this->container->get(Connection::class);
 
-        /** @var ModelManager $modelManager */
         $modelManager = $this->container->get(ModelManager::class);
 
         $hash = $this->Request()->get('sConfirmation');
@@ -275,11 +274,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         }
         $customerId = (int) $data['customerId'];
 
-        /** @var DateTimeInterface $date */
         $date = new DateTime();
 
-        /** @var Customer $customer */
         $customer = $modelManager->find(Customer::class, $customerId);
+        if (!$customer instanceof Customer) {
+            throw new ModelNotFoundException(Customer::class, $customerId);
+        }
 
         // One-Time-Account
         if ($data['fromCheckout'] === true || $customer->getAccountMode() === 1) {

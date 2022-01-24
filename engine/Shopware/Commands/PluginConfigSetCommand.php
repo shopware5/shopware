@@ -172,7 +172,6 @@ class PluginConfigSetCommand extends ShopwareCommand implements CompletionAwareI
             return 1;
         }
 
-        /** @var ModelManager $em */
         $em = $this->container->get(ModelManager::class);
 
         $shopId = null;
