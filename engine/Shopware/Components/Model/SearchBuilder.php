@@ -28,10 +28,7 @@ use Shopware\Bundle\SearchBundleDBAL\SearchTerm\TermHelperInterface;
 
 class SearchBuilder
 {
-    /**
-     * @var TermHelperInterface
-     */
-    private $termHelper;
+    private TermHelperInterface $termHelper;
 
     public function __construct(TermHelperInterface $termHelper)
     {

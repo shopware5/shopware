@@ -23,7 +23,9 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Repository\CustomerRepository;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Attribute\Customer as CustomerAttribute;
 use Shopware\Models\Customer\Customer;
 
@@ -86,12 +88,12 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
      */
     public function delete($id)
     {
-        $this->get(\Doctrine\DBAL\Connection::class)->executeQuery(
+        $this->get(Connection::class)->executeQuery(
             'DELETE FROM s_customer_streams_mapping WHERE customer_id = :id',
             [':id' => $id]
         );
 
-        $this->get(\Doctrine\DBAL\Connection::class)->executeQuery(
+        $this->get(Connection::class)->executeQuery(
             'DELETE FROM s_customer_search_index WHERE id = :id',
             [':id' => $id]
         );
@@ -104,7 +106,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
      */
     protected function getListQuery()
     {
-        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
+        $query = $this->container->get(ModelManager::class)->createQueryBuilder();
 
         $query->select([
             'customer.id',
@@ -224,7 +226,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
      */
     private function fetchAttributes(array $ids)
     {
-        $query = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createQueryBuilder();
+        $query = $this->container->get(ModelManager::class)->createQueryBuilder();
         $query->select(['attribute']);
         $query->from(CustomerAttribute::class, 'attribute', 'attribute.customerId');
         $query->where('attribute.customerId IN (:ids)');
@@ -277,14 +279,14 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
 
                 case 'lastLogin':
                 case 'firstLogin':
-                    $date = new \DateTime($condition['value']);
+                    $date = new DateTime($condition['value']);
                     $condition['value'] = $date->format('Y-m-d');
                     $condition['expression'] = '>=';
                     break;
             }
         }
 
-        $repository = $this->container->get(\Shopware\Bundle\AttributeBundle\Repository\CustomerRepository::class);
+        $repository = $this->container->get(CustomerRepository::class);
 
         $result = $repository->search($criteria);
 

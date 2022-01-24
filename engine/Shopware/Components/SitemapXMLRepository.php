@@ -27,10 +27,8 @@ namespace Shopware\Components;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\QueryBuilder;
 use Exception;
 use PDO;
-use PDOStatement;
 use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
@@ -40,7 +38,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
 
 /**
- * @deprecated Will be removed in Shopware 5.6
+ * @deprecated Will be removed in Shopware 5.8
  */
 class SitemapXMLRepository
 {
@@ -390,7 +388,6 @@ class SitemapXMLRepository
         $context = $this->contextService->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
-        /** @var QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select(['manufacturer.id', 'manufacturer.name']);
 
@@ -401,10 +398,7 @@ class SitemapXMLRepository
 
         $query->groupBy('manufacturer.id');
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**

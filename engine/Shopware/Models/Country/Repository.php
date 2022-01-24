@@ -24,7 +24,11 @@
 
 namespace Shopware\Models\Country;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\CountryState;
 
 /**
  * @extends ModelRepository<Country>
@@ -34,13 +38,13 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all defined countries.
      *
-     * @param array|null                                         $filter
-     * @param string|array|\Doctrine\ORM\Query\Expr\OrderBy|null $order
-     * @param int|null                                           $offset
-     * @param int|null                                           $limit
+     * @param array|null                $filter
+     * @param string|array|OrderBy|null $order
+     * @param int|null                  $offset
+     * @param int|null                  $limit
      *
-     * @return \Doctrine\ORM\Query
-     * @return \Doctrine\ORM\Query
+     * @return Query
+     * @return Query
      */
     public function getCountriesQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -57,10 +61,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCountriesQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null                                         $filter
-     * @param string|array|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param array|null                $filter
+     * @param string|array|OrderBy|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCountriesQueryBuilder($filter = null, $order = null)
     {
@@ -76,7 +80,7 @@ class Repository extends ModelRepository
             'countries.displayStateInRegistration',
             'area.id as areaId',
         ]);
-        $builder->from(\Shopware\Models\Country\Country::class, 'countries')
+        $builder->from(Country::class, 'countries')
         ->leftJoin('countries.area', 'area');
 
         if ($filter[0]['property'] === 'areaId') {
@@ -94,10 +98,10 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @param array|null                                         $filter
-     * @param string|array|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param array|null                $filter
+     * @param string|array|OrderBy|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCountriesWithStatesQueryBuilder($filter = null, $order = null)
     {
@@ -105,7 +109,7 @@ class Repository extends ModelRepository
 
         $builder
             ->select(['countries', 'states', 'area', 'attribute'])
-            ->from(\Shopware\Models\Country\Country::class, 'countries')
+            ->from(Country::class, 'countries')
             ->leftJoin('countries.attribute', 'attribute')
             ->leftJoin('countries.states', 'states')
             ->leftJoin('countries.area', 'area');
@@ -127,7 +131,7 @@ class Repository extends ModelRepository
      *
      * @param int $areaId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getCountriesByAreaIdQuery($areaId)
     {
@@ -142,14 +146,14 @@ class Repository extends ModelRepository
      *
      * @param int $areaId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCountriesByAreaIdQueryBuilder($areaId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['countries'])
-                ->from(\Shopware\Models\Country\Country::class, 'countries')
+                ->from(Country::class, 'countries')
                 ->where('countries.areaId = ?1')
                 ->setParameter(1, $areaId);
     }
@@ -158,7 +162,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of areas.
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getAreasQuery()
     {
@@ -171,14 +175,14 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getAreasQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAreasQueryBuilder()
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['areas'])
-                ->from(\Shopware\Models\Country\Area::class, 'areas');
+                ->from(Area::class, 'areas');
     }
 
     /**
@@ -186,7 +190,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getCountryQuery($countryId)
     {
@@ -201,14 +205,14 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCountryQueryBuilder($countryId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['countries', 'attribute'])
-                       ->from(\Shopware\Models\Country\Country::class, 'countries')
+                       ->from(Country::class, 'countries')
                        ->leftJoin('countries.attribute', 'attribute')
                        ->where('countries.id = ?1')
                        ->setParameter(1, $countryId);
@@ -220,7 +224,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getCountryAttributesQuery($countryId)
     {
@@ -235,7 +239,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCountryAttributesQueryBuilder($countryId)
     {
@@ -253,7 +257,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getStatesByCountryIdQuery($countryId)
     {
@@ -268,14 +272,14 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getStatesByCountryIdQueryBuilder($countryId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['states', 'attribute'])
-                ->from(\Shopware\Models\Country\State::class, 'states')
+                ->from(State::class, 'states')
                 ->leftJoin('states.attribute', 'attribute')
                 ->where('states.countryId = ?1')
                 ->setParameter(1, $countryId);
@@ -287,7 +291,7 @@ class Repository extends ModelRepository
      *
      * @param int $stateId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query
      */
     public function getStateAttributesQuery($stateId)
     {
@@ -300,14 +304,14 @@ class Repository extends ModelRepository
      *
      * @param int $stateId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getStateAttributesQueryBuilder($stateId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['attribute'])
-                         ->from(\Shopware\Models\Attribute\CountryState::class, 'attribute')
+                         ->from(CountryState::class, 'attribute')
                          ->where('attribute.countryStateId = ?1')
                          ->setParameter(1, $stateId);
     }
