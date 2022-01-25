@@ -36,7 +36,7 @@ class Currency
     public function factory(Container $container, Zend_Locale $locale)
     {
         $currency = 'EUR';
-        if ($container->has('shop')) {
+        if ($container->initialized('shop')) {
             $currency = $container->get('shop')->getCurrency()->getCurrency();
         }
 

@@ -141,8 +141,10 @@ class CustomerStream extends Resource
     }
 
     /**
-     * @param int $offset
-     * @param int $limit
+     * @param int                                                                                     $offset
+     * @param int                                                                                     $limit
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $criteria
+     * @param array<array{property: string, direction: string}>                                       $orderBy
      *
      * @return array
      */

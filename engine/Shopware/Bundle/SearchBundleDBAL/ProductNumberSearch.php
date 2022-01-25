@@ -98,10 +98,7 @@ class ProductNumberSearch implements SearchBundle\ProductNumberSearchInterface
      */
     private function getProducts(QueryBuilder $query)
     {
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
         $products = [];
 
         foreach ($data as $row) {

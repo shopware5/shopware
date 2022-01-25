@@ -52,14 +52,6 @@ class Smarty_Compiler_Config extends Smarty_Internal_CompileBase
     {
         $_attr = $this->getAttributes($compiler, $args);
 
-        if (!Shopware()->Container()->has('config')) {
-            if (!isset($_attr['default'])) {
-                $_attr['default'] = 'null';
-            }
-
-            return '<?php echo ' . $_attr['default'] . '; ?>';
-        }
-
         if (!preg_match('/^([\'"]?)[a-zA-Z0-9]+(\\1)$/', $_attr['name'], $match)) {
             $return = $_attr['name'];
             if (isset($_attr['default'])) {

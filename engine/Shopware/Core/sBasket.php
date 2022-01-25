@@ -2297,10 +2297,7 @@ SQL;
             ]
         );
 
-        /** @var \Doctrine\DBAL\Driver\ResultStatement $statement */
-        $statement = $builder->execute();
-
-        return $statement->fetch() ?: [];
+        return $builder->execute()->fetch() ?: [];
     }
 
     /**

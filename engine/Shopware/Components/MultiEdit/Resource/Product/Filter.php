@@ -123,7 +123,11 @@ class Filter
                 ->leftJoin('detail.article', 'article');
 
         foreach ($joinEntities as $entity) {
-            $builder->leftJoin($this->getDqlHelper()->getAssociationForEntity($entity), $this->getDqlHelper()->getPrefixForEntity($entity));
+            $join = $this->getDqlHelper()->getAssociationForEntity($entity);
+            if (!\is_string($join)) {
+                continue;
+            }
+            $builder->leftJoin($join, $this->getDqlHelper()->getPrefixForEntity($entity));
         }
 
         list($dql, $params) = $this->getDqlHelper()->getDqlFromTokens($tokens);

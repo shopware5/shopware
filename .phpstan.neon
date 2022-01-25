@@ -11,11 +11,12 @@ parameters:
         - %currentWorkingDirectory%/recovery/common/autoload.php # Additional autoloading for testing classes under recovery/*
 
     symfony:
-        constant_hassers: false
-        container_xml_path: 'var/cache/production____REVISION___/container.xml'
-        console_application_loader: tests/phpstan-console-application.php
+        constantHassers: false
+        containerXmlPath: 'var/cache/production____REVISION___/container.xml'
+        consoleApplicationLoader: tests/phpstan-console-application.php
 
     doctrine:
+        queryBuilderClass: Shopware\Components\Model\QueryBuilder
         repositoryClass: Shopware\Components\Model\ModelRepository
         objectManagerLoader: tests/phpstan-doctrine-model-manager.php
 
@@ -70,6 +71,12 @@ parameters:
             message: '#Call to an undefined method \$this\(Shopware\\Components\\Api\\Resource\\Resource\)&Shopware\\Components\\Api\\BatchInterface::(delete|update|create)\(\)#'
             path: engine/Shopware/Components/Api/Resource/Resource.php
 
+        - # Overwrite of parent methods to have a proper type declaration of the entity manager
+            message: '#Method .*::getEntityManager\(\) should return Shopware\\Components\\Model\\ModelManager but returns Doctrine\\ORM\\EntityManagerInterface#'
+            paths:
+                - engine/Shopware/Components/Model/ModelRepository.php
+                - engine/Shopware/Components/Model/QueryBuilder.php
+
         - # Currently not possible to determine the paginator generic type at those places
             message: '#return type with generic class Doctrine\\ORM\\Tools\\Pagination\\Paginator does not specify its types: T#'
             paths:
@@ -77,17 +84,13 @@ parameters:
                 - engine/Shopware/Controllers/Backend/Search.php
 
         # Some day this should be specified
-        - '#no value type specified in iterable type Doctrine\\#'
+        - '#no value type specified in iterable type Doctrine\\DBAL\\#'
 
         # This method does not exists, but it does not throw an error. Needs to be checked
         - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
 
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'
-
-        # PHPStan can not correctly interfer our own ModelManager and QueryBuilder: see https://github.com/phpstan/phpstan-doctrine/issues/243
-        - '#Method Shopware.*::.*\(\) should return Shopware\\Components\\Model\\QueryBuilder but returns Doctrine\\ORM\\QueryBuilder#'
-        - '#Parameter .* expects Shopware\\Components\\Model\\QueryBuilder, Doctrine\\ORM\\QueryBuilder given#'
 
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
@@ -159,3 +162,9 @@ parameters:
         - # Giving "test" as construct parameter sets up a test storage
             message: '#Parameter \#1 \$options of class Enlight_Event_Subscriber_Config constructor expects array\|null, string given#'
             path: tests/Unit/Components/Event/SubscriberConfigTest.php
+
+        - # The Symfony extension does not correctly recognize the helper type. see: https://github.com/phpstan/phpstan-symfony/issues/239
+            message: '#Call to an undefined method Symfony\\Component\\Console\\Helper\\HelperInterface::ask\(\)#'
+            paths:
+                - engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
+                - engine/Shopware/Commands/ThemeCreateCommand.php

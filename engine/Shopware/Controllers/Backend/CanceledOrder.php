@@ -827,7 +827,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      */
     private function convertCancelledOrderInStock(Order $orderModel): bool
     {
-        /** @var ModelManager $entityManager */
         $entityManager = $this->get(ModelManager::class);
 
         $products = $this->getProductsOfOrder($orderModel);

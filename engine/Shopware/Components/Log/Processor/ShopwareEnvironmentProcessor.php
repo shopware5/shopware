@@ -52,7 +52,7 @@ class ShopwareEnvironmentProcessor implements ProcessorInterface
             $record['extra']['request'] = 'Could not process request data';
         }
 
-        if (Shopware()->Container()->has('shop')) {
+        if (Shopware()->Container()->initialized('shop')) {
             $record['extra']['session'] = Shopware()->Session();
             $record['extra']['shopId'] = Shopware()->Shop()->getId() ?: null;
             $record['extra']['shopName'] = Shopware()->Shop()->getName() ?: null;

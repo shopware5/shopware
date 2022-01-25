@@ -26,14 +26,10 @@
  * @param array|string $config
  * @param string       $position where the currency symbol should be displayed
  *
- * @return float|string
+ * @return string
  */
 function smarty_modifier_currency($value, $config = null, $position = null)
 {
-    if (!Shopware()->Container()->has('currency')) {
-        return $value;
-    }
-
     if (!empty($config) && \is_string($config)) {
         $config = strtoupper($config);
         if (\defined('Zend_Currency::' . $config)) {

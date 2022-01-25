@@ -24,7 +24,6 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Driver\ResultStatement;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Query;
@@ -96,9 +95,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         $query->setFirstResult($offset)
             ->setMaxResults($limit);
 
-        /** @var ResultStatement $statement */
-        $statement = $query->execute();
-        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $emotions = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
 
         $query->select('COUNT(DISTINCT emotions.id) as count')
             ->resetQueryPart('groupBy')
@@ -106,9 +103,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             ->setFirstResult(0)
             ->setMaxResults(1);
 
-        /** @var ResultStatement $statement */
-        $statement = $query->execute();
-        $count = $statement->fetch(PDO::FETCH_COLUMN);
+        $count = $query->execute()->fetch(PDO::FETCH_COLUMN);
 
         $this->View()->assign([
             'success' => true,

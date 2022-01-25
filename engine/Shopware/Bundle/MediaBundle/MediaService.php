@@ -28,6 +28,7 @@ use Exception;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\Util;
 use Shopware\Bundle\MediaBundle\Strategy\StrategyInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -299,12 +300,10 @@ class MediaService implements MediaServiceInterface
             return ($request->isSecure() ? 'https' : 'http') . '://' . $request->getHttpHost() . $request->getBasePath() . '/';
         }
 
-        if ($this->container->has('shop')) {
-            /** @var Shop $shop */
+        if ($this->container->initialized('shop')) {
             $shop = $this->container->get('shop');
         } else {
-            /** @var Shop $shop */
-            $shop = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
+            $shop = $this->container->get(ModelManager::class)->getRepository(Shop::class)->getActiveDefault();
         }
 
         if ($shop->getMain()) {

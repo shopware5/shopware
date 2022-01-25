@@ -25,6 +25,8 @@
 namespace Shopware\Components\Routing\Matchers;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Statement;
 use PDO;
 use Shopware\Components\QueryAliasMapper;
 use Shopware\Components\Routing\Context;
@@ -116,9 +118,9 @@ class RewriteMatcher implements MatcherInterface
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      *
-     * @return \Doctrine\DBAL\Driver\Statement
+     * @return Statement
      */
     private function getRouteStatement()
     {

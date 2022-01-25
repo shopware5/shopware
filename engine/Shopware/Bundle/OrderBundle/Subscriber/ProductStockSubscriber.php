@@ -27,7 +27,6 @@ namespace Shopware\Bundle\OrderBundle\Subscriber;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventArgs;
 use Shopware\Bundle\OrderBundle\Service\StockServiceInterface;
-use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Detail;
 
 class ProductStockSubscriber implements SubscriberInterface
@@ -64,7 +63,6 @@ class ProductStockSubscriber implements SubscriberInterface
         /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');
 
-        /** @var ModelManager $entityManager */
         $entityManager = $arguments->get('entityManager');
 
         //returns a change set for the model, which contains all changed properties with the old and new value.

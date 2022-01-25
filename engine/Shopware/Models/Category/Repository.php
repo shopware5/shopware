@@ -105,14 +105,15 @@ class Repository extends ModelRepository
     /**
      * Returns a query builder object to get all defined categories with an count of sub categories.
      *
-     * @param int|null $limit
-     * @param int|null $offset
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     * @param int|null                                                                                $limit
+     * @param int|null                                                                                $offset
      *
      * @return QueryBuilder
      */
     public function getBackendListQuery(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -147,7 +148,7 @@ class Repository extends ModelRepository
      *
      * @param int $categoryId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBackendDetailQuery($categoryId)
     {
@@ -176,15 +177,16 @@ class Repository extends ModelRepository
      * Helper method to create the query builder for the "getListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int|null $limit
-     * @param int|null $offset
-     * @param bool     $selectOnlyActive
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filterBy
+     * @param array<array{property: string, direction: string}>                                       $orderBy
+     * @param int|null                                                                                $limit
+     * @param int|null                                                                                $offset
+     * @param bool                                                                                    $selectOnlyActive
      *
      * @return QueryBuilder
      */
     public function getListQueryBuilder(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQueryBuilder('c');
         $builder->select([
             'c.id as id',
@@ -251,7 +253,7 @@ class Repository extends ModelRepository
      *
      * @param int $categoryId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getDetailQueryBuilder($categoryId)
     {
@@ -284,7 +286,7 @@ class Repository extends ModelRepository
      *
      * @param int $categoryId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getDetailQueryBuilderWithoutArticles($categoryId)
     {
@@ -550,7 +552,7 @@ class Repository extends ModelRepository
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCategoriesByParentBuilder($parentId, $offset = null, $limit = null)
     {
@@ -698,7 +700,7 @@ class Repository extends ModelRepository
      * @param int|null $customerGroupId
      * @param int|null $shopId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getActiveQueryBuilder($customerGroupId = null, $shopId = null)
     {
@@ -740,12 +742,7 @@ class Repository extends ModelRepository
         return $builder;
     }
 
-    /**
-     * @param \Doctrine\ORM\QueryBuilder $builder
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    private function addChildrenCountSelect($builder)
+    private function addChildrenCountSelect(QueryBuilder $builder): QueryBuilder
     {
         $subQuery = $this->getEntityManager()->createQueryBuilder();
         $subQuery->from(Category::class, 'c2')
@@ -758,13 +755,7 @@ class Repository extends ModelRepository
         return $builder;
     }
 
-    /**
-     * @param \Doctrine\ORM\QueryBuilder $builder
-     * @param bool                       $onlyActive
-     *
-     * @return \Doctrine\ORM\QueryBuilder
-     */
-    private function addArticleCountSelect($builder, $onlyActive = false)
+    private function addArticleCountSelect(QueryBuilder $builder, bool $onlyActive = false): QueryBuilder
     {
         $subQuery = $this->getEntityManager()->createQueryBuilder();
         $subQuery->from(Category::class, 'c3')

@@ -36,7 +36,7 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
      * Contains all registered event listeners. A listener can be registered by the
      * registerListener(Enlight_Event_Handler $handler) function.
      *
-     * @var array<string, array<string, callable>>
+     * @var array<string, array<string, callable|object>>
      */
     protected $containerListeners = [];
 
