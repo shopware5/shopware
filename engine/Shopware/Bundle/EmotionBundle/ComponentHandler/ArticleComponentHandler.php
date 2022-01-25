@@ -80,7 +80,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $type = $element->getConfig()->get('article_type');
-        $key = 'emotion-element--' . $element->getId();
+        $key = ComponentHandlerInterface::CRITERIA_KEY . $element->getId();
 
         if ($type === self::TYPE_STATIC_PRODUCT) {
             $collection->getBatchRequest()->setProductNumbers($key, [$element->getConfig()->get('article')]);
@@ -105,7 +105,7 @@ class ArticleComponentHandler implements ComponentHandlerInterface
      */
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $key = 'emotion-element--' . $element->getId();
+        $key = ComponentHandlerInterface::CRITERIA_KEY . $element->getId();
         $type = $element->getConfig()->get('article_type');
 
         $product = current($collection->getBatchResult()->get($key));

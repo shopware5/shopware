@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,29 +24,32 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\EmotionBundle\ComponentHandler;
+namespace Shopware\Tests\Functional\Traits;
 
-use Shopware\Bundle\EmotionBundle\Struct\Collection\PrepareDataCollection;
-use Shopware\Bundle\EmotionBundle\Struct\Collection\ResolvedDataCollection;
-use Shopware\Bundle\EmotionBundle\Struct\Element;
+use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
-interface ComponentHandlerInterface
+trait ShopContextTrait
 {
-    public const CRITERIA_KEY = 'emotion-element--';
-
-    /**
-     * @return bool
-     */
-    public function supports(Element $element);
-
-    /**
-     * @return void
-     */
-    public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context);
-
-    /**
-     * @return void
-     */
-    public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context);
+    public function createShopContext(): ShopContextInterface
+    {
+        return new ShopContext(
+            'foo',
+            new Shop(),
+            new Currency(),
+            new Group(),
+            new Group(),
+            [new Tax()],
+            [new PriceGroup()],
+            null,
+            null,
+            null,
+            [],
+        );
+    }
 }
