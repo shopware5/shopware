@@ -50616,11 +50616,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/MediaManagerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/NewsletterTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, array\\|string\\|null given\\.$#"
 			count: 2
 			path: tests/Functional/Controllers/Backend/NewsletterTest.php
