@@ -42,6 +42,8 @@ use Shopware_Components_Config as ShopwareConfig;
 
 class ArticleSliderComponentHandler implements ComponentHandlerInterface
 {
+    public const SLIDER_TYPE_KEY = 'article_slider_type';
+
     public const TYPE_PRODUCT_STREAM = 'product_stream';
     public const TYPE_STATIC_PRODUCT = 'selected_article';
     public const TYPE_STATIC_VARIANT = 'selected_variant';
@@ -50,6 +52,9 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     public const TYPE_TOPSELLER = 'topseller';
     public const TYPE_LOWEST_PRICE = 'price_asc';
     public const TYPE_HIGHEST_PRICE = 'price_desc';
+
+    public const SELECTED_VARIANTS = 'selected_variants';
+    public const SELECTED_PRODUCTS = 'selected_articles';
 
     public const LEGACY_CONVERT_FUNCTION = 'getArticleSlider';
     public const COMPONENT_NAME = 'emotion-components-article-slider';
@@ -90,8 +95,8 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
      */
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
-        $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
-        $key = 'emotion-element--' . $element->getId();
+        $type = $element->getConfig()->get(self::SLIDER_TYPE_KEY, self::TYPE_STATIC_PRODUCT);
+        $key = ComponentHandlerInterface::CRITERIA_KEY . $element->getId();
 
         switch ($type) {
             case self::TYPE_PRODUCT_STREAM:
@@ -116,7 +121,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $products = $element->getConfig()->get('selected_articles', []);
+                $products = $element->getConfig()->get(self::SELECTED_PRODUCTS, '');
                 $productNumbers = array_filter(explode('|', $products));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
@@ -125,7 +130,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
                 break;
             case self::TYPE_STATIC_VARIANT:
-                $productVariants = $element->getConfig()->get('selected_variants', []);
+                $productVariants = $element->getConfig()->get(self::SELECTED_VARIANTS, '');
                 $productNumbers = array_filter(explode('|', $productVariants));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
@@ -142,7 +147,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $type = $element->getConfig()->get('article_slider_type', self::TYPE_STATIC_PRODUCT);
-        $key = 'emotion-element--' . $element->getId();
+        $key = ComponentHandlerInterface::CRITERIA_KEY . $element->getId();
 
         switch ($type) {
             case self::TYPE_PRODUCT_STREAM:
@@ -156,7 +161,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $products = $element->getConfig()->get('selected_articles', []);
+                $products = $element->getConfig()->get(self::SELECTED_PRODUCTS, '');
                 $productNumbers = array_filter(explode('|', $products));
                 $listProducts = $collection->getBatchResult()->get($key);
 
@@ -171,7 +176,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $element->getData()->set('products', $products);
                 break;
             case self::TYPE_STATIC_VARIANT:
-                $products = $element->getConfig()->get('selected_variants', []);
+                $products = $element->getConfig()->get(self::SELECTED_VARIANTS, '');
                 $productNumbers = array_filter(explode('|', $products));
                 $listProducts = $collection->getBatchResult()->get($key);
                 $listProducts = $this->additionalTextService->buildAdditionalTextLists($listProducts, $context);
@@ -207,7 +212,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
 
     private function generateCriteria(Element $element, ShopContextInterface $context): Criteria
     {
-        $type = $element->getConfig()->get('article_slider_type');
+        $type = $element->getConfig()->get(self::SLIDER_TYPE_KEY);
         $limit = (int) $element->getConfig()->get('article_slider_max_number');
         $categoryId = (int) $element->getConfig()->get('article_slider_category');
 

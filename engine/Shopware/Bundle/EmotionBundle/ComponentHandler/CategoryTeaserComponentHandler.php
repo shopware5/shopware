@@ -83,7 +83,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     public function prepare(PrepareDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $imageType = $element->getConfig()->get('image_type');
-        $key = 'emotion-element--' . $element->getId();
+        $key = ComponentHandlerInterface::CRITERIA_KEY . $element->getId();
 
         switch ($imageType) {
             case self::TYPE_IMAGE:
@@ -113,7 +113,7 @@ class CategoryTeaserComponentHandler implements ComponentHandlerInterface
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context)
     {
         $imageType = $element->getConfig()->get('image_type');
-        $key = 'emotion-element--' . $element->getId();
+        $key = ComponentHandlerInterface::CRITERIA_KEY . $element->getId();
 
         switch ($imageType) {
             case self::TYPE_IMAGE:
