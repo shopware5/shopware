@@ -24,6 +24,8 @@
 
 namespace Shopware\Components;
 
+use Doctrine\ORM\Mapping\MappingException;
+use Doctrine\ORM\Query\QueryException;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Request_RequestHttp;
 use Enlight_Controller_Response_ResponseHttp;
@@ -31,6 +33,7 @@ use Enlight_Event_EventArgs as EventArgs;
 use Exception;
 use PDOException;
 use ReflectionException;
+use Shopware\Components\Model\ModelManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class AttributeSubscriber implements SubscriberInterface
@@ -80,7 +83,7 @@ class AttributeSubscriber implements SubscriberInterface
         $response = new Enlight_Controller_Response_ResponseHttp();
 
         if ($this->isModelException($exception)) {
-            $generator = $this->container->get(\Shopware\Components\Model\ModelManager::class)->createModelGenerator();
+            $generator = $this->container->get(ModelManager::class)->createModelGenerator();
             $result = $generator->generateAttributeModels();
             if ($result['success'] === true) {
                 $response->setRedirect(
@@ -109,7 +112,7 @@ class AttributeSubscriber implements SubscriberInterface
         /*
          * This case matches, when a query selects a doctrine association, which isn't defined in the doctrine model
          */
-        if ($exception instanceof \Doctrine\ORM\Query\QueryException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+        if ($exception instanceof QueryException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
             return true;
         }
 
@@ -130,7 +133,7 @@ class AttributeSubscriber implements SubscriberInterface
         /*
          * This case matches, when a parent model selected and the child model loaded the attribute over the lazy loading process.
          */
-        if ($exception instanceof \Doctrine\ORM\Mapping\MappingException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
+        if ($exception instanceof MappingException && strpos($exception->getMessage(), 'Shopware\Models\Attribute')) {
             return true;
         }
 

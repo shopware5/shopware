@@ -32,7 +32,7 @@ class Criteria
     public $offset = 0;
 
     /**
-     * @var int
+     * @var int|null
      */
     public $limit = 10;
 

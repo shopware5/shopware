@@ -35091,11 +35091,6 @@ parameters:
 			path: engine/Shopware/Core/sRewriteTable.php
 
 		-
-			message: "#^Property Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Criteria\\:\\:\\$limit \\(int\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sRewriteTable.php
-
-		-
 			message: "#^Method sSystem\\:\\:__call\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sSystem.php

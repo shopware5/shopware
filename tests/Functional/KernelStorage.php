@@ -24,34 +24,23 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
+namespace Shopware\Tests\Functional;
 
-use PHPUnit\Framework\TestCase;
-use Shopware\Commands\ShopwareCommand;
-use Shopware\Tests\Functional\KernelStorage;
-
-class ConfigureContainerAwareCommandsTest extends TestCase
+class KernelStorage
 {
-    /**
-     * @dataProvider getShopwareCommands
-     */
-    public function testCompilerAwareIsInitialized(ShopwareCommand $containerAwareCommand): void
+    private static ?TestKernel $kernel = null;
+
+    public static function unset(): void
     {
-        static::assertNotNull($containerAwareCommand->getContainer());
+        self::$kernel = null;
     }
 
-    public function getShopwareCommands(): array
+    public static function receive(): TestKernel
     {
-        $application = new \Shopware\Components\Console\Application(KernelStorage::receive());
-        $application->setCommandLoader(Shopware()->Container()->get('console.command_loader'));
-        $commands = [];
-
-        foreach ($application->all() as $command) {
-            if ($command instanceof ShopwareCommand) {
-                $commands[] = [$command];
-            }
+        if (!self::$kernel instanceof TestKernel) {
+            self::$kernel = TestKernel::start();
         }
 
-        return $commands;
+        return self::$kernel;
     }
 }
