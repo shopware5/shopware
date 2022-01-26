@@ -583,8 +583,8 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             return false;
         }
 
-        $customerGroups = null;
-        $recipientGroups = null;
+        $customerGroups = [];
+        $recipientGroups = [];
         $mailing['groups'] = unserialize($mailing['groups'], ['allowed_classes' => false]);
 
         // The first element holds the selected customer groups for the current newsletter

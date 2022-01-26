@@ -29046,11 +29046,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
-			message: "#^Parameter \\#2 \\$pieces of function implode expects array, array\\<int, string\\>\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
@@ -50619,11 +50614,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\MediaManagerTest\\:\\:testAlbumInheritance\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/MediaManagerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/NewsletterTest.php
 
 		-
 			message: "#^Parameter \\#2 \\$string of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertMatchesRegularExpression\\(\\) expects string, array\\|string\\|null given\\.$#"

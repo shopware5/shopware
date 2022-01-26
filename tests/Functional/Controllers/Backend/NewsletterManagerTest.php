@@ -25,13 +25,11 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Plugin_TestCase;
-use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
+class NewsletterManagerTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use DatabaseTransactionBehaviour;
-    use ContainerTrait;
 
     public function setUp(): void
     {
@@ -46,27 +44,12 @@ class NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
     }
 
     /**
-     * @ticket SW-4747
+     * @ticket SW-23211
      */
-    public function testNewsletterLock(): void
+    public function testNewsletterGroup(): void
     {
-        $this->Front()->setParam('noViewRenderer', false);
-        Shopware()->Config()->offsetSet('MailCampaignsPerCall', 1);
+        $this->dispatch('/backend/NewsletterManager/getGroups');
 
-        $this->dispatch('/backend/newsletter/cron');
-        static::assertMatchesRegularExpression('#[0-9]+ Recipients fetched#', $this->Response()->getBody());
-        $this->reset();
-
-        $this->dispatch('/backend/newsletter/cron');
-        static::assertMatchesRegularExpression('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
-        $this->reset();
-    }
-
-    public function testGetMailsWithoutGroups(): void
-    {
-        $newsletterController = $this->getContainer()->get('shopware_controllers_backend_newsletter');
-        $emails = $newsletterController->getMailingEmails(2);
-
-        static::assertSame([], $emails);
+        static::assertTrue($this->View()->getAssign('success'));
     }
 }
