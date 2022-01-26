@@ -37,7 +37,7 @@ class HandlerRegistry
     /**
      * @var HandlerInterface[]
      */
-    private $handlers;
+    private array $handlers;
 
     public function __construct(
         IteratorAggregate $handlers,
