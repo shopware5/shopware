@@ -28,6 +28,7 @@ namespace Shopware\Bundle\CookieBundle\Services;
 
 use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\CookieGroupCollection;
+use Shopware\Bundle\CookieBundle\Exceptions\NoCookieGroupByNameKnownException;
 use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
 
 class CookieHandler implements CookieHandlerInterface
@@ -74,7 +75,11 @@ class CookieHandler implements CookieHandlerInterface
                     continue;
                 }
 
-                $cookieGroupStruct = $this->cookieGroupCollection->getGroupByName($cookieGroup['name']);
+                try {
+                    $cookieGroupStruct = $this->cookieGroupCollection->getGroupByName($cookieGroup['name']);
+                } catch (NoCookieGroupByNameKnownException $e) {
+                    continue;
+                }
 
                 return $cookieGroupStruct->isRequired() ?: $cookie['active'];
             }

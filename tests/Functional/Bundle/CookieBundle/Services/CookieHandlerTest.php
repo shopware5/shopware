@@ -195,6 +195,36 @@ class CookieHandlerTest extends TestCase
         static::assertTrue($result);
     }
 
+    public function testSuperfluousCustomerCookiesDoNotCreateAnException(): void
+    {
+        $cookieHandler = $this->getCookieHandler();
+
+        $result = $cookieHandler->isCookieAllowedByPreferences('sUniqueID', [
+            'groups' => [
+                [
+                    'name' => 'foobar',
+                    'cookies' => [
+                        'session' => [
+                            'name' => 'sUniqueID',
+                            'active' => true,
+                        ],
+                    ],
+                ],
+                [
+                    'name' => 'comfort',
+                    'cookies' => [
+                        'statistic' => [
+                            'name' => 'sUniqueID',
+                            'active' => true,
+                        ],
+                    ],
+                ],
+            ],
+        ]);
+
+        static::assertTrue($result);
+    }
+
     private function getCookieHandler(): CookieHandler
     {
         return new CookieHandler(
