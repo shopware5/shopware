@@ -86,7 +86,7 @@ class ProductAttributeCondition implements ConditionInterface, JsonSerializable
     }
 
     /**
-     * @return array|int|string|null $value
+     * @return array|int|string|null
      */
     public function getValue()
     {
