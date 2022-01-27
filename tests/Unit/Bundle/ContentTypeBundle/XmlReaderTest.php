@@ -95,6 +95,12 @@ class XmlReaderTest extends TestCase
         $this->reader->read(__DIR__ . '/fixtures/invalid.xml');
     }
 
+    public function testReadInvalidTypeNameFile(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->reader->read(__DIR__ . '/fixtures/valid_with_invalid_typeName.xml');
+    }
+
     public function testReadingInvalidFrontendConfiguration(): void
     {
         $this->expectException(InvalidArgumentException::class);
