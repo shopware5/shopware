@@ -819,6 +819,5 @@
         <service id="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver" alias="argument_resolver.request_value" />
         <service id="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver" alias="argument_resolver.default" />
         <service id="Shopware\Bundle\ContentTypeBundle\Field\AceEditor" alias="Shopware\Bundle\ContentTypeBundle\Field\CodeMirrorField" />
-
     </services>
 </container>

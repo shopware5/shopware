@@ -10971,22 +10971,12 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/VariantHelperInterface.php
 
 		-
-			message: "#^Argument of an invalid type object\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\CombinedConditionQueryBuilder\\:\\:build\\(\\) has parameter \\$conditions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
-
-		-
-			message: "#^Service \"shopware_search_es\\.handler_collection\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
 
