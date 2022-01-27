@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleES\ConditionHandler;
 
-use Exception;
 use ONGR\ElasticsearchDSL\BuilderInterface;
 use ONGR\ElasticsearchDSL\Query\Compound\BoolQuery;
 use ONGR\ElasticsearchDSL\Query\FullText\MatchQuery;
@@ -85,24 +84,22 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         $search->addPostFilter($this->getQuery($criteriaPart));
     }
 
-    /**
-     * @return BuilderInterface
-     */
-    private function getQuery(ProductAttributeCondition $criteriaPart)
+    private function getQuery(ProductAttributeCondition $criteriaPart): BuilderInterface
     {
         $field = 'attributes.core.' . $criteriaPart->getField();
 
-        $type = 'string';
-        try {
-            $attribute = $this->attributeService->get('s_articles_attributes', $criteriaPart->getField());
-            if ($attribute instanceof ConfigurationStruct) {
-                $type = $attribute->getElasticSearchType()['type'];
-                
-                if ($type === 'boolean') {
-                    $criteriaPart->setValue((bool) $criteriaPart->getValue());
-                }
-            }
-        } catch (Exception $e) {
+        $attribute = $this->attributeService->get('s_articles_attributes', $criteriaPart->getField());
+
+        if (!$attribute instanceof ConfigurationStruct) {
+            throw new RuntimeException(sprintf('Attribute not found for field %s', $criteriaPart->getField()));
+        }
+
+        $type = $attribute->getElasticSearchType()['type'];
+
+        $value = $criteriaPart->getValue();
+
+        if ($type === 'boolean') {
+            $value = (bool) $value;
         }
 
         switch ($criteriaPart->getOperator()) {
@@ -110,38 +107,37 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                 if ($type === 'string') {
                     $field .= '.raw';
                 }
-                if ($criteriaPart->getValue() === null) {
+                if ($value === null) {
                     $filter = new BoolQuery();
                     $filter->add(new ExistsQuery($field), BoolQuery::MUST_NOT);
 
                     return $filter;
                 }
-                if (\is_array($criteriaPart->getValue())) {
+                if (\is_array($value)) {
                     throw new RuntimeException('Invalid value for TermQuery provided');
                 }
 
-                return new TermQuery($field, $criteriaPart->getValue());
+                return new TermQuery($field, $value);
 
             case ProductAttributeCondition::OPERATOR_NEQ:
-                if ($criteriaPart->getValue() === null) {
+                if ($value === null) {
                     return new ExistsQuery($field);
                 }
-                if (\is_array($criteriaPart->getValue())) {
+                if (\is_array($value)) {
                     throw new RuntimeException('Invalid value for TermQuery provided');
                 }
                 $filter = new BoolQuery();
-                $filter->add(new TermQuery($field, $criteriaPart->getValue()), BoolQuery::MUST_NOT);
+                $filter->add(new TermQuery($field, $value), BoolQuery::MUST_NOT);
 
                 return $filter;
 
             case ProductAttributeCondition::OPERATOR_LT:
-                return new RangeQuery($field, ['lt' => $criteriaPart->getValue()]);
+                return new RangeQuery($field, ['lt' => $value]);
 
             case ProductAttributeCondition::OPERATOR_LTE:
-                return new RangeQuery($field, ['lte' => $criteriaPart->getValue()]);
+                return new RangeQuery($field, ['lte' => $value]);
 
             case ProductAttributeCondition::OPERATOR_BETWEEN:
-                $value = $criteriaPart->getValue();
                 if (!\is_array($value)) {
                     throw new RuntimeException('Invalid value for RangeQuery provided');
                 }
@@ -149,20 +145,20 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                 return new RangeQuery($field, ['gte' => $value['min'], 'lte' => $value['max']]);
 
             case ProductAttributeCondition::OPERATOR_GT:
-                return new RangeQuery($field, ['gt' => $criteriaPart->getValue()]);
+                return new RangeQuery($field, ['gt' => $value]);
 
             case ProductAttributeCondition::OPERATOR_GTE:
-                return new RangeQuery($field, ['gte' => $criteriaPart->getValue()]);
+                return new RangeQuery($field, ['gte' => $value]);
 
             case ProductAttributeCondition::OPERATOR_CONTAINS:
-                if (!\is_string($criteriaPart->getValue())) {
+                if (!\is_string($value)) {
                     throw new RuntimeException('Invalid value for MatchQuery provided');
                 }
 
-                return new MatchQuery($field, $criteriaPart->getValue());
+                return new MatchQuery($field, $value);
 
             case ProductAttributeCondition::OPERATOR_NOT_IN:
-                if (!\is_array($criteriaPart->getValue())) {
+                if (!\is_array($value)) {
                     throw new RuntimeException('Invalid value for TermsQuery provided');
                 }
 
@@ -170,12 +166,12 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                     $field .= '.raw';
                 }
                 $filter = new BoolQuery();
-                $filter->add(new TermsQuery($field, $criteriaPart->getValue()), BoolQuery::MUST_NOT);
+                $filter->add(new TermsQuery($field, $value), BoolQuery::MUST_NOT);
 
                 return $filter;
 
             case ProductAttributeCondition::OPERATOR_IN:
-                if (!\is_array($criteriaPart->getValue())) {
+                if (!\is_array($value)) {
                     throw new RuntimeException('Invalid value for TermsQuery provided');
                 }
 
@@ -183,10 +179,10 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                     $field .= '.raw';
                 }
 
-                return new TermsQuery($field, $criteriaPart->getValue());
+                return new TermsQuery($field, $value);
 
             case ProductAttributeCondition::OPERATOR_STARTS_WITH:
-                if (!\is_string($criteriaPart->getValue())) {
+                if (!\is_string($value)) {
                     throw new RuntimeException('Invalid value for PrefixQuery provided');
                 }
 
@@ -194,10 +190,10 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                     $field .= '.raw';
                 }
 
-                return new PrefixQuery($field, $criteriaPart->getValue());
+                return new PrefixQuery($field, $value);
 
             case ProductAttributeCondition::OPERATOR_ENDS_WITH:
-                if (\is_array($criteriaPart->getValue())) {
+                if (\is_array($value)) {
                     throw new RuntimeException('Invalid value for WildcardQuery provided');
                 }
 
@@ -205,7 +201,7 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
                     $field .= '.raw';
                 }
 
-                return new WildcardQuery($field, '*' . $criteriaPart->getValue());
+                return new WildcardQuery($field, '*' . $value);
 
             default:
                 throw new RuntimeException(sprintf('Operator %s is not supported in elastic search', $criteriaPart->getOperator()));
