@@ -666,19 +666,37 @@ class sBasket implements \Enlight_Hook
     public function getMaxTax()
     {
         $sessionId = $this->session->get('sessionId');
+        if (!\is_string($sessionId)) {
+            return false;
+        }
 
-        $sql = <<<SQL
-SELECT a.taxID
-FROM s_order_basket b
-JOIN s_articles a ON a.id = b.articleID
-WHERE b.sessionID = ? AND b.modus = 0
-ORDER BY b.tax_rate DESC LIMIT 1;
-SQL;
-        $maxTaxId = $this->connection->fetchColumn($sql, [empty($sessionId) ? session_id() : $sessionId]);
+        $qb = $this->connection->createQueryBuilder();
+        $qb
+            ->select(['product.taxID'])
+            ->from('s_order_basket', 'basket')
+            ->join('basket', 's_articles', 'product', 'product.id = basket.articleID')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('basket.sessionID', ':sessionId'),
+                $qb->expr()->eq('basket.modus', CartPositionsMode::PRODUCT)
+            ))
+            ->orderBy('basket.tax_rate', 'DESC')
+            ->setMaxResults(1)
+            ->setParameter('sessionId', $sessionId)
+        ;
 
+        $this->eventManager->notify(
+            'Shopware_Modules_Basket_GetMaxTax_QueryBuilder',
+            [
+                'sessionId' => $sessionId,
+                'queryBuilder' => $qb,
+            ]
+        );
+
+        $maxTaxId = $qb->execute()->fetchOne();
         if (!$maxTaxId) {
             return false;
         }
+
         $tax = $this->contextService->getShopContext()->getTaxRule($maxTaxId);
 
         return $tax->getTax();
