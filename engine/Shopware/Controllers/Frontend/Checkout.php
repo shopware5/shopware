@@ -696,7 +696,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         if ($this->Request()->isPost()) {
             if (!$this->Request()->getParam('sAddPremium')) {
-                $this->View()->assign('sBasketInfo', Shopware()->Snippets()->getNamespace()->get(
+                $this->View()->assign('sBasketInfo', Shopware()->Snippets()->getNamespace('frontend')->get(
                     'CheckoutSelectPremiumVariant',
                     'Please select an option to place the required premium to the cart',
                     true
