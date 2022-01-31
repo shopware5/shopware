@@ -99,7 +99,11 @@ class ProductAttributeConditionHandler implements PartialConditionHandlerInterfa
         $value = $criteriaPart->getValue();
 
         if ($type === 'boolean') {
-            $value = (bool) $value;
+            if (\is_array($value)) {
+                $value = array_map('boolval', $value);
+            } else {
+                $value = (bool) $value;
+            }
         }
 
         switch ($criteriaPart->getOperator()) {

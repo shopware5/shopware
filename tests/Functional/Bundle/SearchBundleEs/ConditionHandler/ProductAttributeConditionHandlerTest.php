@@ -79,6 +79,37 @@ class ProductAttributeConditionHandlerTest extends TestCase
         $this->deleteAttributeField();
     }
 
+    public function testCreateBoolInAttributeFilter(): void
+    {
+        $this->createAttributeField();
+
+        $productAttributeConditionHandler = $this->getProductAttributeConditionHandler();
+        $search = new Search();
+        $productAttributeCondition = new ProductAttributeCondition(self::BOOL_ATTRIBUTE_FIELD, ConditionInterface::OPERATOR_IN, [true]);
+        $criteria = new Criteria();
+        $shopContext = $this->createShopContext();
+
+        $productAttributeConditionHandler->handleFilter($productAttributeCondition, $criteria, $search, $shopContext);
+
+        static::assertSame([
+            'query' => [
+                'bool' => [
+                    'filter' => [
+                        [
+                            'terms' => [
+                                'attributes.core.foo' => [
+                                    true,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ], $search->toArray());
+
+        $this->deleteAttributeField();
+    }
+
     private function getProductAttributeConditionHandler(): ProductAttributeConditionHandler
     {
         return $this->getContainer()->get(ProductAttributeConditionHandler::class);
