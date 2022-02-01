@@ -107,6 +107,8 @@ class AccountManagerService
     /**
      * Requests the creation of a new Shopware ID anc account (registration action)
      *
+     * @deprecated since 5.7.8, will be removed in 5.8 without replacement.
+     *
      * @param string $shopwareId
      * @param string $email
      * @param string $password

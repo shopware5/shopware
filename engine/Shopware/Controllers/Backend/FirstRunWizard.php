@@ -377,6 +377,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * - password
      * - email
      *
+     * @deprecated since 5.7.8, will be removed in 5.8 without replacement.
+     *
      * @throws Exception
      */
     public function registerNewIdAction()
@@ -411,6 +413,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Expects the following parameters in the request:
      * - shopwareID
      * - password
+     *
+     * @deprecated since 5.7.8, will be removed in 5.8 without replacement.
      */
     public function loginAction()
     {
@@ -582,6 +586,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     /**
      * Fetches known server locales. Returns a struct in server format containing
      * info about the current user's locale.
+     *
+     * @deprecated since 5.7.8, will be removed in 5.8 without replacement.
      *
      * @throws Exception
      *
