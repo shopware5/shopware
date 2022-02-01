@@ -24,7 +24,6 @@
 
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
-use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
 use Shopware\Models\Document\Element;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
@@ -364,72 +363,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     }
 
     /**
-     * Shopware ID registration action for first run wizard
-     *
-     * Expects the following parameters in the request:
-     * - shopwareID
-     * - password
-     * - email
-     *
-     * @throws Exception
-     */
-    public function registerNewIdAction()
-    {
-        $shopwareId = $this->Request()->getParam('shopwareID');
-        $password = $this->Request()->getParam('password');
-        $email = $this->Request()->getParam('email');
-
-        /** @var AccountManagerService $accountManagerService */
-        $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
-
-        try {
-            $locale = $this->getCurrentLocale();
-            $accountManagerService->registerAccount($shopwareId, $email, $password, $locale->getId());
-        } catch (Exception $e) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
-
-            return;
-        }
-
-        $this->View()->assign('message', 'loginSuccessful');
-
-        $this->forward('login');
-    }
-
-    /**
-     * Login action for first run wizard
-     *
-     * Expects the following parameters in the request:
-     * - shopwareID
-     * - password
-     */
-    public function loginAction()
-    {
-        $shopwareId = $this->Request()->getParam('shopwareID');
-        $password = $this->Request()->getParam('password');
-
-        try {
-            $this->getToken($shopwareId, $password);
-        } catch (Exception $e) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $e->getMessage(),
-            ]);
-
-            return;
-        }
-
-        $this->View()->assign('success', true);
-        $message = $this->View()->getAssign('message');
-        if (empty($message)) {
-            $this->View()->assign('message', 'loginSuccessful');
-        }
-    }
-
-    /**
      * Domain registration/retrieval action for first run wizard
      * Usually called after Shopware ID login/registration
      *
@@ -564,47 +497,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
     private function getVersion()
     {
         return $this->container->getParameter('shopware.release.version');
-    }
-
-    /**
-     * Fetches known server locales. Returns a struct in server format containing
-     * info about the current user's locale.
-     *
-     * @throws Exception
-     *
-     * @return LocaleStruct|null Information about the current locale
-     */
-    private function getCurrentLocale()
-    {
-        static $locales;
-
-        if (empty($locales)) {
-            /** @var AccountManagerService $accountManagerService */
-            $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
-
-            try {
-                /** @var LocaleStruct[] $serverLocales */
-                $serverLocales = $accountManagerService->getLocales();
-            } catch (Exception $e) {
-                $this->View()->assign([
-                    'success' => false,
-                    'message' => $e->getMessage(),
-                ]);
-
-                return null;
-            }
-
-            foreach ($serverLocales as $serverLocale) {
-                $locales[$serverLocale->getName()] = $serverLocale;
-            }
-        }
-
-        $user = Shopware()->Container()->get('auth')->getIdentity();
-        /** @var \Shopware\Models\Shop\Locale $locale */
-        $locale = $user->locale;
-        $localeCode = $locale->getLocale();
-
-        return array_key_exists($localeCode, $locales) ? $locales[$localeCode] : null;
     }
 
     /**
