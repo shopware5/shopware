@@ -22,28 +22,37 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Bundle\CustomerSearchBundle\Condition;
 
-/**
- * Defines a condition which can be added to the
- * \Shopware\Bundle\SearchBundle\Criteria class.
- *
- * Each condition is handled by his own condition handler
- * which defined in the specify gateway engines.
- */
-interface ConditionInterface extends CriteriaPartInterface
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+
+class NotOrderedWithPaymentCondition implements ConditionInterface
 {
-    public const OPERATOR_EQ = '=';
-    public const OPERATOR_NEQ = '!=';
-    public const OPERATOR_LT = '<';
-    public const OPERATOR_LTE = '<=';
-    public const OPERATOR_GT = '>';
-    public const OPERATOR_GTE = '>=';
-    public const OPERATOR_IN = 'IN';
-    public const OPERATOR_BETWEEN = 'BETWEEN';
-    public const OPERATOR_NOT_BETWEEN = 'NOT BETWEEN';
-    public const OPERATOR_NOT_IN = 'NOT IN';
-    public const OPERATOR_STARTS_WITH = 'STARTS_WITH';
-    public const OPERATOR_ENDS_WITH = 'ENDS_WITH';
-    public const OPERATOR_CONTAINS = 'CONTAINS';
+    private const NAME = 'NotOrderedWithPaymentCondition';
+
+    /**
+     * @var int[]
+     */
+    protected array $paymentIds;
+
+    /**
+     * @param int[] $paymentIds
+     */
+    public function __construct(array $paymentIds)
+    {
+        $this->paymentIds = $paymentIds;
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getPaymentIds(): array
+    {
+        return $this->paymentIds;
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
+    }
 }

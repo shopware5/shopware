@@ -75,7 +75,15 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNoAddressWithCountryConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.has_canceled_orders_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasCanceledOrdersConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNoCanceledOrdersConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
 
@@ -83,7 +91,11 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
-        <service id="customer_search.dbal.condition.has_order_count_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasOrderCountConditionHandler">
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNoNewsletterRegistrationConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasOrderCountConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
 
@@ -99,6 +111,10 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsNotInCustomerGroupConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.ordered_at_weekday_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedAtWeekdayConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
@@ -107,9 +123,18 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedInLastDaysConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.ordered_in_shop_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInShopConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedInShopConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
 
         <service id="customer_search.dbal.condition.ordered_on_device_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedOnDeviceConditionHandler">
             <tag name="customer_search.condition_handler"/>
@@ -119,7 +144,16 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedProductConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.ordered_product_of_category_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedProductOfCategoryConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedProductOfCategoryConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
 
@@ -127,7 +161,15 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedProductOfManufacturerConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.ordered_with_delivery_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedWithDeliveryConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedWithDeliveryConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
 
@@ -135,11 +177,23 @@
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedWithPaymentConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.registered_in_shop_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\RegisteredInShopConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
 
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotRegisteredInShopConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
         <service id="customer_search.dbal.condition.salutation_handler" class="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\SalutationConditionHandler">
+            <tag name="customer_search.condition_handler"/>
+        </service>
+
+        <service id="Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotSalutationConditionHandler">
             <tag name="customer_search.condition_handler"/>
         </service>
 

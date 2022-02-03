@@ -389,7 +389,13 @@ Ext.define('Shopware.apps.Customer.view.main.StreamView', {
             });
         });
 
-        return new Ext.menu.Menu({ items: items });
+        return new Ext.menu.Menu(
+            {
+                height: 500,
+                overflowY: 'scroll',
+                items: items
+            }
+        );
     },
 
     onSelectInlineStream: function(event, element) {
