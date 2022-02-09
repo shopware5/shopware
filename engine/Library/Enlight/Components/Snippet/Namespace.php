@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Enlight
  *
@@ -37,16 +39,16 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     protected $_allowModifications = true;
 
     /**
-     * @var Enlight_Components_Snippet_Namespace
+     * @var Enlight_Components_Snippet_Namespace|null
      */
     protected $fallback;
 
     /**
-     * @param array|bool $options
+     * @param array<string, mixed> $options
      */
-    public function __construct($options = null)
+    public function __construct(array $options)
     {
-        $name = $options['name'] !== null ? $options['name'] : '';
+        $name = $options['name'] ?? '';
         unset($options['name']);
         parent::__construct($name, $options);
         $this->read();
@@ -62,6 +64,8 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
 
     /**
      * @param Enlight_Components_Snippet_Namespace $fallback
+     *
+     * @return void
      */
     public function setFallback($fallback)
     {
@@ -71,8 +75,9 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
     /**
      * Retrieves a value and returns $default if there is no element set.
      *
-     * @param string $name
-     * @param bool   $save
+     * @param string      $name
+     * @param string|null $default
+     * @param bool        $save
      */
     public function get($name, $default = null, $save = false)
     {
@@ -82,7 +87,7 @@ class Enlight_Components_Snippet_Namespace extends Enlight_Config
         if (\array_key_exists($name, $this->_data)) {
             return $this->_data[$name];
         }
-        if ($default == null && $this->fallback) {
+        if ($default === null && $this->fallback) {
             $default = $this->fallback->get($name);
         }
         if ($save) {

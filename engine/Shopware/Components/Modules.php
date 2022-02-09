@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,12 +34,13 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     /**
      * Container that hold references to all modules already loaded
      *
-     * @var array
+     * @var array<string, object|null>
      */
     protected $modules_container = [];
 
     /**
-     * @param string $name
+     * @param string     $name
+     * @param mixed|null $value
      */
     public function __call($name, $value = null)
     {
@@ -48,6 +51,8 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      * Set class property
      *
      * @param \sSystem $system
+     *
+     * @return void
      */
     public function setSystem($system)
     {
@@ -61,7 +66,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
      */
     public function getModule($name)
     {
-        if (strpos($name, 's') === 0) {
+        if (str_starts_with($name, 's')) {
             $name = substr($name, 1);
         }
         if ($name !== 'RewriteTable') {
@@ -219,10 +224,8 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     /**
      * Load a module defined by $name
      * Possible values for $name - sBasket, sAdmin etc.
-     *
-     * @param string $name
      */
-    private function loadModule($name)
+    private function loadModule(string $name): void
     {
         if (isset($this->modules_container[$name])) {
             return;

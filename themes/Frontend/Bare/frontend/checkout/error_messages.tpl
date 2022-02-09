@@ -71,5 +71,3 @@
         {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetInvalidVoucherGotRemoved remoteMessageLink={url removeMessage="voucher"}}
     {/if}
 {/block}
-
-

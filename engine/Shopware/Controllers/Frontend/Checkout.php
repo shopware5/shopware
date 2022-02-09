@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,6 +45,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Shop\Currency;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * @phpstan-type CheckoutBasketArray array{content: array<string, mixed>, Amount: string, AmountNet: string, Quantity: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax: string, AmountWithTaxNumeric: float, sCurrencyId: int, sShippingcostsTax?: float, sShippingcostsTaxProportional?: array<\Shopware\Components\Cart\Struct\Price>, sShippingcostsNet: float, sShippingcostsWithTax: float, sAmount: float, sAmountTax: float}
@@ -575,9 +578,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function addArticleAction()
     {
-        if (strtolower($this->Request()->getMethod()) !== 'post') {
-            throw new LogicException('This action only admits post requests');
-        }
+        $this->validatePostMethod();
 
         $ordernumber = trim($this->Request()->getParam('sAdd'));
         $quantity = (int) $this->Request()->getParam('sQuantity');
@@ -696,11 +697,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         if ($this->Request()->isPost()) {
             if (!$this->Request()->getParam('sAddPremium')) {
-                $this->View()->assign('sBasketInfo', Shopware()->Snippets()->getNamespace('frontend')->get(
-                    'CheckoutSelectPremiumVariant',
-                    'Please select an option to place the required premium to the cart',
-                    true
-                ));
+                $this->session->offsetSet(
+                    'sErrorMessages',
+                    $this->container->get('snippets')->getNamespace('frontend')->get(
+                        'CheckoutSelectPremiumVariant',
+                        'Please select an option to place the required premium to the cart'
+                    )
+                );
             } else {
                 $this->basket->sSYSTEM->_GET['sAddPremium'] = $this->Request()->getParam('sAddPremium');
                 $this->basket->sInsertPremium();
@@ -1601,9 +1604,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxAddArticleCartAction()
     {
-        if (strtolower($this->Request()->getMethod()) !== 'post') {
-            throw new LogicException('This action only admits post requests');
-        }
+        $this->validatePostMethod();
 
         $orderNumber = $this->Request()->getParam('sAdd');
         $quantity = $this->Request()->getParam('sQuantity');
@@ -1637,9 +1638,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function ajaxDeleteArticleCartAction()
     {
-        if (strtolower($this->Request()->getMethod()) !== 'post') {
-            throw new LogicException('This action only admits post requests');
-        }
+        $this->validatePostMethod();
 
         $itemId = $this->Request()->getParam('sDelete');
 
@@ -2150,5 +2149,12 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         }
 
         return $countryTranslations[$countryId]['allow_shipping'];
+    }
+
+    private function validatePostMethod(): void
+    {
+        if (strtoupper($this->Request()->getMethod()) !== SymfonyRequest::METHOD_POST) {
+            throw new LogicException('This action only admits post requests');
+        }
     }
 }

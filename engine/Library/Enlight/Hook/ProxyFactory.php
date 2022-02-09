@@ -83,7 +83,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
             throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Proxy', $proxyDir));
         }
 
-        $proxyDir = rtrim(Enlight_Loader::realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
+        $proxyDir = rtrim((string) Enlight_Loader::realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
 
         $this->proxyDir = $proxyDir;
     }

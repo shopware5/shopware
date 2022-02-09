@@ -476,86 +476,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Session/Namespace.php
 
 		-
-			message: "#^Method Enlight_Components_Snippet_Manager\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Manager.php
-
-		-
-			message: "#^Property Enlight_Components_Snippet_Manager\\:\\:\\$ignoreNamespace \\(string\\) does not accept bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Manager.php
-
-		-
-			message: "#^Property Enlight_Components_Snippet_Manager\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Manager.php
-
-		-
-			message: "#^Cannot access offset 'name' on array\\|bool\\|null\\.$#"
-			count: 3
-			path: engine/Library/Enlight/Components/Snippet/Namespace.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Namespace.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Namespace.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:get\\(\\) has parameter \\$default with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Namespace.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Namespace\\:\\:setFallback\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Namespace.php
-
-		-
-			message: "#^Right side of && is always true\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Namespace.php
-
-		-
-			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:compileSnippetBlock\\(\\) has parameter \\$content with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:compileSnippetBlock\\(\\) has parameter \\$params with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:getSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:getSnippet\\(\\) has parameter \\$default with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
-			message: "#^Method Enlight_Components_Snippet_Resource\\:\\:populate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
-			message: "#^Parameter \\#1 \\$namespace of method Enlight_Components_Snippet_Resource\\:\\:getSnippet\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Snippet/Resource.php
-
-		-
 			message: "#^Method Enlight_Components_Table\\:\\:_getReferenceMapNormalized\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Table.php
@@ -581,11 +501,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Test/TestCase.php
 
 		-
-			message: "#^Cannot access an offset on bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
 			message: "#^Class Enlight_Config implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Library/Enlight/Config.php
@@ -596,67 +511,7 @@ parameters:
 			path: engine/Library/Enlight/Config.php
 
 		-
-			message: "#^Method Enlight_Config\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:get\\(\\) has parameter \\$default with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
 			message: "#^Method Enlight_Config\\:\\:getDirtyFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:getDirtyFields\\(\\) should return array but returns bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:getName\\(\\) should return Enlight_Config but returns string\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:offsetGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:set\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:setData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:setData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:setDefaultAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Method Enlight_Config\\:\\:setDirtyFields\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config.php
 
@@ -671,16 +526,6 @@ parameters:
 			path: engine/Library/Enlight/Config.php
 
 		-
-			message: "#^Property Enlight_Config\\:\\:\\$_dirtyFields \\(bool\\) does not accept array\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Config.php
-
-		-
-			message: "#^Property Enlight_Config\\:\\:\\$_dirtyFields \\(bool\\) does not accept default value of type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config.php
-
-		-
 			message: "#^Method Enlight_Config_Adapter\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/Adapter.php
@@ -689,11 +534,6 @@ parameters:
 			message: "#^Method Enlight_Config_Adapter\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/Adapter.php
-
-		-
-			message: "#^Binary operation \"\\.\" between string and Enlight_Config results in an error\\.$#"
-			count: 3
-			path: engine/Library/Enlight/Config/Adapter/DbTable.php
 
 		-
 			message: "#^Method Enlight_Config_Adapter_DbTable\\:\\:delete\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
@@ -746,11 +586,6 @@ parameters:
 			path: engine/Library/Enlight/Config/Adapter/File.php
 
 		-
-			message: "#^Parameter \\#1 \\$name of method Enlight_Config_Adapter_File\\:\\:getFilename\\(\\) expects string, Enlight_Config given\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Config/Adapter/File.php
-
-		-
 			message: "#^Property Enlight_Config_Adapter_File\\:\\:\\$_configDir type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/Adapter/File.php
@@ -766,32 +601,7 @@ parameters:
 			path: engine/Library/Enlight/Config/BaseConfig.php
 
 		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:__get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
 			message: "#^Method Enlight_Config_BaseConfig\\:\\:_arrayMergeRecursive\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:_loadFileErrorHandler\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:get\\(\\) has parameter \\$default with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/BaseConfig.php
 
@@ -801,17 +611,7 @@ parameters:
 			path: engine/Library/Enlight/Config/BaseConfig.php
 
 		-
-			message: "#^Method Enlight_Config_BaseConfig\\:\\:setReadOnly\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
 			message: "#^Method Enlight_Config_BaseConfig\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Config/BaseConfig.php
-
-		-
-			message: "#^Property Enlight_Config_BaseConfig\\:\\:\\$_data type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/BaseConfig.php
 
@@ -2463,11 +2263,6 @@ parameters:
 		-
 			message: "#^Method Enlight_Loader\\:\\:loadFile\\(\\) has no return type specified\\.$#"
 			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Method Enlight_Loader\\:\\:realpath\\(\\) should return string but returns string\\|false\\.$#"
-			count: 2
 			path: engine/Library/Enlight/Loader.php
 
 		-
@@ -21146,27 +20941,7 @@ parameters:
 			path: engine/Shopware/Components/Modules.php
 
 		-
-			message: "#^Method Shopware_Components_Modules\\:\\:__call\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Modules.php
-
-		-
 			message: "#^Method Shopware_Components_Modules\\:\\:getModule\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Modules.php
-
-		-
-			message: "#^Method Shopware_Components_Modules\\:\\:loadModule\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Modules.php
-
-		-
-			message: "#^Method Shopware_Components_Modules\\:\\:setSystem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Modules.php
-
-		-
-			message: "#^Property Shopware_Components_Modules\\:\\:\\$modules_container type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Modules.php
 
@@ -23564,71 +23339,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Snippet\\\\DatabaseHandler\\:\\:setOutput\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Snippet/DatabaseHandler.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Shop\\\\Locale\\|null\\.$#"
-			count: 5
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Method Shopware_Components_Snippet_Manager\\:\\:__construct\\(\\) has parameter \\$pluginDirectories with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Method Shopware_Components_Snippet_Manager\\:\\:__construct\\(\\) has parameter \\$snippetConfig with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Method Shopware_Components_Snippet_Manager\\:\\:__construct\\(\\) has parameter \\$themeDir with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Method Shopware_Components_Snippet_Manager\\:\\:getPluginDirs\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, string\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Method Shopware_Components_Snippet_Manager\\:\\:initExtends\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method Enlight_Components_Snippet_Namespace\\:\\:get\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Parameter \\#1 \\$namespace of method Shopware_Components_Snippet_Manager\\:\\:createDbNamespace\\(\\) expects string, string\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Parameter \\#1 \\$namespace of method Shopware_Components_Snippet_Manager\\:\\:createIniNamespace\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Parameter \\#1 \\$section of method Enlight_Config\\:\\:setSection\\(\\) expects array\\|string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Property Shopware_Components_Snippet_Manager\\:\\:\\$extends type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Property Shopware_Components_Snippet_Manager\\:\\:\\$pluginDirectories type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
-
-		-
-			message: "#^Property Shopware_Components_Snippet_Manager\\:\\:\\$snippetConfig type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Manager.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Snippet\\\\QueryHandler\\:\\:loadToQuery\\(\\) return type has no value type specified in iterable type array\\.$#"

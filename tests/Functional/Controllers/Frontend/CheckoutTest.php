@@ -38,6 +38,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
@@ -140,6 +141,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $this->reset();
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setParam('sQuantity', 5);
+        $this->Request()->setMethod(Request::METHOD_GET);
         $this->dispatch('/checkout/addArticle/sAdd/' . self::PRODUCT_NUMBER);
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();

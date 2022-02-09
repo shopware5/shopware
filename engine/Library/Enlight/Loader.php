@@ -152,7 +152,7 @@ class Enlight_Loader
      *
      * @param string $path
      *
-     * @return string
+     * @return string|false
      */
     public static function realpath($path)
     {
