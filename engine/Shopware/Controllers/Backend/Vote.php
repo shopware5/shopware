@@ -59,9 +59,8 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
 
         //assign shops over additional query to improve performance
         $shops = $this->getShops($shopIds);
-        $list = $this->assignShops($list, $shops);
 
-        return $list;
+        return $this->assignShops($list, $shops);
     }
 
     protected function getListQuery()
@@ -73,11 +72,6 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
         return $query;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return \Shopware\Components\Model\QueryBuilder
-     */
     protected function getDetailQuery($id)
     {
         $query = parent::getDetailQuery($id);
@@ -102,10 +96,10 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
     }
 
     /**
-     * @param array[] $list
-     * @param array[] $shops indexed by id
+     * @param array{success: true, data: array<array<string, mixed>>, total: int} $list
+     * @param array<int, array<string, mixed>>                                    $shops indexed by id
      *
-     * @return array[]
+     * @return array{success: true, data: array<array<string, mixed>>, total: int}
      */
     protected function assignShops($list, $shops)
     {
@@ -124,15 +118,15 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
     /**
      * @param array<int, int|string> $shopIds
      *
-     * @return array indexed by id
+     * @return array<int, array<string, mixed>> indexed by id
      */
-    private function getShops(array $shopIds)
+    private function getShops(array $shopIds): array
     {
         if (empty($shopIds)) {
             return [];
         }
 
-        $query = $this->container->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $query = $this->container->get(Connection::class)->createQueryBuilder();
         $query->select('*');
         $query->from('s_core_shops', 'shops');
         $query->where('shops.id IN (:ids)');
