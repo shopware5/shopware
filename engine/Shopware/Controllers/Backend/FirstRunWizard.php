@@ -30,10 +30,10 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Components\Theme\Service;
-use Shopware\Models\Document\Element;
+use Shopware\Models\Config\Element as ConfigElement;
+use Shopware\Models\Document\Element as DocumentElement;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
-use Symfony\Component\Filesystem\Filesystem;
 
 class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -49,13 +49,13 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
     /**
      * Saves the current wizard status (enabled/disabled) to the database
+     *
+     * @return void
      */
     public function saveEnabledAction()
     {
         $value = (bool) $this->Request()->getParam('value');
-        $element = $this->get('models')
-            ->getRepository(\Shopware\Models\Config\Element::class)
-            ->findOneBy(['name' => 'firstRunWizardEnabled']);
+        $element = $this->get('models')->getRepository(ConfigElement::class)->findOneBy(['name' => 'firstRunWizardEnabled']);
 
         $defaultShop = $this->get('models')->getRepository(Shop::class)->getDefault();
 
@@ -73,7 +73,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ],
         ];
 
-        /** @var StoreClient $storeClient */
         $storeClient = $this->container->get(StoreClient::class);
         $storeClient->doTrackEvent('First Run Wizard completed');
 
@@ -84,13 +83,15 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
     /**
      * Saves the current wizard step to the database
+     *
+     * @return void
      */
     public function saveConfigurationAction()
     {
         $values = $this->Request()->getParams();
         $defaultShop = $this->get('models')->getRepository(Shop::class)->getDefault();
 
-        if (strpos($values['desktopLogo'], 'media/') === 0) {
+        if (str_starts_with($values['desktopLogo'], 'media/')) {
             $values['tabletLandscapeLogo'] = $values['desktopLogo'];
             $values['tabletLogo'] = $values['desktopLogo'];
             $values['mobileLogo'] = $values['desktopLogo'];
@@ -147,7 +148,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         foreach ($shopConfigValues as $configName => $configValue) {
             $element = $this->get('models')
-                ->getRepository(\Shopware\Models\Config\Element::class)
+                ->getRepository(ConfigElement::class)
                 ->findOneBy(['name' => $configName]);
 
             if ($configName === 'emailheaderhtml') {
@@ -192,7 +193,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         foreach ($documentConfigValues as $key => $value) {
             $key = str_replace('__document_', '', $key);
-            $elements = $this->get('models')->getRepository(Element::class)->findBy(['name' => $key]);
+            $elements = $this->get('models')->getRepository(DocumentElement::class)->findBy(['name' => $key]);
 
             if (empty($elements) || empty($value)) {
                 continue;
@@ -224,15 +225,13 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
     /**
      * Saves the current wizard step to the database
+     *
+     * @return void
      */
     public function loadConfigurationAction()
     {
-        $defaultShop = $this->container->get(ModelManager::class)
-            ->getRepository(Shop::class)
-            ->getDefault();
-        $theme = $this->container->get(ModelManager::class)
-            ->getRepository(Template::class)
-            ->findOneBy(['template' => 'Responsive']);
+        $defaultShop = $this->container->get(ModelManager::class)->getRepository(Shop::class)->getDefault();
+        $theme = $this->container->get(ModelManager::class)->getRepository(Template::class)->findOneBy(['template' => 'Responsive']);
 
         /**
          * Load theme config values
@@ -278,7 +277,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             'elements',
             'values',
         ])
-            ->from('Shopware\Models\Config\Element', 'elements')
+            ->from(ConfigElement::class, 'elements')
             ->leftJoin('elements.values', 'values', 'WITH', 'values.shopId = :shopId')
             ->where('elements.name IN (:optionNames)')
             ->orderBy('elements.id')
@@ -310,10 +309,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      * Tests connectivity to SBP server
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function pingServerAction()
     {
-        /** @var AccountManagerService $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -335,10 +335,11 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
     /**
      * Gets the available backend locales excluding the current one
+     *
+     * @return void
      */
     public function getAlternativeLocalesAction()
     {
-        /** @var \Shopware\Models\Shop\Locale $targetLocale */
         $targetLocale = Shopware()->Container()->get('auth')->getIdentity()->locale;
 
         $locales = Shopware()->Plugins()->Backend()->Auth()->getLocales();
@@ -447,9 +448,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      */
     public function registerDomainAction()
     {
-        $shop = $this->container->get(ModelManager::class)
-            ->getRepository(Shop::class)
-            ->getDefault();
+        $shop = $this->container->get(ModelManager::class)->getRepository(Shop::class)->getDefault();
 
         $shopwareId = $this->Request()->get('shopwareID');
         $password = $this->Request()->get('password');
@@ -468,7 +467,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $domains = $this->getDomains($token);
 
-        if (\in_array($domain, $domains)) {
+        if (\in_array($domain, $domains, true)) {
             $this->View()->assign([
                 'success' => true,
                 'message' => $this->get('snippets')
@@ -477,7 +476,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             ]);
         }
 
-        /** @var AccountManagerService $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -502,7 +500,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return;
         }
 
-        /** @var Filesystem $fileSystem */
         $fileSystem = $this->container->get('file_system');
         $rootDir = $this->container->getParameter('kernel.root_dir');
         if (!\is_string($rootDir)) {
@@ -633,9 +630,8 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @return string[]|null Information about the current user's shop domains
      */
-    private function getDomains(AccessTokenStruct $token)
+    private function getDomains(AccessTokenStruct $token): ?array
     {
-        /** @var AccountManagerService $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -649,25 +645,20 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             return null;
         }
 
-        $shopsDomains = array_map(function ($shopData) {
+        return array_map(function ($shopData) {
             return $shopData->domain;
         }, $shopsData);
-
-        return $shopsDomains;
     }
 
     /**
      * Loads the SBP token from current session
      * If no valid token is available, queries the server for a new one
      *
-     * @param string $shopwareId
-     * @param string $password
-     *
      * @throws RuntimeException
      *
      * @return AccessTokenStruct Token to access the API
      */
-    private function getToken($shopwareId, $password)
+    private function getToken(string $shopwareId, string $password): AccessTokenStruct
     {
         $token = Shopware()->BackendSession()->get('accessToken');
 
@@ -676,7 +667,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
                 throw new RuntimeException('Could not login - missing login data');
             }
 
-            /** @var AccountManagerService $accountManagerService */
             $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             $token = $accountManagerService->getToken($shopwareId, $password);
