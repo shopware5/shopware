@@ -28281,22 +28281,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:getAlternativeLocalesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:loadConfigurationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:loginAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:pingServerAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
@@ -28307,16 +28292,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:registerNewIdAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:saveConfigurationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_FirstRunWizard\\:\\:saveEnabledAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 

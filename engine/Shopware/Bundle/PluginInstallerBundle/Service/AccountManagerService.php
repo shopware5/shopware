@@ -25,7 +25,6 @@
 namespace Shopware\Bundle\PluginInstallerBundle\Service;
 
 use Exception;
-use GuzzleHttp\ClientInterface;
 use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
@@ -37,29 +36,14 @@ use Shopware_Components_Snippet_Manager;
 
 class AccountManagerService
 {
-    /**
-     * @var StoreClient
-     */
-    private $storeClient;
+    private StoreClient $storeClient;
 
-    /**
-     * @var StructHydrator
-     */
-    private $hydrator;
+    private StructHydrator $hydrator;
 
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippetManager;
+    private Shopware_Components_Snippet_Manager $snippetManager;
 
-    /**
-     * @var ModelManager
-     */
-    private $entityManager;
+    private ModelManager $entityManager;
 
-    /**
-     * @internal param ClientInterface $guzzleHttpClient
-     */
     public function __construct(
         StoreClient $storeClient,
         StructHydrator $structHydrator,
@@ -77,9 +61,7 @@ class AccountManagerService
      */
     public function getDomain()
     {
-        $repo = $this->entityManager->getRepository(Shop::class);
-
-        $default = $repo->getActiveDefault();
+        $default = $this->entityManager->getRepository(Shop::class)->getActiveDefault();
 
         return (string) $default->getHost();
     }
@@ -106,6 +88,8 @@ class AccountManagerService
 
     /**
      * Requests the creation of a new Shopware ID anc account (registration action)
+     *
+     * @deprecated since 5.7.8, will be removed in 5.8 without replacement.
      *
      * @param string $shopwareId
      * @param string $email
@@ -233,10 +217,7 @@ class AccountManagerService
         }
     }
 
-    /**
-     * @return Exception
-     */
-    private function translateExceptionMessage(StoreException $exception)
+    private function translateExceptionMessage(StoreException $exception): Exception
     {
         $namespace = $this->snippetManager
             ->getNamespace('backend/plugin_manager/exceptions');
