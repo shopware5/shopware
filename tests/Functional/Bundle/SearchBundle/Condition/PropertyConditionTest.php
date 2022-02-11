@@ -268,17 +268,16 @@ class PropertyConditionTest extends TestCase
     }
 
     /**
-     * @param string               $number
      * @param array<string, mixed> $properties
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $properties = []
-    ) {
+    ): array {
         $product = parent::getProduct($number, $context, $category);
 
         return array_merge($product, $properties);

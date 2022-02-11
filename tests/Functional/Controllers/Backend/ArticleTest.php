@@ -91,7 +91,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
     public function testSaveArticleOverwriteProtection(): void
     {
         $helper = new Helper();
-        $article = $helper->createArticle([
+        $article = $helper->createProduct([
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,

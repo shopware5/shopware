@@ -157,11 +157,10 @@ class VoteAverageConditionTest extends TestCase
     }
 
     /**
-     * @param string            $number
-     * @param array<int, array> $additionally
+     * @param array<string, array<int>> $additionally
      */
     protected function createProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category,
         $additionally
@@ -176,6 +175,8 @@ class VoteAverageConditionTest extends TestCase
         foreach ($additionally as $shopId => $votes) {
             if (empty($shopId)) {
                 $shopId = null;
+            } else {
+                $shopId = (int) $shopId;
             }
             $this->helper->createVotes($article->getId(), $votes, $shopId);
         }
@@ -185,7 +186,7 @@ class VoteAverageConditionTest extends TestCase
 
     private function createCategory(Shop $shop): Category
     {
-        $category = Shopware()->Container()->get(ModelManager::class)
+        $category = $this->getContainer()->get(ModelManager::class)
             ->find(Category::class, $shop->getCategory()->getId());
 
         return $this->helper->createCategory(['parent' => $category]);

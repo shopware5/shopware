@@ -56,13 +56,12 @@ class IsNewConditionTest extends TestCase
     }
 
     /**
-     * @param string               $number
      * @param array<string, mixed> $data
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $data = []

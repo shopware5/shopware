@@ -29,6 +29,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Category\Category;
@@ -81,7 +82,7 @@ class VariantConditionTest extends TestCase
 
         $condition = $this->createCondition(['xl', 'l'], 'size');
         $sorting = new PriceSorting();
-        $sorting->setDirection(PriceSorting::SORT_ASC);
+        $sorting->setDirection(SortingInterface::SORT_ASC);
 
         $result = $this->search(
             [
@@ -136,7 +137,7 @@ class VariantConditionTest extends TestCase
         $conditionColor = $this->createCondition(['red', 'green'], 'color');
         $conditionSize = $this->createCondition(['l', 'xl'], 'size');
         $sorting = new PriceSorting();
-        $sorting->setDirection(PriceSorting::SORT_ASC);
+        $sorting->setDirection(SortingInterface::SORT_ASC);
 
         $result = $this->search(
             [
@@ -189,7 +190,7 @@ class VariantConditionTest extends TestCase
 
         $condition = $this->createCondition(['xl', 'l'], 'size', true);
         $sorting = new PriceSorting();
-        $sorting->setDirection(PriceSorting::SORT_ASC);
+        $sorting->setDirection(SortingInterface::SORT_ASC);
 
         $result = $this->search(
             [
@@ -248,7 +249,7 @@ class VariantConditionTest extends TestCase
         $conditionColor = $this->createCondition(['red', 'green'], 'color', true);
         $conditionSize = $this->createCondition(['l', 'xl'], 'size', true);
         $sorting = new PriceSorting();
-        $sorting->setDirection(PriceSorting::SORT_ASC);
+        $sorting->setDirection(SortingInterface::SORT_ASC);
 
         $result = $this->search(
             [
@@ -308,7 +309,7 @@ class VariantConditionTest extends TestCase
         $conditionColor = $this->createCondition(['red', 'blue'], 'color', true);
         $conditionSize = $this->createCondition(['l', 'xl'], 'size');
         $sorting = new PriceSorting();
-        $sorting->setDirection(PriceSorting::SORT_ASC);
+        $sorting->setDirection(SortingInterface::SORT_ASC);
 
         $result = $this->search(
             [
@@ -345,13 +346,12 @@ class VariantConditionTest extends TestCase
     /**
      * Get products and set the graduated prices of the variants.
      *
-     * @param string $number
-     * @param array  $data
+     * @param array $data
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $data = []
@@ -416,7 +416,6 @@ class VariantConditionTest extends TestCase
     {
         $groups = [];
         foreach ($expected as $group => $optionNames) {
-            /* @var Group[] $allGroups */
             foreach ($this->groups as $globalGroup) {
                 if ($globalGroup->getName() !== $group) {
                     continue;

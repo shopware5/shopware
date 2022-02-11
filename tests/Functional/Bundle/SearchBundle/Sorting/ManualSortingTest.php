@@ -86,8 +86,11 @@ class ManualSortingTest extends TestCase
         );
     }
 
+    /**
+     * @param int $position
+     */
     protected function createProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category,
         $position
@@ -109,15 +112,15 @@ class ManualSortingTest extends TestCase
     }
 
     protected function search(
-        $products,
-        $expectedNumbers,
-        $category = null,
-        $conditions = [],
-        $facets = [],
-        $sortings = [],
+        array $products,
+        array $expectedNumbers,
+        Category $category = null,
+        array $conditions = [],
+        array $facets = [],
+        array $sortings = [],
         $context = null,
         array $configs = [],
-        $variantSearch = false
+        bool $variantSearch = false
     ): ProductNumberSearchResult {
         $result = parent::search(
             $products,

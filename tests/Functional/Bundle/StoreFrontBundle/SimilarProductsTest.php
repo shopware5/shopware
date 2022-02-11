@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -112,13 +114,11 @@ class SimilarProductsTest extends TestCase
 
         static::assertCount(2, $similarProductList);
 
-        /** @var ListProduct $product */
         foreach ($products as $product) {
             $similarProducts = $similarProductList[$product->getNumber()];
 
             static::assertCount(4, $similarProducts);
 
-            /** @var ListProduct $similarProduct */
             foreach ($similarProducts as $similarProduct) {
                 static::assertInstanceOf(ListProduct::class, $similarProduct);
                 static::assertContains($similarProduct->getNumber(), $similarNumbers);
@@ -140,7 +140,7 @@ class SimilarProductsTest extends TestCase
         }
 
         $helper = new Helper();
-        $convertedShop = (new Converter())->convertShop($helper->getShop(1));
+        $convertedShop = (new Converter())->convertShop($helper->getShop());
         if (!$convertedShop->getCurrency()) {
             $convertedShop->setCurrency($context->getCurrency());
         }
@@ -171,7 +171,7 @@ class SimilarProductsTest extends TestCase
     ): Article {
         $data = $this->getProduct($number, $context, $category);
 
-        return $this->helper->createArticle($data);
+        return $this->helper->createProduct($data);
     }
 
     /**

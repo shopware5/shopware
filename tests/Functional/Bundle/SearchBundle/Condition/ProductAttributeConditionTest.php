@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Shopware\Bundle\SearchBundle\Condition\ProductAttributeCondition;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
@@ -40,7 +41,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_EQ,
+            ConditionInterface::OPERATOR_EQ,
             10
         );
 
@@ -59,7 +60,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_CONTAINS,
+            ConditionInterface::OPERATOR_CONTAINS,
             'Rot'
         );
 
@@ -79,7 +80,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_ENDS_WITH,
+            ConditionInterface::OPERATOR_ENDS_WITH,
             'Grün'
         );
 
@@ -100,7 +101,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_STARTS_WITH,
+            ConditionInterface::OPERATOR_STARTS_WITH,
             'Grün'
         );
 
@@ -121,7 +122,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_IN,
+            ConditionInterface::OPERATOR_IN,
             ['Grün', 'Rot']
         );
 
@@ -142,7 +143,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_EQ,
+            ConditionInterface::OPERATOR_EQ,
             null
         );
 
@@ -163,7 +164,7 @@ class ProductAttributeConditionTest extends TestCase
     {
         $condition = new ProductAttributeCondition(
             'attr1',
-            ProductAttributeCondition::OPERATOR_NEQ,
+            ConditionInterface::OPERATOR_NEQ,
             null
         );
 
@@ -181,7 +182,7 @@ class ProductAttributeConditionTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $attribute = ['attr1' => 10]

@@ -90,13 +90,12 @@ class ImmediateDeliveryConditionTest extends TestCase
     }
 
     /**
-     * @param string             $number
      * @param array<string, int> $data
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $data = ['inStock' => 0, 'minPurchase' => 1]
@@ -109,8 +108,11 @@ class ImmediateDeliveryConditionTest extends TestCase
         return $product;
     }
 
+    /**
+     * @param array<string, mixed> $additionally
+     */
     protected function createProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category,
         $additionally
@@ -128,7 +130,7 @@ class ImmediateDeliveryConditionTest extends TestCase
                 $variant['minPurchase'] = 1;
             }
 
-            return $this->helper->createArticle($fourth);
+            return $this->helper->createProduct($fourth);
         }
 
         return parent::createProduct(

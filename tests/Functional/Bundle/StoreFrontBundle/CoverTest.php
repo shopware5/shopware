@@ -40,7 +40,7 @@ class CoverTest extends TestCase
         $number = 'Cover-Test';
         $context = $this->getContext();
         $data = $this->getProduct($number, $context);
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $product = $this->helper->getListProduct($number, $context);
 
@@ -52,7 +52,7 @@ class CoverTest extends TestCase
         $this->resetContext();
         $number = 'Cover-Test-Multiple';
         $context = $this->getContext();
-        $this->helper->createArticle(
+        $this->helper->createProduct(
             $this->getProduct($number, $context, null, 10)
         );
 
@@ -80,8 +80,8 @@ class CoverTest extends TestCase
             ['main' => 1]
         );
 
-        $this->helper->createArticle($product1);
-        $this->helper->createArticle($product2);
+        $this->helper->createProduct($product1);
+        $this->helper->createProduct($product2);
 
         $products = $this->helper->getListProducts(
             [$number . '-1', $number . '-2'],
@@ -117,7 +117,7 @@ class CoverTest extends TestCase
         $context = $this->getContext();
 
         $data = $this->getVariantImageProduct($number, $context);
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $variants = $this->helper->getListProducts(
             array_column($data['variants'], 'number'),
@@ -150,7 +150,7 @@ class CoverTest extends TestCase
         $number = 'Force-Main-Cover-Test';
         $context = $this->getContext();
         $data = $this->getVariantImageProduct($number, $context);
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $variants = $this->helper->getListProducts(
             array_column($data['variants'], 'number'),
@@ -182,7 +182,7 @@ class CoverTest extends TestCase
 
         $data = $this->getVariantImageProduct($number, $context);
         $data['variants'][0]['images'] = [];
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $variants = $this->helper->getListProducts(
             array_column($data['variants'], 'number'),
@@ -200,13 +200,12 @@ class CoverTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param int    $imageCount
+     * @param int $imageCount
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $imageCount = 1

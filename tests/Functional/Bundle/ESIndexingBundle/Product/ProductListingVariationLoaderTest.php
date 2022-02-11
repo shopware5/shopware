@@ -50,7 +50,7 @@ class ProductListingVariationLoaderTest extends TestCase
         $context = $this->getContext();
         $productData = $this->getProduct($number, $context);
 
-        $productData = $this->helper->createArticle($productData);
+        $productData = $this->helper->createProduct($productData);
 
         $numbers = array_map(static function (Detail $detail) {
             return $detail->getNumber();
@@ -79,7 +79,7 @@ class ProductListingVariationLoaderTest extends TestCase
         $context = $this->getContext();
         $productData = $this->getProduct($number, $context);
 
-        $productData = $this->helper->createArticle($productData);
+        $productData = $this->helper->createProduct($productData);
 
         $numbers = array_map(static function (Detail $detail) {
             return $detail->getNumber();
@@ -106,7 +106,7 @@ class ProductListingVariationLoaderTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $additionally = null

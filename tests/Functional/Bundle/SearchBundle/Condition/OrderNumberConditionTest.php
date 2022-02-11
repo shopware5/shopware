@@ -54,25 +54,24 @@ class OrderNumberConditionTest extends TestCase
         );
     }
 
-    public function createProducts($products, ShopContext $context, Category $category): array
+    public function createProducts(array $products, ShopContext $context, Category $category): array
     {
         $articles = parent::createProducts($products, $context, $category);
 
-        Shopware()->Container()->get(SearchIndexer::class)->build();
+        $this->getContainer()->get(SearchIndexer::class)->build();
 
-        Shopware()->Container()->get(Zend_Cache_Core::class)->clean('all', ['Shopware_Modules_Search']);
+        $this->getContainer()->get(Zend_Cache_Core::class)->clean('all', ['Shopware_Modules_Search']);
 
         return $articles;
     }
 
     /**
-     * @param string $number
      * @param string $name
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $name = null

@@ -48,11 +48,11 @@ abstract class Enlight_Components_Test_TestCase extends TestCase
     }
 
     /**
-     * Allows to set a shopware config
+     * Allows to set a Shopware config
      *
-     * @param string $name
+     * @param bool|string|null $value
      */
-    protected function setConfig($name, $value)
+    protected function setConfig(string $name, $value): void
     {
         Shopware()->Container()->get('config_writer')->save($name, $value);
         Shopware()->Container()->get(Zend_Cache_Core::class)->clean();

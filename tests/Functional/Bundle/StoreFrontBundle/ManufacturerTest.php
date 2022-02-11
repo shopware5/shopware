@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,11 +26,11 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
+use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 
 class ManufacturerTest extends TestCase
 {
-    public function testManufacturerList()
+    public function testManufacturerList(): void
     {
         $ids = [];
         $context = $this->getContext();
@@ -63,10 +65,9 @@ class ManufacturerTest extends TestCase
         ]);
         $ids[] = $manufacturer->getId();
 
-        $manufacturers = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface::class)
+        $manufacturers = Shopware()->Container()->get(ManufacturerServiceInterface::class)
             ->getList($ids, $context);
 
-        /** @var Manufacturer $manufacturer */
         foreach ($manufacturers as $key => $manufacturer) {
             static::assertEquals($key, $manufacturer->getId());
 

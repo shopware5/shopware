@@ -26,9 +26,12 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Supplier;
+use Shopware\Models\Article\Unit as UnitModel;
 
 class TranslationTest extends TestCase
 {
@@ -38,10 +41,10 @@ class TranslationTest extends TestCase
         $context = $this->getContext();
 
         $product = $this->getProduct($number, $context);
-        $article = $this->helper->createArticle($product);
+        $createdProduct = $this->helper->createProduct($product);
 
         $this->helper->createArticleTranslation(
-            $article->getId(),
+            $createdProduct->getId(),
             $context->getShop()->getId()
         );
 
@@ -57,6 +60,7 @@ class TranslationTest extends TestCase
         static::assertEquals('Dummy Translation', $listProduct->getAdditional());
         static::assertEquals('Dummy Translation', $listProduct->getKeywords());
         static::assertEquals('Dummy Translation', $listProduct->getMetaTitle());
+        static::assertInstanceOf(Unit::class, $listProduct->getUnit());
         static::assertEquals('Dummy Translation', $listProduct->getUnit()->getPackUnit());
     }
 
@@ -66,16 +70,18 @@ class TranslationTest extends TestCase
         $context = $this->getContext();
 
         $product = $this->getProduct($number, $context);
-        $article = $this->helper->createArticle($product);
+        $createdProduct = $this->helper->createProduct($product);
 
+        static::assertInstanceOf(Supplier::class, $createdProduct->getSupplier());
         $this->helper->createManufacturerTranslation(
-            $article->getSupplier()->getId(),
+            $createdProduct->getSupplier()->getId(),
             $context->getShop()->getId()
         );
 
         $product = $this->helper->getListProduct($number, $context);
 
         $manufacturer = $product->getManufacturer();
+        static::assertInstanceOf(Manufacturer::class, $manufacturer);
 
         static::assertEquals('Dummy Translation', $manufacturer->getDescription());
         static::assertEquals('Dummy Translation', $manufacturer->getMetaTitle());
@@ -107,11 +113,10 @@ class TranslationTest extends TestCase
         $variant['unit'] = ['name' => 'Test-Unit-Variant', 'unit' => 'ABC'];
         $product['variants'][1] = $variant;
 
-        $article = $this->helper->createArticle($product);
+        $createdProduct = $this->helper->createProduct($product);
 
         $unit = null;
-        /** @var Detail $detail */
-        foreach ($article->getDetails() as $detail) {
+        foreach ($createdProduct->getDetails() as $detail) {
             if ($variant['number'] === $detail->getNumber()) {
                 $unit = $detail->getUnit();
                 break;
@@ -125,9 +130,11 @@ class TranslationTest extends TestCase
             ],
         ];
 
+        static::assertInstanceOf(Detail::class, $createdProduct->getMainDetail());
+        static::assertInstanceOf(UnitModel::class, $createdProduct->getMainDetail()->getUnit());
         $this->helper->createUnitTranslations(
             [
-                $article->getMainDetail()->getUnit()->getId(),
+                $createdProduct->getMainDetail()->getUnit()->getId(),
                 $unit->getId(),
             ],
             $context->getShop()->getId(),
@@ -165,7 +172,7 @@ class TranslationTest extends TestCase
         $product = array_merge($product, $properties);
 
         $this->helper->createPropertyTranslation($properties['all'], $context->getShop()->getId());
-        $this->helper->createArticle($product);
+        $this->helper->createProduct($product);
 
         $listProduct = $this->helper->getListProduct($number, $context);
         $property = $this->helper->getProductProperties($listProduct, $context);
@@ -206,7 +213,7 @@ class TranslationTest extends TestCase
             $context->getShop()->getId()
         );
 
-        $this->helper->createArticle($product);
+        $this->helper->createProduct($product);
 
         $listProduct = $this->helper->getListProduct($number, $context);
 
@@ -229,7 +236,7 @@ class TranslationTest extends TestCase
         }
     }
 
-    protected function getContext($shopId = 1): TestContext
+    protected function getContext(int $shopId = 1): TestContext
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup();

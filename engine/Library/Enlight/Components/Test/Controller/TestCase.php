@@ -292,19 +292,4 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
 
         return $this->_response;
     }
-
-    /**
-     * Allows to set a Shopware config
-     *
-     * @param string           $name
-     * @param bool|string|null $value
-     *
-     * @return void
-     */
-    protected function setConfig($name, $value)
-    {
-        Shopware()->Container()->get('config_writer')->save($name, $value);
-        Shopware()->Container()->get('cache')->clean();
-        Shopware()->Container()->get('config')->setShop(Shopware()->Shop());
-    }
 }

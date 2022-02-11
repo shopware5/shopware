@@ -1792,7 +1792,7 @@ class BasketTest extends TestCase
     {
         $resourceHelper = new Helper();
         try {
-            $product = $resourceHelper->createArticle([
+            $product = $resourceHelper->createProduct([
                 'name' => 'Testartikel',
                 'description' => 'Test description',
                 'active' => true,
@@ -1863,7 +1863,7 @@ class BasketTest extends TestCase
         $resourceHelper = new Helper();
         try {
             // Setup product for the first basket position - a product that costs EUR 29.97
-            $product = $resourceHelper->createArticle([
+            $product = $resourceHelper->createProduct([
                 'name' => 'Testartikel',
                 'description' => 'Test description',
                 'active' => true,
@@ -1955,7 +1955,7 @@ class BasketTest extends TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Setup product for the first basket position - a product that costs EUR 29.97
-        $product = (new Helper())->createArticle([
+        $product = (new Helper())->createProduct([
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,
@@ -2414,12 +2414,12 @@ class BasketTest extends TestCase
             [
                 'key' => 'EK',
                 'quantity' => 1,
-                'discount' => 15,
+                'discount' => 15.0,
             ],
         ]);
 
         // Create test product
-        $product = $resourceHelper->createArticle([
+        $product = $resourceHelper->createProduct([
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,

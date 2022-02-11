@@ -29,7 +29,6 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandler\CategoryConditionHandler;
-use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactory;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
@@ -66,14 +65,13 @@ class CategoryConditionTest extends TestCase
 
     public function testConditionCounter(): void
     {
-        $queryFactory = Shopware()->Container()->get(QueryBuilderFactory::class);
-        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
+        $queryFactory = $this->getContainer()->get(QueryBuilderFactory::class);
+        $context = $this->getContainer()->get(ContextServiceInterface::class)->getShopContext();
 
         $criteria = new Criteria();
         $criteria->addBaseCondition(new CategoryCondition([1]));
         $criteria->addCondition(new CategoryCondition([2]));
 
-        /** @var QueryBuilder $query */
         $query = $queryFactory->createQuery($criteria, $context);
 
         static::assertTrue($query->hasState(CategoryConditionHandler::STATE_NAME));
@@ -81,7 +79,7 @@ class CategoryConditionTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $additionally = null

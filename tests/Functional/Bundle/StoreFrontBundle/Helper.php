@@ -30,7 +30,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Exception;
-use PDO;
 use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
@@ -53,7 +52,6 @@ use Shopware\Components\Api\Resource\Translation;
 use Shopware\Components\Api\Resource\Variant as VariantResource;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
-use Shopware\Kernel;
 use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option;
@@ -67,10 +65,13 @@ use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware\Models\Tax\Tax as TaxModel;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper\ProgressHelper;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Components_Config;
 
 class Helper
 {
+    use ContainerTrait;
+
     protected Converter $converter;
 
     private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
@@ -156,10 +157,10 @@ class Helper
         ConfiguratorGateway $configuratorGateway = null
     ): ConfiguratorSet {
         if ($productConfigurationGateway === null) {
-            $productConfigurationGateway = Shopware()->Container()->get(ProductConfigurationGatewayInterface::class);
+            $productConfigurationGateway = $this->getContainer()->get(ProductConfigurationGatewayInterface::class);
         }
         if ($configuratorGateway === null) {
-            $configuratorGateway = Shopware()->Container()->get(ConfiguratorGatewayInterface::class);
+            $configuratorGateway = $this->getContainer()->get(ConfiguratorGatewayInterface::class);
         }
 
         $service = new ConfiguratorService(
@@ -176,11 +177,10 @@ class Helper
         StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
     ): PropertySet {
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = Shopware()->Container()->get(ProductPropertyGatewayInterface::class);
+            $productPropertyGateway = $this->getContainer()->get(ProductPropertyGatewayInterface::class);
         }
-        $service = new PropertyService($productPropertyGateway);
 
-        return $service->get($product, $context);
+        return (new PropertyService($productPropertyGateway))->get($product, $context);
     }
 
     /**
@@ -190,14 +190,14 @@ class Helper
      */
     public function getListProducts(array $numbers, ShopContextInterface $context, array $configs = []): array
     {
-        $config = Shopware()->Container()->get(Shopware_Components_Config::class);
+        $config = $this->getContainer()->get(Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
             $config->offsetSet($key, $value);
         }
 
-        $result = Shopware()->Container()->get(ListProductServiceInterface::class)->getList($numbers, $context);
+        $result = $this->getContainer()->get(ListProductServiceInterface::class)->getList($numbers, $context);
         foreach ($originals as $key => $value) {
             $config->offsetSet($key, $value);
         }
@@ -217,6 +217,8 @@ class Helper
      * data for a quick product creation.
      *
      * @param TaxModel|TaxStruct|null $tax
+     *
+     * @return array<string, mixed>
      */
     public function getSimpleProduct(
         string $number,
@@ -255,7 +257,7 @@ class Helper
         }
         $this->removePriceGroup();
         foreach ($this->createdProducts as $number) {
-            $this->removeArticle($number);
+            $this->removeProduct($number);
         }
 
         foreach ($this->createdCustomerGroups as $key) {
@@ -300,7 +302,7 @@ class Helper
         }
     }
 
-    public function removeArticle(string $number): void
+    public function removeProduct(string $number): void
     {
         $productId = $this->db->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
@@ -338,9 +340,12 @@ class Helper
         $this->entityManager->clear();
     }
 
-    public function createArticle(array $data): ProductModel
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function createProduct(array $data): ProductModel
     {
-        $this->removeArticle($data['mainDetail']['number']);
+        $this->removeProduct($data['mainDetail']['number']);
         $this->createdProducts[] = $data['mainDetail']['number'];
 
         return $this->articleApi->create($data);
@@ -457,13 +462,16 @@ class Helper
         $this->translationApi->create($data);
     }
 
+    /**
+     * @param array<array{key: string, quantity: int, discount: float}> $discounts
+     */
     public function createPriceGroup(array $discounts = []): PriceGroup
     {
         if (empty($discounts)) {
             $discounts = [
-                ['key' => 'PHP', 'quantity' => 1,  'discount' => 10],
-                ['key' => 'PHP', 'quantity' => 5,  'discount' => 20],
-                ['key' => 'PHP', 'quantity' => 10, 'discount' => 30],
+                ['key' => 'PHP', 'quantity' => 1,  'discount' => 10.0],
+                ['key' => 'PHP', 'quantity' => 5,  'discount' => 20.0],
+                ['key' => 'PHP', 'quantity' => 10, 'discount' => 30.0],
             ];
         }
 
@@ -698,7 +706,7 @@ class Helper
             ->setParameter('article', $articleId)
             ->setParameter(':names', $optionNames, Connection::PARAM_STR_ARRAY);
 
-        return $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        return $query->execute()->fetchAllAssociative();
     }
 
     public function getProductData(array $data = []): array
@@ -874,8 +882,7 @@ class Helper
 
     public function isElasticSearchEnabled(): bool
     {
-        /** @var Kernel $kernel */
-        $kernel = Shopware()->Container()->get('kernel');
+        $kernel = $this->getContainer()->get('kernel');
 
         return $kernel->isElasticSearchEnabled();
     }
@@ -887,7 +894,7 @@ class Helper
         }
 
         $this->clearSearchIndex();
-        Shopware()->Container()->get('shopware_elastic_search.shop_indexer')->index($shop, new ProgressHelper());
+        $this->getContainer()->get('shopware_elastic_search.shop_indexer')->index($shop, new ProgressHelper());
     }
 
     public function refreshBackendSearchIndex(): void
@@ -897,12 +904,12 @@ class Helper
         }
 
         $this->clearSearchIndex();
-        Shopware()->Container()->get('shopware_es_backend.indexer')->index(new ProgressHelper());
+        $this->getContainer()->get('shopware_es_backend.indexer')->index(new ProgressHelper());
     }
 
     public function clearSearchIndex(): void
     {
-        $client = Shopware()->Container()->get('shopware_elastic_search.client');
+        $client = $this->getContainer()->get('shopware_elastic_search.client');
         $client->indices()->delete(['index' => '_all']);
     }
 
@@ -1105,7 +1112,7 @@ class Helper
             $query->andHaving("options LIKE '%|" . (int) $id . "|%'");
         }
 
-        $ids = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $ids = $query->execute()->fetchAllAssociative();
 
         return array_column($ids, 'article_id');
     }

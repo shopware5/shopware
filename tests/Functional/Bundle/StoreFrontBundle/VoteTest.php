@@ -39,7 +39,7 @@ class VoteTest extends TestCase
         $number = 'testVoteList';
         $context = $this->getContext();
         $data = $this->getProduct($number, $context);
-        $product = $this->helper->createArticle($data);
+        $product = $this->helper->createProduct($data);
 
         $points = [1, 2, 2, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
@@ -61,7 +61,7 @@ class VoteTest extends TestCase
         $number = 'testVoteAverage';
         $context = $this->getContext();
         $data = $this->getProduct($number, $context);
-        $product = $this->helper->createArticle($data);
+        $product = $this->helper->createProduct($data);
 
         $points = [1, 2, 2, 3, 3, 3, 3, 3];
         $this->helper->createVotes($product->getId(), $points);
@@ -199,7 +199,7 @@ class VoteTest extends TestCase
         //generate simple product
         $context = $this->getContext();
         $data = $this->getProduct($number, $context);
-        $product = $this->helper->createArticle($data);
+        $product = $this->helper->createProduct($data);
 
         //generate shop specified votes generated
         foreach ($points as $shopId => $shopPoints) {

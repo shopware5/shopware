@@ -171,11 +171,11 @@ class CategoryFacetTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $additionally = null
-    ) {
+    ): array {
         if ($additionally !== null) {
             static::assertInstanceOf(Category::class, $additionally);
         }

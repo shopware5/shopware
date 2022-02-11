@@ -52,7 +52,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testCustomerGroupDiscount(): void
     {
-        $context = $this->getContext();
+        $context = $this->createContext();
         $result = $this->getSearchResult($context);
 
         $this->assertPrices(
@@ -74,7 +74,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testExpandedCustomerGroupDiscount(): void
     {
-        $context = $this->getContext();
+        $context = $this->createContext();
         $result = $this->getSearchResult($context, true);
 
         $this->assertPrices(
@@ -98,7 +98,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testNetPrices(): void
     {
-        $context = $this->getContext(false);
+        $context = $this->createContext(false);
         $result = $this->getSearchResult($context);
 
         $this->assertPrices(
@@ -120,7 +120,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testExpandedNetPrices(): void
     {
-        $context = $this->getContext(false);
+        $context = $this->createContext(false);
         $result = $this->getSearchResult($context, true);
 
         $this->assertPrices(
@@ -144,7 +144,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testCurrencyFactor(): void
     {
-        $context = $this->getContext(true, 0, 1.2);
+        $context = $this->createContext(true, 0, 1.2);
         $result = $this->getSearchResult($context);
 
         $this->assertPrices(
@@ -166,7 +166,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testExpandedCurrencyFactor(): void
     {
-        $context = $this->getContext(true, 0, 1.2);
+        $context = $this->createContext(true, 0, 1.2);
         $result = $this->getSearchResult($context, true);
 
         $this->assertPrices(
@@ -190,7 +190,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testDiscountCurrencyNet(): void
     {
-        $context = $this->getContext(false, 30, 1.2);
+        $context = $this->createContext(false, 30, 1.2);
         $result = $this->getSearchResult($context);
 
         $this->assertPrices(
@@ -212,7 +212,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testExpandedDiscountCurrencyNet(): void
     {
-        $context = $this->getContext(false, 30, 1.2);
+        $context = $this->createContext(false, 30, 1.2);
         $result = $this->getSearchResult($context, true);
 
         $this->assertPrices(
@@ -236,7 +236,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testDiscountCurrencyGross(): void
     {
-        $context = $this->getContext(true, 15, 1.44);
+        $context = $this->createContext(true, 15, 1.44);
         $result = $this->getSearchResult($context);
 
         $this->assertPrices(
@@ -258,7 +258,7 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     public function testExpandedDiscountCurrencyGross(): void
     {
-        $context = $this->getContext(true, 15, 1.44);
+        $context = $this->createContext(true, 15, 1.44);
         $result = $this->getSearchResult($context, true);
 
         $this->assertPrices(
@@ -297,10 +297,8 @@ class VariantConditionWithCurrencyFactor extends TestCase
 
     /**
      * Creates the TestContext with the given configurations.
-     *
-     * @param bool $displayGross
      */
-    protected function getContext($displayGross = true, int $discount = 20, int $currencyFactor = 1): TestContext
+    private function createContext(bool $displayGross = true, int $discount = 20, float $currencyFactor = 1): TestContext
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup(
@@ -332,13 +330,12 @@ class VariantConditionWithCurrencyFactor extends TestCase
     /**
      * Get products and set the graduated prices and inStock of the variants.
      *
-     * @param string $number
-     * @param array  $data
+     * @param array $data
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $data = []
@@ -469,7 +466,6 @@ class VariantConditionWithCurrencyFactor extends TestCase
     {
         $groups = [];
         foreach ($expected as $group => $optionNames) {
-            /* @var Group[] $allGroups */
             foreach ($this->groups as $globalGroup) {
                 if ($globalGroup->getName() !== $group) {
                     continue;

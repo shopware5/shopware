@@ -146,11 +146,10 @@ class VoteAverageFacetTest extends TestCase
     }
 
     /**
-     * @param string            $number
-     * @param array<int, array> $additionally
+     * @param array<string, array<int>> $additionally
      */
     protected function createProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category,
         $additionally
@@ -165,6 +164,8 @@ class VoteAverageFacetTest extends TestCase
         foreach ($additionally as $shopId => $votes) {
             if (empty($shopId)) {
                 $shopId = null;
+            } else {
+                $shopId = (int) $shopId;
             }
             $this->helper->createVotes($article->getId(), $votes, $shopId);
         }

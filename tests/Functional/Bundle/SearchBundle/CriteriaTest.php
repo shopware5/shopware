@@ -32,7 +32,6 @@ use Shopware\Bundle\SearchBundle\Facet\PriceFacet;
 use Shopware\Bundle\SearchBundle\Sorting\PopularitySorting;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNameSorting;
-use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 class CriteriaTest extends TestCase
@@ -64,7 +63,6 @@ class CriteriaTest extends TestCase
 
     public function testIndexedSorting(): void
     {
-        /** @var SortingInterface[] $sortings */
         $sortings = [
             new PriceSorting(),
             new ProductNameSorting(),
@@ -96,7 +94,6 @@ class CriteriaTest extends TestCase
 
         static::assertInstanceOf(CategoryCondition::class, $condition);
 
-        /* @var CategoryCondition $condition */
         static::assertEquals([3], $condition->getCategoryIds());
     }
 }

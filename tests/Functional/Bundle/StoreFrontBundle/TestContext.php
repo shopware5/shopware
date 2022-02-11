@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,86 +26,72 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\Area;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country\State;
+use Shopware\Bundle\StoreFrontBundle\Struct\Currency;
+use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class TestContext extends ShopContext
 {
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country\Area $area
-     */
-    public function setArea($area)
+    public function setArea(Area $area): void
     {
         $this->area = $area;
     }
 
-    /**
-     * @param string $baseUrl
-     */
-    public function setBaseUrl($baseUrl)
+    public function setBaseUrl(string $baseUrl): void
     {
         $this->baseUrl = $baseUrl;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country $country
-     */
-    public function setCountry($country)
+    public function setCountry(Country $country): void
     {
         $this->country = $country;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Currency $currency
-     */
-    public function setCurrency($currency)
+    public function setCurrency(Currency $currency): void
     {
         $this->currency = $currency;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group $currentCustomerGroup
-     */
-    public function setCurrentCustomerGroup($currentCustomerGroup)
+    public function setCurrentCustomerGroup(
+        Group $currentCustomerGroup): void
     {
         $this->currentCustomerGroup = $currentCustomerGroup;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group $fallbackCustomerGroup
-     */
-    public function setFallbackCustomerGroup($fallbackCustomerGroup)
+    public function setFallbackCustomerGroup(
+        Group $fallbackCustomerGroup): void
     {
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup[] $priceGroups
+     * @param PriceGroup[] $priceGroups
      */
-    public function setPriceGroups($priceGroups)
+    public function setPriceGroups(array $priceGroups): void
     {
         $this->priceGroups = $priceGroups;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop
-     */
-    public function setShop($shop)
+    public function setShop(Shop $shop): void
     {
         $this->shop = $shop;
     }
 
-    /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Country\State $state
-     */
-    public function setState($state)
+    public function setState(State $state): void
     {
         $this->state = $state;
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Tax[] $taxRules
+     * @param Tax[] $taxRules
      */
-    public function setTaxRules($taxRules)
+    public function setTaxRules(array $taxRules): void
     {
         $this->taxRules = $taxRules;
     }
