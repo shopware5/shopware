@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Enlight
  *
@@ -55,6 +57,8 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      *
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
+     *
+     * @return void
      */
     public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
     {
@@ -73,11 +77,12 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Compiles the given snippet block if the content parameter is filled.
      *
-     * @param Smarty_Internal_TemplateBase $template
+     * @param array<string, mixed> $params
+     * @param string|null          $content
      *
      * @return string
      */
-    public static function compileSnippetBlock($params, $content, Smarty_Internal_TemplateBase $template = null)
+    public static function compileSnippetBlock($params, $content, ?Smarty_Internal_TemplateBase $template = null)
     {
         if ($content === null) {
             return '';
@@ -120,10 +125,10 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
     /**
      * Compiles the snippet modifier
      *
-     * @param string                                      $content
-     * @param string                                      $name
-     * @param string|Enlight_Components_Snippet_Namespace $namespace
-     * @param bool                                        $force
+     * @param string                                           $content
+     * @param string|null                                      $name
+     * @param string|Enlight_Components_Snippet_Namespace|null $namespace
+     * @param bool                                             $force
      *
      * @return string
      */
@@ -135,7 +140,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
             return $content;
         }
 
-        $name = $name !== null ? $name : $content;
+        $name = $name ?? $content;
         $result = $namespace->get($name);
 
         if ($result === null || $force) {
@@ -252,21 +257,25 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
                 $_name_match[1] = trim($_name_match[1], '"\' ');
 
                 return $_name_match[1];
-            } elseif (strpos($_namespace_match[1], 'ignore') !== false) {
+            }
+
+            if (str_contains($_namespace_match[1], 'ignore')) {
                 return null;
             }
             throw new Enlight_Exception('Missing name attribute in namespace block');
         }
         $path = Enlight_Loader::realpath($source->filepath);
-        foreach ($source->smarty->getTemplateDir() as $template_dir) {
-            $template_dir = Enlight_Loader::realpath($template_dir);
-            if (strpos($path, $template_dir) === 0) {
-                $namespace = substr($path, \strlen($template_dir));
-                $namespace = strtr($namespace, DIRECTORY_SEPARATOR, '/');
-                $namespace = \dirname($namespace) . '/' . pathinfo($namespace, PATHINFO_FILENAME);
-                $namespace = trim($namespace, '/');
+        $templateDirs = $source->smarty->getTemplateDir();
+        if (\is_array($templateDirs)) {
+            foreach ($templateDirs as $template_dir) {
+                $template_dir = Enlight_Loader::realpath($template_dir);
+                if (\is_string($path) && \is_string($template_dir) && str_starts_with($path, $template_dir)) {
+                    $namespace = substr($path, \strlen($template_dir));
+                    $namespace = strtr($namespace, DIRECTORY_SEPARATOR, '/');
+                    $namespace = \dirname($namespace) . '/' . pathinfo($namespace, PATHINFO_FILENAME);
 
-                return $namespace;
+                    return trim($namespace, '/');
+                }
             }
         }
 
@@ -277,9 +286,12 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      * Returns the snippet content for the given snippet namespace and name.
      * If the force parameter is set to true, the default value will be set and returned.
      *
-     * @param string $namespace
-     * @param string $name
-     * @param bool   $force
+     * @param string|null $namespace
+     * @param string      $name
+     * @param string      $default
+     * @param bool        $force
+     *
+     * @return string
      */
     protected function getSnippet($namespace, $name, $default, $force = false)
     {

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DbAdapter;
 use Shopware\Models\Plugin\Plugin;
+use Shopware\Models\Shop\Exception\ShopLocaleNotSetException;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
 
@@ -36,17 +39,17 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected $modelManager;
 
     /**
-     * @var array The config options provided in the global config.php file
+     * @var array{readFromDb: bool, writeToDb: bool, readFromIni: bool, writeToIni: bool, showSnippetPlaceholder: bool} The config options provided in the global config.php file
      */
     protected $snippetConfig;
 
     /**
-     * @var Shopware\Models\Shop\Locale|null
+     * @var Locale|null
      */
     protected $locale;
 
     /**
-     * @var Shopware\Models\Shop\Shop|null
+     * @var Shop|null
      */
     protected $shop;
 
@@ -56,30 +59,31 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     protected $fileAdapter;
 
     /**
-     * @var array
+     * @var array<array{0: int, 1: int}>
      */
     protected $extends = [];
 
     /**
-     * @var array
+     * @var array{Default: string, Local: string, Community: string, ShopwarePlugins: string, ProjectPlugins: string}
      */
-    private $pluginDirectories;
+    private array $pluginDirectories;
+
+    private Locale $fallbackLocale;
 
     /**
-     * @var Locale|null
+     * @param array{Default: string, Local: string, Community: string, ShopwarePlugins: string, ProjectPlugins: string}   $pluginDirectories
+     * @param array{readFromDb: bool, writeToDb: bool, readFromIni: bool, writeToIni: bool, showSnippetPlaceholder: bool} $snippetConfig
      */
-    private $fallbackLocale;
-
-    public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig, $themeDir = null)
+    public function __construct(ModelManager $modelManager, array $pluginDirectories, array $snippetConfig, ?string $themeDir = null)
     {
         $this->snippetConfig = $snippetConfig;
         $this->modelManager = $modelManager;
         $this->pluginDirectories = $pluginDirectories;
 
-        $repository = $this->modelManager->getRepository(Locale::class);
-
-        /** @var Locale $fallbackLocale */
-        $fallbackLocale = $repository->findOneBy(['locale' => 'en_GB']);
+        $fallbackLocale = $this->modelManager->getRepository(Locale::class)->findOneBy(['locale' => 'en_GB']);
+        if (!$fallbackLocale instanceof Locale) {
+            throw new RuntimeException('Required fallback locale "en_GB" not found');
+        }
         $this->fallbackLocale = $fallbackLocale;
 
         if ($this->snippetConfig['readFromIni']) {
@@ -102,7 +106,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Returns a snippet model instance
      *
-     * @param string $namespace
+     * @param string|null $namespace
      *
      * @return Enlight_Components_Snippet_Namespace
      */
@@ -130,7 +134,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             $this->namespaces[$key] = new $this->defaultNamespaceClass(['name' => $namespace]);
         }
 
-        /** @var Enlight_Components_Snippet_Namespace $instance */
         $instance = $this->namespaces[$key];
         if ($this->requiresFallback($instance)) {
             $instance->setFallback($this->createDbNamespace($namespace, 1, $this->fallbackLocale->getId()));
@@ -208,12 +211,17 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     /**
      * Defines the 'extends' logic for snippet loading, responsible for the cascading fallbacks
      * between snippet sets
+     *
+     * @return void
      */
     protected function initExtends()
     {
         $extends = [];
         $shop = $this->shop;
         $locale = $this->locale;
+        if (!$locale instanceof Locale) {
+            throw new ShopLocaleNotSetException();
+        }
 
         $main = $shop !== null ? $shop->getMain() : null;
         if ($main !== null && $main->getId() === 1) {
@@ -249,7 +257,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         }
 
         // fallback to default shop, default language
-        // this needs to be fixed, because its wrong for non-english installations
+        // TODO: this needs to be fixed, because it's wrong for non-english installations
         if ($locale->getId() !== 1) {
             $extends[] = [
                 1,
@@ -277,13 +285,12 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string>
      */
     private function getPluginDirs(): array
     {
         $configDir = [];
 
-        /** @var Plugin[] $plugins */
         $plugins = $this->modelManager->getRepository(Plugin::class)->findBy(['active' => true]);
         foreach ($plugins as $plugin) {
             if ($plugin->isLegacyPlugin()) {
@@ -305,7 +312,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
                     $pluginThemePath
                 );
 
-                /** @var DirectoryIterator $directory */
                 foreach ($directories as $directory) {
                     //check valid directory
                     if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {
@@ -331,7 +337,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
             return $configDir;
         }
 
-        /** @var DirectoryIterator $directory */
         foreach (new DirectoryIterator(
             $themeDir
         ) as $directory) {
@@ -351,10 +356,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         return $this->snippetConfig['readFromDb'];
     }
 
-    /**
-     * @param string $key
-     */
-    private function readFromIni($key): bool
+    private function readFromIni(string $key): bool
     {
         if (!$this->snippetConfig['readFromIni']) {
             return false;
@@ -366,7 +368,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         return !isset($this->namespaces[$key]) || \count($this->namespaces[$key]) === 0;
     }
 
-    private function createDbNamespace(string $namespace, int $shopId, int $localeId): Enlight_Components_Snippet_Namespace
+    private function createDbNamespace(?string $namespace, int $shopId, int $localeId): Enlight_Components_Snippet_Namespace
     {
         return new $this->defaultNamespaceClass([
             'adapter' => $this->adapter,
@@ -376,9 +378,8 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         ]);
     }
 
-    private function createIniNamespace(string $namespace): Enlight_Components_Snippet_Namespace
+    private function createIniNamespace(?string $namespace): Enlight_Components_Snippet_Namespace
     {
-        /** @var Enlight_Components_Snippet_Namespace $fullNamespace */
         $fullNamespace = new $this->defaultNamespaceClass([
             'adapter' => $this->fileAdapter,
             'name' => $namespace,
@@ -389,10 +390,12 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         if (
             !\array_key_exists($locale, $fullNamespace->toArray())
             && \in_array($locale, ['en_GB', 'default'])
-            && \count(array_keys($fullNamespace->toArray()))
+            && \count($fullNamespace->toArray())
         ) {
             $diff = array_diff(['en_GB', 'default'], [$locale]);
-            $locale = array_shift($diff);
+            if ($diff !== []) {
+                $locale = array_shift($diff);
+            }
         }
 
         $fullNamespace->setSection($locale);
@@ -403,9 +406,6 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
 
     private function requiresFallback(Enlight_Components_Snippet_Namespace $instance): bool
     {
-        if (!$instance instanceof Enlight_Components_Snippet_Namespace) {
-            return false;
-        }
         if ($instance->getFallback()) {
             return false;
         }

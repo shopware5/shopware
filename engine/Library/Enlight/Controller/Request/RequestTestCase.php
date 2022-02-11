@@ -17,6 +17,8 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * Request object which should be used in tests
  */
@@ -28,12 +30,12 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
      * @var string[]
      */
     protected $_validMethodTypes = [
-        'DELETE',
-        'GET',
-        'HEAD',
-        'OPTIONS',
-        'POST',
-        'PUT',
+        Request::METHOD_DELETE,
+        Request::METHOD_GET,
+        Request::METHOD_HEAD,
+        Request::METHOD_OPTIONS,
+        Request::METHOD_POST,
+        Request::METHOD_PUT,
     ];
 
     /**
