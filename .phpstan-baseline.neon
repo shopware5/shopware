@@ -10351,16 +10351,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceSwitcher\\:\\:joinCheapestProductPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceSwitcher.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceSwitcher\\:\\:joinPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceSwitcher.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceTable\\:\\:joinAvailableVariant\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceTable.php
@@ -17499,21 +17489,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$value of method Shopware\\\\Components\\\\Check\\\\Requirements\\:\\:compare\\(\\) expects string, string\\|false given\\.$#"
 			count: 4
 			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyEventManager\\:\\:fireArticleByIdEvents\\(\\) has parameter \\$product with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyEventManager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyEventManager\\:\\:fireArticlesByCategoryEvents\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyEventManager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyEventManager\\:\\:fireArticlesByCategoryEvents\\(\\) has parameter \\$result with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyEventManager.php
 
 		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null\\.$#"
@@ -30926,21 +30901,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:layoutAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:listingAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryContent\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
@@ -30951,27 +30911,12 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryListing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryListing\\(\\) has parameter \\$categoryContent with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadListing\\(\\) has parameter \\$emotionConfiguration with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:manufacturerAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:setDefaultSorting\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
@@ -30987,11 +30932,6 @@ parameters:
 
 		-
 			message: "#^Offset 'streamId' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Parameter \\#1 \\$condition of method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:addBaseCondition\\(\\) expects Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface, Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
@@ -32566,11 +32506,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Method sArticles\\:\\:getListing\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Method sArticles\\:\\:getOrderNumberByProductId\\(\\) should return string but returns string\\|false\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -32696,11 +32631,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Method sArticles\\:\\:sGetArticlesByCategory\\(\\) has parameter \\$categoryId with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Method sArticles\\:\\:sGetArticlesBySupplier\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -32816,11 +32746,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$request of method Shopware\\\\Bundle\\\\SearchBundle\\\\StoreFrontCriteriaFactoryInterface\\:\\:createListingCriteria\\(\\) expects Enlight_Controller_Request_Request, Enlight_Controller_Request_Request\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -32837,11 +32762,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Parameter \\#3 \\$request of method sArticles\\:\\:getListing\\(\\) expects Enlight_Controller_Request_Request, Enlight_Controller_Request_Request\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 

@@ -28,6 +28,7 @@ use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
@@ -65,6 +66,7 @@ use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Repository as MediaRepository;
 
 /**
+ * @phpstan-type ListingArray array{sArticles: array<string, array<string, mixed>>, criteria: Criteria, facets: array<FacetResultInterface>, sPage: int, pageIndex: int, pageSizes: array<int>, sPerPage: int|null, sNumberArticles: int, shortParameters: array<string, string>, sTemplate: string|null, sSort: int}
  * Shopware Class that handle products
  */
 class sArticles implements Enlight_Hook
@@ -473,11 +475,12 @@ class sArticles implements Enlight_Hook
     }
 
     /**
+     * @param int|null $categoryId
      * @param Criteria $criteria
      *
      * @throws Enlight_Exception
      *
-     * @return array|bool|mixed
+     * @return ListingArray|false
      */
     public function sGetArticlesByCategory($categoryId = null, Criteria $criteria = null)
     {
@@ -491,20 +494,21 @@ class sArticles implements Enlight_Hook
         $context = $this->contextService->getShopContext();
 
         $request = Shopware()->Container()->get('front')->Request();
+        if (!$request instanceof Enlight_Controller_Request_Request) {
+            throw new RuntimeException('Required request not available');
+        }
 
-        if (!$criteria) {
+        if (!$criteria instanceof Criteria) {
             $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($request, $context);
         }
 
         $result = $this->getListing($categoryId, $context, $request, $criteria);
 
-        $result = $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId, $this);
-
-        return $result;
+        return $this->legacyEventManager->fireArticlesByCategoryEvents($result, $categoryId, $this);
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     * @deprecated in 5.6, will be removed in 5.8 without replacement
      *
      * Get supplier by id
      *
@@ -518,7 +522,7 @@ class sArticles implements Enlight_Hook
      */
     public function sGetSupplierById($id)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $id = (int) $id;
         $categoryId = (int) $this->frontController->Request()->getQuery('sCategory');
@@ -2423,16 +2427,14 @@ class sArticles implements Enlight_Hook
      * Returns a listing of products. Used for the backward compatibility category listings.
      * This function calls the new shopware core and converts the result to the old listing structure.
      *
-     * @param int $categoryId
-     *
-     * @return array
+     * @return ListingArray
      */
     private function getListing(
-        $categoryId,
+        ?int $categoryId,
         ShopContextInterface $context,
         Enlight_Controller_Request_Request $request,
         Criteria $criteria
-    ) {
+    ): array {
         $conditions = $criteria->getConditionsByClass(VariantCondition::class);
         $conditions = array_filter($conditions, function (VariantCondition $condition) {
             return $condition->expandVariants();
@@ -2462,6 +2464,7 @@ class sArticles implements Enlight_Hook
         $products = $this->listingLinkRewriteService->rewriteLinks($criteria, $products, $context);
 
         $pageSizes = explode('|', $this->config->get('numberArticlesToShow'));
+        $pageSizes = array_map('\intval', $pageSizes);
         $sPage = (int) $request->getParam('sPage', 1);
 
         return [
@@ -2474,8 +2477,8 @@ class sArticles implements Enlight_Hook
             'sPerPage' => $criteria->getLimit(),
             'sNumberArticles' => $searchResult->getTotalCount(),
             'shortParameters' => $this->queryAliasMapper->getQueryAliases(),
-            'sTemplate' => $request->getParam('sTemplate'),
-            'sSort' => $request->getParam('sSort', $this->config->get('defaultListingSorting')),
+            'sTemplate' => $request->getParam('sTemplate') ? (string) $request->getParam('sTemplate') : null,
+            'sSort' => (int) $request->getParam('sSort', $this->config->get('defaultListingSorting')),
         ];
     }
 
