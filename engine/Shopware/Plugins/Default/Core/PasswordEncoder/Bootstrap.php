@@ -22,8 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
 use Shopware\Components\Password\Manager;
-use Shopware\Models\Config\Form;
 
 /*
  * @see rfc for argon2 in PHP -> https://wiki.php.net/rfc/argon2_password_hash
@@ -100,6 +100,7 @@ class Shopware_Plugins_Core_PasswordEncoder_Bootstrap extends Shopware_Component
     public function onInitResourcePasswordEncoder(Enlight_Event_EventArgs $args): Manager
     {
         // Get a list of all available hashes
+        /** @var array<PasswordEncoderInterface> $availableHasher */
         $availableHasher = Shopware()->Events()->filter(
             'Shopware_Components_Password_Manager_AddEncoder',
             [],

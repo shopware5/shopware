@@ -34,6 +34,7 @@ use Enlight_Controller_Request_RequestHttp;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use sBasket;
+use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Resource\Customer as CustomerResource;
 use Shopware\Components\Model\ModelManager;
@@ -1706,17 +1707,6 @@ class BasketTest extends TestCase
             ]
         );
 
-        $keys = [
-            'content',
-            'Amount',
-            'AmountNet',
-            'Quantity',
-            'AmountNumeric',
-            'AmountNetNumeric',
-            'AmountWithTax',
-            'AmountWithTaxNumeric',
-        ];
-
         $contentKeys = [
             'id',
             'sessionID',
@@ -1770,22 +1760,26 @@ class BasketTest extends TestCase
         ];
 
         $result = $this->module->sGetBasket();
-        static::assertEquals($keys, array_keys($result));
-        static::assertGreaterThanOrEqual(1, \count($result['content']));
+        static::assertArrayHasKey(CartKey::POSITIONS, $result);
+        static::assertCount(1, $result[CartKey::POSITIONS]);
         foreach ($contentKeys as $key) {
-            static::assertArrayHasKey($key, $result['content'][0]);
+            static::assertArrayHasKey($key, $result[CartKey::POSITIONS][0]);
         }
 
-        $formatPrice = static function (string $price) {
-            return (float) str_replace(',', '.', $price);
-        };
-
-        static::assertGreaterThanOrEqual(1, \count($result['content']));
-        static::assertGreaterThanOrEqual(2, $formatPrice($result['Amount']));
-        static::assertGreaterThanOrEqual(2, $formatPrice($result['AmountNet']));
-        static::assertGreaterThanOrEqual(2, $formatPrice((string) $result['AmountNumeric']));
-        static::assertGreaterThanOrEqual(2, $formatPrice((string) $result['AmountNetNumeric']));
-        static::assertEquals(1, $result['Quantity']);
+        static::assertArrayHasKey(CartKey::AMOUNT, $result);
+        static::assertSame('14,95', $result[CartKey::AMOUNT]);
+        static::assertArrayHasKey(CartKey::AMOUNT_NET, $result);
+        static::assertSame('12,56', $result[CartKey::AMOUNT_NET]);
+        static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $result);
+        static::assertSame(14.95, $result[CartKey::AMOUNT_NUMERIC]);
+        static::assertArrayHasKey(CartKey::AMOUNT_NET_NUMERIC, $result);
+        static::assertSame(12.56, ($result[CartKey::AMOUNT_NET_NUMERIC]));
+        static::assertArrayHasKey(CartKey::AMOUNT_WITH_TAX, $result);
+        static::assertSame('0', ($result[CartKey::AMOUNT_WITH_TAX]));
+        static::assertArrayHasKey(CartKey::AMOUNT_WITH_TAX_NUMERIC, $result);
+        static::assertSame(0.0, ($result[CartKey::AMOUNT_WITH_TAX_NUMERIC]));
+        static::assertArrayHasKey(CartKey::QUANTITY, $result);
+        static::assertSame(1, $result[CartKey::QUANTITY]);
     }
 
     public function testsGetBasketDataHasNumericCartItemAmounts(): void
@@ -1832,14 +1826,14 @@ class BasketTest extends TestCase
             $basketData = $this->module->sGetBasketData();
 
             // Assert that a valid basket was returned
-            static::assertNotEmpty($basketData);
+            static::assertArrayHasKey(CartKey::POSITIONS, $basketData);
             // Assert that there is a numeric basket amount
-            static::assertArrayHasKey('amountNumeric', $basketData['content'][0], 'amountNumeric for cart item should exist');
-            static::assertArrayHasKey('amountnetNumeric', $basketData['content'][0], 'amountnetNumeric for cart item should exist');
-            static::assertGreaterThan(0, $basketData['content'][0]['amountNumeric']);
-            static::assertGreaterThan(0, $basketData['content'][0]['amountnetNumeric']);
-            static::assertEquals(29.97 * 2, $basketData['content'][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity');
-            static::assertEqualsWithDelta(29.97 * 2, $basketData['content'][0]['amountNumeric'], 0.001, 'amountNumeric for cart item should respect cart item quantity');
+            static::assertArrayHasKey('amountNumeric', $basketData[CartKey::POSITIONS][0], 'amountNumeric for cart item should exist');
+            static::assertArrayHasKey('amountnetNumeric', $basketData[CartKey::POSITIONS][0], 'amountnetNumeric for cart item should exist');
+            static::assertGreaterThan(0, $basketData[CartKey::POSITIONS][0]['amountNumeric']);
+            static::assertGreaterThan(0, $basketData[CartKey::POSITIONS][0]['amountnetNumeric']);
+            static::assertEquals(29.97 * 2, $basketData[CartKey::POSITIONS][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity');
+            static::assertEqualsWithDelta(29.97 * 2, $basketData[CartKey::POSITIONS][0]['amountNumeric'], 0.001, 'amountNumeric for cart item should respect cart item quantity');
         } finally {
             $resourceHelper->cleanUp();
         }
@@ -1934,10 +1928,10 @@ class BasketTest extends TestCase
             $this->module->sGetAmount();
 
             // Assert that a valid basket was returned
-            static::assertNotEmpty($basketData);
+            static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
             // Assert that the total is approximately 0.00
-            static::assertEquals(0, $basketData['AmountNumeric'], 'total is approxmately 0.00');
-            static::assertEqualsWithDelta(0, $basketData['AmountNumeric'], 0.0001, 'total is approxmately 0.00');
+            static::assertEquals(0, $basketData[CartKey::AMOUNT_NUMERIC], 'total is approxmately 0.00');
+            static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], 0.0001, 'total is approxmately 0.00');
         } finally {
             // Delete test resources
             if (isset($customerGroupDiscountId)) {
@@ -1994,7 +1988,9 @@ class BasketTest extends TestCase
             ]
         );
 
-        static::assertCount(1, $this->module->sGetBasket()['content']);
+        $cart = $this->module->sGetBasket();
+        static::assertArrayHasKey(CartKey::POSITIONS, $cart);
+        static::assertCount(1, $cart[CartKey::POSITIONS]);
 
         $this->connection->delete('s_articles_details', ['articleID' => $product->getId()]);
         $this->connection->delete('s_articles', ['id' => $product->getId()]);
@@ -2353,14 +2349,19 @@ class BasketTest extends TestCase
         // Adding product without quantity adds one
         $this->module->sAddArticle($randomProductOne['ordernumber']);
         $basket = $this->module->sGetBasket();
-        static::assertEquals(1, $basket['Quantity']);
-        static::assertEquals(1, $basket['content'][0]['quantity']);
+        static::assertArrayHasKey(CartKey::QUANTITY, $basket);
+        static::assertEquals(1, $basket[CartKey::QUANTITY]);
+        static::assertArrayHasKey(CartKey::POSITIONS, $basket);
+        static::assertEquals(1, $basket[CartKey::POSITIONS][0]['quantity']);
 
         // Adding product with quantity adds correctly, finds stacks
         $this->module->sAddArticle($randomProductOne['ordernumber'], 2);
         $basket = $this->module->sGetBasket();
-        static::assertEquals(1, $basket['Quantity']);
-        static::assertEquals(3, $basket['content'][0]['quantity']);
+        static::assertArrayHasKey(CartKey::QUANTITY, $basket);
+        static::assertEquals(1, $basket[CartKey::QUANTITY]);
+        static::assertEquals(1, $basket[CartKey::QUANTITY]);
+        static::assertArrayHasKey(CartKey::POSITIONS, $basket);
+        static::assertEquals(3, $basket[CartKey::POSITIONS][0]['quantity']);
 
         // Start over
         $this->module->sDeleteBasket();
@@ -2368,8 +2369,10 @@ class BasketTest extends TestCase
         // Adding product with quantity over stock, check that we have the available stock
         $this->module->sAddArticle($randomProductOne['ordernumber'], $randomProductOne['instock'] + 200);
         $basket = $this->module->sGetBasket();
-        static::assertEquals(1, $basket['Quantity']);
-        static::assertEquals(min($randomProductOne['instock'], 100), $basket['content'][0]['quantity']);
+        static::assertArrayHasKey(CartKey::QUANTITY, $basket);
+        static::assertEquals(1, $basket[CartKey::QUANTITY]);
+        static::assertArrayHasKey(CartKey::POSITIONS, $basket);
+        static::assertEquals(min($randomProductOne['instock'], 100), $basket[CartKey::POSITIONS][0]['quantity']);
 
         // Start over
         $this->module->sDeleteBasket();
@@ -2395,8 +2398,10 @@ class BasketTest extends TestCase
         // Adding product with quantity over stock, check that we have the desired quantity
         $this->module->sAddArticle($randomProductTwo['ordernumber'], $randomProductTwo['instock'] + 20);
         $basket = $this->module->sGetBasket();
-        static::assertEquals(1, $basket['Quantity']);
-        static::assertEquals(min($randomProductTwo['instock'] + 20, 100), $basket['content'][0]['quantity']);
+        static::assertArrayHasKey(CartKey::QUANTITY, $basket);
+        static::assertEquals(1, $basket[CartKey::QUANTITY]);
+        static::assertArrayHasKey(CartKey::POSITIONS, $basket);
+        static::assertEquals(min($randomProductTwo['instock'] + 20, 100), $basket[CartKey::POSITIONS][0]['quantity']);
 
         // Housekeeping
         $this->connection->delete(
@@ -2474,7 +2479,9 @@ class BasketTest extends TestCase
 
         // Check that the final price equals the net price for the whole basket
         $basketData = $this->module->sGetBasketData();
-        static::assertEquals($basketData['AmountNumeric'], $basketData['AmountNetNumeric']);
+        static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
+        static::assertArrayHasKey(CartKey::AMOUNT_NET_NUMERIC, $basketData);
+        static::assertEquals($basketData[CartKey::AMOUNT_NUMERIC], $basketData[CartKey::AMOUNT_NET_NUMERIC]);
 
         // Delete test resources
         $resourceHelper->cleanUp();
@@ -2492,7 +2499,9 @@ class BasketTest extends TestCase
 
         $this->connection->executeStatement('UPDATE s_articles_details SET minpurchase = 0 WHERE ordernumber = "SW10239"');
 
-        static::assertSame(4, (int) $this->module->sGetBasketData()['content'][0]['quantity']);
+        $cart = $this->module->sGetBasketData();
+        static::assertArrayHasKey(CartKey::POSITIONS, $cart);
+        static::assertSame(4, (int) $cart[CartKey::POSITIONS][0]['quantity']);
     }
 
     private function generateBasketSession(): string

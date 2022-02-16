@@ -2420,13 +2420,14 @@ class AdminTest extends TestCase
 
         // With country data, no dispatch method
         static::assertEquals(
-            ['brutto' => 0, 'netto' => 0],
+            sAdmin::NO_SHIPPING_COSTS,
             $this->module->sGetPremiumShippingcosts($germany)
         );
 
         // With dispatch method
         $this->session->offsetSet('sDispatch', 9);
         $result = $this->module->sGetPremiumShippingcosts($germany);
+        static::assertIsArray($result);
         static::assertArrayHasKey('brutto', $result);
         static::assertArrayHasKey('netto', $result);
         static::assertArrayHasKey('value', $result);

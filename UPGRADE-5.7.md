@@ -16,6 +16,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
+* Changed `\Zend_Db_Adapter_Abstract::insert` return type to native `int` type
+* Changed `\Zend_Db_Adapter_Abstract::fetchAll` return type to native `array` type
 * Updated `bcremer/line-reader` to version 1.2.0
 * Updated `beberlei/assert` to version 3.3.2
 * Updated `cocur/slugify` to version 4.1.0
@@ -55,6 +57,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated several indirect dependencies
 
 ### Removals
+
 * Removed unused dependency `composer/package-versions-deprecated`
 * Removed unused dependency `ocramius/proxy-manager`
 * Removed unused dependency `psr/http-message`. It is now an indirect dependency.

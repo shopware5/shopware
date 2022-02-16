@@ -59,9 +59,9 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
      * @param string|Zend_Db_Select $sql  the SQL statement with placeholders
      * @param array                 $bind an array of data to bind to the placeholders
      *
-     * @throws Zend_Db_Adapter_Exception to re-throw PDOException
+     * @throws Zend_Db_Statement_Exception to re-throw PDOException
      *
-     * @return Zend_Db_Statement_Pdo|false
+     * @return Zend_Db_Statement_Pdo
      */
     public function query($sql, $bind = [])
     {

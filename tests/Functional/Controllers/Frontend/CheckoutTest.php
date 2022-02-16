@@ -31,6 +31,7 @@ use Enlight_Components_Test_Plugin_TestCase;
 use Enlight_Controller_Request_RequestHttp;
 use Enlight_View_Default;
 use LogicException;
+use Shopware\Bundle\CartBundle\CheckoutKey;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
@@ -211,6 +212,15 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 
         // Logout frontend user
         $this->getContainer()->get('modules')->Admin()->logout();
+    }
+
+    public function testCartActionWithEmptyBasket(): void
+    {
+        $this->dispatch('/checkout/cart');
+
+        $cart = $this->View()->getAssign('sBasket');
+
+        static::assertSame(0.0, $cart[CheckoutKey::AMOUNT]);
     }
 
     /**

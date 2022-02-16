@@ -40,7 +40,7 @@ use Shopware\Models\Shop\Shop;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
 /**
- * Deprecated Shopware Class that handles frontend orders
+ * Shopware Class that handles frontend orders
  */
 class sOrder implements Enlight_Hook
 {
@@ -1380,8 +1380,8 @@ class sOrder implements Enlight_Hook
         $mail = Shopware()->TemplateMail()->createMail($templateName, $context, $shop);
 
         $return = [
-            'content' => $mail->getPlainBodyText(),
-            'subject' => $mail->getPlainSubject(),
+            'content' => $mail->getPlainBodyText() ?? '',
+            'subject' => $mail->getPlainSubject() ?? '',
             'email' => trim($user['email']),
             'frommail' => $mail->getFrom(),
             'fromname' => $mail->getFromName(),

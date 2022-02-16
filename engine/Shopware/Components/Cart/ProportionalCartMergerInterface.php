@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,7 +31,9 @@ interface ProportionalCartMergerInterface
     /**
      * Merges proportional cart items into one
      *
-     * @return array
+     * @param array<array<string, mixed>> $content
+     *
+     * @return array<array<string, mixed>>
      */
     public function mergeProportionalItems(array $content);
 }
