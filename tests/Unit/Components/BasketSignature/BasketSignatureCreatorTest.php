@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Unit\Components\BasketSignature;
+namespace Shopware\Tests\Unit\Components\BasketSignature;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
@@ -30,23 +32,22 @@ use Shopware\Components\BasketSignature\BasketSignatureGenerator;
 
 class BasketSignatureCreatorTest extends TestCase
 {
-    public function testSignatureCanBeCreatedForEmptyBasket()
+    public function testSignatureCanBeCreatedForEmptyBasket(): void
     {
-        $signatureCreator = new BasketSignatureGenerator();
-        $signature = $signatureCreator->generateSignature(
+        $signature = (new BasketSignatureGenerator())->generateSignature(
             [
                 'sAmount' => 0,
                 'sAmountTax' => 0,
                 'content' => [],
                 'sCurrencyId' => 1,
             ],
-            null
+            0
         );
 
         static::assertNotEmpty($signature);
     }
 
-    public function testSignatureConsidersItemTaxRate()
+    public function testSignatureConsidersItemTaxRate(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -60,7 +61,7 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -71,12 +72,12 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureConsidersItemQuantity()
+    public function testSignatureConsidersItemQuantity(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -90,7 +91,7 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -101,12 +102,12 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureConsidersItemPrice()
+    public function testSignatureConsidersItemPrice(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -120,7 +121,7 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -131,12 +132,12 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureConsidersItemNumber()
+    public function testSignatureConsidersItemNumber(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -150,7 +151,7 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -161,12 +162,12 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureConsidersBasketAmount()
+    public function testSignatureConsidersBasketAmount(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -178,7 +179,7 @@ class BasketSignatureCreatorTest extends TestCase
                     'content' => [],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -187,12 +188,12 @@ class BasketSignatureCreatorTest extends TestCase
                     'content' => [],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureConsidersBasketTaxAmount()
+    public function testSignatureConsidersBasketTaxAmount(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -204,7 +205,7 @@ class BasketSignatureCreatorTest extends TestCase
                     'content' => [],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -213,12 +214,12 @@ class BasketSignatureCreatorTest extends TestCase
                     'content' => [],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureConsidersMultipleItems()
+    public function testSignatureConsidersMultipleItems(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -235,7 +236,7 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -247,18 +248,17 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSignatureDoesNotConsidersItemOrder()
+    public function testSignatureDoesNotConsidersItemOrder(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
         $generator = $this->createPartialMock(BasketSignatureGenerator::class, []);
-        $class = new ReflectionClass($generator);
-        $method = $class->getMethod('sortItems');
+        $method = (new ReflectionClass($generator))->getMethod('sortItems');
         $method->setAccessible(true);
 
         static::assertSame(
@@ -272,7 +272,7 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             ),
             $signatureCreator->generateSignature(
                 [
@@ -284,26 +284,25 @@ class BasketSignatureCreatorTest extends TestCase
                     ],
                     'sCurrencyId' => 1,
                 ],
-                null
+                0
             )
         );
     }
 
-    public function testSortRandomItems()
+    public function testSortRandomItems(): void
     {
         $generator = $this->createPartialMock(BasketSignatureGenerator::class, []);
-        $class = new ReflectionClass($generator);
-        $method = $class->getMethod('sortItems');
+        $method = (new ReflectionClass($generator))->getMethod('sortItems');
         $method->setAccessible(true);
 
         $items = [];
         // generate 100 random items
         foreach (range(0, 10) as $counter) {
             $items[] = $this->createItemRow(
+                (float) random_int(0, 10),
                 random_int(0, 10),
-                random_int(0, 10),
-                random_int(0, 10),
-                random_int(0, 10)
+                (string) random_int(0, 10),
+                (float) random_int(0, 10)
             );
         }
 
@@ -317,7 +316,7 @@ class BasketSignatureCreatorTest extends TestCase
         }
     }
 
-    public function testSignatureConsidersCustomerId()
+    public function testSignatureConsidersCustomerId(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -343,7 +342,7 @@ class BasketSignatureCreatorTest extends TestCase
         );
     }
 
-    public function testSignatureConsidersCurrencyId()
+    public function testSignatureConsidersCurrencyId(): void
     {
         $signatureCreator = new BasketSignatureGenerator();
 
@@ -390,20 +389,12 @@ class BasketSignatureCreatorTest extends TestCase
         );
     }
 
-    /**
-     * @param float  $price
-     * @param int    $quantity
-     * @param string $number
-     * @param float  $taxRate
-     *
-     * @return array
-     */
     private function createItemRow(
-        $price,
-        $quantity,
-        $number,
-        $taxRate
-    ) {
+        ?float $price,
+        ?int $quantity,
+        ?string $number,
+        ?float $taxRate
+    ): array {
         return [
             'ordernumber' => $number,
             'price' => $price,

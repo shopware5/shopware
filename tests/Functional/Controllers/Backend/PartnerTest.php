@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Controllers\Backend;
+namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Model\ModelManager;
@@ -39,7 +39,7 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
     protected $repository;
 
     /**
-     * dummy data
+     * @var array<string, string>
      */
     private array $dummyData = [
         'idCode' => '31337',
@@ -92,7 +92,7 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * test getList controller action
      */
-    public function testGetList()
+    public function testGetList(): void
     {
         //delete old data
         $repositoryData = $this->repository->findBy(['company' => $this->dummyData['company']]);
@@ -104,13 +104,13 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
         $dummy = $this->createDummy();
         /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/Partner/getList?page=1&start=0&limit=30');
-        static::assertTrue($this->View()->success);
-        $returnData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returnData = $this->View()->getAssign('data');
         static::assertNotEmpty($returnData);
-        static::assertGreaterThan(0, $this->View()->totalCount);
+        static::assertGreaterThan(0, $this->View()->getAssign('totalCount'));
         $foundDummy = [];
         foreach ($returnData as $dummyData) {
-            if ($dummyData['company'] == $dummy->getCompany()) {
+            if ($dummyData['company'] === $dummy->getCompany()) {
                 $foundDummy = $dummyData;
             }
         }
@@ -131,19 +131,19 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
         //test new partner
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
-        static::assertTrue($this->View()->success);
-        static::assertCount(19, $this->View()->data);
-        static::assertEquals('streetDummy', $this->View()->data['street']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertCount(19, $this->View()->getAssign('data'));
+        static::assertEquals('streetDummy', $this->View()->getAssign('data')['street']);
 
         //test update partner
-        $params['id'] = $this->View()->data['id'];
+        $params['id'] = $this->View()->getAssign('data')['id'];
         $params['street'] = $this->updateStreet;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
-        static::assertTrue($this->View()->success);
-        static::assertEquals($this->updateStreet, $this->View()->data['street']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertEquals($this->updateStreet, $this->View()->getAssign('data')['street']);
 
-        return (int) $this->View()->data['id'];
+        return (int) $this->View()->getAssign('data')['id'];
     }
 
     /**
@@ -160,8 +160,8 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/Partner/getDetail');
-        static::assertTrue($this->View()->success);
-        $returningData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returningData = $this->View()->getAssign('data');
         $dummyData = $this->dummyData;
 
         static::assertEquals($dummyData['idCode'], $returningData['idCode']);
@@ -220,13 +220,13 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * test getCustomer controller action
      */
-    public function testMapCustomerAccount()
+    public function testMapCustomerAccount(): void
     {
         $this->Response()->clearBody();
         $this->Request()->request->set('mapCustomerAccountValue', 2);
         $this->dispatch('backend/Partner/mapCustomerAccount');
         $body = $this->Response()->getBody();
-        static::assertTrue(!empty($body));
+        static::assertNotEmpty($body);
 
         $this->Response()->clearBody();
         $this->Request()->request->set('mapCustomerAccountValue', 542350);
@@ -245,16 +245,14 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
         $params['id'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/deletePartner');
-        static::assertTrue($this->View()->success);
-        static::assertCount(4, $this->View()->data);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertCount(4, $this->View()->getAssign('data'));
     }
 
     /**
      * Creates the dummy data
-     *
-     * @return Partner
      */
-    private function getDummyData()
+    private function getDummyData(): Partner
     {
         $dummyModel = new Partner();
         $dummyData = $this->dummyData;
@@ -265,10 +263,8 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * helper method to create the dummy object
-     *
-     * @return Partner
      */
-    private function createDummy()
+    private function createDummy(): Partner
     {
         $dummyData = $this->getDummyData();
         $this->manager->persist($dummyData);

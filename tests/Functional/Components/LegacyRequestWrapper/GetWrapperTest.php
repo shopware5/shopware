@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,16 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\LegacyRequestWrapper;
+namespace Shopware\Tests\Functional\Components\LegacyRequestWrapper;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Request_Request;
 
-/**
- * @covers \Shopware\Components\LegacyRequestWrapper\GetWrapper
- */
 class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
 {
-    private static $resources = [
+    private static array $resources = [
         'Admin',
         'Articles',
         'Basket',
@@ -53,8 +53,9 @@ class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
      * Tests that setting a value inside any core class is equivalent to setting it in the
      * global $_GET
      */
-    public function testSetQuery()
+    public function testSetQuery(): array
     {
+        static::assertInstanceOf(Enlight_Controller_Request_Request::class, Shopware()->Front()->Request());
         $previousGetData = Shopware()->Front()->Request()->getQuery();
 
         foreach (self::$resources as $name) {
@@ -79,8 +80,9 @@ class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testSetQuery
      */
-    public function testOverwriteAndClearQuery($getData)
+    public function testOverwriteAndClearQuery(array $getData): void
     {
+        static::assertInstanceOf(Enlight_Controller_Request_Request::class, Shopware()->Front()->Request());
         static::assertNotEquals($getData, Shopware()->Front()->Request()->getQuery());
 
         foreach (self::$resources as $name) {
@@ -91,8 +93,6 @@ class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
                 static::assertNotEquals($getData, Shopware()->Modules()->getModule($name)->sSYSTEM->_GET->toArray());
             }
         }
-
-        return $getData;
     }
 
     /**
@@ -101,8 +101,9 @@ class GetWrapperTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testSetQuery
      */
-    public function testGetQuery()
+    public function testGetQuery(): void
     {
+        static::assertInstanceOf(Enlight_Controller_Request_Request::class, Shopware()->Front()->Request());
         $previousGetData = Shopware()->Front()->Request()->getQuery();
 
         foreach (self::$resources as $name) {

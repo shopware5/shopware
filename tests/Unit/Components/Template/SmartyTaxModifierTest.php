@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Unit\Components\Template;
+namespace Shopware\Tests\Unit\Components\Template;
 
 require __DIR__ . '/../../../../engine/Library/Enlight/Template/Plugins/modifier.tax.php';
 
@@ -32,11 +34,10 @@ use PHPUnit\Framework\TestCase;
 class SmartyTaxModifierTest extends TestCase
 {
     /**
-     * @param int|float $expected
-     * @param string    $locale
+     * @param string|int|float $tax
      * @dataProvider taxProvider
      */
-    public function testTaxModifierWithValid($tax, $expected, $locale)
+    public function testTaxModifierWithValid($tax, string $expected, string $locale): void
     {
         static::assertSame(
             $expected,
@@ -45,19 +46,16 @@ class SmartyTaxModifierTest extends TestCase
     }
 
     /**
-     * @param string $locale
+     * @param string|bool|null $tax
      * @dataProvider taxProviderInvalid
      */
-    public function testTaxModifierWithInvalid($tax, $locale)
+    public function testTaxModifierWithInvalid($tax, string $locale): void
     {
         $this->expectException(InvalidArgumentException::class);
         smarty_modifier_tax($tax, $locale);
     }
 
-    /**
-     * @return array
-     */
-    public function taxProvider()
+    public function taxProvider(): array
     {
         return [
             ['19.5', '19,50', 'de'],
@@ -76,10 +74,7 @@ class SmartyTaxModifierTest extends TestCase
         ];
     }
 
-    /**
-     * @return array
-     */
-    public function taxProviderInvalid()
+    public function taxProviderInvalid(): array
     {
         return [
             ['true', 'en'],

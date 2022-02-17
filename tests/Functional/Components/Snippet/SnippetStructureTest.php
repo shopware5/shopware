@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,19 +24,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Snippet;
+namespace Shopware\Tests\Functional\Components\Snippet;
 
 use DirectoryIterator;
 use Enlight_Components_Test_TestCase;
 
 class SnippetStructureTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * Test case
-     */
-    public function testSnippetsShouldBeValid()
+    public function testSnippetsShouldBeValid(): void
     {
-        /** @var string $rootDir */
         $rootDir = Shopware()->Container()->getParameter('kernel.root_dir');
         $source = $rootDir . '/snippets';
 

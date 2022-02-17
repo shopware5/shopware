@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Regressions;
+namespace Shopware\Tests\Functional\Regressions;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Exception;
@@ -37,7 +39,9 @@ class Ticket4609Test extends Enlight_Components_Test_Controller_TestCase
      */
     public function testNewsletterLog(): void
     {
-        Shopware()->Models()->getConnection()->exec(file_get_contents(__DIR__ . '/testdata/newsletter.sql'));
+        $sql = file_get_contents(__DIR__ . '/testdata/newsletter.sql');
+        static::assertIsString($sql);
+        Shopware()->Models()->getConnection()->executeStatement($sql);
 
         $this->Front()->setParam('noViewRenderer', false);
 

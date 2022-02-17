@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,19 +24,19 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\SearchBundle\BatchProductNumberSearch;
+namespace Shopware\Tests\Unit\Bundle\SearchBundle;
+
+use PHPUnit\Framework\TestCase;
+use ReflectionClass;
 use Shopware\Bundle\SearchBundle\BatchProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\BatchProductSearch;
 use Shopware\Bundle\SearchBundle\BatchProductSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 
-class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
+class BatchProductSearchTest extends TestCase
 {
-    /**
-     * @var BatchProductNumberSearch
-     */
-    private $batchSearch;
+    private BatchProductSearch $batchSearch;
 
     protected function setUp(): void
     {
@@ -52,38 +54,37 @@ class BatchProductSearchTest extends \PHPUnit\Framework\TestCase
      */
     public function invokeMethod($object, $methodName, array $parameters = [])
     {
-        $reflection = new \ReflectionClass(\get_class($object));
-        $method = $reflection->getMethod($methodName);
+        $method = (new ReflectionClass(\get_class($object)))->getMethod($methodName);
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
     }
 
-    public function testListProductMapping()
+    public function testListProductMapping(): void
     {
         $searchResult = new BatchProductNumberSearchResult([
             'unit-test-1' => [
-                2 => new BaseProduct(2, 2, 2),
-                3 => new BaseProduct(3, 3, 3),
-                4 => new BaseProduct(4, 4, 4),
+                2 => new BaseProduct(2, 2, '2'),
+                3 => new BaseProduct(3, 3, '3'),
+                4 => new BaseProduct(4, 4, '4'),
             ],
         ]);
 
         $listProducts = [
-            1 => new ListProduct(1, 1, 1),
-            2 => new ListProduct(2, 2, 2),
-            3 => new ListProduct(3, 3, 3),
-            4 => new ListProduct(4, 4, 4),
-            5 => new ListProduct(5, 5, 5),
+            1 => new ListProduct(1, 1, '1'),
+            2 => new ListProduct(2, 2, '2'),
+            3 => new ListProduct(3, 3, '3'),
+            4 => new ListProduct(4, 4, '4'),
+            5 => new ListProduct(5, 5, '5'),
         ];
 
         $result = $this->invokeMethod($this->batchSearch, 'mapListProducts', [$searchResult, $listProducts]);
 
         $expectedResult = new BatchProductSearchResult([
             'unit-test-1' => [
-                2 => new ListProduct(2, 2, 2),
-                3 => new ListProduct(3, 3, 3),
-                4 => new ListProduct(4, 4, 4),
+                2 => new ListProduct(2, 2, '2'),
+                3 => new ListProduct(3, 3, '3'),
+                4 => new ListProduct(4, 4, '4'),
             ],
         ]);
 

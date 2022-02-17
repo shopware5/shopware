@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,22 +24,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components;
+namespace Shopware\Tests\Functional\Components;
 
 use Enlight_Components_Test_TestCase;
 use Shopware_Components_Acl;
 
 class AclTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * @var Shopware_Components_Acl
-     */
-    private $acl;
+    private Shopware_Components_Acl $acl;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,28 +40,19 @@ class AclTest extends Enlight_Components_Test_TestCase
         $this->acl = Shopware()->Acl();
     }
 
-    /**
-     * Test case
-     */
-    public function testAclShouldContainRoles()
+    public function testAclShouldContainRoles(): void
     {
         $roles = $this->acl->getRoles();
         static::assertGreaterThan(0, \count($roles));
     }
 
-    /**
-     * Test case
-     */
-    public function testAclShouldContainResources()
+    public function testAclShouldContainResources(): void
     {
         $resources = $this->acl->getResources();
         static::assertGreaterThan(0, \count($resources));
     }
 
-    /**
-     * Test case
-     */
-    public function testTestNotExistingRoleShouldThrowException()
+    public function testTestNotExistingRoleShouldThrowException(): void
     {
         $this->expectException('Zend_Acl_Exception');
         $role = 'this_is_a_not_existing_role';
@@ -76,10 +62,7 @@ class AclTest extends Enlight_Components_Test_TestCase
         $this->acl->isAllowed($role, $resource, $privilege);
     }
 
-    /**
-     * Test case
-     */
-    public function testTestNotExistingResourceShouldThrowException()
+    public function testTestNotExistingResourceShouldThrowException(): void
     {
         $this->expectException('Zend_Acl_Exception');
         $role = 'Test-Group1';
@@ -89,10 +72,7 @@ class AclTest extends Enlight_Components_Test_TestCase
         $this->acl->isAllowed($role, $resource, $privilege);
     }
 
-    /**
-     * Test case
-     */
-    public function testTestNotExistingPrivilegeShouldNotThrowException()
+    public function testTestNotExistingPrivilegeShouldNotThrowException(): void
     {
         $role = 'local_admins';
         $privilege = 'this_is_a_not_existing_privilege';
@@ -101,10 +81,7 @@ class AclTest extends Enlight_Components_Test_TestCase
         static::assertTrue($this->acl->isAllowed($role, $resource, $privilege));
     }
 
-    /**
-     * Test case
-     */
-    public function testTestLocalAdminsShouldHaveAllPrivileges()
+    public function testTestLocalAdminsShouldHaveAllPrivileges(): void
     {
         $role = 'local_admins';
         $resource = 'debug_test';

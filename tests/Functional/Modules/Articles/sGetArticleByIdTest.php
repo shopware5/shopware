@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Modules\Articles;
+namespace Shopware\Tests\Functional\Modules\Articles;
 
 use Enlight_Components_Test_Plugin_TestCase;
 use sArticles;
@@ -31,7 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 
 class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
 {
-    protected $articles = [
+    protected array $articles = [
         2 => [
             'articleID' => '2',
             'articleDetailsID' => '125',
@@ -3455,7 +3457,7 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         ],
     ];
 
-    protected $articleProperties = [
+    private array $articleProperties = [
         'articleID',
         'articleDetailsID',
         'additionaltext',
@@ -3496,15 +3498,13 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
 
     /**
      * Retrieve module instance
-     *
-     * @return sArticles
      */
-    public function Module()
+    public function Module(): sArticles
     {
         return $this->module;
     }
 
-    public function testArticles()
+    public function testArticles(): void
     {
         Shopware()->Container()->get(ContextServiceInterface::class)->initializeShopContext();
         $this->dispatch('/');
@@ -3518,7 +3518,7 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         }
     }
 
-    public function testGetDisabledArticleById()
+    public function testGetDisabledArticleById(): void
     {
         $this->dispatch('/');
 
@@ -3533,7 +3533,7 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertGreaterThan(0, \count($this->Module()->sGetArticleById($id)));
     }
 
-    private function assertArticleData($expected, $data)
+    private function assertArticleData(array $expected, array $data): void
     {
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         foreach ($this->articleProperties as $property) {
@@ -3549,7 +3549,7 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         }
     }
 
-    private function assertLinks($expected, $data)
+    private function assertLinks(array $expected, array $data): void
     {
         static::assertCount(
             \count($expected['sLinks']),
@@ -3558,7 +3558,7 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         );
     }
 
-    private function assertRelated($expected, $data)
+    private function assertRelated(array $expected, array $data): void
     {
         static::assertCount(\count($expected['sRelatedArticles']), $data['sRelatedArticles']);
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);

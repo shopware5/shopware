@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,22 +24,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components;
+namespace Shopware\Tests\Functional\Components;
 
 use Enlight_Components_Test_TestCase;
 use Shopware_Components_StringCompiler;
 
 class StringCompilerTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * @var Shopware_Components_StringCompiler
-     */
-    private $compiler;
+    private Shopware_Components_StringCompiler $compiler;
 
-    /**
-     * Sets up the fixture, for example, opens a network connection.
-     * This method is called before a test is executed.
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -45,10 +40,7 @@ class StringCompilerTest extends Enlight_Components_Test_TestCase
         $this->compiler = new Shopware_Components_StringCompiler(Shopware()->Template());
     }
 
-    /**
-     * Test case
-     */
-    public function testShouldCompileCompatibilityMode()
+    public function testShouldCompileCompatibilityMode(): void
     {
         $template = <<<'EOD'
 Hallo,
@@ -77,10 +69,7 @@ EOD;
         static::assertEquals($result, $expectedResult);
     }
 
-    /**
-     * Test case
-     */
-    public function testShouldCompileSmarty()
+    public function testShouldCompileSmarty(): void
     {
         $template = <<<'EOD'
 Email von {$sConfig.sSHOPNAME} ({$sConfig.sMAIL}) Hallo,
@@ -126,12 +115,10 @@ EOD;
     }
 
     /**
-     * Test case
-     *
      * @depends testShouldCompileSmarty
      * @depends testShouldCompileCompatibilityMode
      */
-    public function testShouldCompileMixedString()
+    public function testShouldCompileMixedString(): void
     {
         $template = <<<'EOD'
 Email von {$sConfig.sSHOPNAME} ({$sConfig.sMAIL})
@@ -160,10 +147,7 @@ EOD;
         static::assertEquals($result, $expectedResult);
     }
 
-    /**
-     * Test case
-     */
-    public function testInvalidSmartyShouldThrowExceptionAndCustomExceptionMessage()
+    public function testInvalidSmartyShouldThrowExceptionAndCustomExceptionMessage(): void
     {
         $this->expectException('Enlight_Exception');
         $this->expectExceptionMessage('Syntax Error 74&quot;  on line 1 &quot;Hallo {$user|invalidmodifier}&quot; unknown modifier &quot;invalidmodifier&quot');

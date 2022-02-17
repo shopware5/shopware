@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Regressions;
+namespace Shopware\Tests\Functional\Regressions;
 
 use Enlight_Components_Mail;
 use PHPUnit\Framework\TestCase;

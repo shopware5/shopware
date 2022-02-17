@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Functional\Components\Migrations;
+namespace Shopware\Tests\Functional\Components\Migrations;
 
 use Doctrine\DBAL\Connection;
 use Generator;

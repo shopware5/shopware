@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,7 +47,7 @@ class sGetArticlesByCategoryTest extends Enlight_Components_Test_TestCase
         $this->module = Shopware()->Modules()->Articles();
     }
 
-    public function testGetArticles()
+    public function testGetArticles(): void
     {
         $categories = [5, 6, 8, 12, 13, 14, 15, 31];
         foreach ($categories as $id => $expected) {
@@ -53,7 +55,7 @@ class sGetArticlesByCategoryTest extends Enlight_Components_Test_TestCase
             static::assertIsArray($data);
 
             foreach ($data['sArticles'] as $key => $article) {
-                static::assertEquals($key, $article['ordernumber']);
+                static::assertSame($key, $article['ordernumber']);
             }
         }
     }

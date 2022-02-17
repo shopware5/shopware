@@ -1180,7 +1180,7 @@ class sExport implements Enlight_Hook
             $row['referenceunit'] = (float) $row['referenceunit'];
             if (!empty($row['purchaseunit']) && !empty($row['referenceunit'])) {
                 $row['referenceprice'] = Shopware()->Modules()->Articles()->calculateReferencePrice(
-                    $row['price'],
+                    (float) $row['price'],
                     $row['purchaseunit'],
                     $row['referenceunit']
                 );

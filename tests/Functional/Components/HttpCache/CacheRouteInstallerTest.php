@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Functional\Components\HttpCache;
+namespace Shopware\Tests\Functional\Components\HttpCache;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
@@ -31,27 +33,18 @@ use Shopware\Components\HttpCache\CacheRouteInstaller;
 
 class CacheRouteInstallerTest extends TestCase
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var CacheRouteInstaller
-     */
-    private $cacheRouteInstaller;
+    private CacheRouteInstaller $cacheRouteInstaller;
 
-    /**
-     * @var ConfigWriter
-     */
-    private $configWriter;
+    private ConfigWriter $configWriter;
 
     /**
      * @before
      */
-    public function startTransaction()
+    public function startTransaction(): void
     {
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->cacheRouteInstaller = Shopware()->Container()->get('shopware.http_cache.route_installer');
         $this->configWriter = Shopware()->Container()->get(ConfigWriter::class);
 
@@ -61,12 +54,12 @@ class CacheRouteInstallerTest extends TestCase
     /**
      * @after
      */
-    public function rollBackTransaction()
+    public function rollBackTransaction(): void
     {
         $this->connection->rollBack();
     }
 
-    public function testAddHttpCacheRoute()
+    public function testAddHttpCacheRoute(): void
     {
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400, ['price']);
 
@@ -78,7 +71,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertStringContainsString('widgets/swag_emotion_test price', $noCacheRoutes);
     }
 
-    public function testAddHttpCacheRouteWithoutTag()
+    public function testAddHttpCacheRouteWithoutTag(): void
     {
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
 
@@ -90,7 +83,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertStringNotContainsString('widgets/swag_emotion_test price', $noCacheRoutes);
     }
 
-    public function testAddHttpCacheRouteEmptyRoutes()
+    public function testAddHttpCacheRouteEmptyRoutes(): void
     {
         $sql = "UPDATE `s_core_config_elements` SET `value` = NULL WHERE `s_core_config_elements`.`name` = 'cacheControllers';";
         $this->connection->executeQuery($sql);
@@ -100,7 +93,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertFalse($result);
     }
 
-    public function testAddHttpCacheRouteAlreadyExists()
+    public function testAddHttpCacheRouteAlreadyExists(): void
     {
         $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
@@ -108,7 +101,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertTrue($result);
     }
 
-    public function testAddHttpCacheRouteAlreadyExistsButDifferentTime()
+    public function testAddHttpCacheRouteAlreadyExistsButDifferentTime(): void
     {
         $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 9999);
@@ -119,7 +112,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertStringContainsString('widgets/swag_emotion_test 9999', $cacheRoutes);
     }
 
-    public function testAddHttpCacheRouteCacheTagAlreadyExists()
+    public function testAddHttpCacheRouteCacheTagAlreadyExists(): void
     {
         $result1 = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400, ['price']);
         $result2 = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400, ['price']);
@@ -132,7 +125,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertStringContainsString('widgets/swag_emotion_test foo', $noCacheRoutes);
     }
 
-    public function testAddHttpCacheRouteEmptyRouteReturnsNull()
+    public function testAddHttpCacheRouteEmptyRouteReturnsNull(): void
     {
         $this->cacheRouteInstaller->addHttpCacheRoute("\n", 9999);
         $result = $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
@@ -144,7 +137,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertStringNotContainsString('9999', $cacheRoutes);
     }
 
-    public function testRemoveHttpCacheRoute()
+    public function testRemoveHttpCacheRoute(): void
     {
         $this->cacheRouteInstaller->addHttpCacheRoute('widgets/swag_emotion_test', 14400);
         $result = $this->cacheRouteInstaller->removeHttpCacheRoute('widgets/swag_emotion_test');
@@ -157,7 +150,7 @@ class CacheRouteInstallerTest extends TestCase
         static::assertStringNotContainsString('widgets/swag_emotion_test price', $noCacheRoutes);
     }
 
-    public function testRemoveHttpCacheRouteEmptyRoutes()
+    public function testRemoveHttpCacheRouteEmptyRoutes(): void
     {
         $sql = "UPDATE `s_core_config_elements` SET `value` = NULL WHERE `s_core_config_elements`.`name` = 'cacheControllers';";
         $this->connection->executeQuery($sql);

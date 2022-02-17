@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Plugins\Core\PaymentMethods;
+namespace Shopware\Tests\Functional\Plugins\Core\PaymentMethods\Components;
 
 use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Models\Customer\PaymentData;
@@ -35,7 +37,7 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
 {
     protected static SepaPaymentMethod $sepaPaymentMethod;
 
-    protected static $sepaStatus;
+    protected static bool $sepaStatus;
 
     public static function setUpBeforeClass(): void
     {
@@ -179,6 +181,7 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
         $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
+        static::assertIsArray($lastPayment);
         static::assertNull($lastPayment['sSepaBankName']);
         static::assertNull($lastPayment['sSepaBic']);
         static::assertSame('', $lastPayment['sSepaIban']);
@@ -201,6 +204,7 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
         self::$sepaPaymentMethod->savePaymentData(1, $this->Request());
 
         $lastPayment = self::$sepaPaymentMethod->getCurrentPaymentDataAsArray(1);
+        static::assertIsArray($lastPayment);
         static::assertSame('Some Valid Bank Name', $lastPayment['sSepaBankName']);
         static::assertSame('Some Valid Bic', $lastPayment['sSepaBic']);
         static::assertSame('AL47212110090000000235698741', $lastPayment['sSepaIban']);

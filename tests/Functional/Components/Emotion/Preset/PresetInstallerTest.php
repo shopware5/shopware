@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Functional\Components\Emotion\Preset;
+namespace Shopware\Tests\Functional\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
@@ -46,7 +48,7 @@ class PresetInstallerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get('Doctrine\DBAL\Connection');
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->connection->beginTransaction();
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
@@ -60,61 +62,55 @@ class PresetInstallerTest extends TestCase
         $this->connection->rollBack();
     }
 
-    public function testPresetInstallationShouldSucceedWithEmptyPresetData()
+    public function testPresetInstallationShouldSucceedWithEmptyPresetData(): void
     {
         $presetMetaData = $this->buildMetaDataMock('foo');
 
         static::assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetInstaller->installOrUpdate([$presetMetaData]);
-        $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
+        $presets = $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets');
 
         static::assertCount(1, $presets);
         // check slugified name
         static::assertEquals('foo', $presets[0]['name']);
     }
 
-    public function testPresetUpdateShouldSucceedWithEmptyPresetData()
+    public function testPresetUpdateShouldSucceedWithEmptyPresetData(): void
     {
         $presetMetaData = $this->buildMetaDataMock('foo');
         $presetMetaDataUpdate = $this->buildMetaDataMock('foo', true);
 
         static::assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetInstaller->installOrUpdate([$presetMetaData]);
-        $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
+        $presets = $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets');
 
         static::assertCount(1, $presets);
         // check slugified name
         static::assertEquals('foo', $presets[0]['name']);
 
         $this->presetInstaller->installOrUpdate([$presetMetaDataUpdate]);
-        $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
+        $presets = $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets');
 
         static::assertCount(1, $presets);
         static::assertEquals('foo', $presets[0]['name']);
         static::assertEquals(1, $presets[0]['custom']);
     }
 
-    public function testPresetUninstallationShouldSucceed()
+    public function testPresetUninstallationShouldSucceed(): void
     {
         $firstPreset = $this->buildMetaDataMock('foo', true);
         $secondPreset = $this->buildMetaDataMock('bar');
 
         $this->presetInstaller->installOrUpdate([$firstPreset, $secondPreset]);
-        static::assertCount(2, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
+        static::assertCount(2, $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets'));
 
         $this->presetInstaller->uninstall(['foo']);
-        $presets = $this->connection->fetchAll('SELECT * FROM s_emotion_presets');
+        $presets = $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets');
         static::assertCount(1, $presets);
         static::assertEquals('bar', $presets[0]['name']);
     }
 
-    /**
-     * @param string $name
-     * @param bool   $custom
-     *
-     * @return \PHPUnit\Framework\MockObject\MockObject
-     */
-    private function buildMetaDataMock($name, $custom = false)
+    private function buildMetaDataMock(string $name, bool $custom = false): PresetMetaDataInterface
     {
         $presetMetaData = $this->createMock(PresetMetaDataInterface::class);
         $presetMetaData->method('getName')->willReturn($name);

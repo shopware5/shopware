@@ -1178,9 +1178,9 @@ class sArticles implements Enlight_Hook
     /**
      * calculates the reference price with the base price data
      *
-     * @param string $price         | the final price which will be shown
-     * @param float  $purchaseUnit
-     * @param float  $referenceUnit
+     * @param string|float $price         | the final price which will be shown
+     * @param string|float $purchaseUnit
+     * @param string|float $referenceUnit
      *
      * @return float
      */
@@ -1189,9 +1189,13 @@ class sArticles implements Enlight_Hook
         $purchaseUnit = (float) $purchaseUnit;
         $referenceUnit = (float) $referenceUnit;
 
-        $price = (float) str_replace(',', '.', $price);
+        if (\is_string($price)) {
+            $price = (float) str_replace(',', '.', $price);
+        } elseif (!\is_float($price)) {
+            throw new UnexpectedValueException('Parameter price needs to be of type "float" or a numeric string');
+        }
 
-        if ($purchaseUnit == 0 || $referenceUnit == 0) {
+        if ($purchaseUnit === 0.0 || $referenceUnit === 0.0) {
             return 0;
         }
 

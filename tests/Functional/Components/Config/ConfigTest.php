@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,20 +24,23 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Components\Config;
+
+use Enlight_Components_Test_TestCase;
+use Enlight_Config;
+use Shopware\Components\Snippet\DbAdapter;
+
 class ConfigTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * Test case
-     */
-    public function testMissingSnippetsConfigSection()
+    public function testMissingSnippetsConfigSection(): void
     {
         // Configure snippet database adapter
-        $adapter = new Shopware\Components\Snippet\DbAdapter([
+        $adapter = new DbAdapter([
             'sectionColumn' => ['shopID', 'localeID'],
         ]);
 
         // Simple default config object with section
-        $config = new \Enlight_Config([], [
+        $config = new Enlight_Config([], [
             'section' => '1:1',
         ]);
 

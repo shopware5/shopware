@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,14 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\tests\Functional\Components\Emotion\Preset;
+namespace Shopware\Tests\Functional\Components\Emotion\Preset;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
-use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer;
+use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface;
 
 /**
  * @group EmotionPreset
@@ -48,13 +50,13 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->connection->beginTransaction();
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->transformer = Shopware()->Container()->get(\Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface::class);
+        $this->transformer = Shopware()->Container()->get(EmotionToPresetDataTransformerInterface::class);
     }
 
     protected function tearDown(): void
@@ -62,16 +64,15 @@ class EmotionToPresetDataTransformerTest extends TestCase
         $this->connection->rollBack();
     }
 
-    public function testShouldFailBecauseOfMissingEmotion()
+    public function testShouldFailBecauseOfMissingEmotion(): void
     {
-        $this->expectException('');
         $this->expectException(NoResultException::class);
-        $this->transformer->transform(null);
+        $this->transformer->transform(0);
     }
 
-    public function testTransformShouldSucceed()
+    public function testTransformShouldSucceed(): void
     {
-        $emotionId = $this->connection->executeQuery('SELECT id FROM s_emotion LIMIT 1')->fetchColumn();
+        $emotionId = $this->connection->executeQuery('SELECT id FROM s_emotion LIMIT 1')->fetchOne();
 
         $data = $this->transformer->transform($emotionId);
 
@@ -91,9 +92,9 @@ class EmotionToPresetDataTransformerTest extends TestCase
         static::assertIsArray($data['requiredPlugins']);
     }
 
-    public function testTransformWithTranslationsShouldSucceed()
+    public function testTransformWithTranslationsShouldSucceed(): void
     {
-        $emotionId = $this->connection->executeQuery('SELECT id FROM s_emotion LIMIT 1')->fetchColumn();
+        $emotionId = $this->connection->executeQuery('SELECT id FROM s_emotion LIMIT 1')->fetchOne();
         $this->connection->insert('s_core_translations', ['objecttype' => 'emotion', 'objectdata' => 'a:1:{s:4:"name";s:11:"My homepage";}', 'objectkey' => $emotionId, 'objectlanguage' => 2, 'dirty' => 1]);
 
         $data = $this->transformer->transform($emotionId);
@@ -112,10 +113,10 @@ class EmotionToPresetDataTransformerTest extends TestCase
         static::assertEmpty($data['requiredPlugins']);
     }
 
-    public function testGettingRequiredPluginsByIdShouldSucceed()
+    public function testGettingRequiredPluginsByIdShouldSucceed(): void
     {
         $this->connection->insert('s_core_plugins', ['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '1.0.0']);
-        $pluginId = $this->connection->fetchColumn('SELECT id FROM s_core_plugins');
+        $pluginId = $this->connection->fetchOne('SELECT id FROM s_core_plugins');
 
         $method = new ReflectionMethod($this->transformer, 'getRequiredPluginsById');
         $method->setAccessible(true);
