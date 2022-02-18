@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,30 +27,24 @@
 namespace Shopware\Bundle\MediaBundle;
 
 use Doctrine\DBAL\Connection;
-use PDO;
 use Shopware\Bundle\MediaBundle\Struct\MediaPosition;
+use Shopware\Models\Media\Album;
 
 class GarbageCollector
 {
     /**
      * @var MediaPosition[]
      */
-    private $mediaPositions;
+    private array $mediaPositions;
+
+    private Connection $connection;
+
+    private MediaServiceInterface $mediaService;
 
     /**
-     * @var Connection
+     * @var array{id: array<int>, path: array<string>}
      */
-    private $connection;
-
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
-
-    /**
-     * @var array
-     */
-    private $queue = [
+    private array $queue = [
         'id' => [],
         'path' => [],
     ];
@@ -65,8 +61,6 @@ class GarbageCollector
 
     /**
      * Start garbage collector job
-     *
-     * @throws \Doctrine\DBAL\DBALException
      *
      * @return int
      */
@@ -89,64 +83,56 @@ class GarbageCollector
     }
 
     /**
-     * @return bool|string
+     * @return int
      */
     public function getCount()
     {
-        return $this->connection->createQueryBuilder()
+        return (int) $this->connection->createQueryBuilder()
             ->select('count(*) as cnt')
             ->from('s_media')
-            ->where('albumID = -13')
+            ->where('albumID = :trashAlbumId')
+            ->setParameter('trashAlbumId', Album::ALBUM_GARBAGE)
             ->execute()
-            ->fetchColumn();
+            ->fetchOne();
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function createTempTable()
+    private function createTempTable(): void
     {
-        $this->connection->exec('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id), INDEX media (mediaId))');
+        $this->connection->executeStatement('CREATE TEMPORARY TABLE IF NOT EXISTS s_media_used (id int auto_increment, mediaId int NOT NULL, PRIMARY KEY pkid (id), INDEX media (mediaId))');
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function moveToTrash()
+    private function moveToTrash(): void
     {
-        $sql = '
-            UPDATE s_media m
-            LEFT JOIN s_media_used u
-            ON u.mediaId = m.id
-            LEFT JOIN s_media_album a
-            ON m.albumID = a.id
-            SET albumID=-13
-            WHERE a.garbage_collectable = 1
-            AND u.id IS NULL
-        ';
-        $this->connection->exec($sql);
+        $sql = <<<'SQL'
+UPDATE s_media media
+LEFT JOIN s_media_used used_media
+    ON used_media.mediaId = media.id
+LEFT JOIN s_media_album album
+    ON media.albumID = album.id
+SET albumID = ?
+WHERE album.garbage_collectable = 1
+    AND used_media.id IS NULL;
+SQL;
+        $this->connection->executeStatement($sql, [Album::ALBUM_GARBAGE]);
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function find(MediaPosition $mediaPosition)
+    private function find(MediaPosition $mediaPosition): void
     {
         switch ($mediaPosition->getParseType()) {
             case MediaPosition::PARSE_JSON:
-                $this->handleJsonTable($mediaPosition);
+                $this->handleTablesWithJsonContent($mediaPosition);
                 break;
 
             case MediaPosition::PARSE_SERIALIZE:
-                $this->handleSerializeTable($mediaPosition);
+                $this->handleTablesWithSerializedContent($mediaPosition);
                 break;
 
             case MediaPosition::PARSE_HTML:
-                $this->handleHtmlTable($mediaPosition);
+                $this->handleTablesWithHtmlContent($mediaPosition);
                 break;
 
             case MediaPosition::PARSE_PIPES:
-                $this->handlePipeTable($mediaPosition);
+                $this->handleTablesWithIdsSeparatedByPipes($mediaPosition);
                 break;
 
             default:
@@ -154,14 +140,13 @@ class GarbageCollector
         }
     }
 
-    /**
-     * Handles tables with json content
-     */
-    private function handleJsonTable(MediaPosition $mediaPosition)
+    private function handleTablesWithJsonContent(MediaPosition $mediaPosition): void
     {
-        $rows = $this->fetchColumn($mediaPosition);
+        foreach ($this->fetchColumn($mediaPosition) as $row) {
+            if (!\is_string($row)) {
+                continue;
+            }
 
-        foreach ($rows as $row) {
             $jsonValues = json_decode($row);
 
             if (empty($jsonValues)) {
@@ -171,44 +156,38 @@ class GarbageCollector
             if (\is_array($jsonValues)) {
                 foreach ($jsonValues as $value) {
                     if (isset($value->mediaId)) {
-                        $this->addMediaById((int) $value->mediaId);
+                        $this->addMediaByIdToUsedTable((int) $value->mediaId);
                     } elseif (isset($value->path)) {
-                        $this->addMediaByPath($value->path);
+                        $this->addMediaByPathToUsedTable($value->path);
                     }
                 }
             } elseif (\is_object($jsonValues)) {
                 if (isset($jsonValues->mediaId)) {
-                    $this->addMediaById((int) $jsonValues->mediaId);
+                    $this->addMediaByIdToUsedTable((int) $jsonValues->mediaId);
                 } elseif (isset($jsonValues->path)) {
-                    $this->addMediaByPath($jsonValues->path);
+                    $this->addMediaByPathToUsedTable($jsonValues->path);
                 }
             }
         }
     }
 
-    /**
-     * Handles tables with serialized content
-     */
-    private function handleSerializeTable(MediaPosition $mediaPosition)
+    private function handleTablesWithSerializedContent(MediaPosition $mediaPosition): void
     {
-        $values = $this->fetchColumn($mediaPosition);
-
-        foreach ($values as $value) {
-            $value = @unserialize($value, ['allowed_classes' => false]);
-            if ($value !== false) {
-                $this->addMediaByPath($value);
+        foreach ($this->fetchColumn($mediaPosition) as $value) {
+            $value = unserialize($value, ['allowed_classes' => false]);
+            if (\is_string($value)) {
+                $this->addMediaByPathToUsedTable($value);
             }
         }
     }
 
-    /**
-     * Handles tables with html content
-     */
-    private function handleHtmlTable(MediaPosition $mediaPosition)
+    private function handleTablesWithHtmlContent(MediaPosition $mediaPosition): void
     {
-        $values = $this->fetchColumn($mediaPosition);
+        foreach ($this->fetchColumn($mediaPosition) as $value) {
+            if (!\is_string($value)) {
+                continue;
+            }
 
-        foreach ($values as $value) {
             // Media path matches
             preg_match_all("/{{1}media[\s+]?path=[\"'](?'mediaTag'\S*)[\"']}{1}/mi", $value, $mediaMatches);
             // Src tag matches
@@ -219,14 +198,14 @@ class GarbageCollector
             if ($mediaMatches['mediaTag']) {
                 foreach ($mediaMatches['mediaTag'] as $match) {
                     $match = $this->mediaService->normalize($match);
-                    $this->addMediaByPath($match);
+                    $this->addMediaByPathToUsedTable($match);
                 }
             }
 
             if ($srcMatches['srcTag']) {
                 foreach ($srcMatches['srcTag'] as $match) {
                     $match = $this->mediaService->normalize($match);
-                    $this->addMediaByPath($match);
+                    $this->addMediaByPathToUsedTable($match);
                 }
             }
 
@@ -235,80 +214,56 @@ class GarbageCollector
                     $match = $this->mediaService->normalize($match);
 
                     // Only add normalized media links and not arbitrary links
-                    if (strpos($match, 'media/') === 0) {
-                        $this->addMediaByPath($match);
+                    if (str_starts_with($match, 'media/')) {
+                        $this->addMediaByPathToUsedTable($match);
                     }
                 }
             }
         }
     }
 
-    /**
-     * Handles tables with IDs separated by pipes
-     */
-    private function handlePipeTable(MediaPosition $mediaPosition)
+    private function handleTablesWithIdsSeparatedByPipes(MediaPosition $mediaPosition): void
     {
-        $values = $this->fetchColumn($mediaPosition);
-
-        foreach ($values as $value) {
-            /** @var array $mediaIds */
-            $mediaIds = array_filter(explode('|', $value));
-
-            foreach ($mediaIds as $id) {
-                $this->addMediaById($id);
+        foreach ($this->fetchColumn($mediaPosition) as $value) {
+            foreach (array_filter(explode('|', $value)) as $id) {
+                $this->addMediaByIdToUsedTable((int) $id);
             }
         }
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function handleTable(MediaPosition $mediaPosition)
+    private function handleTable(MediaPosition $mediaPosition): void
     {
         $sql = sprintf(
             'INSERT INTO s_media_used
-                    SELECT DISTINCT NULL, m.id
-                    FROM s_media m
-                    INNER JOIN %1$s
-                        ON %1$s.%2$s = m.%3$s',
+                SELECT DISTINCT NULL, media.id
+                FROM s_media media
+                INNER JOIN %1$s
+                    ON %1$s.%2$s = media.%3$s',
             $mediaPosition->getSourceTable(),
             $mediaPosition->getSourceColumn(),
             $mediaPosition->getMediaColumn()
         );
 
-        $this->connection->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
-    /**
-     * Adds a media by path to used table
-     *
-     * @param string $path
-     */
-    private function addMediaByPath($path)
+    private function addMediaByPathToUsedTable(string $path): void
     {
         $path = $this->mediaService->normalize($path);
         $this->queue['path'][] = $path;
     }
 
-    /**
-     * Adds a media by id to used table
-     *
-     * @param int $mediaId
-     */
-    private function addMediaById($mediaId)
+    private function addMediaByIdToUsedTable(int $mediaId): void
     {
         $this->queue['id'][] = $mediaId;
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
-    private function processQueue()
+    private function processQueue(): void
     {
         // Process paths
         if (!empty($this->queue['path'])) {
             $paths = array_unique($this->queue['path']);
-            $sql = 'INSERT INTO s_media_used SELECT DISTINCT NULL, m.id FROM s_media m WHERE m.path IN (:mediaPaths)';
+            $sql = 'INSERT INTO s_media_used SELECT DISTINCT NULL, media.id FROM s_media media WHERE media.path IN (:mediaPaths)';
             $this->connection->executeQuery(
                 $sql,
                 [':mediaPaths' => $paths],
@@ -326,15 +281,15 @@ class GarbageCollector
     }
 
     /**
-     * @return array
+     * @return array<int, mixed>
      */
-    private function fetchColumn(MediaPosition $mediaPosition)
+    private function fetchColumn(MediaPosition $mediaPosition): array
     {
         return $this->connection
             ->createQueryBuilder()
             ->select($mediaPosition->getSourceColumn())
             ->from($mediaPosition->getSourceTable())
             ->execute()
-            ->fetchAll(PDO::FETCH_COLUMN);
+            ->fetchFirstColumn();
     }
 }

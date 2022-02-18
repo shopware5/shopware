@@ -8346,21 +8346,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/Commands/ImageMigrateCommand.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaCleanupCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaCleanupCommand\\:\\:handleCleanup\\(\\) should return int but returns int\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$max of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:createProgressBar\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaOptimizeCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
@@ -8409,76 +8394,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Exception\\\\WrongMediaTypeForReplaceException\\:\\:__construct\\(\\) has parameter \\$requiredType with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Exception/WrongMediaTypeForReplaceException.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:addMediaById\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:addMediaByPath\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:createTempTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:fetchColumn\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:find\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleHtmlTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleJsonTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handlePipeTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleSerializeTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:moveToTrash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:processQueue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$mediaIds has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:\\$queue type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
 
 		-
 			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
@@ -27897,11 +27812,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:downloadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:emptyTrashAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
@@ -54939,46 +54849,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\CdnOptimizerServiceTest\\:\\:testLocalOptimize\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/MediaBundle/CdnOptimizerServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\DbalConnectionMock\\:\\:createQueryBuilder\\(\\) should return Doctrine\\\\DBAL\\\\Query\\\\QueryBuilder but returns Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:callHandleHtmlTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:getExampleMediaPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:getGarbageCollector\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:testHandleHtmlTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\:\\:__call\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\:\\:__call\\(\\) has parameter \\$arguments with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\:\\:__call\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\MediaExtensionMappingServiceTest\\:\\:testAllowedExtensionShouldPass\\(\\) has no return type specified\\.$#"
