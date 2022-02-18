@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,17 +26,20 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+
 class PriceCalculationTest extends TestCase
 {
-    public function testCustomerGroupDiscount()
+    public function testCustomerGroupDiscount(): void
     {
         $number = __FUNCTION__;
-        $context = $this->getContext();
+        $context = $this->createContext();
         $data = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
+        static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
         static::assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
 
         $graduations = $listProduct->getPrices();
@@ -44,14 +49,14 @@ class PriceCalculationTest extends TestCase
         static::assertEquals(40, $graduations[2]->getCalculatedPrice());
     }
 
-    public function testNetPrices()
+    public function testNetPrices(): void
     {
         $number = __FUNCTION__;
-        $context = $this->getContext(false);
+        $context = $this->createContext(false);
 
         $data = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
         /*
@@ -66,6 +71,7 @@ class PriceCalculationTest extends TestCase
         */
 
         $cheapest = $listProduct->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapest);
         $graduations = $listProduct->getPrices();
 
         static::assertEquals(67.23, $cheapest->getCalculatedPrice());
@@ -83,13 +89,13 @@ class PriceCalculationTest extends TestCase
         static::assertEquals(67.22, $graduation->getCalculatedReferencePrice());
     }
 
-    public function testCurrencyFactor()
+    public function testCurrencyFactor(): void
     {
         $number = __FUNCTION__;
-        $context = $this->getContext(true, 0, 1.2);
+        $context = $this->createContext(true, 0, 1.2);
         $data = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
         /*
@@ -106,6 +112,7 @@ class PriceCalculationTest extends TestCase
         */
 
         $cheapest = $listProduct->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapest);
         $graduations = $listProduct->getPrices();
 
         static::assertEquals(120, $cheapest->getCalculatedPrice());
@@ -123,13 +130,13 @@ class PriceCalculationTest extends TestCase
         static::assertEquals(120, $graduation->getCalculatedReferencePrice());
     }
 
-    public function testDiscountCurrencyNet()
+    public function testDiscountCurrencyNet(): void
     {
         $number = __FUNCTION__;
-        $context = $this->getContext(false, 30, 1.2);
+        $context = $this->createContext(false, 30, 1.2);
         $data = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
         /*
@@ -146,6 +153,7 @@ class PriceCalculationTest extends TestCase
         */
 
         $cheapest = $listProduct->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapest);
         $graduations = $listProduct->getPrices();
 
         static::assertEquals(70.59, $cheapest->getCalculatedPrice());
@@ -163,13 +171,13 @@ class PriceCalculationTest extends TestCase
         static::assertEquals(70.58, $graduation->getCalculatedReferencePrice());
     }
 
-    public function testDiscountCurrencyGross()
+    public function testDiscountCurrencyGross(): void
     {
         $number = __FUNCTION__;
-        $context = $this->getContext(true, 15, 1.44);
+        $context = $this->createContext(true, 15, 1.44);
         $data = $this->getProduct($number, $context);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
         $listProduct = $this->helper->getListProduct($number, $context);
 
         /*
@@ -185,6 +193,7 @@ class PriceCalculationTest extends TestCase
         */
 
         $cheapest = $listProduct->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapest);
         $graduations = $listProduct->getPrices();
 
         static::assertEquals(122.4, $cheapest->getCalculatedPrice());
@@ -202,14 +211,7 @@ class PriceCalculationTest extends TestCase
         static::assertEquals(122.40000, $graduation->getCalculatedReferencePrice());
     }
 
-    /**
-     * @param bool $displayGross
-     * @param int  $discount
-     * @param int  $currencyFactor
-     *
-     * @return TestContext
-     */
-    protected function getContext($displayGross = true, $discount = 20, $currencyFactor = 1)
+    private function createContext(bool $displayGross = true, int $discount = 20, float $currencyFactor = 1): TestContext
     {
         $tax = $this->helper->createTax();
         $customerGroup = $this->helper->createCustomerGroup(

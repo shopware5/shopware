@@ -57,14 +57,14 @@ class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
 
         $this->manufacturerId = $manufacturer->getId();
 
-        $this->sw1 = $helper->createArticle(
+        $this->sw1 = $helper->createProduct(
             array_merge(
                 $helper->getSimpleProduct('SW1'),
                 ['supplierId' => $manufacturer->getId(), 'categories' => [['id' => 3]]]
             )
         );
 
-        $this->sw2 = $helper->createArticle(
+        $this->sw2 = $helper->createProduct(
             array_merge(
                 $helper->getSimpleProduct('SW2'),
                 ['supplierId' => $manufacturer->getId(), 'categories' => [['id' => 3]]]

@@ -104,12 +104,12 @@ class TextMappingTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function createProducts($products, ShopContext $context, Category $category)
+    public function createProducts(array $products, ShopContext $context, Category $category): array
     {
-        $articles = parent::createProducts($products, $context, $category);
+        $createdProducts = parent::createProducts($products, $context, $category);
 
         $this->helper->refreshSearchIndexes($context->getShop());
 
-        return $articles;
+        return $createdProducts;
     }
 }

@@ -30,7 +30,6 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Customer\Address as AddressModel;
 use Shopware\Models\Customer\Customer;
-use Symfony\Component\Form\FormInterface;
 
 /**
  * @extends Shopware_Controllers_Backend_Application<AddressModel>
@@ -59,6 +58,8 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      * Transfers the address attributes to the according legacy tables.
      *
      * Intended to be called from shopware backend via ajax with request parameter `id`.
+     *
+     * @return void
      */
     public function syncAttributeAction()
     {
@@ -66,17 +67,18 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         if (!$customerAddressId) {
             return;
         }
+
         $address = $this->getManager()->getRepository(AddressModel::class)->find($customerAddressId);
+        if (!$address instanceof AddressModel) {
+            return;
+        }
+
         Shopware()->Container()->get(AddressServiceInterface::class)->update($address);
     }
 
     /**
      * Override save method to make use of symfony form and custom data mapping
      * If isDefaultBillingAddress or isDefaultShippingAddress, the appropriate action will be made
-     *
-     * @param array $data
-     *
-     * @return array
      */
     public function save($data)
     {
@@ -90,7 +92,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         $data['country'] = $data['countryId'];
         $data['state'] = $data['stateId'];
 
-        /** @var FormInterface $form */
         $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model);
         $form->submit($data);
 
@@ -111,7 +112,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         if ($model->getId()) {
             $this->addressService->update($model);
         } else {
-            /** @var Customer $customer */
             $customer = $this->get(ModelManager::class)->find(Customer::class, $data['user_id']);
             $this->addressService->create($model, $customer);
         }
@@ -131,10 +131,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
 
     /**
      * Use address service for deletion
-     *
-     * @param int $id
-     *
-     * @return array
      */
     public function delete($id)
     {
@@ -142,7 +138,6 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
             return ['success' => false, 'error' => 'The id parameter contains no value.'];
         }
 
-        /** @var AddressModel $model */
         $model = $this->getManager()->find($this->model, $id);
 
         if (!($model instanceof $this->model)) {

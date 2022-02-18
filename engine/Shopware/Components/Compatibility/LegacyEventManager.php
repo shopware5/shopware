@@ -24,24 +24,22 @@
 
 namespace Shopware\Components\Compatibility;
 
-use Enlight_Event_EventManager;
 use sArticles;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\ContainerAwareEventManager;
 
+/**
+ * @deprecated - Will be removed with shopware 5.8 without replacement
+ * @phpstan-import-type ListingArray from \sArticles
+ */
 class LegacyEventManager
 {
-    /**
-     * @var Enlight_Event_EventManager
-     */
-    private $eventManager;
+    private ContainerAwareEventManager $eventManager;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
+    private ContextServiceInterface $contextService;
 
     public function __construct(
-        Enlight_Event_EventManager $eventManager,
+        ContainerAwareEventManager $eventManager,
         ContextServiceInterface $contextService
     ) {
         $this->eventManager = $eventManager;
@@ -50,9 +48,13 @@ class LegacyEventManager
 
     /**
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
-     * Removed with shopware 5.1
      *
-     * @param int $categoryId
+     * @deprecated - Will be removed with shopware 5.8
+     *
+     * @param ListingArray $result
+     * @param int|null     $categoryId
+     *
+     * @return ListingArray
      */
     public function fireArticlesByCategoryEvents(
         array $result,
@@ -60,7 +62,7 @@ class LegacyEventManager
         sArticles $module
     ) {
         foreach ($result['sArticles'] as &$product) {
-            $product = Shopware()->Events()->filter(
+            $product = $this->eventManager->filter(
                 'Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd',
                 $product,
                 [
@@ -82,21 +84,23 @@ class LegacyEventManager
 
     /**
      * Following events are deprecated and only implemented for backward compatibility to shopware 4
-     * Removed with shopware 5.1
      *
-     * @return array|mixed
+     * @deprecated - Will be removed with shopware 5.8
+     *
+     * @param array<string, mixed> $product
+     *
+     * @return array<string, mixed>
      */
     public function fireArticleByIdEvents(array $product, sArticles $module)
     {
-        $getArticle = $product;
         $context = $this->contextService->getShopContext();
 
-        return Shopware()->Events()->filter(
+        return $this->eventManager->filter(
             'Shopware_Modules_Articles_GetArticleById_FilterResult',
-            $getArticle,
+            $product,
             [
                 'subject' => $module,
-                'id' => $getArticle['articleID'],
+                'id' => $product['articleID'],
                 'isBlog' => false,
                 'customergroup' => $context->getCurrentCustomerGroup()->getKey(),
             ]

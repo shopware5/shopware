@@ -43,7 +43,7 @@ class SimilarProductConditionTest extends TestCase
         $second = $this->helper->createCategory(['name' => 'second-category', 'parent' => $main]);
 
         $product = $this->getProduct('test', $this->getContext(), null, $second);
-        $article = $this->helper->createArticle($product);
+        $article = $this->helper->createProduct($product);
         $condition = new SimilarProductCondition($article->getId(), $article->getName());
 
         $this->search(
@@ -66,11 +66,11 @@ class SimilarProductConditionTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $additionally = null
-    ) {
+    ): array {
         if ($additionally !== null) {
             static::assertInstanceOf(Category::class, $additionally);
         }

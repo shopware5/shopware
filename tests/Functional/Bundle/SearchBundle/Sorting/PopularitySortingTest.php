@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestContext;
 
 /**
  * @group elasticSearch
@@ -94,8 +95,11 @@ class PopularitySortingTest extends TestCase
         );
     }
 
+    /**
+     * @param int $sales
+     */
     protected function createProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category,
         $sales
@@ -117,15 +121,15 @@ class PopularitySortingTest extends TestCase
     }
 
     protected function search(
-        $products,
-        $expectedNumbers,
-        $category = null,
-        $conditions = [],
-        $facets = [],
-        $sortings = [],
-        $context = null,
+        array $products,
+        array $expectedNumbers,
+        Category $category = null,
+        array $conditions = [],
+        array $facets = [],
+        array $sortings = [],
+        TestContext $context = null,
         array $configs = [],
-        $variantSearch = false
+        bool $variantSearch = false
     ): ProductNumberSearchResult {
         $result = parent::search(
             $products,

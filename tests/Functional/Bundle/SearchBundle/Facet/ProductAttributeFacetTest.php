@@ -66,7 +66,7 @@ class ProductAttributeFacetTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $attribute = ['attr1' => 10]

@@ -75,13 +75,12 @@ class CustomerGroupConditionTest extends TestCase
     }
 
     /**
-     * @param string       $number
      * @param Group[]|null $customerGroups
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $customerGroups = null

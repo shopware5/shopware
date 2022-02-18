@@ -24,6 +24,7 @@
 
 namespace Shopware\Components;
 
+use Enlight\Event\SubscriberInterface;
 use Enlight_Event_EventManager;
 use Enlight_Event_Handler;
 use Enlight_Event_Handler_Default;
@@ -32,6 +33,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContainerAwareEventManager extends Enlight_Event_EventManager
 {
+    private const DEPRECATED_EVENTS = [
+        'Shopware_Modules_Articles_sGetArticlesByCategory_FilterLoopEnd',
+        'Shopware_Modules_Articles_sGetArticlesByCategory_FilterResult',
+        'Shopware_Modules_Articles_GetArticleById_FilterResult',
+    ];
+
     /**
      * Contains all registered event listeners. A listener can be registered by the
      * registerListener(Enlight_Event_Handler $handler) function.
@@ -43,12 +50,9 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
     /**
      * @var ContainerInterface;
      */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var array
-     */
-    private $listenerIds = [];
+    private array $listenerIds = [];
 
     public function __construct(ContainerInterface $container)
     {
@@ -147,8 +151,8 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
     /**
      * Adds a service as event subscriber.
      *
-     * @param string $serviceId The service ID of the subscriber service
-     * @param string $class     The service's class name (which must implement EventSubscriberInterface)
+     * @param string                            $serviceId The service ID of the subscriber service
+     * @param class-string<SubscriberInterface> $class     The service's class name (which must implement EventSubscriberInterface)
      */
     public function addSubscriberService($serviceId, $class)
     {
@@ -157,11 +161,17 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
 
             if (\is_string($params)) {
                 $this->listenerIds[$eventName][] = [$serviceId, $params, 0];
-            } elseif (\is_string($params[0])) {
-                $this->listenerIds[$eventName][] = [$serviceId, $params[0], isset($params[1]) ? $params[1] : 0];
-            } else {
-                foreach ($params as $listener) {
-                    $this->listenerIds[$eventName][] = [$serviceId, $listener[0], isset($listener[1]) ? $listener[1] : 0];
+                continue;
+            }
+
+            if (\is_string($params[0])) {
+                $this->listenerIds[$eventName][] = [$serviceId, $params[0], (int) ($params[1] ?? 0)];
+                continue;
+            }
+
+            foreach ($params as $listener) {
+                if (\is_array($listener)) {
+                    $this->listenerIds[$eventName][] = [$serviceId, $listener[0], $listener[1] ?? 0];
                 }
             }
         }
@@ -175,6 +185,13 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
         $this->containerListeners = [];
 
         return parent::reset();
+    }
+
+    public function addListener($eventName, $listener, $priority = 0)
+    {
+        $this->checkForDeprecatedEvent($eventName);
+
+        return parent::addListener($eventName, $listener, $priority);
     }
 
     /**
@@ -211,6 +228,13 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
             }
 
             $this->containerListeners[$eventName][$key] = $listener;
+        }
+    }
+
+    private function checkForDeprecatedEvent(string $eventName): void
+    {
+        if (\in_array($eventName, self::DEPRECATED_EVENTS, true)) {
+            $this->container->get('corelogger')->warning(sprintf('Event "%s" is deprecated. Do not use it anymore.', $eventName));
         }
     }
 }

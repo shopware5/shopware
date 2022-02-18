@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,7 +39,7 @@ class DownloadTest extends TestCase
         $context = $this->getContext();
         $number = 'testSingleProduct';
         $data = $this->getProduct($number, $context);
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($product);
@@ -60,7 +62,7 @@ class DownloadTest extends TestCase
         $context = $this->getContext();
         foreach ($numbers as $number) {
             $data = $this->getProduct($number, $context);
-            $this->helper->createArticle($data);
+            $this->helper->createProduct($data);
         }
 
         $products = Shopware()->Container()->get(ListProductServiceInterface::class)->getList($numbers, $context);
@@ -79,7 +81,7 @@ class DownloadTest extends TestCase
     }
 
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $additionally = null

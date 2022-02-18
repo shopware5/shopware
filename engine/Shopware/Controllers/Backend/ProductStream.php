@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,14 +29,14 @@ use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\Condition\CustomerGroupCondition;
-use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductSearchInterface;
-use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ContextService;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ProductStream\Repository as ProductStreamRepository;
 use Shopware\Models\ProductStream\ProductStream;
@@ -49,6 +51,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
     protected $alias = 'stream';
 
+    /**
+     * @return void
+     */
     public function copyStreamAttributesAction()
     {
         $sourceStreamId = $this->Request()->getParam('sourceStreamId');
@@ -64,6 +69,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
+    /**
+     * @return void
+     */
     public function loadPreviewAction()
     {
         try {
@@ -73,7 +81,6 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $sorting = $this->Request()->getParam('sort');
 
             if ($sorting !== null) {
-                /** @var SortingInterface[] $sorting */
                 $sorting = $streamRepo->unserialize($sorting);
 
                 foreach ($sorting as $sort) {
@@ -90,7 +97,6 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
                     throw new InvalidArgumentException('Could not decode JSON: ' . json_last_error_msg());
                 }
 
-                /** @var ConditionInterface[] $conditions */
                 $conditions = $streamRepo->unserialize($conditions);
 
                 foreach ($conditions as $condition) {
@@ -102,8 +108,8 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
             $criteria->limit($this->Request()->getParam('limit', 20));
 
             $context = $this->createContext(
-                $this->Request()->getParam('shopId'),
-                $this->Request()->getParam('currencyId'),
+                (int) $this->Request()->getParam('shopId'),
+                (int) $this->Request()->getParam('currencyId'),
                 $this->Request()->getParam('customerGroupKey')
             );
 
@@ -121,8 +127,12 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
             $products = array_values($result->getProducts());
             $products = array_map(function (ListProduct $product) {
-                $price = $product->getCheapestPrice()->getCalculatedPrice();
-                $product = json_decode(json_encode($product), true);
+                $cheapestPrice = $product->getCheapestPrice();
+                if (!$cheapestPrice instanceof Price) {
+                    return $product;
+                }
+                $price = $cheapestPrice->getCalculatedPrice();
+                $product = json_decode(json_encode($product, JSON_THROW_ON_ERROR), true);
                 $product['cheapestPrice'] = $price;
 
                 return $product;
@@ -147,11 +157,6 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         ]);
     }
 
-    /**
-     * @param array $data
-     *
-     * @return array
-     */
     public function save($data)
     {
         if (isset($data['conditions'])) {
@@ -165,21 +170,19 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         return parent::save($data);
     }
 
-    /**
-     * @param int $id
-     *
-     * @return array
-     */
     public function getDetail($id)
     {
         $data = parent::getDetail($id);
 
-        $data['data']['conditions'] = json_decode($data['data']['conditions'], true);
+        $data['data']['conditions'] = isset($data['data']['conditions']) ? json_decode($data['data']['conditions'], true) : null;
         $data['data']['sorting'] = json_decode($data['data']['sorting'], true);
 
         return $data;
     }
 
+    /**
+     * @return void
+     */
     public function loadSelectedProductsAction()
     {
         $streamId = $this->Request()->getParam('streamId');
@@ -205,6 +208,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign(['success' => true, 'data' => $products, 'total' => $total]);
     }
 
+    /**
+     * @return void
+     */
     public function removeSelectedProductAction()
     {
         $streamId = $this->Request()->getParam('streamId');
@@ -218,6 +224,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
+    /**
+     * @return void
+     */
     public function addSelectedProductAction()
     {
         $streamId = $this->Request()->getParam('streamId');
@@ -231,6 +240,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
+    /**
+     * @return void
+     */
     public function getAttributesAction()
     {
         $service = Shopware()->Container()->get(CrudService::class);
@@ -262,6 +274,9 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function copySelectedProductsAction()
     {
         $sourceStreamId = $this->Request()->getParam('sourceStreamId', false);
@@ -279,28 +294,33 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
         $this->View()->assign('success', true);
     }
 
+    protected function getSortConditions($sort, $model, $alias, $whiteList = [])
+    {
+        $sort = parent::getSortConditions($sort, $model, $alias, $whiteList);
+
+        if ($this->isSortingSetByUser($sort)) {
+            return $sort;
+        }
+
+        return $this->addSortingById($sort);
+    }
+
     /**
-     * @param int      $shopId
-     * @param int|null $currencyId
-     * @param int|null $customerGroupKey
-     *
-     * @throws InvalidArgumentException if the specified shop couldn't be found
-     *
-     * @return ProductContext
+     * @throws ModelNotFoundException if the specified shop couldn't be found
      */
-    private function createContext($shopId, $currencyId = null, $customerGroupKey = null)
+    private function createContext(int $shopId, int $currencyId, ?string $customerGroupKey = null): ShopContextInterface
     {
         $repo = Shopware()->Container()->get(ModelManager::class)->getRepository(Shop::class);
 
         $shop = $repo->getActiveById($shopId);
 
-        if (!$shop) {
-            throw new InvalidArgumentException('Shop not found');
+        if (!$shop instanceof Shop) {
+            throw new ModelNotFoundException(Shop::class, $shopId);
         }
 
         $shopId = $shop->getId();
 
-        if (!$currencyId) {
+        if ($currencyId === 0) {
             $currencyId = $shop->getCurrency()->getId();
         }
 
@@ -310,5 +330,28 @@ class Shopware_Controllers_Backend_ProductStream extends Shopware_Controllers_Ba
 
         return Shopware()->Container()->get(ContextServiceInterface::class)
             ->createShopContext($shopId, $currencyId, $customerGroupKey);
+    }
+
+    /**
+     * @param array<array{property: string, direction: string}> $sort
+     */
+    private function isSortingSetByUser(array $sort): bool
+    {
+        return \count($sort) > 1;
+    }
+
+    /**
+     * @param array<array{property: string, direction: string}> $sort
+     *
+     * @return array<array{property: string, direction: string}>
+     */
+    private function addSortingById(array $sort): array
+    {
+        $sort[] = [
+            'property' => $this->alias . '.id',
+            'direction' => 'ASC',
+        ];
+
+        return $sort;
     }
 }

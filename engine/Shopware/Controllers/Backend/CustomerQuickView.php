@@ -221,10 +221,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         return $fields;
     }
 
-    /**
-     * @return array
-     */
-    private function fetchAttributes(array $ids)
+    private function fetchAttributes(array $ids): array
     {
         $query = $this->container->get(ModelManager::class)->createQueryBuilder();
         $query->select(['attribute']);
@@ -235,7 +232,10 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         return $query->getQuery()->getArrayResult();
     }
 
-    private function loadFromRepository()
+    /**
+     * @return array{data: array<array<string, mixed>>, total: int}
+     */
+    private function loadFromRepository(): array
     {
         $request = $this->Request();
         $criteria = new SearchCriteria(Customer::class);
@@ -245,7 +245,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
         $criteria->sortings = $request->getParam('sort', []);
         $criteria->conditions = $request->getParam('filter', []);
 
-        foreach ($criteria->sortings as $index => &$sorting) {
+        foreach ($criteria->sortings as &$sorting) {
             switch ($sorting['property']) {
                 case 'customerGroup':
                     $sorting['property'] = 'customerGroupId';
@@ -268,7 +268,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             }
         }
 
-        foreach ($criteria->conditions as $index => &$condition) {
+        foreach ($criteria->conditions as &$condition) {
             switch ($condition['property']) {
                 case 'customerGroup':
                     $condition['property'] = 'customerGroupId';

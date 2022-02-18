@@ -74,7 +74,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
     {
         $orderNumber = 'swTEST' . uniqid((string) rand());
 
-        $this->apiHelper->createArticle([
+        $this->apiHelper->createProduct([
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,

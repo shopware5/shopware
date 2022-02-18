@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,7 +36,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 
 class ListProductTest extends TestCase
 {
-    public function testProductRequirements()
+    public function testProductRequirements(): void
     {
         $number = 'List-Product-Test';
 
@@ -48,7 +50,7 @@ class ListProductTest extends TestCase
                 $number
             )
         );
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $product = $this->getListProduct($number, $context);
 

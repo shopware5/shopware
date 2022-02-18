@@ -74,15 +74,15 @@ class ProductNameSortingTest extends TestCase
     }
 
     protected function search(
-        $products,
-        $expectedNumbers,
-        $category = null,
-        $conditions = [],
-        $facets = [],
-        $sortings = [],
+        array $products,
+        array $expectedNumbers,
+        Category $category = null,
+        array $conditions = [],
+        array $facets = [],
+        array $sortings = [],
         $context = null,
         array $configs = [],
-        $variantSearch = false
+        bool $variantSearch = false
     ): ProductNumberSearchResult {
         $result = parent::search(
             $products,

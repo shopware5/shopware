@@ -52,13 +52,12 @@ class ShippingFreeConditionTest extends TestCase
     }
 
     /**
-     * @param string $number
-     * @param bool   $shippingFree
+     * @param bool $shippingFree
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $shippingFree = true

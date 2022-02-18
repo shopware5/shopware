@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -36,7 +38,6 @@ use Shopware\Models\Category\Category as CategoryModel;
 use Shopware\Models\Customer\Group as CustomerGroupModel;
 use Shopware\Models\Price\Group as PriceGroupModel;
 use Shopware\Models\Shop\Currency as CurrencyModel;
-use Shopware\Models\Shop\Locale as LocaleModel;
 use Shopware\Models\Shop\Locale as ShopLocale;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware\Models\Tax\Tax as TaxModel;
@@ -152,7 +153,7 @@ class Converter
         return $customerGroup;
     }
 
-    public function convertLocale(LocaleModel $locale): Locale
+    public function convertLocale(ShopLocale $locale): Locale
     {
         $struct = new Locale();
 

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,11 +30,15 @@ use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\HrefLangService;
 use Shopware\Bundle\StoreFrontBundle\Service\HrefLangServiceInterface;
 use Shopware\Components\Api\Resource\Category;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Components_Translation;
 
 class HrefLangTest extends TestCase
 {
+    use ContainerTrait;
+
     /**
      * @var HrefLangServiceInterface
      */
@@ -42,29 +48,29 @@ class HrefLangTest extends TestCase
     {
         parent::setUp();
 
-        Shopware()->Container()->get(Connection::class)->beginTransaction();
+        $this->getContainer()->get(Connection::class)->beginTransaction();
 
         // Easier to see english link
         Shopware()->Db()->executeQuery('UPDATE s_core_shops SET base_url = "/en", category_id = 3 WHERE id != 1');
 
-        Shopware()->Container()->reset('shopware_storefront.href_lang_service');
+        $this->getContainer()->reset('shopware_storefront.href_lang_service');
 
-        $this->service = Shopware()->Container()->get(HrefLangService::class);
+        $this->service = $this->getContainer()->get(HrefLangService::class);
     }
 
     public function tearDown(): void
     {
         parent::tearDown();
-        Shopware()->Container()->get(Connection::class)->rollBack();
+        $this->getContainer()->get(Connection::class)->rollBack();
     }
 
-    public function testHrefLinksNotGenerated()
+    public function testHrefLinksNotGenerated(): void
     {
         $urls = $this->service->getUrls(['controller' => 'cat', 'action' => 'index', 'sCategory' => 912345], $this->getContext());
         static::assertEmpty($urls);
     }
 
-    public function testHrefLinksHome()
+    public function testHrefLinksHome(): void
     {
         $urls = $this->service->getUrls(['controller' => 'index', 'action' => 'index'], $this->getContext());
 
@@ -79,7 +85,7 @@ class HrefLangTest extends TestCase
         }
     }
 
-    public function testHrefLinksListing()
+    public function testHrefLinksListing(): void
     {
         $category = $this->createCategory();
 
@@ -96,7 +102,7 @@ class HrefLangTest extends TestCase
         }
     }
 
-    public function testHrefLinksListingWithParameters()
+    public function testHrefLinksListingWithParameters(): void
     {
         $category = $this->createCategory();
 
@@ -113,7 +119,7 @@ class HrefLangTest extends TestCase
         }
     }
 
-    public function testHrefLinksWithParameters()
+    public function testHrefLinksWithParameters(): void
     {
         $category = $this->createCategory();
 
@@ -128,15 +134,15 @@ class HrefLangTest extends TestCase
         static::assertStringNotContainsString('foo=bar', $urls[0]->getLink());
     }
 
-    private function createCategory()
+    private function createCategory(): int
     {
-        $category = Shopware()->Container()->get(Category::class);
+        $category = $this->getContainer()->get(Category::class);
         $category = $category->create([
             'parent' => 3,
             'name' => 'My fancy german category',
         ]);
 
-        Shopware()->Container()->get(Shopware_Components_Translation::class)->write(2, 'category', $category->getId(), [
+        $this->getContainer()->get(Shopware_Components_Translation::class)->write(2, 'category', $category->getId(), [
             'description' => 'My fancy english category',
         ]);
 
@@ -145,13 +151,14 @@ class HrefLangTest extends TestCase
         $rewriteTable->sCreateRewriteTableCategories();
 
         $englishShop = Shopware()->Models()->getRepository(Shop::class)->getById(2);
-        static::assertNotNull($englishShop);
-        $englishShop->registerResources();
+        static::assertInstanceOf(Shop::class, $englishShop);
+        $shopRegistrationService = $this->getContainer()->get(ShopRegistrationServiceInterface::class);
+        $shopRegistrationService->registerShop($englishShop);
         $rewriteTable->baseSetup();
         $rewriteTable->sCreateRewriteTableCategories();
 
         $defaultShop = Shopware()->Models()->getRepository(Shop::class)->getActiveDefault();
-        $defaultShop->registerResources();
+        $shopRegistrationService->registerShop($defaultShop);
 
         return $category->getId();
     }

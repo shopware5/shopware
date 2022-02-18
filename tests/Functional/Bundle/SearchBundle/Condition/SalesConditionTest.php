@@ -30,7 +30,6 @@ use Shopware\Bundle\SearchBundle\Condition\SalesCondition;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
-use Shopware_Components_TopSeller;
 
 /**
  * @group elasticSearch
@@ -54,12 +53,11 @@ class SalesConditionTest extends TestCase
         );
     }
 
-    public function createProducts($products, ShopContext $context, Category $category): array
+    public function createProducts(array $products, ShopContext $context, Category $category): array
     {
         $products = parent::createProducts($products, $context, $category);
 
-        /** @var Shopware_Components_TopSeller $topSeller */
-        $topSeller = Shopware()->Container()->get('topseller');
+        $topSeller = $this->getContainer()->get('topseller');
         $topSeller->incrementTopSeller($products['second']->getId(), 100);
         $topSeller->incrementTopSeller($products['fourth']->getId(), 101);
 

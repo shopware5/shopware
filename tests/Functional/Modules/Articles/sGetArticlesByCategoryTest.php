@@ -50,6 +50,7 @@ class sGetArticlesByCategoryTest extends Enlight_Components_Test_TestCase
         $categories = [5, 6, 8, 12, 13, 14, 15, 31];
         foreach ($categories as $id => $expected) {
             $data = $this->module->sGetArticlesByCategory($id);
+            static::assertIsArray($data);
 
             foreach ($data['sArticles'] as $key => $article) {
                 static::assertEquals($key, $article['ordernumber']);

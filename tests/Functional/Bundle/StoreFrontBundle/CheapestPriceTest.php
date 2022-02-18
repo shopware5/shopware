@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,27 +26,26 @@
 
 namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class CheapestPriceTest extends TestCase
 {
-    public function testCheapestPriceWithVariants()
+    public function testCheapestPriceWithVariants(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
         $data = $this->getConfiguratorProduct($number, $context);
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
         static::assertEquals(50, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
         static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestWithInactiveVariants()
+    public function testCheapestWithInactiveVariants(): void
     {
         $number = 'testCheapestWithInactiveVariants';
         $context = $this->getContext();
@@ -55,16 +56,16 @@ class CheapestPriceTest extends TestCase
         $data['variants'][$count]['active'] = false;
         $data['variants'][$count - 1]['active'] = false;
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
 
         static::assertEquals(70, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(80, $cheapestPrice->getCalculatedPseudoPrice());
         static::assertEquals(140, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestWithCloseout()
+    public function testCheapestWithCloseout(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -77,15 +78,15 @@ class CheapestPriceTest extends TestCase
         $data['variants'][$count - 1]['inStock'] = 0;
         $data['variants'][$count - 2]['inStock'] = 0;
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
         static::assertEquals(80, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
         static::assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestWithMinPurchase()
+    public function testCheapestWithMinPurchase(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -102,9 +103,9 @@ class CheapestPriceTest extends TestCase
         $last['minPurchase'] = 3;
         $data['variants'][] = $last;
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
 
         /*
          * Expect price * minPurchase calculation
@@ -114,7 +115,7 @@ class CheapestPriceTest extends TestCase
         static::assertEquals(10, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestWithMinPurchaseAndCloseout()
+    public function testCheapestWithMinPurchaseAndCloseout(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -136,16 +137,15 @@ class CheapestPriceTest extends TestCase
         $last['inStock'] = 2;
         $data['variants'][] = $last;
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
         static::assertEquals(60, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(70, $cheapestPrice->getCalculatedPseudoPrice());
         static::assertEquals(120, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestForCustomerGroup()
+    public function testCheapestForCustomerGroup(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -166,9 +166,9 @@ class CheapestPriceTest extends TestCase
             ];
         }
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
 
         /*
          * Expect that the cheapest price calculation works
@@ -184,7 +184,7 @@ class CheapestPriceTest extends TestCase
         static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestWithFallback()
+    public function testCheapestWithFallback(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -197,10 +197,9 @@ class CheapestPriceTest extends TestCase
         $customerGroup = $context->getCurrentCustomerGroup();
         $customerGroup->setKey('FORCE-FALLBACK');
 
-        $this->helper->createArticle($data);
-        $listProduct = $this->helper->getListProduct($number, $context);
-
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
 
         /*
          * Expect that no FORCE-FALLBACK customer group prices found.
@@ -211,7 +210,7 @@ class CheapestPriceTest extends TestCase
         static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
-    public function testCheapestWithPriceGroup()
+    public function testCheapestWithPriceGroup(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -226,10 +225,10 @@ class CheapestPriceTest extends TestCase
         $data['priceGroupActive'] = true;
         $data['priceGroupId'] = $priceGroup->getId();
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
-        $listProduct = $this->helper->getListProduct($number, $context);
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
 
         /*
          * Expect cheapest variant 50€
@@ -238,7 +237,7 @@ class CheapestPriceTest extends TestCase
         static::assertEquals(45, $cheapestPrice->getCalculatedPrice());
     }
 
-    public function testCheapestWithPriceGroupAndCloseout()
+    public function testCheapestWithPriceGroupAndCloseout(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -262,10 +261,10 @@ class CheapestPriceTest extends TestCase
         $data['variants'][$count - 1]['inStock'] = 0;
         $data['variants'][$count - 2]['inStock'] = 0;
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
-        $listProduct = $this->helper->getListProduct($number, $context);
-        $cheapestPrice = $listProduct->getCheapestPrice();
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
 
         /*
          * Expect cheapest variant 80,- €
@@ -283,7 +282,7 @@ class CheapestPriceTest extends TestCase
      *
      * 100,- * 0.8 = 80,-
      */
-    public function testCheapestPriceWithPriceGroupAndLastGraduation()
+    public function testCheapestPriceWithPriceGroupAndLastGraduation(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
@@ -292,11 +291,12 @@ class CheapestPriceTest extends TestCase
             ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 1,  'discount' => 10],
             ['key' => $context->getCurrentCustomerGroup()->getKey(), 'quantity' => 20,  'discount' => 20],
         ]);
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
             'useLastGraduationForCheapestPrice' => true,
         ]);
+        static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
 
         static::assertEquals(80, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
@@ -309,17 +309,18 @@ class CheapestPriceTest extends TestCase
      *
      * 100,- * 0.9 = 90,-
      */
-    public function testCheapestPriceWithPriceGroupAndFirstGraduation()
+    public function testCheapestPriceWithPriceGroupAndFirstGraduation(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
 
-        $data = $this->createPriceGroupProduct($number, $context, false);
-        $this->helper->createArticle($data);
+        $data = $this->createPriceGroupProduct($number, $context);
+        $this->helper->createProduct($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
             'useLastGraduationForCheapestPrice' => false,
         ]);
+        static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
 
         static::assertEquals(90, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
@@ -331,20 +332,20 @@ class CheapestPriceTest extends TestCase
      *
      * 10,- * 0.7 = 7,-
      */
-    public function testPriceGroupWithVariants()
+    public function testPriceGroupWithVariants(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
 
         $data = $this->createPriceGroupProduct($number, $context, true);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
             'useLastGraduationForCheapestPrice' => true,
         ]);
+        static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
 
-        /* @var ListProduct $listProduct */
         static::assertEquals(7, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
@@ -356,27 +357,32 @@ class CheapestPriceTest extends TestCase
      *
      * 10,- * 0.9 = 9,-
      */
-    public function testPriceGroupWithVariantsAndFirstGraduation()
+    public function testPriceGroupWithVariantsAndFirstGraduation(): void
     {
         $number = __FUNCTION__;
         $context = $this->getContext();
 
         $data = $this->createPriceGroupProduct($number, $context, true);
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $listProduct = $this->helper->getListProduct($number, $context, [
             'useLastGraduationForCheapestPrice' => false,
         ]);
+        static::assertInstanceOf(Price::class, $listProduct->getCheapestPrice());
 
         static::assertEquals(9, $listProduct->getCheapestPrice()->getCalculatedPrice());
     }
 
-    private function getConfiguratorProduct($number, ShopContextInterface $context) // ShopContext
+    /**
+     * @return array<string, mixed>
+     */
+    private function getConfiguratorProduct(string $number, ShopContextInterface $context): array
     {
+        $taxRules = $context->getTaxRules();
         $product = $this->helper->getSimpleProduct(
             $number,
-            array_shift($context->getTaxRules()),
+            array_shift($taxRules),
             $context->getCurrentCustomerGroup()
         );
 
@@ -415,20 +421,14 @@ class CheapestPriceTest extends TestCase
      * Each variant has a price of 100,-
      * The price of the last variant (not the main variant) can be provided over $cheapestVariantPrice.
      *
-     * @param string    $number
-     * @param bool      $configurator
-     * @param array     $discounts
-     * @param float|int $cheapestVariantPrice
-     *
-     * @return array
+     * @param array<array{key: string, quantity: int, discount: float}> $discounts
      */
     private function createPriceGroupProduct(
-        $number,
+        string $number,
         TestContext $context,
-        $configurator = false,
-        $discounts = [],
-        $cheapestVariantPrice = 10.00
-    ) {
+        bool $configurator = false,
+        array $discounts = []
+    ): array {
         $priceGroup = $this->helper->createPriceGroup($discounts);
         $priceGroupStruct = $this->converter->convertPriceGroup($priceGroup);
         $context->setPriceGroups([$priceGroupStruct->getId() => $priceGroupStruct]);
@@ -449,13 +449,14 @@ class CheapestPriceTest extends TestCase
             $last['prices'] = [[
                 'from' => 1,
                 'to' => 'beliebig',
-                'price' => $cheapestVariantPrice,
+                'price' => 10.00,
                 'customerGroupKey' => $context->getCurrentCustomerGroup()->getKey(),
                 'pseudoPrice' => 10,
             ]];
             $data['variants'][] = $last;
         } else {
-            $data = $this->helper->getSimpleProduct($number, array_shift($context->getTaxRules()), $context->getCurrentCustomerGroup());
+            $taxRules = $context->getTaxRules();
+            $data = $this->helper->getSimpleProduct($number, array_shift($taxRules), $context->getCurrentCustomerGroup());
         }
 
         $data['lastStock'] = false;

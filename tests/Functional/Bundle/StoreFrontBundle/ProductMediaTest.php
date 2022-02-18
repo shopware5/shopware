@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,7 +45,7 @@ class ProductMediaTest extends TestCase
         $context = $this->getContext();
         $numbers = ['testProductMediaList-1', 'testProductMediaList-2'];
         foreach ($numbers as $number) {
-            $this->helper->createArticle(
+            $this->helper->createProduct(
                 $this->getProduct($number, $context, null, 4)
             );
         }
@@ -60,7 +62,6 @@ class ProductMediaTest extends TestCase
 
             static::assertCount(3, $productMediaList);
 
-            /** @var Media $media */
             foreach ($productMediaList as $media) {
                 if ($media->isPreview()) {
                     $this->assertMediaFile('sasse-korn', $media);
@@ -76,12 +77,10 @@ class ProductMediaTest extends TestCase
         $this->resetContext();
         $numbers = ['testVariantMediaList1-', 'testVariantMediaList2-'];
         $context = $this->getContext();
-        $productsArray = [];
 
         foreach ($numbers as $number) {
             $data = $this->getVariantImageProduct($number, $context);
-            $article = $this->helper->createArticle($data);
-            $productsArray[] = $article;
+            $this->helper->createProduct($data);
         }
 
         $variantNumbers = ['testVariantMediaList1-1', 'testVariantMediaList1-2', 'testVariantMediaList2-1'];
@@ -94,9 +93,7 @@ class ProductMediaTest extends TestCase
         foreach ($variantNumbers as $number) {
             static::assertArrayHasKey($number, $mediaList);
 
-            $variantMedia = $mediaList[$number];
-
-            foreach ($variantMedia as $media) {
+            foreach ($mediaList[$number] as $media) {
                 $this->assertMediaFile('sasse-korn', $media);
             }
         }
@@ -128,7 +125,7 @@ class ProductMediaTest extends TestCase
         $data['variants'][0]['number'] = 'testProductImagesWithVariant-1';
         $data['variants'][0]['images'] = [];
 
-        $this->helper->createArticle($data);
+        $this->helper->createProduct($data);
 
         $variantNumber = 'testProductImagesWithVariant-1';
         $product = Shopware()->Container()->get(ProductServiceInterface::class)
@@ -138,17 +135,16 @@ class ProductMediaTest extends TestCase
     }
 
     /**
-     * @param string   $number
      * @param int|null $imageCount
      *
      * @return array<string, mixed>
      */
     protected function getProduct(
-        $number,
+        string $number,
         ShopContext $context,
         Category $category = null,
         $imageCount = null
-    ) {
+    ): array {
         $data = parent::getProduct($number, $context, $category);
 
         $data['images'][] = $this->helper->getImageData(

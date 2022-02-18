@@ -73,7 +73,7 @@ class BatchProductNumberSearchTest extends TestCase
     /**
      * {@inheritdoc}
      */
-    public function createProducts($products, ShopContext $context, Category $category): array
+    public function createProducts(array $products, ShopContext $context, Category $category): array
     {
         $articles = parent::createProducts($products, $context, $category);
 

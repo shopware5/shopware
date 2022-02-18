@@ -491,16 +491,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Test/Plugin/TestCase.php
 
 		-
-			message: "#^Method Enlight_Components_Test_TestCase\\:\\:setConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/TestCase.php
-
-		-
-			message: "#^Method Enlight_Components_Test_TestCase\\:\\:setConfig\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Test/TestCase.php
-
-		-
 			message: "#^Class Enlight_Config implements generic interface ArrayAccess but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Library/Enlight/Config.php
@@ -8131,21 +8121,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:getFilterConditions\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:getFilterConditions\\(\\) has parameter \\$whiteList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:getFilterConditions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:overrideRecipients\\(\\) has parameter \\$recipients with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
@@ -8164,26 +8139,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLog\\:\\:\\$filters type has no value type specified in iterable type Traversable\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLog.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLogContact\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLogContact.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLogContact\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLogContact.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLogContact\\:\\:getList\\(\\) has parameter \\$wholeParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLogContact.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Controllers\\\\Backend\\\\MailLogContact\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Controllers/Backend/MailLogContact.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\MailBundle\\\\Service\\\\Filter\\\\AssociationExistsFilter\\:\\:__construct\\(\\) has parameter \\$associations with no value type specified in iterable type array\\.$#"
@@ -10394,16 +10349,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceHelper\\:\\:joinPriceGroup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceSwitcher\\:\\:joinCheapestProductPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceSwitcher.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceSwitcher\\:\\:joinPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ListingPriceSwitcher.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ListingPriceTable\\:\\:joinAvailableVariant\\(\\) has no return type specified\\.$#"
@@ -17544,21 +17489,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$value of method Shopware\\\\Components\\\\Check\\\\Requirements\\:\\:compare\\(\\) expects string, string\\|false given\\.$#"
 			count: 4
 			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyEventManager\\:\\:fireArticleByIdEvents\\(\\) has parameter \\$product with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyEventManager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyEventManager\\:\\:fireArticlesByCategoryEvents\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyEventManager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyEventManager\\:\\:fireArticlesByCategoryEvents\\(\\) has parameter \\$result with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyEventManager.php
 
 		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null\\.$#"
@@ -25036,242 +24966,12 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Translations.php
 
 		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getMessage\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Call to an undefined method Symfony\\\\Component\\\\Form\\\\FormError\\|Symfony\\\\Component\\\\Form\\\\FormErrorIterator\\:\\:getOrigin\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Cannot call method getName\\(\\) on Symfony\\\\Component\\\\Form\\\\FormInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:delete\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:getQueryPaginator\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Address\\:\\:syncAttributeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Parameter \\#1 \\$address of method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\AddressService\\:\\:update\\(\\) expects Shopware\\\\Models\\\\Customer\\\\Address, Shopware\\\\Models\\\\Customer\\\\Address\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Address.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:addIdentifierCondition\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getModelFields\\(\\) should return array\\<string, array\\{alias\\: string, type\\: string\\|null\\}\\> but returns array\\<string, string\\>\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:createAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:delete\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:deleteAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:detailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:formatSearchValue\\(\\) has parameter \\$field with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getAdditionalDetailData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getAdditionalDetailData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getDetail\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getFilterConditions\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getFilterConditions\\(\\) has parameter \\$whiteList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getFilterConditions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getList\\(\\) has parameter \\$wholeParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getModelFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getOwningSideAssociation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getQueryPaginator\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSortConditions\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getSortConditions\\(\\) has parameter \\$whiteList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:listAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:reloadAssociation\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:reloadAssociation\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:reloadAssociation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:reloadAssociationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:resolveExtJsData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:resolveExtJsData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:searchAssociation\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:searchAssociation\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:searchAssociation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:searchAssociationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:setManager\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:setRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:updateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Property Shopware_Controllers_Backend_Application\\:\\:\\$filterFields type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Property Shopware_Controllers_Backend_Application\\:\\:\\$sortFields type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:resolveExtJsData\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Application.php
 
@@ -27426,17 +27126,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Customer.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:delete\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Cannot access offset 'attribute' on array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Customer\\\\Customer\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:deleteAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:detailAction\\(\\) has no return type specified\\.$#"
+			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Customer\\\\Customer\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
@@ -27451,152 +27146,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) should return array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Customer\\\\Customer\\>, total\\: int\\} but returns array\\{data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Customer\\\\Customer\\>, total\\: int, success\\?\\: true\\}\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) has parameter \\$wholeParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getModelFields\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:listAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:loadFromRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Cannot call method getFreezeUp\\(\\) on Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:addCustomerToStreamAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:buildSearchIndexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:delete\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getCustomerCountAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getLastFullIndexTimeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getList\\(\\) has parameter \\$wholeParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getNotIndexedCountAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:indexStreamAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:loadAmountPerStreamChartAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:loadChartAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:loadStreamAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:removeCustomerFromStreamAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#1 \\$offset of method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:getList\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#1 \\$stream of method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:indexStream\\(\\) expects Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream, Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#2 \\$limit of method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:getList\\(\\) expects int, int\\|null given\\.$#"
+			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getList\\(\\) should return array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\>, total\\: int\\} but returns array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerStream.php
 
@@ -29401,76 +28956,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ProductFeed.php
 
 		-
-			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:addSelectedProductAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:copySelectedProductsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:copyStreamAttributesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:createContext\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ProductContext but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContextInterface\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:getAttributesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:getDetail\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:loadPreviewAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:loadSelectedProductsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:removeSelectedProductAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ProductStream\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
-			message: "#^Parameter \\#3 \\$customerGroupKey of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ContextService\\:\\:createShopContext\\(\\) expects string\\|null, int\\<min, \\-1\\>\\|int\\<1, max\\>\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ProductStream.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Property\\:\\:changeAssignmentPositionAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Property.php
@@ -29936,107 +29421,17 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Systeminfo.php
 
 		-
-			message: "#^Call to an undefined method Locale\\:\\:getLocale\\(\\)\\.$#"
+			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Shop\\\\Template\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Theme.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:assignAction\\(\\) has no return type specified\\.$#"
+			message: "#^Cannot access offset 'path' on non\\-empty\\-array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Shop\\\\Template\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Theme.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:createAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getAdditionalDetailData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getAdditionalDetailData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getConfigSetsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getDefaultShopId\\(\\) should return string but returns string\\|false\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getList\\(\\) has parameter \\$wholeParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:getThemeInfo\\(\\) should return string\\|null but returns string\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:listAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:loadSettingsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:previewAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:resetPreviewSessionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:saveSettingsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:unzip\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Theme\\:\\:uploadAction\\(\\) has no return type specified\\.$#"
+			message: "#^Cannot access offset 'screen' on array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Shop\\\\Template\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Theme.php
 
@@ -30196,52 +29591,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/UserManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:assignShops\\(\\) has parameter \\$list with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:assignShops\\(\\) has parameter \\$shops with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:assignShops\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:getList\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:getList\\(\\) has parameter \\$sort with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:getList\\(\\) has parameter \\$wholeParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:getShops\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:save\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Vote.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Vote\\:\\:save\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$list of method Shopware_Controllers_Backend_Vote\\:\\:assignShops\\(\\) expects array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\>, total\\: int\\}, array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Article\\\\Vote\\>, total\\: int\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Vote.php
 
@@ -31551,21 +30901,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:layoutAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:listingAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryContent\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
@@ -31576,27 +30911,12 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryListing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryListing\\(\\) has parameter \\$categoryContent with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadListing\\(\\) has parameter \\$emotionConfiguration with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:manufacturerAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:setDefaultSorting\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
@@ -31612,11 +30932,6 @@ parameters:
 
 		-
 			message: "#^Offset 'streamId' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Parameter \\#1 \\$condition of method Shopware\\\\Bundle\\\\SearchBundle\\\\Criteria\\:\\:addBaseCondition\\(\\) expects Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface, Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
@@ -33191,11 +32506,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Method sArticles\\:\\:getListing\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Method sArticles\\:\\:getOrderNumberByProductId\\(\\) should return string but returns string\\|false\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -33321,11 +32631,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Method sArticles\\:\\:sGetArticlesByCategory\\(\\) has parameter \\$categoryId with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Method sArticles\\:\\:sGetArticlesBySupplier\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -33441,11 +32746,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$request of method Shopware\\\\Bundle\\\\SearchBundle\\\\StoreFrontCriteriaFactoryInterface\\:\\:createListingCriteria\\(\\) expects Enlight_Controller_Request_Request, Enlight_Controller_Request_Request\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -33462,11 +32762,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Parameter \\#3 \\$request of method sArticles\\:\\:getListing\\(\\) expects Enlight_Controller_Request_Request, Enlight_Controller_Request_Request\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -46101,16 +45396,6 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionWithCurrencyFactor.php
 
 		-
-			message: "#^Parameter \\#1 \\$displayGross \\(bool\\) of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionWithCurrencyFactor\\:\\:getContext\\(\\) should be compatible with parameter \\$shopId \\(int\\) of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:getContext\\(\\)$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionWithCurrencyFactor.php
-
-		-
-			message: "#^Parameter \\#3 \\$currencyFactor of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionWithCurrencyFactor\\:\\:getContext\\(\\) expects int, float given\\.$#"
-			count: 6
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionWithCurrencyFactor.php
-
-		-
 			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionWithGraduationTest.php
@@ -46181,11 +45466,6 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionWithPriceGroupTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VoteAverageConditionTest\\:\\:createProduct\\(\\) has parameter \\$additionally with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VoteAverageConditionTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Facet\\\\PropertyFacetTest\\:\\:createPropertyCombination\\(\\) has parameter \\$properties with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Facet/PropertyFacetTest.php
@@ -46194,11 +45474,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Facet\\\\PropertyFacetTest\\:\\:createPropertyCombination\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Facet/PropertyFacetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Facet\\\\VoteAverageFacetTest\\:\\:createProduct\\(\\) has parameter \\$additionally with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Facet/VoteAverageFacetTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\HideNoInStockTest\\:\\:categoryConditionFilter\\(\\) has parameter \\$el with no type specified\\.$#"
@@ -46237,11 +45512,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Sorting\\\\PopularitySortingTest\\:\\:search\\(\\) has parameter \\$configs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Sorting/PopularitySortingTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Sorting\\\\PopularitySortingTest\\:\\:search\\(\\) has parameter \\$context with no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Sorting/PopularitySortingTest.php
 
@@ -46421,224 +45691,9 @@ parameters:
 			path: tests/Functional/Bundle/SitemapBundle/SitemapLockTest.php
 
 		-
-			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/BasePriceTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedReferencePrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/BasePriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\BasePriceTest\\:\\:testHigherPurchaseUnit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/BasePriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\BasePriceTest\\:\\:testHigherReferenceUnit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/BasePriceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/StoreFrontBundle/BasePriceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 4
-			path: tests/Functional/Bundle/StoreFrontBundle/BasePriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CategoryServiceTest\\:\\:testBlockedCustomerGroups\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CategoryServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CategoryServiceTest\\:\\:testCategorySorting\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CategoryServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CategoryServiceTest\\:\\:testOnlyActiveCategories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CategoryServiceTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 13
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedPseudoPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 7
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedReferencePrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 8
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Cannot call method getCustomerGroup\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:createPriceGroupProduct\\(\\) has parameter \\$discounts with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:createPriceGroupProduct\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:getConfiguratorProduct\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:getConfiguratorProduct\\(\\) has parameter \\$number with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestForCustomerGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestPriceWithPriceGroupAndFirstGraduation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestPriceWithPriceGroupAndLastGraduation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestPriceWithVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithCloseout\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithFallback\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithInactiveVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithMinPurchase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithMinPurchaseAndCloseout\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithPriceGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testCheapestWithPriceGroupAndCloseout\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testPriceGroupWithVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\CheapestPriceTest\\:\\:testPriceGroupWithVariantsAndFirstGraduation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/StoreFrontBundle/CheapestPriceTest.php
-
-		-
-			message: "#^Cannot call method getConfiguration\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Configurator\\\\Option\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:assertInactiveOptions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:assertInactiveOptions\\(\\) has parameter \\$expectedOptions with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:createSelection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:createSelection\\(\\) has parameter \\$optionNames with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:testDefaultConfigurator\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:testSelection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:testSelectionConfigurator\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:testVariantConfiguration\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$listProduct of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ConfiguratorTest\\:\\:createSelection\\(\\) expects Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct, Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null given\\.$#"
-			count: 4
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$product of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\Core\\\\ConfiguratorService\\:\\:getProductConfigurator\\(\\) expects Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\BaseProduct, Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null given\\.$#"
-			count: 5
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ConfiguratorTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$host of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Shop\\:\\:setHost\\(\\) expects string, string\\|null given\\.$#"
@@ -46671,41 +45726,6 @@ parameters:
 			path: tests/Functional/Bundle/StoreFrontBundle/CoverTest.php
 
 		-
-			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\GraduatedPricesTest\\:\\:testFallbackGraduation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\GraduatedPricesTest\\:\\:testGraduationByPriceGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\GraduatedPricesTest\\:\\:testGraduationWithMinimumPurchase\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\GraduatedPricesTest\\:\\:testSimpleGraduation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\GraduatedPricesTest\\:\\:testVariantGraduation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/StoreFrontBundle/GraduatedPricesTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:cleanUpCombinations\\(\\) has parameter \\$combinations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
@@ -46722,11 +45742,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:combinations\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:createArticle\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
 
@@ -46757,11 +45772,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:createManufacturer\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:createPriceGroup\\(\\) has parameter \\$discounts with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
 
@@ -46896,11 +45906,6 @@ parameters:
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:getSimpleProduct\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Helper\\:\\:getUnitData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
@@ -46971,96 +45976,6 @@ parameters:
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\HrefLangTest\\:\\:createCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/HrefLangTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\HrefLangTest\\:\\:testHrefLinksHome\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/HrefLangTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\HrefLangTest\\:\\:testHrefLinksListing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/HrefLangTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\HrefLangTest\\:\\:testHrefLinksListingWithParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/HrefLangTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\HrefLangTest\\:\\:testHrefLinksNotGenerated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/HrefLangTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\HrefLangTest\\:\\:testHrefLinksWithParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/HrefLangTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ListProductTest\\:\\:testProductRequirements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ListProductTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\ManufacturerTest\\:\\:testManufacturerList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/ManufacturerTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 5
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedPseudoPrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 4
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Cannot call method getCalculatedReferencePrice\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Price\\|null\\.$#"
-			count: 4
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:testCurrencyFactor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:testCustomerGroupDiscount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:testDiscountCurrencyGross\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:testDiscountCurrencyNet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:testNetPrices\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$displayGross \\(bool\\) of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:getContext\\(\\) should be compatible with parameter \\$shopId \\(int\\) of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:getContext\\(\\)$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$currencyFactor of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PriceCalculationTest\\:\\:getContext\\(\\) expects int, float given\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/StoreFrontBundle/PriceCalculationTest.php
-
-		-
 			message: "#^Cannot call method getMedia\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/ProductMediaTest.php
@@ -47086,27 +46001,12 @@ parameters:
 			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:assertSearchResultSorting\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:assertSearchResultSorting\\(\\) has parameter \\$expectedNumbers with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:createProducts\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:search\\(\\) has parameter \\$configs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:search\\(\\) has parameter \\$context with no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
 
@@ -47119,111 +46019,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:search\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$group of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\Converter\\:\\:convertCustomerGroup\\(\\) expects Shopware\\\\Models\\\\Customer\\\\Group, Shopware\\\\Models\\\\Customer\\\\Group\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setArea\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setBaseUrl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setCountry\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setCurrency\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setCurrentCustomerGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setFallbackCustomerGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setPriceGroups\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setState\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestContext\\:\\:setTaxRules\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TestContext.php
-
-		-
-			message: "#^Cannot call method getDescription\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Supplier\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Unit\\|null\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getMetaDescription\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getMetaKeywords\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getMetaTitle\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getPackUnit\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Unit\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
-
-		-
-			message: "#^Cannot call method getUnit\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/TranslationTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Commands\\\\ConfigSetCommandTest\\:\\:configValueProvider\\(\\) return type has no value type specified in iterable type array\\.$#"

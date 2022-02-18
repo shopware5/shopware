@@ -260,9 +260,6 @@ class MailLog extends Shopware_Controllers_Backend_Application
 
         foreach ($filters as $filter) {
             $property = $filter['property'];
-            $operator = $filter['operator'];
-            $expression = $filter['expression'];
-            $value = $filter['value'];
 
             // The property can already be filtered correctly if it is available via getModelFields
             if (\array_key_exists($property, $fields)) {
@@ -275,12 +272,16 @@ class MailLog extends Shopware_Controllers_Backend_Application
                 $property = self::JOIN_ALIAS_ORDER . '.id';
             }
 
-            $conditions[] = [
+            $condition = [
                 'property' => $property,
-                'operator' => $operator,
-                'expression' => $expression,
-                'value' => $value,
+                'operator' => $filter['operator'],
+                'value' => $filter['value'],
             ];
+            if (isset($filter['expression'])) {
+                $condition['expression'] = $filter['expression'];
+            }
+
+            $conditions[] = $condition;
         }
 
         return $conditions;

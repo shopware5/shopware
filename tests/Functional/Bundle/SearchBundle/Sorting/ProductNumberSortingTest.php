@@ -28,6 +28,7 @@ namespace Shopware\Tests\Functional\Bundle\SearchBundle\Sorting;
 
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\SearchBundle\Sorting\ProductNumberSorting;
+use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
 
 /**
@@ -54,15 +55,15 @@ class ProductNumberSortingTest extends TestCase
     }
 
     protected function search(
-        $products,
-        $expectedNumbers,
-        $category = null,
-        $conditions = [],
-        $facets = [],
-        $sortings = [],
+        array $products,
+        array $expectedNumbers,
+        Category $category = null,
+        array $conditions = [],
+        array $facets = [],
+        array $sortings = [],
         $context = null,
         array $configs = [],
-        $variantSearch = false
+        bool $variantSearch = false
     ): ProductNumberSearchResult {
         $result = parent::search(
             $products,
