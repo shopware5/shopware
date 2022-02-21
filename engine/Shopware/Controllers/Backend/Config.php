@@ -1453,7 +1453,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             ]
         );
 
-        $element->setValues($values);
+        $element->setValues(new ArrayCollection($values));
 
         $modelManager->flush($element);
 

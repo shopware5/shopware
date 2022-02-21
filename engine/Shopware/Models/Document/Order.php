@@ -873,10 +873,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
              WHERE order_id=?',
             [$this->_id]
         );
-        $this->_paymentInstances = new ArrayObject(
-            \is_array($paymentInstances) ? $paymentInstances : [],
-            ArrayObject::ARRAY_AS_PROPS
-        );
+        $this->_paymentInstances = new ArrayObject($paymentInstances, ArrayObject::ARRAY_AS_PROPS);
     }
 
     private function initializeShopContext(int $shopId): void

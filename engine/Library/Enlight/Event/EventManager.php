@@ -267,10 +267,15 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The return value of the execute method will be set in the event arguments return value.
      *
+     * @template TValue of mixed
+     *
      * @param string                             $event
+     * @param TValue                             $value
      * @param Enlight_Event_EventArgs|array|null $eventArgs
      *
      * @throws Enlight_Event_Exception
+     *
+     * @return TValue
      */
     public function filter($event, $value, $eventArgs = null)
     {

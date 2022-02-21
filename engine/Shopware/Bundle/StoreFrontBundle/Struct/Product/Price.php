@@ -48,7 +48,7 @@ class Price extends Extendable
      * The reference unit price is calculated over the price value
      * and the pack and reference unit of the product.
      *
-     * @var float
+     * @var float|null
      */
     protected $calculatedReferencePrice;
 
@@ -117,7 +117,7 @@ class Price extends Extendable
     }
 
     /**
-     * @return float
+     * @return float|null
      */
     public function getCalculatedReferencePrice()
     {

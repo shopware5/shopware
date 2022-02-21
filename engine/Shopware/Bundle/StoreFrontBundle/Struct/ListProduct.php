@@ -195,7 +195,7 @@ class ListProduct extends BaseProduct
     /**
      * Ean code of the product.
      *
-     * @var string
+     * @var string|null
      */
     protected $ean;
 
@@ -617,7 +617,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @param string $ean
+     * @param string|null $ean
      */
     public function setEan($ean)
     {
@@ -625,7 +625,7 @@ class ListProduct extends BaseProduct
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getEan()
     {

@@ -43,7 +43,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
                     'price' => (float) $item['price'],
                 ];
             },
-            $basket[CartKey::POSITIONS]
+            $basket[CartKey::POSITIONS] ?? []
         );
 
         $items = $this->sortItems($items);

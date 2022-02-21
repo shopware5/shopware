@@ -54,9 +54,21 @@ use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 /**
  * Shopware Class that handles several
  * functions around customer / order related things
+ *
+ * @phpstan-type ShippingCostArray array{value: string, factor: string, brutto: float, surcharge: float, taxMode: string, tax: float, netto: float, shippingfree?: float, difference?: array{float: float, formated: string}}
  */
 class sAdmin implements \Enlight_Hook
 {
+    public const NO_SHIPPING_COSTS = [
+        'value' => '0',
+        'factor' => '0',
+        'brutto' => 0.0,
+        'surcharge' => 0.0,
+        'taxMode' => '0',
+        'tax' => 0.0,
+        'netto' => 0.0,
+    ];
+
     /**
      * Check if current active shop has own registration
      *
@@ -414,7 +426,7 @@ class sAdmin implements \Enlight_Hook
             ORDER BY position, name
         ';
 
-        $paymentMeans = $this->db->fetchAll(
+        $paymentMethods = $this->db->fetchAll(
             $sql,
             [
                 $subShopID,
@@ -422,28 +434,28 @@ class sAdmin implements \Enlight_Hook
             ]
         );
 
-        if ($paymentMeans === false) {
-            $paymentMeans = $this->db->fetchAll(
+        if (empty($paymentMethods)) {
+            $paymentMethods = $this->db->fetchAll(
                 'SELECT id, active, esdactive, mobile_inactive FROM s_core_paymentmeans ORDER BY position, name'
             );
         }
 
-        foreach ($paymentMeans as $payKey => $payValue) {
+        foreach ($paymentMethods as $payKey => $payValue) {
             // Hide payment means which are not active
             if (empty($payValue['active']) && $payValue['id'] != $user['additional']['user']['paymentpreset']) {
-                unset($paymentMeans[$payKey]);
+                unset($paymentMethods[$payKey]);
                 continue;
             }
 
             // If this is an esd order, hide payment means which are not accessible for esd
             if (empty($payValue['esdactive']) && $sEsd) {
-                unset($paymentMeans[$payKey]);
+                unset($paymentMethods[$payKey]);
                 continue;
             }
 
             // Handle blocking for smartphones
             if (!empty($payValue['mobile_inactive']) && $isMobile) {
-                unset($paymentMeans[$payKey]);
+                unset($paymentMethods[$payKey]);
                 continue;
             }
 
@@ -452,30 +464,27 @@ class sAdmin implements \Enlight_Hook
                 $this->sManageRisks($payValue['id'], null, $user)
                 && $payValue['id'] != $user['additional']['user']['paymentpreset']
             ) {
-                unset($paymentMeans[$payKey]);
-                continue;
+                unset($paymentMethods[$payKey]);
             }
         }
 
         // If no payment is left use always the fallback payment no matter if it has any restrictions too
-        if (!\count($paymentMeans)) {
-            $paymentMeans[] = ['id' => $this->config->offsetGet('paymentdefault')];
+        if (!\count($paymentMethods)) {
+            $paymentMethods[] = ['id' => $this->config->offsetGet('paymentdefault')];
         }
 
-        $paymentMeans = Shopware()->Container()->get(PaymentGatewayInterface::class)
-            ->getList(array_column($paymentMeans, 'id'), $this->contextService->getShopContext());
+        $paymentMethods = Shopware()->Container()->get(PaymentGatewayInterface::class)
+            ->getList(array_column($paymentMethods, 'id'), $this->contextService->getShopContext());
 
-        $paymentMeans = array_map(static function ($payment) {
+        $paymentMethods = array_map(static function ($payment) {
             return Shopware()->Container()->get(LegacyStructConverter::class)->convertPaymentStruct($payment);
-        }, $paymentMeans);
+        }, $paymentMethods);
 
-        $paymentMeans = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Shopware_Modules_Admin_GetPaymentMeans_DataFilter',
-            $paymentMeans,
+            $paymentMethods,
             ['subject' => $this]
         );
-
-        return $paymentMeans;
     }
 
     /**
@@ -489,9 +498,10 @@ class sAdmin implements \Enlight_Hook
      */
     public function sInitiatePaymentClass($paymentData)
     {
+        /** @var array<string, string> $dirs */
         $dirs = [];
 
-        if (substr($paymentData['class'], -\strlen('.php')) === '.php') {
+        if (str_ends_with($paymentData['class'], '.php')) {
             $index = substr($paymentData['class'], 0, (int) strpos($paymentData['class'], '.php'));
         } else {
             $index = $paymentData['class'];
@@ -709,7 +719,7 @@ class sAdmin implements \Enlight_Hook
             $countries = $this->sGetCountryList();
             $country = reset($countries);
 
-            $this->moduleManager->Admin()->sGetPremiumShippingcosts($country);
+            $this->sGetPremiumShippingcosts($country);
 
             $amount = $this->moduleManager->Basket()->sGetAmount();
             $this->session->offsetSet('sBasketAmount', empty($amount) ? 0 : array_shift($amount));
@@ -2998,9 +3008,9 @@ class sAdmin implements \Enlight_Hook
      * Get shipping costs
      * Used in sBasket and Checkout controller
      *
-     * @param array $country Array with details for a single country
+     * @param array<string, mixed>|null $country Array with details for a single country
      *
-     * @return array|false Array with shipping costs data, or false on failure
+     * @return ShippingCostArray|false Array with shipping costs data, or false on failure
      */
     public function sGetPremiumShippingcosts($country = null)
     {
@@ -3075,7 +3085,7 @@ class sAdmin implements \Enlight_Hook
         );
 
         if (empty($dispatch)) {
-            return ['brutto' => 0, 'netto' => 0];
+            return self::NO_SHIPPING_COSTS;
         }
 
         if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && !empty($this->sSYSTEM->sUSERGROUPDATA['id'])) {
@@ -3100,10 +3110,14 @@ class sAdmin implements \Enlight_Hook
                     'brutto' => $payment['surcharge'],
                     'netto' => round($payment['surcharge'] * 100 / (100 + $tax), 2),
                     'tax' => $tax,
+                    'value' => '0',
+                    'factor' => '0',
+                    'surcharge' => 0.0,
+                    'taxMode' => '0',
                 ];
             }
 
-            return ['brutto' => 0, 'netto' => 0];
+            return self::NO_SHIPPING_COSTS;
         }
 
         if (empty($dispatch['calculation'])) {
@@ -3157,7 +3171,7 @@ class sAdmin implements \Enlight_Hook
             $result['brutto'] += $result['surcharge'];
         }
         if ($result['brutto'] < 0) {
-            return ['brutto' => 0, 'netto' => 0];
+            return self::NO_SHIPPING_COSTS;
         }
 
         $result['taxMode'] = $dispatch['tax_calculation'];
@@ -3916,46 +3930,35 @@ SQL;
         );
         $isEmailExists = \count($result) === 0;
 
-        if ($result === false) {
-            $result = [
-                'code' => 10,
-                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                    ->get('UnknownError', 'Unknown error'),
-            ];
-
-            return $result;
-        } elseif (\count($result) === 0) {
+        if (\count($result) === 0) {
             $customer = $this->db->fetchOne(
                 'SELECT id FROM s_user WHERE email = ? LIMIT 1',
                 [$email]
             );
 
             $voteConfirmed = $this->front->getParam('voteConfirmed');
-            $now = $this->front->getParam('optinNow');
-            $now = isset($now) ? $now : (new DateTime())->format('Y-m-d H:i:s');
+            $now = $this->front->getParam('optinNow') ?? (new DateTime())->format('Y-m-d H:i:s');
 
             $added = $voteConfirmed ? $this->front->getParam('optinDate') : $now;
             $doubleOptInConfirmed = $voteConfirmed ? $now : null;
 
-            $result = $this->db->insert(
-                's_campaigns_mailaddresses',
-                [
-                    'customer' => (int) !empty($customer),
-                    'groupID' => $groupID,
-                    'email' => $email,
-                    'added' => $added,
-                    'double_optin_confirmed' => $doubleOptInConfirmed,
-                ]
-            );
-
-            if ($result === false) {
-                $result = [
+            try {
+                $this->db->insert(
+                    's_campaigns_mailaddresses',
+                    [
+                        'customer' => (int) !empty($customer),
+                        'groupID' => $groupID,
+                        'email' => $email,
+                        'added' => $added,
+                        'double_optin_confirmed' => $doubleOptInConfirmed,
+                    ]
+                );
+            } catch (Zend_Db_Exception $e) {
+                return [
                     'code' => 10,
                     'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                         ->get('UnknownError', 'Unknown error'),
                 ];
-
-                return $result;
             }
         }
 
@@ -3968,14 +3971,12 @@ SQL;
             ]
         );
 
-        $result = [
+        return [
             'code' => 3,
             'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
                 ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
             'isNewRegistration' => $isEmailExists,
         ];
-
-        return $result;
     }
 
     /**

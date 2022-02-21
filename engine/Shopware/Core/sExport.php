@@ -1091,9 +1091,9 @@ class sExport implements Enlight_Hook
 
         $sql = $this->sCreateSql();
 
-        $result = $this->db->query($sql);
-
-        if ($result === false) {
+        try {
+            $result = $this->db->query($sql);
+        } catch (Zend_Db_Exception $e) {
             return;
         }
 

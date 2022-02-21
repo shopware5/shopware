@@ -78,7 +78,7 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
         foreach ($newCart as &$item) {
             if (isset($item['proportion'])) {
                 usort($item['proportion'], function ($a, $b) {
-                    return $a['tax_rate'] > $b['tax_rate'] ? 1 : -1;
+                    return $a['tax_rate'] <=> $b['tax_rate'];
                 });
             }
         }
@@ -88,13 +88,14 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
     }
 
     /**
-     * @param string $property
+     * @param array<string, mixed> $item1
+     * @param array<string, mixed> $item2
      *
-     * @return float
+     * @return float|string
      */
-    private function mergeAmount(array $item1, array $item2, $property)
+    private function mergeAmount(array $item1, array $item2, string $property)
     {
-        $hasComma = strpos($item1[$property], ',') !== false;
+        $hasComma = str_contains($item1[$property], ',');
         $amount = (float) str_replace(',', '.', $item1[$property]) + (float) str_replace(',', '.', $item2[$property]);
 
         if ($hasComma) {

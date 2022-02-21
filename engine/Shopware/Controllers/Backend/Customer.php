@@ -728,11 +728,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         ";
 
         // Select the orders from the database
-        $orders = Shopware()->Db()->fetchAll($sql, [$customerId, $fromDateFilter, $toDateFilter]);
-
-        if ($orders === false) {
-            return [];
-        }
+        $orders = $this->get('dbal_connection')->fetchAllAssociative($sql, [$customerId, $fromDateFilter, $toDateFilter]);
 
         $first = new DateTime($orders[0]['date']);
         $last = new DateTime($orders[\count($orders) - 1]['date']);

@@ -43,7 +43,7 @@ use Symfony\Component\HttpFoundation\Cookie;
 /**
  * Shopware Class that handles cart operations
  *
- * @phpstan-type BasketArray array{content: non-empty-array, Amount: string, AmountNet: string, Quantity: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax: string, AmountWithTaxNumeric: float}
+ * @phpstan-type BasketArray array{content?:array<array<string, mixed>>, Amount?:string, AmountNet?:string, Quantity?:int, AmountNumeric?:float, AmountNetNumeric?:float, AmountWithTax?:string, AmountWithTaxNumeric?:float}
  */
 class sBasket implements \Enlight_Hook
 {
@@ -1027,25 +1027,27 @@ class sBasket implements \Enlight_Hook
             ]
         );
 
-        $isInserted = (bool) $this->db->query($sql, $params);
-
-        if ($isInserted) {
-            $insertId = $this->db->lastInsertId('s_order_basket');
-
-            $this->eventManager->notify(
-                'Shopware_Modules_Basket_AddVoucher_Inserted',
-                [
-                    'subject' => $this,
-                    'basketId' => $insertId,
-                    'voucher' => $voucherDetails,
-                    'vouchername' => $voucherName,
-                    'shippingfree' => $freeShipping,
-                    'tax' => $tax,
-                ]
-            );
+        try {
+            $this->db->query($sql, $params);
+        } catch (Zend_Db_Exception $e) {
+            return false;
         }
 
-        return $isInserted;
+        $insertId = $this->db->lastInsertId('s_order_basket');
+
+        $this->eventManager->notify(
+            'Shopware_Modules_Basket_AddVoucher_Inserted',
+            [
+                'subject' => $this,
+                'basketId' => $insertId,
+                'voucher' => $voucherDetails,
+                'vouchername' => $voucherName,
+                'shippingfree' => $freeShipping,
+                'tax' => $tax,
+            ]
+        );
+
+        return true;
     }
 
     /**
@@ -1356,7 +1358,7 @@ class sBasket implements \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @phpstan-return array|BasketArray
+     * @phpstan-return BasketArray
      *
      * @return array
      */
@@ -1415,9 +1417,9 @@ class sBasket implements \Enlight_Hook
      * @throws \Exception
      * @throws \Enlight_Exception
      *
-     * @phpstan-return array|BasketArray
+     * @phpstan-return BasketArray
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function sGetBasketData()
     {
@@ -1658,17 +1660,18 @@ class sBasket implements \Enlight_Hook
             return false;
         }
 
-        $delete = $this->db->query(
-            'DELETE FROM s_order_notes
-            WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
-            AND id=?',
-            [
-                $this->front->Request()->getCookie('sUniqueID'),
-                $this->session->get('sUserId'),
-                $id,
-            ]
-        );
-        if (!$delete) {
+        try {
+            $this->db->query(
+                'DELETE FROM s_order_notes
+                WHERE (sUniqueID = ? OR (userID = ?  AND userID != 0))
+                AND id=?',
+                [
+                    $this->front->Request()->getCookie('sUniqueID'),
+                    $this->session->get('sUserId'),
+                    $id,
+                ]
+            );
+        } catch (Zend_Db_Exception $e) {
             throw new Enlight_Exception('Basket sDeleteNote ##01 Could not delete item');
         }
 
@@ -1820,12 +1823,12 @@ class sBasket implements \Enlight_Hook
                     ]
                 );
 
-                $update = $this->db->query(
-                    $sql,
-                    $params
-                );
-
-                if (!$update || !$updatedPrice) {
+                try {
+                    $this->db->query(
+                        $sql,
+                        $params
+                    );
+                } catch (Zend_Db_Exception $e) {
                     throw new Enlight_Exception(sprintf('Basket Update ##01 Could not update quantity %s', $sql));
                 }
             }
@@ -1944,7 +1947,7 @@ class sBasket implements \Enlight_Hook
      * @throws \Enlight_Event_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return int|false|void Id of the inserted basket entry, or false on failure
+     * @return int|false Id of the inserted basket entry, or false on failure
      */
     public function sAddArticle($id, $quantity = 1)
     {
@@ -1986,13 +1989,13 @@ class sBasket implements \Enlight_Hook
         $quantity = $this->getBasketQuantity($quantity, $chkBasketForProduct, $product);
 
         if ($quantity <= 0) {
-            return;
+            return false;
         }
 
         if ($chkBasketForProduct) {
             $this->sUpdateArticle($chkBasketForProduct['id'], $quantity);
 
-            return $chkBasketForProduct['id'];
+            return (int) $chkBasketForProduct['id'];
         }
 
         $price = $this->getPriceForAddProduct($product);
@@ -2057,11 +2060,12 @@ class sBasket implements \Enlight_Hook
             ]
         );
 
-        $result = $this->db->query($sql, $params);
-
-        if (!$result) {
+        try {
+            $this->db->query($sql, $params);
+        } catch (Zend_Db_Exception $e) {
             throw new Enlight_Exception(sprintf('BASKET-INSERT #02 SQL-Error%s', $sql));
         }
+
         $insertId = (int) $this->db->lastInsertId();
 
         $this->db->insert(
@@ -2591,17 +2595,19 @@ class sBasket implements \Enlight_Hook
      * Loads relevant associated data for the provided products
      * Used in sGetBasket
      *
+     * @param array<array<string, mixed>> $getProducts
+     *
      * @throws \Exception
      * @throws \Enlight_Event_Exception
      *
-     * @return array
+     * @return array{0: array<array<string, mixed>>, 1: float, 2: float, 3: int, 4: float}
      */
-    private function getBasketProducts(array $getProducts)
+    private function getBasketProducts(array $getProducts): array
     {
-        $totalAmount = 0;
-        $discount = 0;
-        $totalAmountWithTax = 0;
-        $totalAmountNet = 0;
+        $totalAmount = 0.0;
+        $discount = 0.0;
+        $totalAmountWithTax = 0.0;
+        $totalAmountNet = 0.0;
         $totalCount = 0;
 
         $numbers = [];
@@ -2827,9 +2833,9 @@ class sBasket implements \Enlight_Hook
     /**
      * @throws \Enlight_Event_Exception
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    private function loadBasketProducts()
+    private function loadBasketProducts(): array
     {
         $attrs = $this->fieldHelper->getTableFields('s_order_basket_attributes', 's_order_basket_attributes');
 

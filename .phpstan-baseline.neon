@@ -306,11 +306,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
 
 		-
-			message: "#^Cannot call method rowCount\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
-
-		-
 			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:createFromDbalConnectionAndConfig\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
@@ -327,11 +322,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type Zend_Db_Statement_Pdo\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
-
-		-
-			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) should return Zend_Db_Statement_Pdo but returns Zend_Db_Statement_Pdo\\|false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
 
@@ -1831,17 +1821,7 @@ parameters:
 			path: engine/Library/Enlight/Event/EventManager.php
 
 		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
 			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventManager.php
 
@@ -14856,11 +14836,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Address.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
@@ -16996,41 +16971,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/PaymentTokenSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMerger\\:\\:mergeAmount\\(\\) has parameter \\$item1 with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMerger\\:\\:mergeAmount\\(\\) has parameter \\$item2 with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMerger\\:\\:mergeAmount\\(\\) should return float but returns float\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMerger\\:\\:mergeProportionalItems\\(\\) has parameter \\$content with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMerger\\:\\:mergeProportionalItems\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMerger.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMergerInterface\\:\\:mergeProportionalItems\\(\\) has parameter \\$content with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMergerInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartMergerInterface\\:\\:mergeProportionalItems\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalCartMergerInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalCartNormalizer\\:\\:normalize\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/ProportionalCartNormalizer.php
@@ -17536,11 +17476,6 @@ parameters:
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertStateStruct\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertStateStructList\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
@@ -17557,11 +17492,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertVoteStruct\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:getCategoryCanonicalParams\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
@@ -17597,11 +17527,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$manufacturer of method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:getSupplierListingLink\\(\\) expects Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer, Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\\\Manufacturer\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
@@ -18208,11 +18133,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Shopware_Models_Document_Order\\:\\:\\$userID\\.$#"
 			count: 6
-			path: engine/Shopware/Components/Document.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
 			path: engine/Shopware/Components/Document.php
 
 		-
@@ -20903,11 +20823,6 @@ parameters:
 		-
 			message: "#^Argument of an invalid type array\\<int, string\\>\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 2
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
 
 		-
@@ -24906,18 +24821,8 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
@@ -26446,16 +26351,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Cache.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Cannot call method rowCount\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:convertOrderAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
@@ -26508,11 +26403,6 @@ parameters:
 		-
 			message: "#^Offset 0 does not exist on array\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
-			count: 6
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
 
 		-
@@ -26711,11 +26601,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Category.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:beforeSaveElement\\(\\) has parameter \\$elementData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
@@ -26877,11 +26762,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:validateData\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -27127,11 +27007,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$voucher\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Document.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Document.php
 
@@ -28021,11 +27896,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
-			message: "#^Cannot call method rowCount\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Newsletter\\:\\:cronAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
@@ -28354,11 +28224,6 @@ parameters:
 			message: "#^PHPDoc tag @var for variable \\$filter has no value type specified in iterable type array\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Overview.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Overview\\:\\:getOrderSummaryAction\\(\\) has no return type specified\\.$#"
@@ -29091,11 +28956,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Site.php
 
 		-
-			message: "#^Cannot call method fetchAll\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 4
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Snippet\\:\\:createSnippetAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
@@ -29226,11 +29086,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Parameter \\#2 \\$encoding of method Shopware_Controllers_Backend_Snippet\\:\\:getFormatSnippetForExport\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
@@ -29274,11 +29129,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:updateSupplierAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
 
 		-
 			message: "#^Cannot call method getOffset\\(\\) on DateTimeZone\\|false\\.$#"
@@ -29673,11 +29523,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property Enlight_Components_Mail\\:\\:\\$Subject\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
@@ -30076,41 +29921,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Campaign.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$sBasketAmount\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$sBasketCurrency\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$sBasketQuantity\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sBasket\\.$#"
-			count: 39
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sFormData\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sPayment\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sUserData\\.$#"
-			count: 23
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_GET\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -30128,11 +29938,6 @@ parameters:
 		-
 			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot access offset 'id' on array\\|false\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
@@ -30281,6 +30086,11 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
+			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getBasket\\(\\) should return array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\} but returns array\\{content\\?\\: mixed, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}\\.$#"
+			count: 1
+			path: engine/Shopware/Controllers/Frontend/Checkout.php
+
+		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getBoughtToo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -30356,11 +30166,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getSelectedCountry\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getSelectedDispatch\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -30372,11 +30177,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getSelectedState\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getShippingCosts\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -30466,12 +30266,17 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$activeBillingAddressId has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$basket of method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}, array\\{content\\?\\: array\\<array\\<string, mixed\\>\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\: float, \\.\\.\\.\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$activeShippingAddressId has no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$basket of method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}, array\\{content\\?\\: array\\<array\\<string, mixed\\>\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\} given\\.$#"
+			count: 1
+			path: engine/Shopware/Controllers/Frontend/Checkout.php
+
+		-
+			message: "#^Parameter \\#1 \\$cart of method Shopware\\\\Components\\\\Cart\\\\TaxAggregatorInterface\\:\\:taxSum\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, sShippingcostsTax\\?\\: float, sShippingcostsTaxProportional\\?\\: array\\<Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price\\>, sShippingcostsNet\\: float, sShippingcostsWithTax\\: float\\}, array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -30873,11 +30678,6 @@ parameters:
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
 			count: 3
-			path: engine/Shopware/Controllers/Frontend/Newsletter.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Frontend/Newsletter.php
 
 		-
@@ -31476,16 +31276,6 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Recommendation.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 3
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Cannot access an offset on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Cannot access offset 'additional' on array\\|bool\\.$#"
 			count: 2
 			path: engine/Shopware/Core/sAdmin.php
@@ -31493,11 +31283,6 @@ parameters:
 		-
 			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
 			count: 6
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Cannot access offset mixed on non\\-empty\\-array\\|false\\.$#"
-			count: 4
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
@@ -31767,16 +31552,6 @@ parameters:
 
 		-
 			message: "#^Method sAdmin\\:\\:sGetPremiumDispatches\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:sGetPremiumShippingcosts\\(\\) has parameter \\$country with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:sGetPremiumShippingcosts\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -32221,22 +31996,12 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
-			count: 3
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Parameter \\#2 \\$discountTax of method sAdmin\\:\\:handleDispatchDiscount\\(\\) expects float, float\\|int\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
 			message: "#^Parameter \\#2 \\$discountTax of method sAdmin\\:\\:handleDispatchSurcharge\\(\\) expects float, float\\|int\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Parameter \\#2 \\$dispatches of method sAdmin\\:\\:calculateDispatchSurcharge\\(\\) expects array, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -32291,18 +32056,8 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Binary operation \"\\-\" between int\\|string and 1 results in an error\\.$#"
 			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Cannot access offset 0 on array\\|false\\.$#"
-			count: 5
 			path: engine/Shopware/Core/sArticles.php
 
 		-
@@ -32546,11 +32301,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Method sArticles\\:\\:sGetArticlesBySupplier\\(\\) should return array\\|void but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Method sArticles\\:\\:sGetCheapestPrice\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -32597,6 +32347,11 @@ parameters:
 
 		-
 			message: "#^Method sArticles\\:\\:sGetProductByOrdernumber\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Core/sArticles.php
+
+		-
+			message: "#^Method sArticles\\:\\:sGetProductByOrdernumber\\(\\) should return array\\|false but returns array\\|bool\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -32661,11 +32416,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
-			count: 3
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#2 \\$orderNumber of method sArticles\\:\\:getArticleCover\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -32694,11 +32444,6 @@ parameters:
 			message: "#^Property sArticles\\:\\:\\$searchService \\(Shopware\\\\Bundle\\\\SearchBundle\\\\ProductSearch\\) does not accept Shopware\\\\Bundle\\\\SearchBundle\\\\VariantSearch\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 3
-			path: engine/Shopware/Core/sArticlesComparisons.php
 
 		-
 			message: "#^Cannot access offset 'linkDetails' on array\\|false\\.$#"
@@ -32766,18 +32511,8 @@ parameters:
 			path: engine/Shopware/Core/sArticlesComparisons.php
 
 		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Core/sArticlesComparisons.php
-
-		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$sLanguage\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 3
 			path: engine/Shopware/Core/sBasket.php
 
 		-
@@ -32906,16 +32641,6 @@ parameters:
 			path: engine/Shopware/Core/sBasket.php
 
 		-
-			message: "#^Method sBasket\\:\\:getBasketProducts\\(\\) has parameter \\$getProducts with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Method sBasket\\:\\:getBasketProducts\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
 			message: "#^Method sBasket\\:\\:getBasketQuantity\\(\\) has parameter \\$basketProduct with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
@@ -32966,16 +32691,6 @@ parameters:
 			path: engine/Shopware/Core/sBasket.php
 
 		-
-			message: "#^Method sBasket\\:\\:loadBasketProducts\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Method sBasket\\:\\:loadBasketProducts\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
 			message: "#^Method sBasket\\:\\:sAddVoucher\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
@@ -33007,16 +32722,6 @@ parameters:
 
 		-
 			message: "#^Method sBasket\\:\\:sGetAmountRestrictedArticles\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Method sBasket\\:\\:sGetBasket\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Method sBasket\\:\\:sGetBasketData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
 
@@ -33058,11 +32763,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$percentage of method Shopware\\\\Components\\\\Cart\\\\ProportionalTaxCalculator\\:\\:recalculatePercentageDiscount\\(\\) expects float, string given\\.$#"
 			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|false given\\.$#"
-			count: 2
 			path: engine/Shopware/Core/sBasket.php
 
 		-
@@ -33396,11 +33096,6 @@ parameters:
 			path: engine/Shopware/Core/sMarketing.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 4
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sMarketing.php
@@ -33486,11 +33181,6 @@ parameters:
 			path: engine/Shopware/Core/sMarketing.php
 
 		-
-			message: "#^Parameter \\#1 \\$products of method sMarketing\\:\\:sGetMailCampaignsProducts\\(\\) expects array, array\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sMarketing.php
@@ -33519,11 +33209,6 @@ parameters:
 			message: "#^Property sMarketing\\:\\:\\$sBlacklist type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sOrder.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getValues\\(\\)\\.$#"
@@ -33566,11 +33251,6 @@ parameters:
 			path: engine/Shopware/Core/sOrder.php
 
 		-
-			message: "#^Method sOrder\\:\\:getAvailableSerialsOfEsd\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sOrder.php
-
-		-
 			message: "#^Method sOrder\\:\\:getCustomerInformationByOrderId\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sOrder.php
@@ -33582,11 +33262,6 @@ parameters:
 
 		-
 			message: "#^Method sOrder\\:\\:getOrderDetailsByOrderId\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sOrder.php
-
-		-
-			message: "#^Method sOrder\\:\\:getOrderDetailsByOrderId\\(\\) should return array but returns array\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sOrder.php
 
@@ -33927,11 +33602,6 @@ parameters:
 
 		-
 			message: "#^Method sRewriteTable\\:\\:sSmartyCategoryPath\\(\\) should return string\\|null but returns array\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sRewriteTable.php
-
-		-
-			message: "#^Parameter \\#1 \\$articles of method sRewriteTable\\:\\:mapArticleTranslationObjectData\\(\\) expects array, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sRewriteTable.php
 
@@ -42176,11 +41846,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/CronProductExport/Bootstrap.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_CronRating_Bootstrap\\:\\:getCustomers\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
@@ -42636,11 +42301,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$combinations of method Shopware_Components_AlsoBought\\:\\:refreshMultipleBoughtArticles\\(\\) expects array, array\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#4 \\$active of method Shopware_Components_Plugin_Bootstrap\\:\\:createCronJob\\(\\) expects int, true given\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
@@ -42694,11 +42354,6 @@ parameters:
 			message: "#^Method Shopware_Components_SimilarShown\\:\\:updateElapsedSimilarShownArticles\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/SimilarShown.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/TopSeller.php
 
 		-
 			message: "#^Method Shopware_Components_TopSeller\\:\\:incrementTopSeller\\(\\) has no return type specified\\.$#"
@@ -43247,11 +42902,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Seo\\:\\:seoSupplierAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php
-
-		-
-			message: "#^Parameter \\#1 \\$articles of method sRewriteTable\\:\\:mapArticleTranslationObjectData\\(\\) expects array, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Controllers/Seo.php
 
@@ -45991,11 +45641,6 @@ parameters:
 			path: tests/Functional/Components/Api/AddressTest.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 4
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Cannot access offset 'details' on array\\|Shopware\\\\Models\\\\Article\\\\Article\\.$#"
 			count: 2
 			path: tests/Functional/Components/Api/ArticleTest.php
@@ -46027,16 +45672,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'translations' on array\\|Shopware\\\\Models\\\\Article\\\\Article\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Cannot access offset 3 on array\\|false\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Cannot access offset 4 on array\\|false\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
 
@@ -46692,11 +46327,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'number' on array\\|Shopware\\\\Models\\\\Order\\\\Order\\.$#"
-			count: 2
-			path: tests/Functional/Components/Api/OrderTest.php
-
-		-
-			message: "#^Cannot call method fetchColumn\\(\\) on Zend_Db_Statement_Pdo\\|false\\.$#"
 			count: 2
 			path: tests/Functional/Components/Api/OrderTest.php
 
@@ -49272,11 +48902,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$payment of method sAdmin\\:\\:sGetPaymentMean\\(\\) expects int\\|string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertArrayHasKey\\(\\) expects array\\|ArrayAccess, array\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Core/AdminTest.php
 
@@ -57399,4 +57024,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-

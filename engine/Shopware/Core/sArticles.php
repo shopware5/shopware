@@ -447,24 +447,24 @@ class sArticles implements Enlight_Hook
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without replacement
+     * @deprecated in 5.6, will be removed in 5.8 without replacement
      *
      * Get id from all products, that belongs to a specific supplier
      *
      * @param int $supplierID Supplier id (s_articles.supplierID)
      *
-     * @return array|void
+     * @return array
      */
     public function sGetArticlesBySupplier($supplierID = null)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if (!empty($supplierID)) {
             $this->frontController->Request()->setQuery('sSearch', $supplierID);
         }
 
         if (!$this->frontController->Request()->getQuery('sSearch')) {
-            return;
+            return [];
         }
         $sSearch = (int) $this->frontController->Request()->getQuery('sSearch');
 
@@ -1277,15 +1277,11 @@ class sArticles implements Enlight_Hook
             return false;
         }
 
-        $getPromotionResult = $this->getPromotion(null, $ordernumber);
-
-        $getPromotionResult = Shopware()->Events()->filter(
+        return Shopware()->Events()->filter(
             'Shopware_Modules_Articles_sGetProductByOrdernumber_FilterResult',
-            $getPromotionResult,
+            $this->getPromotion(null, $ordernumber),
             ['subject' => $this, 'value' => $ordernumber]
         );
-
-        return $getPromotionResult;
     }
 
     /**
@@ -1320,7 +1316,7 @@ class sArticles implements Enlight_Hook
             return false;
         }
 
-        $result = $this->getPromotion($category, $value);
+        $result = $this->getPromotion((int) $category, $value);
 
         if (!$result) {
             return false;
@@ -2383,12 +2379,9 @@ class sArticles implements Enlight_Hook
      * Returns a minified product which can be used for listings,
      * sliders or emotions.
      *
-     * @param int|null $category
-     * @param string   $number
-     *
      * @return array|false
      */
-    private function getPromotion($category, $number)
+    private function getPromotion(?int $category, string $number)
     {
         $context = $this->contextService->getShopContext();
 
