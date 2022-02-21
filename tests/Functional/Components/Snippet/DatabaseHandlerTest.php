@@ -22,30 +22,35 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Snippet;
+namespace Shopware\Tests\Functional\Components\Snippet;
 
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Snippet\Snippet;
-use Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class DatabaseHandlerTest extends Enlight_Components_Test_TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
     /**
      * Tests the import of snippets with missing locale.
      * Asserts that all remaining snippets of a plugin are imported correctly even if some
      * of the snippets are skipped because the respective locale is missing.
      */
-    public function testLoadToDatabaseWithMissingLocale()
+    public function testLoadToDatabaseWithMissingLocale(): void
     {
-        $em = Shopware()->Container()->get(ModelManager::class);
+        $em = $this->getContainer()->get(ModelManager::class);
 
         // Delete necessary locale
         $germanLocale = $em->getRepository(Locale::class)->findOneBy([
             'locale' => 'de_DE',
         ]);
+        static::assertInstanceOf(Locale::class, $germanLocale);
         $em->remove($germanLocale);
         // Delete snippets of the AdvancedMenu plugin
         $advancedMenuSnippets = $em->getRepository(Snippet::class)->findBy([
@@ -63,9 +68,8 @@ class DatabaseHandlerTest extends Enlight_Components_Test_TestCase
         static::assertCount(0, $advancedMenuSnippets);
 
         // (partial) import snippets of the AdvancedMenu plugin
-        /** @var Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap $pluginBootstrap */
-        $pluginBootstrap = Shopware()->Plugins()->Frontend()->get('AdvancedMenu');
-        Shopware()->Container()->get(DatabaseHandler::class)->loadToDatabase($pluginBootstrap->Path() . 'Snippets/');
+        $pluginBootstrap = Shopware()->Plugins()->Frontend()->AdvancedMenu();
+        $this->getContainer()->get(DatabaseHandler::class)->loadToDatabase($pluginBootstrap->Path() . 'Snippets/');
 
         // Check that all snippets of the remaining locale are installed
         $advancedMenuSnippets = $em->getRepository(Snippet::class)->findBy([
@@ -78,7 +82,7 @@ class DatabaseHandlerTest extends Enlight_Components_Test_TestCase
         Shopware()->Db()->exec($sql);
 
         // Import all remaining snippets
-        Shopware()->Container()->get(DatabaseHandler::class)
+        $this->getContainer()->get(DatabaseHandler::class)
             ->loadToDatabase($pluginBootstrap->Path() . 'Snippets/');
     }
 }

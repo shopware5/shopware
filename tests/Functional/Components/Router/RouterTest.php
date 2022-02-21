@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components\Router;
+namespace Shopware\Tests\Functional\Components\Router;
 
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Routing\Context;
@@ -122,7 +124,9 @@ class RouterTest extends Enlight_Components_Test_TestCase
         $localRouter->setContext($context);
 
         $url = $localRouter->assemble($params);
+        static::assertIsString($url);
         $match = $localRouter->match($url);
+        static::assertIsArray($match);
         static::assertEquals(array_intersect($match, $params), $params);
     }
 

@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Album;
+namespace Shopware\Tests\Unit\Model\Album;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Models\Media\Media;

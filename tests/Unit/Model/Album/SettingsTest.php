@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,15 +24,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Models\Album;
+namespace Shopware\Tests\Unit\Model\Album;
 
 use PHPUnit\Framework\TestCase;
+use Shopware\Models\Media\Settings;
 
 class SettingsTest extends TestCase
 {
-    public function testGetThumbnailSizeReturnValue()
+    public function testGetThumbnailSizeReturnValue(): void
     {
-        $settings = new \Shopware\Models\Media\Settings();
+        $settings = new Settings();
         $settings->setThumbnailSize([]);
 
         $size = $settings->getThumbnailSize();

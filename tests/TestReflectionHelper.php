@@ -24,26 +24,33 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Regressions;
+namespace Shopware\Tests;
 
-use Enlight_Components_Mail;
-use PHPUnit\Framework\TestCase;
+use ReflectionClass;
+use ReflectionMethod;
+use ReflectionProperty;
 
-class Ticket5217Test extends TestCase
+class TestReflectionHelper
 {
     /**
-     * Test case method
+     * @param class-string $class
      */
-    public function testMailTransport(): void
+    public static function getMethod(string $class, string $methodName): ReflectionMethod
     {
-        $mailTransport = Shopware()->Container()->get('mailtransport');
+        $method = (new ReflectionClass($class))->getMethod($methodName);
+        $method->setAccessible(true);
 
-        $mail = new Enlight_Components_Mail();
+        return $method;
+    }
 
-        $mail->setBodyText('Test Hallo');
-        $mail->addTo('test@example.com');
+    /**
+     * @param class-string $class
+     */
+    public static function getProperty(string $class, string $propertyName): ReflectionProperty
+    {
+        $property = (new ReflectionClass($class))->getProperty($propertyName);
+        $property->setAccessible(true);
 
-        $mail = $mail->send($mailTransport);
-        static::assertInstanceOf('Zend_Mail', $mail);
+        return $property;
     }
 }

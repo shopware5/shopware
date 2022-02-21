@@ -24,10 +24,14 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Components\Auth\Adapter;
+
 use Doctrine\DBAL\Connection;
+use Enlight_Components_Session_Namespace;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Components_Auth_Adapter_Default;
 
 require_once __DIR__ . '/../../../../../engine/Shopware/Controllers/Backend/UserManager.php';
 
@@ -50,9 +54,9 @@ class DefaultTest extends TestCase
         static::assertTrue($insertResult);
 
         $session = $this->getContainer()->get('session');
-        static::assertInstanceOf(\Enlight_Components_Session_Namespace::class, $session);
+        static::assertInstanceOf(Enlight_Components_Session_Namespace::class, $session);
 
-        $authDefault = new \Shopware_Components_Auth_Adapter_Default($session);
+        $authDefault = new Shopware_Components_Auth_Adapter_Default($session);
         $authDefault->setIdentity('unitTest');
         $authDefault->setCredential('testtest');
 

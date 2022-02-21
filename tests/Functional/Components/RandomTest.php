@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,17 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components;
+namespace Shopware\Tests\Functional\Components;
 
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Random;
 
 class RandomTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * Test case
-     */
-    public function testGeneratePassword()
+    public function testGeneratePassword(): void
     {
         $sets = [];
         $sets[] = 'abcdefghjkmnpqrstuvwxyz';
@@ -45,13 +44,13 @@ class RandomTest extends Enlight_Components_Test_TestCase
         $password = Random::generatePassword();
         static::assertEquals(15, \strlen($password));
 
-        for ($i = 0; $i < \strlen($password); ++$i) {
+        for ($i = 0, $iMax = \strlen($password); $i < $iMax; ++$i) {
             $char = $password[$i];
 
             static::assertStringContainsString($char, $chars);
 
             foreach ($sets as $key => $set) {
-                if (strpos($set, $char) !== false) {
+                if (str_contains($set, $char)) {
                     unset($sets[$key]);
                 }
             }
@@ -60,19 +59,13 @@ class RandomTest extends Enlight_Components_Test_TestCase
         static::assertEmpty($sets);
     }
 
-    /**
-     * Test case
-     */
-    public function testGetBoolean()
+    public function testGetBoolean(): void
     {
         $result = Random::getBoolean();
         static::assertIsBool($result);
     }
 
-    /**
-     * Test case
-     */
-    public function testGetInteger()
+    public function testGetInteger(): void
     {
         for ($i = 0; $i < 100; ++$i) {
             $result = Random::getInteger(-100000, 100000);
@@ -81,10 +74,7 @@ class RandomTest extends Enlight_Components_Test_TestCase
         }
     }
 
-    /**
-     * Test case
-     */
-    public function testGetFloat()
+    public function testGetFloat(): void
     {
         $results = [];
         for ($i = 0; $i < 1000; ++$i) {

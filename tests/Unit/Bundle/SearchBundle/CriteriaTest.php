@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,7 +37,7 @@ class CriteriaTest extends TestCase
      *
      * @param int $limit
      */
-    public function testInvalidCriteriaLimit($limit)
+    public function testInvalidCriteriaLimit($limit): void
     {
         $this->expectException('InvalidArgumentException');
         $criteria = new Criteria();
@@ -47,7 +49,7 @@ class CriteriaTest extends TestCase
      *
      * @param int $limit
      */
-    public function testValidCriteriaLimit($limit)
+    public function testValidCriteriaLimit($limit): void
     {
         $criteria = new Criteria();
         $criteria->limit($limit);
@@ -59,7 +61,7 @@ class CriteriaTest extends TestCase
      *
      * @param int $offset
      */
-    public function testInvalidCriteriaOffset($offset)
+    public function testInvalidCriteriaOffset($offset): void
     {
         $this->expectException('InvalidArgumentException');
         $criteria = new Criteria();
@@ -71,14 +73,14 @@ class CriteriaTest extends TestCase
      *
      * @param int $offset
      */
-    public function testValidCriteriaOffset($offset)
+    public function testValidCriteriaOffset($offset): void
     {
         $criteria = new Criteria();
         $criteria->offset($offset);
         static::assertEquals($offset, $criteria->getOffset());
     }
 
-    public function validCriteriaLimit()
+    public function validCriteriaLimit(): array
     {
         return [
             [1],
@@ -87,7 +89,7 @@ class CriteriaTest extends TestCase
         ];
     }
 
-    public function validCriteriaOffset()
+    public function validCriteriaOffset(): array
     {
         return [
             [0],
@@ -96,7 +98,7 @@ class CriteriaTest extends TestCase
         ];
     }
 
-    public function invalidCriteriaOffset()
+    public function invalidCriteriaOffset(): array
     {
         return [
             [-1],
@@ -107,7 +109,7 @@ class CriteriaTest extends TestCase
         ];
     }
 
-    public function invalidCriteriaLimit()
+    public function invalidCriteriaLimit(): array
     {
         return [
             [0],

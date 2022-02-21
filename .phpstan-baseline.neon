@@ -8346,21 +8346,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/Commands/ImageMigrateCommand.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaCleanupCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaCleanupCommand\\:\\:handleCleanup\\(\\) should return int but returns int\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
-
-		-
-			message: "#^Parameter \\#1 \\$max of method Symfony\\\\Component\\\\Console\\\\Style\\\\SymfonyStyle\\:\\:createProgressBar\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaCleanupCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Commands\\\\MediaOptimizeCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
@@ -8409,76 +8394,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Exception\\\\WrongMediaTypeForReplaceException\\:\\:__construct\\(\\) has parameter \\$requiredType with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Exception/WrongMediaTypeForReplaceException.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:addMediaById\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:addMediaByPath\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:createTempTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:fetchColumn\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:find\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleHtmlTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleJsonTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handlePipeTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleSerializeTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:handleTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:moveToTrash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:processQueue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$mediaIds has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\MediaBundle\\\\GarbageCollector\\:\\:\\$queue type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
 
 		-
 			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
@@ -27901,11 +27816,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:emptyTrashAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:filterAlbums\\(\\) has parameter \\$albums with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
@@ -46026,36 +45936,6 @@ parameters:
 			path: tests/Functional/Commands/ConfigSetCommandTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testAclShouldContainResources\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AclTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testAclShouldContainRoles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AclTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testTestLocalAdminsShouldHaveAllPrivileges\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AclTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testTestNotExistingPrivilegeShouldNotThrowException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AclTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testTestNotExistingResourceShouldThrowException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AclTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\AclTest\\:\\:testTestNotExistingRoleShouldThrowException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AclTest.php
-
-		-
 			message: "#^Cannot access offset 'customer' on array\\|Shopware\\\\Models\\\\Customer\\\\Address\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/AddressTest.php
@@ -47621,11 +47501,6 @@ parameters:
 			path: tests/Functional/Components/CheckoutTest.php
 
 		-
-			message: "#^Method ConfigTest\\:\\:testMissingSnippetsConfigSection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Config/ConfigTest.php
-
-		-
 			message: "#^Method ShopwareConfigTest\\:\\:initForm\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Config/ShopwareConfigTest.php
@@ -47706,239 +47581,24 @@ parameters:
 			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
 
 		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\EmotionToPresetDataTransformerTest\\:\\:testGettingRequiredPluginsByIdShouldSucceed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\EmotionToPresetDataTransformerTest\\:\\:testShouldFailBecauseOfMissingEmotion\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\EmotionToPresetDataTransformerTest\\:\\:testTransformShouldSucceed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\EmotionToPresetDataTransformerTest\\:\\:testTransformWithTranslationsShouldSucceed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$emotionId of method Shopware\\\\Components\\\\Emotion\\\\Preset\\\\EmotionToPresetDataTransformer\\:\\:transform\\(\\) expects int, null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$exception of method PHPUnit\\\\Framework\\\\TestCase\\:\\:expectException\\(\\) expects class\\-string\\<Throwable\\>, string given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportForElemementWithBannerSliderComponent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportForElemementWithBannerSliderComponentShouldNotChangeElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportForElementWithBannerComponent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportForElementWithBannerComponentShouldNotChangeElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportWithMissingElementKey\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportWithPresetAlreadyImported\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizerTest\\:\\:testAssetImportWithWrongPresetData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$exception of method PHPUnit\\\\Framework\\\\TestCase\\:\\:expectException\\(\\) expects class\\-string\\<Throwable\\>, string given\\.$#"
-			count: 3
-			path: tests/Functional/Components/Emotion/Preset/PresetDataSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetInstallerTest\\:\\:testPresetInstallationShouldSucceedWithEmptyPresetData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetInstallerTest\\:\\:testPresetUninstallationShouldSucceed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetInstallerTest\\:\\:testPresetUpdateShouldSucceedWithEmptyPresetData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetInstallerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$presetMetaData of method Shopware\\\\Components\\\\Emotion\\\\Preset\\\\PresetInstaller\\:\\:installOrUpdate\\(\\) expects array\\<Shopware\\\\Components\\\\Emotion\\\\Preset\\\\PresetMetaDataInterface\\>, array\\<int, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject\\> given\\.$#"
-			count: 2
-			path: tests/Functional/Components/Emotion/Preset/PresetInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoaderTest\\:\\:testPresetLoadingShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoaderTest\\:\\:testPresetLoadingShouldBeSuccessfulWithEmptyElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoaderTest\\:\\:testPresetLoadingShouldBeSuccessfulWithoutElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoaderTest\\:\\:testPresetLoadingShouldFailMissingIdentifier\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoaderTest\\:\\:testPresetLoadingShouldFailNoResult\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoaderTest\\:\\:testShouldBeSuccessfulWithJsonEncodedDataValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$exception of method PHPUnit\\\\Framework\\\\TestCase\\:\\:expectException\\(\\) expects class\\-string\\<Throwable\\>, string given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$presetId of method Shopware\\\\Components\\\\Emotion\\\\Preset\\\\PresetLoader\\:\\:load\\(\\) expects int, null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Emotion/Preset/PresetLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:rollBackTransaction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:startTransaction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRoute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRouteAlreadyExists\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRouteAlreadyExistsButDifferentTime\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRouteCacheTagAlreadyExists\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRouteEmptyRouteReturnsNull\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRouteEmptyRoutes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testAddHttpCacheRouteWithoutTag\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testRemoveHttpCacheRoute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Functional\\\\Components\\\\HttpCache\\\\CacheRouteInstallerTest\\:\\:testRemoveHttpCacheRouteEmptyRoutes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/HttpCache/CacheRouteInstallerTest.php
-
-		-
-			message: "#^Cannot call method getQuery\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 5
-			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Cannot call method setQuery\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
 			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testGetQuery\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testOverwriteAndClearQuery\\(\\) has parameter \\$getData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testOverwriteAndClearQuery\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testSetQuery\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testOverwriteAndClearQuery\\(\\) has parameter \\$getData with no type specified\\.$#"
+			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:\\$resources type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testSetQuery\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:\\$resources has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Cannot call method getPost\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 5
-			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Cannot call method setPost\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
 			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
@@ -47946,32 +47606,22 @@ parameters:
 			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testGetPost\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testOverwriteAndClearPost\\(\\) has parameter \\$getData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testOverwriteAndClearPost\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testSetPost\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testOverwriteAndClearPost\\(\\) has parameter \\$getData with no type specified\\.$#"
+			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:\\$resources type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testSetPost\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:\\$resources has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Method Functional\\\\Components\\\\Migrations\\\\Migrations_Migration1607Test\\:\\:commentArticleConfigProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Migrations\\\\Migrations_Migration1607Test\\:\\:commentArticleConfigProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Migrations/Migrations_Migration1607Test.php
 
@@ -48251,26 +47901,6 @@ parameters:
 			path: tests/Functional/Components/Privacy/IpAnonymizerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\RandomTest\\:\\:testGeneratePassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/RandomTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\RandomTest\\:\\:testGetBoolean\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/RandomTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\RandomTest\\:\\:testGetFloat\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/RandomTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\RandomTest\\:\\:testGetInteger\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/RandomTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\ReflectionHelperTest\\:\\:testCreationOfInvalidClass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/ReflectionHelperTest.php
@@ -48286,22 +47916,12 @@ parameters:
 			path: tests/Functional/Components/ReflectionHelperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\Router\\\\RouterTest\\:\\:getTestParamsProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Router\\\\RouterTest\\:\\:getTestParamsProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Router/RouterTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\Router\\\\RouterTest\\:\\:testArrayParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Router/RouterTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$arr1 of function array_intersect expects array, array\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Router/RouterTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$pathInfo of method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:match\\(\\) expects string, string\\|false given\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Router\\\\RouterTest\\:\\:testArrayParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Router/RouterTest.php
 
@@ -48324,21 +47944,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Routing\\\\Matchers\\\\RewriteMatcherTest\\:\\:testMatcherTest\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Routing/Matchers/RewriteMatcherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\Snippet\\\\DatabaseHandlerTest\\:\\:testLoadToDatabaseWithMissingLocale\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Snippet/DatabaseHandlerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\Shop\\\\Locale\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Snippet/DatabaseHandlerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\Snippet\\\\SnippetStructureTest\\:\\:testSnippetsShouldBeValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Snippet/SnippetStructureTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\StateTranslatorServiceTest\\:\\:testTranslateStateDifferentLocale\\(\\) has no return type specified\\.$#"
@@ -48379,76 +47984,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\StreamProtocolValidatorTest\\:\\:testInvalidProtocols\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/StreamProtocolValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\StringCompilerTest\\:\\:testInvalidSmartyShouldThrowExceptionAndCustomExceptionMessage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/StringCompilerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\StringCompilerTest\\:\\:testShouldCompileCompatibilityMode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/StringCompilerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\StringCompilerTest\\:\\:testShouldCompileMixedString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/StringCompilerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\StringCompilerTest\\:\\:testShouldCompileSmarty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/StringCompilerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testCreateMailWithInvalidTemplateNameShouldThrowException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testCreateMailWithoutMainShopTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testCreateMailWithoutShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testCreateMailWithoutShopTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testCreateMailWorks\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testLoadSmartyTemplateLoadsValues\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testLoadTemplateLoadsValues\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testLoadValuesLoadsValues\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Components\\\\TemplateMailTest\\:\\:testShouldBeInstanceOfShopwareComponentsTemplateMail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/TemplateMailTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$mailModel of method Shopware_Components_TemplateMail\\:\\:createMail\\(\\) expects Shopware\\\\Models\\\\Mail\\\\Mail\\|string, Shopware\\\\Models\\\\Mail\\\\Mail\\|null given\\.$#"
-			count: 2
-			path: tests/Functional/Components/TemplateMailTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\Base\\:\\:getSnippetHandler\\(\\) has no return type specified\\.$#"
@@ -49104,36 +48639,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NotificationTest\\:\\:testGetCustomerList\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/NotificationTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
-			count: 8
-			path: tests/Functional/Controllers/Backend/PartnerTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Backend/PartnerTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$totalCount\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PartnerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Controllers\\\\Backend\\\\PartnerTest\\:\\:testGetList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PartnerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Controllers\\\\Backend\\\\PartnerTest\\:\\:testMapCustomerAccount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PartnerTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Controllers\\\\Backend\\\\PartnerTest\\:\\:\\$dummyData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PartnerTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
@@ -50216,174 +49721,49 @@ parameters:
 			path: tests/Functional/Modules/Acl/RemoveAndCreateResourceTest.php
 
 		-
-			message: "#^Call to method getId\\(\\) on an unknown class Shopware\\\\Tests\\\\Modules\\\\Articles\\\\Shopware\\\\Models\\\\Article\\\\Article\\.$#"
-			count: 2
-			path: tests/Functional/Modules/Articles/SeoCategoryTest.php
-
-		-
-			message: "#^Cannot access offset 3 on array\\|false\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\SeoCategoryTest\\:\\:getSimpleTestData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/SeoCategoryTest.php
 
 		-
-			message: "#^Cannot access offset 4 on array\\|false\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/SeoCategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\SeoCategoryTest\\:\\:getSimpleTestData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/SeoCategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\SeoCategoryTest\\:\\:testSeoCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/SeoCategoryTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$article contains unknown class Shopware\\\\Tests\\\\Modules\\\\Articles\\\\Shopware\\\\Models\\\\Article\\\\Article\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/SeoCategoryTest.php
-
-		-
-			message: "#^Call to an undefined method sArticles\\:\\:calculateCheapestBasePriceData\\(\\)\\.$#"
-			count: 2
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Call to an undefined method sArticles\\:\\:getCheapestVariant\\(\\)\\.$#"
-			count: 2
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Cannot access offset 'purchaseunit' on array\\|false\\.$#"
-			count: 4
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Cannot access offset 'referenceprice' on array\\|false\\.$#"
-			count: 4
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Cannot access offset 'referenceunit' on array\\|false\\.$#"
-			count: 4
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\TestBasePriceCalculation\\:\\:testCalculateCheapestBasePriceData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\TestBasePriceCalculation\\:\\:testCalculateReferencePrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\TestBasePriceCalculation\\:\\:testGetCheapestVariant\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\TestBasePriceCalculation\\:\\:testsGetArticleById\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\TestBasePriceCalculation\\:\\:testsGetProductByOrderNumber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\TestBasePriceCalculation\\:\\:testsGetPromotionById\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Parameter \\#1 \\$price of method sArticles\\:\\:calculateReferencePrice\\(\\) expects string, float\\|int\\|string given\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Parameter \\#2 \\$purchaseUnit of method sArticles\\:\\:calculateReferencePrice\\(\\) expects float, float\\|int\\|string given\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Parameter \\#3 \\$referenceUnit of method sArticles\\:\\:calculateReferencePrice\\(\\) expects float, int\\|string given\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/TestBasePriceCalculation.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertArticleData\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertArticleData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertArticleData\\(\\) has parameter \\$data with no type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertArticleData\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertArticleData\\(\\) has parameter \\$expected with no type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertLinks\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertLinks\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertLinks\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertLinks\\(\\) has parameter \\$data with no type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertRelated\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertLinks\\(\\) has parameter \\$expected with no type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertRelated\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertRelated\\(\\) has no return type specified\\.$#"
+			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:\\$articleProperties type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertRelated\\(\\) has parameter \\$data with no type specified\\.$#"
+			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:\\$articles type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:assertRelated\\(\\) has parameter \\$expected with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:testArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:testGetDisabledArticleById\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:\\$articleProperties has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Modules\\\\Articles\\\\sGetArticleByIdTest\\:\\:\\$articles has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/sGetArticleByIdTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\sGetArticlesByCategoryTest\\:\\:testGetArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Articles/sGetArticlesByCategoryTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Category\\\\sGetCategoriesTest\\:\\:assertAndGetSubCategories\\(\\) has no return type specified\\.$#"
@@ -50811,144 +50191,9 @@ parameters:
 			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/TopSellerTest.php
 
 		-
-			message: "#^Offset 'sSepaBankName' does not exist on array\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Plugins/Core/PaymentMethods/Components/SepaPaymentMethodTest.php
-
-		-
-			message: "#^Offset 'sSepaBic' does not exist on array\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Plugins/Core/PaymentMethods/Components/SepaPaymentMethodTest.php
-
-		-
-			message: "#^Offset 'sSepaIban' does not exist on array\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Plugins/Core/PaymentMethods/Components/SepaPaymentMethodTest.php
-
-		-
-			message: "#^Offset 'sSepaUseBillingData' does not exist on array\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Plugins/Core/PaymentMethods/Components/SepaPaymentMethodTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Plugins\\\\Core\\\\PaymentMethods\\\\SepaPaymentMethodTest\\:\\:\\$sepaStatus has no type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Recovery\\\\Update\\\\UpdateHtaccessTest\\:\\:getCombinations\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: tests/Functional/Plugins/Core/PaymentMethods/Components/SepaPaymentMethodTest.php
-
-		-
-			message: "#^Call to an undefined method Enlight_Controller_Request_Request\\:\\:setClientIp\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Cannot access offset 'deviceType' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Cannot access offset 'page' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Cannot access offset 'remoteaddr' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:getCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:getCookie\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:providerReferer\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshCampaign\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshCurrentUsers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshPartner\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshReferer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshReferer\\(\\) has parameter \\$assert with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshReferer\\(\\) has parameter \\$partner with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshReferer\\(\\) has parameter \\$referer with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Plugins\\\\Frontend\\\\StatisticsTest\\:\\:testRefreshReferer\\(\\) has parameter \\$result with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Frontend/StatisticsTest.php
-
-		-
-			message: "#^Method Functional\\\\Recovery\\\\Update\\\\TestUpdateHtaccess\\:\\:getCombinations\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Recovery/Update/TestUpdateHtaccess.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4609Test.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 2
-			path: tests/Functional/Regressions/Ticket4788Test.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Regressions\\\\Ticket4788Test\\:\\:\\$articlesToTest has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Regressions\\\\Ticket4788Test\\:\\:\\$backup has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Regressions\\\\Ticket4788Test\\:\\:\\$longDescription has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Regressions\\\\Ticket4788Test\\:\\:\\$longDescriptionStripped has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Regressions\\\\Ticket4788Test\\:\\:\\$shortDescription has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Regressions/Ticket4788Test.php
+			path: tests/Functional/Recovery/Update/UpdateHtaccessTest.php
 
 		-
 			message: "#^Variable \\$this might not be defined\\.$#"
@@ -55606,46 +54851,6 @@ parameters:
 			path: tests/Unit/Bundle/MediaBundle/CdnOptimizerServiceTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\DbalConnectionMock\\:\\:createQueryBuilder\\(\\) should return Doctrine\\\\DBAL\\\\Query\\\\QueryBuilder but returns Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:callHandleHtmlTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:getExampleMediaPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:getGarbageCollector\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\GarbageCollectorTest\\:\\:testHandleHtmlTable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\:\\:__call\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\:\\:__call\\(\\) has parameter \\$arguments with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\QueryBuilderMock\\:\\:__call\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/MediaBundle/GarbageCollectorTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\MediaExtensionMappingServiceTest\\:\\:testAllowedExtensionShouldPass\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/MediaBundle/MediaExtensionMappingServiceTest.php
@@ -55876,142 +55081,32 @@ parameters:
 			path: tests/Unit/Bundle/PluginInstallerBundle/UniqueIdGenerator/UniqueIdGeneratorTest.php
 
 		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
 
 		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testGetBaseProductsRangeWithEmptyProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testGetBaseProductsRangeWithLessProductsThanRequested\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testGetBaseProductsRangeWithLessProductsThanRequestedAndDifferentHashes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testGetBaseProductsRangeWithMoreProductsThanRequested\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testMultipleCallGetBaseProductsRangeWithMoreProductsThanRequested\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithDifferentCriteriaSorting\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithEmptyCriteria\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithEqualCriteriaButDifferentSorting\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithMultipleDifferentCriteria\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithMultipleEqualAndDifferentCriteria\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithMultipleEqualCriteria\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithMultipleEqualCriteriaButMixedBaseConditions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductNumberSearchTest\\:\\:testOptimizeCriteriaListWithSingleCriteria\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$number of class Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\BaseProduct constructor expects string, int given\\.$#"
-			count: 38
-			path: tests/Unit/Bundle/SearchBundle/BatchProductNumberSearchTest.php
-
-		-
-			message: "#^Method BatchProductSearchTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\BatchProductSearchTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SearchBundle/BatchProductSearchTest.php
 
 		-
-			message: "#^Method BatchProductSearchTest\\:\\:testListProductMapping\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductSearchTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$number of class Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\BaseProduct constructor expects string, int given\\.$#"
-			count: 3
-			path: tests/Unit/Bundle/SearchBundle/BatchProductSearchTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$number of class Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct constructor expects string, int given\\.$#"
-			count: 8
-			path: tests/Unit/Bundle/SearchBundle/BatchProductSearchTest.php
-
-		-
-			message: "#^Property BatchProductSearchTest\\:\\:\\$batchSearch \\(Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearch\\) does not accept PHPUnit\\\\Framework\\\\MockObject\\\\MockObject&Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductSearch\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/BatchProductSearchTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:invalidCriteriaLimit\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:invalidCriteriaLimit\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:invalidCriteriaOffset\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:invalidCriteriaOffset\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:testInvalidCriteriaLimit\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:validCriteriaLimit\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:testInvalidCriteriaOffset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:testValidCriteriaLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:testValidCriteriaOffset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:validCriteriaLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:validCriteriaOffset\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\CriteriaTest\\:\\:validCriteriaOffset\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SearchBundle/CriteriaTest.php
 
@@ -56281,98 +55376,8 @@ parameters:
 			path: tests/Unit/Bundle/StoreFrontBundle/Struct/CloneStructTest.php
 
 		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureCanBeCreatedForEmptyBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersBasketAmount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersBasketTaxAmount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersCurrencyId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersCustomerId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersItemNumber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersItemPrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersItemQuantity\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersItemTaxRate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureConsidersMultipleItems\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSignatureDoesNotConsidersItemOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:testSortRandomItems\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$price of method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) expects float, null given\\.$#"
-			count: 6
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$customerId of method Shopware\\\\Components\\\\BasketSignature\\\\BasketSignatureGenerator\\:\\:generateSignature\\(\\) expects int, null given\\.$#"
-			count: 17
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$quantity of method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) expects int, null given\\.$#"
-			count: 12
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$number of method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) expects string, int\\<0, 10\\> given\\.$#"
-			count: 1
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$number of method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) expects string, null given\\.$#"
-			count: 12
-			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
-
-		-
-			message: "#^Parameter \\#4 \\$taxRate of method Shopware\\\\tests\\\\Unit\\\\Components\\\\BasketSignature\\\\BasketSignatureCreatorTest\\:\\:createItemRow\\(\\) expects float, null given\\.$#"
-			count: 12
 			path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
 
 		-
@@ -58146,32 +57151,17 @@ parameters:
 			path: tests/Unit/Components/QueryAliasMapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:taxProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:taxProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
 
 		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:taxProviderInvalid\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:taxProviderInvalid\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
 
 		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:testTaxModifierWithInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:testTaxModifierWithInvalid\\(\\) has parameter \\$tax with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:testTaxModifierWithValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Components\\\\Template\\\\SmartyTaxModifierTest\\:\\:testTaxModifierWithValid\\(\\) has parameter \\$tax with no type specified\\.$#"
+			message: "#^Parameter \\#1 \\$value of function smarty_modifier_tax expects float\\|int\\|string, bool\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
 
@@ -58214,36 +57204,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Controllers\\\\Backend\\\\ExtJsTest\\:\\:testInflectPath\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Controllers/Backend/ExtJsTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testCustomerEmailAliasResolvedToAssociatedColumn\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testCustomerNameColumnResolvedToBillingNames\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testResolveFunctionsKeepsPrefixedProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testResolveSortParametersKeepsDirection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testSortByMultipleColumnsWithoutPrefix\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Controllers/Backend/OrderTest.php
-
-		-
-			message: "#^Method Shopware\\\\tests\\\\Unit\\\\Controllers\\\\Backend\\\\OrderTest\\:\\:testSortByNonePrefixedColumn\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Controllers/Backend/OrderTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Core\\\\sArticlesTest\\:\\:provideData\\(\\) has no return type specified\\.$#"
@@ -58386,11 +57346,6 @@ parameters:
 			path: tests/Unit/Library/ZendMailProtocolTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Models\\\\Album\\\\SettingsTest\\:\\:testGetThumbnailSizeReturnValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Model/Album/SettingsTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$constraint of method Shopware\\\\Components\\\\Model\\\\DBAL\\\\Validator\\\\OrderNumberValidator\\:\\:validate\\(\\) expects Symfony\\\\Component\\\\Validator\\\\Constraint, null given\\.$#"
 			count: 1
 			path: tests/Unit/Model/OrderNumberValidatorTest.php
@@ -58444,3 +57399,4 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
+

@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Functional\Recovery\Update;
+namespace Shopware\Tests\Functional\Recovery\Update;
 
 require_once __DIR__ . '/../../../../recovery/update/src/UpdateHtaccess.php';
 
@@ -32,7 +32,7 @@ use Generator;
 use PHPUnit\Framework\TestCase;
 use Shopware\Recovery\Update\UpdateHtaccess;
 
-class TestUpdateHtaccess extends TestCase
+class UpdateHtaccessTest extends TestCase
 {
     private const HTACCESS_V576 = <<<'EOF'
 <IfModule mod_rewrite.c>

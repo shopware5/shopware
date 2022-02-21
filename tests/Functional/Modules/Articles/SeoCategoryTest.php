@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,32 +24,36 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Modules\Articles;
+namespace Shopware\Tests\Functional\Modules\Articles;
 
 use Enlight_Components_Test_Plugin_TestCase;
+use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\Resource;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article as Product;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class SeoCategoryTest extends Enlight_Components_Test_Plugin_TestCase
 {
-    /**
-     * @var \Shopware\Components\Api\Resource\Article
-     */
-    private $resource;
+    use ContainerTrait;
+
+    private Article $resource;
 
     public function setUp(): void
     {
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
-        $this->resource = new \Shopware\Components\Api\Resource\Article();
+        $this->getContainer()->get(ModelManager::class)->clear();
+        $this->resource = new Article();
         $this->resource->setManager(Shopware()->Models());
         parent::setUp();
     }
 
-    public function testSeoCategory()
+    public function testSeoCategory(): void
     {
         $this->dispatch('/');
 
         $data = $this->getSimpleTestData();
 
-        $data['categories'] = Shopware()->Db()->fetchAll('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
+        $data['categories'] = $this->getContainer()->get('dbal_connection')->fetchAllAssociative('SELECT DISTINCT id FROM s_categories LIMIT 5, 10');
 
         $first = $data['categories'][3];
         $second = $data['categories'][4];
@@ -57,30 +63,31 @@ class SeoCategoryTest extends Enlight_Components_Test_Plugin_TestCase
             ['shopId' => 2, 'categoryId' => $second['id']],
         ];
 
-        $article = $this->resource->create($data);
+        $product = $this->resource->create($data);
+        static::assertInstanceOf(Product::class, $product);
 
-        $this->resource->setResultMode(\Shopware\Components\Api\Resource\Resource::HYDRATE_OBJECT);
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        /** @var Shopware\Models\Article\Article $article */
-        $article = $this->resource->getOne($article->getId());
+        $product = $this->resource->getOne($product->getId());
+        static::assertInstanceOf(Product::class, $product);
 
         $german = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
-            $article->getId(),
+            $product->getId(),
             null,
             1
         );
 
         $english = Shopware()->Modules()->Categories()->sGetCategoryIdByArticleId(
-            $article->getId(),
+            $product->getId(),
             null,
             2
         );
 
-        static::assertEquals($first['id'], $german);
-        static::assertEquals($second['id'], $english);
+        static::assertSame((int) $first['id'], $german);
+        static::assertSame((int) $second['id'], $english);
     }
 
-    private function getSimpleTestData()
+    private function getSimpleTestData(): array
     {
         return [
             'name' => 'Testartikel',

@@ -20,20 +20,19 @@
 /**
  * Returns a tax value in local specific format.
  *
- * @param int|float $value
- * @param string    $locale
+ * @param int|float|string $value
+ * @param string|null      $locale
  */
 function smarty_modifier_tax($value, $locale = null)
 {
     if (!is_numeric($value)) {
-        throw new InvalidArgumentException('Input ' . (string) $value . ' must be numeric.');
+        throw new InvalidArgumentException(sprintf('Input %s must be numeric.', (string) $value));
     }
 
     $format['precision'] = 2;
+    $format['locale'] = $locale;
     if (!$locale) {
         $format['locale'] = Shopware()->Container()->get('locale');
-    } else {
-        $format['locale'] = $locale;
     }
 
     // check if value is integer

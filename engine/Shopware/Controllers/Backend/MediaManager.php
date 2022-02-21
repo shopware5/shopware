@@ -576,23 +576,19 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     }
 
     /**
-     * Empty albumId -13
-     *
      * @throws ORMException
      * @throws OptimisticLockException
      * @throws ORMInvalidArgumentException
+     *
+     * @return void
      */
     public function emptyTrashAction()
     {
         $em = $this->get(ModelManager::class);
-        $repository = $em->getRepository(Media::class);
-
-        $query = $repository->getAlbumMediaQuery(-13);
+        $query = $em->getRepository(Media::class)->getAlbumMediaQuery(Album::ALBUM_GARBAGE);
         $query->setHydrationMode(AbstractQuery::HYDRATE_OBJECT);
 
-        $iterableResult = $query->iterate();
-        foreach ($iterableResult as $key => $row) {
-            $media = $row[0];
+        foreach ($query->toIterable() as $key => $media) {
             $em->remove($media);
             if ($key % 100 === 0) {
                 $em->flush();

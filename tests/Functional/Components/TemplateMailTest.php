@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,19 +24,21 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Components;
+namespace Shopware\Tests\Functional\Components;
 
+use Doctrine\ORM\EntityRepository;
 use Enlight_Components_Mail;
 use Enlight_Components_Test_TestCase;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Mail\Attachment;
+use Shopware\Models\Mail\Mail;
+use Shopware\Models\Shop\Shop;
 use Shopware_Components_StringCompiler;
 use Shopware_Components_TemplateMail;
 
 class TemplateMailTest extends Enlight_Components_Test_TestCase
 {
-    /**
-     * @var Shopware_Components_TemplateMail
-     */
-    private $mail;
+    private Shopware_Components_TemplateMail $mail;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -46,15 +50,11 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
 
         $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
 
-        $repository = $this->createMock(\Doctrine\ORM\EntityRepository::class);
-        $repository->expects(static::any())
-            ->method('findOneBy')
-            ->willReturn(null);
+        $repository = $this->createMock(EntityRepository::class);
+        $repository->method('findOneBy')->willReturn(null);
 
-        $manager = $this->createMock(\Shopware\Components\Model\ModelManager::class);
-        $manager->expects(static::any())
-                ->method('getRepository')
-                ->willReturn($repository);
+        $manager = $this->createMock(ModelManager::class);
+        $manager->method('getRepository')->willReturn($repository);
 
         $this->mail = new Shopware_Components_TemplateMail();
         $this->mail->setShop(Shopware()->Shop());
@@ -62,35 +62,18 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         $this->mail->setStringCompiler($stringCompiler);
     }
 
-    /**
-     * Test case
-     */
-    public function testShouldBeInstanceOfShopwareComponentsTemplateMail()
-    {
-        static::assertInstanceOf('\Shopware_Components_TemplateMail', $this->mail);
-
-        static::assertInstanceOf('\Shopware_Components_StringCompiler', $this->mail->getStringCompiler());
-        static::assertInstanceOf('\Shopware\Components\Model\ModelManager', $this->mail->getModelManager());
-    }
-
-    /**
-     * Test case
-     */
-    public function testLoadValuesLoadsValues()
+    public function testLoadValuesLoadsValues(): void
     {
         $mail = new Enlight_Components_Mail('UTF-8');
         $templateMock = $this->getSimpleMailMockObject();
 
         $result = $this->mail->loadValues($mail, $templateMock);
 
-        static::assertInstanceOf('\Enlight_Components_Mail', $result);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $result);
         static::assertEquals('UTF-8', $result->getCharset());
     }
 
-    /**
-     * Test case
-     */
-    public function testLoadTemplateLoadsValues()
+    public function testLoadTemplateLoadsValues(): void
     {
         $mail = new Enlight_Components_Mail('UTF-8');
         $templateMock = $this->getSimpleMailMockObject();
@@ -105,11 +88,9 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     }
 
     /**
-     * Test case
-     *
      * @depends testLoadTemplateLoadsValues
      */
-    public function testLoadSmartyTemplateLoadsValues()
+    public function testLoadSmartyTemplateLoadsValues(): void
     {
         $mail = new Enlight_Components_Mail('UTF-8');
         $templateMock = $this->getSmartyMailMockObject();
@@ -130,11 +111,7 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         static::assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
     }
 
-    /**
-     * Test case
-     * todo@bc implement some kind of testmode for templatemailer
-     */
-    public function testCreateMailWorks()
+    public function testCreateMailWorks(): void
     {
         $templateMock = $this->getSmartyMailMockObject();
 
@@ -152,19 +129,16 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         static::assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
     }
 
-    /**
-     * Test case
-     */
-    public function testCreateMailWithInvalidTemplateNameShouldThrowException()
+    public function testCreateMailWithInvalidTemplateNameShouldThrowException(): void
     {
         $this->expectException('Enlight_Exception');
         $this->mail->createMail('ThisIsNoTemplateName', []);
     }
 
     /**
-     * Sending mails throught cron without having shop set
+     * Sending mails through cron without having shop set
      */
-    public function testCreateMailWithoutShop()
+    public function testCreateMailWithoutShop(): void
     {
         $templateMail = new Shopware_Components_TemplateMail();
         $templateMail->setModelManager(Shopware()->Models());
@@ -178,19 +152,20 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     /**
      * Tests the mail creation if the passed shop does not have a template, but its main shop does.
      */
-    public function testCreateMailWithoutShopTemplate()
+    public function testCreateMailWithoutShopTemplate(): void
     {
         // Prepare new shop without template
-        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $defaultShop = $entityManager->find(\Shopware\Models\Shop\Shop::class, 1);
-        $newShop = new \Shopware\Models\Shop\Shop();
+        $entityManager = Shopware()->Container()->get(ModelManager::class);
+        $defaultShop = $entityManager->find(Shop::class, 1);
+        $newShop = new Shop();
         $newShop->setMain($defaultShop);
         $newShop->setName('New Shop');
         $entityManager->persist($newShop);
         $entityManager->flush($newShop);
 
         // Test mail creation
-        $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
+        $registerConfirmationMail = $entityManager->find(Mail::class, 1);
+        static::assertInstanceOf(Mail::class, $registerConfirmationMail);
         $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
         static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
 
@@ -202,21 +177,22 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     /**
      * Tests the mail creation if the passed shop and its main shop does not have templates.
      */
-    public function testCreateMailWithoutMainShopTemplate()
+    public function testCreateMailWithoutMainShopTemplate(): void
     {
         // Prepare new shop and main shop without templates
-        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $newMainShop = new \Shopware\Models\Shop\Shop();
+        $entityManager = Shopware()->Container()->get(ModelManager::class);
+        $newMainShop = new Shop();
         $newMainShop->setName('New Main Shop');
         $entityManager->persist($newMainShop);
-        $newShop = new \Shopware\Models\Shop\Shop();
+        $newShop = new Shop();
         $newShop->setMain($newMainShop);
         $newShop->setName('New Shop');
         $entityManager->persist($newShop);
         $entityManager->flush([$newMainShop, $newShop]);
 
         // Test mail creation
-        $registerConfirmationMail = $entityManager->find(\Shopware\Models\Mail\Mail::class, 1);
+        $registerConfirmationMail = $entityManager->find(Mail::class, 1);
+        static::assertInstanceOf(Mail::class, $registerConfirmationMail);
         $mail = $this->mail->createMail($registerConfirmationMail, [], $newShop);
         static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
 
@@ -226,97 +202,72 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         $entityManager->flush([$newMainShop, $newShop]);
     }
 
-    /**
-     * @return \Shopware\Models\Mail\Attachment
-     */
-    protected function getAttachmentMockObject()
+    private function getAttachmentMockObject(): Attachment
     {
-        $attachmentMock = $this->createMock(\Shopware\Models\Mail\Attachment::class);
+        $attachmentMock = $this->createMock(Attachment::class);
 
-        $attachmentMock->expects(static::any())
-                       ->method('getPath')
-                       ->willReturn(__FILE__);
+        $attachmentMock->method('getPath')
+            ->willReturn(__FILE__);
 
-        $attachmentMock->expects(static::any())
-                       ->method('getName')
-                       ->willReturn('foobar.pdf');
+        $attachmentMock->method('getName')
+            ->willReturn('foobar.pdf');
 
-        $attachmentMock->expects(static::any())
-                       ->method('getFileName')
-                       ->willReturn('foobar.pdf')
-                       ->willReturn('foobar.pdf');
+        $attachmentMock->method('getFileName')
+            ->willReturn('foobar.pdf')
+            ->willReturn('foobar.pdf');
 
         return $attachmentMock;
     }
 
-    /**
-     * @return \Shopware\Models\Mail\Mail
-     */
-    protected function getSimpleMailMockObject()
+    private function getSimpleMailMockObject(): Mail
     {
-        $templateMock = $this->createMock(\Shopware\Models\Mail\Mail::class);
+        $templateMock = $this->createMock(Mail::class);
 
-        $templateMock->expects(static::any())
-                     ->method('getFromMail')
-                     ->willReturn('info@demo.shopware.de');
+        $templateMock->method('getFromMail')
+            ->willReturn('info@demo.shopware.de');
 
-        $templateMock->expects(static::any())
-                     ->method('getFromName')
-                     ->willReturn('Shopware 5 Demo');
+        $templateMock->method('getFromName')
+            ->willReturn('Shopware 5 Demo');
 
-        $templateMock->expects(static::any())
-                     ->method('getSubject')
-                     ->willReturn('Shopware 5 Testmail');
+        $templateMock->method('getSubject')
+            ->willReturn('Shopware 5 Testmail');
 
-        $templateMock->expects(static::any())
-                     ->method('getContent')
-                     ->willReturn('Testcontent');
+        $templateMock->method('getContent')
+            ->willReturn('Testcontent');
 
-        $templateMock->expects(static::any())
-                     ->method('getContentHtml')
-                     ->willReturn('Testcontent HTML');
+        $templateMock->method('getContentHtml')
+            ->willReturn('Testcontent HTML');
 
-        $templateMock->expects(static::any())
-                     ->method('isHtml')
-                     ->willReturn(true);
+        $templateMock->method('isHtml')
+            ->willReturn(true);
 
-        $templateMock->expects(static::any())
-                     ->method('getAttachments')
-                     ->willReturn([$this->getAttachmentMockObject()]);
+        $templateMock->method('getAttachments')
+            ->willReturn([$this->getAttachmentMockObject()]);
 
         return $templateMock;
     }
 
-    /**
-     * @return \Shopware\Models\Mail\Mail
-     */
-    protected function getSmartyMailMockObject()
+    private function getSmartyMailMockObject(): Mail
     {
-        $templateMock = $this->createMock(\Shopware\Models\Mail\Mail::class);
+        $templateMock = $this->createMock(Mail::class);
 
-        $templateMock->expects(static::any())
-                     ->method('getFromMail')
-                     ->willReturn('{$sConfig.sMAIL}');
+        $templateMock->method('getFromMail')
+            ->willReturn('{$sConfig.sMAIL}');
 
-        $templateMock->expects(static::any())
-                     ->method('getFromName')
-                     ->willReturn('{$sConfig.sSHOPNAME}');
+        $templateMock->method('getFromName')
+            ->willReturn('{$sConfig.sSHOPNAME}');
 
-        $templateMock->expects(static::any())
-                     ->method('getSubject')
-                     ->willReturn('Ihr Bestellung bei {$sConfig.sSHOPNAME}');
+        $templateMock->method('getSubject')
+            ->willReturn('Ihr Bestellung bei {$sConfig.sSHOPNAME}');
 
-        $templateMock->expects(static::any())
-                     ->method('getContent')
-                     ->willReturn('Testbestellung bei {$sConfig.sSHOPNAME}');
+        $templateMock->method('getContent')
+            ->willReturn('Testbestellung bei {$sConfig.sSHOPNAME}');
 
-        $templateMock->expects(static::any())
-                     ->method('getContentHtml')
-                     ->willReturn('Testbestellung HTML bei {$sConfig.sSHOPNAME}');
+        $templateMock->method('getContentHtml')
+            ->willReturn('Testbestellung HTML bei {$sConfig.sSHOPNAME}');
 
-        $templateMock->expects(static::any())
-                     ->method('isHtml')
-                     ->willReturn(true);
+        $templateMock->method('isHtml')
+            ->willReturn(true);
 
         return $templateMock;
     }
