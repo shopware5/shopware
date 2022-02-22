@@ -71,9 +71,9 @@ class SimilarProductsTest extends TestCase
         }
         $this->linkSimilarProduct($article->getId(), $similarProducts);
 
-        $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
+        $product = $this->getContainer()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($product);
-        $similarProducts = Shopware()->Container()->get(SimilarProductsServiceInterface::class)->get($product, $context);
+        $similarProducts = $this->getContainer()->get(SimilarProductsServiceInterface::class)->get($product, $context);
         static::assertIsArray($similarProducts);
 
         static::assertCount(4, $similarProducts);
@@ -106,10 +106,10 @@ class SimilarProductsTest extends TestCase
         $this->linkSimilarProduct($article->getId(), $similarProducts);
         $this->linkSimilarProduct($article2->getId(), $similarProducts);
 
-        $products = Shopware()->Container()->get(ListProductServiceInterface::class)
+        $products = $this->getContainer()->get(ListProductServiceInterface::class)
             ->getList([$number, $number2], $context);
 
-        $similarProductList = Shopware()->Container()->get(SimilarProductsServiceInterface::class)
+        $similarProductList = $this->getContainer()->get(SimilarProductsServiceInterface::class)
             ->getList($products, $context);
 
         static::assertCount(2, $similarProductList);
@@ -139,7 +139,7 @@ class SimilarProductsTest extends TestCase
             $this->getProductObject($similarNumber, $context, $category);
         }
 
-        $helper = new Helper();
+        $helper = new Helper($this->getContainer());
         $convertedShop = (new Converter())->convertShop($helper->getShop());
         if (!$convertedShop->getCurrency()) {
             $convertedShop->setCurrency($context->getCurrency());
@@ -149,9 +149,9 @@ class SimilarProductsTest extends TestCase
             $convertedShop
         );
 
-        $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($number, $context);
+        $product = $this->getContainer()->get(ListProductServiceInterface::class)->get($number, $context);
         static::assertNotNull($product);
-        $similar = Shopware()->Container()->get(SimilarProductsServiceInterface::class)->get($product, $context);
+        $similar = $this->getContainer()->get(SimilarProductsServiceInterface::class)->get($product, $context);
         static::assertIsArray($similar);
 
         static::assertCount(3, $similar);

@@ -30,10 +30,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Exception;
-use Shopware\Bundle\StoreFrontBundle;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ConfiguratorGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductConfigurationGateway;
+use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ProductConfigurationGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ProductPropertyGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
@@ -44,6 +44,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroupStruc
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set as PropertySet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax as TaxStruct;
 use Shopware\Components\Api\Resource\Article as ProductResource;
@@ -65,14 +66,14 @@ use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop as ShopModel;
 use Shopware\Models\Tax\Tax as TaxModel;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper\ProgressHelper;
-use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Components_Config;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Helper
 {
-    use ContainerTrait;
-
     protected Converter $converter;
+
+    private ContainerInterface $container;
 
     private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
@@ -126,10 +127,11 @@ class Helper
      */
     private array $propertyNames = [];
 
-    public function __construct()
+    public function __construct(ContainerInterface $container = null)
     {
-        $this->db = Shopware()->Db();
-        $this->entityManager = Shopware()->Models();
+        $this->container = $container ?? Shopware()->Container();
+        $this->db = $this->container->get('db');
+        $this->entityManager = $this->container->get('models');
         $this->converter = new Converter();
 
         $api = new ProductResource();
@@ -151,16 +153,16 @@ class Helper
 
     public function getProductConfigurator(
         ListProduct $listProduct,
-        StoreFrontBundle\Struct\ShopContext $context,
+        ShopContext $context,
         array $selection = [],
         ProductConfigurationGateway $productConfigurationGateway = null,
         ConfiguratorGateway $configuratorGateway = null
     ): ConfiguratorSet {
         if ($productConfigurationGateway === null) {
-            $productConfigurationGateway = $this->getContainer()->get(ProductConfigurationGatewayInterface::class);
+            $productConfigurationGateway = $this->container->get(ProductConfigurationGatewayInterface::class);
         }
         if ($configuratorGateway === null) {
-            $configuratorGateway = $this->getContainer()->get(ConfiguratorGatewayInterface::class);
+            $configuratorGateway = $this->container->get(ConfiguratorGatewayInterface::class);
         }
 
         $service = new ConfiguratorService(
@@ -173,11 +175,11 @@ class Helper
 
     public function getProductProperties(
         ListProduct $product,
-        StoreFrontBundle\Struct\ShopContext $context,
-        StoreFrontBundle\Gateway\DBAL\ProductPropertyGateway $productPropertyGateway = null
+        ShopContext $context,
+        ProductPropertyGateway $productPropertyGateway = null
     ): PropertySet {
         if ($productPropertyGateway === null) {
-            $productPropertyGateway = $this->getContainer()->get(ProductPropertyGatewayInterface::class);
+            $productPropertyGateway = $this->container->get(ProductPropertyGatewayInterface::class);
         }
 
         return (new PropertyService($productPropertyGateway))->get($product, $context);
@@ -190,14 +192,14 @@ class Helper
      */
     public function getListProducts(array $numbers, ShopContextInterface $context, array $configs = []): array
     {
-        $config = $this->getContainer()->get(Shopware_Components_Config::class);
+        $config = $this->container->get(Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
             $originals[$key] = $config->get($key);
             $config->offsetSet($key, $value);
         }
 
-        $result = $this->getContainer()->get(ListProductServiceInterface::class)->getList($numbers, $context);
+        $result = $this->container->get(ListProductServiceInterface::class)->getList($numbers, $context);
         foreach ($originals as $key => $value) {
             $config->offsetSet($key, $value);
         }
@@ -625,7 +627,7 @@ class Helper
 
         foreach ($points as $point) {
             $data['points'] = $point;
-            Shopware()->Db()->insert('s_articles_vote', $data);
+            $this->db->insert('s_articles_vote', $data);
         }
     }
 
@@ -882,7 +884,7 @@ class Helper
 
     public function isElasticSearchEnabled(): bool
     {
-        $kernel = $this->getContainer()->get('kernel');
+        $kernel = $this->container->get('kernel');
 
         return $kernel->isElasticSearchEnabled();
     }
@@ -894,7 +896,7 @@ class Helper
         }
 
         $this->clearSearchIndex();
-        $this->getContainer()->get('shopware_elastic_search.shop_indexer')->index($shop, new ProgressHelper());
+        $this->container->get('shopware_elastic_search.shop_indexer')->index($shop, new ProgressHelper());
     }
 
     public function refreshBackendSearchIndex(): void
@@ -904,12 +906,12 @@ class Helper
         }
 
         $this->clearSearchIndex();
-        $this->getContainer()->get('shopware_es_backend.indexer')->index(new ProgressHelper());
+        $this->container->get('shopware_es_backend.indexer')->index(new ProgressHelper());
     }
 
     public function clearSearchIndex(): void
     {
-        $client = $this->getContainer()->get('shopware_elastic_search.client');
+        $client = $this->container->get('shopware_elastic_search.client');
         $client->indices()->delete(['index' => '_all']);
     }
 
@@ -1084,7 +1086,7 @@ class Helper
 
     private function deleteCategory(string $name): void
     {
-        $ids = Shopware()->Db()->fetchCol('SELECT id FROM s_categories WHERE description = ?', [$name]);
+        $ids = $this->db->fetchCol('SELECT id FROM s_categories WHERE description = ?', [$name]);
 
         foreach ($ids as $id) {
             $this->categoryApi->delete($id);

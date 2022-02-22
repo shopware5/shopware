@@ -29,9 +29,12 @@ use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Models\Article\Article;
 use Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
 {
+    use ContainerTrait;
+
     /**
      * @var int
      */
@@ -51,7 +54,7 @@ class OrderedProductOfManufacturerConditionHandlerTest extends TestCase
     {
         parent::setUp();
 
-        $helper = new Helper();
+        $helper = new Helper($this->getContainer());
 
         $manufacturer = $helper->createManufacturer($helper->getManufacturerData());
 
