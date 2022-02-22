@@ -24,14 +24,20 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Random;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
+
     public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     public $clearBasketOnReset = true;
@@ -44,7 +50,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->apiHelper = new Helper();
+        $this->apiHelper = new Helper($this->getContainer());
     }
 
     protected function tearDown(): void
@@ -58,7 +64,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         parent::reset();
 
         if ($this->clearBasketOnReset) {
-            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('DELETE FROM s_order_basket');
+            $this->getContainer()->get(Connection::class)->executeQuery('DELETE FROM s_order_basket');
         }
 
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
@@ -132,7 +138,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
     protected function createVoucher($value, $taxId, $percent = 1)
     {
         $code = Random::getAlphanumericString(12);
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
+        $this->getContainer()->get(Connection::class)
             ->insert('s_emarketing_vouchers', [
                 'description' => 'test voucher',
                 'value' => $value,
@@ -183,7 +189,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
      */
     protected function setPaymentSurcharge($surchargeAbsolute, $surchargePercent = 0, $surchargeCountry = '')
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_core_paymentmeans SET surcharge = ?, debit_percent = ?, surchargestring = ?', [
+        $this->getContainer()->get(Connection::class)->executeQuery('UPDATE s_core_paymentmeans SET surcharge = ?, debit_percent = ?, surchargestring = ?', [
             $surchargeAbsolute,
             $surchargePercent,
             $surchargeCountry,
@@ -196,7 +202,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
      */
     protected function setCustomerGroupSurcharge($minOrderValue, $surcharge)
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_core_customergroups SET minimumorder = ?, minimumordersurcharge = ?', [
+        $this->getContainer()->get(Connection::class)->executeQuery('UPDATE s_core_customergroups SET minimumorder = ?, minimumordersurcharge = ?', [
             $minOrderValue,
             $surcharge,
         ]);
@@ -210,7 +216,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
     protected function addCustomerGroupDiscount($customerGroupKey, $discountStart, $discountValuePercent)
     {
         $this->clearCustomerGroupDiscount($customerGroupKey);
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('INSERT INTO s_core_customergroups_discounts VALUES (null, (SELECT id FROM s_core_customergroups WHERE groupkey = ?), ?, ?)', [
+        $this->getContainer()->get(Connection::class)->executeQuery('INSERT INTO s_core_customergroups_discounts VALUES (null, (SELECT id FROM s_core_customergroups WHERE groupkey = ?), ?, ?)', [
             $customerGroupKey,
             $discountValuePercent,
             $discountStart,
@@ -222,7 +228,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
      */
     protected function clearCustomerGroupDiscount($customerGroupKey)
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('DELETE FROM s_core_customergroups_discounts WHERE groupID = (SELECT id FROM s_core_customergroups WHERE groupkey = ?)', [$customerGroupKey]);
+        $this->getContainer()->get(Connection::class)->executeQuery('DELETE FROM s_core_customergroups_discounts WHERE groupID = (SELECT id FROM s_core_customergroups WHERE groupkey = ?)', [$customerGroupKey]);
     }
 
     /**
@@ -231,7 +237,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
      */
     protected function setVoucherTax($orderCode, $taxConfig)
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->update('s_emarketing_vouchers', [
+        $this->getContainer()->get(Connection::class)->update('s_emarketing_vouchers', [
             'taxconfig' => $taxConfig,
         ], [
             'ordercode' => $orderCode,
@@ -249,11 +255,11 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
             $group
         );
 
-        /** @var \Shopware\Models\Shop\Repository $repository */
+        /** @var Repository $repository */
         $repository = Shopware()->Models()->getRepository(Shop::class);
         $shop = $repository->getActiveById($user['language']);
 
-        Shopware()->Container()->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         Shopware()->Session()->set('Admin', true);
         Shopware()->System()->_POST = [

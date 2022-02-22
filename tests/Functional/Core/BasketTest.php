@@ -1784,7 +1784,7 @@ class BasketTest extends TestCase
 
     public function testsGetBasketDataHasNumericCartItemAmounts(): void
     {
-        $resourceHelper = new Helper();
+        $resourceHelper = new Helper($this->getContainer());
         try {
             $product = $resourceHelper->createProduct([
                 'name' => 'Testartikel',
@@ -1854,7 +1854,7 @@ class BasketTest extends TestCase
      */
     public function testsGetBasketDataNegativeCloseToZeroTotal(): void
     {
-        $resourceHelper = new Helper();
+        $resourceHelper = new Helper($this->getContainer());
         try {
             // Setup product for the first basket position - a product that costs EUR 29.97
             $product = $resourceHelper->createProduct([
@@ -1949,7 +1949,7 @@ class BasketTest extends TestCase
         $this->session->offsetSet('sessionId', $this->module->sSYSTEM->sSESSION_ID);
 
         // Setup product for the first basket position - a product that costs EUR 29.97
-        $product = (new Helper())->createProduct([
+        $product = (new Helper($this->getContainer()))->createProduct([
             'name' => 'Testartikel',
             'description' => 'Test description',
             'active' => true,
@@ -2412,7 +2412,7 @@ class BasketTest extends TestCase
 
     public function testsPriceCalculationTaxfreeWithPriceGroupDiscount(): void
     {
-        $resourceHelper = new Helper();
+        $resourceHelper = new Helper($this->getContainer());
 
         // Create pricegroup
         $priceGroup = $resourceHelper->createPriceGroup([

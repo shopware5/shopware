@@ -26,10 +26,14 @@ namespace Shopware\Tests\Functional\Modules\Category;
 
 use Enlight_Components_Test_TestCase;
 use sCategories;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class sGetCategoriesTest extends Enlight_Components_Test_TestCase
 {
+    use ContainerTrait;
+
     /**
      * @var Helper
      */
@@ -42,7 +46,7 @@ class sGetCategoriesTest extends Enlight_Components_Test_TestCase
 
     protected function setUp(): void
     {
-        $this->helper = new Helper();
+        $this->helper = new Helper($this->getContainer());
 
         Shopware()->Db()->query(
             "DELETE FROM s_categories WHERE description LIKE 'Foo%' AND parent = 3"
@@ -209,7 +213,7 @@ class sGetCategoriesTest extends Enlight_Components_Test_TestCase
         Shopware()->Db()->executeUpdate('UPDATE s_categories SET mediaID = 564 WHERE id = ?', [$first1->getId()]);
 
         $result = $this->module->sGetCategories($second1->getId());
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->getContainer()->get(MediaServiceInterface::class);
 
         $result = array_values($result);
         $category = $result[1];

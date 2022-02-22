@@ -26,9 +26,12 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class SearchTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
+
     /**
      * @var Helper
      */
@@ -45,7 +48,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        $this->helper = new Helper();
+        $this->helper = new Helper($this->getContainer());
     }
 
     /**

@@ -32,10 +32,13 @@ use ReflectionMethod;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Controllers_Backend_Article;
 
 class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
+
     /**
      * @var ReflectionMethod
      */
@@ -58,7 +61,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
 
-        Shopware()->Container()->get(Connection::class)->beginTransaction();
+        $this->getContainer()->get(Connection::class)->beginTransaction();
 
         // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -81,7 +84,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
 
-        Shopware()->Container()->get(Connection::class)->rollBack();
+        $this->getContainer()->get(Connection::class)->rollBack();
     }
 
     /**
@@ -90,7 +93,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testSaveArticleOverwriteProtection(): void
     {
-        $helper = new Helper();
+        $helper = new Helper($this->getContainer());
         $article = $helper->createProduct([
             'name' => 'Testartikel',
             'description' => 'Test description',

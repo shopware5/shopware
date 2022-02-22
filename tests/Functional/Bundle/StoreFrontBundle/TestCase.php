@@ -57,7 +57,7 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
 
     protected function setUp(): void
     {
-        $this->helper = new Helper();
+        $this->helper = new Helper($this->getContainer());
         $this->converter = new Converter();
         parent::setUp();
     }

@@ -109,7 +109,7 @@ class ListingTest extends TestCase
 
     private function prepareElasticSearchIndex(): void
     {
-        $helper = new Helper();
+        $helper = new Helper($this->getContainer());
         $context = $helper->createContext(
             $helper->createCustomerGroup(),
             $helper->getShop(),
