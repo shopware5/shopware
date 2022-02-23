@@ -69,6 +69,7 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
             this.createStartCard(),
             this.createInstallCard(),
             this.createConfigurationCard(),
+            this.createConfigurationPostponedCard(),
             this.createDoneCard(),
             this.createErrorCard()
         );
@@ -135,6 +136,8 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
     },
 
     /**
+     * @deprecated v5.8.0 This will be removed with the next minor version without replacement.
+     *
      * @returns { Ext.container.Container }
      */
     createConfigurationCard: function () {
@@ -174,14 +177,6 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
                     inputValue: true,
                     uncheckedValue: false
                 }, {
-                    xtype: 'checkbox',
-                    name: 'payPalPlus',
-                    fieldLabel: '{s name="pay_pal/configuration/plus/label"}{/s}',
-                    inputValue: true,
-                    uncheckedValue: false,
-                    helpTitle: '{s name="pay_pal/configuration/plus/label"}{/s}',
-                    helpText: '{s name="pay_pal/configuration/plus/help_text"}{/s}',
-                }, {
                     xtype: 'button',
                     text: '{s name="pay_pal/configuration/save/text"}{/s}',
                     cls: 'primary',
@@ -199,6 +194,23 @@ Ext.define('Shopware.apps.FirstRunWizard.view.main.PayPal', {
             itemId: 'configuration',
             items: [
                 me.form,
+            ]
+        });
+    },
+
+    createConfigurationPostponedCard: function () {
+        var me = this;
+
+        return Ext.create('Ext.container.Container', {
+            itemId: 'configuration_postponed',
+            items: [
+                {
+                    xtype: 'container',
+                    html: '<h1>{s name="pay_pal/configuration_postponed/headline"}{/s}</h1><p>{s name="pay_pal/configuration_postponed/instructions"}{/s}</p>',
+                    style: {
+                        marginBottom: '10px'
+                    }
+                }
             ]
         });
     },
