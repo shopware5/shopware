@@ -51,7 +51,7 @@ PHP analyze:
         -   name: mysql:5.7
             alias: mysql
 
-JavaScript analyze:
+JavaScript checks:
     tags:
         - t3.nano
     stage: Static analysis
@@ -61,6 +61,7 @@ JavaScript analyze:
     script:
         - make install-theme-depencencies
         - make check-js-code
+        - make test-jest
 
 Code Coverage:
     tags:

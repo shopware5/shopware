@@ -52,6 +52,7 @@ fix-eslint-backend:
 
 install-theme-depencencies:
 	npm install --prefix ./themes
+	npm install --prefix ./themes/Frontend/Responsive
 
 frontend-watch: clear-cache
 	./bin/console sw:theme:dump:configuration
@@ -73,6 +74,9 @@ test-phpunit: init
 
 test-phpunit-elasticsearch: elasticsearch-populate
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=skipElasticSearch --group=elasticSearch
+
+test-jest:
+	npm run test --prefix ./themes/Frontend/Responsive
 
 elasticsearch-populate: .make.config.build.elasticsearch .make.console.executable
 	./bin/console sw:es:index:populate

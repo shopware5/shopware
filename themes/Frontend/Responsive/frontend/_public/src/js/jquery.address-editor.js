@@ -153,7 +153,7 @@
 
             // Ajax request to fetch available addresses
             $.ajax({
-                url: window.controller['ajax_address_editor'],
+                url: window.controller.ajax_address_editor,
                 data: requestData,
                 success: function(data) {
                     $.loadingIndicator.close(function() {

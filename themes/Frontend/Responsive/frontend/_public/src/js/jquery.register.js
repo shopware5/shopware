@@ -660,9 +660,9 @@
             }
 
             if (skipEmailConfirmationError) {
-                result['emailConfirmation'] = false;
+                result.emailConfirmation = false;
             } else if (skipPasswordConfirmationError) {
-                result['passwordConfirmation'] = false;
+                result.passwordConfirmation = false;
             }
 
             for (var key in result) {

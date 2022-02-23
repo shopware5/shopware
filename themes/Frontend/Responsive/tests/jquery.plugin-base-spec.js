@@ -15,7 +15,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
 
@@ -43,7 +43,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
 
@@ -65,7 +65,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element',
+            class: 'test--element',
             'data-testCls': 'modified-test'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
@@ -87,7 +87,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element',
+            class: 'test--element',
             'data-testCls': 'modified-test'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
@@ -107,7 +107,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
 
@@ -126,7 +126,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
 
@@ -140,12 +140,12 @@ describe('Plugin base class', function() {
         var $testElement, data, options;
 
         $.plugin('yay', {
-            defaults: { foo: true, bar: false  },
+            defaults: { foo: true, bar: false },
             init: function() {}
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
         options = data.getOptions();
@@ -161,12 +161,12 @@ describe('Plugin base class', function() {
         var $testElement, data, options;
 
         $.plugin('yay', {
-            defaults: { foo: true  },
+            defaults: { foo: true },
             init: function() {}
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
         data.setOption('foo', false);
@@ -181,16 +181,16 @@ describe('Plugin base class', function() {
         var $testElement, data;
 
         $.plugin('yay', {
-            defaults: { foo: true, bar: false  },
+            defaults: { foo: true, bar: false },
             init: function() {}
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
-        expect(data.getEventName('click')).toBe('click.yay');
-        expect(data.getEventName('click touch mouseenter')).toBe('click.yay touch.yay mouseenter.yay');
+        expect(data.getEventName('click')).toContain('click.yay');
+        expect(data.getEventName('click touch mouseenter')).toMatch(/click.yay.* touch.yay.* mouseenter.yay.*/);
 
         $testElement.remove();
         data._destroy();
@@ -200,12 +200,12 @@ describe('Plugin base class', function() {
         var $testElement;
 
         $.plugin('yay', {
-            defaults: { foo: true, bar: false  },
+            defaults: { foo: true, bar: false },
             init: function() {}
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         expect($testElement.is(':plugin-yay')).toBe(true);
 
@@ -226,12 +226,12 @@ describe('Plugin base class', function() {
 
         $.overridePlugin('yay', {
             testMethod: function() {
-                this.$el.addClass('testing')
+                this.$el.addClass('testing');
             }
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         expect($testElement.hasClass('testing')).toBe(true);
 
@@ -246,7 +246,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
         data._on($testElement, 'testEvent1', $.noop);
@@ -267,7 +267,7 @@ describe('Plugin base class', function() {
         });
 
         $testElement = $('<div>', {
-            'class': 'test--element'
+            class: 'test--element'
         }).appendTo($('body')).yay();
         data = $testElement.data('plugin_yay');
         data._on($testElement, 'testEvent1', $.noop);

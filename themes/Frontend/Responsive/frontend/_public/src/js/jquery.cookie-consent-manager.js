@@ -223,7 +223,7 @@
 
         parsePreferences: function () {
             var me = this,
-                groupNames = Object.keys(me.preferences['groups']),
+                groupNames = Object.keys(me.preferences.groups),
                 group,
                 groupRequired,
                 cookieNames,
@@ -232,15 +232,15 @@
             $.each(groupNames, function (groupIndex, groupName) {
                 group = me.findGroupByName(groupName);
                 groupRequired = group.find(me.opts.cookieActiveInputLabelSelector).hasClass(me.opts.requiredClass);
-                me.toggleGroup(group, groupRequired || me.preferences['groups'][groupName].active);
+                me.toggleGroup(group, groupRequired || me.preferences.groups[groupName].active);
 
-                cookieNames = Object.keys(me.preferences['groups'][groupName].cookies);
+                cookieNames = Object.keys(me.preferences.groups[groupName].cookies);
 
                 $.each(cookieNames, function (cookieIndex, cookieName) {
                     cookie = me.findCookieByName(cookieName);
-                    me.toggleCookie(cookie, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
+                    me.toggleCookie(cookie, groupRequired || me.preferences.groups[groupName].cookies[cookieName].active);
 
-                    me.checkActiveStateForAllCookiesOfGroup(group, groupRequired || me.preferences['groups'][groupName].cookies[cookieName].active);
+                    me.checkActiveStateForAllCookiesOfGroup(group, groupRequired || me.preferences.groups[groupName].cookies[cookieName].active);
                 });
             });
         },
@@ -281,14 +281,14 @@
 
                 uniqueNames.push(groupName);
 
-                if (!Object.prototype.hasOwnProperty.call(preferences['groups'], groupName)) {
-                    preferences['groups'][groupName] = {
+                if (!Object.prototype.hasOwnProperty.call(preferences.groups, groupName)) {
+                    preferences.groups[groupName] = {
                         name: groupName,
                         cookies: {}
                     };
                 }
 
-                preferences['groups'][groupName].active = isActive;
+                preferences.groups[groupName].active = isActive;
 
                 cookies.each(function (cookieIndex, cookie) {
                     var cookieName = $(cookie).find(opts.cookieNameSelector).val(),
@@ -296,13 +296,13 @@
 
                     uniqueNames.push(cookieName);
 
-                    if (!Object.prototype.hasOwnProperty.call(preferences['groups'][groupName].cookies, cookieName)) {
-                        preferences['groups'][groupName].cookies[cookieName] = {
+                    if (!Object.prototype.hasOwnProperty.call(preferences.groups[groupName].cookies, cookieName)) {
+                        preferences.groups[groupName].cookies[cookieName] = {
                             name: cookieName
                         };
                     }
 
-                    preferences['groups'][groupName].cookies[cookieName].active = isCookieActive;
+                    preferences.groups[groupName].cookies[cookieName].active = isCookieActive;
                 });
             });
 

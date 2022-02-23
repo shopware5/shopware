@@ -2,14 +2,13 @@
     "name": "shopwareresponsivetheme",
     "version": "1.0.0",
     "description": "The default responsive theme for Shopware",
-    "main": "karma.conf.js",
     "private": true,
     "directories": {
         "test": "tests"
     },
     "scripts": {
         "build": "grunt",
-        "test": "karma start karma.conf.js"
+        "test": "jest"
     },
     "repository": {
         "type": "git",
@@ -42,6 +41,7 @@
     "devDependencies": {
         "grunt": "^1.4.0",
         "grunt-contrib-clean": "1.1.0",
-        "grunt-contrib-copy": "1.0.0"
+        "grunt-contrib-copy": "1.0.0",
+        "jest": "^27.5.1"
     }
 }

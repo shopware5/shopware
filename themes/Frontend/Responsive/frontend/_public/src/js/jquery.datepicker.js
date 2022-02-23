@@ -217,16 +217,16 @@
                     me.opts.enabledDates = me.opts.enabledDates.split(',');
                 }
 
-                config['enable'] = me.opts.enabledDates;
+                config.enable = me.opts.enabledDates;
             }
 
             /**
              * Event handler api of the flatpickr plugin.
              */
-            config['onReady'] = $.proxy(me.onPickerReady, me);
-            config['onChange'] = $.proxy(me.onPickerChange, me);
-            config['onOpen'] = $.proxy(me.onPickerOpen, me);
-            config['onClose'] = $.proxy(me.onPickerClose, me);
+            config.onReady = $.proxy(me.onPickerReady, me);
+            config.onChange = $.proxy(me.onPickerChange, me);
+            config.onOpen = $.proxy(me.onPickerOpen, me);
+            config.onClose = $.proxy(me.onPickerClose, me);
 
             me.flatpickr = me.$el.flatpickr(config);
 
