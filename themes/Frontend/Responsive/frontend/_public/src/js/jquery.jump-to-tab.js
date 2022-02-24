@@ -23,7 +23,7 @@
 
         init: function () {
             var me = this,
-                param = decodeURI((RegExp('(?:action|jumpTab)=(.+?)(&|$)').exec(location.search) || [null, null])[1]);
+                param = decodeURI((/(?:action|jumpTab)=(.+?)(&|$)/.exec(location.search) || [null, null])[1]);
 
             me.applyDataAttributes();
 

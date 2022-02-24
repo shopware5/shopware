@@ -642,7 +642,7 @@
                 };
 
             if (me.opts.ajaxCategoryID !== null) {
-                data['category'] = me.opts.ajaxCategoryID;
+                data.category = me.opts.ajaxCategoryID;
             }
 
             me.isLoading = true;

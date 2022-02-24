@@ -745,8 +745,8 @@
             var tempParams = {};
 
             $.each(formData, function (index, item) {
-                if (item['value'] !== null) {
-                    tempParams[item['name']] = item['value'];
+                if (item.value !== null) {
+                    tempParams[item.name] = item.value;
                 }
             });
 

@@ -33,13 +33,8 @@
      */
     function deserializeValue(value) {
         try {
-            return !value ? value : value === 'true' || (
-                value === 'false' ? false
-                    : value === 'null' ? null
-                        : numberRegex.test(value) ? +value
-                            : objectRegex.test(value) ? JSON.parse(value)
-                                : value
-            );
+            return !value ? value : value === 'true' ||
+                (value === 'false' ? false : value === 'null' ? null : numberRegex.test(value) ? +value : objectRegex.test(value) ? JSON.parse(value) : value);
         } catch (e) {
             return value;
         }

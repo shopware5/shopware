@@ -7,7 +7,7 @@ describe('Global publish-subscribe pattern', function() {
         $.publish('test-event', 'sometest');
     });
 
-    it('should be possible to subscribe to an plugin init event', function() {
+    it('should be possible to subscribe to a plugin init event', function() {
         var name = 'yay';
 
         $.plugin(name, {
@@ -19,11 +19,11 @@ describe('Global publish-subscribe pattern', function() {
         });
 
         $('<div>', {
-            'class': 'some-element'
+            class: 'some-element'
         })[name]();
     });
 
-    it('should be possible to subscribe to an plugin destroy event', function() {
+    it('should be possible to subscribe to a plugin destroy event', function() {
         var name = 'yay', element, data;
 
         $.plugin(name, {
@@ -35,14 +35,14 @@ describe('Global publish-subscribe pattern', function() {
         });
 
         element = $('<div>', {
-            'class': 'some-element'
+            class: 'some-element'
         })[name]();
 
         data = element.data('plugin_' + name);
         data._destroy();
     });
 
-    it('should be possible to subscribe to an plugin addEventListener event', function() {
+    it('should be possible to subscribe to a plugin addEventListener event', function() {
         var name = 'yay', element, data;
 
         $.plugin(name, {
@@ -50,18 +50,18 @@ describe('Global publish-subscribe pattern', function() {
         });
 
         $.subscribe('plugin/' + name + '/onRegisterEvent', function(event, element, eventName) {
-            expect(eventName).toBe('click.' + name);
+            expect(eventName).toContain('click.' + name);
         });
 
         element = $('<div>', {
-            'class': 'some-element'
+            class: 'some-element'
         })[name]();
 
         data = element.data('plugin_' + name);
         data._on(element, 'click', function() {});
     });
 
-    it('should be possible to subscribe to an plugin removeEventListener event', function() {
+    it('should be possible to subscribe to a plugin removeEventListener event', function() {
         var name = 'yay', element, data;
 
         $.plugin(name, {
@@ -73,7 +73,7 @@ describe('Global publish-subscribe pattern', function() {
         });
 
         element = $('<div>', {
-            'class': 'some-element'
+            class: 'some-element'
         })[name]();
 
         data = element.data('plugin_' + name);

@@ -128,7 +128,7 @@
 
             // Ajax request to fetch available addresses
             $.ajax({
-                url: window.controller['ajax_address_selection'],
+                url: window.controller.ajax_address_selection,
                 data: {
                     id: me.opts.id,
                     extraData: extraData
