@@ -68,6 +68,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
                 'navigate-next': me.navigateNext,
                 'navigate-back': me.navigateBack,
                 'navigate-skip': me.navigateSkip,
+                'paypal-configuration-postponed': me.onPaypalConfigurationPostponed,
             }
         });
 
@@ -242,6 +243,10 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.Main', {
             toolbar.extraButton = new Ext.create('Ext.button.Button', buttons.extraButtonSettings);
             toolbar.insert(2, toolbar.extraButton);
         }
+    },
+
+    onPaypalConfigurationPostponed: function () {
+        Ext.util.Cookies.set('paypalConfigurationPostponed', true);
     }
 });
 

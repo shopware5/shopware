@@ -47,7 +47,8 @@ Ext.define('Shopware.apps.Index.controller.Main', {
             firstRunWizardEnabled = me.subApplication.firstRunWizardEnabled,
             enableInstallationFeedback = me.subApplication.enableInstallationFeedback,
             enableBetaFeedback = me.subApplication.enableBetaFeedback,
-            biOverviewEnabled = me.subApplication.biOverviewEnabled;
+            biOverviewEnabled = me.subApplication.biOverviewEnabled,
+            paypalSettingsEnabled = Ext.util.Cookies.get('paypalConfigurationPostponed');
 
         if (!firstRunWizardEnabled) {
             firstRunWizardStep = 0;
@@ -98,6 +99,25 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                         });
                     }, 2000);
                 }
+            }
+
+            if (paypalSettingsEnabled) {
+                try {
+                    Ext.create('Shopware.apps.PaypalUnifiedSettings');
+                } catch (exception) {
+                    Shopware.Notification.createGrowlMessage('{s name="title/paypal_settings_unavailable"}{/s}', '{s name="content/paypal_settings_unavailable"}{/s}');
+
+                    return;
+                } finally {
+                    Ext.util.Cookies.clear('paypalConfigurationPostponed');
+                }
+
+                Ext.Function.defer(function() {
+                    Shopware.app.Application.addSubApplication({
+                        name: 'Shopware.apps.PaypalUnifiedSettings',
+                        action: 'index'
+                    });
+                }, 2000);
             }
 
             /*{if {acl_is_allowed privilege=manage resource=benchmark}}*/

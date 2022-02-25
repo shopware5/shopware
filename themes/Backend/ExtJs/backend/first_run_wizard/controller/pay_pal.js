@@ -37,6 +37,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
     extend: 'Ext.app.Controller',
 
     pluginName: 'SwagPaymentPayPalUnified',
+    pluginVersion: null,
 
     refs: [
         { ref: 'skipButton', selector: 'first-run-wizard button[name=skip-button]' },
@@ -50,6 +51,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
     snippets: {
         downloadFailed: '{s name="pay_pal/errors/download"}{/s}',
         installFailed: '{s name="pay_pal/errors/install"}{/s}',
+        refreshFailed: '{s name="pay_pal/errors/refresh"}{/s}',
         unknownFailed: '{s name="pay_pal/errors/unknown"}{/s}',
         configurationFailed: '{s name="pay_pal/errors/configuration"}{/s}',
         activateFailed: '{s name="pay_pal/errors/activate"}{/s}',
@@ -94,7 +96,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
         this.getNextButton().disable();
         this.getPayPalCard().navigateToCard('empty');
 
-        this.handlePluginState();
+        this.refreshPlugins(Ext.bind(this.handlePluginState, this));
     },
 
     initInstallCard: function () {
@@ -124,14 +126,7 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
             '{url controller=FirstRunWizardPluginManager action=saveConfiguration}',
             values,
             me.snippets.configurationFailed,
-            function () {
-                me.initAjaxRequest(
-                    '{url controller=PluginInstaller action=activatePlugin}',
-                    { technicalName: me.pluginName },
-                    me.snippets.activateFailed,
-                    Ext.bind(me.compileTheme, me)
-                );
-            }
+            Ext.bind(me.activatePlugin, me)
         );
     },
 
@@ -172,6 +167,26 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
         );
     },
 
+    refreshPlugins: function (callback) {
+        var me = this;
+
+        Ext.Ajax.request({
+            url: '{url controller=PluginManager action=refreshPluginList}',
+            success: function (operation) {
+                var response = Ext.decode(operation.responseText),
+                    successState = response.success;
+
+                if (!successState) {
+                    me.displayError(me.snippets.refreshFailed);
+
+                    return;
+                }
+
+                callback();
+            },
+        });
+    },
+
     handlePluginState: function () {
         var me = this;
 
@@ -206,8 +221,27 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
                     return;
                 }
 
+                if (response.data.version === null) {
+                    me.displayError(me.snippets.unknownFailed);
+
+                    return;
+                } else {
+                    me.pluginVersion = response.data.version;
+                }
+
                 if (response.data.active === false) {
-                    me.getPayPalCard().navigateToCard('configuration');
+                    if (me.pluginVersion.charAt(0) >= 4) {
+                        me.getFirstRunWizard().fireEvent('paypal-configuration-postponed');
+                        me.getPayPalCard().navigateToCard('configuration_postponed');
+
+                        me.activatePlugin(function () {
+                            Shopware.app.Application.fireEvent('shopware-theme-cache-warm-up-request');
+
+                            me.getNextButton().enable();
+                        });
+                    } else {
+                        me.getPayPalCard().navigateToCard('configuration');
+                    }
 
                     return;
                 }
@@ -216,6 +250,17 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
                 me.getPayPalCard().navigateToCard('done');
             },
         });
+    },
+
+    activatePlugin: function (callback) {
+        var me = this;
+
+        me.initAjaxRequest(
+            '{url controller=PluginInstaller action=activatePlugin}',
+            { technicalName: me.pluginName },
+            me.snippets.activateFailed,
+            callback ? callback : Ext.bind(me.compileTheme, me)
+        );
     },
 
     installPlugin: function () {
@@ -227,8 +272,8 @@ Ext.define('Shopware.apps.FirstRunWizard.controller.PayPal', {
             me.snippets.installFailed,
             function () {
                 me.getPayPalCard().setLoading(false);
-                me.getPayPalCard().navigateToCard('configuration');
-                me.getSkipButton().show();
+
+                me.handlePluginState();
             }
         );
     },
