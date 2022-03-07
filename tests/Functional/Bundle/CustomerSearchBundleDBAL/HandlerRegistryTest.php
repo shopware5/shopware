@@ -29,10 +29,20 @@ use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\CustomerAttributeC
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasAddressWithCountryConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasCanceledOrdersConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNewsletterRegistrationConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNoAddressWithCountryConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasNoNewsletterRegistrationConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasOrderCountConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\HasTotalOrderAmountConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsCustomerSinceConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsInCustomerGroupConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\IsNotInCustomerGroupConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedInLastDaysConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedInShopConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedProductConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedWithDeliveryConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotOrderedWithPaymentConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotRegisteredInShopConditionHandler;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\NotSalutationConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedAtWeekdayConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInLastDaysConditionHandler;
 use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler\OrderedInShopConditionHandler;
@@ -64,24 +74,34 @@ class HandlerRegistryTest extends TestCase
         static::assertContains(AgeConditionHandler::class, $classes);
         static::assertContains(CustomerAttributeConditionHandler::class, $classes);
         static::assertContains(HasAddressWithCountryConditionHandler::class, $classes);
+        static::assertContains(HasNoAddressWithCountryConditionHandler::class, $classes);
         static::assertContains(HasCanceledOrdersConditionHandler::class, $classes);
         static::assertContains(HasNewsletterRegistrationConditionHandler::class, $classes);
+        static::assertContains(HasNoNewsletterRegistrationConditionHandler::class, $classes);
         static::assertContains(HasOrderCountConditionHandler::class, $classes);
         static::assertContains(HasTotalOrderAmountConditionHandler::class, $classes);
         static::assertContains(IsCustomerSinceConditionHandler::class, $classes);
         static::assertContains(IsInCustomerGroupConditionHandler::class, $classes);
+        static::assertContains(IsNotInCustomerGroupConditionHandler::class, $classes);
         static::assertContains(OrderedAtWeekdayConditionHandler::class, $classes);
         static::assertContains(OrderedInLastDaysConditionHandler::class, $classes);
+        static::assertContains(NotOrderedInLastDaysConditionHandler::class, $classes);
         static::assertContains(OrderedInShopConditionHandler::class, $classes);
+        static::assertContains(NotOrderedInShopConditionHandler::class, $classes);
         static::assertContains(OrderedOnDeviceConditionHandler::class, $classes);
         static::assertContains(OrderedProductConditionHandler::class, $classes);
+        static::assertContains(NotOrderedProductConditionHandler::class, $classes);
         static::assertContains(OrderedProductOfCategoryConditionHandler::class, $classes);
         static::assertContains(OrderedProductOfManufacturerConditionHandler::class, $classes);
         static::assertContains(OrderedWithDeliveryConditionHandler::class, $classes);
+        static::assertContains(NotOrderedWithDeliveryConditionHandler::class, $classes);
         static::assertContains(OrderedWithPaymentConditionHandler::class, $classes);
+        static::assertContains(NotOrderedWithPaymentConditionHandler::class, $classes);
         static::assertContains(RegisteredInShopConditionHandler::class, $classes);
+        static::assertContains(NotRegisteredInShopConditionHandler::class, $classes);
         static::assertContains(SearchTermConditionHandler::class, $classes);
         static::assertContains(SalutationConditionHandler::class, $classes);
+        static::assertContains(NotSalutationConditionHandler::class, $classes);
     }
 
     public function testNoneSupportConditionThrowsException()

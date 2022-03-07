@@ -121,7 +121,7 @@ class TestCase extends Enlight_Components_Test_TestCase
             'customernumber' => $customer['number'],
             'accountmode' => 0,
             'paymentpreset' => 1,
-            'subshopID' => 1000,
+            'subshopID' => $customer['subshopID'] ?? 1000,
             'failedlogins' => 0,
         ], $customer));
 

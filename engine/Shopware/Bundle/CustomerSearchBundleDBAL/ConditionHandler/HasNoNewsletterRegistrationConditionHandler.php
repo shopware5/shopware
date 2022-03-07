@@ -22,28 +22,22 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\SearchBundle;
+namespace Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
-/**
- * Defines a condition which can be added to the
- * \Shopware\Bundle\SearchBundle\Criteria class.
- *
- * Each condition is handled by his own condition handler
- * which defined in the specify gateway engines.
- */
-interface ConditionInterface extends CriteriaPartInterface
+use Shopware\Bundle\CustomerSearchBundle\Condition\HasNoNewsletterRegistrationCondition;
+use Shopware\Bundle\CustomerSearchBundleDBAL\ConditionHandlerInterface;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
+use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
+
+class HasNoNewsletterRegistrationConditionHandler implements ConditionHandlerInterface
 {
-    public const OPERATOR_EQ = '=';
-    public const OPERATOR_NEQ = '!=';
-    public const OPERATOR_LT = '<';
-    public const OPERATOR_LTE = '<=';
-    public const OPERATOR_GT = '>';
-    public const OPERATOR_GTE = '>=';
-    public const OPERATOR_IN = 'IN';
-    public const OPERATOR_BETWEEN = 'BETWEEN';
-    public const OPERATOR_NOT_BETWEEN = 'NOT BETWEEN';
-    public const OPERATOR_NOT_IN = 'NOT IN';
-    public const OPERATOR_STARTS_WITH = 'STARTS_WITH';
-    public const OPERATOR_ENDS_WITH = 'ENDS_WITH';
-    public const OPERATOR_CONTAINS = 'CONTAINS';
+    public function supports(ConditionInterface $condition): bool
+    {
+        return $condition instanceof HasNoNewsletterRegistrationCondition;
+    }
+
+    public function handle(ConditionInterface $condition, QueryBuilder $query): void
+    {
+        $query->andWhere('customer.newsletter = 0');
+    }
 }

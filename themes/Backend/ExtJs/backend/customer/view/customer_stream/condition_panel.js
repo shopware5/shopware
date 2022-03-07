@@ -52,12 +52,9 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
     bodyPadding: '10 0 0',
 
     initComponent: function() {
-        var me = this,
-            handlers = me.registerHandlers();
+        var me = this;
 
-        me.handlers = handlers.sort(function compare(a, b) {
-            return a.getLabel().localeCompare(b.getLabel());
-        });
+        me.handlers = me.registerHandlers()
 
         me.items = [];
 
@@ -70,24 +67,37 @@ Ext.define('Shopware.apps.Customer.view.customer_stream.ConditionPanel', {
         return [
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.AgeCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasAddressWithCountryCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasNoAddressWithCountryCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasCanceledOrdersCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasNoCanceledOrdersCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasNewsletterRegistrationCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasNoNewsletterRegistrationCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.IsCustomerSinceCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.IsInCustomerGroupCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.IsNotInCustomerGroupCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasOrderCountCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedAtWeekdayCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInLastDaysCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedInLastDaysCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedInShopCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedInShopCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.RegisteredInShopCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotRegisteredInShopCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedOnDeviceCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedProductCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfCategoryCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedProductOfCategoryCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedProductOfManufacturerCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedProductOfManufacturerCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithDeliveryCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedWithDeliveryCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.OrderedWithPaymentCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotOrderedWithPaymentCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.HasTotalOrderAmountCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.CustomerAttributeCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SalutationCondition'),
+            Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.NotSalutationCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.SearchTermCondition'),
             Ext.create('Shopware.apps.Customer.view.customer_stream.conditions.AccountModeCondition')
         ];
