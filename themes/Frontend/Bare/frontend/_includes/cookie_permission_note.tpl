@@ -3,6 +3,7 @@
      data-cookie-permission="true"
      data-urlPrefix="{url controller=index action=index}"
      data-title="{s name="cookiePermission/title"}{/s}"
+     data-cookieTimeout="{config name="cookieTimeout"}"
      {if $Shop}data-shopId="{$Shop->getId()}"{/if}>
 
     {if {config name="cookie_note_mode"} != 2}

@@ -151,7 +151,15 @@
              * @property offCanvasCategoryMenuSelector
              * @type {string}
              */
-            offCanvasCategoryMenuSelector: '.entry--menu-left .entry--link[data-offcanvas="true"]'
+            offCanvasCategoryMenuSelector: '.entry--menu-left .entry--link[data-offcanvas="true"]',
+
+            /**
+             * The Selector for the Cookie Timeout
+             *
+             * @property cookieTimeout
+             * @type {number}
+             */
+            cookieTimeout: 60
         },
 
         /**
@@ -308,8 +316,7 @@
 
             uniqueNames.sort();
             preferences.hash = window.btoa(JSON.stringify(uniqueNames));
-
-            date.setTime(date.getTime() + (180 * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + (this.opts.cookieTimeout * 24 * 60 * 60 * 1000));
 
             document.cookie = this.preferenceCookieName + '=' + JSON.stringify(preferences) + ';path=' + this.getBasePath() + ';expires=' + date.toGMTString() + ';' + ($.isSecure() ? ' secure;' : '');
 

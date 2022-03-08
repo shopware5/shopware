@@ -1,6 +1,6 @@
 {namespace name='frontend/cookie_consent/main'}
 
-<div id='cookie-consent' class='off-canvas is--left block-transition' data-cookie-consent-manager='true'>
+<div id='cookie-consent' class='off-canvas is--left block-transition' data-cookie-consent-manager='true' data-cookieTimeout='{config name="cookieTimeout"}'>
     {block name='frontend_index_cookie_consent_manager_content'}
         {block name='frontend_index_cookie_consent_manager_header'}
             <div class='cookie-consent--header cookie-consent--close'>
