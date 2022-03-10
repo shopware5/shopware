@@ -650,7 +650,7 @@ class sExport implements Enlight_Hook
      * @param string $object
      * @param string $objectData
      *
-     * @return array
+     * @return array<string, string>
      */
     public function sMapTranslation($object, $objectData)
     {

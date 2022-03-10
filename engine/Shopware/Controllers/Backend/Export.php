@@ -125,6 +125,10 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
     {
         $outputHandle = fopen($output, 'w');
 
+        if (!\is_resource($outputHandle)) {
+            throw new \RuntimeException(sprintf('Output file %s can not be opened', $outputHandle));
+        }
+
         $this->export->sSmarty = $this->View()->Engine();
         $this->export->sInitSmarty();
 
