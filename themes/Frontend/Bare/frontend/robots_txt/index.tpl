@@ -24,6 +24,7 @@
 
 {block name="frontend_robots_txt_allows"}
     {$robotsTxt->setAllow('/widgets/emotion')}
+    {$robotsTxt->setAllow('/widgets/index/refreshStatistic')}
     {block name="frontend_robots_txt_allows_output"}
         {foreach $robotsTxt->getAllows() as $allow}
             {$allow}
