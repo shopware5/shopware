@@ -60,6 +60,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /de/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/ticket/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/compare/', $robotsTxt);
@@ -68,6 +69,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /en/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /en/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/ticket/', $robotsTxt);
 
@@ -97,6 +99,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /de/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/ticket/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/compare/', $robotsTxt);
@@ -105,6 +108,7 @@ SQL,
         static::assertArrayNotHasKey('Disallow: /en/account/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/address/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/note/', $robotsTxt);
+        static::assertArrayNotHasKey('Disallow: /en/widgets/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/listing/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/ticket/', $robotsTxt);
 
@@ -134,6 +138,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /de/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/ticket/', $robotsTxt);
 
@@ -163,6 +168,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/de/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
 
@@ -194,6 +200,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/de/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
 
@@ -225,6 +232,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/ticket/', $robotsTxt);
 
@@ -254,6 +262,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/ticket/', $robotsTxt);
 
@@ -285,6 +294,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/de/account/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/address/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/note/', $robotsTxt);
+        static::assertArrayHasKey('Disallow: /foo/de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
 
