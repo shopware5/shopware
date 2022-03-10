@@ -10,6 +10,7 @@
     {$robotsTxt->setDisallow('/account')}
     {$robotsTxt->setDisallow('/address')}
     {$robotsTxt->setDisallow('/note')}
+    {$robotsTxt->setDisallow('/widgets')}
     {$robotsTxt->setDisallow('/listing')}
     {$robotsTxt->setDisallow('/ticket')}
     {$robotsTxt->setDisallow('/tracking')}
