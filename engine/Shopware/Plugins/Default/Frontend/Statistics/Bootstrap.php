@@ -392,7 +392,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $session = $this->get('session');
 
         // Count the views of this blog item
-        $visitedBlogItems = $session->get('visitedBlogItems');
+        $visitedBlogItems = $session->get('visitedBlogItems', []);
         if (\in_array($blogArticleId, $visitedBlogItems, true)) {
             return;
         }
