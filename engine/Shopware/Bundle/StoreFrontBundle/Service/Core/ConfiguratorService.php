@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,8 +47,8 @@ class ConfiguratorService implements ConfiguratorServiceInterface
         ProductConfigurationGatewayInterface $productConfigurationGateway,
         ConfiguratorGatewayInterface $configuratorGateway
     ) {
-        $this->configuratorGateway = $configuratorGateway;
         $this->productConfigurationGateway = $productConfigurationGateway;
+        $this->configuratorGateway = $configuratorGateway;
     }
 
     /**
@@ -124,10 +126,10 @@ class ConfiguratorService implements ConfiguratorServiceInterface
      * Checks if the passed combination is compatible with the provided customer configurator
      * selection.
      *
-     * @param array<string>   $combinations
-     * @param array<int, int> $selection
+     * @param array<string>|null $combinations
+     * @param array<int, int>    $selection
      */
-    private function isCombinationValid(Group $group, array $combinations, array $selection): bool
+    private function isCombinationValid(Group $group, ?array $combinations, array $selection): bool
     {
         if (empty($combinations)) {
             return false;
