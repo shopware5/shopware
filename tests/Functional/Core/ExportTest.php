@@ -33,11 +33,13 @@ use RuntimeException;
 use sExport;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Models\ProductFeed\ProductFeed;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ExportTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
+    use ContainerTrait;
 
     private sExport $export;
 
@@ -56,13 +58,11 @@ class ExportTest extends TestCase
 
     public function setUp(): void
     {
-        $container = Shopware()->Container();
-
         $this->export = Shopware()->Modules()->Export();
-        $this->repository = $container->get('models')->getRepository(ProductFeed::class);
-        $this->template = $container->get('template');
+        $this->repository = $this->getContainer()->get('models')->getRepository(ProductFeed::class);
+        $this->template = $this->getContainer()->get('template');
 
-        $this->cacheDir = $container->getParameter('shopware.product_export.cache_dir');
+        $this->cacheDir = $this->getContainer()->getParameter('shopware.product_export.cache_dir');
 
         $this->testDir = __DIR__ . '/fixtures/productexport/';
 
@@ -74,7 +74,7 @@ class ExportTest extends TestCase
             throw new RuntimeException(sprintf("Unable to write in directory '%s'\n", $this->cacheDir));
         }
 
-        $this->connection = $container->get('dbal_connection');
+        $this->connection = $this->getContainer()->get('dbal_connection');
     }
 
     public function testNewFields(): void
@@ -132,17 +132,33 @@ class ExportTest extends TestCase
         );
     }
 
+    public function testMainNumbersAreIncludedInTheExport(): void
+    {
+        $this->connection->executeQuery((string) file_get_contents($this->testDir . 'products.sql'));
+
+        $sql = 'REPLACE INTO `s_export` (`id`, `name`, `last_export`, `active`, `hash`, `show`, `count_articles`, `expiry`, `interval`, `formatID`, `last_change`, `filename`, `encodingID`, `categoryID`, `currencyID`, `customergroupID`, `partnerID`, `languageID`, `active_filter`, `image_filter`, `stockmin_filter`, `instock_filter`, `price_filter`, `own_filter`, `header`, `body`, `footer`, `count_filter`, `multishopID`, `variant_export`, `cache_refreshed`, `dirty`) VALUES
+(99, \'Test\', \'2019-11-18 19:26:59\', 1, \'be825a3aec75a7793e11ccf74caffbb9\', 0, 52, \'2019-11-18 22:46:10\', 0, 1, \'2019-11-18 22:46:10\', \'test.csv\', 2, 3, 1, 1, \'\', 1, 1, 0, 0, 0, 0, \'\', \'{strip}\narticleID{#S#}\npseudosales{#S#}\nmetaTitle{#S#}\nnotification{#S#}\navailable_from{#S#}\navailable_to{#S#}\npricegroupActive{#S#}\npricegroupID\n{/strip}{#L#}\', \'{strip}\n{$sArticle.articleID|escape}{#S#}\n{$sArticle.pseudosales|escape}{#S#}\n{$sArticle.metaTitle|escape}{#S#}\n{$sArticle.notification|escape}{#S#}\n{$sArticle.available_from|escape}{#S#}\n{$sArticle.available_to|escape}{#S#}\n{$sArticle.pricegroupActive|escape}{#S#}\n{$sArticle.pricegroupID|escape}\n{/strip}{#L#}\', \'\', 0, NULL, 1, \'2000-01-01 00:00:00\', 1);';
+        $this->connection->executeQuery($sql);
+
+        $db = $this->getContainer()->get('db');
+        $productFeed = $this->repository->find(99);
+        static::assertInstanceOf(ProductFeed::class, $productFeed);
+
+        $this->setupExportState($productFeed);
+
+        $sql = $this->export->sCreateSql();
+
+        $result = $db->query($sql)->fetchAll()[0];
+
+        static::assertArrayHasKey('mainnumber', $result);
+    }
+
     private function generateFeed(int $feedId): string
     {
         $productFeed = $this->repository->find($feedId);
         static::assertInstanceOf(ProductFeed::class, $productFeed);
 
-        $this->export->sFeedID = $productFeed->getId();
-        $this->export->sHash = $productFeed->getHash();
-        $this->export->sInitSettings();
-        $this->export->sSettings['categoryID'] = 0;
-        $this->export->sSmarty = clone $this->template;
-        $this->export->sInitSmarty();
+        $this->setupExportState($productFeed);
 
         $fileName = $productFeed->getHash() . '_' . $productFeed->getFileName();
 
@@ -155,5 +171,15 @@ class ExportTest extends TestCase
         $this->export->executeExport($handle);
 
         return $fileName;
+    }
+
+    private function setupExportState(ProductFeed $productFeed): void
+    {
+        $this->export->sFeedID = $productFeed->getId();
+        $this->export->sHash = $productFeed->getHash();
+        $this->export->sInitSettings();
+        $this->export->sSettings['categoryID'] = 0;
+        $this->export->sSmarty = clone $this->template;
+        $this->export->sInitSmarty();
     }
 }

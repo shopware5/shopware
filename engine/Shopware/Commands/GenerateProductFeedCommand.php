@@ -179,6 +179,11 @@ class GenerateProductFeedCommand extends ShopwareCommand implements CompletionAw
 
         $feedCachePath = $this->cacheDir . '/' . $fileName;
         $handleResource = fopen($feedCachePath, 'w');
+
+        if (!\is_resource($handleResource)) {
+            throw new RuntimeException(sprintf('Feed cache path %s can not be opened', $feedCachePath));
+        }
+
         $export->executeExport($handleResource);
     }
 }

@@ -650,7 +650,7 @@ class sExport implements Enlight_Hook
      * @param string $object
      * @param string $objectData
      *
-     * @return array
+     * @return array<string, string>
      */
     public function sMapTranslation($object, $objectData)
     {
@@ -953,6 +953,7 @@ class sExport implements Enlight_Hook
 
                 d.id as `articledetailsID`,
                 IF(v.ordernumber IS NOT NULL,v.ordernumber,d.ordernumber) as ordernumber,
+                main.ordernumber as mainnumber,
 
                 d.suppliernumber,
                 d.ean,
@@ -960,7 +961,7 @@ class sExport implements Enlight_Hook
                 d.height,
                 d.length,
                 d.kind,
-                IF(v.standard=1||kind=1,1,0) as standard,
+                IF(v.standard=1||d.kind=1,1,0) as standard,
                 d.additionaltext,
                 COALESCE(sai.impressions, 0) as impressions,
                 d.sales,
@@ -1006,6 +1007,10 @@ class sExport implements Enlight_Hook
             INNER JOIN s_articles_details d
             ON d.articleID = a.id
             $sql_add_product_variant_join_condition
+
+            LEFT JOIN s_articles_details main
+            ON main.id = a.main_detail_id
+
             LEFT JOIN s_articles_attributes AS `at`
             ON d.id = `at`.articledetailsID
 

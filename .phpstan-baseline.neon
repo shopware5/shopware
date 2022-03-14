@@ -13926,11 +13926,6 @@ parameters:
 			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$handleResource of method sExport\\:\\:executeExport\\(\\) expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\ListProductFeedCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/ListProductFeedCommand.php
@@ -27281,11 +27276,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Export.php
 
 		-
-			message: "#^Parameter \\#1 \\$handleResource of method sExport\\:\\:executeExport\\(\\) expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Export.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$targetField\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
@@ -33042,11 +33032,6 @@ parameters:
 
 		-
 			message: "#^Method sExport\\:\\:sGetPremiumDispatchSurcharge\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
-			message: "#^Method sExport\\:\\:sMapTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php
 
