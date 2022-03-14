@@ -82,6 +82,14 @@
             cookieNameSelector: '.cookie-consent--cookie-name',
 
             /**
+             * The Selector for the Cookie Timeout
+             *
+             * @property cookieTimeout
+             * @type {number}
+             */
+            cookieTimeout: 60,
+
+            /**
              * The current shopId for create the storageKey
              *
              * @property shopId
@@ -312,8 +320,7 @@
             } catch (err) { }
 
             var d = new Date();
-            d.setTime(d.getTime() + (180 * 24 * 60 * 60 * 1000));
-
+            d.setTime(d.getTime() + (this.opts.cookieTimeout * 24 * 60 * 60 * 1000));
             document.cookie = 'allowCookie=1; path=' + this.getBasePath() + ';expires=' + d.toGMTString() + ';' + ($.isSecure() ? ' secure;' : '');
 
             this.hideElement();
