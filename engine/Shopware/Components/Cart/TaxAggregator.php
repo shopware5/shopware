@@ -119,7 +119,7 @@ class TaxAggregator implements TaxAggregatorInterface
             /** @var callable(array<numeric-string, float> $carry, Price $shippingTax): array<numeric-string, float> $callback */
             $callback = static function (array $carry, Price $shippingTax) {
                 /** @var numeric-string $taxRate */
-                $taxRate = number_format($shippingTax->getTaxRate(), 2);
+                $taxRate = number_format((float) $shippingTax->getTaxRate(), 2);
 
                 if (!\array_key_exists($taxRate, $carry)) {
                     $carry[$taxRate] = 0.0;
