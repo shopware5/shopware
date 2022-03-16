@@ -73,9 +73,9 @@ abstract class Enlight_Controller_Router extends Enlight_Class
     /**
      * Assembles the given parameters.
      *
-     * @param array $userParams
+     * @param array<string, mixed> $userParams
      *
-     * @return mixed|string
+     * @return string
      */
     abstract public function assemble($userParams = []);
 

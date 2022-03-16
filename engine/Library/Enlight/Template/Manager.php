@@ -236,7 +236,7 @@ class Enlight_Template_Manager extends Smarty
      * @param string   $templateDir
      * @param int|null $key
      *
-     * @return string
+     * @return string|false
      */
     public function resolveTemplateDir($templateDir, $key = null)
     {
@@ -247,9 +247,8 @@ class Enlight_Template_Manager extends Smarty
                 ['subject' => $this, 'key' => $key]
             );
         }
-        $templateDir = Enlight_Loader::isReadable($templateDir);
 
-        return $templateDir;
+        return Enlight_Loader::isReadable($templateDir);
     }
 
     /**

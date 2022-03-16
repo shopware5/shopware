@@ -66,16 +66,6 @@ parameters:
 			path: engine/Library/Enlight/Class.php
 
 		-
-			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Class.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Class.php
-
-		-
 			message: "#^Property Enlight_Class\\:\\:\\$instances type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Class.php
@@ -786,21 +776,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Dispatcher.php
 
 		-
-			message: "#^Binary operation \"\\.\" between 'Controller \"' and array\\|string results in an error\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Call to function is_object\\(\\) with array\\|string will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Call to function is_object\\(\\) with string will always evaluate to false\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
 			message: "#^Cannot clone object\\|null\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
@@ -816,31 +791,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
 
 		-
-			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:formatActionName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:formatControllerName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getControllerClass\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getControllerPath\\(\\) should return string but returns null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getControllerPath\\(\\) should return string but returns object\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
 			message: "#^Method Enlight_Controller_Dispatcher_Default\\:\\:getModules\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
@@ -851,17 +801,7 @@ parameters:
 			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
 
 		-
-			message: "#^Parameter \\#1 \\$class of method Enlight_Hook_HookManager\\:\\:getProxy\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Parameter \\#1 \\$className of method Enlight_Controller_Dispatcher_Default\\:\\:isForbiddenController\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Parameter \\#1 \\$classname of function class_exists expects string, array\\|string given\\.$#"
+			message: "#^Parameter \\#1 \\$classname of function class_exists expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
 
@@ -887,11 +827,6 @@ parameters:
 
 		-
 			message: "#^Property Enlight_Controller_Dispatcher_Default\\:\\:\\$modules type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Dispatcher/Default.php
 
@@ -1706,16 +1641,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
 
 		-
-			message: "#^Parameter \\#2 \\$pieces of function implode expects array, \\$this\\(Enlight_Controller_Response_ResponseTestCase\\) given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Response/ResponseTestCase.php
-
-		-
-			message: "#^Method Enlight_Controller_Router\\:\\:assemble\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Router.php
-
-		-
 			message: "#^Method Enlight_Controller_Router\\:\\:setGlobalParam\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Router.php
@@ -1786,21 +1711,6 @@ parameters:
 			path: engine/Library/Enlight/Event/EventHandler.php
 
 		-
-			message: "#^Argument of an invalid type Enlight_Event_Handler supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Cannot access offset int on array\\{\\}\\|Enlight_Event_Handler\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Cannot access offset mixed on Enlight_Event_Handler\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
 			message: "#^Method Enlight_Event_EventManager\\:\\:buildEventArgs\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventManager.php
@@ -1836,11 +1746,6 @@ parameters:
 			path: engine/Library/Enlight/Event/EventManager.php
 
 		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:getListeners\\(\\) should return array\\<Enlight_Event_Handler\\> but returns Enlight_Event_Handler\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
 			message: "#^Method Enlight_Event_EventManager\\:\\:notify\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventManager.php
@@ -1852,26 +1757,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Event_EventManager\\:\\:registerSubscriber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$array_arg of function ksort expects array, array\\<int, Enlight_Event_Handler\\>\\|Enlight_Event_Handler given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, Enlight_Event_Handler given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|Enlight_Event_Handler given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Property Enlight_Event_EventManager\\:\\:\\$listeners \\(array\\<Enlight_Event_Handler\\>\\) does not accept array\\<array\\|Enlight_Event_Handler\\>\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventManager.php
 
@@ -2171,32 +2056,7 @@ parameters:
 			path: engine/Library/Enlight/Hook/ProxyFactory.php
 
 		-
-			message: "#^Parameter \\#1 \\$argument of class ReflectionClass constructor expects class\\-string\\<T of object\\>\\|T of object, string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/ProxyFactory.php
-
-		-
-			message: "#^Parameter \\#1 \\$file of function file_put_contents expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/ProxyFactory.php
-
-		-
-			message: "#^Parameter \\#1 \\$old_name of function rename expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/ProxyFactory.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/ProxyFactory.php
-
-		-
 			message: "#^Cannot assign offset '0' to string\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Method Enlight_Loader\\:\\:addIncludePath\\(\\) should return string but returns bool\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Loader.php
 
@@ -2212,16 +2072,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Loader\\:\\:explodeIncludePath\\(\\) should return array but returns array\\<int, string\\>\\|false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Method Enlight_Loader\\:\\:getClassPath\\(\\) should return string\\|void but returns null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Method Enlight_Loader\\:\\:getClassPath\\(\\) should return string\\|void but returns string\\|true\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Loader.php
 
@@ -2251,27 +2101,7 @@ parameters:
 			path: engine/Library/Enlight/Loader.php
 
 		-
-			message: "#^Parameter \\#1 \\$path of method Enlight_Loader\\:\\:loadFile\\(\\) expects string, string\\|void given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Parameter \\#2 \\$subject of function preg_split expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
 			message: "#^Property Enlight_Loader\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string\\|void and null will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Loader.php
 
@@ -2467,11 +2297,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Template_Manager\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
-			message: "#^Method Enlight_Template_Manager\\:\\:resolveTemplateDir\\(\\) should return string but returns bool\\|string\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php
 
@@ -20609,16 +20434,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$eventManager of method Doctrine\\\\ORM\\\\EntityManager\\:\\:__construct\\(\\) expects Doctrine\\\\Common\\\\EventManager, Doctrine\\\\Common\\\\EventManager\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ModelManager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\ProxyAwareRepositoryFactory\\:\\:createRepository\\(\\) return type with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ProxyAwareRepositoryFactory.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$repositoryClassName contains generic interface Doctrine\\\\Persistence\\\\ObjectRepository but does not specify its types\\: TEntityClass$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ProxyAwareRepositoryFactory.php
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\ProxyAwareRepositoryFactory\\:\\:\\$repositoryList with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: TEntityClass$#"

@@ -41,15 +41,14 @@ use Enlight\Event\SubscriberInterface;
 class Enlight_Event_EventManager extends Enlight_Class
 {
     /**
-     * @var Enlight_Event_Handler[] Contains all registered event listeners. A listener can be registered by the
-     *                              registerListener(Enlight_Event_Handler $handler) function.
+     * @var array<string, array<Enlight_Event_Handler>> Contains all registered event listeners. A listener can be registered by the registerListener(Enlight_Event_Handler) function.
      */
     protected $listeners = [];
 
     /**
      * Returns all event listeners of the Enlight_Event_EventManager
      *
-     * @return Enlight_Event_Handler[]
+     * @return array<string, array<Enlight_Event_Handler>>
      */
     public function getAllListeners()
     {
@@ -128,8 +127,8 @@ class Enlight_Event_EventManager extends Enlight_Class
         }
 
         $listenerToRemove = $handler->getListener();
-        foreach ($this->listeners[$eventName] as $i => $handler) {
-            if ($listenerToRemove === $handler->getListener()) {
+        foreach ($this->listeners[$eventName] as $i => $listener) {
+            if ($listenerToRemove === $listener->getListener()) {
                 unset($this->listeners[$eventName][$i]);
             }
         }

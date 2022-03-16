@@ -135,7 +135,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
      * Returns the proxy for the given class. If the Enlight_Hook_ProxyFactory hasn't
      * already instantiated it, the function instantiates it automatically.
      *
-     * @param string $class
+     * @param class-string $class
      */
     public function getProxy($class)
     {
@@ -145,7 +145,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
     /**
      * Checks if a proxy exists for the given class.
      *
-     * @param string $class
+     * @param class-string $class
      *
      * @return bool
      */

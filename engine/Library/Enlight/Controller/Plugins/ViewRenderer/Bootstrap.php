@@ -288,7 +288,7 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
 
         $parts = [$moduleName, $controllerName, $actionName];
         foreach ($parts as &$part) {
-            $part = preg_replace('#[A-Z]#', '_$0', $part);
+            $part = (string) preg_replace('#[A-Z]#', '_$0', $part);
             $part = trim($part, '_');
             $part = strtolower($part);
         }

@@ -268,7 +268,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
             $url = $this->Front()->Router()->assemble($url);
         }
         if (!preg_match('#^(https?|ftp)://#', $url)) {
-            if (strpos($url, '/') !== 0) {
+            if (!str_starts_with($url, '/')) {
                 $url = $this->Request()->getBaseUrl() . '/' . $url;
             }
             $uri = $this->Request()->getScheme() . '://' . $this->Request()->getHttpHost();

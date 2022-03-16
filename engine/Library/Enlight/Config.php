@@ -61,7 +61,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     /**
      * The section separator.
      *
-     * @var string
+     * @var non-empty-string
      */
     protected $_sectionSeparator = ':';
 
@@ -499,7 +499,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
     }
 
     /**
-     * @return string
+     * @return non-empty-string
      */
     public function getSectionSeparator()
     {
