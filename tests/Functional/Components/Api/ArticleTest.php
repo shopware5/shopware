@@ -43,6 +43,7 @@ use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Download;
 use Shopware\Models\Article\Price;
 use Shopware\Models\Article\Unit;
+use Shopware\Models\Attribute\Article as ProductAttribute;
 use Shopware\Models\Attribute\ArticleImage;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroup;
@@ -56,10 +57,7 @@ class ArticleTest extends TestCase
      */
     protected $resource;
 
-    /**
-     * @return Article
-     */
-    public function createResource()
+    public function createResource(): Article
     {
         return new Article();
     }
@@ -761,7 +759,10 @@ class ArticleTest extends TestCase
             foreach ($thumbnails as $key => $thumbnail) {
                 static::assertTrue($mediaService->has($thumbnail));
 
-                $image = imagecreatefromstring($mediaService->read($thumbnail));
+                $mediaPath = $mediaService->read($thumbnail);
+                static::assertIsString($mediaPath);
+                $image = imagecreatefromstring($mediaPath);
+                static::assertNotFalse($image);
                 $width = imagesx($image);
                 $height = imagesy($image);
 
@@ -1360,7 +1361,7 @@ class ArticleTest extends TestCase
             static::assertCount(2, $variant->getConfiguratorOptions(), 'Configurator option count dont match');
 
             foreach ($variant->getConfiguratorOptions() as $option) {
-                static::assertTrue(\in_array($option->getName(), ['M', 'S', 'blau', 'grün']));
+                static::assertContains($option->getName(), ['M', 'S', 'blau', 'grün']);
             }
         }
 
@@ -2893,11 +2894,13 @@ class ArticleTest extends TestCase
 
             static::assertCount(1, $image->getMappings());
 
-            $mapping = array_shift($image->getMappings()->getValues());
+            $mappingValues = $image->getMappings()->getValues();
+            $mapping = array_shift($mappingValues);
 
             static::assertCount(1, $mapping->getRules());
 
-            $rule = array_shift($mapping->getRules()->getValues());
+            $ruleValues = $mapping->getRules()->getValues();
+            $rule = array_shift($ruleValues);
 
             if ($media->getId() === 2) {
                 static::assertEquals('NewVal1', $rule->getOption()->getName());
@@ -2954,7 +2957,7 @@ class ArticleTest extends TestCase
         $entityManager = Shopware()->Models();
         $productRepository = $entityManager->getRepository(ProductModel::class);
         $detailRepository = $entityManager->getRepository(Detail::class);
-        $attributeRepository = $entityManager->getRepository(\Shopware\Models\Attribute\Article::class);
+        $attributeRepository = $entityManager->getRepository(ProductAttribute::class);
 
         // Test preparation
 

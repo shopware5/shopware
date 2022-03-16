@@ -70,6 +70,6 @@ class RouterTestObject extends Enlight_Components_Test_TestCase
 
         $this->expectException(InvalidArgumentException::class);
 
-        $localRouter->assemble([$cls]);
+        $localRouter->assemble(['foo' => $cls]);
     }
 }

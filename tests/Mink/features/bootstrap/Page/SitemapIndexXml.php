@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -40,7 +42,7 @@ class SitemapIndexXml extends Page
      */
     public function checkXml(array $links)
     {
-        $homepageUrl = rtrim($this->getParameter('base_url'), '/');
+        $homepageUrl = rtrim($this->getParameter('base_url') ?? '', '/');
         $xml = json_decode(json_encode(simplexml_load_string($this->getContent())), true);
         $xml = $xml['body']['div'][0]['sitemapindex'];
 

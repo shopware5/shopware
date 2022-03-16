@@ -51,10 +51,10 @@ class ShopResolverTest extends TestCase
 
     public function testResolve(): void
     {
-        $this->service->add(1, $this->field);
+        $this->service->add('1', $this->field);
         $this->service->resolve();
 
-        $shop = $this->service->get(1, $this->field);
+        $shop = $this->service->get('1', $this->field);
         static::assertIsArray($shop);
         static::assertEquals(Shopware()->Shop()->getId(), $shop['id']);
     }

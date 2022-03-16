@@ -47,7 +47,7 @@ class RouterTest extends Enlight_Components_Test_TestCase
         $seo = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229]);
         $seoExplicit = $localRouter->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => 229, '_seo' => true]);
 
-        static::assertEquals($seo, $seoExplicit);
+        static::assertSame($seo, $seoExplicit);
     }
 
     /**
@@ -83,12 +83,12 @@ class RouterTest extends Enlight_Components_Test_TestCase
         $seo = $localRouter->assemble(['controller' => 'doesnotexist']);
         $raw = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => false]);
 
-        static::assertEquals($raw, $seo);
+        static::assertSame($raw, $seo);
 
         $raw = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => false]);
         $seo = $localRouter->assemble(['controller' => 'doesnotexist', '_seo' => true]);
 
-        static::assertEquals($raw, $seo);
+        static::assertSame($raw, $seo);
     }
 
     /**
@@ -106,7 +106,7 @@ class RouterTest extends Enlight_Components_Test_TestCase
         $withAction = $localRouter->assemble(['controller' => 'doesnotexist', 'action' => 'index']);
         $withoutAction = $localRouter->assemble(['controller' => 'doesnotexist']);
 
-        static::assertEquals($withAction, $withoutAction);
+        static::assertSame($withAction, $withoutAction);
     }
 
     /**

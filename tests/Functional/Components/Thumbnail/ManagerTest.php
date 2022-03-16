@@ -132,7 +132,10 @@ class ManagerTest extends TestCase
             static::assertTrue($mediaService->has($path . '_' . $size . '.jpg'));
             static::assertTrue($mediaService->has($path . '_' . $size . '.png'));
 
-            $image = imagecreatefromstring($mediaService->read($path . '_' . $size . '.jpg'));
+            $imagePath = $mediaService->read($path . '_' . $size . '.jpg');
+            static::assertIsString($imagePath);
+            $image = imagecreatefromstring($imagePath);
+            static::assertNotFalse($image);
             $width = imagesx($image);
             $height = imagesy($image);
 

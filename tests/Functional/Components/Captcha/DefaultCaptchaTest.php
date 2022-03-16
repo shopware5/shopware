@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,15 +28,13 @@ namespace Shopware\Tests\Functional\Components\Captcha;
 
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Template_Manager;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Captcha\DefaultCaptcha;
 use Shopware_Components_Config;
 
-class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
+class DefaultCaptchaTest extends TestCase
 {
-    /**
-     * @var DefaultCaptcha
-     */
-    private $captcha;
+    private DefaultCaptcha $captcha;
 
     public function setUp(): void
     {
@@ -47,14 +47,14 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testCaptchaIsInitiallyInvalid()
+    public function testCaptchaIsInitiallyInvalid(): void
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParam('sCaptcha', 'foobar');
         static::assertFalse($this->captcha->validate($request));
     }
 
-    public function testValidCaptcha()
+    public function testValidCaptcha(): void
     {
         $templateData = $this->captcha->getTemplateData();
         static::assertArrayHasKey('img', $templateData);
@@ -62,12 +62,13 @@ class DefaultCaptchaTest extends \PHPUnit\Framework\TestCase
         $random = Shopware()->Session()->get(DefaultCaptcha::SESSION_KEY);
 
         $request = new Enlight_Controller_Request_RequestTestCase();
-        $request->setParam('sCaptcha', array_pop(array_keys($random)));
+        $random = array_keys($random);
+        $request->setParam('sCaptcha', array_pop($random));
 
         static::assertTrue($this->captcha->validate($request));
     }
 
-    public function testValidMultipleCaptchaCalls()
+    public function testValidMultipleCaptchaCalls(): void
     {
         // call captcha five times
         $this->captcha->getTemplateData();

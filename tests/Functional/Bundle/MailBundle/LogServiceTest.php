@@ -25,12 +25,14 @@
 namespace Shopware\Tests\Functional\Bundle\MailBundle;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\MailBundle\Service\LogService;
 use Shopware\Bundle\MailBundle\Service\LogServiceInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Log;
 
-class LogServiceTest extends \PHPUnit\Framework\TestCase
+class LogServiceTest extends TestCase
 {
     use MailBundleTestTrait;
 
@@ -48,7 +50,7 @@ class LogServiceTest extends \PHPUnit\Framework\TestCase
     {
         parent::setUp();
 
-        $entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $entityManager = Shopware()->Container()->get(ModelManager::class);
 
         $this->entityManager = $entityManager;
         $this->logService = new LogService(

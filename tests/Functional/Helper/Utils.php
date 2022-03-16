@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,14 +27,18 @@
 namespace Shopware\Tests\Functional\Helper;
 
 use Closure;
+use RuntimeException;
 
 class Utils
 {
-    public static function bindAndCall(callable $fn, $newThis, $args = [], $bindClass = null)
+    /**
+     * @return array<mixed>|callable|null
+     */
+    public static function bindAndCall(Closure $fn, object $newThis)
     {
-        $func = Closure::bind($fn, $newThis, $bindClass ?: \get_class($newThis));
-        if ($args) {
-            return \call_user_func_array($func, $args);
+        $func = Closure::bind($fn, $newThis, \get_class($newThis));
+        if (!$func instanceof Closure) {
+            throw new RuntimeException('Could not create closure function');
         }
 
         return $func(); //faster
@@ -41,24 +47,19 @@ class Utils
     /**
      * Changes a property value of an object. (hijack because you can also change private/protected properties)
      *
-     * @param object $object
-     * @param string $propertyName
+     * @param mixed|null $newValue
      */
-    public static function hijackProperty($object, $propertyName, $newValue)
+    public static function hijackProperty(object $object, string $propertyName, $newValue): void
     {
         self::bindAndCall(function () use ($object, $propertyName, $newValue) {
             $object->$propertyName = $newValue;
         }, $object);
     }
 
-    public static function hijackMethod($object, $methodName, array $arguments = [])
-    {
-        return self::bindAndCall(function () use ($object, $methodName, $arguments) {
-            return \call_user_func_array([$object, $methodName], $arguments);
-        }, $object);
-    }
-
-    public static function hijackAndReadProperty($object, $propertyName)
+    /**
+     * @return array<mixed>|callable|null
+     */
+    public static function hijackAndReadProperty(object $object, string $propertyName)
     {
         return self::bindAndCall(function () use ($object, $propertyName) {
             return $object->$propertyName;

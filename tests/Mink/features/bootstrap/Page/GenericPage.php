@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -57,9 +59,9 @@ class GenericPage extends Page implements HelperSelectorInterface
      * If null arguments are provided, no next page link is expected, and validation
      * will fail if one is found
      *
-     * @param string $locator
-     * @param string $path
-     * @param array  $query
+     * @param string      $locator
+     * @param string|null $path
+     * @param array       $query
      */
     public function checkLink($locator, $path = null, $query = [])
     {
@@ -76,8 +78,8 @@ class GenericPage extends Page implements HelperSelectorInterface
         $link = $elements[$locator]->getAttribute('href');
         $linkParts = parse_url($link);
 
-        $expectedUrl = rtrim($this->getParameter('base_url'), '/') . '/' . rtrim($path, '/');
-        if (strpos($expectedUrl, '?') === false) {
+        $expectedUrl = rtrim($this->getParameter('base_url') ?? '', '/') . '/' . rtrim($path ?? '', '/');
+        if (!str_contains($expectedUrl, '?')) {
             $expectedUrl .= '/';
         }
         if (!empty($query)) {
@@ -106,7 +108,7 @@ class GenericPage extends Page implements HelperSelectorInterface
     {
         $elements = Helper::findElements($this, ['robots']);
         $robotsValue = $elements['robots']->getAttribute('content');
-        if ($robotsValue === '') {
+        if (empty($robotsValue)) {
             Helper::throwException(['Missing robots data']);
         }
         $robotsParts = explode(',', $robotsValue);

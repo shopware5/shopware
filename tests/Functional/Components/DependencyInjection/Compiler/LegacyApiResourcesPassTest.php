@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,17 +28,14 @@ namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Api\Resource\Article;
-use Shopware\Tests\Functional\Helper\Utils;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Shopware\Tests\TestReflectionHelper;
 
 class LegacyApiResourcesPassTest extends TestCase
 {
     public function testLegacyServiceGettingAssigned(): void
     {
         $kernel = Shopware()->Container()->get('kernel');
-
-        /** @var ContainerBuilder $container */
-        $container = Utils::hijackMethod($kernel, 'buildContainer');
+        $container = TestReflectionHelper::getMethod(\get_class($kernel), 'buildContainer')->invoke($kernel);
 
         $container
             ->register('shopware.api.mynewresource')

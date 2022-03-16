@@ -53,7 +53,7 @@ class MediaResolverTest extends TestCase
 
     public function testResolve(): void
     {
-        $id = (int) Shopware()->Models()->getConnection()->fetchColumn('SELECT id from s_media LIMIT 1');
+        $id = (string) Shopware()->Models()->getConnection()->fetchColumn('SELECT id from s_media LIMIT 1');
 
         $this->service->add($id, $this->field);
         $this->service->resolve();

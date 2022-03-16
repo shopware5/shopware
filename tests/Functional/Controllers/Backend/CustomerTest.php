@@ -131,8 +131,8 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEquals($debit->getId(), $dummyData->getPaymentId());
         static::assertCount(1, $dummyData->getPaymentData()->toArray());
 
-        /** @var PaymentData $paymentData */
-        $paymentData = array_shift($dummyData->getPaymentData()->toArray());
+        $paymentDataArray = $dummyData->getPaymentData()->toArray();
+        $paymentData = array_shift($paymentDataArray);
         static::assertInstanceOf(PaymentData::class, $paymentData);
         static::assertEquals('Account Holder Name', $paymentData->getAccountHolder());
         static::assertEquals('1234567890', $paymentData->getAccountNumber());

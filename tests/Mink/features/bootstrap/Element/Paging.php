@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -91,8 +93,6 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
             if ($this->noElement('next', false)) {
                 $message = sprintf('Page %d was not found!', $page);
                 Helper::throwException($message);
-
-                return;
             }
             $this->moveDirection('next');
         }

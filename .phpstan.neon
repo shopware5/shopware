@@ -1,6 +1,12 @@
 includes:
 	- .phpstan-baseline.neon
 
+services:
+    -
+        class: \Shopware\Tests\PHPStan\Extension\SmartyClassDynamicReturnTypeExtension
+        tags:
+                - phpstan.broker.dynamicMethodReturnTypeExtension
+
 parameters:
     level: 8
     inferPrivatePropertyTypeFromConstructor: true
@@ -168,3 +174,6 @@ parameters:
             paths:
                 - engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
                 - engine/Shopware/Commands/ThemeCreateCommand.php
+        - # For testing purposes the constructor of the price struct gets strings
+            message: '#Parameter .* of class Shopware\\Components\\Cart\\Struct\\Price constructor expects float.*string given#'
+            path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php

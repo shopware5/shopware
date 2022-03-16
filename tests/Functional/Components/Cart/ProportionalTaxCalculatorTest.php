@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -44,7 +46,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         $this->taxCalculator = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator');
     }
 
-    public function testDifferentTaxes()
+    public function testDifferentTaxes(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -54,7 +56,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         static::assertTrue($this->taxCalculator->hasDifferentTaxes($basket));
     }
 
-    public function testDifferentTaxesWithOneTax()
+    public function testDifferentTaxesWithOneTax(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -63,7 +65,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         static::assertFalse($this->taxCalculator->hasDifferentTaxes($basket));
     }
 
-    public function testAbsoluteCalculationWithOneTax()
+    public function testAbsoluteCalculationWithOneTax(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -79,7 +81,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         static::assertEquals(1.5966386554622, $calculatedProportional[0]->getTax());
     }
 
-    public function testAbsoluteCalculation()
+    public function testAbsoluteCalculation(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -103,7 +105,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         static::assertEquals(0.34448685884779, $calculatedProportional[1]->getTax());
     }
 
-    public function testPercentCalculationWithOneTax()
+    public function testPercentCalculationWithOneTax(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -118,7 +120,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         static::assertEquals(19, $calculatedProportional['1f0e3dad99908345f7439f8ffabdffc4']->getTaxRate());
     }
 
-    public function testPercentCalculation()
+    public function testPercentCalculation(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -138,7 +140,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         static::assertEquals(7, $calculatedProportional['8f14e45fceea167a5a36dedd4bea2543']->getTaxRate());
     }
 
-    public function testNetAbsoluteCalculation()
+    public function testNetAbsoluteCalculation(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -154,7 +156,7 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         }
     }
 
-    public function testNetPercentCalculation()
+    public function testNetPercentCalculation(): void
     {
         $basket = [
             new Price(30, 25.21, 19, 4.79),
@@ -177,8 +179,9 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
     {
         $messageTemplate = 'The %s with value: %s is NAN';
 
-        /** @var Price $result */
-        $result = array_shift($this->taxCalculator->calculate(0, [$price], false));
+        $prices = $this->taxCalculator->calculate(0, [$price], false);
+        $result = array_shift($prices);
+        static::assertInstanceOf(Price::class, $result);
 
         static::assertFalse(
             is_nan($result->getPrice()),
@@ -196,7 +199,10 @@ class ProportionalTaxCalculatorTest extends Enlight_Components_Test_TestCase
         );
     }
 
-    public function calculate_thereIsNoPriceWith_NAN_test_dataProvider()
+    /**
+     * @return array<array<Price>>
+     */
+    public function calculate_thereIsNoPriceWith_NAN_test_dataProvider(): array
     {
         return [
             [new Price(0, 0, 6, 0)],
