@@ -195,7 +195,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
         }
 
         $section = explode($config->getSectionSeparator(), $config->getSection());
-        if ($section === false) {
+        if (!\is_array($section)) {
             return $this;
         }
 
@@ -294,7 +294,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     public function delete(Enlight_Config $config, $fields = null, $deleteDirty = false)
     {
         $section = explode($config->getSectionSeparator(), $config->getSection());
-        if ($section === false) {
+        if (!\is_array($section)) {
             return $this;
         }
 

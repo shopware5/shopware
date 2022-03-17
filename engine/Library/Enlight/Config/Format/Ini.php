@@ -31,17 +31,19 @@
  */
 class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
 {
+    private const EXTENDS_MARKER = ';extends';
+
     /**
      * String that separates nesting levels of configuration data identifiers
      *
-     * @var string
+     * @var non-empty-string
      */
     protected $_nestSeparator = '.';
 
     /**
      * String that separates the parent section name
      *
-     * @var string
+     * @var non-empty-string
      */
     protected $_sectionSeparator = ':';
 
@@ -110,7 +112,11 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
                 $allowModifications = (bool) $options['allowModifications'];
             }
             if (isset($options['nestSeparator'])) {
-                $this->_nestSeparator = (string) $options['nestSeparator'];
+                $nestSeparator = (string) $options['nestSeparator'];
+                if ($nestSeparator === '') {
+                    throw new UnexpectedValueException('nestSeparator must be a non-empty string');
+                }
+                $this->_nestSeparator = $nestSeparator;
             }
             if (isset($options['skipExtends'])) {
                 $this->_skipExtends = (bool) $options['skipExtends'];
@@ -138,7 +144,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
             $dataArray = [];
             foreach ($section as $sectionName) {
                 if (!isset($iniArray[$sectionName])) {
-                    throw new Enlight_Config_Exception("Section '$sectionName' cannot be found in $filename");
+                    throw new Enlight_Config_Exception(sprintf("Section '%s' cannot be found in %s", $sectionName, $filename));
                 }
                 $dataArray = $this->_arrayMergeRecursive($this->_processSection($iniArray, $sectionName), $dataArray);
             }
@@ -192,7 +198,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
         $iniArray = [];
         foreach ($loaded as $key => $data) {
             $pieces = explode($this->_sectionSeparator, $key);
-            if ($pieces === false) {
+            if (!\is_array($pieces)) {
                 continue;
             }
 
@@ -204,11 +210,11 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
 
                 case 2:
                     $extendedSection = trim($pieces[1]);
-                    $iniArray[$thisSection] = array_merge([';extends' => $extendedSection], $data);
+                    $iniArray[$thisSection] = array_merge([self::EXTENDS_MARKER => $extendedSection], $data);
                     break;
 
                 default:
-                    throw new Enlight_Config_Exception("Section '$thisSection' may not extend multiple sections in $filename");
+                    throw new Enlight_Config_Exception(sprintf("Section '%s' may not extend multiple sections in %s", $thisSection, $filename));
             }
         }
 
@@ -233,7 +239,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
         $thisSection = $iniArray[$section];
 
         foreach ($thisSection as $key => $value) {
-            if (strtolower($key) == ';extends') {
+            if (strtolower($key) === self::EXTENDS_MARKER) {
                 if (isset($iniArray[$value])) {
                     $this->_assertValidExtend($section, $value);
 
@@ -241,7 +247,7 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
                         $config = $this->_processSection($iniArray, $value, $config);
                     }
                 } else {
-                    throw new Enlight_Config_Exception("Parent section '$section' cannot be found");
+                    throw new Enlight_Config_Exception(sprintf("Parent section '%s' cannot be found", $section));
                 }
             } else {
                 $config = $this->_processKey($config, $key, $value);
@@ -265,9 +271,9 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
      */
     protected function _processKey($config, $key, $value)
     {
-        if (strpos($key, $this->_nestSeparator) !== false) {
+        if (str_contains($key, $this->_nestSeparator)) {
             $pieces = explode($this->_nestSeparator, $key, 2);
-            if ($pieces !== false && \strlen($pieces[0]) && \strlen($pieces[1])) {
+            if ($pieces !== false && $pieces[0] !== '' && $pieces[1] !== '') {
                 if (!isset($config[$pieces[0]])) {
                     if ($pieces[0] === '0' && !empty($config)) {
                         // convert the current values in $config into an array
@@ -276,11 +282,11 @@ class Enlight_Config_Format_Ini extends Enlight_Config_BaseConfig
                         $config[$pieces[0]] = [];
                     }
                 } elseif (!\is_array($config[$pieces[0]])) {
-                    throw new Enlight_Config_Exception("Cannot create sub-key for '{$pieces[0]}' as key already exists");
+                    throw new Enlight_Config_Exception(sprintf("Cannot create sub-key for '%s' as key already exists", $pieces[0]));
                 }
                 $config[$pieces[0]] = $this->_processKey($config[$pieces[0]], $pieces[1], $value);
             } else {
-                throw new Enlight_Config_Exception("Invalid key '$key'");
+                throw new Enlight_Config_Exception(sprintf("Invalid key '%s'", $key));
             }
         } else {
             $config[$key] = $value;

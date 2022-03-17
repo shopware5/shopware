@@ -46,7 +46,7 @@ class DbAdapter extends Enlight_Config_Adapter_DbTable
     private function overwriteWithDefaultShopValues(Enlight_Config $config): void
     {
         $section = explode($config->getSectionSeparator(), $config->getSection());
-        if ($section === false) {
+        if (!\is_array($section)) {
             return;
         }
 

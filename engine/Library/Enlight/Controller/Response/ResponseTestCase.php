@@ -118,7 +118,7 @@ class Enlight_Controller_Response_ResponseTestCase extends Enlight_Controller_Re
      */
     public function sendResponse()
     {
-        $headers = $this->sendHeaders();
+        $headers = $this->getHeaders();
         $content = implode("\n", $headers) . "\n\n";
 
         if ($this->isException() && $this->renderExceptions()) {

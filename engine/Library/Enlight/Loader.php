@@ -52,6 +52,8 @@ class Enlight_Loader
      */
     public const POSITION_REMOVE = 'remove';
 
+    private const COLON_PATH_SEPARATOR = ':';
+
     /**
      * @var array Contains all registered namespaces
      */
@@ -70,7 +72,7 @@ class Enlight_Loader
      * by the method loadFile.
      *
      * @param string|array $class
-     * @param string       $path
+     * @param string|null  $path
      *
      * @throws Enlight_Exception
      *
@@ -136,7 +138,7 @@ class Enlight_Loader
      *
      * @param string $path
      *
-     * @return string|bool
+     * @return string|false
      */
     public static function isReadable($path)
     {
@@ -210,10 +212,10 @@ class Enlight_Loader
     public static function explodeIncludePath($path = null)
     {
         if ($path === null) {
-            $path = get_include_path();
+            $path = (string) get_include_path();
         }
 
-        if (PATH_SEPARATOR == ':') {
+        if (PATH_SEPARATOR === self::COLON_PATH_SEPARATOR) {
             // On *nix systems, include_paths which include paths with a stream
             // schema cannot be safely explode'd, so we have to be a bit more
             // intelligent in the approach.
@@ -229,24 +231,24 @@ class Enlight_Loader
      * Returns the path of the given class name. Iterates all namespaces
      * and checks if the namespace contains the class name.
      * After the namespace is founded the namespace is split by the separator
-     * and concated with the DIRECTORY_SEPARATOR constant.
+     * and concatenated with the DIRECTORY_SEPARATOR constant.
      * Last is to consider whether the path is readable.
      *
      * @param string $class
      *
-     * @return string|void
+     * @return string|null
      */
     public function getClassPath($class)
     {
         foreach ($this->namespaces as $namespace) {
-            if (strpos($class, $namespace['namespace']) !== 0) {
+            if (!str_starts_with($class, $namespace['namespace'])) {
                 continue;
             }
             $path = substr($class, \strlen($namespace['namespace']) + 1);
             $path = str_replace(str_split($namespace['separator']), DIRECTORY_SEPARATOR, $path);
             $path = $namespace['path'] . $path . $namespace['extension'];
             $path = self::isReadable($path);
-            if ($path !== false) {
+            if (\is_string($path)) {
                 return $path;
             }
         }
@@ -278,12 +280,14 @@ class Enlight_Loader
      *
      * @return Enlight_Loader
      */
-    public function registerNamespace($namespace, $path,
-                                        $separator = self::DEFAULT_SEPARATOR,
-                                        $extension = self::DEFAULT_EXTENSION,
-                                        $position = self::POSITION_APPEND)
-    {
-        $namespace = [
+    public function registerNamespace(
+        $namespace,
+        $path,
+        $separator = self::DEFAULT_SEPARATOR,
+        $extension = self::DEFAULT_EXTENSION,
+        $position = self::POSITION_APPEND
+    ) {
+        $namespaceArray = [
             'namespace' => $namespace,
             'path' => $path,
             'separator' => $separator,
@@ -292,10 +296,10 @@ class Enlight_Loader
 
         switch ($position) {
             case self::POSITION_APPEND:
-                array_push($this->namespaces, $namespace);
+                $this->namespaces[] = $namespaceArray;
                 break;
             case self::POSITION_PREPEND:
-                array_unshift($this->namespaces, $namespace);
+                array_unshift($this->namespaces, $namespaceArray);
                 break;
             default:
                 break;
@@ -317,9 +321,6 @@ class Enlight_Loader
      */
     public static function addIncludePath($path, $position = self::POSITION_APPEND)
     {
-        if (\is_array($path)) {
-            return (bool) array_map(__METHOD__, $path);
-        }
         if (!\is_string($path) || !file_exists($path) || !is_dir($path)) {
             throw new Enlight_Exception('Path "' . $path . '" is not a dir failure');
         }
@@ -332,7 +333,7 @@ class Enlight_Loader
 
         switch ($position) {
             case self::POSITION_APPEND:
-                array_push($paths, $path);
+                $paths[] = $path;
                 break;
             case self::POSITION_PREPEND:
                 array_unshift($paths, $path);
@@ -361,7 +362,7 @@ class Enlight_Loader
         }
 
         $old = set_include_path($path);
-        if ($old !== $path && (!$old || $old == get_include_path())) {
+        if ($old !== $path && (!$old || $old === get_include_path())) {
             throw new Enlight_Exception('Include path "' . $path . '" could not be set failure');
         }
 

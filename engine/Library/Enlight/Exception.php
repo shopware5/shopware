@@ -59,7 +59,7 @@ class Enlight_Exception extends Exception
         parent::__construct($message, $code, $previous);
 
         if (\in_array($code, [self::CLASS_NOT_FOUND, self::METHOD_NOT_FOUND, self::PROPERTY_NOT_FOUND])) {
-            $trace = debug_backtrace(false);
+            $trace = debug_backtrace(0);
             foreach ($trace as $i => $var) {
                 if (!$i || $var['function'] == '__call' || !isset($var['line'])) {
                     unset($trace[$i]);

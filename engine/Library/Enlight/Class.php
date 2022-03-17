@@ -135,7 +135,7 @@ abstract class Enlight_Class
      *
      * @throws \Enlight_Exception
      *
-     * @return string
+     * @return class-string
      */
     public static function getClassName($class = null)
     {
@@ -146,10 +146,11 @@ abstract class Enlight_Class
         if (\is_object($class)) {
             $class = \get_class($class);
         } elseif (!class_exists($class)) {
-            throw new Enlight_Exception('Class ' . $class . ' does not exist and could not be loaded');
+            throw new Enlight_Exception(sprintf('Class "%s" does not exist and could not be loaded', $class));
         }
 
-        if (\in_array('Enlight_Hook', class_implements($class))) {
+        $classImplements = class_implements($class);
+        if (\is_array($classImplements) && \in_array(Enlight_Hook::class, $classImplements, true)) {
             $class = Shopware()->Hooks()->getProxy($class);
         }
 
@@ -160,8 +161,8 @@ abstract class Enlight_Class
      * Returns a class instance. If the class is already initialed the existing instance will returned.
      * Otherwise the class will be initialed with the given arguments.
      *
-     * @param string $class
-     * @param array  $args
+     * @param class-string $class
+     * @param array        $args
      *
      * @throws \ReflectionException
      *

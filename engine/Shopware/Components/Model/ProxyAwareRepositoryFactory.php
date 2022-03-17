@@ -49,10 +49,15 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
     }
 
     /**
-     * {@inheritdoc}
+     * @template TEntityClass of object
+     *
+     * @param class-string<TEntityClass> $entityName
+     *
+     * @return ObjectRepository<TEntityClass>
      */
     public function getRepository(EntityManagerInterface $entityManager, $entityName)
     {
+        /** @var class-string<TEntityClass> $entityName */
         $entityName = ltrim($entityName, '\\');
         $repositoryHash = $entityManager->getClassMetadata($entityName)->getName() . spl_object_hash($entityManager);
 
@@ -64,20 +69,23 @@ class ProxyAwareRepositoryFactory implements RepositoryFactory
     }
 
     /**
-     * @param string $entityName
+     * @template TEntityClass of object
      *
-     * @return ObjectRepository
+     * @param class-string<TEntityClass> $entityName
+     *
+     * @return ObjectRepository<TEntityClass>
      */
     private function createRepository(EntityManagerInterface $entityManager, $entityName)
     {
         $metadata = $entityManager->getClassMetadata($entityName);
 
+        /** @var class-string<ObjectRepository<TEntityClass>>|null $repositoryClassName */
         $repositoryClassName = $metadata->customRepositoryClassName;
         if ($repositoryClassName === null) {
             $repositoryClassName = $entityManager->getConfiguration()->getDefaultRepositoryClassName();
         }
 
-        /** @var class-string<ObjectRepository> $repositoryClassName */
+        /** @var class-string<ObjectRepository<TEntityClass>> $repositoryClassName */
         $repositoryClassName = $this->hookManager->getProxy($repositoryClassName);
 
         return new $repositoryClassName($entityManager, $metadata);

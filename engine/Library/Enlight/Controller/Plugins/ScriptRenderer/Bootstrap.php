@@ -175,7 +175,9 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $count = \count($templateNames);
         if ($count === 0) {
             return null;
-        } elseif ($count === 1) {
+        }
+
+        if ($count === 1) {
             return $templateNames[0];
         }
 

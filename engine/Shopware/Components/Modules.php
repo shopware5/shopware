@@ -70,16 +70,17 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
             $name = substr($name, 1);
         }
         if ($name !== 'RewriteTable') {
-            $name = 's' . ucfirst(strtolower($name));
+            $className = 's' . ucfirst(strtolower($name));
         } else {
-            $name = 's' . $name;
+            $className = 's' . $name;
         }
 
-        if (!isset($this->modules_container[$name])) {
-            $this->loadModule($name);
+        /** @var class-string $className */
+        if (!isset($this->modules_container[$className])) {
+            $this->loadModule($className);
         }
 
-        return $this->modules_container[$name];
+        return $this->modules_container[$className];
     }
 
     /**
@@ -232,6 +233,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
         }
 
         $this->modules_container[$name] = null;
+        /** @var class-string $name */
         $name = basename($name);
 
         if ($name === 'sSystem') {
