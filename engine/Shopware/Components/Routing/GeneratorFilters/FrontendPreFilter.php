@@ -26,6 +26,7 @@ namespace Shopware\Components\Routing\GeneratorFilters;
 
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\PreFilterInterface;
+use UnexpectedValueException;
 
 class FrontendPreFilter implements PreFilterInterface
 {
@@ -34,6 +35,10 @@ class FrontendPreFilter implements PreFilterInterface
      */
     public function preFilter($params, Context $context)
     {
+        if (!\is_array($params)) {
+            throw new UnexpectedValueException('Parameter "params" needs to be an array at this point');
+        }
+
         if (isset($params['sDetails'], $params['action']) && $params['action'] === 'detail') {
             $params['sArticle'] = $params['sDetails'];
             unset($params['sDetails']);

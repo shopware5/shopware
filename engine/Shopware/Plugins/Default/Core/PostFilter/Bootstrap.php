@@ -81,7 +81,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
 
         $headers = $response->getHeaders();
         foreach ($headers as $header) {
-            if ($header['name'] === 'Content-Type' && strpos($header['value'], 'application/javascript') === 0) {
+            if ($header['name'] === 'Content-Type' && str_starts_with($header['value'], 'application/javascript')) {
                 $source = str_replace(["\r\n", "\r"], "\n", $source);
                 $expressions = [
                     // Remove comments
@@ -91,9 +91,8 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
                     '#^\s+#ms' => '',
                     //'#\s+$#ms' => '',
                 ];
-                $source = preg_replace(array_keys($expressions), array_values($expressions), $source);
 
-                return $source;
+                return preg_replace(array_keys($expressions), array_values($expressions), $source);
             }
         }
         if (!\in_array($request->getModuleName(), ['frontend', 'widgets'], true)) {
@@ -170,14 +169,14 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         if (!empty($this->backLinkWhiteList)) {
             if ($src[1] === 'a' && preg_match('#^https?://#', $src[3])) {
                 $host = @parse_url($src[3], PHP_URL_HOST);
-                if (!strstr($src[0], 'rel=') && !\in_array($host, $this->backLinkWhiteList)) {
+                if (!str_contains($src[0], 'rel=') && !\in_array($host, $this->backLinkWhiteList)) {
                     $src[0] = rtrim($src[0], '>') . ' rel="nofollow noopener">';
                 }
             }
         }
 
         $link = $src[3];
-        if (strpos($link, '{media') === 0) {
+        if (str_starts_with($link, '{media')) {
             $link = $this->handleMediaPlugin($link);
         } else {
             $anchorPart = '';
@@ -186,11 +185,11 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
             }
 
             // If the link begins with the baseFile (default shopware.php) we always want to rewrite the link
-            if (strpos($link, self::$baseFile) === 0) {
+            if (str_starts_with($link, self::$baseFile)) {
                 $link = $this->rewriteLink($link);
             }
 
-            if (strpos($link, 'www.') === 0) {
+            if (str_starts_with($link, 'www.')) {
                 $link = 'http://' . $link;
             }
             if (!preg_match('#^[a-z]+:|^\#|^/#', $link)) {
@@ -232,19 +231,24 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
      */
     protected function filterUrls($source)
     {
-        /** @var RouterInterface $router */
         $router = $this->get(RouterInterface::class);
         $baseFile = preg_quote($router->getContext()->getBaseFile(), '#');
         $regex = '#<(a|form|iframe|link|img)[^<>]*(href|src|action)="(' . $baseFile . '[^"]*)".*>#Umsi';
         if (preg_match_all($regex, $source, $matches) > 0) {
             $urls = array_map('htmlspecialchars_decode', $matches[3]);
-            $this->urls = array_combine($matches[3], $router->generateList($urls));
+            $combinedUrls = array_combine($matches[3], $router->generateList($urls));
+            if (\is_array($combinedUrls)) {
+                $this->urls = $combinedUrls;
+            }
         }
         // Rewrite urls in rss and atom feeds
         $regex = '#<(guid|link|id)>(' . $baseFile . '[^<]*)</(guid|link|id)>#Umsi';
         if (preg_match_all($regex, $source, $matches) > 0) {
             $urls = array_map('htmlspecialchars_decode', $matches[2]);
             $urls = array_combine($matches[2], $router->generateList($urls));
+            if (!\is_array($urls)) {
+                throw new RuntimeException('Arrays could not be combined');
+            }
             $source = preg_replace_callback($regex, function ($found) use (&$urls) {
                 return '<' . $found[1] . '>' . $urls[$found[2]] . '</' . $found[3] . '>';
             }, $source);
@@ -311,8 +315,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
         // load plugin to have access to the compiler
         Shopware()->Template()->loadPlugin('Smarty_Compiler_Media');
 
-        $compiler = new Smarty_Compiler_Media();
-        $attributes = $compiler->parseAttributes($attributes);
+        $attributes = (new Smarty_Compiler_Media())->parseAttributes($attributes);
 
         return $attributes['path'];
     }

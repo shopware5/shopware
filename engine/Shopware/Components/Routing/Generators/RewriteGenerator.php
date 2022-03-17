@@ -102,31 +102,28 @@ class RewriteGenerator implements GeneratorListInterface
         return $url;
     }
 
-    /**
-     * @return array
-     */
     public function generateList(array $list, Context $context)
     {
-        $orgQueryList = array_map(function ($params) use ($context) {
+        $orgQueryList = array_filter(array_map(function ($params) use ($context) {
             return $this->preAssemble($params, $context);
-        }, $list);
+        }, $list));
 
-        if (\count($orgQueryList) === 0 || max($orgQueryList) === false) {
-            return $list;
+        if (\count($orgQueryList) === 0) {
+            return [];
         }
 
-        $orgPathList = array_map(function ($orgQuery) {
+        $orgPathList = array_map(function (array $orgQuery) {
             return http_build_query($orgQuery, '', '&');
         }, $orgQueryList);
 
-        $urls = $this->rewriteList($orgPathList, $context);
-        if (empty($urls) || max($urls) === false) {
-            return $list;
+        $urls = array_filter($this->rewriteList($orgPathList, $context));
+        if (\count($urls) === 0) {
+            return [];
         }
 
         //Add query / strtolower
         array_walk($urls, function (&$url, $key) use ($context, $list, $orgQueryList) {
-            if ($url !== false) {
+            if (\is_string($url)) {
                 if ($context->isUrlToLower()) {
                     $url = strtolower($url);
                 }
@@ -153,9 +150,9 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @param array $query
+     * @param array<string, mixed> $query
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function getOrgQueryArray($query)
     {
@@ -230,7 +227,7 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @return array|bool
+     * @return array<string, mixed>|false
      */
     private function preAssemble(array $params, Context $context)
     {
@@ -252,7 +249,7 @@ class RewriteGenerator implements GeneratorListInterface
     /**
      * @throws \Doctrine\DBAL\DBALException
      *
-     * @return array
+     * @return array<string|false>
      */
     private function rewriteList(array $list, Context $context)
     {
@@ -283,9 +280,9 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @return string
+     * @param array<string, mixed> $query
      */
-    private function rewriteQuery(array $query)
+    private function rewriteQuery(array $query): string
     {
         $tmp = $this->queryAliasMapper->replaceLongParams($query);
 

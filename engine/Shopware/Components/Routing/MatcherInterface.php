@@ -29,7 +29,7 @@ interface MatcherInterface
     /**
      * @param string $pathInfo
      *
-     * @return string|array|false
+     * @return string|array<string, mixed>|false
      */
     public function match($pathInfo, Context $context);
 }

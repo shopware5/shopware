@@ -38,21 +38,23 @@ namespace Shopware\Components\Routing;
 interface RouterInterface
 {
     /**
-     * @param array[]|string[] $list
+     * @param array<array<string, mixed>>|array<string> $list
      *
-     * @return string[]|false[]
+     * @return array<string>
      */
     public function generateList(array $list, Context $context = null);
 
     /**
-     * @param array|string $userParams
+     * @param array<string, mixed> $userParams
      *
-     * @return string|false
+     * @return string
      */
     public function assemble($userParams = [], Context $context = null);
 
     /**
      * Switch the context
+     *
+     * @return void
      */
     public function setContext(Context $context);
 
@@ -64,7 +66,7 @@ interface RouterInterface
     /**
      * @param string $pathInfo
      *
-     * @return array|false
+     * @return array<string, mixed>|false
      */
     public function match($pathInfo, Context $context = null);
 }

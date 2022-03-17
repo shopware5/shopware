@@ -36,14 +36,14 @@ class DefaultMatcher implements MatcherInterface
     protected $dispatcher;
 
     /**
-     * @var string
+     * @var non-empty-string
      */
-    protected $separator;
+    protected $separator = '/';
 
     /**
-     * @param string $separator
+     * @param non-empty-string $separator
      */
-    public function __construct(EnlightDispatcher $dispatcher, $separator = '/')
+    public function __construct(EnlightDispatcher $dispatcher, string $separator = '/')
     {
         $this->dispatcher = $dispatcher;
         $this->separator = $separator;

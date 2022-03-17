@@ -27,7 +27,9 @@ namespace Shopware\Components\Routing;
 interface GeneratorInterface
 {
     /**
-     * @return array|string|false
+     * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>|string|false
      */
     public function generate(array $params, Context $context);
 }

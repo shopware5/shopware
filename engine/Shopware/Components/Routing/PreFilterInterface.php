@@ -27,9 +27,9 @@ namespace Shopware\Components\Routing;
 interface PreFilterInterface
 {
     /**
-     * @param array|string $params
+     * @param array<string, mixed>|string $params
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function preFilter($params, Context $context);
 }
