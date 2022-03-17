@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,12 +26,13 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkEncryption;
 
-class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
+class BenchmarkEncryptionTest extends TestCase
 {
-    public function testCorrectSignatureIsWorking()
+    public function testCorrectSignatureIsWorking(): void
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
@@ -39,7 +42,7 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
         static::assertTrue($encryption->isSignatureValid($message, $signature));
     }
 
-    public function testWrongSignatureIsFailing()
+    public function testWrongSignatureIsFailing(): void
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
@@ -49,7 +52,7 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
         static::assertFalse($encryption->isSignatureValid($message, $signature));
     }
 
-    public function testSignatureIsSupported()
+    public function testSignatureIsSupported(): void
     {
         $encryption = new BenchmarkEncryption(__DIR__ . '/fixtures/public_test_key.pem');
 
@@ -58,15 +61,11 @@ class BenchmarkEncryptionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Generates a signature for a given message using the private key
-     *
-     * @param string $message
-     *
-     * @return string
      */
-    private function sign($message)
+    private function sign(string $message): string
     {
         $signature = '';
-        if (false === $privateKeyResource = openssl_pkey_get_private('file://' . __DIR__ . '/fixtures/private_test_key.pem', null)) {
+        if (false === $privateKeyResource = openssl_pkey_get_private('file://' . __DIR__ . '/fixtures/private_test_key.pem', '')) {
             while ($errors[] = openssl_error_string()) {
             }
             throw new RuntimeException(sprintf("Could not import private key: \n%s", implode("\n", $errors)));

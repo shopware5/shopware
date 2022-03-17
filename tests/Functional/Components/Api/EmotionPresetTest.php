@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,31 +27,31 @@
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\PrivilegeException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Models\Emotion\Preset;
 
 /**
  * @group EmotionPreset
  */
-class EmotionPresetTest extends \PHPUnit\Framework\TestCase
+class EmotionPresetTest extends TestCase
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var EmotionPreset
-     */
-    private $resource;
+    private EmotionPreset $resource;
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->connection->beginTransaction();
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
-        $this->resource = Shopware()->Container()->get(\Shopware\Components\Api\Resource\EmotionPreset::class);
+        $this->resource = Shopware()->Container()->get(EmotionPreset::class);
         parent::setUp();
     }
 
@@ -59,44 +61,44 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         parent::tearDown();
     }
 
-    public function testCreate()
+    public function testCreate(): void
     {
         $this->resource->create(['name' => 'test', 'presetData' => '[]']);
         static::assertCount(1, $this->connection->fetchAll('SELECT * FROM s_emotion_presets'));
     }
 
-    public function testCreateReturnsPersistedEntity()
+    public function testCreateReturnsPersistedEntity(): void
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]']);
         static::assertInstanceOf(Preset::class, $preset);
         static::assertNotNull($preset->getId());
     }
 
-    public function testPresetDataIsRequiredOnCreate()
+    public function testPresetDataIsRequiredOnCreate(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->create(['name' => 'Test']);
     }
 
-    public function testPresetNameIsRequiredOnCreate()
+    public function testPresetNameIsRequiredOnCreate(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
+        $this->expectException(ParameterMissingException::class);
         $this->resource->create(['presetData' => '[]']);
     }
 
-    public function testPresetNameCannotBeEmpty()
+    public function testPresetNameCannotBeEmpty(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $this->resource->create(['name' => '', 'presetData' => '[]']);
     }
 
-    public function testPresetDataCanNotBeEmpty()
+    public function testPresetDataCanNotBeEmpty(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ValidationException');
+        $this->expectException(ValidationException::class);
         $this->resource->create(['name' => 'test', 'presetData' => '']);
     }
 
-    public function testListContainsRequiredPlugins()
+    public function testListContainsRequiredPlugins(): void
     {
         $this->insertPreset(
             [
@@ -108,7 +110,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $preset = array_shift($this->resource->getList());
+        $presets = $this->resource->getList();
+        $preset = array_shift($presets);
+        static::assertIsArray($preset);
         $preset = $this->removeIds($preset);
 
         static::assertEquals([
@@ -139,7 +143,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         ], $preset);
     }
 
-    public function testListContainsRequiredPluginsWithLocalPlugins()
+    public function testListContainsRequiredPluginsWithLocalPlugins(): void
     {
         $this->insertPreset(
             [
@@ -153,7 +157,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             [['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '2.0.0', 'installation_date' => '2017-01-01', 'active' => 1]]
         );
 
-        $preset = array_shift($this->resource->getList());
+        $presets = $this->resource->getList();
+        $preset = array_shift($presets);
+        static::assertIsArray($preset);
         $preset = $this->removeIds($preset);
 
         static::assertEquals([
@@ -184,7 +190,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         ], $preset);
     }
 
-    public function testPluginWithExactSameVersion()
+    public function testPluginWithExactSameVersion(): void
     {
         $this->insertPreset(
             [
@@ -198,7 +204,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             [['name' => 'SwagLiveShopping', 'label' => 'Live shopping', 'version' => '2.0.0', 'installation_date' => '2017-01-01', 'active' => 1]]
         );
 
-        $preset = array_shift($this->resource->getList());
+        $presets = $this->resource->getList();
+        $preset = array_shift($presets);
+        static::assertIsArray($preset);
         $preset = $this->removeIds($preset);
 
         static::assertEquals([
@@ -229,14 +237,16 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         ], $preset);
     }
 
-    public function testListItemWithTranslation()
+    public function testListItemWithTranslation(): void
     {
         $this->insertPreset(
             ['name' => 'First preset', 'preset_data' => '[]'],
             [['label' => 'English label', 'description' => 'English description', 'locale' => 'en_GB']]
         );
 
-        $preset = array_shift($this->resource->getList('en_GB'));
+        $presets = $this->resource->getList('en_GB');
+        $preset = array_shift($presets);
+        static::assertIsArray($preset);
         $preset = $this->removeIds($preset);
 
         static::assertSame([
@@ -254,7 +264,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         ], $preset);
     }
 
-    public function testListItemsWithAndWithoutTranslation()
+    public function testListItemsWithAndWithoutTranslation(): void
     {
         $this->insertPreset(
             ['name' => 'First preset', 'preset_data' => '[]'],
@@ -303,7 +313,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function testCreateWithTranslation()
+    public function testCreateWithTranslation(): void
     {
         $preset = $this->resource->create([
             'name' => 'Test preset',
@@ -315,7 +325,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         ]);
 
         static::assertNotNull($preset->getId());
-        $english = array_shift($this->resource->getList('en_GB'));
+        $presets = $this->resource->getList('en_GB');
+        $english = array_shift($presets);
+        static::assertIsArray($english);
 
         $english = $this->removeIds($english);
         static::assertSame([
@@ -332,7 +344,9 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
             'locale' => 'en_GB',
         ], $english);
 
-        $german = array_shift($this->resource->getList('de_DE'));
+        $presets = $this->resource->getList();
+        $german = array_shift($presets);
+        static::assertIsArray($german);
         $german = $this->removeIds($german);
         static::assertSame([
             'name' => 'Test-preset',
@@ -349,7 +363,7 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         ], $german);
     }
 
-    public function testUpdate()
+    public function testUpdate(): void
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => json_encode(['data'])]);
         $updated = $this->resource->update($preset->getId(), ['name' => 'updated']);
@@ -357,57 +371,64 @@ class EmotionPresetTest extends \PHPUnit\Framework\TestCase
         static::assertCount(1, $this->connection->fetchAll("SELECT * FROM s_emotion_presets WHERE name = 'updated'"));
     }
 
-    public function testUpdateWithInvalidId()
+    public function testUpdateWithInvalidId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->update(1000, ['name' => 'test']);
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $preset = $this->resource->create(['name' => 'test', 'presetData' => 'data']);
         $this->resource->delete($preset->getId());
         static::assertEmpty($this->resource->getList());
     }
 
-    public function testValidateExistingName()
+    public function testValidateExistingName(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
         $this->resource->create(['name' => 'test', 'presetData' => '[]']);
         $this->resource->create(['name' => 'test', 'presetData' => '[]']);
     }
 
-    public function testDeleteWithInvalidId()
+    public function testDeleteWithInvalidId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\ParameterMissingException');
-        $this->resource->delete(null);
+        $this->expectException(ParameterMissingException::class);
+        $this->resource->delete(0);
     }
 
-    public function testDeleteWithNoneExistingId()
+    public function testDeleteWithNoneExistingId(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\NotFoundException');
+        $this->expectException(NotFoundException::class);
         $this->resource->delete(1000);
         static::assertEmpty($this->resource->getList());
     }
 
-    public function testDeleteNoneCustomPreset()
+    public function testDeleteNoneCustomPreset(): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\PrivilegeException');
+        $this->expectException(PrivilegeException::class);
         $preset = $this->resource->create(['name' => 'test', 'presetData' => '[]', 'custom' => false]);
         $this->resource->delete($preset->getId());
     }
 
     /**
-     * @return array
+     * @param array<string, mixed> $item
+     *
+     * @return array<string, mixed>
      */
-    private function removeIds(array $item)
+    private function removeIds(array $item): array
     {
         unset($item['id']);
 
         return $item;
     }
 
-    private function insertPreset(array $preset, array $translations = [], array $localPlugins = [])
+    /**
+     * @param array<string, mixed>        $preset
+     * @param array<array<string, mixed>> $translations
+     * @param array<array<string, mixed>> $localPlugins
+     */
+    private function insertPreset(array $preset, array $translations = [], array $localPlugins = []): void
     {
         $this->connection->insert('s_emotion_presets', $preset);
         $id = $this->connection->lastInsertId('s_emotion_presets');

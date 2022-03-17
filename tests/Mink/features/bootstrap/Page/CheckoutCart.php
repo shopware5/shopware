@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -216,24 +218,18 @@ class CheckoutCart extends Page implements \Shopware\Tests\Mink\HelperSelectorIn
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @param string $language
-     *
      * @throws Exception
-     *
-     * @return bool
      */
-    public function verifyPage($language = '')
+    public function verifyPage(string $language = ''): bool
     {
         $info = Helper::getPageInfo($this->getSession(), ['controller', 'action']);
 
-        if (($info['controller'] === 'checkout') && ($info['action'] === 'cart')) {
+        if (\is_array($info) && ($info['controller'] === 'checkout') && ($info['action'] === 'cart')) {
             return Helper::hasNamedLink($this, 'checkout', $language);
         }
 
         $message = ['You are not on the cart!', 'Current URL: ' . $this->getSession()->getCurrentUrl()];
         Helper::throwException($message);
-
-        return false;
     }
 
     /**

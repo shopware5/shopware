@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,19 +27,19 @@
 namespace Shopware\Tests\Functional\Components\DependencyInjection\Compiler;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\DependencyInjection\Container;
-use Shopware\Tests\Functional\Helper\Utils;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Shopware\Tests\TestReflectionHelper;
 
 class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @param string $serviceId
      * @dataProvider provideApiResourceIds
      */
-    public function testApiResourcesAreSetUpCorrect($serviceId): void
+    public function testApiResourcesAreSetUpCorrect(string $serviceId): void
     {
         $resource = Shopware()->Container()->get($serviceId);
+        static::assertInstanceOf(Resource::class, $resource);
         static::assertNotNull($resource->getManager());
     }
 
@@ -45,8 +47,7 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
     {
         $kernel = Shopware()->Container()->get('kernel');
 
-        /** @var ContainerBuilder $container */
-        $container = Utils::hijackMethod($kernel, 'buildContainer');
+        $container = TestReflectionHelper::getMethod(\get_class($kernel), 'buildContainer')->invoke($kernel);
 
         $container
             ->register('api.deco1')
@@ -60,6 +61,9 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
         static::assertNotEmpty($container->getDefinition('api.deco1')->getTag('shopware.api_resource'));
     }
 
+    /**
+     * @return array<array<string>>
+     */
     public function provideApiResourceIds(): array
     {
         return array_map(
@@ -67,7 +71,7 @@ class ConfigureApiResourcesPassTest extends Enlight_Components_Test_Controller_T
                 return [$id];
             },
             array_filter(Shopware()->Container()->getServiceIds(), function ($id) {
-                return strpos($id, 'shopware.api.') === 0;
+                return str_starts_with($id, 'shopware.api.');
             })
         );
     }

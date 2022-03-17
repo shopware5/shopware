@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -292,7 +294,7 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
 
         $requestUrl = sprintf(
             'backend/Config/getForm?filter=%s&page=1&_dc=' . time() . '&page=1&start=0&limit=25',
-            urlencode(json_encode($requestFilter))
+            urlencode(json_encode($requestFilter, JSON_THROW_ON_ERROR))
         );
 
         // Disable ACLs for this request:

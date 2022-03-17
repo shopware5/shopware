@@ -2456,16 +2456,6 @@ parameters:
 			path: engine/Library/Enlight/Template/Manager.php
 
 		-
-			message: "#^Cannot assign new offset to array\\|string\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
-			message: "#^Cannot assign offset string to array\\|string\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php
@@ -2492,16 +2482,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Template_Manager\\:\\:setTemplateDir\\(\\) has parameter \\$template_dir with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_unshift expects array, array\\|string given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|string given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php
 
@@ -2959,11 +2939,6 @@ parameters:
 			message: "#^Function smarty_modifiercompiler_template_exists\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/modifiercompiler.template_exists.php
-
-		-
-			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
 
 		-
 			message: "#^Cannot access property \\$handler on array\\.$#"
@@ -16789,11 +16764,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\CaptchaRepository\\:\\:__construct\\(\\) has parameter \\$captchas with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Captcha/CaptchaRepository.php
-
-		-
-			message: "#^Argument of an invalid type array\\|string supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\DefaultCaptcha\\:\\:getImageResource\\(\\) should return resource but returns resource\\|false\\.$#"
@@ -43246,48 +43216,8 @@ parameters:
 			path: tests/Functional/Api/CategoryTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\CategoryTest\\:\\:testDeleteCategoriesShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\CategoryTest\\:\\:testDeleteCategoriesShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\CategoryTest\\:\\:testDeleteCategoryWithInvalidIdShouldReturnMessage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\CategoryTest\\:\\:testGetCategoriesShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\CategoryTest\\:\\:testGetCategoriesWithIdShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\CategoryTest\\:\\:testPostCategoriesShouldBeSuccessful\\(\\) should return string but returns int\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 16
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Api/CategoryTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
 			path: tests/Functional/Api/CategoryTest.php
 
 		-
@@ -43306,48 +43236,8 @@ parameters:
 			path: tests/Functional/Api/CustomerGroupTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPostManufacturersShouldBeSuccessful\\(\\) should return string but returns int\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPutManufacturersImageShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPutManufacturersImageShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPutManufacturersShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPutManufacturersWithInvalidDataShouldReturnError\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\ManufacturerTest\\:\\:testPutManufacturersWithInvalidDataShouldReturnError\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 6
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Api/ManufacturerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
 			path: tests/Functional/Api/ManufacturerTest.php
 
 		-
@@ -43356,48 +43246,8 @@ parameters:
 			path: tests/Functional/Api/MediaTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\MediaTest\\:\\:testDeleteMediaWithIdShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\MediaTest\\:\\:testDeleteMediaWithIdShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\MediaTest\\:\\:testGetMediaWithIdShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\MediaTest\\:\\:testGetMediaWithIdShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\MediaTest\\:\\:testGetMediaWithUploadedFileAndOverwrittenNameByIdShouldBeSuccessful\\(\\) has parameter \\$identifier with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\MediaTest\\:\\:testGetMediaWithUploadedFileByIdShouldBeSuccessful\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/MediaTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 12
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 3
-			path: tests/Functional/Api/MediaTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 3
 			path: tests/Functional/Api/MediaTest.php
 
 		-
@@ -43426,38 +43276,8 @@ parameters:
 			path: tests/Functional/Api/PaymentMethodsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\PaymentMethodsTest\\:\\:testDeletePaymentWithIdShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/PaymentMethodsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\PaymentMethodsTest\\:\\:testDeletePaymentWithInvalidIdShouldFailWithMessage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/PaymentMethodsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\PaymentMethodsTest\\:\\:testGetPaymentShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/PaymentMethodsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Api\\\\PaymentMethodsTest\\:\\:testPostPaymentShouldBeSuccessful\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Api/PaymentMethodsTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 6
-			path: tests/Functional/Api/PaymentMethodsTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Api/PaymentMethodsTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
-			count: 1
 			path: tests/Functional/Api/PaymentMethodsTest.php
 
 		-
@@ -43804,26 +43624,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AttributeBundle\\\\SchemaOperatorTest\\:\\:iterateTypeArray\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AttributeBundle/SchemaOperatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkEncryptionTest\\:\\:testCorrectSignatureIsWorking\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkEncryptionTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkEncryptionTest\\:\\:testSignatureIsSupported\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkEncryptionTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkEncryptionTest\\:\\:testWrongSignatureIsFailing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkEncryptionTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$passphrase of function openssl_pkey_get_private expects string, null given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkEncryptionTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkTestCase\\:\\:getAssetsFolder\\(\\) has no return type specified\\.$#"
@@ -44289,16 +44089,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\StatisticsClientTest\\:\\:testResetBenchmarkData\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/BenchmarkBundle/StatisticsClientTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$item of method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\AbstractResolver\\:\\:add\\(\\) expects array\\|string, int given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/ContentTypeBundle/FieldResolver/MediaResolverTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$item of method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\AbstractResolver\\:\\:add\\(\\) expects array\\|string, int given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/ContentTypeBundle/FieldResolver/ShopResolverTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\ExtjsBuilderTest\\:\\:dataProviderColumnFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -44802,11 +44592,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getPath\\(\\) on Shopware\\\\Models\\\\Media\\\\Media\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/MediaBundle/MediaReplaceServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/MediaBundle/MediaReplaceServiceTest.php
 
@@ -45961,21 +45746,6 @@ parameters:
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$im of function imagesx expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagesy expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$image of function imagecreatefromstring expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$number of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getOneByNumber\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/ArticleTest.php
@@ -45983,11 +45753,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$number of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:updateByNumber\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
-			path: tests/Functional/Components/Api/ArticleTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 2
 			path: tests/Functional/Components/Api/ArticleTest.php
 
 		-
@@ -46119,186 +45884,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerStreamTest\\:\\:testCreateStaticStream\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CustomerStreamTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:insertPreset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:insertPreset\\(\\) has parameter \\$localPlugins with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:insertPreset\\(\\) has parameter \\$preset with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:insertPreset\\(\\) has parameter \\$translations with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:removeIds\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:removeIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testCreateReturnsPersistedEntity\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testCreateWithTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testDelete\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testDeleteNoneCustomPreset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testDeleteWithInvalidId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testDeleteWithNoneExistingId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testListContainsRequiredPlugins\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testListContainsRequiredPluginsWithLocalPlugins\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testListItemWithTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testListItemsWithAndWithoutTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testPluginWithExactSameVersion\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testPresetDataCanNotBeEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testPresetDataIsRequiredOnCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testPresetNameCannotBeEmpty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testPresetNameIsRequiredOnCreate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testUpdate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testUpdateWithInvalidId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:testValidateExistingName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$item of method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\EmotionPresetTest\\:\\:removeIds\\(\\) expects array, array\\|null given\\.$#"
-			count: 6
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$presetId of method Shopware\\\\Components\\\\Api\\\\Resource\\\\EmotionPreset\\:\\:delete\\(\\) expects int, null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 6
-			path: tests/Functional/Components/Api/EmotionPresetTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:getExtendedTestData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:getSimpleTestData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:testReplaceMedia\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:testSubmittedNameIsUsed\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:testUploadMediaWithNonWhitelistedExtension\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:testUploadName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\MediaTest\\:\\:testUploadNameWithOver50Characters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/MediaTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function base64_encode expects string, string\\|false given\\.$#"
-			count: 3
-			path: tests/Functional/Components/Api/MediaTest.php
 
 		-
 			message: "#^Cannot access offset 'details' on array\\|Shopware\\\\Models\\\\Order\\\\Order\\.$#"
@@ -46711,59 +46296,9 @@ parameters:
 			path: tests/Functional/Components/AuthTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$plugin of method Shopware\\\\Components\\\\Plugin\\\\ConfigWriter\\:\\:saveConfigElement\\(\\) expects Shopware\\\\Models\\\\Plugin\\\\Plugin, Shopware\\\\Models\\\\Plugin\\\\Plugin\\|null given\\.$#"
-			count: 3
-			path: tests/Functional/Components/CacheSubscriberTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Components\\\\CacheSubscriberTest\\:\\:\\$pluginId has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/CacheSubscriberTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\CaptchaRepositoryTest\\:\\:testThrowCaptchaNotFoundException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Captcha/CaptchaRepositoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\CaptchaValidatorTest\\:\\:testInvalidCaptcha\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/CaptchaValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\CaptchaValidatorTest\\:\\:testValidateCustomCaptchaDefault\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/CaptchaValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\CaptchaValidatorTest\\:\\:testValidateCustomCaptchaHoneypot\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/CaptchaValidatorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/CaptchaValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\DefaultCaptchaTest\\:\\:testCaptchaIsInitiallyInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/DefaultCaptchaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\DefaultCaptchaTest\\:\\:testValidCaptcha\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/DefaultCaptchaTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\DefaultCaptchaTest\\:\\:testValidMultipleCaptchaCalls\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/DefaultCaptchaTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_pop is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/DefaultCaptchaTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\BasketQueryHelperTest\\:\\:testGetInsertDiscountAttributeQuery\\(\\) has no return type specified\\.$#"
@@ -46941,76 +46476,6 @@ parameters:
 			path: tests/Functional/Components/Cart/ProportionalCartCalculationVoucherTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:calculate_thereIsNoPriceWith_NAN_test_dataProvider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testAbsoluteCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testAbsoluteCalculationWithOneTax\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testDifferentTaxes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testDifferentTaxesWithOneTax\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testNetAbsoluteCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testNetPercentCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testPercentCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\ProportionalTaxCalculatorTest\\:\\:testPercentCalculationWithOneTax\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$price of class Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price constructor expects float, string given\\.$#"
-			count: 4
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$netPrice of class Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price constructor expects float, string given\\.$#"
-			count: 4
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$taxRate of class Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price constructor expects float, string given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
-			message: "#^Parameter \\#4 \\$tax of class Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price constructor expects float\\|null, string given\\.$#"
-			count: 4
-			path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
 			count: 1
 			path: tests/Functional/Components/CheckoutTest.php
@@ -47134,16 +46599,6 @@ parameters:
 			message: "#^Method ShopwareConfigTest\\:\\:testCoreConfigPrefixed\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Config/ShopwareConfigTest.php
-
-		-
-			message: "#^Cannot call method getManager\\(\\) on object\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Components/DependencyInjection/Compiler/ConfigureApiResourcesPassTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\Compiler\\\\ConfigureApiResourcesPassTest\\:\\:provideApiResourceIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/DependencyInjection/Compiler/ConfigureApiResourcesPassTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\Compiler\\\\ConfigureContainerAwareCommandsTest\\:\\:getShopwareCommands\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -47781,21 +47236,6 @@ parameters:
 			path: tests/Functional/Components/Thumbnail/ManagerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$im of function imagesx expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Thumbnail/ManagerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagesy expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Thumbnail/ManagerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$image of function imagecreatefromstring expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Thumbnail/ManagerTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Components/Thumbnail/ManagerTest.php
@@ -47932,11 +47372,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigGetFormTest\\:\\:testFormElementSettingTranslationIsUserLocaleIfMatching\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigGetFormTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function urlencode expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/ConfigGetFormTest.php
 
@@ -48092,11 +47527,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$group of method Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:setGroup\\(\\) expects array\\|Shopware\\\\Models\\\\Customer\\\\Group, Shopware\\\\Models\\\\Customer\\\\Group\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift is passed by reference, so it expects variables only\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/CustomerTest.php
 
@@ -49101,81 +48531,6 @@ parameters:
 			path: tests/Functional/Core/sRewriteTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:bindAndCall\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:bindAndCall\\(\\) has parameter \\$args with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:bindAndCall\\(\\) has parameter \\$bindClass with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:bindAndCall\\(\\) has parameter \\$newThis with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackAndReadProperty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackAndReadProperty\\(\\) has parameter \\$object with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackAndReadProperty\\(\\) has parameter \\$propertyName with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackMethod\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackMethod\\(\\) has parameter \\$methodName with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackMethod\\(\\) has parameter \\$object with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackProperty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Helper\\\\Utils\\:\\:hijackProperty\\(\\) has parameter \\$newValue with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Parameter \\#1 \\$closure of static method Closure\\:\\:bind\\(\\) expects Closure, callable\\(\\)\\: mixed given\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
-			message: "#^Parameter \\#1 \\$function of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{mixed, mixed\\} given\\.$#"
-			count: 1
-			path: tests/Functional/Helper/Utils.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Library\\\\ZendLocaleTest\\:\\:getLocales\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Library/ZendLocaleTest.php
@@ -49913,16 +49268,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:verifyLogin\\(\\)\\.$#"
 			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
-			message: "#^Cannot access offset 'action' on array\\|bool\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
-			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
-			count: 4
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
 		-
@@ -51711,11 +51056,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ExportContext.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ExportContext.php
-
-		-
 			message: "#^Parameter \\#3 \\$shopType of method Shopware\\\\Tests\\\\Mink\\\\ExportContext\\:\\:validate\\(\\) expects bool, string given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ExportContext.php
@@ -51803,31 +51143,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Shopware\\\\Tests\\\\Mink\\\\HelperSelectorInterface\\:\\:getSession\\(\\)\\.$#"
 			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Cannot call method check\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Cannot call method getAttribute\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 2
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Cannot call method getTagName\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Cannot call method selectOption\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Cannot call method setValue\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 2
 			path: tests/Mink/features/bootstrap/Helper.php
 
 		-
@@ -51941,11 +51256,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getContentBlock\\(\\) should return Behat\\\\Mink\\\\Element\\\\NodeElement but return statement is missing\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getElementData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
@@ -51972,11 +51282,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getRequiredSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getRequiredSelectors\\(\\) should return array but return statement is missing\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
 
@@ -52022,11 +51327,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:spin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:throwException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
 
@@ -52501,11 +51801,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/Account.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Account\\:\\:verifyPage\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Account.php
-
-		-
 			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:clickNamedLink\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Account.php
@@ -52611,16 +51906,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
 
 		-
-			message: "#^Cannot access offset 'action' on array\\|bool\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
-
-		-
-			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\CheckoutCart\\:\\:addArticle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
@@ -52687,16 +51972,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\CheckoutCart\\:\\:getAggregationPosition\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\CheckoutCart\\:\\:getAggregationPosition\\(\\) should return int but return statement is missing\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\CheckoutCart\\:\\:getLabel\\(\\) should return string but return statement is missing\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/CheckoutCart.php
 
@@ -52896,11 +52171,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/Detail.php
 
 		-
-			message: "#^Cannot call method findAll\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 2
-			path: tests/Mink/features/bootstrap/Page/Detail.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Detail\\:\\:addToBasket\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Detail.php
@@ -53061,17 +52331,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/GenericPage.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function rtrim expects string, string\\|null given\\.$#"
-			count: 2
-			path: tests/Mink/features/bootstrap/Page/GenericPage.php
-
-		-
 			message: "#^Parameter \\#1 \\$url of function parse_url expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/GenericPage.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/GenericPage.php
 
@@ -53391,11 +52651,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/Note.php
 
 		-
-			message: "#^Cannot call method getText\\(\\) on Shopware\\\\Tests\\\\Mink\\\\Element\\\\SitemapGroup\\|string\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Sitemap.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Sitemap\\:\\:checkGroup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Sitemap.php
@@ -53441,11 +52696,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/Sitemap.php
 
 		-
-			message: "#^Parameter \\#1 \\$element of static method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getElementData\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\HelperSelectorInterface, Shopware\\\\Tests\\\\Mink\\\\Element\\\\SitemapGroup\\|string given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Sitemap.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\SitemapIndexXml\\:\\:checkXml\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/SitemapIndexXml.php
@@ -53457,11 +52707,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/SitemapIndexXml.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function rtrim expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/SitemapIndexXml.php
 

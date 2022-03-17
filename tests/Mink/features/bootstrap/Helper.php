@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,6 +28,8 @@ namespace Shopware\Tests\Mink;
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Mink\Element\DocumentElement;
+use Behat\Mink\Element\NodeElement;
+use Behat\Mink\Session;
 use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
@@ -365,6 +369,8 @@ class Helper
      * @param int          $type
      *
      * @throws Exception|PendingException
+     *
+     * @return never-return
      */
     public static function throwException($messages = [], $type = self::EXCEPTION_GENERIC)
     {
@@ -403,7 +409,6 @@ EOD
                 throw new PendingException($message);
             default:
                 self::throwException('Invalid exception type!', self::EXCEPTION_PENDING);
-                break;
         }
     }
 
@@ -540,7 +545,7 @@ EOD
      *
      * @throws Exception
      *
-     * @return \Behat\Mink\Element\NodeElement
+     * @return NodeElement
      */
     public static function getContentBlock(Page $parent)
     {
@@ -586,7 +591,7 @@ EOD
                     $fieldName = sprintf('%s[%s]', $key, $tempFieldName);
                 }
 
-                if (strpos($fieldName, '.') !== false) {
+                if (str_contains($fieldName, '.')) {
                     $fieldName = str_replace('.', '][', $fieldName);
                 }
 
@@ -595,7 +600,7 @@ EOD
 
                 $field = $form->findField($fieldName);
 
-                if (empty($field)) {
+                if (!$field instanceof NodeElement) {
                     if (empty($fieldValue)) {
                         continue;
                     }
@@ -615,6 +620,10 @@ EOD
 
                 self::spin(static function () use (&$field, $fieldType, $fieldValue, $form, $fieldName): bool {
                     try {
+                        if (!$field instanceof NodeElement) {
+                            return false;
+                        }
+
                         //Select
                         if (empty($fieldType)) {
                             $field->selectOption($fieldValue);
@@ -661,7 +670,7 @@ EOD
      *
      * @return array|bool
      */
-    public static function getPageInfo(\Behat\Mink\Session $session, array $selectionMode)
+    public static function getPageInfo(Session $session, array $selectionMode)
     {
         $prefixes = [
             'emotion' => [
@@ -674,6 +683,9 @@ EOD
         ];
 
         $body = $session->getPage()->find('css', 'body');
+        if (!$body instanceof NodeElement) {
+            self::throwException('body not found');
+        }
         $class = $body->getAttribute('class');
 
         foreach ($prefixes as $template => $modes) {

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -208,7 +210,7 @@ SQL;
     private function validate(TableNode $entries, $export, $shopType)
     {
         $baseUrl = rtrim($this->getMinkParameter('base_url'), '/');
-        $basePath = trim(parse_url($baseUrl, PHP_URL_PATH), '/');
+        $basePath = trim((string) parse_url($baseUrl, PHP_URL_PATH), '/');
         $subshopBaseUrl = rtrim('http://' . $this->subShopDomain . '/' . $basePath, '/');
 
         foreach ($entries as $entry) {

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,8 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Resource\Media;
 
 class MediaTest extends TestCase
@@ -33,15 +37,12 @@ class MediaTest extends TestCase
      */
     protected $resource;
 
-    /**
-     * @return Media
-     */
-    public function createResource()
+    public function createResource(): Media
     {
         return new Media();
     }
 
-    public function testUploadName()
+    public function testUploadName(): void
     {
         $data = $this->getSimpleTestData();
         $source = __DIR__ . '/fixtures/test-bild.jpg';
@@ -53,7 +54,7 @@ class MediaTest extends TestCase
 
         $data['file'] = $dest;
         $path = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         if ($mediaService->has($path)) {
             $mediaService->delete($path);
         }
@@ -68,7 +69,7 @@ class MediaTest extends TestCase
         unlink($dest);
     }
 
-    public function testUploadNameWithOver50Characters()
+    public function testUploadNameWithOver50Characters(): void
     {
         $data = $this->getSimpleTestData();
         $source = __DIR__ . '/fixtures/test-bild.jpg';
@@ -82,7 +83,7 @@ class MediaTest extends TestCase
         $media = $this->resource->create($data);
 
         $pathPicture = Shopware()->DocPath('media_image') . $media->getFileName();
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         static::assertTrue($mediaService->has($pathPicture));
 
         //check if the thumbnails are generated
@@ -95,10 +96,12 @@ class MediaTest extends TestCase
         unlink($dest);
     }
 
-    public function testSubmittedNameIsUsed()
+    public function testSubmittedNameIsUsed(): void
     {
         $data = $this->getExtendedTestData();
-        $base64Data = base64_encode(file_get_contents(__DIR__ . '/fixtures/shopware_logo.png'));
+        $image = file_get_contents(__DIR__ . '/fixtures/shopware_logo.png');
+        static::assertIsString($image);
+        $base64Data = base64_encode($image);
         $data['file'] = 'data:image/png;base64,' . $base64Data;
         $ids = [];
 
@@ -118,10 +121,12 @@ class MediaTest extends TestCase
         }
     }
 
-    public function testReplaceMedia()
+    public function testReplaceMedia(): void
     {
         $data = $this->getSimpleTestData();
-        $base64Data = base64_encode(file_get_contents(__DIR__ . '/fixtures/shopware_logo.png'));
+        $image = file_get_contents(__DIR__ . '/fixtures/shopware_logo.png');
+        static::assertIsString($image);
+        $base64Data = base64_encode($image);
         $updateData = [
             'file' => 'data:image/png;base64,' . $base64Data,
         ];
@@ -136,7 +141,7 @@ class MediaTest extends TestCase
         $data['file'] = $dest;
         $deletePath = Shopware()->DocPath('media_image') . 'test-bild-used.jpg';
         $readPath = Shopware()->DocPath('media_image') . 'test-bild-used.png';
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         if ($mediaService->has($deletePath)) {
             $mediaService->delete($deletePath);
@@ -147,16 +152,18 @@ class MediaTest extends TestCase
         //check if the thumbnails are generated
         $this->resource->update($media->getId(), $updateData);
 
-        $content = base64_encode($mediaService->read($readPath));
+        $mediaPath = $mediaService->read($readPath);
+        static::assertIsString($mediaPath);
+        $content = base64_encode($mediaPath);
 
         $mediaService->delete($readPath);
 
         static::assertEquals($content, $base64Data, 'Replaced file was not persisted correctly.');
     }
 
-    public function testUploadMediaWithNonWhitelistedExtension()
+    public function testUploadMediaWithNonWhitelistedExtension(): void
     {
-        $this->expectException('Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionNotAllowedException');
+        $this->expectException(MediaFileExtensionNotAllowedException::class);
         $this->expectExceptionMessage('The media file extension "foo" is not allowed.');
         $source = __DIR__ . '/fixtures/test-bild.jpg';
         $dest = __DIR__ . '/fixtures/test-bild-used.foo';
@@ -169,7 +176,7 @@ class MediaTest extends TestCase
         $data['file'] = $dest;
 
         $path = Shopware()->DocPath('media_unknown') . 'test-bild-used.foo';
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         if ($mediaService->has($path)) {
             $mediaService->delete($path);
         }
@@ -179,7 +186,10 @@ class MediaTest extends TestCase
         unlink($dest);
     }
 
-    protected function getSimpleTestData()
+    /**
+     * @return array{album: -1, description: 'Test description'}
+     */
+    protected function getSimpleTestData(): array
     {
         return [
             'album' => -1,
@@ -187,7 +197,10 @@ class MediaTest extends TestCase
         ];
     }
 
-    protected function getExtendedTestData()
+    /**
+     * @return array{album: -1, description: 'Test description', name: 'some-name-lorem-ipsum'}
+     */
+    protected function getExtendedTestData(): array
     {
         $temp = $this->getSimpleTestData();
         $temp['name'] = 'some-name-lorem-ipsum';

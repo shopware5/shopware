@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -71,7 +73,7 @@ class PaymentMethodsTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testGetPaymentShouldBeSuccessful()
+    public function testGetPaymentShouldBeSuccessful(): void
     {
         $this->authenticatedApiRequest('GET', '/api/paymentmethods');
         $response = $this->client->getResponse();
@@ -95,7 +97,7 @@ class PaymentMethodsTest extends AbstractApiTestCase
         static::assertIsArray($data);
     }
 
-    public function testPostPaymentShouldBeSuccessful()
+    public function testPostPaymentShouldBeSuccessful(): int
     {
         $requestData = [
             'name' => 'debit' . uniqid('foo', true),
@@ -120,7 +122,9 @@ class PaymentMethodsTest extends AbstractApiTestCase
         static::assertTrue($result['success']);
 
         $location = $response->headers->get('location');
-        $identifier = (int) array_pop(explode('/', $location));
+        static::assertIsString($location);
+        $location = explode('/', $location);
+        $identifier = (int) array_pop($location);
 
         static::assertGreaterThan(0, $identifier);
 
@@ -133,10 +137,8 @@ class PaymentMethodsTest extends AbstractApiTestCase
 
     /**
      * @depends testPostPaymentShouldBeSuccessful
-     *
-     * @param string $identifier
      */
-    public function testGetPaymentWithIdShouldBeSuccessful($identifier): void
+    public function testGetPaymentWithIdShouldBeSuccessful(int $identifier): void
     {
         $this->authenticatedApiRequest('GET', '/api/paymentmethods/' . $identifier);
         $response = $this->client->getResponse();
@@ -159,10 +161,8 @@ class PaymentMethodsTest extends AbstractApiTestCase
 
     /**
      * @depends testPostPaymentShouldBeSuccessful
-     *
-     * @param int $id
      */
-    public function testDeletePaymentWithIdShouldBeSuccessful($id)
+    public function testDeletePaymentWithIdShouldBeSuccessful(int $id): void
     {
         $this->authenticatedApiRequest('DELETE', '/api/paymentmethods/' . $id);
         $response = $this->client->getResponse();
@@ -178,7 +178,7 @@ class PaymentMethodsTest extends AbstractApiTestCase
         static::assertTrue($result['success']);
     }
 
-    public function testDeletePaymentWithInvalidIdShouldFailWithMessage()
+    public function testDeletePaymentWithInvalidIdShouldFailWithMessage(): void
     {
         $id = 9999999;
 

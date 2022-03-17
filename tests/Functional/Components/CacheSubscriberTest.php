@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,7 +39,7 @@ class CacheSubscriberTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    private $pluginId = 0;
+    private int $pluginId = 0;
 
     protected function setUp(): void
     {
@@ -61,7 +63,6 @@ class CacheSubscriberTest extends TestCase
         ]);
         $this->pluginId = (int) $connection->lastInsertId();
 
-        /** @var CacheSubscriber $cacheSubscriber */
         $cacheSubscriber = Shopware()->Container()->get(CacheSubscriber::class);
 
         Utils::hijackProperty($cacheSubscriber, 'clearTags', []);
@@ -73,6 +74,7 @@ class CacheSubscriberTest extends TestCase
         $this->resetTags();
 
         $plugin = Shopware()->Models()->getRepository(Plugin::class)->find($this->pluginId);
+        static::assertInstanceOf(Plugin::class, $plugin);
         $shop = Shopware()->Models()->getRepository(Shop::class)->getDefault();
         Shopware()->Container()->get('shopware.plugin.config_writer')->saveConfigElement($plugin, 'testConfigOnChange', 'foo', $shop);
 
@@ -85,6 +87,7 @@ class CacheSubscriberTest extends TestCase
         $this->resetTags();
 
         $plugin = Shopware()->Models()->getRepository(Plugin::class)->find($this->pluginId);
+        static::assertInstanceOf(Plugin::class, $plugin);
 
         $shop = Shopware()->Models()->getRepository(Shop::class)->getDefault();
         Shopware()->Container()->get('shopware.plugin.config_writer')->saveConfigElement($plugin, 'testConfigOnChange', 'foo', $shop);
@@ -103,7 +106,6 @@ class CacheSubscriberTest extends TestCase
         $form->setLabel(__CLASS__ . __FUNCTION__);
         $form->setDescription('');
 
-        /** @var Form $parent */
         $parent = Shopware()->Models()->getRepository(Form::class)->findOneBy([
             'name' => 'Other',
         ]);
@@ -118,7 +120,6 @@ class CacheSubscriberTest extends TestCase
 
     private function resetTags(): void
     {
-        /** @var CacheSubscriber $cacheSubscriber */
         $cacheSubscriber = Shopware()->Container()->get(CacheSubscriber::class);
 
         Utils::hijackProperty($cacheSubscriber, 'clearTags', []);

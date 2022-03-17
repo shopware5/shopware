@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,9 +36,9 @@ class ManufacturerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('GET', '/api/manufacturers');
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull($response->headers->get('Set-Cookie'));
-        static::assertEquals(200, $response->getStatusCode());
+        static::assertSame(200, $response->getStatusCode());
 
         $response = $response->getContent();
         $response = json_decode($response, true);
@@ -65,9 +67,9 @@ class ManufacturerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('POST', '/api/manufacturers', [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull($response->headers->get('Set-Cookie'));
-        static::assertEquals(400, $response->getStatusCode());
+        static::assertSame(400, $response->getStatusCode());
 
         $result = $response->getContent();
         $result = json_decode($result, true);
@@ -78,7 +80,7 @@ class ManufacturerTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostManufacturersShouldBeSuccessful(): string
+    public function testPostManufacturersShouldBeSuccessful(): int
     {
         $requestData = [
             'name' => 'Foo Bar',
@@ -91,8 +93,8 @@ class ManufacturerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('POST', '/api/manufacturers', [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals(201, $response->getStatusCode());
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(201, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull(
             $response->headers->get('Set-Cookie'),
             'There should be no set-cookie header set.'
@@ -104,8 +106,10 @@ class ManufacturerTest extends AbstractApiTestCase
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
 
-        $location = $response->headers->get('Location');
-        $identifier = (int) array_pop(explode('/', $location));
+        $location = $response->headers->get('location');
+        static::assertIsString($location);
+        $location = explode('/', $location);
+        $identifier = (int) array_pop($location);
 
         static::assertGreaterThan(0, $identifier);
 
@@ -115,7 +119,7 @@ class ManufacturerTest extends AbstractApiTestCase
     /**
      * @depends testPostManufacturersShouldBeSuccessful
      */
-    public function testPutManufacturersWithInvalidDataShouldReturnError($id)
+    public function testPutManufacturersWithInvalidDataShouldReturnError(int $id): void
     {
         $requestData = [
             'description' => 'invalid',
@@ -125,8 +129,8 @@ class ManufacturerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('PUT', '/api/manufacturers/' . $id, [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
-        static::assertEquals(400, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(400, $response->getStatusCode());
 
         $result = $response->getContent();
         $result = json_decode($result, true);
@@ -140,7 +144,7 @@ class ManufacturerTest extends AbstractApiTestCase
     /**
      * @depends testPostManufacturersShouldBeSuccessful
      */
-    public function testPutManufacturersShouldBeSuccessful($id): string
+    public function testPutManufacturersShouldBeSuccessful(int $id): int
     {
         $requestData = [
             'name' => 'Bar Foo',
@@ -156,8 +160,8 @@ class ManufacturerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('PUT', '/api/manufacturers/' . $id, [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals(200, $response->getStatusCode());
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull(
             $response->headers->get('location'),
             'There should be no location header set.'
@@ -175,7 +179,7 @@ class ManufacturerTest extends AbstractApiTestCase
     /**
      * @depends testPutManufacturersShouldBeSuccessful
      */
-    public function testPutManufacturersImageShouldBeSuccessful($id)
+    public function testPutManufacturersImageShouldBeSuccessful(int $id): int
     {
         $requestData = [
             'name' => 'Foo Bar',
@@ -188,8 +192,8 @@ class ManufacturerTest extends AbstractApiTestCase
         $this->authenticatedApiRequest('PUT', '/api/manufacturers/' . $id, [], $requestData);
         $response = $this->client->getResponse();
 
-        static::assertEquals(200, $response->getStatusCode());
-        static::assertEquals('application/json', $response->headers->get('Content-Type'));
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('application/json', $response->headers->get('Content-Type'));
         static::assertNull(
             $response->headers->get('location'),
             'There should be no location header set.'
