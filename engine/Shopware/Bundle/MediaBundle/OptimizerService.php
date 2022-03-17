@@ -52,6 +52,9 @@ class OptimizerService implements OptimizerServiceInterface
 
         // Reading and resetting the permissions on the file since some optimizer are unable to do so themselves.
         $perms = fileperms($filepath);
+        if (!\is_int($perms)) {
+            $perms = 0644;
+        }
         $optimizer->run($filepath);
         chmod($filepath, $perms);
     }

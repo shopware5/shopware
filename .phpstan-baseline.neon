@@ -4626,11 +4626,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
 			message: "#^Property Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:\\$fieldAlias type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
@@ -4791,22 +4786,7 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Field/TypeGrid.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\AbstractResolver\\:\\:add\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\AbstractResolver\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
 
@@ -4821,27 +4801,12 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\TypeResolver\\:\\:add\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\TypeResolver\\:\\:get\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\TypeResolver\\:\\:getTypeService\\(\\) should return Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\RepositoryInterface but returns object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
 
@@ -5062,11 +5027,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$type of method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Field\\:\\:setType\\(\\) expects Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Field\\\\FieldInterface, object given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Services/TypeBuilder.php
-
-		-
-			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/TypeBuilder.php
 
@@ -7686,11 +7646,6 @@ parameters:
 			path: engine/Shopware/Bundle/EsBackendBundle/SearchQueryBuilder.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/SearchQueryBuilder.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Searcher\\\\GenericSearcher\\:\\:addFilters\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/Searcher/GenericSearcher.php
@@ -7996,11 +7951,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
 
 		-
-			message: "#^Property Shopware\\\\Bundle\\\\MailBundle\\\\Service\\\\LogService\\:\\:\\$filters \\(array\\<Shopware\\\\Bundle\\\\MailBundle\\\\Service\\\\Filter\\\\MailFilterInterface\\>\\) does not accept iterable\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Adapters\\\\AdapterFactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Adapters/AdapterFactoryInterface.php
@@ -8226,21 +8176,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function file_get_contents expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function filesize expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
-			message: "#^Parameter \\#1 \\$imagefile of function getimagesize expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
@@ -8402,11 +8337,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\OptimizerService\\:\\:optimize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/OptimizerService.php
-
-		-
-			message: "#^Parameter \\#2 \\$mode of function chmod expects int, int\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/OptimizerService.php
 
@@ -10001,11 +9931,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundle/ProductSearchResult.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function stripslashes expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/SearchTermPreProcessor.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Sorting\\\\ProductAttributeSorting\\:\\:setField\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/Sorting/ProductAttributeSorting.php
@@ -10326,26 +10251,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\TermHelper\\:\\:splitTerm\\(\\) should return array but returns array\\<mixed, mixed\\>\\|bool\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$array of function array_unique expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\TermHelperInterface\\:\\:splitTerm\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelperInterface.php
@@ -10382,11 +10287,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\VariantHelper\\:\\:joinVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/VariantHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/VariantHelper.php
 
@@ -10676,22 +10576,12 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:filterLink\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:getSitesByShopId\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
@@ -10877,26 +10767,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function feof expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fread expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
 
@@ -11347,11 +11217,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\MediaHydrator\\:\\:updateMedia\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/MediaHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of function getimagesizefromstring expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/MediaHydrator.php
 
@@ -56069,3 +55934,4 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
+

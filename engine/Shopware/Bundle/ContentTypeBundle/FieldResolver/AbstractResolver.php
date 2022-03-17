@@ -39,7 +39,7 @@ abstract class AbstractResolver
     protected $resolveIds = [];
 
     /**
-     * @param string|array $item
+     * @param string $item
      */
     public function add($item, Field $field): void
     {
@@ -57,7 +57,7 @@ abstract class AbstractResolver
     abstract public function resolve(): void;
 
     /**
-     * @param int|string $item
+     * @param string $item
      */
     public function get($item, Field $field)
     {

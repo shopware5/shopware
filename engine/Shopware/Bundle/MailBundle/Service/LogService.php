@@ -30,36 +30,25 @@ use Exception;
 use PDO;
 use Shopware\Bundle\MailBundle\Service\Filter\AdministrativeMailFilter;
 use Shopware\Bundle\MailBundle\Service\Filter\MailFilterInterface;
-use Shopware\Models\Mail\Contact;
 use Shopware\Models\Mail\Log;
-use Shopware\Models\Order\Document\Document;
 
 class LogService implements LogServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
+
+    private LogEntryBuilderInterface $entryBuilder;
 
     /**
-     * @var LogEntryBuilderInterface
+     * @var Log[]
      */
-    private $entryBuilder;
-
-    /**
-     * @var Log[]|array
-     */
-    private $entries;
+    private array $entries;
 
     /**
      * @var MailFilterInterface[]
      */
-    private $filters;
+    private iterable $filters;
 
-    /**
-     * @var bool
-     */
-    private $flushError = false;
+    private bool $flushError = false;
 
     public function __construct(Connection $connection, LogEntryBuilderInterface $entryBuilder, iterable $filters)
     {
@@ -111,7 +100,6 @@ class LogService implements LogServiceInterface
                 ]);
                 $mailLogId = (int) $this->connection->lastInsertId();
 
-                /** @var Document $document */
                 foreach ($entry->getDocuments() as $document) {
                     $this->connection->insert('s_mail_log_document', [
                         'log_id' => $mailLogId,
@@ -119,7 +107,6 @@ class LogService implements LogServiceInterface
                     ]);
                 }
 
-                /** @var Contact $recipient */
                 foreach ($entry->getRecipients() as $recipient) {
                     $mail = mb_strtolower(trim($recipient->getMailAddress()));
 
@@ -162,7 +149,6 @@ class LogService implements LogServiceInterface
         $recipients = [];
 
         foreach ($this->entries as $entry) {
-            /** @var Contact $recipient */
             foreach ($entry->getRecipients() as $recipient) {
                 if ($recipient->getId()) {
                     continue;

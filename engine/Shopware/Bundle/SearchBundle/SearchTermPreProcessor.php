@@ -40,7 +40,7 @@ class SearchTermPreProcessor implements SearchTermPreProcessorInterface
         //converts encoded characters back ('%a5%27' to '?')
         $term = mb_convert_encoding($term, 'UTF-8');
         //does the replacing of 4byte chars to the Unicode replacement character
-        $term = preg_replace('/[\xF0-\xF7].../s', '�', $term);
+        $term = (string) preg_replace('/[\xF0-\xF7].../s', '�', $term);
 
         //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
         $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($term))));

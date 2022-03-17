@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\EmotionBundle\Struct;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 
 class ElementData implements JsonSerializable
 {
@@ -70,7 +71,7 @@ class ElementData implements JsonSerializable
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return $this->storage;
