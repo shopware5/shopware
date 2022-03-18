@@ -30,6 +30,9 @@ interface RobotsTxtGeneratorInterface
 
     public function setDisallow(string $disallow): void;
 
+    /**
+     * @param array<string> $baseUrls
+     */
     public function setBaseUrls(array $baseUrls): void;
 
     public function setHost(string $host): void;

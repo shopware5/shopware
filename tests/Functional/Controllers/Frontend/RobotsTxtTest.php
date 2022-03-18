@@ -72,6 +72,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /en/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /en/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -111,6 +112,7 @@ SQL,
         static::assertArrayNotHasKey('Disallow: /en/widgets/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/listing/', $robotsTxt);
         static::assertArrayNotHasKey('Disallow: /en/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -141,6 +143,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /de/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -171,6 +174,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /foo/de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -203,6 +207,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /foo/de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -235,6 +240,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /foo/de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -265,6 +271,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /foo/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
@@ -297,6 +304,7 @@ SQL,
         static::assertArrayHasKey('Disallow: /foo/de/widgets/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/listing/', $robotsTxt);
         static::assertArrayHasKey('Disallow: /foo/de/ticket/', $robotsTxt);
+        static::assertArrayHasKey('Allow: /foo/de/widgets/index/refreshStatistic', $robotsTxt);
 
         $this->sitemapTest();
     }
