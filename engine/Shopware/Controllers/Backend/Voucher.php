@@ -244,6 +244,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         //use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
+        if (!\is_resource($fp)) {
+            throw new RuntimeException('Could not open temporary stream');
+        }
         fputcsv($fp, array_keys($resultArray[0]), ';');
 
         foreach ($resultArray as $value) {

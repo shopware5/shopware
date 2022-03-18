@@ -72,6 +72,7 @@ use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -1944,7 +1945,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $overwriteMode = $this->Request()->query->get('uploadMode');
         $file = $this->Request()->files->get('fileId');
 
-        if ($file === null) {
+        if (!$file instanceof UploadedFile) {
             $this->View()->assign(['success' => false]);
 
             return;
@@ -1999,7 +2000,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
         }
 
-        $upstream = fopen($file->getRealPath(), 'rb');
+        $filePath = (string) $file->getRealPath();
+        $upstream = fopen($filePath, 'rb');
+        if (!\is_resource($upstream)) {
+            throw new RuntimeException(sprintf('Could not open file at: %s', $filePath));
+        }
         $filesystem->writeStream($destinationPath, $upstream);
         fclose($upstream);
 
@@ -2044,12 +2049,22 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $response->sendResponse();
 
         $upstream = $filesystem->readStream($path);
+        if (!\is_resource($upstream)) {
+            throw new RuntimeException(sprintf('Could not open file from: %s', $path));
+        }
         $downstream = fopen('php://output', 'wb');
+        if (!\is_resource($downstream)) {
+            throw new RuntimeException('Could not open temporary stream');
+        }
 
         ob_end_clean();
 
         while (!feof($upstream)) {
-            fwrite($downstream, fread($upstream, 4096));
+            $read = fread($upstream, 4096);
+            if (!\is_string($read)) {
+                continue;
+            }
+            fwrite($downstream, $read);
             flush();
         }
     }
@@ -2166,7 +2181,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return $this->getChartData();
         }
 
-        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', mktime(0, 0, 0, (int) date('m'), 1, (int) date('Y'))));
+        $timeStamp = (int) mktime(0, 0, 0, (int) date('m'), 1, (int) date('Y'));
+        $startDate = $this->Request()->getParam('fromDate', date('Y-m-d', $timeStamp));
         $endDate = $this->Request()->getParam('toDate', date('Y-m-d'));
 
         $sql = "
@@ -3396,7 +3412,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param Product $article
      * @param int     $mergeType
      *
-     * @return array|bool
+     * @return array|false
      */
     protected function prepareVariantData($variant, $detailData, &$counter, $dependencies, $priceVariations, $allOptions, $originals, $article, $mergeType)
     {
@@ -3418,6 +3434,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($dependencies as $dependency) {
             if (\in_array($dependency['parentId'], $optionIds) && \in_array($dependency['childId'], $optionIds)) {
                 $abortVariant = true;
+                break;
             }
         }
 

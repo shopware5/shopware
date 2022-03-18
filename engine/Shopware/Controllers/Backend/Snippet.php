@@ -413,7 +413,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         }
 
         $destPath = realpath($destPath);
-        if (!file_exists($destPath)) {
+        if ($destPath === false || !file_exists($destPath)) {
             echo json_encode([
                 'success' => false,
                 'message' => sprintf("Destination directory '%s' does not exist.", $destPath),
@@ -612,7 +612,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
 
             $sql = 'SELECT * FROM s_core_snippets ORDER BY namespace';
             $result = $this->database->query($sql);
-            $rows = null;
+            $rows = [];
 
             echo "REPLACE INTO `s_core_snippets` (`namespace`, `name`, `value`, `localeID`, `shopID`,`created`, `updated`, `dirty`) VALUES \r\n";
             foreach ($result->fetchAll() as $row) {
@@ -953,23 +953,23 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
      */
     protected function getFormatSnippetForSave($string)
     {
-        $string = mb_convert_encoding($string, 'HTML-ENTITIES', mb_detect_encoding($string, ['utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251']));
+        $encoding = mb_detect_encoding($string, ['utf-8', 'iso-8859-1', 'iso-8859-15', 'windows-1251']);
+        if (!\is_string($encoding)) {
+            $encoding = 'utf-8';
+        }
+        $string = mb_convert_encoding($string, 'HTML-ENTITIES', $encoding);
 
-        $string = html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
-
-        return $string;
+        return html_entity_decode($string, ENT_NOQUOTES, 'UTF-8');
     }
 
     /**
      * Validates the value of the snippet. Returns false if the snippet value is empty and the shopId/localeId is
      * not 1.
-     *
-     * @return bool
      */
-    private function isSnippetValid(Snippet $snippet)
+    private function isSnippetValid(Snippet $snippet): bool
     {
         if (!$snippet->getValue()) {
-            if ($snippet->getShopId() != 1 || $snippet->getLocaleId() != 1) {
+            if ((int) $snippet->getShopId() !== 1 || (int) $snippet->getLocaleId() !== 1) {
                 return false;
             }
         }

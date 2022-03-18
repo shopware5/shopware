@@ -95,7 +95,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         $term = mb_strtolower(trim($this->Request()->get('search')));
 
         $term = preg_replace('/[^\\w0-9]+/u', ' ', $term);
-        $term = trim(preg_replace('/\s+/', '%', $term), '%');
+        $term = trim((string) preg_replace('/\s+/', '%', $term), '%');
 
         if ($term === '') {
             return;

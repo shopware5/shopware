@@ -208,25 +208,33 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * Get user, basket and payment data for view assignment
      * Create temporary entry in s_order table
      * Check some conditions (minimum charge)
+     *
+     * @return void
      */
     public function confirmAction()
     {
         if (empty($this->View()->sUserLoggedIn)) {
-            return $this->forward(
+            $this->forward(
                 'login',
                 'account',
                 null,
                 ['sTarget' => 'checkout', 'sTargetAction' => 'confirm', 'showNoAccount' => true]
             );
-        } elseif ($this->basket->sCountBasket() < 1) {
-            return $this->forward('cart');
+
+            return;
+        }
+
+        if ($this->basket->sCountBasket() < 1) {
+            $this->forward('cart');
+
+            return;
         }
 
         $this->View()->assign('sCountry', $this->getSelectedCountry());
         $this->View()->assign('sState', $this->getSelectedState());
 
         $payment = $this->getSelectedPayment();
-        if (\array_key_exists('validation', $payment) && !empty($payment['validation'])) {
+        if (\is_array($payment) && \array_key_exists('validation', $payment) && !empty($payment['validation'])) {
             $this->onPaymentMethodValidationFail();
 
             return;
@@ -1483,7 +1491,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      *
      * Get selected payment or do payment mean selection automatically
      *
-     * @return array|bool
+     * @return array|false
      */
     public function getSelectedPayment()
     {
@@ -1575,6 +1583,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     public function setDispatch($dispatchId, $paymentId = null)
     {
         $supportedDispatches = $this->getDispatches($paymentId);
+        if (!\is_array($supportedDispatches)) {
+            $supportedDispatches = [];
+        }
 
         // Iterate over supported dispatches, look for the provided one
         foreach ($supportedDispatches as $dispatch) {

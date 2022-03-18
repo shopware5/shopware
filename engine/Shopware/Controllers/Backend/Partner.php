@@ -61,12 +61,14 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Returns a JSON string to with all found partner for the backend listing
+     *
+     * @return void
      */
     public function getListAction()
     {
         try {
-            $limit = (int) $this->Request()->limit;
-            $offset = (int) $this->Request()->start;
+            $limit = (int) $this->Request()->getParam('limit');
+            $offset = (int) $this->Request()->getParam('start');
 
             // Order data
             $order = (array) $this->Request()->getParam('sort', []);
@@ -85,13 +87,15 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Returns a JSON string for the statistic overview
+     *
+     * @return void
      */
     public function getStatisticListAction()
     {
         try {
-            $limit = (int) $this->Request()->limit;
-            $offset = (int) $this->Request()->start;
-            $partnerId = (int) $this->Request()->partnerId;
+            $limit = (int) $this->Request()->getParam('limit');
+            $offset = (int) $this->Request()->getParam('start');
+            $partnerId = (int) $this->Request()->getParam('partnerId');
 
             // Order data
             $order = (array) $this->Request()->getParam('sort', []);
@@ -125,6 +129,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * returns a JSON string to show all the partner detail information
+     *
+     * @return void
      */
     public function getDetailAction()
     {
@@ -140,10 +146,12 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Returns a JSON string for the statistic chart
+     *
+     * @return void
      */
     public function getChartDataAction()
     {
-        $partnerId = (int) $this->Request()->partnerId;
+        $partnerId = (int) $this->Request()->getParam('partnerId');
 
         $fromDate = $this->getFromDate();
         $toDate = $this->getToDate();
@@ -159,12 +167,14 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Creates or updates a new Partner
+     *
+     * @return void
      */
     public function savePartnerAction()
     {
         $params = $this->Request()->getParams();
 
-        $id = $this->Request()->id;
+        $id = $this->Request()->getParam('id');
 
         if (!empty($id)) {
             // Edit Data
@@ -195,6 +205,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * return the customerId for the customer mapping
+     *
+     * @return void
      */
     public function mapCustomerAccountAction()
     {
@@ -211,7 +223,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
             '%s %s %s %s|%d',
             $customer->getNumber(),
             $customer->getFirstname() . ' ' . $customer->getLastname(),
-            $customer->getDefaultBillingAddress()->getCompany(),
+            $customer->getDefaultBillingAddress() ? $customer->getDefaultBillingAddress()->getCompany() : '',
             $customer->getEmail(),
             $customer->getId()
         );
@@ -219,12 +231,14 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Deletes a Partner from the database
+     *
+     * @return void
      */
     public function deletePartnerAction()
     {
         try {
             /** @var Partner $model */
-            $model = $this->get('models')->getRepository(Partner::class)->find($this->Request()->id);
+            $model = $this->get('models')->getRepository(Partner::class)->find($this->Request()->getParam('id'));
             $this->get('models')->remove($model);
             $this->get('models')->flush();
             $this->View()->assign(['success' => true, 'data' => $this->Request()->getParams()]);
@@ -235,11 +249,13 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Validate the Tracking code to prevent that it already exists
+     *
+     * @return void
      */
     public function validateTrackingCodeAction()
     {
-        $trackingCode = $this->Request()->value;
-        $partnerId = (int) $this->Request()->param;
+        $trackingCode = $this->Request()->getParam('value');
+        $partnerId = (int) $this->Request()->getParam('param');
 
         $repository = $this->get('models')->getRepository(Partner::class);
         $foundPartner = $repository->getValidateTrackingCodeQuery($trackingCode, $partnerId);
@@ -249,28 +265,32 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Exports the Statistic Data of the partner via CSV
+     *
+     * @return void
      */
     public function downloadStatisticAction()
     {
         $this->Front()->Plugins()->Json()->setRenderer(false);
-        $partnerId = (int) $this->Request()->partnerId;
+        $partnerId = (int) $this->Request()->getParam('partnerId');
 
-        $repository = $this->get('models')->getRepository(Partner::class);
-        $dataQuery = $repository->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
+        $dataQuery = $this->get('models')->getRepository(Partner::class)
+            ->getStatisticListQuery(null, null, null, $partnerId, false, $this->getFromDate(), $this->getToDate());
         $resultArray = $dataQuery->getArrayResult();
 
         $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
         $this->Response()->headers->set('content-disposition', 'attachment;filename=partner_statistic.csv');
-        // Use this to set the BOM to show it in the right way for excel and stuff
+        // Use this to set the BOM to show it in the right way for Excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
+        if (!\is_resource($fp)) {
+            throw new RuntimeException('Could not open temporary stream');
+        }
         if (\is_array($resultArray[0])) {
             fputcsv($fp, array_keys($resultArray[0]), ';');
         }
 
         foreach ($resultArray as $value) {
-            $date = $value['orderTime']->format('d-m-Y');
-            $value['orderTime'] = $date;
+            $value['orderTime'] = $value['orderTime']->format('d-m-Y');
             $value['netTurnOver'] = number_format((float) $value['netTurnOver'], 2, ',', '.');
             $value['provision'] = number_format((float) $value['provision'], 2, ',', '.');
             fputcsv($fp, $value, ';');
@@ -280,6 +300,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Will redirect to the frontend to execute the partner link
+     *
+     * @return void
      */
     public function redirectToPartnerLinkAction()
     {
@@ -299,9 +321,6 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         $this->redirect($url . '?sPartner=' . urlencode($partnerId));
     }
 
-    /**
-     * Registers the different acl permission for the different controller actions.
-     */
     protected function initAcl()
     {
         /*

@@ -467,7 +467,7 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
 
         $domains = $this->getDomains($token);
 
-        if (\in_array($domain, $domains, true)) {
+        if (\is_array($domains) && \in_array($domain, $domains, true)) {
             $this->View()->assign([
                 'success' => true,
                 'message' => $this->get('snippets')

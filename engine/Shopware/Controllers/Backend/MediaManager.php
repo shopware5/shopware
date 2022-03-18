@@ -858,7 +858,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
     {
         $name = iconv('utf-8', 'ascii//translit', $name);
         $name = preg_replace('#[^A-Za-z0-9\-_]#', '-', $name);
-        $name = preg_replace('#-{2,}#', '-', $name);
+        $name = (string) preg_replace('#-{2,}#', '-', $name);
         $name = trim($name, '-');
 
         return mb_substr($name, 0, 180);
