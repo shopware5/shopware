@@ -43151,46 +43151,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:cleanupStatistic\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshArticleImpression\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshCurrentUsers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshLog\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshPartner\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshReferer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:updateLog\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
 			message: "#^PHPDoc tag @param for parameter \\$request with type Enlight_Controller_Request_Request is not subtype of native type Enlight_Controller_Request_RequestHttp\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
