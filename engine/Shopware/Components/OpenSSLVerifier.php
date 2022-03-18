@@ -98,13 +98,16 @@ class OpenSSLVerifier
             return $this->keyResource;
         }
 
-        $publicKey = trim(file_get_contents($this->publicKeyPath));
+        $publicKey = trim((string) file_get_contents($this->publicKeyPath));
 
-        if (false === $this->keyResource = openssl_pkey_get_public($publicKey)) {
+        $keyResource = openssl_pkey_get_public($publicKey);
+        if ($keyResource === false) {
             while ($errors[] = openssl_error_string()) {
             }
             throw new RuntimeException(sprintf("Error during public key read: \n%s", implode("\n", $errors)));
         }
+
+        $this->keyResource = $keyResource;
 
         return $this->keyResource;
     }

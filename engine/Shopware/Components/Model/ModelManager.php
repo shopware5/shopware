@@ -203,7 +203,7 @@ class ModelManager extends EntityManager
     {
         $metaDataCache = $this->getConfiguration()->getMetadataCacheImpl();
 
-        if (method_exists($metaDataCache, 'deleteAll')) {
+        if ($metaDataCache !== null && method_exists($metaDataCache, 'deleteAll')) {
             $metaDataCache->deleteAll();
         }
 

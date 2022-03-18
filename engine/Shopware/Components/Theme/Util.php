@@ -29,6 +29,7 @@ use Doctrine\ORM\AbstractQuery;
 use Exception;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
+use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Template;
 
 /**
@@ -40,17 +41,13 @@ class Util
 {
     /**
      * Required for different path operations.
-     *
-     * @var PathResolver
      */
-    private $pathResolver;
+    private PathResolver $pathResolver;
 
     /**
      * Only used to get all active plugins.
-     *
-     * @var ModelManager
      */
-    private $entityManager;
+    private ModelManager $entityManager;
 
     public function __construct(ModelManager $entityManager, PathResolver $pathResolver)
     {
@@ -147,7 +144,7 @@ class Util
         $builder = $this->entityManager->createQueryBuilder();
 
         $builder->select(['plugins'])
-            ->from(\Shopware\Models\Plugin\Plugin::class, 'plugins')
+            ->from(Plugin::class, 'plugins')
             ->where('plugins.active = true')
             ->andWhere('plugins.installed IS NOT NULL');
 
@@ -158,10 +155,8 @@ class Util
 
     /**
      * Returns the theme preview thumbnail.
-     *
-     * @return string|null
      */
-    private function getThemeImage(Template $theme)
+    private function getThemeImage(Template $theme): ?string
     {
         $directory = $this->pathResolver->getDirectory($theme);
 
@@ -172,6 +167,9 @@ class Util
         }
 
         $thumbnail = file_get_contents($thumbnail);
+        if (!\is_string($thumbnail)) {
+            return null;
+        }
 
         return 'data:image/png;base64,' . base64_encode($thumbnail);
     }

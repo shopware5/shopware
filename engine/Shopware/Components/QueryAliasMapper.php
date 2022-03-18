@@ -32,9 +32,9 @@ class QueryAliasMapper
     /**
      * Array containing the query alias mappings
      *
-     * @var string[]
+     * @var array<string, string>
      */
-    private $queryAliasMappings;
+    private array $queryAliasMappings;
 
     /**
      * [
@@ -42,7 +42,7 @@ class QueryAliasMapper
      *    'sPage'   => 'p',
      * ]
      *
-     * @param string[] $queryAliasMappings
+     * @param array<string, string> $queryAliasMappings
      */
     public function __construct(array $queryAliasMappings)
     {
@@ -90,7 +90,7 @@ class QueryAliasMapper
      *    'sPage'   => 'p',
      * ]
      *
-     * @return string[]
+     * @return array<string, string>
      */
     public function getQueryAliases()
     {
@@ -98,7 +98,7 @@ class QueryAliasMapper
     }
 
     /**
-     * Returns the short form of an given alias
+     * Returns the short form of a given alias
      *
      * $this->getQueryAlias('sSearch') returns 'q'
      *
@@ -110,11 +110,13 @@ class QueryAliasMapper
     {
         $list = $this->getQueryAliases();
 
-        return isset($list[$key]) ? $list[$key] : null;
+        return $list[$key] ?? null;
     }
 
     /**
      * Replaces the query params with their matching long form
+     *
+     * @return void
      */
     public function replaceShortRequestQueries(Enlight_Controller_Request_RequestHttp $request)
     {
@@ -142,9 +144,9 @@ class QueryAliasMapper
      *    'foo' => 'bar'
      * ]
      *
-     * @param string[] $params
+     * @param array<string, mixed> $params
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function replaceLongParams($params)
     {
@@ -176,9 +178,9 @@ class QueryAliasMapper
      *   'foo'   => 'bar,
      * ]
      *
-     * @param string[] $params
+     * @param array<string, mixed> $params
      *
-     * @return string[]
+     * @return array<string, mixed>
      */
     public function replaceShortParams($params)
     {

@@ -25,6 +25,7 @@
 namespace Shopware\Components\Plugin\Context;
 
 use JsonSerializable;
+use ReturnTypeWillChange;
 use Shopware\Components\CacheManager;
 use Shopware\Models\Plugin\Plugin;
 
@@ -167,7 +168,7 @@ class InstallContext implements JsonSerializable
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return ['scheduled' => $this->scheduled];

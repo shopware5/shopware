@@ -24,6 +24,8 @@
 
 namespace Shopware\Components;
 
+use ReturnTypeWillChange;
+
 /**
  * @deprecated - With Shopware 5.8 all occurrences of this trait will be replaced with `Shopware\Components\ObjectJsonSerializeTrait`
  */
@@ -34,7 +36,7 @@ trait ObjectJsonSerializeTraitDeprecated
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         return get_object_vars($this);

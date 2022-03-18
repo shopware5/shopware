@@ -550,6 +550,9 @@ class Backup
         $outFileFooter = $path . $table . '.footersql';
 
         $fileHandle = fopen($outFileData, 'w');
+        if (!\is_resource($fileHandle)) {
+            throw new RuntimeException(sprintf('Could not open stream at "%s"', $outFileData));
+        }
 
         $columns = $this->getAffectedColumns($table);
         $sqlColumns = implode(', ', $columns);

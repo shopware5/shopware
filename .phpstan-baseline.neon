@@ -15391,42 +15391,12 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$destPath of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:getUniqueFileName\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Attribute\\\\Media\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function is_dir expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function unlink expects string, bool\\|string given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
 			message: "#^Parameter \\#1 \\$filename of function unlink expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of class Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile constructor expects string, array\\|bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of class Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile constructor expects string, bool\\|string given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function pathinfo expects string, bool\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
@@ -15436,32 +15406,12 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$pathname of function mkdir expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
 			message: "#^Parameter \\#2 \\$baseFilename of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:load\\(\\) expects string\\|null, bool\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
-			message: "#^Parameter \\#2 \\$destinationPath of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:uploadBase64File\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
 			message: "#^Parameter \\#2 \\$filename of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:prepareFilePath\\(\\) expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#3 \\$baseFilename of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:uploadBase64File\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
@@ -16056,16 +16006,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function unlink expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#1 \\$source_file of function copy expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
 			message: "#^Parameter \\#1 \\$variant of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:considerTaxInput\\(\\) expects array, array\\|Shopware\\\\Models\\\\Article\\\\Detail given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
@@ -16391,11 +16331,6 @@ parameters:
 			path: engine/Shopware/Components/CacheManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$object of function method_exists expects object\\|string, Doctrine\\\\Common\\\\Cache\\\\Cache\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CacheManager.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\CacheManager\\:\\:\\$cacheConfig type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CacheManager.php
@@ -16416,129 +16351,9 @@ parameters:
 			path: engine/Shopware/Components/CacheSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\CaptchaInterface\\:\\:getTemplateData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/CaptchaInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\CaptchaRepository\\:\\:__construct\\(\\) has parameter \\$captchas with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Captcha/CaptchaRepository.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\DefaultCaptcha\\:\\:getImageResource\\(\\) should return resource but returns resource\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\DefaultCaptcha\\:\\:getTemplateData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagecolorallocate expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imageline expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagestring expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagettftext expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function base64_encode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#6 \\$col of function imageline expects int, int\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#6 \\$col of function imagestring expects int, int\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Parameter \\#6 \\$col of function imagettftext expects int, int\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/DefaultCaptcha.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\HoneypotCaptcha\\:\\:getTemplateData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/HoneypotCaptcha.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\LegacyCaptcha\\:\\:getImageResource\\(\\) should return resource but returns resource\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\LegacyCaptcha\\:\\:getTemplateData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$templateDirs has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagecolorallocate expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imageline expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagestring expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagettftext expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function base64_encode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#6 \\$col of function imageline expects int, int\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#6 \\$col of function imagestring expects int, int\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Parameter \\#6 \\$col of function imagettftext expects int, int\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Captcha/LegacyCaptcha.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\NoCaptcha\\:\\:getTemplateData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/NoCaptcha.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\BasketHelper\\:\\:addProportionalDiscount\\(\\) has no return type specified\\.$#"
@@ -16832,11 +16647,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Components_Check_File\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Check/File.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/File.php
 
@@ -17341,16 +17151,6 @@ parameters:
 			path: engine/Shopware/Components/CsvIterator.php
 
 		-
-			message: "#^Method Shopware_Components_CsvIterator\\:\\:SetFieldmark\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Method Shopware_Components_CsvIterator\\:\\:_read\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
 			message: "#^Method Shopware_Components_CsvIterator\\:\\:current\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CsvIterator.php
@@ -17361,32 +17161,7 @@ parameters:
 			path: engine/Shopware/Components/CsvIterator.php
 
 		-
-			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function feof expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fread expects resource, resource\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function rewind expects resource, resource\\|null given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
 			message: "#^Property Shopware_Components_CsvIterator\\:\\:\\$_current type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
-			message: "#^Property Shopware_Components_CsvIterator\\:\\:\\$_handler \\(resource\\|null\\) does not accept resource\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CsvIterator.php
 
@@ -17626,11 +17401,6 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Compiler/ConfigureContainerAwareCommands.php
 
 		-
-			message: "#^Parameter \\#1 \\$object_or_string of function is_a expects object\\|string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Compiler/ConfigureContainerAwareCommands.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Compiler\\\\DoctrineEventSubscriberCompilerPass\\:\\:process\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Compiler/DoctrineEventSubscriberCompilerPass.php
@@ -17697,11 +17467,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DispatchFormatHelper\\:\\:formatNameForRequest\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DispatchFormatHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function ucwords expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DispatchFormatHelper.php
 
@@ -18656,11 +18421,6 @@ parameters:
 			path: engine/Shopware/Components/Filesystem/PrefixFilesystem.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\PrefixFilesystem\\:\\:checkPath\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Filesystem/PrefixFilesystem.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\PrefixFilesystem\\:\\:createDir\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Filesystem/PrefixFilesystem.php
@@ -18702,11 +18462,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\PrefixFilesystem\\:\\:writeStream\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Filesystem/PrefixFilesystem.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function ltrim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Filesystem/PrefixFilesystem.php
 
@@ -19046,17 +18801,7 @@ parameters:
 			path: engine/Shopware/Components/HttpCache/CacheWarmer.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\DefaultRouteService\\:\\:findRouteValue\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/DefaultRouteService.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\DefaultRouteService\\:\\:getDefaultNoCacheTags\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/DefaultRouteService.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\DefaultRouteService\\:\\:getDefaultRouteValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/DefaultRouteService.php
 
@@ -19161,37 +18906,12 @@ parameters:
 			path: engine/Shopware/Components/HttpCache/Store.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function file_get_contents expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/Store.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function fopen expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/Store.php
-
-		-
 			message: "#^Parameter \\#1 \\$id of method Shopware\\\\Components\\\\HttpCache\\\\Store\\:\\:purgeByShopwareId\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/Store.php
 
 		-
-			message: "#^Parameter \\#1 \\$old_name of function rename expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/Store.php
-
-		-
-			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/Store.php
-
-		-
 			message: "#^Parameter \\#2 \\$data of method Shopware\\\\Components\\\\HttpCache\\\\Store\\:\\:save\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/Store.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/Store.php
 
@@ -19462,11 +19182,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\License\\\\Service\\\\LocalLicenseUnpackService\\:\\:readLicenseInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/License/Service/LocalLicenseUnpackService.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function base64_decode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/License/Service/LocalLicenseUnpackService.php
 
@@ -19966,11 +19681,6 @@ parameters:
 			path: engine/Shopware/Components/Model/Configuration.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function rtrim expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/Configuration.php
-
-		-
 			message: "#^Parameter \\#2 \\$cache of class Doctrine\\\\Common\\\\Annotations\\\\CachedReader constructor expects Doctrine\\\\Common\\\\Cache\\\\Cache, Doctrine\\\\Common\\\\Cache\\\\Cache\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/Configuration.php
@@ -20192,11 +19902,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$className of method Doctrine\\\\ORM\\\\EntityManager\\:\\:getClassMetadata\\(\\) expects string, class\\-string\\<Shopware\\\\Components\\\\Model\\\\ModelEntity\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$object of function method_exists expects object\\|string, Doctrine\\\\Common\\\\Cache\\\\Cache\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ModelManager.php
 
@@ -20492,11 +20197,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$filename of function is_file expects string, string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
 
@@ -20924,16 +20624,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\ResourceInterface\\:\\:save\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/ResourceInterface.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/OpenSSLVerifier.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\OpenSSLVerifier\\:\\:\\$keyResource \\(resource\\|null\\) does not accept resource\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/OpenSSLVerifier.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\OptinService\\:\\:add\\(\\) has no return type specified\\.$#"
@@ -21901,16 +21591,6 @@ parameters:
 			path: engine/Shopware/Components/ProductStream/RepositoryInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\QueryAliasMapper\\:\\:replaceShortRequestQueries\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/QueryAliasMapper.php
-
-		-
-			message: "#^Cannot access offset 6 on string\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Random.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Random\\:\\:generatePassword\\(\\) has parameter \\$availableSets with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Random.php
@@ -21926,16 +21606,6 @@ parameters:
 			path: engine/Shopware/Components/Random.php
 
 		-
-			message: "#^Parameter \\#1 \\$character of function ord expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Random.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function base64_encode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Random.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\ReflectionHelper\\:\\:createInstanceFromNamedArguments\\(\\) has parameter \\$arguments with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ReflectionHelper.php
@@ -21947,11 +21617,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\ReflectionHelper\\:\\:verifyClass\\(\\) has parameter \\$class with generic class ReflectionClass but does not specify its types\\: T$#"
-			count: 1
-			path: engine/Shopware/Components/ReflectionHelper.php
-
-		-
-			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ReflectionHelper.php
 
@@ -22207,11 +21872,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitemapXMLRepository\\:\\:readSupplierUrls\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/SitemapXMLRepository.php
-
-		-
-			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/SitemapXMLRepository.php
 
@@ -23491,151 +23151,6 @@ parameters:
 			path: engine/Shopware/Components/Theme/Util.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function base64_encode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Util.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:calculateProportionalThumbnailSize\\(\\) has parameter \\$originalSize with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:calculateProportionalThumbnailSize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:createNewImage\\(\\) has parameter \\$newSize with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:createNewImage\\(\\) has parameter \\$originalSize with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:createNewImage\\(\\) should return resource but returns resource\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:createThumbnail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:downloadImage\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:fixGdImageBlur\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:fixGdImageBlur\\(\\) has parameter \\$newSize with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:getOriginalImageSize\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:optimizeImage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:saveImage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:uploadImage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$dst_im of function imagecopyresampled expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$fileContent of method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\Basic\\:\\:createImageResource\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function fopen expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagealphablending expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagecolorallocate expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagefill expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagesavealpha expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#2 \\$dest of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:writeStream\\(\\) expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#4 \\$col of function imagefill expects int, int\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Parameter \\#4 \\$col of function imagesetpixel expects int, int\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/Basic.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Generator\\\\GeneratorInterface\\:\\:createThumbnail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Generator/GeneratorInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:createMediaThumbnail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Thumbnail/Manager.php
@@ -23826,11 +23341,6 @@ parameters:
 			path: engine/Shopware/Components/Translation.php
 
 		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Translation.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Translation.php
@@ -23862,11 +23372,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\UploadMaxSizeValidator\\:\\:validateContentLength\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/UploadMaxSizeValidator.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/UploadMaxSizeValidator.php
 
@@ -41214,66 +40719,6 @@ parameters:
 			message: "#^Property Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:\\$cacheInvalidationBuffer type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$Admin\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Response_Response\\:\\:\\$headers\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Argument of an invalid type int\\<min, \\-1\\>\\|int\\<1, max\\> supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Cannot access an offset on array\\|int\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:getNoCacheTagsForRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:getNoCacheTagsFromCookie\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:resetCookies\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:setContextCacheKey\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:setContextCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Parameter \\#1 \\$arr1 of function array_intersect expects array, int given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
-
-		-
-			message: "#^Property ShopwarePlugins\\\\HttpCache\\\\CacheControl\\:\\:\\$config type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/CacheControl.php
 
 		-
 			message: "#^Cannot access offset 'elements' on Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\.$#"

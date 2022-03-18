@@ -315,28 +315,20 @@ class PrefixFilesystem implements FilesystemInterface
     public function stripPrefix($path)
     {
         $prefix = rtrim($this->prefix, '/');
-        $path = preg_replace('#^' . $prefix . '#', '', $path);
-        $path = ltrim($path, '/');
+        $path = (string) preg_replace('#^' . $prefix . '#', '', $path);
 
-        return $path;
+        return ltrim($path, '/');
     }
 
-    /**
-     * @param string $prefix
-     *
-     * @return string
-     */
-    private function normalizePrefix($prefix)
+    private function normalizePrefix(string $prefix): string
     {
         return trim($prefix, '/') . '/';
     }
 
     /**
-     * @param string $path
-     *
      * @throws RuntimeException
      */
-    private function checkPath($path)
+    private function checkPath(string $path): void
     {
         if (!preg_match('#\.\./|\\0#msi', $path)) {
             return;

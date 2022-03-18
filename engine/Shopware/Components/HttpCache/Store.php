@@ -136,6 +136,9 @@ class Store extends BaseStore
             }
 
             $headerData = file_get_contents($headerFile->getPathname());
+            if (!\is_string($headerData)) {
+                continue;
+            }
             $headerData = unserialize($headerData, ['allowed_classes' => false]);
 
             $changed = false;
@@ -189,7 +192,7 @@ class Store extends BaseStore
             return $headerKey;
         }
 
-        $cacheIds = array_filter(explode(';', $response->headers->get('x-shopware-cache-id')));
+        $cacheIds = array_filter(explode(';', (string) $response->headers->get('x-shopware-cache-id')));
         $cacheKey = $response->headers->get('x-content-digest');
 
         foreach ($cacheIds as $cacheId) {
@@ -363,10 +366,8 @@ class Store extends BaseStore
      *
      * @param string $key  The store key
      * @param string $data The data to store
-     *
-     * @return bool
      */
-    private function save($key, $data)
+    private function save(string $key, string $data): bool
     {
         $path = $this->getPath($key);
         if (!is_dir(\dirname($path)) && @mkdir(\dirname($path), 0777, true) === false && !is_dir(\dirname($path))) {
@@ -374,13 +375,18 @@ class Store extends BaseStore
         }
 
         $tmpFile = tempnam(\dirname($path), basename($path));
-        if (false === $fp = @fopen($tmpFile, 'wb')) {
+        if (!\is_string($tmpFile)) {
+            return false;
+        }
+
+        $fp = @fopen($tmpFile, 'wb');
+        if ($fp === false) {
             return false;
         }
         @fwrite($fp, $data);
         @fclose($fp);
 
-        if ($data != file_get_contents($tmpFile)) {
+        if ($data !== file_get_contents($tmpFile)) {
             return false;
         }
 

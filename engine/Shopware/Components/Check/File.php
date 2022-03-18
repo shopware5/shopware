@@ -71,7 +71,7 @@ class Shopware_Components_Check_File
     {
         $baseDir = $this->testDir;
 
-        $md5Sums = trim(file_get_contents($this->filePath));
+        $md5Sums = trim((string) file_get_contents($this->filePath));
         $md5Sums = explode("\n", $md5Sums);
 
         $good = [];

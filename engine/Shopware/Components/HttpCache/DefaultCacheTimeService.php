@@ -25,13 +25,11 @@
 namespace Shopware\Components\HttpCache;
 
 use Enlight_Controller_Request_Request as Request;
+use UnexpectedValueException;
 
 class DefaultCacheTimeService implements CacheTimeServiceInterface
 {
-    /**
-     * @var DefaultRouteService
-     */
-    private $defaultRoute;
+    private DefaultRouteService $defaultRoute;
 
     public function __construct(DefaultRouteService $defaultRoute)
     {
@@ -45,6 +43,11 @@ class DefaultCacheTimeService implements CacheTimeServiceInterface
      */
     public function getCacheTime(Request $request)
     {
-        return $this->defaultRoute->findRouteValue($request);
+        $cacheTime = $this->defaultRoute->findRouteValue($request);
+        if (\is_array($cacheTime)) {
+            throw new UnexpectedValueException('Cache time should be integer or null at this point');
+        }
+
+        return $cacheTime;
     }
 }

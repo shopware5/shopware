@@ -73,7 +73,7 @@ class LocalLicenseUnpackService implements LicenseUnpackServiceInterface
         $license = str_replace('-------- LICENSE BEGIN ---------', '', $license);
         $license = str_replace('--------- LICENSE END ----------', '', $license);
         $license = preg_replace('#--.+?--#', '', (string) $license);
-        $license = preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
+        $license = (string) preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
 
         $info = base64_decode($license, true);
         if ($info === false) {

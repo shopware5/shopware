@@ -26,6 +26,7 @@ namespace Shopware\Components\LegacyRequestWrapper;
 
 use ArrayAccess;
 use Enlight_Controller_Request_Request;
+use ReturnTypeWillChange;
 
 class GetWrapper implements ArrayAccess
 {
@@ -43,7 +44,7 @@ class GetWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $getData = $this->request->getQuery();
@@ -58,7 +59,7 @@ class GetWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->request->getQuery($offset);
@@ -72,7 +73,7 @@ class GetWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->request->setQuery($offset, $value);
@@ -85,7 +86,7 @@ class GetWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->request->setQuery($offset, null);

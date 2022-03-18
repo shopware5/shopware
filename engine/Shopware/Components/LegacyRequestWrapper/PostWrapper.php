@@ -27,6 +27,7 @@ namespace Shopware\Components\LegacyRequestWrapper;
 use ArrayAccess;
 use Enlight_Controller_Request_Request;
 use Exception;
+use ReturnTypeWillChange;
 
 class PostWrapper implements ArrayAccess
 {
@@ -44,7 +45,7 @@ class PostWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $postData = $this->request->getPost();
@@ -59,7 +60,7 @@ class PostWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->request->getPost($offset);
@@ -73,7 +74,7 @@ class PostWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         $this->request->setPost($offset, $value);
@@ -88,7 +89,7 @@ class PostWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         $this->request->setPost($offset, null);
