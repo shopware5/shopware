@@ -44,7 +44,7 @@ interface CaptchaInterface
     /**
      * Returns an array of data which will be assigned to the captcha's template
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getTemplateData();
 }

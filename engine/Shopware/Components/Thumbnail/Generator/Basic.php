@@ -24,7 +24,6 @@
 
 namespace Shopware\Components\Thumbnail\Generator;
 
-use Exception;
 use RuntimeException;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
@@ -67,11 +66,18 @@ class Basic implements GeneratorInterface
      */
     public function createThumbnail($imagePath, $destination, $maxWidth, $maxHeight, $keepProportions = false, $quality = 90)
     {
+        $maxWidth = (int) $maxWidth;
+        $maxHeight = (int) $maxHeight;
+        $quality = (int) $quality;
+
         if (!$this->mediaService->has($imagePath)) {
-            throw new Exception(sprintf('File not found: %s', $imagePath));
+            throw new RuntimeException(sprintf('File not found: %s', $imagePath));
         }
 
         $content = $this->mediaService->read($imagePath);
+        if (!\is_string($content)) {
+            throw new RuntimeException(sprintf('Could not read image from file: %s', $imagePath));
+        }
         $image = $this->createImageResource($content, $imagePath);
 
         // Determines the width and height of the original image
@@ -110,13 +116,13 @@ class Basic implements GeneratorInterface
      *
      * @param resource $imageResource
      *
-     * @return array
+     * @return array{width: int, height: int}
      */
-    private function getOriginalImageSize($imageResource)
+    private function getOriginalImageSize($imageResource): array
     {
         return [
-            'width' => imagesx($imageResource),
-            'height' => imagesy($imageResource),
+            'width' => (int) imagesx($imageResource),
+            'height' => (int) imagesy($imageResource),
         ];
     }
 
@@ -125,16 +131,14 @@ class Basic implements GeneratorInterface
      * the given path and calls the right creation
      * method for the image extension
      *
-     * @param string $fileContent
-     * @param string $imagePath
-     *
      * @throws RuntimeException
      *
      * @return resource
      */
-    private function createImageResource($fileContent, $imagePath)
+    private function createImageResource(string $fileContent, string $imagePath)
     {
-        if (!$image = @imagecreatefromstring($fileContent)) {
+        $image = imagecreatefromstring($fileContent);
+        if ($image === false) {
             throw new RuntimeException(sprintf('Image is not in a recognized format (%s)', $imagePath));
         }
 
@@ -143,12 +147,8 @@ class Basic implements GeneratorInterface
 
     /**
      * Returns the extension of the file with passed path
-     *
-     * @param string $path
-     *
-     * @return string
      */
-    private function getImageExtension($path)
+    private function getImageExtension(string $path): string
     {
         return pathinfo($path, PATHINFO_EXTENSION);
     }
@@ -156,12 +156,11 @@ class Basic implements GeneratorInterface
     /**
      * Calculate image proportion and set the new resolution
      *
-     * @param int $width
-     * @param int $height
+     * @param array{width: int, height: int} $originalSize
      *
-     * @return array
+     * @return array{width: int, height: int, proportion: float}
      */
-    private function calculateProportionalThumbnailSize(array $originalSize, $width, $height)
+    private function calculateProportionalThumbnailSize(array $originalSize, int $width, int $height): array
     {
         // Source image size
         $srcWidth = $originalSize['width'];
@@ -187,27 +186,29 @@ class Basic implements GeneratorInterface
         }
 
         return [
-            'width' => $dstWidth,
-            'height' => $dstHeight,
+            'width' => (int) $dstWidth,
+            'height' => (int) $dstHeight,
             'proportion' => $factor,
         ];
     }
 
     /**
-     * @param resource $image
-     * @param array    $originalSize
-     * @param array    $newSize
-     * @param string   $extension
+     * @param resource                       $image
+     * @param array{width: int, height: int} $originalSize
+     * @param array{width: int, height: int} $newSize
      *
      * @return resource
      */
-    private function createNewImage($image, $originalSize, $newSize, $extension)
+    private function createNewImage($image, array $originalSize, array $newSize, string $extension)
     {
         // Creates a new image with given size
         $newImage = imagecreatetruecolor($newSize['width'], $newSize['height']);
+        if ($newImage === false) {
+            throw new RuntimeException('Could not create image');
+        }
 
         if (\in_array($extension, ['jpg', 'jpeg'])) {
-            $background = imagecolorallocate($newImage, 255, 255, 255);
+            $background = (int) imagecolorallocate($newImage, 255, 255, 255);
             imagefill($newImage, 0, 0, $background);
         } else {
             // Disables blending
@@ -235,12 +236,12 @@ class Basic implements GeneratorInterface
     /**
      * Fix #fefefe in white backgrounds
      *
-     * @param array    $newSize
-     * @param resource $newImage
+     * @param array{width: int, height: int} $newSize
+     * @param resource                       $newImage
      */
-    private function fixGdImageBlur($newSize, $newImage)
+    private function fixGdImageBlur(array $newSize, $newImage): void
     {
-        $colorWhite = imagecolorallocate($newImage, 255, 255, 255);
+        $colorWhite = (int) imagecolorallocate($newImage, 255, 255, 255);
         $processHeight = $newSize['height'] + 0;
         $processWidth = $newSize['width'] + 0;
         for ($y = 0; $y < $processHeight; ++$y) {
@@ -257,11 +258,10 @@ class Basic implements GeneratorInterface
     }
 
     /**
-     * @param string   $destination
      * @param resource $newImage
-     * @param int      $quality     - JPEG quality
+     * @param int      $quality  - JPEG quality
      */
-    private function saveImage($destination, $newImage, $quality)
+    private function saveImage(string $destination, $newImage, int $quality): void
     {
         ob_start();
         // saves the image information into a specific file extension
@@ -278,15 +278,15 @@ class Basic implements GeneratorInterface
         }
 
         $content = ob_get_contents();
+        if (!\is_string($content)) {
+            throw new RuntimeException('Could not open image');
+        }
         ob_end_clean();
 
         $this->mediaService->write($destination, $content);
     }
 
-    /**
-     * @param string $destination
-     */
-    private function optimizeImage($destination)
+    private function optimizeImage(string $destination): void
     {
         $tmpFilename = $this->downloadImage($destination);
 
@@ -300,31 +300,35 @@ class Basic implements GeneratorInterface
         }
     }
 
-    /**
-     * @param string $destination
-     *
-     * @return string
-     */
-    private function downloadImage($destination)
+    private function downloadImage(string $destination): string
     {
         $tmpFilename = tempnam(sys_get_temp_dir(), 'optimize_image');
+        if (!\is_string($tmpFilename)) {
+            throw new RuntimeException('Could not create tmp file name');
+        }
         $handle = fopen($tmpFilename, 'wb');
+        if (!\is_resource($handle)) {
+            throw new RuntimeException(sprintf('Could not open file at: %s', $tmpFilename));
+        }
 
+        $fromHandle = $this->mediaService->readStream($destination);
+        if (!\is_resource($fromHandle)) {
+            throw new RuntimeException(sprintf('Could not open file at: %s', $destination));
+        }
         stream_copy_to_stream(
-            $this->mediaService->readStream($destination),
+            $fromHandle,
             $handle
         );
 
         return $tmpFilename;
     }
 
-    /**
-     * @param string $destination
-     * @param string $tmpFilename
-     */
-    private function uploadImage($destination, $tmpFilename)
+    private function uploadImage(string $destination, string $tmpFilename): void
     {
         $fileHandle = fopen($tmpFilename, 'rb');
+        if (!\is_resource($fileHandle)) {
+            throw new RuntimeException(sprintf('Could not open file at: %s', $tmpFilename));
+        }
         $this->mediaService->writeStream($destination, $fileHandle);
         fclose($fileHandle);
     }

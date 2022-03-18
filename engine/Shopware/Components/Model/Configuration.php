@@ -215,7 +215,7 @@ class Configuration extends BaseConfiguration
             throw new RuntimeException(sprintf("Unable to write in the doctrine attribute directory (%s)\n", $dir));
         }
 
-        $dir = rtrim(realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
+        $dir = rtrim((string) realpath($dir), '\\/') . DIRECTORY_SEPARATOR;
 
         $this->attributeDir = $dir;
 

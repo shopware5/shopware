@@ -74,11 +74,13 @@ class DefaultRouteService
      * findRouteValue takes the current Request and tries to find a default max-age value for either the full route,
      * including the action, or at least the controller. If that fails, null is returned.
      *
-     * @return int|null
+     * @param array<string, array<string>> $values
+     *
+     * @return array<string>|int|null
      */
     public function findRouteValue(Enlight_Controller_Request_Request $request, array $values = null)
     {
-        if (!$values) {
+        if (empty($values)) {
             $values = $this->getDefaultRouteValues();
         }
 
@@ -98,9 +100,9 @@ class DefaultRouteService
     /**
      * Returns an array mapping controller names to their default max-age as set via the HttpCache Plugin.
      *
-     * @return array
+     * @return array<string, int>
      */
-    private function getDefaultRouteValues()
+    private function getDefaultRouteValues(): array
     {
         $controllers = $this->config['cacheControllers'];
         $result = [];

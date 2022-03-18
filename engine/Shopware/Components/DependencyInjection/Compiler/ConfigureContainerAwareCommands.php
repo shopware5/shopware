@@ -42,7 +42,11 @@ class ConfigureContainerAwareCommands implements CompilerPassInterface
                 continue;
             }
 
-            if (is_a($definition->getClass(), ContainerAwareInterface::class, true)) {
+            $definitionClass = $definition->getClass();
+            if (!\is_string($definitionClass)) {
+                continue;
+            }
+            if (is_a($definitionClass, ContainerAwareInterface::class, true)) {
                 $definition->addMethodCall('setContainer', [new Reference('service_container')]);
             }
         }

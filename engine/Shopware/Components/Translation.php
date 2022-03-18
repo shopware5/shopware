@@ -366,7 +366,7 @@ class Shopware_Components_Translation
             $type = 'article';
             $data = array_merge(
                 $this->read($language, $type, $key),
-                $data
+                $data ?? []
             );
         }
 

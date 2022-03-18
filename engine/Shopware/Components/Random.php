@@ -26,6 +26,7 @@ namespace Shopware\Components;
 
 use DomainException;
 use RuntimeException;
+use UnexpectedValueException;
 
 /**
  * Pseudorandom number generator (PRNG).
@@ -44,12 +45,12 @@ abstract class Random
      *
      * @param int $length
      *
-     * @return string|false
+     * @return string
      */
     public static function getBytes($length)
     {
         if ($length <= 0) {
-            return false;
+            throw new UnexpectedValueException('Parameter "length" must be a positive integer');
         }
 
         return random_bytes($length);

@@ -121,7 +121,7 @@ class ReflectionHelper
         }
         $fileDir = substr($fileName, 0, \strlen($docPath));
 
-        // Trying to execute a class outside of the Shopware DocumentRoot
+        // Trying to execute a class outside the Shopware DocumentRoot
         if ($fileDir !== $docPath) {
             throw new InvalidArgumentException(sprintf('Class "%s" out of scope', $class->getFileName()), 1);
         }
@@ -148,7 +148,8 @@ class ReflectionHelper
         }
 
         $className = $class->getName();
-        if (!\array_key_exists(ReflectionAwareInterface::class, class_implements($className))) {
+        $classImplements = class_implements($className);
+        if (!\is_array($classImplements) || !\array_key_exists(ReflectionAwareInterface::class, $classImplements)) {
             throw new InvalidArgumentException(sprintf('Class %s has to implement the interface %s', $className, ReflectionAwareInterface::class));
         }
     }

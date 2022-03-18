@@ -30,7 +30,7 @@ use Shopware\Components\Random;
 use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class DefaultCaptcha implements CaptchaInterface
+class DefaultCaptcha extends AbstractCaptcha
 {
     public const SESSION_KEY = __CLASS__ . '_sRandom';
     public const CAPTCHA_METHOD = 'default';
@@ -40,24 +40,13 @@ class DefaultCaptcha implements CaptchaInterface
      */
     private $container;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
-
-    /**
-     * @var Enlight_Template_Manager
-     */
-    private $templateManager;
-
     public function __construct(
         ContainerInterface $container,
         Shopware_Components_Config $config,
         Enlight_Template_Manager $templateManager
     ) {
         $this->container = $container;
-        $this->config = $config;
-        $this->templateManager = $templateManager;
+        parent::__construct($config, $templateManager);
     }
 
     /**
@@ -93,7 +82,7 @@ class DefaultCaptcha implements CaptchaInterface
 
         ob_start();
         imagepng($imgResource, null, 9);
-        $img = ob_get_clean();
+        $img = (string) ob_get_clean();
         imagedestroy($imgResource);
         $img = base64_encode($img);
 
@@ -120,86 +109,7 @@ class DefaultCaptcha implements CaptchaInterface
         return self::CAPTCHA_METHOD;
     }
 
-    /**
-     * Generates the captcha challenge image from a given string
-     *
-     * @param string $string
-     *
-     * @return resource
-     */
-    private function getImageResource($string)
-    {
-        $captcha = $this->getCaptchaFile('frontend/_public/src/img/bg--captcha.jpg');
-        $font = $this->getCaptchaFile('frontend/_public/src/fonts/captcha.ttf');
-
-        if (empty($captcha)) {
-            $captcha = $this->getCaptchaFile('frontend/_resources/images/captcha/background.jpg');
-        }
-
-        if (empty($font)) {
-            $font = $this->getCaptchaFile('frontend/_resources/images/captcha/font.ttf');
-        }
-
-        if (!empty($captcha)) {
-            $im = imagecreatefromjpeg($captcha);
-        } else {
-            $im = imagecreatetruecolor(162, 87);
-        }
-        if (!empty($this->config->get('CaptchaColor'))) {
-            $colors = explode(',', $this->config->get('CaptchaColor'));
-        } else {
-            $colors = explode(',', '255,0,0');
-        }
-
-        $black = imagecolorallocate($im, (int) $colors[0], (int) $colors[1], (int) $colors[2]);
-        $string = implode(' ', str_split($string));
-
-        if (!empty($font)) {
-            for ($i = 0; $i <= \strlen($string); ++$i) {
-                $rand1 = Random::getInteger(35, 40);
-                $rand2 = Random::getInteger(15, 20);
-                $rand3 = Random::getInteger(60, 70);
-                imagettftext($im, $rand1, $rand2, ($i + 1) * 15, $rand3, $black, $font, substr($string, $i, 1));
-                imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, substr($string, $i, 1));
-            }
-            for ($i = 0; $i < 8; ++$i) {
-                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150), Random::getInteger(20, 100), $black);
-                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150), Random::getInteger(20, 100), $black);
-            }
-        } else {
-            $white = imagecolorallocate($im, 255, 255, 255);
-            imagestring($im, 5, 40, 35, $string, $white);
-            imagestring($im, 3, 40, 70, 'missing font', $white);
-        }
-
-        return $im;
-    }
-
-    /**
-     * Helper function that checks if a given file exists in any template directory.
-     * If the file exists, the full file path will be returned, otherwise null.
-     *
-     * @param string $fileName
-     *
-     * @return string|null
-     */
-    private function getCaptchaFile($fileName)
-    {
-        $templateDirs = $this->templateManager->getTemplateDir();
-
-        foreach ($templateDirs as $templateDir) {
-            if (file_exists($templateDir . $fileName)) {
-                return $templateDir . $fileName;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return string
-     */
-    private function createCaptchaString()
+    private function createCaptchaString(): string
     {
         $alphabetRangeLow = range('a', 'z');
         $alphabetRangeUpp = range('A', 'Z');

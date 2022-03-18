@@ -30,14 +30,14 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * The CSV file handler.
      *
-     * @var resource|null
+     * @var resource
      */
     private $_handler;
 
     /**
      * The delimiter of the CSV file.
      *
-     * @var string
+     * @var non-empty-string
      */
     private $_delimiter;
 
@@ -79,9 +79,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This is the constructor. It try to open the CSV file.
      *
-     * @param string $filename  the full path of the CSV file
-     * @param string $delimiter the delimiter
-     * @param int    $header
+     * @param string           $filename  the full path of the CSV file
+     * @param non-empty-string $delimiter the delimiter
+     * @param int              $header
      *
      * @throws Exception
      */
@@ -93,9 +93,11 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
             throw new InvalidArgumentException(sprintf('Given file path "%s" does not exist', $filename));
         }
 
-        if (($this->_handler = fopen($realPath, 'r')) === false) {
+        $handler = fopen($realPath, 'r');
+        if (!\is_resource($handler)) {
             throw new Exception(sprintf('The file "%s" cannot be opened', $realPath));
         }
+        $this->_handler = $handler;
 
         $this->_newline = $this->getNewLineType();
 
@@ -117,9 +119,11 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     }
 
     /**
-     * @deprecated in 5.6, will be removed 5.7 without replacement
+     * @deprecated in 5.6, will be removed 5.8 without replacement
      *
      * @param string $fieldmark
+     *
+     * @return void
      */
     public function SetFieldmark($fieldmark)
     {
@@ -136,6 +140,8 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 
     /**
      * This method move the file pointer to the next row.
+     *
+     * @return void
      */
     public function next()
     {
@@ -145,6 +151,8 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 
     /**
      * This method reset the file handler.
+     *
+     * @return void
      */
     public function rewind()
     {
@@ -212,7 +220,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         if ($pos !== false && $pos > 1) {
             rewind($this->_handler);
             // Check if the previous char is a \r. If it is we have a windows EOL
-            if (substr($content, $pos - 1, 1) === "\r") {
+            if ($content[$pos - 1] === "\r") {
                 return $newLineWin;
             }
 
@@ -224,14 +232,17 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
 
     /**
      * This method read the next row of the CSV file.
+     *
+     * @return void
      */
     private function _read()
     {
-        if (!$this->_handler || feof($this->_handler)) {
+        if (feof($this->_handler)) {
             $this->_current = false;
 
             return;
         }
+
         $count = 0;
         $line = stream_get_line($this->_handler, self::DEFAULT_LENGTH, $this->_newline);
         if ($line === false) {
@@ -239,7 +250,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
         }
 
         // Remove possible utf8-bom
-        if (substr($line, 0, 3) == pack('CCC', 0xEF, 0xBB, 0xBF)) {
+        if (str_starts_with($line, pack('CCC', 0xEF, 0xBB, 0xBF))) {
             $line = substr($line, 3);
         }
 
@@ -252,7 +263,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
             return;
         }
         $line = explode($this->_delimiter, $line);
-        if (empty($count) || $line === false) {
+        if (empty($count) || !\is_array($line)) {
             $this->_current = $line;
 
             return;
@@ -265,7 +276,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
             if ($count % 2 !== 0) {
                 $row .= ';';
                 continue;
-            } elseif ($count) {
+            }
+
+            if ($count) {
                 $this->_current[] = str_replace($this->_fieldmark . $this->_fieldmark, $this->_fieldmark, substr($row, 1, -1));
             } else {
                 $this->_current[] = $row;

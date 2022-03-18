@@ -49,7 +49,7 @@ class CacheControl
     private $session;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     private $config;
 
@@ -73,6 +73,9 @@ class CacheControl
      */
     private $cacheRouteGeneration;
 
+    /**
+     * @param array<string, mixed> $config
+     */
     public function __construct(
         Session $session,
         array $config,
@@ -110,7 +113,7 @@ class CacheControl
             return false;
         }
 
-        if ($this->session->Admin) {
+        if ($this->session->get('Admin')) {
             return false;
         }
 
@@ -171,7 +174,7 @@ class CacheControl
      *
      * @param int $shopId
      *
-     * @return array
+     * @return array<string>
      */
     public function getNoCacheTagsForRequest(Request $request, $shopId)
     {
@@ -185,7 +188,7 @@ class CacheControl
         $configuredNoCacheTags = $this->defaultRouteService->getDefaultNoCacheTags();
         $routeTags = $this->defaultRouteService->findRouteValue($request, $configuredNoCacheTags);
 
-        if (!$routeTags) {
+        if (!\is_array($routeTags)) {
             return $tags;
         }
 
@@ -210,7 +213,7 @@ class CacheControl
         $auto = $this->defaultRouteService->findRouteValue($request, self::AUTO_NO_CACHE_CONTROLLERS);
 
         $tags = [];
-        if ($auto !== null) {
+        if (\is_array($auto)) {
             $tags = $auto;
         }
 
@@ -273,17 +276,17 @@ class CacheControl
 
         $autoNoCacheControls = $this->defaultRouteService->findRouteValue($request, self::AUTO_NO_CACHE_CONTROLLERS);
 
-        return isset($autoNoCacheControls) && isset($tags[$targetName]) && !empty(array_intersect($autoNoCacheControls, $tags[$targetName]));
+        return isset($autoNoCacheControls, $tags[$targetName])
+            && \is_array($autoNoCacheControls) && !empty(array_intersect($autoNoCacheControls, $tags[$targetName]));
     }
 
+    /**
+     * @return void
+     */
     public function setContextCacheKey(Request $request, ShopContextInterface $context, Response $response)
     {
-        $session = $this->session;
-
-        $customerGroup = $session->offsetGet('sUserGroup');
-
         //not logged in => reset global context cookie
-        if (!$customerGroup) {
+        if (!$this->session->offsetGet('sUserGroup')) {
             $this->resetCookies($request, $response);
 
             return;
@@ -317,7 +320,7 @@ class CacheControl
      * )
      * </code>
      *
-     * @return array
+     * @return array<string>
      */
     private function getNoCacheTagsFromCookie(Request $request)
     {
@@ -328,18 +331,15 @@ class CacheControl
         }
 
         $noCacheTags = explode(',', $noCacheCookie);
-        $noCacheTags = array_map('trim', $noCacheTags);
 
-        return $noCacheTags;
+        return array_map('trim', $noCacheTags);
     }
 
     /**
      * Validates if the provided request is a cacheable route which should not be cached if a specify tag is set
      * and the request contains the nocache parameter as get parameter
-     *
-     * @return bool
      */
-    private function hasAllowedNoCacheParameter(Request $request)
+    private function hasAllowedNoCacheParameter(Request $request): bool
     {
         $configuredRoutes = $this->defaultRouteService->getDefaultNoCacheTags();
         $tag = $this->defaultRouteService->findRouteValue($request, $configuredRoutes);
@@ -347,14 +347,12 @@ class CacheControl
         return isset($tag) && $request->getQuery('nocache') !== null;
     }
 
-    private function resetCookies(Request $request, Response $response)
+    private function resetCookies(Request $request, Response $response): void
     {
-        $response->headers->setCookie(
-            new Cookie('x-cache-context-hash', null, strtotime('-1 Year'), $request->getBasePath() . '/')
-        );
+        $response->setCookie('x-cache-context-hash', null, strtotime('-1 Year'), $request->getBasePath() . '/');
     }
 
-    private function setContextCookie(Request $request, ShopContextInterface $context, Response $response)
+    private function setContextCookie(Request $request, ShopContextInterface $context, Response $response): void
     {
         $hash = json_encode($context->getTaxRules()) . json_encode($context->getCurrentCustomerGroup());
 
@@ -365,8 +363,6 @@ class CacheControl
             'response' => $response,
         ]);
 
-        $response->headers->setCookie(
-            new Cookie('x-cache-context-hash', sha1($hash), 0, $request->getBasePath() . '/', null, $request->isSecure())
-        );
+        $response->setCookie('x-cache-context-hash', sha1($hash), 0, $request->getBasePath() . '/', null, $request->isSecure());
     }
 }

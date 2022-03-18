@@ -305,42 +305,48 @@ class Media extends Resource
     }
 
     /**
-     * @param string $url          URL of the resource that should be loaded (ftp, http, file)
-     * @param string $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
+     * @param string      $url          URL of the resource that should be loaded (ftp, http, file)
+     * @param string|null $baseFilename Optional: Instead of creating a hash, create a filename based on the given one
      *
      * @throws InvalidArgumentException
      * @throws Exception
      *
-     * @return bool|string returns the absolute path of the downloaded file
+     * @return string returns the absolute path of the downloaded file
      */
     public function load($url, $baseFilename = null)
     {
         $destPath = tempnam(sys_get_temp_dir(), '');
         unlink($destPath);
 
-        if (!@mkdir($destPath) && !is_dir($destPath)) {
+        if (!\is_string($destPath) || (!@mkdir($destPath) && !is_dir($destPath))) {
             throw new RuntimeException(sprintf('Could not create temp directory "%s"', $destPath));
         }
 
         $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($url);
 
-        if (strpos($url, 'data:image') !== false) {
+        if (str_contains($url, 'data:image')) {
             return $this->uploadBase64File($url, $destPath, $baseFilename);
         }
 
         $filename = $this->getUniqueFileName($destPath, $baseFilename);
         $filePath = sprintf('%s/%s', $destPath, $filename);
 
-        if (!$put_handle = fopen($filePath, 'wb+')) {
+        $put_handle = fopen($filePath, 'wb+');
+        if (!\is_resource($put_handle)) {
             throw new Exception(sprintf('Could not open %s for writing', $filePath));
         }
 
-        if (!$get_handle = fopen($url, 'rb')) {
+        $get_handle = fopen($url, 'rb');
+        if (!\is_resource($get_handle)) {
             throw new Exception(sprintf('Could not open %s for reading', $url));
         }
 
         while (!feof($get_handle)) {
-            fwrite($put_handle, fgets($get_handle, 4096));
+            $read = fgets($get_handle, 4096);
+            if (!\is_string($read)) {
+                continue;
+            }
+            fwrite($put_handle, $read);
         }
 
         fclose($get_handle);
@@ -396,9 +402,9 @@ class Media extends Resource
      * If the passed baseFilename already exists in the destination path,
      * the function creates a unique file name.
      *
-     * @param string $url
-     * @param string $destinationPath
-     * @param string $baseFilename
+     * @param string      $url
+     * @param string      $destinationPath
+     * @param string|null $baseFilename
      *
      * @throws CustomValidationException
      * @throws Exception
@@ -407,7 +413,8 @@ class Media extends Resource
      */
     protected function uploadBase64File($url, $destinationPath, $baseFilename)
     {
-        if (!$get_handle = fopen($url, 'r')) {
+        $get_handle = fopen($url, 'r');
+        if (!\is_resource($get_handle)) {
             throw new Exception(sprintf('Could not open %s for reading', $url));
         }
 
@@ -420,12 +427,19 @@ class Media extends Resource
         $filename = $this->getUniqueFileName($destinationPath, $baseFilename) . '.' . $extension;
         $destinationFilePath = sprintf('%s/%s', $destinationPath, $filename);
 
-        if (!$put_handle = fopen("$destinationPath/$filename", 'wb+')) {
+        $put_handle = fopen("$destinationPath/$filename", 'wb+');
+        if (!\is_resource($put_handle)) {
             throw new Exception("Could not open $destinationPath/$filename for writing");
         }
+
         while (!feof($get_handle)) {
-            fwrite($put_handle, fgets($get_handle, 4096));
+            $read = fgets($get_handle, 4096);
+            if (!\is_string($read)) {
+                continue;
+            }
+            fwrite($put_handle, $read);
         }
+
         fclose($get_handle);
         fclose($put_handle);
 
@@ -482,11 +496,11 @@ class Media extends Resource
 
             $this->getContainer()->get('shopware.components.stream_protocol_validator')->validate($params['file']);
 
-            if (!file_exists($params['file']) || strpos($params['file'], 'ftp://') === 0) {
+            if (!file_exists($params['file']) || str_starts_with($params['file'], 'ftp://')) {
                 try {
                     $path = $this->load($params['file'], $params['name']);
 
-                    if (strpos($params['file'], 'data:image') !== false) {
+                    if (str_contains($params['file'], 'data:image')) {
                         $originalName = $params['name'];
                     }
                 } catch (Exception $e) {

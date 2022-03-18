@@ -42,45 +42,24 @@ use Shopware\Models\Category\Category;
  */
 class SitemapXMLRepository
 {
-    /**
-     * @var ModelManager
-     */
-    private $em;
+    private ModelManager $em;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
+    private ContextServiceInterface $contextService;
 
-    /**
-     * @var ProductNumberSearchInterface
-     */
-    private $productNumberSearch;
+    private ProductNumberSearchInterface $productNumberSearch;
 
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $storeFrontCriteriaFactory;
+    private StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory;
 
-    /**
-     * @var int
-     */
-    private $batchSize;
+    private int $batchSize;
 
-    /**
-     * @param int $batchSize
-     */
     public function __construct(
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         ModelManager $em,
         ContextServiceInterface $contextService,
-        $batchSize = 10000
+        int $batchSize = 10000
     ) {
         $this->em = $em;
         $this->connection = $this->em->getConnection();
@@ -345,12 +324,12 @@ class SitemapXMLRepository
             return true;
         }
 
-        $userParams = parse_url($link, PHP_URL_QUERY);
-        parse_str($userParams, $userParams);
+        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
+        parse_str($parsedUserParams, $userParams);
 
         $blacklist = ['', 'sitemap', 'sitemapXml'];
 
-        if (\in_array($userParams['sViewport'], $blacklist)) {
+        if (\in_array($userParams['sViewport'], $blacklist, true)) {
             return false;
         }
 

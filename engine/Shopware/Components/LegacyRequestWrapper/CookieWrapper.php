@@ -27,6 +27,7 @@ namespace Shopware\Components\LegacyRequestWrapper;
 use ArrayAccess;
 use Enlight_Controller_Request_Request;
 use Exception;
+use ReturnTypeWillChange;
 
 class CookieWrapper implements ArrayAccess
 {
@@ -44,7 +45,7 @@ class CookieWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         $cookieData = $this->request->getCookie();
@@ -59,7 +60,7 @@ class CookieWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->request->getCookie($offset);
@@ -75,7 +76,7 @@ class CookieWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         throw new Exception('Please use setcookie() to set cookie data');
@@ -90,7 +91,7 @@ class CookieWrapper implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         throw new Exception('Unsupported operation');
