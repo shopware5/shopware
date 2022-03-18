@@ -110,7 +110,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
             return false;
         }
         $result = false;
-        $bots = preg_replace('/[^a-z;]/', '', strtolower($this->Config()->get('botBlackList')));
+        $bots = (string) preg_replace('/[^a-z;]/', '', strtolower($this->Config()->get('botBlackList')));
         $bots = explode(';', $bots);
         if (str_replace($bots, '', $userAgent) !== $userAgent) {
             $result = true;

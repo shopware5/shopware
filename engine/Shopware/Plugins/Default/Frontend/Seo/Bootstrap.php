@@ -102,7 +102,7 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
             }
             if (!empty($metaDescription)) {
                 $metaDescription = html_entity_decode($metaDescription, ENT_COMPAT, 'UTF-8');
-                $metaDescription = trim(preg_replace('/\s\s+/', ' ', strip_tags($metaDescription)));
+                $metaDescription = trim((string) preg_replace('/\s\s+/', ' ', strip_tags($metaDescription)));
                 $metaDescription = htmlspecialchars($metaDescription, ENT_COMPAT);
             }
         }

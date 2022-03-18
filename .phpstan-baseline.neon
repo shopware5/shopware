@@ -40371,11 +40371,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#2 \\$prefix of function http_build_query expects string, null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#4 \\$active of method Shopware_Components_Plugin_Bootstrap\\:\\:createCronJob\\(\\) expects int, true given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -41391,11 +41386,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
-
-		-
 			message: "#^PHPDoc tag @param for parameter \\$request with type Enlight_Controller_Request_Request is not subtype of native type Enlight_Controller_Request_RequestHttp\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
@@ -41407,11 +41397,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$request of method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshBlog\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Enlight_Controller_Request_Request given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
 

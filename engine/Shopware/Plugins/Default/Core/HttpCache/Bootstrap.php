@@ -388,7 +388,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             $params['nocache'] = 1;
         }
 
-        $url = sprintf('%s/?%s', $request->getBaseUrl(), http_build_query($params, null, '&'));
+        $url = sprintf('%s/?%s', $request->getBaseUrl(), http_build_query($params, '', '&'));
 
         return '<esi:include src="' . $url . '" />';
     }
