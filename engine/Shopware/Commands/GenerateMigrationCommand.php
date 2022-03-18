@@ -127,7 +127,7 @@ class GenerateMigrationCommand extends ShopwareCommand
 
     private function camelCaseToDash(string $string): string
     {
-        return strtolower(ltrim(preg_replace('/[A-Z]/', '-$0', $string), '-'));
+        return strtolower(ltrim((string) preg_replace('/[A-Z]/', '-$0', $string), '-'));
     }
 
     private function generateMigrationFileContent(?string $pluginName, int $nextVersion): string

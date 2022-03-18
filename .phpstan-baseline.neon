@@ -13536,11 +13536,6 @@ parameters:
 			path: engine/Shopware/Commands/GenerateAttributesCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function ltrim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\GenerateProductFeedCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
@@ -13652,11 +13647,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\MigrationsMigrateCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$arr2 of function array_intersect_key expects array, array\\<string, mixed\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
 
@@ -54819,4 +54809,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
