@@ -923,7 +923,7 @@ class sBasket implements \Enlight_Hook
             $hasMultipleTaxes = $taxCalculator->hasDifferentTaxes($prices);
 
             if ($voucherDetails['percental']) {
-                $voucherPrices = $taxCalculator->recalculatePercentageDiscount('-' . $voucherValue, $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
+                $voucherPrices = $taxCalculator->recalculatePercentageDiscount(-$voucherValue, $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
             } else {
                 $voucherPrices = $taxCalculator->calculate($voucherDetails['value'], $prices, !$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']);
             }

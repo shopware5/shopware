@@ -16431,11 +16431,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/ProportionalCartNormalizerInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Cart\\\\ProportionalTaxCalculator\\:\\:sumByTax\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/ProportionalTaxCalculator.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\Struct\\\\CartItemStruct\\:\\:getAdditionalInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/Struct/CartItemStruct.php
@@ -31416,11 +31411,6 @@ parameters:
 			path: engine/Shopware/Core/sBasket.php
 
 		-
-			message: "#^Parameter \\#1 \\$percentage of method Shopware\\\\Components\\\\Cart\\\\ProportionalTaxCalculator\\:\\:recalculatePercentageDiscount\\(\\) expects float, string given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
 			message: "#^Property sBasket\\:\\:\\$additionalTextService \\(Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\AdditionalTextServiceInterface\\) does not accept Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\AdditionalTextServiceInterface\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
@@ -35369,31 +35359,6 @@ parameters:
 			message: "#^Property Shopware\\\\Models\\\\Document\\\\Document\\:\\:\\$elements with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Document/Document.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:__construct\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:__toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:assignAttributeTranslation\\(\\) has parameter \\$position with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:assignAttributeTranslation\\(\\) has parameter \\$translation with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
-
-		-
-			message: "#^Method Shopware_Models_Document_Order\\:\\:assignAttributeTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Document/Order.php
 
 		-
 			message: "#^Property Shopware_Models_Document_Order\\:\\:\\$_billing \\(ArrayObject\\|null\\) does not accept array\\<string, ArrayObject\\<string, mixed\\>\\>\\|ArrayObject\\.$#"
