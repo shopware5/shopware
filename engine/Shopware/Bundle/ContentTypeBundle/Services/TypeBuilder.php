@@ -37,7 +37,7 @@ class TypeBuilder
     /**
      * @var array<string, class-string<FieldInterface>>
      */
-    private $fields;
+    private array $fields;
 
     /**
      * @param array<string, class-string<FieldInterface>> $fields
@@ -212,6 +212,8 @@ class TypeBuilder
      */
     private function implementsFieldInterface(string $className): bool
     {
-        return \array_key_exists(FieldInterface::class, class_implements($className));
+        $classImplements = class_implements($className);
+
+        return \is_array($classImplements) && \array_key_exists(FieldInterface::class, $classImplements);
     }
 }

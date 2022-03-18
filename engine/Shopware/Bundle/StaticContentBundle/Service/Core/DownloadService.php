@@ -29,6 +29,7 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\FileNotFoundException;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
+use RuntimeException;
 use Shopware\Bundle\StaticContentBundle\Service\DownloadServiceInterface;
 use Shopware\Components\Filesystem\PublicUrlGeneratorInterface;
 use Shopware_Components_Config;
@@ -121,14 +122,24 @@ class DownloadService implements DownloadServiceInterface
         $response->sendHeaders();
 
         $upstream = $filesystem->readStream($location);
+        if (!\is_resource($upstream)) {
+            throw new RuntimeException(sprintf('Could not read stream from: %s', $location));
+        }
         $downstream = fopen('php://output', 'wb');
+        if (!\is_resource($downstream)) {
+            throw new RuntimeException('Could not create temp stream');
+        }
 
         if (!$this->unitTestMode) {
             ob_end_clean();
         }
 
         while (!feof($upstream)) {
-            fwrite($downstream, fread($upstream, 4096));
+            $read = fread($upstream, 4096);
+            if (!\is_string($read)) {
+                continue;
+            }
+            fwrite($downstream, $read);
             flush();
         }
     }

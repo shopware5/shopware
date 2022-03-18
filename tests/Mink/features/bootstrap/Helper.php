@@ -104,14 +104,16 @@ class Helper
     /**
      * Converts the value to a float
      *
-     * @param string $value
-     *
-     * @return float
+     * @param string|float|int $value
      */
-    public static function floatValue($value)
+    public static function floatValue($value): float
     {
         if (\is_float($value)) {
             return $value;
+        }
+
+        if (\is_int($value)) {
+            return (float) $value;
         }
 
         $float = str_replace([' ', '.', ','], ['', '', '.'], $value);

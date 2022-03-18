@@ -40,7 +40,7 @@ class Context implements JsonSerializable
     use ObjectJsonSerializeTraitDeprecated;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     public $params = [];
 
@@ -84,7 +84,7 @@ class Context implements JsonSerializable
     protected $shopId;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $globalParams = [];
 
@@ -112,9 +112,10 @@ class Context implements JsonSerializable
     protected $actionKey = 'action';
 
     /**
-     * @param string $host
-     * @param string $baseUrl
-     * @param bool   $secure
+     * @param string               $host
+     * @param string               $baseUrl
+     * @param bool                 $secure
+     * @param array<string, mixed> $globalParams
      */
     public function __construct($host = 'localhost', $baseUrl = '', $secure = false, array $globalParams = [])
     {
@@ -134,6 +135,8 @@ class Context implements JsonSerializable
 
     /**
      * @param string $baseFile
+     *
+     * @return void
      */
     public function setBaseFile($baseFile)
     {
@@ -150,6 +153,8 @@ class Context implements JsonSerializable
 
     /**
      * @param string|null $host
+     *
+     * @return void
      */
     public function setHost($host)
     {
@@ -168,6 +173,8 @@ class Context implements JsonSerializable
 
     /**
      * @param string $baseUrl
+     *
+     * @return void
      */
     public function setBaseUrl($baseUrl)
     {
@@ -184,6 +191,8 @@ class Context implements JsonSerializable
 
     /**
      * @param bool $secure
+     *
+     * @return void
      */
     public function setSecure($secure)
     {
@@ -200,6 +209,8 @@ class Context implements JsonSerializable
 
     /**
      * @param bool $removeCategory
+     *
+     * @return void
      */
     public function setRemoveCategory($removeCategory)
     {
@@ -216,6 +227,8 @@ class Context implements JsonSerializable
 
     /**
      * @param bool $urlToLower
+     *
+     * @return void
      */
     public function setUrlToLower($urlToLower)
     {
@@ -232,6 +245,8 @@ class Context implements JsonSerializable
 
     /**
      * @param int $shopId
+     *
+     * @return void
      */
     public function setShopId($shopId)
     {
@@ -246,11 +261,11 @@ class Context implements JsonSerializable
      */
     public function getParam($name, $default = null)
     {
-        return isset($this->params[$name]) ? $this->params[$name] : $default;
+        return $this->params[$name] ?? $default;
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getParams()
     {
@@ -258,31 +273,39 @@ class Context implements JsonSerializable
     }
 
     /**
-     * @param string $name
+     * @param string     $name
+     * @param mixed|null $param
+     *
+     * @return void
      */
     public function setParam($name, $param)
     {
         $this->params[$name] = $param;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @return void
+     */
     public function setParams(array $params)
     {
         $this->params = $params;
     }
 
     /**
-     * @param string $name
-     * @param string $default
+     * @param string      $name
+     * @param string|null $default
      *
      * @return string
      */
     public function getGlobalParam($name, $default = null)
     {
-        return isset($this->globalParams[$name]) ? $this->globalParams[$name] : $default;
+        return $this->globalParams[$name] ?? $default;
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getGlobalParams()
     {
@@ -290,7 +313,10 @@ class Context implements JsonSerializable
     }
 
     /**
-     * @param string $name
+     * @param string     $name
+     * @param mixed|null $globalParam
+     *
+     * @return void
      */
     public function setGlobalParam($name, $globalParam)
     {
@@ -300,7 +326,9 @@ class Context implements JsonSerializable
     /**
      * @see Enlight_Controller_Router::setGlobalParam
      *
-     * @param array $globalParams
+     * @param array<string, mixed> $globalParams
+     *
+     * @return void
      */
     public function setGlobalParams($globalParams)
     {
@@ -348,14 +376,14 @@ class Context implements JsonSerializable
             $request->getHttpHost(),
             $request->getBaseUrl(),
             $request->isSecure(),
-            [self::getGlobalParamsFromRequest($request)]
+            self::getGlobalParamsFromRequest($request)
         );
     }
 
     /**
      * @see \Enlight_Controller_Router::setGlobalParam
      *
-     * @return array
+     * @return array{module?: string, controller?: string, action?: string}
      */
     public static function getGlobalParamsFromRequest(EnlightRequest $request)
     {
@@ -373,6 +401,9 @@ class Context implements JsonSerializable
         return $globalParams;
     }
 
+    /**
+     * @return void
+     */
     public function updateFromEnlightRequest(EnlightRequest $request)
     {
         $this->setHost($request->getHttpHost());
@@ -388,8 +419,8 @@ class Context implements JsonSerializable
     public static function createFromShop(ShopwareShop $shop, ShopwareConfig $config)
     {
         $self = new self(
-            $shop->getHost(),
-            $shop->getBaseUrl(),
+            $shop->getHost() ?? 'localhost',
+            $shop->getBaseUrl() ?? '',
             $shop->getSecure(),
             []
         );

@@ -4626,11 +4626,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
 			message: "#^Property Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:\\$fieldAlias type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
@@ -4791,22 +4786,7 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Field/TypeGrid.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\AbstractResolver\\:\\:add\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\AbstractResolver\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
 
@@ -4821,27 +4801,12 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/AbstractResolver.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\TypeResolver\\:\\:add\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\TypeResolver\\:\\:get\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\FieldResolver\\\\TypeResolver\\:\\:getTypeService\\(\\) should return Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\RepositoryInterface but returns object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/FieldResolver/TypeResolver.php
 
@@ -5062,11 +5027,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$type of method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Structs\\\\Field\\:\\:setType\\(\\) expects Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Field\\\\FieldInterface, object given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Services/TypeBuilder.php
-
-		-
-			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\<string, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/TypeBuilder.php
 
@@ -7686,11 +7646,6 @@ parameters:
 			path: engine/Shopware/Bundle/EsBackendBundle/SearchQueryBuilder.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/SearchQueryBuilder.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Searcher\\\\GenericSearcher\\:\\:addFilters\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/Searcher/GenericSearcher.php
@@ -7996,11 +7951,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
 
 		-
-			message: "#^Property Shopware\\\\Bundle\\\\MailBundle\\\\Service\\\\LogService\\:\\:\\$filters \\(array\\<Shopware\\\\Bundle\\\\MailBundle\\\\Service\\\\Filter\\\\MailFilterInterface\\>\\) does not accept iterable\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Adapters\\\\AdapterFactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Adapters/AdapterFactoryInterface.php
@@ -8226,21 +8176,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function file_get_contents expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function filesize expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
-			message: "#^Parameter \\#1 \\$imagefile of function getimagesize expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/MediaBundle/MediaReplaceService.php
@@ -8402,11 +8337,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\OptimizerService\\:\\:optimize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/OptimizerService.php
-
-		-
-			message: "#^Parameter \\#2 \\$mode of function chmod expects int, int\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/OptimizerService.php
 
@@ -10001,11 +9931,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundle/ProductSearchResult.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function stripslashes expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/SearchTermPreProcessor.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\Sorting\\\\ProductAttributeSorting\\:\\:setField\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/Sorting/ProductAttributeSorting.php
@@ -10326,26 +10251,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\TermHelper\\:\\:splitTerm\\(\\) should return array but returns array\\<mixed, mixed\\>\\|bool\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$array of function array_unique expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\TermHelperInterface\\:\\:splitTerm\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/TermHelperInterface.php
@@ -10382,11 +10287,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\VariantHelper\\:\\:joinVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/VariantHelper.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/VariantHelper.php
 
@@ -10601,17 +10501,7 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
 
 		-
-			message: "#^Parameter \\#1 \\$loc of class Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$category has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/CategoryUrlProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$loc of class Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url constructor expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/CategoryUrlProvider.php
 
@@ -10624,11 +10514,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/CustomUrlProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$loc of class Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/LandingPageUrlProvider.php
 
 		-
 			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
@@ -10651,11 +10536,6 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
 
 		-
-			message: "#^Parameter \\#1 \\$loc of class Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
@@ -10666,18 +10546,8 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
 
 		-
-			message: "#^Parameter \\#1 \\$loc of class Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:filterLink\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
 		-
@@ -10687,16 +10557,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
-			message: "#^Parameter \\#1 \\$loc of class Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url constructor expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
@@ -10877,26 +10737,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function feof expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fread expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StaticContentBundle/Service/Core/DownloadService.php
 
@@ -11347,11 +11187,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\MediaHydrator\\:\\:updateMedia\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/MediaHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of function getimagesizefromstring expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/MediaHydrator.php
 
@@ -19366,71 +19201,6 @@ parameters:
 			path: engine/Shopware/Components/HttpCache/Store.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\BlogProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/BlogProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\CategoryProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/CategoryProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\EmotionProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/EmotionProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\FormProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/FormProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\ManufacturerProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/ManufacturerProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\ProductProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/ProductProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\ProductWithCategoryProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/ProductWithCategoryProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\ProductWithNumberProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/ProductWithNumberProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\StaticProvider\\:\\:createRequestParameters\\(\\) has parameter \\$custom with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/StaticProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\StaticProvider\\:\\:createRequestParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/StaticProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\StaticProvider\\:\\:createXhrRequestParameters\\(\\) has parameter \\$custom with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/StaticProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\StaticProvider\\:\\:createXhrRequestParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/StaticProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProvider\\\\StaticProvider\\:\\:getUrls\\(\\) should return array\\<string\\> but returns array\\<string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProvider/StaticProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProviderFactory\\:\\:__construct\\(\\) has parameter \\$urlProviders with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/UrlProviderFactory.php
@@ -22216,274 +21986,9 @@ parameters:
 			path: engine/Shopware/Components/RobotsTxtGeneratorInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:__construct\\(\\) has parameter \\$globalParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:getGlobalParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:getGlobalParamsFromRequest\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:getParams\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setBaseFile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setBaseUrl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setGlobalParam\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setGlobalParam\\(\\) has parameter \\$globalParam with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setGlobalParams\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setGlobalParams\\(\\) has parameter \\$globalParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setHost\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setParam\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setParam\\(\\) has parameter \\$param with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setParams\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setParams\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setRemoveCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setSecure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setShopId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:setUrlToLower\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:updateFromEnlightRequest\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Parameter \\#1 \\$host of class Shopware\\\\Components\\\\Routing\\\\Context constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Parameter \\#2 \\$baseUrl of class Shopware\\\\Components\\\\Routing\\\\Context constructor expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Routing\\\\Context\\:\\:\\$globalParams type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Routing\\\\Context\\:\\:\\$params type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Context.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\DefaultPreFilter\\:\\:preFilter\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/DefaultPreFilter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\DefaultPreFilter\\:\\:preFilter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/DefaultPreFilter.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/DefaultPreFilter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\FrontendPostFilter\\:\\:isFullPath\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPostFilter.php
-
-		-
-			message: "#^Cannot assign offset 'action' to array\\|string\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'controller' to array\\|string\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'forceSecure' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'fullPath' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'rewriteAlias' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'rewriteOld' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'rewriteUrl' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'sCoreId' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'sDetails' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Cannot assign offset 'sUseSSL' to array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\FrontendPreFilter\\:\\:preFilter\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\FrontendPreFilter\\:\\:preFilter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\FrontendPreFilter\\:\\:preFilter\\(\\) should return array but returns array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPreFilter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorInterface\\:\\:generate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorInterface\\:\\:generate\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorListInterface\\:\\:generateList\\(\\) has parameter \\$list with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorListInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorListInterface\\:\\:generateList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/GeneratorListInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\DefaultGenerator\\:\\:generate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/DefaultGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\DefaultGenerator\\:\\:generate\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/DefaultGenerator.php
-
-		-
-			message: "#^Cannot access offset 'sAction' on array\\|bool\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:generate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:generate\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:generateList\\(\\) has parameter \\$list with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:generateList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:getOrgQueryArray\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:getOrgQueryArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:preAssemble\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
@@ -22491,44 +21996,9 @@ parameters:
 			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:preAssemble\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:rewriteList\\(\\) has parameter \\$list with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:rewriteList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Generators\\\\RewriteGenerator\\:\\:rewriteQuery\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Parameter \\#1 \\$querydata of function http_build_query expects array\\|object, array\\|bool given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Parameter \\#2 \\$arr2 of function array_diff_key expects array, array\\|bool given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Generators/RewriteGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\MatcherInterface\\:\\:match\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/MatcherInterface.php
-
-		-
-			message: "#^Argument of an invalid type array\\<int, string\\>\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Matchers/DefaultMatcher.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Matchers\\\\DefaultMatcher\\:\\:fillDefaults\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
@@ -22541,109 +22011,19 @@ parameters:
 			path: engine/Shopware/Components/Routing/Matchers/DefaultMatcher.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Matchers\\\\DefaultMatcher\\:\\:match\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Matchers/DefaultMatcher.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Matchers\\\\EventMatcher\\:\\:match\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Matchers/EventMatcher.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Matchers\\\\RewriteMatcher\\:\\:getQueryFormOrgPath\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Matchers/RewriteMatcher.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Matchers\\\\RewriteMatcher\\:\\:match\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Matchers/RewriteMatcher.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\PreFilterInterface\\:\\:preFilter\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/PreFilterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\PreFilterInterface\\:\\:preFilter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/PreFilterInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:__construct\\(\\) has parameter \\$generators with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/Router.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:assemble\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$list of method Shopware\\\\Components\\\\Routing\\\\GeneratorListInterface\\:\\:generateList\\(\\) expects array\\<array\\<string, mixed\\>\\>, array\\<array\\<string, mixed\\>\\|string\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/Router.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:generateList\\(\\) has parameter \\$list with no value type specified in iterable type array\\.$#"
+			message: "#^Parameter \\#1 \\$params of method Shopware\\\\Components\\\\Routing\\\\GeneratorInterface\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\<string, mixed\\>\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:match\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:setContext\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:setGenerators\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:setMatchers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:setPostFilters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:setPreFilters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$url has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Parameter \\#1 \\$params of method Shopware\\\\Components\\\\Routing\\\\GeneratorInterface\\:\\:generate\\(\\) expects array, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\RouterInterface\\:\\:assemble\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/RouterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\RouterInterface\\:\\:generateList\\(\\) has parameter \\$list with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/RouterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\RouterInterface\\:\\:match\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/RouterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\RouterInterface\\:\\:setContext\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/RouterInterface.php
 
 		-
 			message: "#^Cannot call method beginTransaction\\(\\) on PDO\\|null\\.$#"
@@ -22772,11 +22152,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitePageMenu\\:\\:overrideExisting\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/SitePageMenu.php
-
-		-
-			message: "#^Parameter \\#2 \\$seoUrls of method Shopware\\\\Components\\\\SitePageMenu\\:\\:assignSeoUrls\\(\\) expects array\\<string\\>, array\\<string\\|false\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/SitePageMenu.php
 
@@ -42481,11 +41856,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/PostFilter/Bootstrap.php
 
 		-
-			message: "#^Cannot access offset mixed on array\\<string\\|false\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PostFilter/Bootstrap.php
-
-		-
 			message: "#^Cannot call method getBasePath\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PostFilter/Bootstrap.php
@@ -42532,11 +41902,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$source of method Shopware_Plugins_Core_PostFilter_Bootstrap\\:\\:filterSource\\(\\) expects string, array\\<string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PostFilter/Bootstrap.php
-
-		-
-			message: "#^Property Shopware_Plugins_Core_PostFilter_Bootstrap\\:\\:\\$urls \\(array\\<string\\>\\) does not accept array\\<string\\|false\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PostFilter/Bootstrap.php
 
@@ -56069,3 +55434,4 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
+

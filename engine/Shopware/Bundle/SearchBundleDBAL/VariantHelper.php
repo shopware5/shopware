@@ -169,7 +169,7 @@ class VariantHelper implements VariantHelperInterface
     {
         $tableKey = $condition->getName();
 
-        $suffix = md5(json_encode($condition));
+        $suffix = md5(json_encode($condition, JSON_THROW_ON_ERROR));
 
         if ($query->hasState('option_' . $tableKey)) {
             return;

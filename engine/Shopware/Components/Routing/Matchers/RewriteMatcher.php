@@ -41,7 +41,7 @@ class RewriteMatcher implements MatcherInterface
     protected $connection;
 
     /**
-     * @var string[]
+     * @var array{module: 'frontend', controller: 'index', action: 'index'}
      */
     protected $defaultRoute = [
         'module' => 'frontend',
@@ -49,15 +49,9 @@ class RewriteMatcher implements MatcherInterface
         'action' => 'index',
     ];
 
-    /**
-     * @var Config
-     */
-    private $config;
+    private Config $config;
 
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
+    private QueryAliasMapper $queryAliasMapper;
 
     public function __construct(Connection $connection, QueryAliasMapper $queryAliasMapper, Config $config)
     {
@@ -71,7 +65,7 @@ class RewriteMatcher implements MatcherInterface
      */
     public function match($pathInfo, Context $context)
     {
-        if (strpos($pathInfo, '/backend/') === 0 || strpos($pathInfo, '/api/') === 0) {
+        if (str_starts_with($pathInfo, '/backend/') || str_starts_with($pathInfo, '/api/')) {
             return $pathInfo;
         }
         if ($context->getShopId() === null) { // only frontend
@@ -93,7 +87,7 @@ class RewriteMatcher implements MatcherInterface
         $context->setParams($params);
 
         // /widgets and /index supports short request queries
-        if ($pathInfo === '/' || strpos($pathInfo, '/widgets/') === 0) {
+        if ($pathInfo === '/' || str_starts_with($pathInfo, '/widgets/')) {
             return $pathInfo;
         }
 
@@ -149,11 +143,9 @@ class RewriteMatcher implements MatcherInterface
     }
 
     /**
-     * @param string $orgPath
-     *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getQueryFormOrgPath($orgPath)
+    private function getQueryFormOrgPath(string $orgPath): array
     {
         parse_str($orgPath, $query);
         $query = array_merge($this->defaultRoute, $query);

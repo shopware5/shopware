@@ -26,6 +26,7 @@ namespace Shopware\Components\Routing;
 
 use Enlight_Controller_Request_Request as EnlightRequest;
 use Enlight_Controller_Router as EnlightRouter;
+use RuntimeException;
 
 class Router extends EnlightRouter implements RouterInterface
 {
@@ -55,8 +56,6 @@ class Router extends EnlightRouter implements RouterInterface
     protected $postFilters;
 
     /**
-     * The DI constructor of Shopware router
-     *
      * @param MatcherInterface[]    $matchers
      * @param PreFilterInterface[]  $preFilters
      * @param PostFilterInterface[] $postFilters
@@ -78,7 +77,7 @@ class Router extends EnlightRouter implements RouterInterface
     }
 
     /**
-     * Switch the context
+     * {@inheritdoc}
      */
     public function setContext(Context $context)
     {
@@ -86,7 +85,7 @@ class Router extends EnlightRouter implements RouterInterface
     }
 
     /**
-     * @return Context
+     * {@inheritdoc}
      */
     public function getContext()
     {
@@ -114,24 +113,20 @@ class Router extends EnlightRouter implements RouterInterface
     }
 
     /**
-     * @param array[] $list
-     * @param Context $context
-     *
-     * @return string[]|false[]
+     * {@inheritdoc}
      */
     public function generateList(array $list, Context $context = null)
     {
-        $context = $context === null ? $this->context : $context;
+        $context = $context ?? $this->context;
         $contextList = [];
 
         foreach ($list as $key => &$userParams) {
             $contextList[$key] = clone $context;
             foreach ($this->preFilters as $preFilter) {
-                if ($preFilter instanceof PreFilterInterface) {
-                    $userParams = $preFilter->preFilter($userParams, $contextList[$key]);
-                }
+                $userParams = $preFilter->preFilter($userParams, $contextList[$key]);
             }
         }
+        unset($userParams);
 
         $urls = [];
         foreach ($this->generators as $route) {
@@ -142,7 +137,11 @@ class Router extends EnlightRouter implements RouterInterface
                     if (isset($urls[$key]) && \is_string($urls[$key])) {
                         continue;
                     }
-                    $urls[$key] = $route->generate($params, $contextList[$key]);
+                    $url = $route->generate($params, $contextList[$key]);
+                    if (!\is_string($url)) {
+                        continue;
+                    }
+                    $urls[$key] = $url;
                 }
             }
         }
@@ -159,10 +158,7 @@ class Router extends EnlightRouter implements RouterInterface
     }
 
     /**
-     * @param array|string $userParams
-     * @param Context      $context
-     *
-     * @return string|false
+     * {@inheritdoc}
      */
     public function assemble($userParams = [], Context $context = null)
     {
@@ -174,8 +170,8 @@ class Router extends EnlightRouter implements RouterInterface
                 $userParams = $preFilter->preFilter($userParams, $context);
             }
         }
-        /** @var array|string|false $url */
-        $url = false;
+
+        $url = null;
         foreach ($this->generators as $route) {
             if ($route instanceof GeneratorInterface) {
                 $url = $route->generate($userParams, $context);
@@ -185,7 +181,7 @@ class Router extends EnlightRouter implements RouterInterface
             }
         }
         if (!\is_string($url)) {
-            return false;
+            throw new RuntimeException('Could not create URL');
         }
         foreach ($this->postFilters as $postFilter) {
             if ($postFilter instanceof PostFilterInterface) {
@@ -206,6 +202,8 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * @param MatcherInterface[] $matchers
+     *
+     * @return void
      */
     public function setMatchers($matchers)
     {
@@ -222,6 +220,8 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * @param GeneratorInterface[]|GeneratorListInterface[] $generators
+     *
+     * @return void
      */
     public function setGenerators($generators)
     {
@@ -238,6 +238,8 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * @param PreFilterInterface[] $preFilters
+     *
+     * @return void
      */
     public function setPreFilters($preFilters)
     {
@@ -254,6 +256,8 @@ class Router extends EnlightRouter implements RouterInterface
 
     /**
      * @param PostFilterInterface[] $postFilters
+     *
+     * @return void
      */
     public function setPostFilters($postFilters)
     {

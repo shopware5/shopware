@@ -112,12 +112,8 @@ class StaticUrlProvider implements UrlProviderInterface
 
     /**
      * Helper function to read all static pages of a shop from the database
-     *
-     * @param int $shopId
-     *
-     * @return array
      */
-    private function getSitesByShopId($shopId)
+    private function getSitesByShopId(int $shopId): array
     {
         $keys = $this->connection->createQueryBuilder()
             ->select('shopGroups.key')
@@ -168,20 +164,17 @@ class StaticUrlProvider implements UrlProviderInterface
      * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
      * Returns false, if the link is not allowed
      *
-     * @param string $link
-     * @param array  $userParams
-     *
-     * @return bool
+     * @param array<string, mixed> $userParams
      */
-    private function filterLink($link, &$userParams)
+    private function filterLink(?string $link, array &$userParams): bool
     {
         if (empty($link)) {
             return true;
         }
-        $userParams = parse_url($link, PHP_URL_QUERY);
-        parse_str($userParams, $userParams);
+        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
+        parse_str($parsedUserParams, $userParams);
         $blacklist = ['', 'sitemap', 'sitemapXml'];
-        if (\in_array($userParams['sViewport'], $blacklist)) {
+        if (\in_array($userParams['sViewport'], $blacklist, true)) {
             return false;
         }
 

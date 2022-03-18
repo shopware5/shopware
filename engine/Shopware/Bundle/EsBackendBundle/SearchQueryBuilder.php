@@ -60,22 +60,20 @@ class SearchQueryBuilder
     }
 
     /**
-     * @param string $term
-     *
-     * @return string[]
+     * @return array<string>
      */
-    private function tokenize($term)
+    private function tokenize(string $term): array
     {
         $string = mb_strtolower(html_entity_decode($term), 'UTF-8');
         $string = trim(str_replace(['.', '-', '/', '\\'], ' ', $string));
         $string = str_replace('<', ' <', $string);
         $string = strip_tags($string);
-        $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
+        $string = trim((string) preg_replace("/[^\pL_0-9]/u", ' ', $string));
 
         $tokens = array_unique(explode(' ', $string));
         $tokens = array_map('trim', $tokens);
 
-        $tokens = array_filter(
+        return array_filter(
             array_filter(
                 $tokens,
                 function ($token) {
@@ -83,16 +81,14 @@ class SearchQueryBuilder
                 }
             )
         );
-
-        return $tokens;
     }
 
     /**
-     * @param string[] $items
+     * @param array<string> $items
      *
-     * @return string[]
+     * @return array<string>
      */
-    private function combine($items)
+    private function combine(array $items): array
     {
         $result = [];
 

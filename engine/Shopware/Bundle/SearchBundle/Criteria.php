@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Assert\Assertion;
+use ReturnTypeWillChange;
 use Shopware\Bundle\StoreFrontBundle\Struct\Extendable;
 use Shopware\Components\ReflectionAwareInterface;
 
@@ -423,7 +424,7 @@ class Criteria extends Extendable implements ReflectionAwareInterface
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function jsonSerialize()
     {
         $data = get_object_vars($this);

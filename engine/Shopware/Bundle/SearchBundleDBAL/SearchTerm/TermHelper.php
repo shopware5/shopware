@@ -83,11 +83,14 @@ class TermHelper implements TermHelperInterface
 
         if ($this->replaceNonLetters) {
             // Remove not required chars from string
-            $string = trim(preg_replace("/[^\pL_0-9]/u", ' ', $string));
+            $string = trim((string) preg_replace("/[^\pL_0-9]/u", ' ', $string));
         }
 
         // Parse string into array
         $wordsTmp = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
+        if (!\is_array($wordsTmp)) {
+            return [];
+        }
 
         if (\count($wordsTmp)) {
             $words = array_unique($wordsTmp);
@@ -107,13 +110,11 @@ class TermHelper implements TermHelperInterface
 
     /**
      * Filter out bad keywords before starting search
-     *
-     * @return array|bool
      */
-    private function filterBadWordsFromString(array $words)
+    private function filterBadWordsFromString(array $words): array
     {
-        if (!\count($words) || !\is_array($words)) {
-            return false;
+        if (\count($words) === 0) {
+            return [];
         }
 
         $result = [];
@@ -129,12 +130,8 @@ class TermHelper implements TermHelperInterface
 
     /**
      * Check if a keyword is on blacklist or not
-     *
-     * @param string $word
-     *
-     * @return bool
      */
-    private function filterBadWordFromString($word)
+    private function filterBadWordFromString(string $word): bool
     {
         static $badWords;
 
@@ -147,7 +144,7 @@ class TermHelper implements TermHelperInterface
             );
         }
 
-        if (\in_array((string) $word, $badWords)) {
+        if (\in_array($word, $badWords, true)) {
             return false;
         }
 

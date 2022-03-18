@@ -27,7 +27,9 @@ namespace Shopware\Components\Routing;
 interface GeneratorListInterface extends GeneratorInterface
 {
     /**
-     * @return array
+     * @param array<array<string, mixed>> $list
+     *
+     * @return array<string>
      */
     public function generateList(array $list, Context $context);
 }

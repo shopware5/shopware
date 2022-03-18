@@ -126,6 +126,9 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         }
 
         foreach ($this->fieldAlias as $id => $name) {
+            $classImplements = class_implements($name);
+            $hasResolver = \is_array($classImplements) && \array_key_exists(ResolveableFieldInterface::class, $classImplements);
+
             if ($name === TypeField::class || $name === TypeGrid::class) {
                 $snippetName = 'type-' . explode('-', $id)[1];
 
@@ -133,7 +136,7 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
                     'id' => $id,
                     'name' => $name,
                     'label' => sprintf($namespace->get($snippetName, $snippetName, true), ucfirst(explode('-', $id)[0])),
-                    'hasResolver' => \array_key_exists(ResolveableFieldInterface::class, class_implements($name)),
+                    'hasResolver' => $hasResolver,
                 ];
 
                 continue;
@@ -143,7 +146,7 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
                 'id' => $id,
                 'name' => $name,
                 'label' => $namespace->get($id, $id, true),
-                'hasResolver' => \array_key_exists(ResolveableFieldInterface::class, class_implements($name)),
+                'hasResolver' => $hasResolver,
             ];
         }
 

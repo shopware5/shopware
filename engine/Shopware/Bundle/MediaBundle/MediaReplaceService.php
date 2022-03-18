@@ -33,6 +33,7 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Media;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use UnexpectedValueException;
 
 class MediaReplaceService implements MediaReplaceServiceInterface
 {
@@ -78,6 +79,11 @@ class MediaReplaceService implements MediaReplaceServiceInterface
             throw new InvalidArgumentException(sprintf('Media with id %s not found', $mediaId));
         }
 
+        $filePath = $file->getRealPath();
+        if (!\is_string($filePath)) {
+            throw new UnexpectedValueException(sprintf('Could not get path of file "%s"', $file->getFilename()));
+        }
+
         $uploadedFileExtension = $this->getExtension($file);
 
         if ($media->getType() !== $this->mappingService->getType($uploadedFileExtension)) {
@@ -88,7 +94,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
             throw new MediaFileExtensionNotAllowedException($uploadedFileExtension);
         }
 
-        $fileContent = file_get_contents($file->getRealPath());
+        $fileContent = file_get_contents($filePath);
         $oldExtension = strtolower($media->getExtension());
         $newExtension = strtolower($this->getExtension($file));
 
@@ -108,11 +114,11 @@ class MediaReplaceService implements MediaReplaceServiceInterface
         }
 
         $media->setExtension($this->getExtension($file));
-        $media->setFileSize(filesize($file->getRealPath()));
+        $media->setFileSize(filesize($filePath));
         $media->setCreated(new DateTime());
 
         if ($media->getType() === Media::TYPE_IMAGE) {
-            $imageSize = getimagesize($file->getRealPath());
+            $imageSize = getimagesize($filePath);
 
             if ($imageSize) {
                 $media->setWidth($imageSize[0]);

@@ -192,7 +192,7 @@ class MediaHydrator extends Hydrator
 
     private function updateMedia(array $data): array
     {
-        $imageSize = getimagesizefromstring($this->mediaService->read($data['__media_path']));
+        $imageSize = getimagesizefromstring((string) $this->mediaService->read($data['__media_path']));
         if (!\is_array($imageSize)) {
             throw new RuntimeException(sprintf('Could not get image size from "%s"', $data['__media_path']));
         }
