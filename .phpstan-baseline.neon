@@ -30746,11 +30746,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$arr1 of function array_diff expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#1 \\$orderNumber of method sArticles\\:\\:sGetArticleNameByOrderNumber\\(\\) expects string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -30761,17 +30756,7 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#2 \\$orderNumber of method sArticles\\:\\:getArticleCover\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -31321,11 +31306,6 @@ parameters:
 			path: engine/Shopware/Core/sCore.php
 
 		-
-			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCore.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCore.php
@@ -31522,11 +31502,6 @@ parameters:
 
 		-
 			message: "#^Method sMarketing\\:\\:sMailCampaignsGetDetail\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sMarketing.php
 
@@ -32017,11 +31992,6 @@ parameters:
 
 		-
 			message: "#^Method sSystem\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sSystem.php
-
-		-
-			message: "#^Parameter \\#1 \\$function of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{sCore, string\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sSystem.php
 
@@ -54534,4 +54504,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
