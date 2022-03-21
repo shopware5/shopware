@@ -30,6 +30,7 @@ namespace Shopware\Tests\Functional\Plugins\Frontend;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
 use Enlight_Controller_Response_Response;
+use Shopware\Tests\TestReflectionHelper;
 use Shopware_Plugins_Frontend_Statistics_Bootstrap;
 
 class StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
@@ -154,6 +155,19 @@ class StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
         $this->Plugin()->refreshPartner($request, $response);
 
         static::assertSame('sCampaign1', Shopware()->Session()->get('sPartner'));
+    }
+
+    public function testRefreshBlogWorksWithoutVisits(): void
+    {
+        $request = $this->Request()
+            ->setQuery('blogId', 1);
+
+        $plugin = $this->Plugin();
+
+        $methode = TestReflectionHelper::getMethod(Shopware_Plugins_Frontend_Statistics_Bootstrap::class, 'refreshBlog');
+        $methode->invoke($plugin, $request);
+
+        static::assertSame([1], Shopware()->Session()->get('visitedBlogItems'));
     }
 
     private function getCookie(Enlight_Controller_Response_Response $response): ?string

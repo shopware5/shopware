@@ -123,7 +123,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      * @param Enlight_Controller_Request_Request       $request
      * @param Enlight_Controller_Response_ResponseHttp $response
      *
-     * @throws Exception
+     * @return void
      */
     public function updateLog($request, $response)
     {
@@ -141,6 +141,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
 
     /**
      * @param Enlight_Controller_Request_Request $request
+     *
+     * @return void
      */
     public function refreshBasket(Enlight_Controller_Request_RequestHttp $request)
     {
@@ -185,6 +187,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
 
     /**
      * Cleanup statistic
+     *
+     * @return void
      */
     public function cleanupStatistic()
     {
@@ -199,6 +203,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      *
      * @throws Exception
      * @throws Zend_Db_Adapter_Exception
+     *
+     * @return void
      */
     public function refreshCurrentUsers(Enlight_Controller_Request_Request $request)
     {
@@ -220,6 +226,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      * Refresh visitor log
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function refreshLog(Enlight_Controller_Request_Request $request)
     {
@@ -278,6 +286,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      * Refresh referrer log
      *
      * @param Enlight_Controller_Request_Request $request
+     *
+     * @return void
      */
     public function refreshReferer($request)
     {
@@ -306,6 +316,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      * Refresh article impressions
      *
      * @param Enlight_Controller_Request_Request $request
+     *
+     * @return void
      */
     public function refreshArticleImpression($request)
     {
@@ -334,6 +346,8 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
      *
      * @param Enlight_Controller_Request_Request       $request
      * @param Enlight_Controller_Response_ResponseHttp $response
+     *
+     * @return void
      */
     public function refreshPartner($request, $response)
     {
@@ -392,7 +406,7 @@ ShopWiki;Bot;WebAlta;;abachobot;architext;ask jeeves;frooglebot;googlebot;lycos;
         $session = $this->get('session');
 
         // Count the views of this blog item
-        $visitedBlogItems = $session->get('visitedBlogItems');
+        $visitedBlogItems = $session->get('visitedBlogItems', []);
         if (\in_array($blogArticleId, $visitedBlogItems, true)) {
             return;
         }
