@@ -29,139 +29,135 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Components\Captcha\DefaultCaptcha;
+use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 
-class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
+class ResetPasswordWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use ContainerTrait;
+
+    private const PASSWORD_RESET_REQUEST = [
+        'module' => 'frontend',
+        'controller' => 'account',
+        'action' => 'password',
+        'email' => 'test@example.com',
+        'first_name_confirmation' => '',
+    ];
 
     private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
     public function tearDown(): void
     {
         $this->Template()->clearAllAssign();
-        $this->saveRegisterCaptchaConfig('nocaptcha');
+        $this->savePasswordResetCaptchaConfig('nocaptcha');
         parent::tearDown();
     }
 
     public function testValidateCaptchaWithInvalidName(): void
     {
-        $this->saveRegisterCaptchaConfig('uninstalledCaptchaName');
-        $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
+        $this->savePasswordResetCaptchaConfig('uninstalledCaptchaName');
+        $postParameter = self::PASSWORD_RESET_REQUEST;
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
-
-        $this->dispatch('/register/saveRegister/sTarget/account/sTargetAction/index');
-
-        $viewVariables = $this->View()->getAssign();
-
-        static::assertTrue($this->Response()->isRedirect());
-        static::assertArrayNotHasKey('errors', $viewVariables);
+        $this->expectException(CaptchaNotFoundException::class);
+        $this->dispatch('/account/password');
     }
 
     public function testNoCaptcha(): void
     {
-        $this->saveRegisterCaptchaConfig('nocaptcha');
-        $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
+        $this->savePasswordResetCaptchaConfig('nocaptcha');
+        $postParameter = self::PASSWORD_RESET_REQUEST;
 
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
-        $this->dispatch('/register/saveRegister/sTarget/account/sTargetAction/index');
+        $this->dispatch('/account/password');
 
         $viewVariables = $this->View()->getAssign();
-
-        static::assertTrue($this->Response()->isRedirect());
-        static::assertArrayNotHasKey('errors', $viewVariables);
+        static::assertArrayNotHasKey('sErrorMessages', $viewVariables);
     }
 
     public function testHoneypot(): void
     {
-        $this->saveRegisterCaptchaConfig('honeypot');
-        $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
+        $this->savePasswordResetCaptchaConfig('honeypot');
+        $postParameter = self::PASSWORD_RESET_REQUEST;
 
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
-        $this->dispatch('/register/saveRegister/sTarget/account/sTargetAction/index');
+        $this->dispatch('/account/password');
 
         $viewVariables = $this->View()->getAssign();
 
-        static::assertTrue($this->Response()->isRedirect());
-        static::assertArrayNotHasKey('errors', $viewVariables);
+        static::assertArrayNotHasKey('sErrorMessages', $viewVariables);
     }
 
     public function testDefault(): void
     {
-        $this->saveRegisterCaptchaConfig('default');
+        $this->savePasswordResetCaptchaConfig('default');
         $random = md5(uniqid());
         $sessionVars = ['sCaptcha' => $random, $random => true];
 
         Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
 
-        $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
+        $postParameter = self::PASSWORD_RESET_REQUEST;
+        $postParameter['sCaptcha'] = $random;
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $this->Request()->setMethod('POST');
+        $this->Request()->setPost($postParameter);
+
+        $this->dispatch('/account/password');
+        $viewVariables = $this->View()->getAssign();
+        static::assertArrayNotHasKey('sErrorMessages', $viewVariables);
+    }
+
+    public function testInvalidDefault(): void
+    {
+        $this->savePasswordResetCaptchaConfig('default');
+        $random = md5(uniqid());
+        $sessionVars = ['sCaptcha' => $random];
+
+        Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
+
+        $postParameter = self::PASSWORD_RESET_REQUEST;
         $postParameter['sCaptcha'] = $random;
 
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
-        $this->dispatch('/register/saveRegister/sTarget/account/sTargetAction/index');
+        $this->dispatch('/account/password');
 
         $viewVariables = $this->View()->getAssign();
-
-        static::assertTrue($this->Response()->isRedirect());
-        static::assertArrayNotHasKey('errors', $viewVariables);
+        static::assertArrayHasKey('sErrorMessages', $viewVariables);
     }
 
     public function testInvalidHoneypot(): void
     {
-        $this->saveRegisterCaptchaConfig('honeypot');
-        $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
+        $this->savePasswordResetCaptchaConfig('honeypot');
+        $postParameter = self::PASSWORD_RESET_REQUEST;
         $postParameter['first_name_confirmation'] = uniqid();
 
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
         $this->Request()->setMethod('POST');
         $this->Request()->setPost($postParameter);
 
-        $this->dispatch('/register/saveRegister/sTarget/account/sTargetAction/index');
+        $this->dispatch('/account/password');
 
         $viewVariables = $this->View()->getAssign();
 
-        static::assertArrayHasKey('errors', $viewVariables);
+        static::assertArrayHasKey('sErrorMessages', $viewVariables);
     }
 
-    public function testInvalidDefault(): void
-    {
-        $this->saveRegisterCaptchaConfig('default');
-        $random = md5(uniqid());
-        $sessionVars = ['sCaptcha' => $random];
-
-        Shopware()->Session()->offsetSet(DefaultCaptcha::SESSION_KEY, $sessionVars);
-
-        $postParameter = include __DIR__ . '/fixtures/captchaRequest.php';
-        $postParameter['sCaptcha'] = $random;
-
-        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
-        $this->Request()->setMethod('POST');
-        $this->Request()->setPost($postParameter);
-
-        $this->dispatch('/register/saveRegister/sTarget/account/sTargetAction/index');
-
-        $viewVariables = $this->View()->getAssign();
-
-        static::assertArrayHasKey('errors', $viewVariables);
-    }
-
-    private function saveRegisterCaptchaConfig(string $value): void
+    private function savePasswordResetCaptchaConfig(string $value): void
     {
         $formattedValue = sprintf('s:%d:"%s";', \strlen($value), $value);
         $this->getContainer()->get(Connection::class)->executeQuery(
             'UPDATE s_core_config_elements SET value = ? WHERE name = ?',
-            [$formattedValue, 'registerCaptcha']
+            [$formattedValue, 'passwordResetCaptcha']
         );
 
         Shopware()->Container()->get('cache')->clean();

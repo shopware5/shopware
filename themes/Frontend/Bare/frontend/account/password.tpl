@@ -52,6 +52,15 @@
                                 </div>
                             {/block}
 
+                            {* Captcha *}
+                            {block name='frontend_account_index_form_captcha'}
+                                <div class="is--align-center password-reset--captcha">
+                                    {$captchaName = {config name="passwordResetCaptcha"}}
+                                    {$captchaHasError = $errors.captcha}
+                                    {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
+                                </div>
+                            {/block}
+
                             {* Recover password actions *}
                             {block name="frontend_account_password_reset_actions"}
                                 <div class="password-reset--form-actions panel--actions is--wide is--align-center">

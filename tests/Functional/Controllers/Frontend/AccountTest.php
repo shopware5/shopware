@@ -44,6 +44,12 @@ class AccountTest extends ControllerTestCase
         parent::setUp();
     }
 
+    public function tearDown(): void
+    {
+        $this->Template()->clearAllAssign();
+        parent::tearDown();
+    }
+
     public function testPasswordWillBeChanged(): void
     {
         $hash = $this->getNextResetHash('test@example.com');

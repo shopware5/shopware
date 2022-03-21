@@ -36,6 +36,7 @@ use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StaticContentBundle\Exception\EsdNotFoundException;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
@@ -48,6 +49,10 @@ use Symfony\Component\Form\FormInterface;
 
 class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 {
+    private const DEFAULT_CAPTCHA_SETTING = 'nocaptcha';
+
+    private const CONFIG_PASSWORD_RESET_CAPTCHA = 'passwordResetCaptcha';
+
     /**
      * @deprecated - Will be private in Shopware 5.8
      *
@@ -62,6 +67,10 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      */
     protected $customerService;
 
+    private Shopware_Components_Config $config;
+
+    private CaptchaValidator $captchaValidator;
+
     /**
      * @return void
      */
@@ -69,6 +78,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         $this->admin = Shopware()->Modules()->Admin();
         $this->customerService = Shopware()->Container()->get(CustomerServiceInterface::class);
+    }
+
+    public function __construct(Shopware_Components_Config $config, CaptchaValidator $captchaValidator)
+    {
+        parent::__construct();
+        $this->config = $config;
+        $this->captchaValidator = $captchaValidator;
     }
 
     public function preDispatch()
@@ -467,11 +483,21 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
      *
      * @param string $email
      *
-     * @return array{sErrorMessages?: array<string>, sErrorFlag?: array{email: true}}
+     * @return array{sErrorMessages?: array<string>, sErrorFlag?: array{email?: true, sCaptcha?: true}}
      */
     public function sendResetPasswordConfirmationMail($email)
     {
         $snippets = Shopware()->Snippets()->getNamespace('frontend/account/password');
+        if ($this->config->get(self::CONFIG_PASSWORD_RESET_CAPTCHA) !== self::DEFAULT_CAPTCHA_SETTING) {
+            if (!empty($this->config->get('CaptchaColor'))) {
+                if (!$this->captchaValidator->validateByName($this->config->get(self::CONFIG_PASSWORD_RESET_CAPTCHA), $this->Request())) {
+                    return [
+                        'sErrorMessages' => [$snippets->get('captchaInvalid')],
+                        'sErrorFlag' => ['sCaptcha' => true],
+                    ];
+                }
+            }
+        }
 
         if (empty($email)) {
             return [
