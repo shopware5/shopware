@@ -32,7 +32,8 @@ use PDO;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme;
-use Shopware\Models\Shop;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Shop\Template;
 
 /**
  * The Theme\Inheritance class is used to
@@ -44,30 +45,15 @@ use Shopware\Models\Shop;
  */
 class Inheritance
 {
-    /**
-     * @var PathResolver
-     */
-    private $pathResolver;
+    private PathResolver $pathResolver;
 
-    /**
-     * @var ModelManager
-     */
-    private $entityManager;
+    private ModelManager $entityManager;
 
-    /**
-     * @var Util
-     */
-    private $util;
+    private Util $util;
 
-    /**
-     * @var Enlight_Event_EventManager
-     */
-    private $eventManager;
+    private Enlight_Event_EventManager $eventManager;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
     public function __construct(
         ModelManager $entityManager,
@@ -88,18 +74,18 @@ class Inheritance
      *
      * @return array
      */
-    public function buildInheritances(Shop\Template $template)
+    public function buildInheritances(Template $template)
     {
         $hierarchy = $this->buildInheritanceRecursive($template);
 
         $util = $this->util;
-        $bare = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
+        $bare = array_filter($hierarchy, function (Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
 
             return $theme->injectBeforePlugins();
         });
 
-        $custom = array_filter($hierarchy, function (Shop\Template $template) use ($util) {
+        $custom = array_filter($hierarchy, function (Template $template) use ($util) {
             $theme = $util->getThemeByTemplate($template);
 
             return !$theme->injectBeforePlugins();
@@ -116,11 +102,9 @@ class Inheritance
      * Returns the inheritance-path of a given shop theme as an array of
      * template-names. The names are sorted descending in priority.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     *
      * @return string[]
      */
-    public function getInheritancePath(Shop\Template $template)
+    public function getInheritancePath(Template $template)
     {
         $hierarchy = $this->buildInheritanceRecursive($template);
         $path = [];
@@ -140,19 +124,17 @@ class Inheritance
      * This function is used for the less compiler and the template registration.
      * The less compiler can only work with valid configuration types like pixel,
      * em or color fields. For this reason the function contains the $lessCompatible
-     * parameter which selects only valid less fields.
-     * This fields are defined as class property within this class and can be extended
+     * parameter which selects only valid "less" fields.
+     * These fields are defined as class property within this class and can be extended
      * over a shopware event.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     * @param \Shopware\Models\Shop\Shop     $shop
-     * @param bool                           $lessCompatible
+     * @param bool $lessCompatible
      *
      * @throws Enlight_Event_Exception
      *
      * @return array
      */
-    public function buildConfig(Shop\Template $template, Shop\Shop $shop, $lessCompatible = true)
+    public function buildConfig(Template $template, Shop $shop, $lessCompatible = true)
     {
         $templates = $this->fetchTemplates();
 
@@ -173,13 +155,11 @@ class Inheritance
             $lessCompatible
         );
 
-        $config = $this->eventManager->filter('Theme_Inheritance_Config_Created', $config, [
+        return $this->eventManager->filter('Theme_Inheritance_Config_Created', $config, [
             'shop' => $shop,
             'template' => $template,
             'lessCompatible' => $lessCompatible,
         ]);
-
-        return $config;
     }
 
     /**
@@ -187,26 +167,22 @@ class Inheritance
      * The returned directory array will be registered as template directories.
      * The function is used from the ViewRenderer plugin of Enlight.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     *
      * @throws Enlight_Event_Exception
      *
      * @return array
      */
-    public function getTemplateDirectories(Shop\Template $template)
+    public function getTemplateDirectories(Template $template)
     {
         $directories = $this->getTemplateDirectoriesRecursive(
             $template->getId(),
             $this->fetchTemplates()
         );
 
-        $directories = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Theme_Inheritance_Template_Directories_Collected',
             $directories,
             ['template' => $template]
         );
-
-        return $directories;
     }
 
     /**
@@ -216,13 +192,11 @@ class Inheritance
      * as smarty plugin directory.
      * This allows the developers to implement own smarty plugins.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     *
      * @throws Enlight_Event_Exception
      *
      * @return array
      */
-    public function getSmartyDirectories(Shop\Template $template)
+    public function getSmartyDirectories(Template $template)
     {
         $directories = $this->getTemplateDirectoriesRecursive(
             $template->getId(),
@@ -233,13 +207,11 @@ class Inheritance
             return implode(DIRECTORY_SEPARATOR, [$dir, '_private', 'smarty']) . DIRECTORY_SEPARATOR;
         }, $directories);
 
-        $directories = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Theme_Inheritance_Smarty_Directories_Collected',
             $directories,
             ['template' => $template]
         );
-
-        return $directories;
     }
 
     /**
@@ -247,11 +219,9 @@ class Inheritance
      *
      * @return string[]
      */
-    public function getTemplateCssFiles(Shop\Template $template)
+    public function getTemplateCssFiles(Template $template)
     {
-        $theme = $this->util->getThemeByTemplate($template);
-
-        $css = $theme->getCss();
+        $css = $this->util->getThemeByTemplate($template)->getCss();
 
         $directory = $this->pathResolver->getPublicDirectory($template);
         foreach ($css as &$file) {
@@ -266,11 +236,9 @@ class Inheritance
      *
      * @return string[]
      */
-    public function getTemplateJavascriptFiles(Shop\Template $template)
+    public function getTemplateJavascriptFiles(Template $template)
     {
-        $theme = $this->util->getThemeByTemplate($template);
-
-        $files = $theme->getJavascript();
+        $files = $this->util->getThemeByTemplate($template)->getJavascript();
 
         $directory = $this->pathResolver->getPublicDirectory($template);
 
@@ -286,7 +254,7 @@ class Inheritance
      *
      * @return Theme
      */
-    public function getTheme(Shop\Template $template)
+    public function getTheme(Template $template)
     {
         return $this->util->getThemeByTemplate($template);
     }
@@ -294,14 +262,12 @@ class Inheritance
     /**
      * Helper function which creates an array with all shop templates
      * inside which should be included in the frontend inheritance.
-     *
-     * @return array
      */
-    private function buildInheritanceRecursive(Shop\Template $template)
+    private function buildInheritanceRecursive(Template $template): array
     {
         $hierarchy = [$template];
 
-        if ($template->getParent() instanceof Shop\Template) {
+        if ($template->getParent() instanceof Template) {
             $hierarchy = array_merge(
                 $hierarchy,
                 $this->buildInheritanceRecursive($template->getParent())
@@ -317,12 +283,9 @@ class Inheritance
      * The function returns an array with all template directories
      * for the inheritance of the passed template.
      *
-     * @param int     $templateId
      * @param array[] $templates
-     *
-     * @return array
      */
-    private function getTemplateDirectoriesRecursive($templateId, $templates)
+    private function getTemplateDirectoriesRecursive(int $templateId, array $templates): array
     {
         $template = $templates[$templateId];
 
@@ -333,7 +296,7 @@ class Inheritance
         if ($template['parent_id'] !== null) {
             $directories = array_merge(
                 $directories,
-                $this->getTemplateDirectoriesRecursive($template['parent_id'], $templates)
+                $this->getTemplateDirectoriesRecursive((int) $template['parent_id'], $templates)
             );
         }
 
@@ -348,17 +311,13 @@ class Inheritance
      * This function is used for the less compiler and the template registration.
      * The less compiler can only work with valid configuration types like pixel,
      * em or color fields. For this reason the function contains the $lessCompatible
-     * parameter which selects only valid less fields.
-     * This fields are defined as class property within this class and can be extended
+     * parameter which selects only valid "less" fields.
+     * These fields are defined as class property within this class and can be extended
      * over a shopware event.
      *
-     * @param int     $templateId
      * @param array[] $configs
-     * @param bool    $lessCompatible
-     *
-     * @return array
      */
-    private function buildConfigRecursive($templateId, array $templates, $configs, $lessCompatible = true)
+    private function buildConfigRecursive(int $templateId, array $templates, array $configs, bool $lessCompatible = true): array
     {
         $template = $templates[$templateId];
 
@@ -371,7 +330,7 @@ class Inheritance
 
         if ($template['parent_id']) {
             $parent = $this->buildConfigRecursive(
-                $template['parent_id'],
+                (int) $template['parent_id'],
                 $templates,
                 $configs,
                 $lessCompatible
@@ -384,18 +343,12 @@ class Inheritance
     }
 
     /**
-     * Helper function which returns the theme configuration as
-     * key - value array.
+     * Helper function which returns the theme configuration as key - value array.
      *
-     * The element name is used as array key, the shop config
-     * as value. If no shop config saved, the value will fallback to
-     * the default value.
-     *
-     * @param bool $lessCompatible
-     *
-     * @return array
+     * The element name is used as array key, the shop config as value.
+     * If no shop config saved, the value will fall back to the default value.
      */
-    private function parseConfig(array $config, $lessCompatible = true)
+    private function parseConfig(array $config, bool $lessCompatible = true): array
     {
         foreach ($config as &$row) {
             if (!isset($row['value'])) {
@@ -404,7 +357,7 @@ class Inheritance
                 $row['value'] = unserialize($row['value'], ['allowed_classes' => false]);
             }
 
-            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && strpos($row['value'], 'media/') !== false) {
+            if ($row['type'] === 'theme-media-selection' && $row['value'] !== $row['defaultValue'] && str_contains($row['value'], 'media/')) {
                 $row['value'] = $this->mediaService->getUrl($row['value']);
             }
 
@@ -413,21 +366,23 @@ class Inheritance
             }
         }
 
-        if (!\is_array($config) || empty($config)) {
+        if (empty($config)) {
             return [];
         }
 
         //creates a key value array for the configuration.
-        return array_combine(
+        $combinedArray = array_combine(
             array_column($config, 'name'),
             array_column($config, 'value')
         );
+        if (!\is_array($combinedArray)) {
+            return [];
+        }
+
+        return $combinedArray;
     }
 
-    /**
-     * @return array
-     */
-    private function fetchTemplates()
+    private function fetchTemplates(): array
     {
         $query = $this->entityManager->getConnection()->createQueryBuilder();
         $query->select([
@@ -447,17 +402,14 @@ class Inheritance
     }
 
     /**
-     * @param int     $id
      * @param array[] $templates
-     *
-     * @return array
      */
-    private function filterAffectedTemplates($id, $templates)
+    private function filterAffectedTemplates(int $id, array $templates): array
     {
         $active = $templates[$id];
 
         if ($active['parent_id']) {
-            $children = $this->filterAffectedTemplates($active['parent_id'], $templates);
+            $children = $this->filterAffectedTemplates((int) $active['parent_id'], $templates);
             $directories = [$id => $active];
             $directories += $children;
 
@@ -469,12 +421,10 @@ class Inheritance
 
     /**
      * @param int[] $templateIds
-     * @param int   $shopId
-     * @param bool  $lessCompatible
      *
      * @return array[] indexed by template id
      */
-    private function getConfigs($templateIds, $shopId, $lessCompatible)
+    private function getConfigs(array $templateIds, int $shopId, bool $lessCompatible): array
     {
         $query = $this->entityManager->getConnection()->createQueryBuilder();
 

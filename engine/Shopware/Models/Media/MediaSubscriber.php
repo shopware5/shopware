@@ -34,15 +34,9 @@ use SimpleXMLElement;
 
 class MediaSubscriber implements EventSubscriber
 {
-    /**
-     * @var Container
-     */
-    private $container;
+    private Container $container;
 
-    /**
-     * @param Container $container
-     */
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         $this->container = $container;
     }
@@ -60,6 +54,8 @@ class MediaSubscriber implements EventSubscriber
 
     /**
      * Set meta data on load
+     *
+     * @return void
      */
     public function postLoad(LifecycleEventArgs $eventArgs)
     {
@@ -68,6 +64,8 @@ class MediaSubscriber implements EventSubscriber
 
     /**
      * Set meta data on save
+     *
+     * @return void
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
@@ -79,9 +77,12 @@ class MediaSubscriber implements EventSubscriber
      *
      * @throws Exception
      */
-    private function migrateMeta(LifecycleEventArgs $eventArgs)
+    private function migrateMeta(LifecycleEventArgs $eventArgs): void
     {
         $media = $eventArgs->getEntity();
+        if (!$media instanceof Media) {
+            return;
+        }
 
         if (!$this->isFormatSupported($media)) {
             return;
@@ -92,7 +93,7 @@ class MediaSubscriber implements EventSubscriber
         if ((!$media->getHeight() || !$media->getWidth()) && $mediaService->has($media->getPath())) {
             switch ($media->getType()) {
                 case Media::TYPE_IMAGE:
-                    $imageSize = getimagesizefromstring($mediaService->read($media->getPath()));
+                    $imageSize = getimagesizefromstring((string) $mediaService->read($media->getPath()));
                     if (\is_array($imageSize)) {
                         [$width, $height] = $imageSize;
                         break;
@@ -100,8 +101,7 @@ class MediaSubscriber implements EventSubscriber
 
                     // no break
                 case Media::TYPE_VECTOR:
-                    if (
-                        $media->getExtension() === 'svg'
+                    if ($media->getExtension() === 'svg'
                         && $xml = simplexml_load_string($mediaService->read($media->getPath()))
                     ) {
                         /** @var SimpleXMLElement|null $attr */
@@ -136,16 +136,11 @@ class MediaSubscriber implements EventSubscriber
     }
 
     /**
-     * Test file for instance Media and has supported types
-     *
-     * @param object $media
-     *
-     * @return bool
+     * Test file for supported types
      */
-    private function isFormatSupported($media)
+    private function isFormatSupported(Media $media): bool
     {
-        return $media instanceof Media
-            && ($media->getType() === Media::TYPE_IMAGE
-                || ($media->getType() === Media::TYPE_VECTOR && $media->getExtension() === 'svg'));
+        return $media->getType() === Media::TYPE_IMAGE
+            || ($media->getType() === Media::TYPE_VECTOR && $media->getExtension() === 'svg');
     }
 }

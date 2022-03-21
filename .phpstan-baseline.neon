@@ -7941,16 +7941,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function mb_strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Adapters\\\\AdapterFactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Adapters/AdapterFactoryInterface.php
@@ -19896,11 +19886,6 @@ parameters:
 			path: engine/Shopware/Components/Model/ModelManager.php
 
 		-
-			message: "#^Parameter \\#3 \\$eventManager of method Doctrine\\\\ORM\\\\EntityManager\\:\\:__construct\\(\\) expects Doctrine\\\\Common\\\\EventManager, Doctrine\\\\Common\\\\EventManager\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelManager.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\ProxyAwareRepositoryFactory\\:\\:\\$repositoryList with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ProxyAwareRepositoryFactory.php
@@ -22717,11 +22702,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:parseConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Inheritance.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:parseConfig\\(\\) should return array but returns array\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Inheritance.php
 
@@ -32151,11 +32131,6 @@ parameters:
 			path: engine/Shopware/Kernel.php
 
 		-
-			message: "#^Parameter \\#2 \\$newvalue of function ini_set expects string, bool\\|float\\|int\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Kernel.php
-
-		-
 			message: "#^Property Shopware\\\\Kernel\\:\\:\\$config type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Kernel.php
@@ -35791,11 +35766,6 @@ parameters:
 			path: engine/Shopware/Models/Mail/Attachment.php
 
 		-
-			message: "#^Property Shopware\\\\Models\\\\Mail\\\\Contact\\:\\:\\$mailAddress \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Mail/Contact.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Mail\\\\File\\:\\:getFileName\\(\\) should return string but returns bool\\|string\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Mail/File.php
@@ -36141,11 +36111,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Media.php
@@ -36206,46 +36171,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:getExtension\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getHeight\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getPath\\(\\)\\.$#"
-			count: 3
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getType\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getWidth\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:setHeight\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:setWidth\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
 			message: "#^Cannot access property \\$height on SimpleXMLElement\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Models/Media/MediaSubscriber.php
@@ -36258,26 +36183,6 @@ parameters:
 		-
 			message: "#^Cannot access property \\$width on SimpleXMLElement\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:migrateMeta\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:postLoad\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:prePersist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of function getimagesizefromstring expects string, string\\|false given\\.$#"
-			count: 1
 			path: engine/Shopware/Models/Media/MediaSubscriber.php
 
 		-

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,33 +26,30 @@
 
 namespace Shopware\Tests\Functional\Bundle\MailBundle;
 
-use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\MailBundle\Service\LogService;
 use Shopware\Bundle\MailBundle\Service\LogServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Log;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class LogServiceTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
     use MailBundleTestTrait;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private ModelManager $entityManager;
 
-    /**
-     * @var LogServiceInterface
-     */
-    private $logService;
+    private LogServiceInterface $logService;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $entityManager = Shopware()->Container()->get(ModelManager::class);
+        $entityManager = $this->getContainer()->get(ModelManager::class);
 
         $this->entityManager = $entityManager;
         $this->logService = new LogService(
@@ -79,6 +78,6 @@ class LogServiceTest extends TestCase
         $this->logService->log($this->createSimpleMail());
         $this->logService->flush();
 
-        static::assertEquals($count + 1, $repo->count([]));
+        static::assertSame($count + 1, $repo->count([]));
     }
 }

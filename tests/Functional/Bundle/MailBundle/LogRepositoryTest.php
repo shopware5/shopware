@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,67 +29,48 @@ namespace Shopware\Tests\Functional\Bundle\MailBundle;
 use DateInterval;
 use DateTime;
 use DateTimeInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Enlight_Components_Mail;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Log;
 use Shopware\Models\Mail\LogRepositoryInterface;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class LogRepositoryTest extends TestCase
 {
-    use MailBundleTestTrait;
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
+    use MailBundleTestTrait;
 
     private const PAST_DATE = '2019-01-01T00:00:00+0000';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private ModelManager $entityManager;
+
+    private LogEntryBuilderInterface $builder;
+
+    private LogRepositoryInterface $repository;
 
     /**
-     * @var LogEntryBuilderInterface
+     * @var array<string, Log>
      */
-    private $builder;
+    private array $testEntries;
 
-    /**
-     * @var LogRepositoryInterface
-     */
-    private $repository;
+    private DateTimeInterface $pastDate;
 
-    /**
-     * @var Log[]|array
-     */
-    private $testEntries;
+    private DateTimeInterface $currentDate;
 
-    /**
-     * @var DateTimeInterface
-     */
-    private $pastDate;
+    private DateTimeInterface $pastDatePlusOneDay;
 
-    /**
-     * @var DateTimeInterface
-     */
-    private $currentDate;
-
-    /**
-     * @var DateTimeInterface
-     */
-    private $pastDatePlusOneDay;
-
-    /**
-     * @var DateTimeInterface
-     */
-    private $currentDateMinusOneDay;
+    private DateTimeInterface $currentDateMinusOneDay;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $this->entityManager = $this->getContainer()->get(ModelManager::class);
         $this->builder = new LogEntryBuilder($this->entityManager);
         $this->repository = $this->entityManager->getRepository(Log::class);
 
@@ -111,14 +94,14 @@ class LogRepositoryTest extends TestCase
 
         $entry = array_pop($entries);
         static::assertInstanceOf(Log::class, $entry);
-        static::assertEquals($this->currentDate, $entry->getSentAt());
+        static::assertSame($this->currentDate, $entry->getSentAt());
 
         $entries = $this->repository->findByDate($this->pastDate, $this->currentDateMinusOneDay);
         static::assertCount(1, $entries);
 
         $entry = array_pop($entries);
         static::assertInstanceOf(Log::class, $entry);
-        static::assertEquals($this->pastDate, $entry->getSentAt());
+        static::assertSame($this->pastDate, $entry->getSentAt());
     }
 
     public function testDeleteByDate(): void
@@ -130,7 +113,7 @@ class LogRepositoryTest extends TestCase
 
         $entry = array_pop($entries);
         static::assertInstanceOf(Log::class, $entry);
-        static::assertEquals($this->pastDate, $entry->getSentAt());
+        static::assertSame($this->pastDate, $entry->getSentAt());
 
         $this->repository->deleteByDate($this->pastDate, $this->currentDate);
 

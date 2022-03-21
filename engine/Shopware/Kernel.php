@@ -290,7 +290,7 @@ class Kernel extends SymfonyKernel
         foreach ($settings as $key => $value) {
             $key = empty($prefix) ? $key : $prefix . $key;
             if (is_scalar($value)) {
-                ini_set($key, $value);
+                ini_set($key, (string) $value);
             } elseif (\is_array($value)) {
                 $this->setPhpSettings($value, $key . '.');
             }

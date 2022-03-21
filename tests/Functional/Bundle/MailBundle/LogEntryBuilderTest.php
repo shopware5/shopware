@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,31 +26,28 @@
 
 namespace Shopware\Tests\Functional\Bundle\MailBundle;
 
-use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Contact;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class LogEntryBuilderTest extends \PHPUnit\Framework\TestCase
+class LogEntryBuilderTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
     use MailBundleTestTrait;
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
-
-    /**
-     * @var LogEntryBuilderInterface
-     */
-    private $builder;
+    private LogEntryBuilderInterface $builder;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->entityManager = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
-        $this->builder = new LogEntryBuilder($this->entityManager);
+        $entityManager = $this->getContainer()->get(ModelManager::class);
+        $this->builder = new LogEntryBuilder($entityManager);
     }
 
     public function testBuildWithSimpleMail(): void
@@ -58,9 +57,9 @@ class LogEntryBuilderTest extends \PHPUnit\Framework\TestCase
 
         static::assertNotNull($entry);
 
-        static::assertEquals($mail->getSubject(), $entry->getSubject());
-        static::assertEquals($mail->getFrom(), $entry->getSender());
+        static::assertSame($mail->getSubject(), $entry->getSubject());
+        static::assertSame($mail->getFrom(), $entry->getSender());
         static::assertInstanceOf(Contact::class, $entry->getRecipients()->first());
-        static::assertEquals($mail->getPlainBodyText(), $entry->getContentText());
+        static::assertSame($mail->getPlainBodyText(), $entry->getContentText());
     }
 }
