@@ -21631,26 +21631,6 @@ parameters:
 			path: engine/Shopware/Components/Register/RegistrationCleanupSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\RobotsTxtGenerator\\:\\:setBaseUrls\\(\\) has parameter \\$baseUrls with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/RobotsTxtGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\RobotsTxtGenerator\\:\\:setRouterContext\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/RobotsTxtGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\RobotsTxtGenerator\\:\\:setRouterContext\\(\\) has parameter \\$routerContext with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/RobotsTxtGenerator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\RobotsTxtGeneratorInterface\\:\\:setBaseUrls\\(\\) has parameter \\$baseUrls with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/RobotsTxtGeneratorInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\GeneratorFilters\\\\FrontendPostFilter\\:\\:isFullPath\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/GeneratorFilters/FrontendPostFilter.php

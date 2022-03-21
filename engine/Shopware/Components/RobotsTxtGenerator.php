@@ -177,6 +177,11 @@ class RobotsTxtGenerator implements RobotsTxtGeneratorInterface
         }
     }
 
+    /**
+     * @param array<int, Context> $routerContext
+     *
+     * @return RobotsTxtGenerator
+     */
     public function setRouterContext(array $routerContext)
     {
         $this->routerContext = $routerContext;
