@@ -121,7 +121,14 @@ class Price extends LazyFetchModelEntity
      *
      * @ORM\Column(name="pseudoprice", type="float", nullable=true)
      */
-    private $pseudoPrice = 0.0;
+    private $pseudoPrice = null;
+
+    /**
+     * @var float|null
+     *
+     * @ORM\Column(name="regulation_price", type="float", nullable=true)
+     */
+    private $regulationPrice = null;
 
     /**
      * @var string|null
@@ -291,6 +298,23 @@ class Price extends LazyFetchModelEntity
     public function getPseudoPrice()
     {
         return $this->pseudoPrice;
+    }
+
+
+    /**
+     * @return float|null
+     */
+    public function getRegulationPrice(): ?float
+    {
+        return $this->regulationPrice;
+    }
+
+    /**
+     * @param float|null $regulationPrice
+     */
+    public function setRegulationPrice(?float $regulationPrice): void
+    {
+        $this->regulationPrice = $regulationPrice;
     }
 
     /**
