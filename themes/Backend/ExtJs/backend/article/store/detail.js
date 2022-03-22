@@ -26,10 +26,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Article Module
- * Detail store which is used to load a single article.
- */
 //{block name="backend/article/store/detail"}
 Ext.define('Shopware.apps.Article.store.Detail', {
     /**

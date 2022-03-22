@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Article Module
- */
 //{block name="backend/article/store/group"}
 Ext.define('Shopware.apps.Article.store.Group', {
     /**

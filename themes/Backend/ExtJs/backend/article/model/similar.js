@@ -27,11 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Article backend module.
- *
- * todo@all: Documentation
- */
 //{block name="backend/article/model/similar"}
 Ext.define('Shopware.apps.Article.model.Similar', {
 

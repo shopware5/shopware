@@ -28,10 +28,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Article models.
- * The attribute model contains the data for the dynamic article attributes.
- */
 //{block name="backend/article/model/seo_category"}
 Ext.define('Shopware.apps.Article.model.SeoCategory', {
 

@@ -27,6 +27,7 @@
  * @package Article
  * @subpackage Detail
  */
+
 //{block name="backend/article/model/download"}
 Ext.define('Shopware.apps.Article.model.Download', {
 

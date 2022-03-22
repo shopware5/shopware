@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Article Module
- */
 //{block name="backend/article/store/property"}
 Ext.define('Shopware.apps.Article.store.Property', {
     extend: 'Ext.data.Store',

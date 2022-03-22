@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Article backend module.
- */
 //{block name="backend/article/model/serial"}
 Ext.define('Shopware.apps.Article.model.Serial', {
     /**

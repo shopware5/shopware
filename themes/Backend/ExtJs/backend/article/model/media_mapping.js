@@ -20,13 +20,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  *
- * Shopware Model - Article backend module.
- *
  * @link http://www.shopware.de/
  * @license http://www.shopware.de/license
  * @package Article
  * @subpackage Detail
  */
+
 //{block name="backend/article/model/media_mapping"}
 Ext.define('Shopware.apps.Article.model.MediaMapping', {
     /**
