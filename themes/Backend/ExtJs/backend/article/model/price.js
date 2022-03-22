@@ -46,6 +46,7 @@ Ext.define('Shopware.apps.Article.model.Price', {
         { name: 'to', type: 'string' },
         { name: 'price', type: 'float' },
         { name: 'pseudoPrice', type: 'float' },
+        { name: 'regulationPrice', type: 'float', defaultValue: null },
         { name: 'percent', type: 'float' },
         { name: 'cloned', type: 'boolean', defaultValue: false },
         { name: 'customerGroupKey', type: 'string' }
