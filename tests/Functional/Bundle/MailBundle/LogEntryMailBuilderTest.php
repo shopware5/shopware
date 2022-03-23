@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,33 +26,34 @@
 
 namespace Shopware\Tests\Functional\Bundle\MailBundle;
 
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilderInterface;
 use Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder;
 use Shopware\Bundle\MailBundle\Service\LogEntryMailBuilderInterface;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
+class LogEntryMailBuilderTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
     use MailBundleTestTrait;
 
-    /**
-     * @var LogEntryBuilderInterface
-     */
-    private $entryBuilder;
+    private LogEntryBuilderInterface $entryBuilder;
 
-    /**
-     * @var LogEntryMailBuilderInterface
-     */
-    private $mailBuilder;
+    private LogEntryMailBuilderInterface $mailBuilder;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->entryBuilder = new LogEntryBuilder(Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class));
+        $this->entryBuilder = new LogEntryBuilder($this->getContainer()->get(ModelManager::class));
         $this->mailBuilder = new LogEntryMailBuilder(
-            Shopware()->Container()->get('shopware.filesystem.private'),
-            Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class)
+            $this->getContainer()->get('shopware.filesystem.private'),
+            $this->getContainer()->get(MediaServiceInterface::class)
         );
     }
 
@@ -62,7 +65,7 @@ class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
         $built = $this->mailBuilder->build($entry);
 
         static::assertNotNull($built);
-        static::assertEquals($mail->getFrom(), $built->getFrom());
+        static::assertSame($mail->getFrom(), $built->getFrom());
         static::assertCount(\count($mail->getTo()), $built->getTo());
 
         /*
@@ -74,14 +77,14 @@ class LogEntryMailBuilderTest extends \PHPUnit\Framework\TestCase
             static::assertContains($recipient, $built->getTo());
         }
 
-        static::assertEquals($mail->getSubject(), $built->getSubject());
-        static::assertEquals($mail->getBodyText(), $built->getBodyText());
-        static::assertEquals($mail->getBodyHtml(), $built->getBodyHtml());
-        static::assertEquals($mail->hasAttachments, $built->hasAttachments);
+        static::assertSame($mail->getSubject(), $built->getSubject());
+        static::assertSame($mail->getBodyText(true), $built->getBodyText(true));
+        static::assertSame($mail->getBodyHtml(), $built->getBodyHtml());
+        static::assertSame($mail->hasAttachments, $built->hasAttachments);
 
         $entry->setSender('"AAA\" params injection"@domain');
         $built = $this->mailBuilder->build($entry);
 
-        static::assertEquals(LogEntryMailBuilder::INVALID_SENDER_REPLACEMENT_ADDRESS, $built->getFrom());
+        static::assertSame(LogEntryMailBuilder::INVALID_SENDER_REPLACEMENT_ADDRESS, $built->getFrom());
     }
 }

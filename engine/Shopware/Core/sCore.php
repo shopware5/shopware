@@ -103,16 +103,15 @@ class sCore implements \Enlight_Hook
      */
     public function sRewriteLink($link = null, $title = null)
     {
-        $url = str_replace(',', '=', $link);
-        $url = html_entity_decode($url);
-        $query = parse_url($url, PHP_URL_QUERY);
-        parse_str($query, $query);
+        $url = html_entity_decode(str_replace(',', '=', $link));
+        $query = (string) parse_url($url, PHP_URL_QUERY);
+        parse_str($query, $queryArray);
 
         if (!empty($title)) {
-            $query['title'] = $title;
+            $queryArray['title'] = $title;
         }
-        $query['module'] = 'frontend';
+        $queryArray['module'] = 'frontend';
 
-        return $this->front->Router()->assemble($query);
+        return $this->front->Router()->assemble($queryArray);
     }
 }

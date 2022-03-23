@@ -48,7 +48,7 @@ class ThemeCacheGenerateCommand extends ShopwareCommand implements CompletionAwa
                 return $key + 1;
             }, array_keys($context->getWords(), '--shopId'));
             $combinedArray = array_combine($shopIdKeys, array_pad([], \count($shopIdKeys), 0));
-            if ($combinedArray === false) {
+            if (!\is_array($combinedArray)) {
                 throw new RuntimeException('Arrays could not be combined');
             }
             $selectedShopIds = array_intersect_key($context->getWords(), $combinedArray);

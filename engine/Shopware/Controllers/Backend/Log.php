@@ -177,7 +177,13 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
         $out = fopen('php://output', 'wb');
+        if (!\is_resource($out)) {
+            throw new RuntimeException('Could not open temporary stream');
+        }
         $file = fopen($logFilePath, 'rb');
+        if (!\is_resource($file)) {
+            throw new RuntimeException('Could not open log file');
+        }
 
         stream_copy_to_stream($file, $out);
     }

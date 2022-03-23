@@ -483,7 +483,7 @@ class sMarketing implements Enlight_Hook
             $name = strip_tags(html_entity_decode($product['articleName'], ENT_QUOTES, 'UTF-8'));
             $name = preg_replace('/[^\\w0-9äöüßÄÖÜ´`.-]/u', ' ', $name);
             $name = preg_replace('/\s\s+/', ' ', $name);
-            $name = preg_replace('/\(.*\)/', '', $name);
+            $name = (string) preg_replace('/\(.*\)/', '', $name);
             $name = trim($name, ' -');
             $products[$productId]['articleID'] = $productId;
             $products[$productId]['name'] = $name;

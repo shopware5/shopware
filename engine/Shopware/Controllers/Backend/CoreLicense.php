@@ -252,7 +252,7 @@ class Shopware_Controllers_Backend_CoreLicense extends Shopware_Controllers_Back
         $license = $licenseInformation->license;
 
         $license = preg_replace('#--.+?--#', '', (string) $license);
-        $license = preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
+        $license = (string) preg_replace('#[^A-Za-z0-9+/=]#', '', $license);
         $license = chunk_split($license, 32);
         $license = "-------- LICENSE BEGIN ---------\r\n" . $license . "--------- LICENSE END ----------\r\n";
 

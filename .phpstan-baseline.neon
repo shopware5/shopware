@@ -7941,16 +7941,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function mb_strtolower expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\Adapters\\\\AdapterFactoryInterface\\:\\:create\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/Adapters/AdapterFactoryInterface.php
@@ -13536,11 +13526,6 @@ parameters:
 			path: engine/Shopware/Commands/GenerateAttributesCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function ltrim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\GenerateProductFeedCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
@@ -13652,11 +13637,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\MigrationsMigrateCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
-
-		-
-			message: "#^Parameter \\#2 \\$arr2 of function array_intersect_key expects array, array\\<string, mixed\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/MigrationsMigrateCommand.php
 
@@ -19906,11 +19886,6 @@ parameters:
 			path: engine/Shopware/Components/Model/ModelManager.php
 
 		-
-			message: "#^Parameter \\#3 \\$eventManager of method Doctrine\\\\ORM\\\\EntityManager\\:\\:__construct\\(\\) expects Doctrine\\\\Common\\\\EventManager, Doctrine\\\\Common\\\\EventManager\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelManager.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\ProxyAwareRepositoryFactory\\:\\:\\$repositoryList with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ProxyAwareRepositoryFactory.php
@@ -22731,11 +22706,6 @@ parameters:
 			path: engine/Shopware/Components/Theme/Inheritance.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:parseConfig\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Inheritance.php
-
-		-
 			message: "#^Cannot call method getReloadSnippets\\(\\) on array\\|Shopware\\\\Models\\\\Theme\\\\Settings\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Installer.php
@@ -24301,26 +24271,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function feof expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fread expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fwrite expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Parameter \\#2 \\$detail of method Shopware_Controllers_Backend_Article\\:\\:copyConfigurationTemplateTranslations\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -24332,26 +24282,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$oldMainDetail of method Shopware_Controllers_Backend_Article\\:\\:swapDetailTranslations\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\$resource of method League\\\\Flysystem\\\\FilesystemInterface\\:\\:writeStream\\(\\) expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function fwrite expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\$timestamp of function date expects int, int\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\.\\.\\.\\$args of function array_merge expects array, array\\|true given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -25046,11 +24976,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
 
 		-
-			message: "#^Parameter \\#2 \\$timestamp of function date expects int, int\\|false given\\.$#"
-			count: 5
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$usedIds\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Category.php
@@ -25422,11 +25347,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_CoreLicense\\:\\:uninstallLicenseAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CoreLicense.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function chunk_split expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CoreLicense.php
 
@@ -25996,11 +25916,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
 
 		-
-			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\<string\\>\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
-
-		-
 			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizardPluginManager.php
@@ -26187,16 +26102,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getLogsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Parameter \\#1 \\$source of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Parameter \\#2 \\$dest of function stream_copy_to_stream expects resource, resource\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Log.php
 
@@ -26491,11 +26396,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Parameter \\#2 \\$fileName of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:removeAlbumThumbnails\\(\\) expects string, bool\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
@@ -26514,11 +26414,6 @@ parameters:
 			message: "#^Property Shopware_Controllers_Backend_MediaManager\\:\\:\\$fileUploadBlacklist has no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Argument of an invalid type array\\|true supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Controller_Response_Response\\:\\:setStatusCode\\(\\)\\.$#"
@@ -26651,43 +26546,13 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
-			message: "#^Parameter \\#1 \\$im of function imagecolorallocate expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagedestroy expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagefill expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Parameter \\#1 \\$im of function imagegif expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
 			message: "#^Parameter \\#1 \\$mailing of method Shopware_Controllers_Backend_Newsletter\\:\\:initTemplate\\(\\) expects array, array\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function strip_tags expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
 			message: "#^Parameter \\#1 \\$template of method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:buildConfig\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\|true given\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
 		-
@@ -26702,11 +26567,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Newsletter.php
-
-		-
-			message: "#^Parameter \\#4 \\$col of function imagefill expects int, int\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Newsletter.php
 
@@ -26864,106 +26724,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_Overview\\:\\:getOrderSummaryAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Overview.php
-
-		-
-			message: "#^Parameter \\#2 \\$timestamp of function date expects int, int\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Overview.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$id\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$limit\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$param\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$partnerId\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$start\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$value\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Cannot call method getCompany\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:deletePartnerAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:downloadStatisticAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:getChartDataAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:getDetailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:getListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:getStatisticListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:mapCustomerAccountAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:redirectToPartnerLinkAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:savePartnerAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Partner\\:\\:validateTrackingCodeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Partner.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fputcsv expects resource, resource\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Partner.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Payment\\:\\:createPaymentsAction\\(\\) has no return type specified\\.$#"
@@ -27536,11 +27296,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Search.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Search.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Search.php
@@ -27706,27 +27461,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^Parameter \\#1 \\$dir of function tempnam expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function file_exists expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function is_writable expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
 			message: "#^Parameter \\#2 \\$encoding of method Shopware_Controllers_Backend_Snippet\\:\\:getFormatSnippetForExport\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#2 \\$pieces of function implode expects array, array\\<int, string\\>\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
@@ -28123,16 +27858,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$codePattern of method Shopware_Controllers_Backend_Voucher\\:\\:validateCodePattern\\(\\) expects string, array\\|string given\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fclose expects resource, resource\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Voucher.php
-
-		-
-			message: "#^Parameter \\#1 \\$fp of function fputcsv expects resource, resource\\|false given\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Voucher.php
 
 		-
@@ -28566,11 +28291,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
 			count: 2
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
@@ -28692,11 +28412,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:checkPaymentAvailability\\(\\) has parameter \\$payments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:confirmAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -28926,18 +28641,8 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Parameter \\#1 \\$stack of function array_shift expects array, array\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
 			message: "#^Parameter \\#2 \\$email of method sAdmin\\:\\:sUpdateNewsletter\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Parameter \\#2 \\$search of function array_key_exists expects array, array\\|bool given\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
@@ -29142,11 +28847,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$input of method Shopware_Controllers_Frontend_Forms\\:\\:_filterInput\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Parameter \\#1 \\$var of function count expects array\\|Countable, array\\<int, string\\>\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Forms.php
 
@@ -29698,11 +29398,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:translateCategoryTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
-			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
 		-
@@ -31031,11 +30726,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$arr1 of function array_diff expects array, array\\<int, string\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#1 \\$orderNumber of method sArticles\\:\\:sGetArticleNameByOrderNumber\\(\\) expects string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -31046,17 +30736,7 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Parameter \\#2 \\$orderNumber of method sArticles\\:\\:getArticleCover\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
 
@@ -31606,11 +31286,6 @@ parameters:
 			path: engine/Shopware/Core/sCore.php
 
 		-
-			message: "#^Parameter \\#1 \\$encoded_string of function parse_str expects string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCore.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCore.php
@@ -31807,11 +31482,6 @@ parameters:
 
 		-
 			message: "#^Method sMarketing\\:\\:sMailCampaignsGetDetail\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sMarketing.php
 
@@ -32306,11 +31976,6 @@ parameters:
 			path: engine/Shopware/Core/sSystem.php
 
 		-
-			message: "#^Parameter \\#1 \\$function of function call_user_func_array expects callable\\(\\)\\: mixed, array\\{sCore, string\\} given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sSystem.php
-
-		-
 			message: "#^Property sSystem\\:\\:\\$sCurrency type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sSystem.php
@@ -32462,11 +32127,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$source of static method Symfony\\\\Component\\\\HttpKernel\\\\Kernel\\:\\:stripComments\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Kernel.php
-
-		-
-			message: "#^Parameter \\#2 \\$newvalue of function ini_set expects string, bool\\|float\\|int\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Kernel.php
 
@@ -36106,11 +35766,6 @@ parameters:
 			path: engine/Shopware/Models/Mail/Attachment.php
 
 		-
-			message: "#^Property Shopware\\\\Models\\\\Mail\\\\Contact\\:\\:\\$mailAddress \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Mail/Contact.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Mail\\\\File\\:\\:getFileName\\(\\) should return string but returns bool\\|string\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Mail/File.php
@@ -36456,11 +36111,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Media.php
@@ -36521,46 +36171,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Call to an undefined method object\\:\\:getExtension\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getHeight\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getId\\(\\)\\.$#"
-			count: 2
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getPath\\(\\)\\.$#"
-			count: 3
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getType\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:getWidth\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:setHeight\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Call to an undefined method object\\:\\:setWidth\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
 			message: "#^Cannot access property \\$height on SimpleXMLElement\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Models/Media/MediaSubscriber.php
@@ -36573,26 +36183,6 @@ parameters:
 		-
 			message: "#^Cannot access property \\$width on SimpleXMLElement\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:migrateMeta\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:postLoad\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Media\\\\MediaSubscriber\\:\\:prePersist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/MediaSubscriber.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of function getimagesizefromstring expects string, string\\|false given\\.$#"
-			count: 1
 			path: engine/Shopware/Models/Media/MediaSubscriber.php
 
 		-
@@ -40686,11 +40276,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#2 \\$prefix of function http_build_query expects string, null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#4 \\$active of method Shopware_Components_Plugin_Bootstrap\\:\\:createCronJob\\(\\) expects int, true given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -41706,11 +41291,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$str of function trim expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
-
-		-
 			message: "#^PHPDoc tag @param for parameter \\$request with type Enlight_Controller_Request_Request is not subtype of native type Enlight_Controller_Request_RequestHttp\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
@@ -41722,11 +41302,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$request of method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:refreshBlog\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\Request, Enlight_Controller_Request_Request given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#2 \\$str of function explode expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
 
@@ -54819,4 +54394,3 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-

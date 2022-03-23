@@ -27,16 +27,16 @@ use Shopware\Components\LegacyRequestWrapper\GetWrapper;
 use Shopware\Components\LegacyRequestWrapper\PostWrapper;
 
 /**
- * Deprecated Shopware Class
+ * @deprecated Will be removed with Shopware 5.8
  */
-class sSystem implements \Enlight_Hook
+class sSystem implements Enlight_Hook
 {
     /**
      * Shopware configuration
      *
      * @var Shopware_Components_Config
      *
-     * @deprecated Use Shopware()->Config()
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Config() instead
      */
     public $sCONFIG;
 
@@ -45,7 +45,7 @@ class sSystem implements \Enlight_Hook
      *
      * @var string
      *
-     * @deprecated Use Shopware()->Session()->get('sessionId')
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Session()->get('sessionId') instead
      */
     public $sSESSION_ID;
 
@@ -54,7 +54,7 @@ class sSystem implements \Enlight_Hook
      *
      * @var Enlight_Template_Manager
      *
-     * @deprecated Use Shopware()->Template()
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Template() instead
      */
     public $sSMARTY;
 
@@ -63,7 +63,7 @@ class sSystem implements \Enlight_Hook
      *
      * @var Shopware_Components_Modules
      *
-     * @deprecated Use Shopware()->Modules()
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Modules() instead
      */
     public $sMODULES;
 
@@ -71,6 +71,8 @@ class sSystem implements \Enlight_Hook
      * Current customer group
      *
      * @var string
+     *
+     * @deprecated Will be removed with Shopware 5.8. Use ContextServiceInterface->getShopContext()->getCurrentCustomerGroup() instead
      */
     public $sUSERGROUP;
 
@@ -78,6 +80,8 @@ class sSystem implements \Enlight_Hook
      * Information about customer group
      *
      * @var array
+     *
+     * @deprecated Will be removed with Shopware 5.8. Use ContextServiceInterface->getShopContext()->getCurrentCustomerGroup() instead
      */
     public $sUSERGROUPDATA;
 
@@ -86,7 +90,7 @@ class sSystem implements \Enlight_Hook
      *
      * @var Enlight_Components_Session_Namespace Session
      *
-     * @deprecated Use Shopware()->Session()
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Session() instead
      */
     public $_SESSION;
 
@@ -94,6 +98,8 @@ class sSystem implements \Enlight_Hook
      * Path to product images
      *
      * @var string
+     *
+     * @deprecated Will be removed with Shopware 5.8 without replacement
      */
     public $sPathArticleImg;
 
@@ -101,6 +107,8 @@ class sSystem implements \Enlight_Hook
      * Path to banners
      *
      * @var string
+     *
+     * @deprecated Will be removed with Shopware 5.8 without replacement
      */
     public $sPathBanner;
 
@@ -108,6 +116,8 @@ class sSystem implements \Enlight_Hook
      * Path to Start
      *
      * @var string
+     *
+     * @deprecated Will be removed with Shopware 5.8 without replacement
      */
     public $sPathStart;
 
@@ -116,16 +126,16 @@ class sSystem implements \Enlight_Hook
      *
      * @var array
      *
-     * @deprecated Use Shopware()->Shop()->getCurrency() or Shopware()->Shop()->getCurrency()->toArray()
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Shop()->getCurrency() or Shopware()->Shop()->getCurrency()->toArray() instead.
      */
     public $sCurrency;
 
     /**
      * Pointer to PHP-Mailer Object
      *
-     * @var \Enlight_Components_Mail
+     * @var Enlight_Components_Mail
      *
-     * @deprecated Use Shopware()->Mail()
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Mail() instead
      */
     public $sMailer;
 
@@ -134,7 +144,7 @@ class sSystem implements \Enlight_Hook
      *
      * @var bool
      *
-     * @deprecated Use Shopware()->Session()->Bot
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Session()->get('Bot') instead
      */
     public $sBotSession;
 
@@ -143,22 +153,22 @@ class sSystem implements \Enlight_Hook
      *
      * @var sSystem
      *
-     * @deprecated
+     * @deprecated Will be removed with Shopware 5.8 without replacement
      */
     public $sSYSTEM;
 
     /**
-     * @var \Shopware\Components\LegacyRequestWrapper\PostWrapper Wrapper for _POST
+     * @var PostWrapper Wrapper for _POST
      */
     private $postWrapper;
 
     /**
-     * @var \Shopware\Components\LegacyRequestWrapper\GetWrapper Wrapper for _GET
+     * @var GetWrapper Wrapper for _GET
      */
     private $getWrapper;
 
     /**
-     * @var \Shopware\Components\LegacyRequestWrapper\CookieWrapper Wrapper for _COOKIE
+     * @var CookieWrapper Wrapper for _COOKIE
      */
     private $cookieWrapper;
 
@@ -201,12 +211,12 @@ class sSystem implements \Enlight_Hook
     }
 
     /**
-     * @deprecated Use Shopware()->Modules()->Core()->(method name)
+     * @deprecated Will be removed with Shopware 5.8. Use Shopware()->Modules()->Core()->method_name() instead
      *
      * @param string $name
      */
     public function __call($name, $params = null)
     {
-        return \call_user_func_array([Shopware()->Modules()->Core(), $name], $params);
+        return Shopware()->Modules()->Core()->$name($params);
     }
 }

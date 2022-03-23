@@ -46,11 +46,15 @@ class MigrationsMigrateCommand extends ShopwareCommand implements CompletionAwar
             $meta = new ReflectionClass(AbstractMigration::class);
             $constants = $meta->getConstants();
             $modeConstantKeys = array_filter(array_keys($constants), function ($constantKey) {
-                return strpos($constantKey, 'MODUS_') === 0;
+                return str_starts_with($constantKey, 'MODUS_');
             });
             $modeConstantPseudoValues = array_pad([], \count($modeConstantKeys), 0);
+            $combined = array_combine($modeConstantKeys, $modeConstantPseudoValues);
+            if (!\is_array($combined)) {
+                throw new RuntimeException('Arrays could not be combined');
+            }
 
-            return array_intersect_key($constants, array_combine($modeConstantKeys, $modeConstantPseudoValues));
+            return array_intersect_key($constants, $combined);
         }
 
         return [];

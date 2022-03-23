@@ -59,12 +59,12 @@ class Contact extends ModelEntity
         $this->id = $id;
     }
 
-    public function getMailAddress(): ?string
+    public function getMailAddress(): string
     {
         return $this->mailAddress;
     }
 
-    public function setMailAddress(?string $mailAddress = ''): void
+    public function setMailAddress(string $mailAddress): void
     {
         $this->mailAddress = $mailAddress;
     }

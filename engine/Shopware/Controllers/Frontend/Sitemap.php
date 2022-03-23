@@ -259,12 +259,12 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             return true;
         }
 
-        $userParams = parse_url($link, PHP_URL_QUERY);
-        parse_str($userParams, $userParams);
+        $userParams = (string) parse_url($link, PHP_URL_QUERY);
+        parse_str($userParams, $userParamsArray);
 
         $blacklist = ['', 'sitemap', 'sitemapXml'];
 
-        if (\in_array($userParams['sViewport'], $blacklist, true)) {
+        if (\in_array($userParamsArray['sViewport'], $blacklist, true)) {
             return false;
         }
 
@@ -372,25 +372,25 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getSitemapArray(int $id, string $name, string $viewport, string $idParam, $link = null): array
     {
-        $userParams = [];
+        $userParamsArray = [];
 
         if (\is_string($link)) {
-            $userParams = parse_url($link, PHP_URL_QUERY);
-            parse_str($userParams, $userParams);
+            $userParams = (string) parse_url($link, PHP_URL_QUERY);
+            parse_str($userParams, $userParamsArray);
         }
 
-        if (empty($userParams)) {
-            $userParams = [
+        if (empty($userParamsArray)) {
+            $userParamsArray = [
                 'sViewport' => $viewport,
                 $idParam => $id,
             ];
         }
 
         if (\is_array($link)) {
-            $userParams = array_merge($userParams, $link);
+            $userParamsArray = array_merge($userParamsArray, $link);
         }
 
-        $link = $this->Front()->Router()->assemble($userParams);
+        $link = $this->Front()->Router()->assemble($userParamsArray);
 
         return [
             'id' => $id,

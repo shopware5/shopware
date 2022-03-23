@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components\Archive;
 
 use Countable;
+use ReturnTypeWillChange;
 use SeekableIterator;
 
 abstract class Adapter implements SeekableIterator, Countable
@@ -52,7 +53,7 @@ abstract class Adapter implements SeekableIterator, Countable
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return $this->count;

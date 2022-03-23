@@ -13,6 +13,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Added missing dependency `google/cloud-storage`, which was an indirect dependency before
 * Added missing dependency `psr/log`, which was an indirect dependency before
 * Added missing dependency `psr/link`, which was an indirect dependency before
+* Added missing dependency `doctrine/event-manager`, which was an indirect dependency before
 
 ### Changes
 

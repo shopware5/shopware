@@ -63,7 +63,7 @@ class ModelManager extends EntityManager
         Connection $conn,
         Configuration $config,
         QueryOperatorValidator $operatorValidator,
-        EventManager $eventManager = null
+        EventManager $eventManager
     ) {
         $this->operatorValidator = $operatorValidator;
         parent::__construct($conn, $config, $eventManager);

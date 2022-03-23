@@ -1247,7 +1247,7 @@ class sArticles implements Enlight_Hook
         if (is_numeric($moneyfloat)) {
             $moneyfloat = sprintf('%F', $moneyfloat);
         }
-        $money_str = explode('.', $moneyfloat);
+        $money_str = explode('.', (string) $moneyfloat);
         if (empty($money_str[1])) {
             $money_str[1] = 0;
         }
@@ -1338,9 +1338,8 @@ class sArticles implements Enlight_Hook
         $text = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $text);
         $text = preg_replace('!<[^>]*?>!u', ' ', $text);
         $text = preg_replace('/\s\s+/u', ' ', $text);
-        $text = trim($text);
 
-        return $text;
+        return trim((string) $text);
     }
 
     /**
@@ -2632,6 +2631,9 @@ class sArticles implements Enlight_Hook
         $string = strip_tags(html_entity_decode($longDescription, ENT_COMPAT | ENT_HTML401, 'UTF-8'));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);
+        if (!\is_array($words)) {
+            $words = [];
+        }
         $badWords = explode(',', $this->config->get('badwords'));
         $words = array_count_values(array_diff($words, $badWords));
         foreach (array_keys($words) as $word) {

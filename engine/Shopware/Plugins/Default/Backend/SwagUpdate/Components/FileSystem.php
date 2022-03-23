@@ -137,7 +137,7 @@ class FileSystem
         $newPermission[2] = '7';
 
         $newPermission = octdec($newPermission);
-        chmod($fileInfo->getPathname(), $newPermission);
+        chmod($fileInfo->getPathname(), (int) $newPermission);
         clearstatcache(false, $fileInfo->getPathname());
     }
 
@@ -165,7 +165,7 @@ class FileSystem
         }
 
         $newPermission = octdec($newPermission);
-        chmod($fileInfo->getPathname(), $newPermission);
+        chmod($fileInfo->getPathname(), (int) $newPermission);
         clearstatcache(false, $fileInfo->getPathname());
     }
 }
