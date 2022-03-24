@@ -195,8 +195,8 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     private LegacyStructConverter $structConverter;
 
     /**
-     * @param int   $id
-     * @param array $config
+     * @param int                  $id
+     * @param array<string, mixed> $config
      */
     public function __construct($id, $config = [])
     {
@@ -215,7 +215,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
 
         $this->_id = $id;
         $this->_config = $config;
-        $this->_summaryNet = (bool) $config['summaryNet'];
+        $this->_summaryNet = (bool) ($config['summaryNet'] ?? false);
         $this->_shippingCostsAsPosition = (bool) $config['shippingCostsAsPosition'];
 
         $this->getOrder();
@@ -240,7 +240,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * Convert this object into an array
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function __toArray()
     {
@@ -521,8 +521,9 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function getMaxTaxRate()
     {
         $maxTax = 0;
+
         foreach ($this->_positions as $position) {
-            if ((int) $position['mode'] === CartPositionsMode::PRODUCT) {
+            if ((int) $position['modus'] === CartPositionsMode::PRODUCT) {
                 $getTax = $position['tax_rate'];
                 if (empty($getTax) && $this->_shipping !== null) {
                     $position['tax'] = $this->getTaxRepository()->getTaxRateByConditions(
@@ -1009,6 +1010,11 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     /**
      * This method overwrites all attribute values with the translated value
      * in case there is one.
+     *
+     * @param array<string, string> $position
+     * @param array<string, string> $translation
+     *
+     * @return array<string, string>
      */
     private function assignAttributeTranslation(array $position, array $translation): array
     {

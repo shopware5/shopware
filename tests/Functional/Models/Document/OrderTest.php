@@ -62,6 +62,29 @@ class OrderTest extends TestCase
         static::assertEquals(3.31, $tax['20.00']);
     }
 
+    public function testProportionalTaxCalculation(): void
+    {
+        $orderId = 60001;
+        $documentId = 0;
+        $this->executeFixture(__DIR__ . '/_fixtures/order-proportional.sql');
+
+        $orderDocument = Shopware_Components_Document::initDocument(
+            $orderId,
+            $documentId,
+            $this->getDefaultConfig()
+        )->_order;
+
+        $amountNetto = Closure::bind(
+            function (): float {
+                return $this->_amountNetto;
+            },
+            $orderDocument,
+            $orderDocument
+        )();
+
+        static::assertEquals(16.355708418891172, $amountNetto);
+    }
+
     /**
      * @return array <string, mixed>
      */

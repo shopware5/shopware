@@ -40,6 +40,8 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
         $taxes = [];
 
         foreach ($sumByTaxes as $taxRate => $price) {
+            $taxRate = (float) $taxRate;
+
             if ((float) $price === 0.0) {
                 $taxes[] = new Price(0.0, 0.0, $taxRate, 0.0);
                 continue;
@@ -105,7 +107,7 @@ class ProportionalTaxCalculator implements ProportionalTaxCalculatorInterface
     /**
      * @param Price[] $prices
      *
-     * @return array
+     * @return array<string|int, float>
      */
     protected function sumByTax(array $prices)
     {
