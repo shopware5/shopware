@@ -28,7 +28,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `elasticsearch/elasticsearch` to version 7.16.0
 * Updated `fig/link-util` to version 1.1.2
 * Updated `guzzlehttp/guzzle` to version 7.4.1
-* Updated `guzzlehttp/psr7` to version 2.1.0
+* Updated `guzzlehttp/psr7` to version 2.2.1
 * Updated `laminas/laminas-code` to version 4.5.1
 * Updated `league/flysystem` to version 1.1.9
 * Updated `league/flysystem-aws-s3-v3` to version 1.0.29
