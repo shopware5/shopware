@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Article backend module.
- */
 //{block name="backend/article/model/property_group"}
 Ext.define('Shopware.apps.Article.model.PropertyGroup', {
 

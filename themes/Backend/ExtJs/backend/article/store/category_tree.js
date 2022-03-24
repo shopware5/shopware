@@ -27,11 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Article Module
- *
- * todo@all: Documentation
- */
 //{block name="backend/article/store/category_tree"}
 Ext.define('Shopware.apps.Article.store.CategoryTree', {
     /**

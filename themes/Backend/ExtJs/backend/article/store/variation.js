@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Store - Article Module
- */
 //{block name="backend/article/store/variation"}
 Ext.define('Shopware.apps.Article.store.Variation', {
     /**

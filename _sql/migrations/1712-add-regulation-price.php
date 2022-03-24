@@ -1,3 +1,4 @@
+<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -19,37 +20,21 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
- *
- * @category   Shopware
- * @package    Article
- * @subpackage PropertyValue
- * @version    $Id$
- * @author shopware AG
  */
+class Migrations_Migration1712 extends Shopware\Components\Migrations\AbstractMigration
+{
+    public function up($modus)
+    {
+        $sql = <<<SQL
+ALTER TABLE `s_articles_prices` ADD `regulation_price` DOUBLE AFTER `pseudoprice`;
+SQL;
+        $this->addSql($sql);
 
-//{block name="backend/article/model/property_option"}
-Ext.define('Shopware.apps.Article.model.PropertyOption', {
 
-    /**
-    * Extends the standard Ext Model
-    * @string
-    */
-    extend: 'Ext.data.Model',
+        $sql = <<<SQL
+ALTER TABLE `s_article_configurator_template_prices` ADD `regulation_price` DOUBLE AFTER `pseudoprice`;
+SQL;
+        $this->addSql($sql);
 
-    /**
-     * Fields array which contains the model fields
-     * @array
-     */
-    fields: [
-        //{block name="backend/article/model/property_option/fields"}{/block}
-        { name: 'id', type: 'int' },
-        { name: 'name', type: 'string' },
-        { name: 'propertyValues' }
-    ],
-
-    associations: [
-        { type: 'hasMany', model: 'Shopware.apps.Article.model.PropertyValue', name: 'getValues', associationKey: 'values' }
-    ]
-
-});
-//{/block}
+    }
+}

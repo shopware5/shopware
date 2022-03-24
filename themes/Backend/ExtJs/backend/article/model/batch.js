@@ -28,8 +28,6 @@
  */
 
 /**
- * Shopware Model - Article models.
- *
  * The batch model of the article module is responsible to initials
  * all stores which used for the data selection on the detail page.
  */

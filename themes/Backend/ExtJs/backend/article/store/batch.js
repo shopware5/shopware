@@ -28,8 +28,6 @@
  */
 
 /**
- * Shopware Store - Article Module
- *
  * The batch store of the article module is responsible to initials
  * all global stores of the detail page which used for the data selection.
  */

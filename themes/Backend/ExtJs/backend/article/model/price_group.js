@@ -27,11 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Article backend module.
- *
- * todo@all: Documentation
- */
 //{block name="backend/article/model/price_group"}
 Ext.define('Shopware.apps.Article.model.PriceGroup', {
 

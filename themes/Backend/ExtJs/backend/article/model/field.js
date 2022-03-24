@@ -27,9 +27,6 @@
  * @author shopware AG
  */
 
-/**
- * Shopware Model - Article models.
- */
 //{block name="backend/article/model/field"}
 Ext.define('Shopware.apps.Article.model.Field', {
 
