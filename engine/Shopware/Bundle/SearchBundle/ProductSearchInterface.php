@@ -25,12 +25,15 @@
 namespace Shopware\Bundle\SearchBundle;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductSearchInterface
 {
     /**
      * Creates a search request on the internal search gateway to
      * get the product result for the passed criteria object.
+     *
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @return ProductSearchResult
      */

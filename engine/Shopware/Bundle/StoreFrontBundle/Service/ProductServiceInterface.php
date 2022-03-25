@@ -26,11 +26,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface ProductServiceInterface extends ListProductServiceInterface
 {
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface::get()
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @param string[] $numbers
      *
@@ -41,6 +43,8 @@ interface ProductServiceInterface extends ListProductServiceInterface
     /**
      * Returns a full \Shopware\Bundle\StoreFrontBundle\Struct\Product object.
      * A product struct contains all data about one single product.
+     *
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @param string $number
      *

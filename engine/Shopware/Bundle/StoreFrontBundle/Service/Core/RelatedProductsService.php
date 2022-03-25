@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class RelatedProductsService implements RelatedProductsServiceInterface
 {
@@ -48,7 +48,7 @@ class RelatedProductsService implements RelatedProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(BaseProduct $product, ProductContextInterface $context)
+    public function get(BaseProduct $product, ShopContextInterface $context)
     {
         $related = $this->getList([$product], $context);
 
@@ -58,7 +58,7 @@ class RelatedProductsService implements RelatedProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ProductContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         /*
          * Returns an array which is associated with the different product numbers.

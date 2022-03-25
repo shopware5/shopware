@@ -37,7 +37,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VoteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductService implements ProductServiceInterface
@@ -89,7 +88,7 @@ class ProductService implements ProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($number, ProductContextInterface $context)
+    public function get($number, ShopContextInterface $context)
     {
         $products = $this->getList([$number], $context);
 
@@ -99,7 +98,7 @@ class ProductService implements ProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $numbers, ProductContextInterface $context)
+    public function getList(array $numbers, ShopContextInterface $context)
     {
         $listProducts = $this->listProductService->getList($numbers, $context);
 

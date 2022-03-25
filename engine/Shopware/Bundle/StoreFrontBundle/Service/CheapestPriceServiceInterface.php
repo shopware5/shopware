@@ -27,11 +27,13 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CheapestPriceServiceInterface
 {
     /**
      * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @param ListProduct[] $products
      *
@@ -49,6 +51,7 @@ interface CheapestPriceServiceInterface
      * please refer to the linked classes.
      *
      * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CheapestPriceGatewayInterface::get()
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @return PriceRule|null
      */

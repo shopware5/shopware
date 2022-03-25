@@ -24,6 +24,9 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Struct;
 
+/**
+ * @deprecated in 5.7, will be removed with 5.8. Please use ShopContextInterface instead
+ */
 interface ProductContextInterface extends ShopContextInterface
 {
 }

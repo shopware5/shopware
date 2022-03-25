@@ -25,7 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
 
 use Shopware\Bundle\StoreFrontBundle\Service\PriceCalculatorInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 class PriceCalculator implements PriceCalculatorInterface
@@ -33,7 +33,7 @@ class PriceCalculator implements PriceCalculatorInterface
     /**
      * {@inheritdoc}
      */
-    public function calculatePrice($price, Tax $tax, ProductContextInterface $context)
+    public function calculatePrice($price, Tax $tax, ShopContextInterface $context)
     {
         /**
          * Important:

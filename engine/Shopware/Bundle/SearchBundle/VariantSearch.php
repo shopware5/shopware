@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\VariantListingPriceServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Attribute;
 use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Option;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class VariantSearch implements ProductSearchInterface
 {
@@ -61,7 +61,7 @@ class VariantSearch implements ProductSearchInterface
     /**
      * {@inheritdoc}
      */
-    public function search(Criteria $criteria, ProductContextInterface $context)
+    public function search(Criteria $criteria, ShopContextInterface $context)
     {
         $result = $this->decorated->search($criteria, $context);
         if (!$criteria->hasConditionOfClass(VariantCondition::class)) {
