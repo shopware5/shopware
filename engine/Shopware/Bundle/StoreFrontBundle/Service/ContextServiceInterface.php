@@ -69,6 +69,8 @@ interface ContextServiceInterface
      * - Tax rules of the current customer group
      * - Price group discounts of the current customer group
      *
+     * @deprecated 5.7, removed in 5.8. Please use getShopContext instead
+     *
      * @return ShopContextInterface
      */
     public function getProductContext();
@@ -109,6 +111,8 @@ interface ContextServiceInterface
      * Initials a product context class which contains
      * all required information to calculate a product.
      *
+     * @deprecated 5.7, removed in 5.8. Please use initializeShopContext instead
+     *
      * @return void
      */
     public function initializeProductContext();
@@ -117,6 +121,8 @@ interface ContextServiceInterface
      * @param int         $shopId
      * @param int|null    $currencyId
      * @param string|null $customerGroupKey
+     *
+     * @deprecated 5.7, removed in 5.8. Please use createShopContext instead
      *
      * @return ShopContextInterface
      */

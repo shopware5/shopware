@@ -102,7 +102,7 @@ class ProductAttributeFacetHandlerTest extends TestCase
     private function getShopContext(): ShopContextInterface
     {
         return $this->getContainer()->get('shopware_storefront.context_service')
-            ->createProductContext(1, 1, 'EK');
+            ->createShopContext(1, 1, 'EK');
     }
 
     private function getProductAttributeFacet(): CriteriaPartInterface
