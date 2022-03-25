@@ -59,6 +59,8 @@ class PriceRule extends Extendable
      */
     protected $pseudoPrice;
 
+    protected ?float $regulationPrice = null;
+
     /**
      * Contains the associated customer group of this price.
      * Each graduated product price is defined for a single customer group.
@@ -182,5 +184,15 @@ class PriceRule extends Extendable
     public function getUnit()
     {
         return $this->unit;
+    }
+
+    public function getRegulationPrice(): ?float
+    {
+        return $this->regulationPrice;
+    }
+
+    public function setRegulationPrice(?float $regulationPrice): void
+    {
+        $this->regulationPrice = $regulationPrice;
     }
 }

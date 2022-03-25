@@ -32,7 +32,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
@@ -50,7 +49,7 @@ class PriceCalculationService implements PriceCalculationServiceInterface
      */
     public function calculateProduct(
         ListProduct $product,
-        ProductContextInterface $context
+        ShopContextInterface $context
     ) {
         $tax = $context->getTaxRule($product->getTax()->getId());
         if (!$tax instanceof Tax) {
@@ -142,6 +141,10 @@ class PriceCalculationService implements PriceCalculationServiceInterface
         // Check if a pseudo price is defined and calculates it too.
         $price->setCalculatedPseudoPrice(
             $this->priceCalculatorService->calculatePrice($rule->getPseudoPrice(), $tax, $context)
+        );
+
+        $price->setCalculatedRegulationPrice(
+            $this->priceCalculatorService->calculatePrice($rule->getRegulationPrice(), $tax, $context)
         );
 
         // Check if the product has unit definitions and calculate the reference price for the unit.
