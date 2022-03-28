@@ -110,6 +110,10 @@ class PriceCalculationService implements PriceCalculationServiceInterface
             $priceRule->setPseudoPrice(
                 $priceRule->getUnit()->getMinPurchase() * $priceRule->getPseudoPrice()
             );
+
+            $priceRule->setRegulationPrice(
+                $priceRule->getUnit()->getMinPurchase() * $priceRule->getRegulationPrice()
+            );
         }
 
         $tax = $context->getTaxRule($product->getTax()->getId());
@@ -143,9 +147,11 @@ class PriceCalculationService implements PriceCalculationServiceInterface
             $this->priceCalculatorService->calculatePrice($rule->getPseudoPrice(), $tax, $context)
         );
 
-        $price->setCalculatedRegulationPrice(
-            $this->priceCalculatorService->calculatePrice($rule->getRegulationPrice(), $tax, $context)
-        );
+        if ($rule->getRegulationPrice()) {
+            $price->setCalculatedRegulationPrice(
+                $this->priceCalculatorService->calculatePrice($rule->getRegulationPrice(), $tax, $context)
+            );
+        }
 
         // Check if the product has unit definitions and calculate the reference price for the unit.
         if ($price->getUnit() instanceof Unit && $price->getUnit()->getPurchaseUnit()) {

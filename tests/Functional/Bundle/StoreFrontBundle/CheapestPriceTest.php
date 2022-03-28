@@ -83,6 +83,7 @@ class CheapestPriceTest extends TestCase
         static::assertInstanceOf(Price::class, $cheapestPrice);
         static::assertEquals(80, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(119, $cheapestPrice->getCalculatedRegulationPrice());
         static::assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
     }
 
@@ -112,6 +113,7 @@ class CheapestPriceTest extends TestCase
          */
         static::assertEquals(15, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(18, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(0, $cheapestPrice->getCalculatedRegulationPrice());
         static::assertEquals(10, $cheapestPrice->getCalculatedReferencePrice());
     }
 

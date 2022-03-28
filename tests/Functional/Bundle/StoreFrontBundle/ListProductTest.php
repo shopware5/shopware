@@ -86,6 +86,7 @@ class ListProductTest extends TestCase
         static::assertNotEmpty($product->getCheapestPrice()->getCalculatedPrice());
         static::assertNotEmpty($product->getCheapestPrice()->getCalculatedPseudoPrice());
         static::assertNotEmpty($product->getCheapestPrice()->getFrom());
+        static::assertNotEmpty($product->getCheapestPrice()->getCalculatedRegulationPrice());
 
         static::assertGreaterThanOrEqual(1, $product->getUnit()->getMinPurchase());
         static::assertNotEmpty($product->getManufacturer()->getName());

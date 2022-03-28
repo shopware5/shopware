@@ -301,10 +301,6 @@ class LegacyStructConverter
      */
     public function convertListProductStruct(ListProduct $product)
     {
-        if (!$product instanceof ListProduct) {
-            return [];
-        }
-
         $cheapestPrice = $product->getListingPrice();
 
         $promotion = $this->getListProductData($product);
@@ -365,6 +361,7 @@ class LegacyStructConverter
         $data['pseudoprice_numeric'] = $price->getCalculatedPseudoPrice();
         $data['price_attributes'] = $price->getAttributes();
         $data['pricegroup'] = $price->getCustomerGroup()->getKey();
+        $data['regulationPrice'] = $price->getCalculatedRegulationPrice();
 
         if ($price->getCalculatedPseudoPrice()) {
             $discount = 0;

@@ -29186,18 +29186,8 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Index.php
 
 		-
-			message: "#^Access to an undefined property sSystem\\:\\:\\$_GET\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 2
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:filterListingEmotions\\(\\) has parameter \\$emotions with no value type specified in iterable type array\\.$#"
-			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
@@ -29211,27 +29201,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:getDevicesWithListing\\(\\) has parameter \\$emotions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:getEmotionConfiguration\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:getRedirectLocation\\(\\) has parameter \\$categoryContent with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:getRedirectLocation\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:getSeoDataOfManufacturer\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
@@ -29241,57 +29211,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:hasListing\\(\\) has parameter \\$emotions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:haveAllViewportsEmotions\\(\\) has parameter \\$emotions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryContent\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryContent\\(\\) should return array but returns array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadCategoryListing\\(\\) has parameter \\$categoryContent with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Listing\\:\\:loadListing\\(\\) has parameter \\$emotionConfiguration with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Offset 'blog' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Offset 'id' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
 			message: "#^Offset 'streamId' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Parameter \\#1 \\$url of method Enlight_Controller_Action\\:\\:redirect\\(\\) expects array\\|string, array\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Listing.php
-
-		-
-			message: "#^Parameter \\#3 \\$streamId of method Shopware_Controllers_Frontend_Listing\\:\\:hasProducts\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 

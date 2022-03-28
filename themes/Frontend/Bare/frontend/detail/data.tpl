@@ -60,6 +60,26 @@
                     {/block}
                 {/if}
             {/block}
+
+            {* Regulation price *}
+            {block name='frontend_detail_data_regulation_price'}
+                {if $sArticle.regulationPrice}
+
+                    {* Discount price content *}
+                    {block name='frontend_detail_data_pseudo_price_discount_content'}
+                        <div class="content--regulation">
+                            {block name='frontend_detail_data_regulation_price_before'}
+                                {s name="priceRegulationLabel"}{/s}
+                            {/block}
+                            <span>{$sArticle.regulationPrice|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
+
+                            {block name='frontend_detail_data_regulation_price_after'}
+                                {s name="priceRegulationInfo"}{/s}
+                            {/block}
+                        </div>
+                    {/block}
+                {/if}
+            {/block}
         </div>
     {/if}
 
