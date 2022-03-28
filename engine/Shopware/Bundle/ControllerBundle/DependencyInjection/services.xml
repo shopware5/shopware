@@ -20,24 +20,31 @@
             <argument type="tagged" tag="controller.argument_value_resolver"/>
         </service>
 
-        <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
-            <tag name="controller.argument_value_resolver" priority="0" />
-            <argument type="service" id="service_container"/>
+        <service id="argument_resolver.request_value" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver">
+            <argument type="collection" />
+            <tag name="controller.argument_value_resolver" priority="50" />
         </service>
 
         <service id="argument_resolver.request_parameter" class="Shopware\Bundle\ControllerBundle\ArgumentResolver\RequestParameterResolver">
-            <tag name="controller.argument_value_resolver" priority="-20" />
             <argument type="collection" />
+            <tag name="controller.argument_value_resolver" />
         </service>
 
-        <service id="argument_resolver.request_value" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver">
-            <tag name="controller.argument_value_resolver" priority="-40" />
-            <argument type="collection" />
+        <service
+            id="Shopware\Bundle\ControllerBundle\ArgumentResolver\ShopContextResolver"
+            class="Shopware\Bundle\ControllerBundle\ArgumentResolver\ShopContextResolver">
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <tag name="controller.argument_value_resolver" />
+        </service>
+
+        <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
+            <argument type="service" id="service_container"/>
+            <tag name="controller.argument_value_resolver" priority="-50" />
         </service>
 
         <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
-            <tag name="controller.argument_value_resolver" priority="-100" />
             <argument type="collection" />
+            <tag name="controller.argument_value_resolver" priority="-100" />
         </service>
     </services>
 </container>
