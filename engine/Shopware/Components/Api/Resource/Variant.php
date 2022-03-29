@@ -912,6 +912,9 @@ class Variant extends Resource implements BatchInterface
             if (\array_key_exists('pseudoPrice', $priceData)) {
                 $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
             }
+            if (\array_key_exists('regulationPrice', $priceData)) {
+                $priceData['regulationPrice'] = $priceData['regulationPrice'] / (100 + (float) $tax->getTax()) * 100;
+            }
         }
 
         return $priceData;

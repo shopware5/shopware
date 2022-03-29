@@ -26,6 +26,9 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use ReflectionMethod;
@@ -33,11 +36,13 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Controllers_Backend_Article;
 
 class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     /**
      * @var ReflectionMethod
@@ -50,7 +55,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
     private $interpretNumberSyntaxMethod;
 
     /**
-     * @var MockObject
+     * @var MockObject|Shopware_Controllers_Backend_Article
      */
     private $controller;
 
@@ -60,8 +65,6 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->getContainer()->get(Connection::class)->beginTransaction();
 
         // Disable auth and acl
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
@@ -83,8 +86,6 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
         parent::tearDown();
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
-
-        $this->getContainer()->get(Connection::class)->rollBack();
     }
 
     /**
@@ -141,7 +142,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
         static::assertFalse($this->View()->getAssign('success'));
     }
 
-    public function testinterpretNumberSyntax(): void
+    public function testInterpretNumberSyntax(): void
     {
         $article = new Article();
 
@@ -159,5 +160,45 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         static::assertSame('SW500.2', $result);
+    }
+
+    public function testSaveNetRegulationPrice(): void
+    {
+        $product = [
+            'supplierId' => 5,
+            'name' => 'test',
+            'active' => true,
+            'taxId' => 1,
+            'autoNumber' => '10002',
+            'mainPrices' => [
+                    0 => [
+                            'id' => 0,
+                            'from' => 1,
+                            'to' => 'Beliebig',
+                            'price' => 10,
+                            'pseudoPrice' => 0,
+                            'regulationPrice' => 119,
+                            'percent' => 0,
+                            'customerGroupKey' => 'EK',
+                        ],
+                ],
+        ];
+
+        $view = new Enlight_View_Default(new Enlight_Template_Manager());
+        $request = new Enlight_Controller_Request_RequestTestCase();
+
+        $request->setPost($product);
+        $this->controller->setView($view);
+        $this->controller->setRequest($request);
+        $this->controller->setContainer($this->getContainer());
+        $this->controller->saveAction();
+
+        $data = $view->getAssign('data');
+        $firstArticle = array_pop($data);
+
+        $regulationPrice = $this->getContainer()->get(Connection::class)->fetchOne('SELECT regulation_price FROM s_articles_prices WHERE articleID = ' . $firstArticle['id']);
+
+        //(119 / 119) * 100
+        static::assertEquals(100, (float) $regulationPrice);
     }
 }

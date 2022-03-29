@@ -125,14 +125,14 @@ class ArticleTest extends AbstractApiTestCase
                         'from' => 1,
                         'to' => 20,
                         'price' => 500,
-                        'regulationPrice' => 25,
+                        'regulationPrice' => 119,
                     ],
                     [
                         'customerGroupKey' => 'EK',
                         'from' => 21,
                         'to' => '-',
                         'price' => 400,
-                        'regulationPrice' => 25,
+                        'regulationPrice' => 119,
                     ],
                 ],
             ],
@@ -348,7 +348,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('id', $data);
         static::assertArrayHasKey('active', $data);
 
-        static::assertEquals(25, $data['mainDetail']['prices'][0]['regulationPrice']);
+        static::assertEquals(100, $data['mainDetail']['prices'][0]['regulationPrice']);
         static::assertEquals('Testartikel', $data['name']);
     }
 
