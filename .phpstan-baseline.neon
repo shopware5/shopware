@@ -45021,21 +45021,6 @@ parameters:
 			path: tests/Functional/Components/Router/RouterTestObject.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Routing\\\\Matchers\\\\RewriteMatcherTest\\:\\:createSeoUrls\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Routing/Matchers/RewriteMatcherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Routing\\\\Matchers\\\\RewriteMatcherTest\\:\\:provideSeoUrls\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Routing/Matchers/RewriteMatcherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Routing\\\\Matchers\\\\RewriteMatcherTest\\:\\:testMatcherTest\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Routing/Matchers/RewriteMatcherTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\StateTranslatorServiceTest\\:\\:testTranslateStateDifferentLocale\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/StateTranslatorServiceTest.php
