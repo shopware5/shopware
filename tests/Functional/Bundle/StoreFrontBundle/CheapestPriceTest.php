@@ -58,6 +58,7 @@ class CheapestPriceTest extends TestCase
 
         $this->helper->createProduct($data);
         $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+
         static::assertInstanceOf(Price::class, $cheapestPrice);
 
         static::assertEquals(70, $cheapestPrice->getCalculatedPrice());
@@ -80,10 +81,11 @@ class CheapestPriceTest extends TestCase
 
         $this->helper->createProduct($data);
         $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+
         static::assertInstanceOf(Price::class, $cheapestPrice);
         static::assertEquals(80, $cheapestPrice->getCalculatedPrice());
         static::assertEquals(90, $cheapestPrice->getCalculatedPseudoPrice());
-        static::assertEquals(119, $cheapestPrice->getCalculatedRegulationPrice());
+        static::assertEquals(100, $cheapestPrice->getCalculatedRegulationPrice());
         static::assertEquals(160, $cheapestPrice->getCalculatedReferencePrice());
     }
 
