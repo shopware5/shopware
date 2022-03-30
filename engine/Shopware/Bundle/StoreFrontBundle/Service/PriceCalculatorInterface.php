@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 
 interface PriceCalculatorInterface
@@ -38,6 +39,8 @@ interface PriceCalculatorInterface
      * and the pseudo price of a price struct.
      *
      * @param float $price
+     *
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @return float
      */

@@ -57,6 +57,7 @@ class PriceHydrator extends Hydrator
         $price->setFrom((int) $data['__price_from']);
         $price->setPrice((float) $data['__price_price']);
         $price->setPseudoPrice((float) $data['__price_pseudoprice']);
+        $price->setRegulationPrice((float) $data['__price_regulation_price']);
 
         if (strtolower($data['__price_to']) === 'beliebig') {
             $price->setTo(null);

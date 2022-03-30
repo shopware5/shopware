@@ -26,6 +26,7 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface PriceCalculationServiceInterface
 {
@@ -40,6 +41,8 @@ interface PriceCalculationServiceInterface
      *
      * The calculated \Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule structs are wrapped into a \Shopware\Bundle\StoreFrontBundle\Struct\Product\Price
      * struct which contains only the calculated price values and the reference to his rule.
+     *
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @return void
      */

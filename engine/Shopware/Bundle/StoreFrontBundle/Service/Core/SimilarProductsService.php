@@ -32,7 +32,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\SimilarProductsGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\SimilarProductsServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
 class SimilarProductsService implements SimilarProductsServiceInterface
@@ -64,7 +64,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(ListProduct $product, ProductContextInterface $context)
+    public function get(ListProduct $product, ShopContextInterface $context)
     {
         $similar = $this->getList([$product], $context);
 
@@ -74,7 +74,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ProductContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         /*
          * Returns an array which is associated with the different product numbers.

@@ -60,6 +60,20 @@
         </service>
 
         <service id="shopware_controllers_frontend_listing" class="Shopware_Controllers_Frontend_Listing">
+            <argument type="service" id="shopware.customer_stream.repository"/>
+            <argument type="service" id="shopware_storefront.context_service"/>
+            <argument type="service" id="shopware_emotion.store_front_emotion_device_configuration"/>
+            <argument type="service" id="config"/>
+            <argument type="service" id="shopware_search.store_front_criteria_factory"/>
+            <argument type="service" id="shopware_search.product_number_search"/>
+            <argument type="service" id="shopware_storefront.custom_sorting_service"/>
+            <argument type="service" id="shopware_product_stream.criteria_factory"/>
+            <argument type="service" id="shopware_storefront.custom_facet_service"/>
+            <argument type="service" id="shopware_product_stream.facet_filter"/>
+            <argument type="service" id="shopware_storefront.manufacturer_service"/>
+            <argument type="service" id="Shopware\Models\Category\Repository"/>
+            <argument type="service" id="shopware_product_stream.repository"/>
+
             <tag name="shopware.controller" module="frontend" controller="listing"/>
         </service>
 

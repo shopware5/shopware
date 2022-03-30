@@ -24,7 +24,6 @@
 
 namespace Shopware\Bundle\SearchBundleDBAL;
 
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
@@ -49,7 +48,7 @@ class PriceHelper implements PriceHelperInterface
     /**
      * {@inheritdoc}
      */
-    public function getSelection(ProductContextInterface $context)
+    public function getSelection(ShopContextInterface $context)
     {
         $fallback = $context->getFallbackCustomerGroup();
         $current = $context->getCurrentCustomerGroup();
@@ -177,8 +176,8 @@ class PriceHelper implements PriceHelperInterface
         if ($this->config->get('hideNoInStock')) {
             $stockCondition = <<< SQL
 AND (
-      (availableVariant.laststock * availableVariant.instock) 
-      >= 
+      (availableVariant.laststock * availableVariant.instock)
+      >=
       (availableVariant.laststock * availableVariant.minpurchase)
 )
 SQL;

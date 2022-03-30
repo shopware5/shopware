@@ -13,6 +13,7 @@
         <import resource="cart.xml"/>
         <import resource="api.xml"/>
         <import resource="service-aliases.xml"/>
+        <import resource="models.xml"/>
     </imports>
 
     <parameters>

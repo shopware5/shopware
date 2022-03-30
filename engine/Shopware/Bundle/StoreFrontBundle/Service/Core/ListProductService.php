@@ -37,7 +37,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Category;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
@@ -86,7 +85,7 @@ class ListProductService implements ListProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get($number, ProductContextInterface $context)
+    public function get($number, ShopContextInterface $context)
     {
         $products = $this->getList([$number], $context);
 
@@ -96,7 +95,7 @@ class ListProductService implements ListProductServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList(array $numbers, ProductContextInterface $context)
+    public function getList(array $numbers, ShopContextInterface $context)
     {
         // faster replacement for array_unique()
         // see http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip

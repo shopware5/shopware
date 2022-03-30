@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductSearch implements ProductSearchInterface
 {
@@ -54,7 +54,7 @@ class ProductSearch implements ProductSearchInterface
      */
     public function search(
         Criteria $criteria,
-        ProductContextInterface $context
+        ShopContextInterface $context
     ) {
         $numberResult = $this->searchGateway->search($criteria, $context);
 

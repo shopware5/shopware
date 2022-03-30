@@ -31,4 +31,22 @@
             </span>
         {/if}
     {/block}
+
+    {* Regulation price *}
+    {block name='frontend_listing_box_article_price_regulation'}
+        {if $sArticle.regulationPrice}
+            <div class="price--regulation">
+
+                {block name='frontend_listing_box_article_price_discount_before'}
+                    {s name="priceRegulationLabel" namespace="frontend/detail/data"}{/s}
+                {/block}
+
+                {$sArticle.regulationPrice|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}
+
+                {block name='frontend_listing_box_article_price_discount_after'}
+                    {s name="priceRegulationInfo" namespace="frontend/detail/data"}{/s}
+                {/block}
+            </div>
+        {/if}
+    {/block}
 </div>

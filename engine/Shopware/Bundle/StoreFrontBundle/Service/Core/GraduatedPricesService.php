@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Unit;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class GraduatedPricesService implements GraduatedPricesServiceInterface
 {
@@ -46,7 +46,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(ListProduct $product, ProductContextInterface $context)
+    public function get(ListProduct $product, ShopContextInterface $context)
     {
         $prices = $this->getList([$product], $context);
 
@@ -56,7 +56,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ProductContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
         $specify = $this->graduatedPricesGateway->getList(
@@ -94,7 +94,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
                 $context->getFallbackCustomerGroup()
             );
 
-            $prices = $prices + $fallbackPrices;
+            $prices = array_merge($prices, $fallbackPrices);
         }
 
         $priceGroups = $context->getPriceGroups();

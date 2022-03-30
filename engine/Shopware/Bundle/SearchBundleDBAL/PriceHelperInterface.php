@@ -32,6 +32,8 @@ interface PriceHelperInterface
     /**
      * Returns the full selection for the cheapest price
      *
+     * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
+     *
      * @return string
      */
     public function getSelection(ProductContextInterface $context);

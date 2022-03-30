@@ -805,6 +805,7 @@ class Helper
                 'price' => $priceOffset + 100.00,
                 'customerGroupKey' => $group,
                 'pseudoPrice' => $priceOffset + 110,
+                'regulationPrice' => $priceOffset + 120,
             ],
             [
                 'from' => 11,
@@ -812,6 +813,7 @@ class Helper
                 'price' => $priceOffset + 75.00,
                 'customerGroupKey' => $group,
                 'pseudoPrice' => $priceOffset + 85,
+                'regulationPrice' => $priceOffset + 95,
             ],
             [
                 'from' => 21,
@@ -819,6 +821,7 @@ class Helper
                 'price' => $priceOffset + 50.00,
                 'customerGroupKey' => $group,
                 'pseudoPrice' => $priceOffset + 60,
+                'regulationPrice' => $priceOffset + 70,
             ],
         ];
     }

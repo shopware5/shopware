@@ -293,6 +293,7 @@ class FieldHelper
             'price.price as __price_price',
             'price.pseudoprice as __price_pseudoprice',
             'price.percent as __price_percent',
+            'price.regulation_price as __price_regulation_price',
         ];
 
         $fields = array_merge(

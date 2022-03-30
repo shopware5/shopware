@@ -65,6 +65,8 @@ class Price extends Extendable
      */
     protected $calculatedPseudoPrice;
 
+    protected ?float $calculatedRegulationPrice = null;
+
     /**
      * @var PriceRule
      */
@@ -167,5 +169,15 @@ class Price extends Extendable
     public function getTo()
     {
         return $this->rule->getTo();
+    }
+
+    public function getCalculatedRegulationPrice(): ?float
+    {
+        return $this->calculatedRegulationPrice;
+    }
+
+    public function setCalculatedRegulationPrice(?float $calculatedRegulationPrice): void
+    {
+        $this->calculatedRegulationPrice = $calculatedRegulationPrice;
     }
 }

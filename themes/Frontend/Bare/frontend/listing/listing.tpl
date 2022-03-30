@@ -39,7 +39,6 @@
 
 {* Listing wrapper *}
 {block name="frontend_listing_listing_wrapper"}
-
     {if $showListing}
 
         {$listingCssClass = "listing--wrapper"}

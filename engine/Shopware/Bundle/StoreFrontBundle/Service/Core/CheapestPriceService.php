@@ -32,7 +32,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceDiscount;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
-use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware_Components_Config;
 
@@ -53,7 +52,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function get(ListProduct $product, ProductContextInterface $context)
+    public function get(ListProduct $product, ShopContextInterface $context)
     {
         $cheapestPrices = $this->getList([$product], $context);
 
@@ -63,7 +62,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getList($products, ProductContextInterface $context)
+    public function getList($products, ShopContextInterface $context)
     {
         $group = $context->getCurrentCustomerGroup();
 
@@ -96,7 +95,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
             $context->getFallbackCustomerGroup()
         );
 
-        $prices = $prices + $fallbackPrices;
+        $prices = array_merge($prices, $fallbackPrices);
 
         return $this->calculatePriceGroupDiscounts($products, $prices, $context);
     }
@@ -107,7 +106,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
      *
      * @return array<string, PriceRule>
      */
-    private function calculatePriceGroupDiscounts(array $products, array $prices, ProductContextInterface $context): array
+    private function calculatePriceGroupDiscounts(array $products, array $prices, ShopContextInterface $context): array
     {
         foreach ($products as $product) {
             if (!$product->isPriceGroupActive()) {
