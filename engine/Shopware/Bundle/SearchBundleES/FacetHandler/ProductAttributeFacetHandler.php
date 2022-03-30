@@ -85,53 +85,6 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
         $this->addFacet($criteriaPart, $search);
     }
 
-    private function addFacet(ProductAttributeFacet $criteriaPart, Search $search): void
-    {
-        $field = 'attributes.core.' . $criteriaPart->getField();
-        $type = null;
-
-        try {
-            $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
-            if ($attribute instanceof ConfigurationStruct) {
-                $type = $attribute->getElasticSearchType()['type'];
-            }
-        } catch (Exception $e) {
-        }
-
-        $this->criteriaParts[] = $criteriaPart;
-
-        switch ($criteriaPart->getMode()) {
-            case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
-            case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
-                if ($type === 'string') {
-                    $field .= '.raw';
-                }
-                $aggregation = new TermsAggregation($criteriaPart->getName());
-                $aggregation->setField($field);
-                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
-                break;
-
-            case ProductAttributeFacet::MODE_BOOLEAN_RESULT:
-                $count = new ValueCountAggregation($criteriaPart->getName() . '_count');
-                $count->setField($field);
-
-                $aggregation = new FilterAggregation($criteriaPart->getName());
-                $aggregation->setFilter(new ExistsQuery($field));
-                $aggregation->addAggregation($count);
-                break;
-
-            case ProductAttributeFacet::MODE_RANGE_RESULT:
-                $aggregation = new TermsAggregation($criteriaPart->getName());
-                $aggregation->setField($field);
-                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
-                break;
-
-            default:
-                return;
-        }
-        $search->addAggregation($aggregation);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -195,6 +148,53 @@ class ProductAttributeFacetHandler implements HandlerInterface, ResultHydratorIn
 
             $result->addFacet($criteriaPartResult);
         }
+    }
+
+    private function addFacet(ProductAttributeFacet $criteriaPart, Search $search): void
+    {
+        $field = 'attributes.core.' . $criteriaPart->getField();
+        $type = null;
+
+        try {
+            $attribute = $this->crudService->get('s_articles_attributes', $criteriaPart->getField());
+            if ($attribute instanceof ConfigurationStruct) {
+                $type = $attribute->getElasticSearchType()['type'];
+            }
+        } catch (Exception $e) {
+        }
+
+        $this->criteriaParts[] = $criteriaPart;
+
+        switch ($criteriaPart->getMode()) {
+            case ProductAttributeFacet::MODE_VALUE_LIST_RESULT:
+            case ProductAttributeFacet::MODE_RADIO_LIST_RESULT:
+                if ($type === 'string') {
+                    $field .= '.raw';
+                }
+                $aggregation = new TermsAggregation($criteriaPart->getName());
+                $aggregation->setField($field);
+                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
+                break;
+
+            case ProductAttributeFacet::MODE_BOOLEAN_RESULT:
+                $count = new ValueCountAggregation($criteriaPart->getName() . '_count');
+                $count->setField($field);
+
+                $aggregation = new FilterAggregation($criteriaPart->getName());
+                $aggregation->setFilter(new ExistsQuery($field));
+                $aggregation->addAggregation($count);
+                break;
+
+            case ProductAttributeFacet::MODE_RANGE_RESULT:
+                $aggregation = new TermsAggregation($criteriaPart->getName());
+                $aggregation->setField($field);
+                $aggregation->addParameter('size', self::AGGREGATION_SIZE);
+                break;
+
+            default:
+                return;
+        }
+        $search->addAggregation($aggregation);
     }
 
     private function switchTemplate(string $type, FacetResultInterface $result, ProductAttributeFacet $facet): void

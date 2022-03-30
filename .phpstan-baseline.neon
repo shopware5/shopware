@@ -981,11 +981,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
 
 		-
-			message: "#^Variable \\$controller in PHPDoc tag @var does not match assigned variable \\$subject\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:getPadding\\(\\) should return string but returns bool\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php

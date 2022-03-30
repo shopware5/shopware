@@ -39,6 +39,22 @@ class CustomRecipes extends Page
      */
     protected $path = '/backend/?app=CustomRecipes';
 
+    public function clickAddButton(): void
+    {
+        $this->getCustomRecipesListWindow()->getAddButton()->press();
+    }
+
+    public function getCustomRecipesListWindow(): CustomRecipesListWindow
+    {
+        $window = $this->getElement(CustomRecipesListWindow::class);
+
+        if ($window instanceof CustomRecipesListWindow) {
+            return $window;
+        }
+
+        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', CustomRecipesListWindow::class));
+    }
+
     protected function verifyPage(): void
     {
         $recipesWindowPresent = $this->waitFor(10, function (CustomRecipes $page): bool {
@@ -51,22 +67,6 @@ class CustomRecipes extends Page
 
         if ($recipesWindowPresent) {
             return;
-        }
-
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', CustomRecipesListWindow::class));
-    }
-
-    public function clickAddButton(): void
-    {
-        $this->getCustomRecipesListWindow()->getAddButton()->press();
-    }
-
-    public function getCustomRecipesListWindow(): CustomRecipesListWindow
-    {
-        $window = $this->getElement(CustomRecipesListWindow::class);
-
-        if ($window instanceof CustomRecipesListWindow) {
-            return $window;
         }
 
         throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', CustomRecipesListWindow::class));

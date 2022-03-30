@@ -30,9 +30,9 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 
 class TestFacet implements FacetResultInterface
 {
-    protected string $facetName = 'bla';
-
     public string $test = '<b>';
+
+    protected string $facetName = 'bla';
 
     public function getFacetName()
     {

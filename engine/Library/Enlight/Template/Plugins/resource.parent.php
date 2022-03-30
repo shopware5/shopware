@@ -25,6 +25,41 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
     protected $index;
 
     /**
+     * populate Source Object with meta data from Resource
+     *
+     * @param Smarty_Template_Source   $source    source object
+     * @param Smarty_Internal_Template $_template template object
+     */
+    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    {
+        $filePath = $this->buildFilepath($source, $_template);
+        $s = Smarty_Resource::source(null, $source->smarty, $filePath);
+
+        $source->components = $s;
+        $source->filepath = $s->filepath;
+        $source->uid = $s->uid;
+        if ($_template && $_template->smarty->compile_check) {
+            $source->timestamp = $s->timestamp;
+            $source->exists = $s->exists;
+        }
+        $source->template = $_template;
+    }
+
+    /**
+     * Load template's source from files into current template object
+     *
+     * @param Smarty_Template_Source $source source object
+     *
+     * @throws SmartyException if source cannot be loaded
+     *
+     * @return string template source
+     */
+    public function getContent(Smarty_Template_Source $source)
+    {
+        return $source->components->handler->getContent($source->components);
+    }
+
+    /**
      * build template filepath by traversing the template_dir array
      *
      * @param Smarty_Template_Source   $source    source object
@@ -68,40 +103,5 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
         $resource_name .= $this->index;
 
         return \get_class($this) . '#' . $smarty->joined_template_dir . '#' . $resource_name;
-    }
-
-    /**
-     * populate Source Object with meta data from Resource
-     *
-     * @param Smarty_Template_Source   $source    source object
-     * @param Smarty_Internal_Template $_template template object
-     */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
-    {
-        $filePath = $this->buildFilepath($source, $_template);
-        $s = Smarty_Resource::source(null, $source->smarty, $filePath);
-
-        $source->components = $s;
-        $source->filepath = $s->filepath;
-        $source->uid = $s->uid;
-        if ($_template && $_template->smarty->compile_check) {
-            $source->timestamp = $s->timestamp;
-            $source->exists = $s->exists;
-        }
-        $source->template = $_template;
-    }
-
-    /**
-     * Load template's source from files into current template object
-     *
-     * @param Smarty_Template_Source $source source object
-     *
-     * @throws SmartyException if source cannot be loaded
-     *
-     * @return string template source
-     */
-    public function getContent(Smarty_Template_Source $source)
-    {
-        return $source->components->handler->getContent($source->components);
     }
 }

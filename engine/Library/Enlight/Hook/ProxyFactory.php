@@ -167,6 +167,29 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
     }
 
     /**
+     * Clear proxy cache
+     */
+    public function clearCache()
+    {
+        $proxies = new GlobIterator(
+            $this->proxyDir . '*Proxy.php',
+            FilesystemIterator::CURRENT_AS_PATHNAME
+        );
+
+        foreach ($proxies as $proxyPath) {
+            @unlink($proxyPath);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getProxyDir()
+    {
+        return $this->proxyDir;
+    }
+
+    /**
      * This function creates the proxy class for the given class name.
      * The proxy class extends the original class and implements the Enlight_Hook_Proxy.
      *
@@ -411,28 +434,5 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         }
 
         throw new Enlight_Exception(sprintf('Unable to write file "%s"', $fileName));
-    }
-
-    /**
-     * Clear proxy cache
-     */
-    public function clearCache()
-    {
-        $proxies = new GlobIterator(
-            $this->proxyDir . '*Proxy.php',
-            FilesystemIterator::CURRENT_AS_PATHNAME
-        );
-
-        foreach ($proxies as $proxyPath) {
-            @unlink($proxyPath);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getProxyDir()
-    {
-        return $this->proxyDir;
     }
 }

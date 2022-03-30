@@ -83,7 +83,6 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
-        /** @var Enlight_Controller_Action $controller $controller */
         $subject = $args->get('subject');
         $response = $subject->Response();
         $request = $subject->Request();

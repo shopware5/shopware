@@ -152,6 +152,21 @@ class TaxAggregator implements TaxAggregatorInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function taxSum(array $cart, float $maximumTaxRate): array
+    {
+        $result = $this->aggregateTaxes(
+            $this->positionsTaxSum($cart, $maximumTaxRate) ?? [],
+            $this->shippingCostsTaxSum($cart) ?? []
+        );
+
+        ksort($result, SORT_NUMERIC);
+
+        return $result;
+    }
+
+    /**
      * @param array<int|numeric-string, float> $positionTaxSum
      * @param array<int|numeric-string, float> $shippingCostsTaxSum
      *
@@ -282,20 +297,5 @@ class TaxAggregator implements TaxAggregatorInterface
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function taxSum(array $cart, float $maximumTaxRate): array
-    {
-        $result = $this->aggregateTaxes(
-            $this->positionsTaxSum($cart, $maximumTaxRate) ?? [],
-            $this->shippingCostsTaxSum($cart) ?? []
-        );
-
-        ksort($result, SORT_NUMERIC);
-
-        return $result;
     }
 }

@@ -122,24 +122,6 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     }
 
     /**
-     * Retrieve a value and return $default if there is no element set.
-     *
-     * @param string     $name
-     * @param mixed|null $default
-     *
-     * @return mixed|null
-     */
-    public function get($name, $default = null)
-    {
-        $result = $default;
-        if (\array_key_exists($name, $this->_data)) {
-            $result = $this->_data[$name];
-        }
-
-        return $result;
-    }
-
-    /**
      * Magic function so that $obj->value will work.
      *
      * @param string $name
@@ -196,26 +178,6 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
     }
 
     /**
-     * Return an associative array of the stored data.
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $array = [];
-        $data = $this->_data;
-        foreach ($data as $key => $value) {
-            if ($value instanceof Enlight_Config_BaseConfig) {
-                $array[$key] = $value->toArray();
-            } else {
-                $array[$key] = $value;
-            }
-        }
-
-        return $array;
-    }
-
-    /**
      * Support isset() overloading on PHP 5.1
      *
      * @param string $name
@@ -245,6 +207,44 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
         } else {
             throw new Enlight_Config_Exception('Enlight_Config_BaseConfig is read only');
         }
+    }
+
+    /**
+     * Retrieve a value and return $default if there is no element set.
+     *
+     * @param string     $name
+     * @param mixed|null $default
+     *
+     * @return mixed|null
+     */
+    public function get($name, $default = null)
+    {
+        $result = $default;
+        if (\array_key_exists($name, $this->_data)) {
+            $result = $this->_data[$name];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Return an associative array of the stored data.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $array = [];
+        $data = $this->_data;
+        foreach ($data as $key => $value) {
+            if ($value instanceof Enlight_Config_BaseConfig) {
+                $array[$key] = $value->toArray();
+            } else {
+                $array[$key] = $value;
+            }
+        }
+
+        return $array;
     }
 
     /**

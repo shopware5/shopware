@@ -47,18 +47,6 @@ class Enlight_Hook_HookExecutionContext
     protected $parentExecutionLevel = 0;
 
     /**
-     * @param string $className
-     * @param string $method
-     * @param string $hookType
-     *
-     * @return string
-     */
-    public static function createHookEventName($className, $method, $hookType)
-    {
-        return $className . '::' . $method . '::' . $hookType;
-    }
-
-    /**
      * @param string $method
      */
     public function __construct(
@@ -69,6 +57,18 @@ class Enlight_Hook_HookExecutionContext
     ) {
         $this->hookManager = $hookManager;
         $this->args = new Enlight_Hook_HookArgs($subject, $method, $args);
+    }
+
+    /**
+     * @param string $className
+     * @param string $method
+     * @param string $hookType
+     *
+     * @return string
+     */
+    public static function createHookEventName($className, $method, $hookType)
+    {
+        return $className . '::' . $method . '::' . $hookType;
     }
 
     /**

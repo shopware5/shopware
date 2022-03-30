@@ -3457,6 +3457,13 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         ],
     ];
 
+    /**
+     * Module instance
+     *
+     * @var sArticles
+     */
+    protected $module;
+
     private array $articleProperties = [
         'articleID',
         'articleDetailsID',
@@ -3479,13 +3486,6 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
         'supplierImg',
         'tax',
     ];
-
-    /**
-     * Module instance
-     *
-     * @var sArticles
-     */
-    protected $module;
 
     /**
      * Test set up method
