@@ -38,7 +38,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\CriteriaFactoryInterface;
-use Shopware\Components\ProductStream\FacetFilter;
+use Shopware\Components\ProductStream\FacetFilterInterface;
 use Shopware\Components\ProductStream\Repository as ProductStreamRepository;
 use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
@@ -64,7 +64,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     private CustomFacetServiceInterface $customFacetService;
 
-    private FacetFilter $facetFilter;
+    private FacetFilterInterface $facetFilter;
 
     private ManufacturerServiceInterface $manufacturerService;
 
@@ -82,7 +82,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         CustomSortingServiceInterface $customSortingService,
         CriteriaFactoryInterface $criteriaFactory,
         CustomFacetServiceInterface $customFacetService,
-        FacetFilter $facetFilter,
+        FacetFilterInterface $facetFilter,
         ManufacturerServiceInterface $manufacturerService,
         CategoryRepository $categoryRepository,
         ProductStreamRepository $productStreamRepository
