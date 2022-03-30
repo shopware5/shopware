@@ -3233,6 +3233,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if ($customerGroup['taxInput']) {
                 $price['price'] = $price['price'] / 100 * (100 + $tax['tax']);
                 $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']);
+                $price['regulationPrice'] = $price['regulationPrice'] / 100 * (100 + $tax['tax']);
             }
             $prices[$key] = $price;
         }
@@ -4098,6 +4099,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             if ($customerGroup->getTaxInput()) {
                 $priceData['price'] = $priceData['price'] / (100 + (float) $tax->getTax()) * 100;
                 $priceData['pseudoPrice'] = $priceData['pseudoPrice'] / (100 + (float) $tax->getTax()) * 100;
+                $priceData['regulationPrice'] = $priceData['regulationPrice'] / (100 + (float) $tax->getTax()) * 100;
             }
 
             // Resolve the oneToMany association of ExtJs to an oneToOne association for doctrine.
