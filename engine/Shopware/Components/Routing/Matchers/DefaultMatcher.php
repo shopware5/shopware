@@ -88,19 +88,13 @@ class DefaultMatcher implements MatcherInterface
             }
         }
 
-        $query = $this->fillDefaults($context, $query);
-
-        return $query;
+        return $this->fillDefaults($context, $query);
     }
 
     /**
      * Fills up default values for module, controller and action
-     *
-     * @param array $query
-     *
-     * @return array
      */
-    private function fillDefaults(Context $context, $query)
+    private function fillDefaults(Context $context, array $query): array
     {
         $defaults = [
             $context->getModuleKey() => $this->dispatcher->getDefaultModule(),
@@ -108,8 +102,6 @@ class DefaultMatcher implements MatcherInterface
             $context->getActionKey() => $this->dispatcher->getDefaultAction(),
         ];
 
-        $query = array_merge($defaults, $query);
-
-        return $query;
+        return array_merge($defaults, $query);
     }
 }

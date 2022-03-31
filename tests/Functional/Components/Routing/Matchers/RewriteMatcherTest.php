@@ -193,16 +193,6 @@ class RewriteMatcherTest extends TestCase
                     'rewriteAlias' => true,
                 ],
             ],
-            [
-                1,
-                'same-url',
-                [
-                    'module' => 'frontend',
-                    'controller' => 'short',
-                    'action' => 'index',
-                    'rewriteAlias' => true,
-                ],
-            ],
             'Category SEO URL with trailing slash, trailing slash in DB' => [
                 1,
                 'Notenbuecher/',
@@ -225,7 +215,7 @@ class RewriteMatcherTest extends TestCase
                     'rewriteAlias' => true,
                 ],
             ],
-            'Note controller should be called (fails)' => [
+            'Note controller should be called' => [
                 1,
                 'note',
                 'note',
@@ -282,7 +272,6 @@ class RewriteMatcherTest extends TestCase
              ('same-url-different-subshops-one-main', 'sViewport=e&param=5', 0, 1),
              ('same-url-different-subshops-one-main', 'sViewport=f&param=6', 1, 2),
              ('url-with-slash/', 'sViewport=a&param=1', 1, 1),
-             ('same-url-short', 'sViewport=short', 1, 1),
              ('Notenbuecher/', 'sViewport=cat&sCategory=76', 1, 1),
              ('Notenbuch', 'sViewport=cat&sCategory=76', 1, 1)"
         );
