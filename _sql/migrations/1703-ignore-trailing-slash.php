@@ -22,13 +22,15 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1703 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1703 extends AbstractMigration
 {
     public function up($modus)
     {
         $elementExists = $this->connection
             ->query('SELECT id FROM `s_core_config_elements` WHERE `name` = "ignore_trailing_slash" AND form_id = (SELECT id FROM s_core_config_forms WHERE name = "Frontend100") LIMIT 1')
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetch(PDO::FETCH_COLUMN);
 
         if (is_string($elementExists)) {
             return;
@@ -47,8 +49,8 @@ EOD;
         $this->addSql($sql);
         if ($modus === self::MODUS_UPDATE) {
             $sql = <<<'EOD'
-SET @elementId = (SELECT form_id FROM s_core_config_elements WHERE name = 'ignore_trailing_slash' AND form_id = @parent);
-INSERT INTO s_core_config_values (element_id, shop_id,value) SELECT @elementId, s.id, 'b:0' from s_core_shops s;
+SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'ignore_trailing_slash' AND form_id = @parent);
+INSERT INTO s_core_config_values (element_id, shop_id,value) SELECT @elementId, s.id, 'b:0;' from s_core_shops s;
 EOD;
             $this->addSql($sql);
         }

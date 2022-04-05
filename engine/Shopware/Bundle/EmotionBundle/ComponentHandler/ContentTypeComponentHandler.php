@@ -34,8 +34,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ContentTypeComponentHandler implements ComponentHandlerInterface
 {
-    private const COMPONENT_NAME = 'emotion-components-content-type';
-
     public const CONTENT_TYPE_KEY = 'content_type';
     public const MODE_KEY = 'mode';
     public const IDS_KEY = 'ids';
@@ -46,6 +44,8 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
     public const MODE_NEWEST = 0;
     public const MODE_RANDOM = 1;
     public const MODE_SELECTED = 2;
+
+    private const COMPONENT_NAME = 'emotion-components-content-type';
 
     private ContainerInterface $container;
 

@@ -33,11 +33,6 @@
 interface Enlight_Hook_Proxy
 {
     /**
-     * @return string[]
-     */
-    public static function getHookMethods();
-
-    /**
      * @param string $method
      */
     public function __pushHookExecutionContext($method, Enlight_Hook_HookExecutionContext $context);
@@ -64,10 +59,15 @@ interface Enlight_Hook_Proxy
     /**
      * @param string $method
      */
-    public function executeParent($method, array $args = []);
+    public function __executeOriginalMethod($method, array $args = []);
+
+    /**
+     * @return string[]
+     */
+    public static function getHookMethods();
 
     /**
      * @param string $method
      */
-    public function __executeOriginalMethod($method, array $args = []);
+    public function executeParent($method, array $args = []);
 }

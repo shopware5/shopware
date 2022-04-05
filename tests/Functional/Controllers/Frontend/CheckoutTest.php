@@ -223,6 +223,34 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertSame(0.0, $cart[CheckoutKey::AMOUNT]);
     }
 
+    public function testRedirectShippingPaymentPageOnEmptyBasket(): void
+    {
+        $this->loginFrontendUser();
+
+        $this->Request()->setMethod('GET');
+        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
+        $response = $this->dispatch('/checkout/shippingPayment');
+
+        $locationHeader = array_filter($response->getHeaders(), static function (array $header) {
+            return stripos($header['name'], 'location') === 0;
+        });
+
+        static::assertTrue($response->isRedirect());
+        static::assertEquals(302, $response->getHttpResponseCode());
+        static::assertCount(2, $locationHeader); // Known bug due to Symfony migration
+        $locationHeader = array_pop($locationHeader);
+        static::assertStringContainsString('/checkout/cart', $locationHeader['value']);
+    }
+
+    public function testCorrectRenderingOfErrorSnippet(): void
+    {
+        $view = new Enlight_View_Default($this->getContainer()->get('template'));
+        $view->assign('sInvalidCartItems', ['foo', 'test']);
+        $template = $view->fetch('frontend/checkout/error_messages.tpl');
+        static::assertStringContainsString('Folgende Produkte sind nicht mehr verfügbar', $template);
+        static::assertStringContainsString('<li>foo</li><li>test</li>', $template);
+    }
+
     /**
      * Compares the calculated price from a basket with the calculated price from \Shopware\Bundle\OrderBundle\Service\CalculationService::recalculateOrderTotals()
      * It does so by creating via the frontend controllers, and comparing the amount (net & gross) with the values provided by
@@ -301,34 +329,6 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertEquals($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, $messageNet);
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
-    }
-
-    public function testRedirectShippingPaymentPageOnEmptyBasket(): void
-    {
-        $this->loginFrontendUser();
-
-        $this->Request()->setMethod('GET');
-        $this->Request()->setHeader('User-Agent', self::USER_AGENT);
-        $response = $this->dispatch('/checkout/shippingPayment');
-
-        $locationHeader = array_filter($response->getHeaders(), static function (array $header) {
-            return stripos($header['name'], 'location') === 0;
-        });
-
-        static::assertTrue($response->isRedirect());
-        static::assertEquals(302, $response->getHttpResponseCode());
-        static::assertCount(2, $locationHeader); // Known bug due to Symfony migration
-        $locationHeader = array_pop($locationHeader);
-        static::assertStringContainsString('/checkout/cart', $locationHeader['value']);
-    }
-
-    public function testCorrectRenderingOfErrorSnippet(): void
-    {
-        $view = new Enlight_View_Default($this->getContainer()->get('template'));
-        $view->assign('sInvalidCartItems', ['foo', 'test']);
-        $template = $view->fetch('frontend/checkout/error_messages.tpl');
-        static::assertStringContainsString('Folgende Produkte sind nicht mehr verfügbar', $template);
-        static::assertStringContainsString('<li>foo</li><li>test</li>', $template);
     }
 
     /**

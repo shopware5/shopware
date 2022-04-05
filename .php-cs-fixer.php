@@ -72,6 +72,7 @@ return (new Config())
         'no_useless_return' => true,
         'no_superfluous_phpdoc_tags' => true,
         'operator_linebreak' => ['only_booleans' => true],
+        'ordered_class_elements' => true,
         'phpdoc_line_span' => true,
         'phpdoc_order' => true,
         'phpdoc_summary' => false,

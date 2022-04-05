@@ -296,38 +296,6 @@ class VariantConditionWithCurrencyFactor extends TestCase
     }
 
     /**
-     * Creates the TestContext with the given configurations.
-     */
-    private function createContext(bool $displayGross = true, int $discount = 20, float $currencyFactor = 1): TestContext
-    {
-        $tax = $this->helper->createTax();
-        $customerGroup = $this->helper->createCustomerGroup(
-            [
-                'key' => 'DISC',
-                'tax' => $displayGross,
-                'mode' => true,
-                'discount' => $discount,
-            ]
-        );
-
-        $currency = $this->helper->createCurrency(
-            [
-                'factor' => $currencyFactor,
-            ]
-        );
-
-        $shop = $this->helper->getShop();
-
-        return $this->helper->createContext(
-            $customerGroup,
-            $shop,
-            [$tax],
-            null,
-            $currency
-        );
-    }
-
-    /**
      * Get products and set the graduated prices and inStock of the variants.
      *
      * @param array $data
@@ -390,6 +358,38 @@ class VariantConditionWithCurrencyFactor extends TestCase
         $product['variants'] = $variants;
 
         return $product;
+    }
+
+    /**
+     * Creates the TestContext with the given configurations.
+     */
+    private function createContext(bool $displayGross = true, int $discount = 20, float $currencyFactor = 1): TestContext
+    {
+        $tax = $this->helper->createTax();
+        $customerGroup = $this->helper->createCustomerGroup(
+            [
+                'key' => 'DISC',
+                'tax' => $displayGross,
+                'mode' => true,
+                'discount' => $discount,
+            ]
+        );
+
+        $currency = $this->helper->createCurrency(
+            [
+                'factor' => $currencyFactor,
+            ]
+        );
+
+        $shop = $this->helper->getShop();
+
+        return $this->helper->createContext(
+            $customerGroup,
+            $shop,
+            [$tax],
+            null,
+            $currency
+        );
     }
 
     private function getSearchResult(TestContext $context, $expanded = false): ProductNumberSearchResult

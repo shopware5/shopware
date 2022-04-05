@@ -32,6 +32,16 @@
 abstract class Enlight_Components_Test_Plugin_TestCase extends Enlight_Components_Test_Controller_TestCase
 {
     /**
+     * Tests set up method
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Shopware()->Container()->load('plugins');
+    }
+
+    /**
      * Creates a new instance of Enlight_Event_EventArgs by the passed parameters.
      * If the name didn't passed, the class name will be used.
      * If the name passed as array, the name will be used as arguments.
@@ -51,15 +61,5 @@ abstract class Enlight_Components_Test_Plugin_TestCase extends Enlight_Component
         }
 
         return new Enlight_Event_EventArgs($args);
-    }
-
-    /**
-     * Tests set up method
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        Shopware()->Container()->load('plugins');
     }
 }

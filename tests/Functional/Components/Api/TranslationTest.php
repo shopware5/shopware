@@ -570,57 +570,6 @@ class TranslationTest extends TestCase
         $this->numberDelete('configuratoroption', $entity['name']);
     }
 
-    private function numberCreate(string $type, int $id, string $number): void
-    {
-        $data = $this->getDummyData($type);
-        $data['key'] = $number;
-
-        $translation = $this->resource->createByNumber($data);
-
-        static::assertInstanceOf(Translation::class, $translation);
-
-        static::assertEquals($id, $translation->getKey());
-
-        $translated = $this->resource->getTranslationComponent()->unFilterData(
-            $type,
-            $translation->getData()
-        );
-
-        foreach ($data['data'] as $key => $value) {
-            static::assertEquals($value, $translated[$key]);
-        }
-    }
-
-    private function numberUpdate(string $type, int $id, string $number): void
-    {
-        $data = $this->getDummyData($type);
-        foreach ($data['data'] as &$item) {
-            $item .= '-UPDATED';
-        }
-
-        $translation = $this->resource->updateByNumber($number, $data);
-
-        static::assertInstanceOf(Translation::class, $translation);
-
-        static::assertEquals($id, $translation->getKey());
-
-        $translated = $this->resource->getTranslationComponent()->unFilterData(
-            $type,
-            $translation->getData()
-        );
-
-        foreach ($data['data'] as $key => $value) {
-            static::assertEquals($value, $translated[$key]);
-        }
-    }
-
-    private function numberDelete(string $type, string $number): void
-    {
-        $data = $this->getDummyData($type);
-        $result = $this->resource->deleteByNumber($number, $data);
-        static::assertTrue($result);
-    }
-
     public function testCreateMissingKey(): void
     {
         $this->expectException(ParameterMissingException::class);
@@ -939,6 +888,57 @@ class TranslationTest extends TestCase
     public function testGetOneWithMissingIdShouldThrowParameterMissingException(): void
     {
         static::assertTrue(true);
+    }
+
+    private function numberCreate(string $type, int $id, string $number): void
+    {
+        $data = $this->getDummyData($type);
+        $data['key'] = $number;
+
+        $translation = $this->resource->createByNumber($data);
+
+        static::assertInstanceOf(Translation::class, $translation);
+
+        static::assertEquals($id, $translation->getKey());
+
+        $translated = $this->resource->getTranslationComponent()->unFilterData(
+            $type,
+            $translation->getData()
+        );
+
+        foreach ($data['data'] as $key => $value) {
+            static::assertEquals($value, $translated[$key]);
+        }
+    }
+
+    private function numberUpdate(string $type, int $id, string $number): void
+    {
+        $data = $this->getDummyData($type);
+        foreach ($data['data'] as &$item) {
+            $item .= '-UPDATED';
+        }
+
+        $translation = $this->resource->updateByNumber($number, $data);
+
+        static::assertInstanceOf(Translation::class, $translation);
+
+        static::assertEquals($id, $translation->getKey());
+
+        $translated = $this->resource->getTranslationComponent()->unFilterData(
+            $type,
+            $translation->getData()
+        );
+
+        foreach ($data['data'] as $key => $value) {
+            static::assertEquals($value, $translated[$key]);
+        }
+    }
+
+    private function numberDelete(string $type, string $number): void
+    {
+        $data = $this->getDummyData($type);
+        $result = $this->resource->deleteByNumber($number, $data);
+        static::assertTrue($result);
     }
 
     /**

@@ -33,8 +33,6 @@ class UpdateHtaccess
     private const MARKER_STOP = '# END Shopware';
     private const INSTRUCTIONS = '# The directives (lines) between "# BEGIN Shopware" and "# END Shopware" are dynamically generated. Any changes to the directives between these markers will be overwritten.';
 
-    private string $htaccessPath;
-
     /**
      * This constant contains the hashes of known previous states of the
      * .htaccess file. Modifications done by the SwagSecurity plugin v1.1.25 and
@@ -81,6 +79,8 @@ class UpdateHtaccess
         '5d7e6211ff581e12cbd9769e5b3da4bd', // https://github.com/shopware/shopware/blob/7662e140d2/.htaccess
         '7ca5b55b89c5a2306307d9b65479791a', // https://github.com/shopware/shopware/blob/7662e140d2/.htaccess + SwagSecurity section
     ];
+
+    private string $htaccessPath;
 
     public function __construct(string $htaccessPath)
     {

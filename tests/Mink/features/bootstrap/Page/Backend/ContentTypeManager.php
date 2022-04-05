@@ -42,23 +42,6 @@ class ContentTypeManager extends Page
      */
     protected $path = '/backend/?app=ContentTypeManager';
 
-    protected function verifyPage(): void
-    {
-        $listWindowPresent = $this->waitFor(10, function (ContentTypeManager $page): bool {
-            try {
-                return $page->getListWindow() instanceof Element;
-            } catch (Throwable $e) {
-                return false;
-            }
-        });
-
-        if ($listWindowPresent) {
-            return;
-        }
-
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerListWindow::class));
-    }
-
     public function clickAddButton(): void
     {
         $this->getListWindow()->getAddButton()->press();
@@ -115,6 +98,23 @@ class ContentTypeManager extends Page
         }
 
         throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerFieldWindow::class));
+    }
+
+    protected function verifyPage(): void
+    {
+        $listWindowPresent = $this->waitFor(10, function (ContentTypeManager $page): bool {
+            try {
+                return $page->getListWindow() instanceof Element;
+            } catch (Throwable $e) {
+                return false;
+            }
+        });
+
+        if ($listWindowPresent) {
+            return;
+        }
+
+        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerListWindow::class));
     }
 
     private function clickUsingJs(NodeElement $el, ?NodeElement $contextNode = null): void

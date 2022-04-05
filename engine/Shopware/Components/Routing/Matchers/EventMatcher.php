@@ -46,7 +46,7 @@ class EventMatcher implements MatcherInterface
      */
     public function match($pathInfo, Context $context)
     {
-        if (strpos($pathInfo, '/backend/') === 0 || strpos($pathInfo, '/api/') === 0) {
+        if (str_starts_with($pathInfo, '/backend/') || str_starts_with($pathInfo, '/api/')) {
             return $pathInfo;
         }
         if ($context->getShopId() === null) { //only frontend

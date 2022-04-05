@@ -158,22 +158,6 @@ class PriceFacetTest extends TestCase
         static::assertEquals(375.00, $facet->getMax());
     }
 
-    private function getTestContext(): TestContext
-    {
-        $context = $this->getContext();
-
-        $data = ['key' => 'BAK', 'tax' => true];
-
-        $context->setFallbackCustomerGroup(
-            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
-        );
-
-        $context->getCurrentCustomerGroup()->setDisplayGrossPrices(true);
-        $context->getCurrentCustomerGroup()->setUseDiscount(false);
-
-        return $context;
-    }
-
     /**
      * @param string             $number
      * @param array<string, int> $prices
@@ -200,5 +184,21 @@ class PriceFacetTest extends TestCase
         }
 
         return $product;
+    }
+
+    private function getTestContext(): TestContext
+    {
+        $context = $this->getContext();
+
+        $data = ['key' => 'BAK', 'tax' => true];
+
+        $context->setFallbackCustomerGroup(
+            $this->converter->convertCustomerGroup($this->helper->createCustomerGroup($data))
+        );
+
+        $context->getCurrentCustomerGroup()->setDisplayGrossPrices(true);
+        $context->getCurrentCustomerGroup()->setUseDiscount(false);
+
+        return $context;
     }
 }

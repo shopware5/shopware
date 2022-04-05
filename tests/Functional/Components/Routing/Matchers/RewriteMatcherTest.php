@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,12 +27,15 @@
 namespace Shopware\Tests\Functional\Components\Routing\Matchers;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Matchers\RewriteMatcher;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class RewriteMatcherTest extends Enlight_Components_Test_TestCase
+class RewriteMatcherTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var Connection
      */
@@ -52,7 +57,6 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
         $this->matcher = $c->get('shopware.routing.matchers.rewrite_matcher');
 
         Shopware()->Models()->clear();
-        $this->connection->beginTransaction();
 
         $this->createSeoUrls();
         parent::setUp();
@@ -65,55 +69,35 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
     {
         parent::tearDown();
         Shopware()->Models()->clear();
-        $this->connection->rollBack();
-    }
-
-    /**
-     * Create demo data for the testcases
-     */
-    public function createSeoUrls()
-    {
-        $this->connection->exec("
-            INSERT INTO s_core_rewrite_urls(path, org_path, main, subshopID)
-            VALUES
-            ('unique-url-main', 'sViewport=a&param=1', 1, 1),
-            ('unique-url-main-with-action', 'sViewport=b&action=foo&param=2', 1, 1),
-            ('unique-url-main-with-s-action', 'sViewport=c&sAction=bar&param=3', 1, 1),
-            ('unique-url-not-main', 'sViewport=d&param=4', 0, 1),
-            ('same-url-different-subshops-one-main', 'sViewport=e&param=5', 0, 1),
-            ('same-url-different-subshops-one-main', 'sViewport=f&param=6', 1, 2),
-            ('url-with-slash/', 'sViewport=a&param=1', 1, 1),
-            ('same-url-short', 'sViewport=short', 1, 1)
-        ");
     }
 
     /**
      * Provide SEO URLs to be tested
      *
-     * @return array
+     * @return array<array<int|string|array<string, mixed>>>
      */
-    public function provideSeoUrls()
+    public function provideSeoUrls(): array
     {
         return [
             [
-                'shopId' => 1,
-                'path' => 'this-url-does-not-exists',
-                'expected' => 'this-url-does-not-exists',
+                1,
+                'this-url-does-not-exists',
+                'this-url-does-not-exists',
             ],
             [
-                'shopId' => 1,
-                'path' => '/backend/this-is-a-backend-url',
-                'expected' => '/backend/this-is-a-backend-url',
+                1,
+                '/backend/this-is-a-backend-url',
+                '/backend/this-is-a-backend-url',
             ],
             [
-                'shopId' => 1,
-                'path' => '/api/this-is-an-api-url',
-                'expected' => '/api/this-is-an-api-url',
+                1,
+                '/api/this-is-an-api-url',
+                '/api/this-is-an-api-url',
             ],
             [
-                'shopId' => 1,
-                'path' => 'unique-url-main',
-                'expected' => [
+                1,
+                'unique-url-main',
+                [
                     'module' => 'frontend',
                     'controller' => 'a',
                     'action' => 'index',
@@ -122,9 +106,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 2,
-                'path' => 'unique-url-main',
-                'expected' => [
+                2,
+                'unique-url-main',
+                [
                     'module' => 'frontend',
                     'controller' => 'a',
                     'action' => 'index',
@@ -133,9 +117,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 1,
-                'path' => 'unique-url-main-with-action',
-                'expected' => [
+                1,
+                'unique-url-main-with-action',
+                [
                     'module' => 'frontend',
                     'controller' => 'b',
                     'action' => 'foo',
@@ -144,9 +128,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 1,
-                'path' => 'unique-url-main-with-s-action',
-                'expected' => [
+                1,
+                'unique-url-main-with-s-action',
+                [
                     'module' => 'frontend',
                     'controller' => 'c',
                     'action' => 'bar',
@@ -155,9 +139,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 1,
-                'path' => 'unique-url-not-main',
-                'expected' => [
+                1,
+                'unique-url-not-main',
+                [
                     'module' => 'frontend',
                     'controller' => 'd',
                     'action' => 'index',
@@ -166,9 +150,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 1,
-                'path' => 'same-url-different-subshops-one-main',
-                'expected' => [
+                1,
+                'same-url-different-subshops-one-main',
+                [
                     'module' => 'frontend',
                     'controller' => 'e',
                     'action' => 'index',
@@ -178,8 +162,8 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
             ],
             [
                 'shopId' => 2,
-                'path' => 'same-url-different-subshops-one-main',
-                'expected' => [
+                'same-url-different-subshops-one-main',
+                [
                     'module' => 'frontend',
                     'controller' => 'f',
                     'action' => 'index',
@@ -188,9 +172,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 1,
-                'path' => 'unique-url-main/',
-                'expected' => [
+                1,
+                'unique-url-main/',
+                [
                     'module' => 'frontend',
                     'controller' => 'a',
                     'action' => 'index',
@@ -199,9 +183,9 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                 ],
             ],
             [
-                'shopId' => 1,
-                'path' => 'url-with-slash',
-                'expected' => [
+                1,
+                'url-with-slash',
+                [
                     'module' => 'frontend',
                     'controller' => 'a',
                     'action' => 'index',
@@ -209,39 +193,91 @@ class RewriteMatcherTest extends Enlight_Components_Test_TestCase
                     'rewriteAlias' => true,
                 ],
             ],
-            [
-                'shopId' => 1,
-                'path' => 'same-url',
-                'expected' => [
+            'Category SEO URL with trailing slash, trailing slash in DB' => [
+                1,
+                'Notenbuecher/',
+                [
                     'module' => 'frontend',
-                    'controller' => 'short',
+                    'controller' => 'cat',
                     'action' => 'index',
+                    'sCategory' => '76',
+                    'rewriteUrl' => true,
+                ],
+            ],
+            'Category SEO URL without trailing slash, trailing slash in DB' => [
+                1,
+                'Notenbuecher',
+                [
+                    'module' => 'frontend',
+                    'controller' => 'cat',
+                    'action' => 'index',
+                    'sCategory' => '76',
                     'rewriteAlias' => true,
+                ],
+            ],
+            'Note controller should be called' => [
+                1,
+                'note',
+                'note',
+            ],
+            'Category SEO URL with trailing slash, trailing slash not in DB' => [
+                1,
+                'Notenbuch/',
+                [
+                    'module' => 'frontend',
+                    'controller' => 'cat',
+                    'action' => 'index',
+                    'sCategory' => '76',
+                    'rewriteAlias' => true,
+                ],
+            ],
+            'Category SEO URL without trailing slash, trailing slash not in DB' => [
+                1,
+                'Notenbuch',
+                [
+                    'module' => 'frontend',
+                    'controller' => 'cat',
+                    'action' => 'index',
+                    'sCategory' => '76',
+                    'rewriteUrl' => true,
                 ],
             ],
         ];
     }
 
     /**
-     * Test case
+     * @dataProvider provideSeoUrls
+     *
+     * @param array{0: int, 1: string, 2: string|array<string, mixed>}|string $expected
      */
-    public function testMatcherTest()
+    public function testMatcherTest(int $shopId, string $path, $expected): void
     {
-        foreach ($this->provideSeoUrls() as $testCase) {
-            $context = $this->createRoutingContext($testCase['shopId']);
+        $context = $this->createRoutingContext($shopId);
 
-            static::assertEquals($this->matcher->match($testCase['path'], $context), $testCase['expected']);
-        }
+        static::assertSame($expected, $this->matcher->match($path, $context));
     }
 
     /**
-     * Creates a routing context for the given $shopId
-     *
-     * @param int $shopId
-     *
-     * @return Context
+     * Create demo data for the testcases
      */
-    public function createRoutingContext($shopId)
+    private function createSeoUrls(): void
+    {
+        $this->connection->executeStatement(
+            "INSERT INTO s_core_rewrite_urls(path, org_path, main, subshopID)
+             VALUES
+             ('unique-url-main', 'sViewport=a&param=1', 1, 1),
+             ('unique-url-main-with-action', 'sViewport=b&action=foo&param=2', 1, 1),
+             ('unique-url-main-with-s-action', 'sViewport=c&sAction=bar&param=3', 1, 1),
+             ('unique-url-not-main', 'sViewport=d&param=4', 0, 1),
+             ('same-url-different-subshops-one-main', 'sViewport=e&param=5', 0, 1),
+             ('same-url-different-subshops-one-main', 'sViewport=f&param=6', 1, 2),
+             ('url-with-slash/', 'sViewport=a&param=1', 1, 1),
+             ('Notenbuecher/', 'sViewport=cat&sCategory=76', 1, 1),
+             ('Notenbuch', 'sViewport=cat&sCategory=76', 1, 1)"
+        );
+    }
+
+    private function createRoutingContext(int $shopId): Context
     {
         $context = new Context();
         $context->setShopId($shopId);

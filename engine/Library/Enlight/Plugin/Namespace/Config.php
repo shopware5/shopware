@@ -73,7 +73,6 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
             return parent::load($name, $throwException);
         }
 
-        /** @var \Enlight_Config $item */
         $classname = $item->get('class');
         if (!class_exists($classname)) {
             $classname .= 'Dummy';
