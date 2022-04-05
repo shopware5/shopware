@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Symfony\Component\HttpFoundation\Response;
 
 class SearchTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -41,7 +42,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         // Check for valid markup
         // Ignore whitespace, since this testcase checks wether the list is structured correctly (li following ul)
         self::assertStringContainsStringIgnoringWhitespace(
-            ' <ul class="results--list"> <li class="list--entry block-group result--item">',
+            '<ul class="results--list"> <li class="list--entry',
             $this->Response()->getBody()
         );
         // Check for expected search link and number of results
@@ -57,11 +58,33 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->Response()->clearBody();
         $this->dispatch('ajax_search?sSearch=1234%a5%27%20having%201=1--%20');
-        static::assertStringContainsString('Keine Suchergebnisse gefunden', $this->Response()->getBody());
+
+        /*
+         * See: https://shopware.atlassian.net/browse/SW-24678
+         *
+         * We need to make sure, that special characters in search queries do
+         * not lead to errors. Search keywords are cached though, so a check for
+         * an empty result is not guaranteed to be successful.
+         */
+        static::assertSame(Response::HTTP_OK, $this->Response()->getStatusCode());
+
+        $body = $this->Response()->getBody();
+
+        static::assertIsString($body);
+        static::assertStringNotContainsStringIgnoringCase('an error has occured', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
+        static::assertStringNotContainsStringIgnoringCase('ein fehler ist aufgetreten', $body);
+
         //search for an emoji, might not be displayed correctly in IDE
         $this->Response()->clearBody();
         $this->dispatch('ajax_search?sSearch=👨‍🚒');
-        static::assertStringContainsString('Keine Suchergebnisse gefunden', $this->Response()->getBody());
+
+        static::assertSame(Response::HTTP_OK, $this->Response()->getStatusCode());
+
+        $body = $this->Response()->getBody();
+
+        static::assertIsString($body);
+        static::assertStringNotContainsStringIgnoringCase('an error has occured', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
+        static::assertStringNotContainsStringIgnoringCase('ein fehler ist aufgetreten', $body);
     }
 
     /**
@@ -71,8 +94,11 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
     {
         $this->dispatch(sprintf('search?sSearch=%s', $term));
 
-        static::assertStringContainsString($filtered, $this->Response()->getBody(), sprintf('Expected filtered term "%s" not found on search page', $filtered));
-        static::assertStringNotContainsString($term, $this->Response()->getBody(), sprintf('Malicious term "%s" found on search page', $term));
+        $body = $this->Response()->getBody();
+
+        static::assertIsString($body);
+        static::assertStringContainsString($filtered, $body, sprintf('Expected filtered term "%s" not found on search page', $filtered));
+        static::assertStringNotContainsString($term, $body, sprintf('Malicious term "%s" found on search page', $term));
     }
 
     public function searchTermProvider()

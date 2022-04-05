@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use RuntimeException;
 use Shopware\Components\Api\BatchInterface;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Model\QueryBuilder;
@@ -1029,6 +1030,10 @@ class Variant extends Resource implements BatchInterface
                     $saveFileName = $fileName . '.' . $fileExt;
                 }
                 $saveFile = $esdDir . '/' . $saveFileName;
+
+                if (!is_writable($esdDir)) {
+                    throw new RuntimeException(sprintf('Unable to save ESD-file, as the directory "%s" is not writable.', $esdDir));
+                }
 
                 copy($file, $saveFile);
                 @unlink($file);

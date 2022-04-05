@@ -27,7 +27,7 @@ workflow:
 
 stages:
     - Static analysis
-    - Unit
+    - PHPUnit
     - End-to-end testing
     - Security
 
@@ -38,8 +38,6 @@ default:
         - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
         # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/27921#note_38132416
         - eval export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME SW_HOST SW_BASE_PATH ELASTICSEARCH_HOST
-
-# Stage: static
 
 PHP analyze:
     tags:
@@ -64,37 +62,10 @@ JavaScript checks:
         - make check-js-code
         - make test-jest
 
-Code Coverage:
-    tags:
-        - t3.medium
-    stage: Static analysis
-    script:
-        - make init
-        - php -d pcov.enabled=1 -d pcov.directory=$CI_PROJECT_DIR
-            vendor/bin/phpunit
-            --configuration tests/phpunit.xml.dist
-            --log-junit ${ARTIFACTS_ROOT}/phpunit.junit.xml
-            --colors=never
-            --exclude-group=elasticSearch,pcovAdapterBrokenTest
-            --coverage-cobertura=${ARTIFACTS_ROOT}/phpunit-coverage.cobertura.xml
-            --coverage-text | sed -E -n '1,/^\s*Lines:\s*([0-9]+(\.[0-9]+)?)%/ p' # See: https://gitlab.shopware.com/shopware/6/product/platform/-/blob/trunk/.gitlab/stages/02-unit.yml#L92
-    services:
-        -   name: mysql:5.7
-            alias: mysql
-    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
-    artifacts:
-        paths:
-            - ${ARTIFACTS_ROOT}/*
-        expire_in: 1 week
-        reports:
-            junit: ${ARTIFACTS_ROOT}/phpunit.junit.xml
-            cobertura: ${ARTIFACTS_ROOT}/*.cobertura.xml
-
-# stage: Unit
 .phpunit_base:
     tags:
         - t3.medium
-    stage: Unit
+    stage: PHPUnit
     services:
         -   name: mysql:5.7
             alias: mysql
@@ -110,7 +81,6 @@ Code Coverage:
     tags:
         - t3.medium
     extends: .phpunit_base
-    stage: Elasticsearch
     script:
         - make init
         - make test-phpunit-elasticsearch
@@ -120,40 +90,40 @@ Code Coverage:
         reports:
             junit: ${ARTIFACTS_ROOT}/test-log.xml
 
-PHP 7.4:
-    extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
-    stage: Unit
-    services:
-        -   name: mysql:5.7
-            alias: mysql
-
-PHP 8.0:
+Code Coverage:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0
-    stage: Unit
-    services:
-        -   name: mysql:5.7
-            alias: mysql
+    script:
+        - make test-phpunit-coverage-cobertura
+    artifacts:
+        paths:
+            - ${ARTIFACTS_ROOT}/*
+        expire_in: 1 week
+        reports:
+            junit: ${ARTIFACTS_ROOT}/phpunit.junit.xml
+            cobertura: ${ARTIFACTS_ROOT}/*.cobertura.xml
+    parallel:
+        matrix:
+            - TESTSUITE: ['unit', 'functional']
+
+Code Coverage Statistic:
+    extends: .phpunit_base
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.0
+    variables:
+        TESTSUITE: 'all'
+    script:
+        - make test-phpunit-coverage-statistic | sed -E -n '1,/^\s*Lines:\s*([0-9]+(\.[0-9]+)?)%/ p' # See: https://gitlab.shopware.com/shopware/6/product/platform/-/blob/trunk/.gitlab/stages/02-unit.yml#L92
+    coverage: '/^\s*Lines:\s*(\d+(?:\.\d+)?%)/'
+
+PHP 7.4:
+    extends: .phpunit_base
 
 PHP 8.1:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.1
-    stage: Unit
-    services:
-        -   name: mysql:5.7
-            alias: mysql
-
-MySQL 5.7:
-    extends: .phpunit_base
-    stage: Unit
-    services:
-        -   name: mysql:5.7
-            alias: mysql
 
 MySQL 8.0:
     extends: .phpunit_base
-    stage: Unit
     services:
         -   name: mysql:8.0.19
             alias: mysql
@@ -161,23 +131,19 @@ MySQL 8.0:
 
 MariaDB 10.1:
     extends: .phpunit_base
-    stage: Unit
     services:
         -   name: mariadb:10.1
             alias: mysql
 
 MariaDB 10.5:
     extends: .phpunit_base
-    stage: Unit
     services:
         -   name: mariadb:10.5
             alias: mysql
 
-# stage: Elasticsearch
 Elasticsearch 7:
     extends: .phpunit_es_base
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
-    stage: Unit
     services:
         -   name: mysql:8.0.19
             alias: mysql
@@ -185,19 +151,6 @@ Elasticsearch 7:
         -   name: docker.elastic.co/elasticsearch/elasticsearch:7.9.1
             alias: elasticsearch
             command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
-
-#Elasticsearch 8:
-#    extends: .phpunit_es_base
-#    image: gitlab.shopware.com:5005/shopware/5/product/shopware:7.4
-#    stage: Elasticsearch
-#    allow_failure: true
-#    services:
-#        -   name: mysql:8.0.19
-#            alias: mysql
-#            command: ["mysqld", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--default-authentication-plugin=mysql_native_password"]
-#        -   name: docker.elastic.co/elasticsearch/elasticsearch:8.0.0-SNAPSHOT
-#            alias: elasticsearch
-#            command: [ "bin/elasticsearch", "-Expack.security.enabled=false", "-Ediscovery.type=single-node" ]
 
 .mink_base:
     tags:

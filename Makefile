@@ -11,7 +11,7 @@ endif
 
 -include $(ENV_FILE)
 
-.PHONY: init clear-cache check-code test-mink elasticsearch-populate test-phpunit test-phpunit-elasticsearch debug-config clean-make-config clean check-config-variables
+.PHONY: init clear-cache check-code test-mink elasticsearch-populate test-phpunit test-phpunit-coverage-cobertura test-phpunit-coverage-statistic test-phpunit-elasticsearch debug-config clean-make-config clean check-config-variables
 
 init: .make.init
 
@@ -72,11 +72,20 @@ test-phpunit: init
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=elasticSearch
 	./vendor/bin/phpunit --config recovery/common/phpunit.xml.dist --log-junit build/artifacts/test-log.xml
 
+test-phpunit-coverage-cobertura: init
+	php -d pcov.enabled=1 -d pcov.directory="$(CURDIR)" vendor/bin/phpunit --configuration="tests/phpunit.xml.dist" --log-junit="build/artifacts/phpunit.junit.xml" --colors="never" --exclude-group="elasticSearch,pcovAdapterBrokenTest" --testsuite="$(TESTSUITE)" --coverage-cobertura="build/artifacts/phpunit-coverage-$(TESTSUITE).cobertura.xml"
+
+test-phpunit-coverage-statistic: init tests/phpunit-full-coverage.xml
+	php -d pcov.enabled=1 -d pcov.directory="$(CURDIR)" vendor/bin/phpunit --configuration="tests/phpunit-full-coverage.xml" --log-junit="build/artifacts/phpunit.junit.xml" --colors="never" --exclude-group="elasticSearch,pcovAdapterBrokenTest" --testsuite="$(TESTSUITE)" --coverage-text
+
 test-phpunit-elasticsearch: elasticsearch-populate
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=skipElasticSearch --group=elasticSearch
 
 test-jest:
 	npm run test --prefix ./themes/Frontend/Responsive
+
+tests/phpunit-full-coverage.xml:
+	sed -e 's/includeUncoveredFiles="false"/includeUncoveredFiles="true"/g' < tests/phpunit.xml.dist > tests/phpunit-full-coverage.xml
 
 elasticsearch-populate: .make.config.build.elasticsearch .make.console.executable
 	./bin/console sw:es:index:populate

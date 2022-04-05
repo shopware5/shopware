@@ -775,7 +775,17 @@ class VariantTest extends TestCase
             ],
         ];
 
+        $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+
+        if (!is_writable($esdDir)) {
+            static::expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
+        }
+
         $article = $this->resourceArticle->create($params);
+
+        if (!is_writable($esdDir)) {
+            static::markTestIncomplete('Skipping thorough ESD-file-check, as the process is unable to read/write to the file-directory.');
+        }
 
         static::assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
         static::assertEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
@@ -825,7 +835,17 @@ class VariantTest extends TestCase
             ],
         ];
 
+        $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+
+        if (!is_writable($esdDir)) {
+            static::expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
+        }
+
         $article = $this->resourceArticle->create($params);
+
+        if (!is_writable($esdDir)) {
+            static::markTestIncomplete('Skipping thorough ESD-file-check, as the process is unable to read/write to the file-directory.');
+        }
 
         static::assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
         static::assertEquals(5, $article->getMainDetail()->getEsd()->getSerials()->count());
@@ -858,6 +878,7 @@ class VariantTest extends TestCase
                 'esd' => [
                     'file' => 'file://' . __DIR__ . '/fixtures/shopware_logo.png',
                     'hasSerials' => true,
+                    'reuse' => false,
                     'serials' => [
                         [
                             'serialnumber' => '1000',
@@ -879,7 +900,17 @@ class VariantTest extends TestCase
             ],
         ];
 
+        $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
+
+        if (!is_writable($esdDir)) {
+            static::expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
+        }
+
         $article = $this->resourceArticle->create($params);
+
+        if (!is_writable($esdDir)) {
+            static::markTestIncomplete('Skipping thorough ESD-file-check, as the process is unable to read/write to the file-directory.');
+        }
 
         static::assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
         static::assertEquals(5, $article->getMainDetail()->getEsd()->getSerials()->count());

@@ -46036,17 +46036,7 @@ parameters:
 			path: tests/Functional/Controllers/Frontend/SearchTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
 			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringNotContainsString\\(\\) expects string, array\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/SearchTest.php
 
