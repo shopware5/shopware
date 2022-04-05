@@ -71,6 +71,13 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     private CaptchaValidator $captchaValidator;
 
+    public function __construct(Shopware_Components_Config $config, CaptchaValidator $captchaValidator)
+    {
+        parent::__construct();
+        $this->config = $config;
+        $this->captchaValidator = $captchaValidator;
+    }
+
     /**
      * @return void
      */
@@ -78,13 +85,6 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     {
         $this->admin = Shopware()->Modules()->Admin();
         $this->customerService = Shopware()->Container()->get(CustomerServiceInterface::class);
-    }
-
-    public function __construct(Shopware_Components_Config $config, CaptchaValidator $captchaValidator)
-    {
-        parent::__construct();
-        $this->config = $config;
-        $this->captchaValidator = $captchaValidator;
     }
 
     public function preDispatch()
