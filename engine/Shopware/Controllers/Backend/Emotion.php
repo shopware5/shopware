@@ -1325,6 +1325,9 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         if ($valueType === 'json') {
             if (\is_array($value)) {
                 foreach ($value as &$val) {
+                    if (!isset($val['path'])) {
+                        continue;
+                    }
                     $val['path'] = $mediaService->normalize($val['path']);
                 }
                 unset($val);
