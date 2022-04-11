@@ -6941,11 +6941,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/TextMappingInterface.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/EmotionElementService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Service\\\\EmotionElementService\\:\\:__construct\\(\\) has parameter \\$componentHandler with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EmotionBundle/Service/EmotionElementService.php
@@ -8096,11 +8091,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/Exception/WrongMediaTypeForReplaceException.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/GarbageCollectorFactory.php
-
-		-
 			message: "#^Property Shopware\\\\Bundle\\\\MediaBundle\\\\MediaExtensionMappingService\\:\\:\\$mapping has no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/MediaExtensionMappingService.php
@@ -8174,11 +8164,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:\\$config type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/MediaService.php
-
-		-
-			message: "#^Cannot call method first\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaServiceFactory.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceFactory\\:\\:__construct\\(\\) has parameter \\$adapterFactories with no value type specified in iterable type IteratorAggregate\\.$#"
@@ -9911,11 +9896,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundle/Sorting/Sorting.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/StoreFrontCriteriaFactory.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\StoreFrontCriteriaFactory\\:\\:__construct\\(\\) has parameter \\$requestHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/StoreFrontCriteriaFactory.php
@@ -9976,11 +9956,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/PriceHelperInterface.php
 
 		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ProductNumberSearch\\:\\:__construct\\(\\) has parameter \\$facetHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
@@ -10001,11 +9976,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
 
 		-
-			message: "#^Parameter \\#1 \\$objects of method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ProductNumberSearch\\:\\:assertCollectionIsInstanceOf\\(\\) expects Doctrine\\\\Common\\\\Collections\\\\ArrayCollection, Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
-
-		-
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, array\\<Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\FacetHandlerInterface\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
@@ -10014,11 +9984,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilder\\:\\:addState\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilder.php
-
-		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilderFactory.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilderFactory\\:\\:__construct\\(\\) has parameter \\$conditionHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
@@ -10048,11 +10013,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilderFactory\\:\\:assertCollectionIsInstanceOf\\(\\) has parameter \\$objects with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
 			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilderFactory.php
-
-		-
-			message: "#^Parameter \\#1 \\$objects of method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilderFactory\\:\\:assertCollectionIsInstanceOf\\(\\) expects Doctrine\\\\Common\\\\Collections\\\\ArrayCollection, Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null given\\.$#"
-			count: 2
 			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilderFactory.php
 
 		-
@@ -10294,11 +10254,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\FacetHandler\\\\PropertyFacetHandler\\:\\:hydrateProperties\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PropertyFacetHandler.php
-
-		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/HandlerRegistry.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\HandlerRegistry\\:\\:__construct\\(\\) has parameter \\$handlers with no value type specified in iterable type IteratorAggregate\\.$#"
@@ -16956,11 +16911,6 @@ parameters:
 			path: engine/Shopware/Components/ConfigWriter.php
 
 		-
-			message: "#^Argument of an invalid type Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Console/Application.php
-
-		-
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\Console\\\\Helper\\\\HelperInterface\\:\\:formatBlock\\(\\)\\.$#"
 			count: 2
 			path: engine/Shopware/Components/Console/Application.php
@@ -18092,11 +18042,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method import\\(\\) on Shopware\\\\Components\\\\Emotion\\\\Preset\\\\ComponentHandler\\\\ComponentHandlerInterface\\|true\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Emotion/Preset/PresetDataSynchronizer.php
-
-		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Emotion/Preset/PresetDataSynchronizer.php
 
@@ -25451,11 +25396,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Document.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:afterImportAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:createElementData\\(\\) has parameter \\$element with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
@@ -25491,16 +25431,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:createTemplateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteManyTemplates\\(\\) has parameter \\$records with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
@@ -25511,17 +25441,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteManyTemplatesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteTemplate\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:deleteTemplateAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
@@ -25531,37 +25451,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:detailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:duplicateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:duplicateTemplate\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:duplicateTemplateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:exportAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:getMasterLandingPagesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:getMediaXTypes\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
@@ -25576,31 +25466,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:getTemplatesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:importAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:importTranslationsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:libraryAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:listAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:processDataFieldValue\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
@@ -25611,17 +25476,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:saveAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:saveEmotion\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:savePreviewAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
@@ -25636,27 +25491,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:updateStatusAndPositionAction\\(\\) has no return type specified\\.$#"
+			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:isEncoded\\(\\) expects string, array\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:updateTemplateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:uploadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:isEncoded\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:normalize\\(\\) expects string, array\\|string given\\.$#"
+			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:normalize\\(\\) expects string, array\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
@@ -53654,11 +53494,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\RequirementValidatorTest\\:\\:testSecondRequiredPluginNotExists\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Plugin/RequirementValidatorTest.php
-
-		-
-			message: "#^Cannot call method toArray\\(\\) on Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\|null\\.$#"
-			count: 2
-			path: tests/Unit/Components/Plugin/ResourceSubscriberTest.php
 
 		-
 			message: "#^Cannot call method item\\(\\) on DOMNodeList\\|false\\.$#"
