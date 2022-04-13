@@ -28,46 +28,48 @@ namespace Shopware\Tests\Functional\Bundle\SitemapBundle\Provider;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SitemapBundle\Provider\CategoryUrlProvider as OriginalProvider;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\Routing\Context;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class CategoryUrlProviderTest extends TestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
 
     public function setUp(): void
     {
-        $dbConnection = Shopware()->Container()->get('dbal_connection');
+        $dbConnection = $this->getContainer()->get('dbal_connection');
 
         $dbConnection->exec('DELETE FROM s_categories');
         $sql = file_get_contents(__DIR__ . '/assets/categories.sql');
+        static::assertIsString($sql);
         $dbConnection->exec($sql);
 
         $dbConnection->exec('DELETE FROM s_core_shops');
         $sql = file_get_contents(__DIR__ . '/assets/shops.sql');
+        static::assertIsString($sql);
         $dbConnection->exec($sql);
     }
 
     public function testGetUrls(): void
     {
-        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(1);
+        $shop = $this->getContainer()->get('models')->getRepository(Shop::class)->getActiveById(1);
         static::assertNotNull($shop);
 
-        $categoryUrlProvider = $this->getCategoryUrlProvider();
-        $urls = $categoryUrlProvider->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
+        $urls = $this->getCategoryUrlProvider()->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
 
         static::assertCount(9, $urls);
     }
 
     public function testGetUrlsConsidersParentCategory(): void
     {
-        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(1);
+        $shop = $this->getContainer()->get('models')->getRepository(Shop::class)->getActiveById(1);
         static::assertNotNull($shop);
 
-        $categoryUrlProvider = $this->getCategoryUrlProvider();
-        $urls = $categoryUrlProvider->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
+        $urls = $this->getCategoryUrlProvider()->getUrls($this->getRouterContext($shop), $this->getShopContext($shop));
 
         $firstUrl = $urls[0];
 
@@ -76,7 +78,7 @@ class CategoryUrlProviderTest extends TestCase
 
     public function testGetUrlsWorksWithSubshops(): void
     {
-        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(1);
+        $shop = $this->getContainer()->get('models')->getRepository(Shop::class)->getActiveById(1);
         static::assertNotNull($shop);
 
         $categoryUrlProvider = $this->getCategoryUrlProvider();
@@ -84,7 +86,7 @@ class CategoryUrlProviderTest extends TestCase
 
         static::assertCount(9, $urls);
 
-        $shop = Shopware()->Container()->get('models')->getRepository(Shop::class)->getActiveById(2);
+        $shop = $this->getContainer()->get('models')->getRepository(Shop::class)->getActiveById(2);
         static::assertNotNull($shop);
 
         $categoryUrlProvider = $this->getCategoryUrlProvider();
@@ -95,14 +97,14 @@ class CategoryUrlProviderTest extends TestCase
 
     private function getRouterContext(Shop $shop): Context
     {
-        return Context::createFromShop($shop, Shopware()->Container()->get('config'));
+        return Context::createFromShop($shop, $this->getContainer()->get('config'));
     }
 
-    private function getShopContext(Shop $shop): ShopContext
+    private function getShopContext(Shop $shop): ShopContextInterface
     {
         static::assertNotNull($shop->getCurrency());
 
-        return Shopware()->Container()->get('shopware_storefront.context_service')->createShopContext(
+        return $this->getContainer()->get('shopware_storefront.context_service')->createShopContext(
             $shop->getId(),
             $shop->getCurrency()->getId(),
             $shop->getCustomerGroup()->getKey()
@@ -111,6 +113,6 @@ class CategoryUrlProviderTest extends TestCase
 
     private function getCategoryUrlProvider(): OriginalProvider
     {
-        return new OriginalProvider(Shopware()->Container()->get('models'), Shopware()->Container()->get('router'));
+        return new OriginalProvider($this->getContainer()->get('models'), $this->getContainer()->get('router'));
     }
 }

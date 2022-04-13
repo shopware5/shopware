@@ -10466,67 +10466,12 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/ConfigHandler/File.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BaseUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BaseUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BlogUrlProvider\\:\\:fetchTranslations\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BlogUrlProvider\\:\\:fetchTranslations\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BlogUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$category has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/CategoryUrlProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProvider\\:\\:isAvailableForShop\\(\\) has parameter \\$url with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/CustomUrlProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/CustomUrlProvider.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ManufacturerUrlProvider\\:\\:getManufacturersForSitemap\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ManufacturerUrlProvider\\:\\:getManufacturersForSitemap\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ManufacturerUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ProductUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
 
@@ -10537,11 +10482,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:getSitesByShopId\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
@@ -10714,11 +10654,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\UrlFilterInterface\\:\\:addFilterContainer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/UrlFilterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\UrlProviderInterface\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/UrlProviderInterface.php
 
 		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
@@ -21619,21 +21554,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Matchers\\\\DefaultMatcher\\:\\:fillDefaults\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Routing/Matchers/DefaultMatcher.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:__construct\\(\\) has parameter \\$generators with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of method Shopware\\\\Components\\\\Routing\\\\GeneratorListInterface\\:\\:generateList\\(\\) expects array\\<array\\<string, mixed\\>\\>, array\\<array\\<string, mixed\\>\\|string\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Parameter \\#1 \\$params of method Shopware\\\\Components\\\\Routing\\\\GeneratorInterface\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\<string, mixed\\>\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
 
 		-
 			message: "#^Cannot call method beginTransaction\\(\\) on PDO\\|null\\.$#"
@@ -42989,26 +42909,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundleDBAL/SearchIndexerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CategoryUrlProviderTest\\:\\:getShopContext\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContext but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContextInterface\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
-			message: "#^Offset 0 does not exist on array\\<Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url\\>\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, array\\<Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url\\>\\|null given\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:getCustomUrlProvider\\(\\) has no return type specified\\.$#"

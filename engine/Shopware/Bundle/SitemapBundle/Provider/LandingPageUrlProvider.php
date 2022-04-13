@@ -28,7 +28,7 @@ use DateTime;
 use DateTimeInterface;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context;
 use Shopware\Models\Emotion\Emotion;
 
 class LandingPageUrlProvider extends BaseUrlProvider
@@ -36,7 +36,7 @@ class LandingPageUrlProvider extends BaseUrlProvider
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
+    public function getUrls(Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
             return [];
@@ -46,8 +46,7 @@ class LandingPageUrlProvider extends BaseUrlProvider
 
         $shopId = $shopContext->getShop()->getId();
 
-        $builder = $emotionRepository->getCampaignsByShopId($shopId);
-        $campaigns = $builder->getQuery()->getArrayResult();
+        $campaigns = $emotionRepository->getCampaignsByShopId($shopId)->getQuery()->getArrayResult();
 
         if (\count($campaigns) === 0) {
             return [];
@@ -84,13 +83,8 @@ class LandingPageUrlProvider extends BaseUrlProvider
     /**
      * Helper function to filter emotion campaigns
      * Returns false, if the campaign starts later or is outdated
-     *
-     * @param DateTimeInterface|null $from
-     * @param DateTimeInterface|null $to
-     *
-     * @return bool
      */
-    private function filterCampaign($from = null, $to = null)
+    private function filterCampaign(?DateTimeInterface $from = null, ?DateTimeInterface $to = null): bool
     {
         $now = new DateTime();
 

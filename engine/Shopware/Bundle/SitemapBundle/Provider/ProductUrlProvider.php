@@ -34,50 +34,30 @@ use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\RouterInterface;
 use Shopware\Models\Article\Article as Product;
 
 class ProductUrlProvider implements UrlProviderInterface
 {
-    /**
-     * @var Routing\RouterInterface
-     */
-    private $router;
+    private RouterInterface $router;
 
-    /**
-     * @var int|null|null
-     */
-    private $lastId;
+    private ?int $lastId = null;
 
-    /**
-     * @var ProductNumberSearchInterface
-     */
-    private $productNumberSearch;
+    private ProductNumberSearchInterface $productNumberSearch;
 
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $storeFrontCriteriaFactory;
+    private StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory;
 
-    /**
-     * @var ConnectionInterface
-     */
-    private $connection;
+    private ConnectionInterface $connection;
 
-    /**
-     * @var int
-     */
-    private $batchSize;
+    private int $batchSize;
 
-    /**
-     * @param int $batchSize
-     */
     public function __construct(
-        Routing\RouterInterface $router,
+        RouterInterface $router,
         ProductNumberSearchInterface $productNumberSearch,
         StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory,
         ConnectionInterface $connection,
-        $batchSize
+        int $batchSize
     ) {
         $this->router = $router;
         $this->productNumberSearch = $productNumberSearch;
@@ -89,7 +69,7 @@ class ProductUrlProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
+    public function getUrls(Context $routingContext, ShopContextInterface $shopContext)
     {
         $criteria = $this->storeFrontCriteriaFactory
             ->createBaseCriteria([$shopContext->getShop()->getCategory()->getId()], $shopContext);
@@ -112,8 +92,8 @@ class ProductUrlProvider implements UrlProviderInterface
         }, array_values($productNumberSearchResult->getProducts()));
         unset($productNumberSearchResult);
 
-        $qb = $this->connection->createQueryBuilder();
-        $statement = $qb->from('s_articles', 'product')
+        $statement = $this->connection->createQueryBuilder()
+            ->from('s_articles', 'product')
             ->select('id, changetime')
             ->where('id IN(:productIds)')
             ->setParameter('productIds', $productIds, Connection::PARAM_INT_ARRAY)
