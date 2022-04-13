@@ -72,7 +72,7 @@ class Shopware extends Enlight_Application
     public function __call($name, $value = null)
     {
         $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1)[0];
-        $caller = $trace['file'] . ':' . $trace['line'];
+        $caller = ($trace['file'] ?? '') . ':' . ($trace['line'] ?? '');
 
         trigger_error('Shopware()->' . $name . '() is deprecated since version 4.2 and will be removed in 5.8. Use the Container instead. Called by ' . $caller, E_USER_DEPRECATED);
 

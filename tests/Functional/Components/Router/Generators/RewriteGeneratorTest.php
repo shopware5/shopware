@@ -66,6 +66,27 @@ class RewriteGeneratorTest extends TestCase
         static::assertSame('freizeitwelten/', $urls[6]);
     }
 
+    public function testGenerateListWithOnlyNotGeneratedURLs(): void
+    {
+        $list = [
+            5 => [
+                'controller' => 'cat',
+                'module' => 'frontend',
+                'sCategory' => '8888',
+            ],
+            6 => [
+                'controller' => 'cat',
+                'module' => 'frontend',
+                'sCategory' => '9999',
+            ],
+        ];
+
+        $urls = $this->createGenerator()->generateList($list, $this->createShopContext());
+
+        static::assertFalse($urls[5]);
+        static::assertFalse($urls[6]);
+    }
+
     private function createGenerator(): RewriteGenerator
     {
         $eventManagerMock = $this->createMock(ContainerAwareEventManager::class);

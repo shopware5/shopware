@@ -150,9 +150,7 @@ class Router extends EnlightRouter implements RouterInterface
         }
 
         // At this point only strings should be in the array
-        $urls = array_filter($urls, static function ($url): bool {
-            return \is_string($url);
-        });
+        $urls = array_filter($urls, '\is_string');
         foreach ($this->postFilters as $postFilter) {
             foreach ($urls as $key => &$url) {
                 if ($postFilter instanceof PostFilterInterface) {

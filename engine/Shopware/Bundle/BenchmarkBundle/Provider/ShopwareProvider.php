@@ -104,7 +104,7 @@ class ShopwareProvider implements BenchmarkProviderInterface
      */
     private function getOs()
     {
-        return PHP_OS ?: '';
+        return PHP_OS;
     }
 
     /**
