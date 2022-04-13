@@ -32,9 +32,9 @@ use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 use Shopware\Components\Cart\Struct\Price;
 use Shopware\Components\Cart\TaxAggregator;
-use Shopware\Models\Tax\Tax;
 
 class TaxAggregatorTest extends TestCase
 {
@@ -60,13 +60,13 @@ class TaxAggregatorTest extends TestCase
         ?string $discountTaxConfig = null
     ): void {
         $subject = new TaxAggregator(
-            static::createConfiguredMock(
+            $this->createConfiguredMock(
                 Connection::class,
                 [
                     'fetchOne' => 'none',
                 ]
             ),
-            static::createStub(ContextServiceInterface::class),
+            $this->createStub(ContextServiceInterface::class),
             null,
             $discountTaxConfig,
             $taxAutoModeConfig
@@ -195,8 +195,8 @@ class TaxAggregatorTest extends TestCase
         ?array $shippingCostsTaxProportional = null
     ): void {
         $subject = new TaxAggregator(
-            static::createStub(Connection::class),
-            static::createStub(ContextServiceInterface::class)
+            $this->createStub(Connection::class),
+            $this->createStub(ContextServiceInterface::class)
         );
 
         $basket = [
@@ -231,7 +231,7 @@ class TaxAggregatorTest extends TestCase
             ],
             self::SHIPPING_COSTS_TAX_RATE,
             [
-                static::createConfiguredMock(
+                $this->createConfiguredMock(
                     Price::class,
                     [
                         'getTaxRate' => self::SHIPPING_COSTS_TAX_RATE,
@@ -256,35 +256,35 @@ class TaxAggregatorTest extends TestCase
             ],
             self::SHIPPING_COSTS_TAX_RATE,
             [
-                static::createConfiguredMock(
+                $this->createConfiguredMock(
                     Price::class,
                     [
                         'getTaxRate' => self::SHIPPING_COSTS_TAX_RATE,
                         'getTax' => 1.1,
                     ]
                 ),
-                static::createConfiguredMock(
+                $this->createConfiguredMock(
                     Price::class,
                     [
                         'getTaxRate' => self::SHIPPING_COSTS_TAX_RATE,
                         'getTax' => 1.1,
                     ]
                 ),
-                static::createConfiguredMock(
+                $this->createConfiguredMock(
                     Price::class,
                     [
                         'getTaxRate' => self::SHIPPING_COSTS_TAX_RATE + 1,
                         'getTax' => 1.1,
                     ]
                 ),
-                static::createConfiguredMock(
+                $this->createConfiguredMock(
                     Price::class,
                     [
                         'getTaxRate' => self::SHIPPING_COSTS_TAX_RATE + 1,
                         'getTax' => 1.1,
                     ]
                 ),
-                static::createConfiguredMock(
+                $this->createConfiguredMock(
                     Price::class,
                     [
                         'getTaxRate' => self::SHIPPING_COSTS_TAX_RATE - 1,
@@ -307,21 +307,21 @@ class TaxAggregatorTest extends TestCase
         ?string $voucherTaxMode = null,
         ?string $voucherTaxConfig = null
     ): void {
-        $connection = static::createConfiguredMock(
+        $connection = $this->createConfiguredMock(
             Connection::class,
             [
                 'fetchOne' => $voucherTaxMode,
             ]
         );
 
-        $contextService = static::createConfiguredMock(
+        $contextService = $this->createConfiguredMock(
             ContextServiceInterface::class,
             [
-                'getContext' => static::createConfiguredMock(
+                'getContext' => $this->createConfiguredMock(
                     ShopContextInterface::class,
                     [
-                        'getTaxRule' => static::createConfiguredMock(
-                            \Shopware\Bundle\StoreFrontBundle\Struct\Tax::class,
+                        'getTaxRule' => $this->createConfiguredMock(
+                            Tax::class,
                             [
                                 'getTax' => (float) $voucherTaxMode,
                             ]
@@ -419,14 +419,14 @@ class TaxAggregatorTest extends TestCase
     /**
      * @dataProvider taxSumDataProvider
      *
-     * @param array<string, float>                                                                                                                                              $expected
+     * @param array<numeric-string, float>                                                                                                                                      $expected
      * @param array{content?: non-empty-array, sShippingcostsTax?: float, sShippingcostsTaxProportional?: array<Price>, sShippingcostsNet: float, sShippingcostsWithTax: float} $basket
      */
     public function testTaxSum(array $expected, array $basket): void
     {
         $subject = new TaxAggregator(
-            static::createStub(Connection::class),
-            static::createStub(ContextServiceInterface::class)
+            $this->createStub(Connection::class),
+            $this->createStub(ContextServiceInterface::class)
         );
 
         static::assertSame(

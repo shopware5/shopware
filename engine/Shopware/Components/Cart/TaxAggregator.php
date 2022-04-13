@@ -183,8 +183,8 @@ class TaxAggregator implements TaxAggregatorInterface
             array_diff_key($shippingCostsTaxSum, $positionTaxSum)
         );
 
-        /** @var callable(array<numeric-string, float> $carry, numeric-string $taxRate): array<numeric-string, float> $callback */
-        $callback = static function (array $carry, string $taxRate) use ($positionTaxSum, $shippingCostsTaxSum): array {
+        /** @var callable(array<numeric-string, float> $carry, int|numeric-string $taxRate): array<numeric-string, float> $callback */
+        $callback = static function (array $carry, $taxRate) use ($positionTaxSum, $shippingCostsTaxSum): array {
             $carry[$taxRate] = $positionTaxSum[$taxRate] + $shippingCostsTaxSum[$taxRate];
 
             return $carry;

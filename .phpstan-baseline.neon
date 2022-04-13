@@ -2101,11 +2101,6 @@ parameters:
 			path: engine/Library/Enlight/Loader.php
 
 		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
 			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap.php
@@ -10466,67 +10461,12 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/ConfigHandler/File.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BaseUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BaseUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BlogUrlProvider\\:\\:fetchTranslations\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BlogUrlProvider\\:\\:fetchTranslations\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\BlogUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/BlogUrlProvider.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$category has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/CategoryUrlProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProvider\\:\\:isAvailableForShop\\(\\) has parameter \\$url with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/CustomUrlProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/CustomUrlProvider.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ManufacturerUrlProvider\\:\\:getManufacturersForSitemap\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ManufacturerUrlProvider\\:\\:getManufacturersForSitemap\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ManufacturerUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ManufacturerUrlProvider.php
-
-		-
-			message: "#^Call to an undefined method Doctrine\\\\DBAL\\\\Driver\\\\Connection\\:\\:createQueryBuilder\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\ProductUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/ProductUrlProvider.php
 
@@ -10537,11 +10477,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:getSitesByShopId\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\StaticUrlProvider\\:\\:reset\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
@@ -10714,11 +10649,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\UrlFilterInterface\\:\\:addFilterContainer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/UrlFilterInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\UrlProviderInterface\\:\\:reset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/UrlProviderInterface.php
 
 		-
 			message: "#^Cannot access offset 'size' on array\\|false\\.$#"
@@ -13519,6 +13449,11 @@ parameters:
 			message: "#^Method Shopware\\\\Commands\\\\GenerateAttributesCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/GenerateAttributesCommand.php
+
+		-
+			message: "#^Variable \\$versions in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: engine/Shopware/Commands/GenerateMigrationCommand.php
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\GenerateProductFeedCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -16567,16 +16502,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregator\\:\\:positionsTaxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/TaxAggregator.php
-
-		-
-			message: "#^Parameter \\#2 \\$callback of function array_reduce expects callable\\(array\\<int\\|string, float\\>, int\\|string\\)\\: array\\<int\\|string, float\\>, callable\\(array\\<numeric\\-string, float\\>, numeric\\-string\\)\\: array\\<numeric\\-string, float\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/TaxAggregator.php
-
-		-
-			message: "#^Parameter \\#2 \\$callback of function array_reduce expects callable\\(array\\<string, float\\>, Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price\\)\\: array\\<string, float\\>, callable\\(array\\<numeric\\-string, float\\>, Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price\\)\\: array\\<numeric\\-string, float\\> given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/TaxAggregator.php
 
@@ -19751,16 +19676,6 @@ parameters:
 			path: engine/Shopware/Components/Model/LazyFetchModelEntity.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\LazyFetchModelEntity\\:\\:fetchLazy\\(\\) should return TModel of object\\|null but returns \\(Doctrine\\\\Persistence\\\\Proxy&TModel of object\\)\\|TModel of object\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/LazyFetchModelEntity.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\LazyFetchModelEntity\\:\\:fetchLazy\\(\\) should return TModel of object\\|null but returns Doctrine\\\\Persistence\\\\Proxy&TModel of object\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/LazyFetchModelEntity.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\LazyFetchModelEntity\\:\\:setEntityManager\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/LazyFetchModelEntity.php
@@ -20046,11 +19961,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
 
 		-
-			message: "#^Cannot access offset mixed on non\\-empty\\-array\\<int, string\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Backup\\:\\:buildAffectedTableArray\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
@@ -20117,11 +20027,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Backup\\:\\:getDirectoryList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Backup\\:\\:getDirectoryList\\(\\) should return array but returns array\\<int, string\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Backup.php
 
@@ -21621,21 +21526,6 @@ parameters:
 			path: engine/Shopware/Components/Routing/Matchers/DefaultMatcher.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Routing\\\\Router\\:\\:__construct\\(\\) has parameter \\$generators with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of method Shopware\\\\Components\\\\Routing\\\\GeneratorListInterface\\:\\:generateList\\(\\) expects array\\<array\\<string, mixed\\>\\>, array\\<array\\<string, mixed\\>\\|string\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
-			message: "#^Parameter \\#1 \\$params of method Shopware\\\\Components\\\\Routing\\\\GeneratorInterface\\:\\:generate\\(\\) expects array\\<string, mixed\\>, array\\<string, mixed\\>\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Routing/Router.php
-
-		-
 			message: "#^Cannot call method beginTransaction\\(\\) on PDO\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Session/PdoSessionHandler.php
@@ -21762,6 +21652,11 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitePageMenu\\:\\:overrideExisting\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Components/SitePageMenu.php
+
+		-
+			message: "#^Variable \\$activePages in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: engine/Shopware/Components/SitePageMenu.php
 
@@ -28906,6 +28801,11 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Listing.php
 
 		-
+			message: "#^Variable \\$showListing in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: engine/Shopware/Controllers/Frontend/Listing.php
+
+		-
 			message: "#^Method Shopware_Controllers_Frontend_Media\\:\\:fallbackAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Media.php
@@ -31112,11 +31012,6 @@ parameters:
 
 		-
 			message: "#^Method sCategories\\:\\:sGetCategoryPath\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
-			message: "#^Method sCategories\\:\\:sGetCategoryPath\\(\\) should return array but returns array\\|string\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCategories.php
 
@@ -40741,6 +40636,11 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
 
 		-
+			message: "#^Parameter \\#2 \\$callback of function preg_replace_callback expects callable\\(array\\<int\\|string, string\\>\\)\\: string, Closure\\(mixed\\)\\: int given\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
+
+		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Core/PostFilter/Bootstrap.php
@@ -42991,26 +42891,6 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundleDBAL/SearchIndexerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CategoryUrlProviderTest\\:\\:getShopContext\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContext but returns Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContextInterface\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
-			message: "#^Offset 0 does not exist on array\\<Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url\\>\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, array\\<Shopware\\\\Bundle\\\\SitemapBundle\\\\Struct\\\\Url\\>\\|null given\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CategoryUrlProviderTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:getCustomUrlProvider\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SitemapBundle/Provider/CustomUrlProviderTest.php
@@ -44357,11 +44237,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 2
-			path: tests/Functional/Components/Cart/CartPersistServiceTest.php
-
-		-
-			message: "#^Cannot access offset 'sessionID' on array\\<string, mixed\\>\\|false\\.$#"
 			count: 2
 			path: tests/Functional/Components/Cart/CartPersistServiceTest.php
 

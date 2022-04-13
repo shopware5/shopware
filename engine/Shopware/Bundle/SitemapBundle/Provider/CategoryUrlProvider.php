@@ -27,7 +27,7 @@ namespace Shopware\Bundle\SitemapBundle\Provider;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context;
 use Shopware\Models\Category\Category;
 
 class CategoryUrlProvider extends BaseUrlProvider
@@ -35,7 +35,7 @@ class CategoryUrlProvider extends BaseUrlProvider
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
+    public function getUrls(Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
             return [];
@@ -45,7 +45,6 @@ class CategoryUrlProvider extends BaseUrlProvider
         $categoryRepository = $this->modelManager->getRepository(Category::class);
         $categories = $categoryRepository->getActiveChildrenList($parentId, $shopContext->getFallbackCustomerGroup()->getId(), null, $shopContext->getShop()->getId());
 
-        /** @var array $category */
         foreach ($categories as $key => &$category) {
             if (!empty($category['external'])) {
                 unset($categories[$key]);

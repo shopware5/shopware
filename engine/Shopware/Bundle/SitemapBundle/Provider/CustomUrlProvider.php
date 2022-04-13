@@ -28,19 +28,13 @@ use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context;
 
 class CustomUrlProvider implements UrlProviderInterface
 {
-    /**
-     * @var ConfigHandler
-     */
-    private $configHandler;
+    private ConfigHandler $configHandler;
 
-    /**
-     * @var bool
-     */
-    private $allExported;
+    private bool $allExported = false;
 
     public function __construct(ConfigHandler $configHandler)
     {
@@ -50,7 +44,7 @@ class CustomUrlProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext)
+    public function getUrls(Context $routingContext, ShopContextInterface $shopContext)
     {
         if ($this->allExported) {
             return [];
@@ -87,12 +81,7 @@ class CustomUrlProvider implements UrlProviderInterface
         $this->allExported = false;
     }
 
-    /**
-     * @param int $shopId
-     *
-     * @return bool
-     */
-    private function isAvailableForShop(array $url, $shopId)
+    private function isAvailableForShop(array $url, int $shopId): bool
     {
         return \in_array((int) $url['shopId'], [$shopId, 0], true);
     }

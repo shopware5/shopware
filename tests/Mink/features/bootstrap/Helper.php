@@ -381,9 +381,12 @@ class Helper
         }
 
         $debug = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $debugClass = $debug[1]['class'] ?? '';
+        $debugType = $debug[1]['type'] ?? '';
+        $debugLine = $debug[0]['line'] ?? '';
 
         $message = [<<<EOD
-Exception thrown in {$debug[1]['class']}{$debug[1]['type']}{$debug[1]['function']}():{$debug[0]['line']}
+Exception thrown in {$debugClass}{$debugType}{$debug[1]['function']}():{$debugLine}
 
 Stacktrace:
 EOD
@@ -396,7 +399,9 @@ EOD
                 break;
             }
 
-            $message[] = "{$next['class']}{$next['type']}{$next['function']}():{$call['line']}";
+            $nextType = $next['type'] ?? '';
+            $callLine = $call['line'] ?? '';
+            $message[] = "{$next['class']}{$nextType}{$next['function']}():{$callLine}";
         }
 
         $message[] = "\r\nException:";

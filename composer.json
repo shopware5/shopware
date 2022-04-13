@@ -105,7 +105,7 @@
         "php-parallel-lint/php-var-dump-check": "^0.5",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "1.1.0",
-        "phpstan/phpstan": "1.4.2",
+        "phpstan/phpstan": "1.4.5",
         "phpstan/phpstan-doctrine": "1.2.6",
         "phpstan/phpstan-phpunit": "1.0.0",
         "phpstan/phpstan-symfony": "1.1.2",

@@ -25,22 +25,18 @@
 namespace Shopware\Components\Routing;
 
 /**
- * Interface of Shopware Router 2
- *
- * Replace the default router of shopware 4 / enlight
- *
- * @see \Symfony\Component\Routing\UrlMatcherInterface
- * @see \Symfony\Component\Routing\UrlGeneratorInterface
- * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RouterInterface.html
+ * @see \Symfony\Component\Routing\Matcher\UrlMatcherInterface
+ * @see \Symfony\Component\Routing\Generator\UrlGeneratorInterface
+ * @see https://symfony.com/doc/4.4/routing.html
  * @see \Enlight_Controller_Router
  * @see http://framework.zend.com/manual/1.12/de/zend.controller.router.html#zend.controller.router.subclassing
  */
 interface RouterInterface
 {
     /**
-     * @param array<array<string, mixed>>|array<string> $list
+     * @param array<int, array<string, mixed>>|array<int, string> $list
      *
-     * @return array<string>
+     * @return array<int, string>
      */
     public function generateList(array $list, Context $context = null);
 

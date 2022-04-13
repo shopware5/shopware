@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,17 +28,19 @@ namespace Shopware\Bundle\SitemapBundle;
 
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
-use Shopware\Components\Routing;
+use Shopware\Components\Routing\Context;
 
 interface UrlProviderInterface
 {
     /**
-     * @return Url[]|null
+     * @return Url[]
      */
-    public function getUrls(Routing\Context $routingContext, ShopContextInterface $shopContext);
+    public function getUrls(Context $routingContext, ShopContextInterface $shopContext);
 
     /**
      * Resets the provider for next sitemap generation
+     *
+     * @return void
      */
     public function reset();
 }

@@ -56,9 +56,10 @@ class Router extends EnlightRouter implements RouterInterface
     protected $postFilters;
 
     /**
-     * @param MatcherInterface[]    $matchers
-     * @param PreFilterInterface[]  $preFilters
-     * @param PostFilterInterface[] $postFilters
+     * @param MatcherInterface[]                            $matchers
+     * @param GeneratorInterface[]|GeneratorListInterface[] $generators
+     * @param PreFilterInterface[]                          $preFilters
+     * @param PostFilterInterface[]                         $postFilters
      */
     public function __construct(
         Context $context,
@@ -127,13 +128,15 @@ class Router extends EnlightRouter implements RouterInterface
             }
         }
         unset($userParams);
+        /** @var array<int, array<string, mixed>> $preFilteredList */
+        $preFilteredList = $list;
 
         $urls = [];
         foreach ($this->generators as $route) {
             if ($route instanceof GeneratorListInterface) {
-                $urls = $route->generateList($list, $context);
+                $urls = $route->generateList($preFilteredList, $context);
             } elseif ($route instanceof GeneratorInterface) {
-                foreach ($list as $key => $params) {
+                foreach ($preFilteredList as $key => $params) {
                     if (isset($urls[$key]) && \is_string($urls[$key])) {
                         continue;
                     }
@@ -146,6 +149,8 @@ class Router extends EnlightRouter implements RouterInterface
             }
         }
 
+        // At this point only strings should be in the array
+        $urls = array_filter($urls, '\is_string');
         foreach ($this->postFilters as $postFilter) {
             foreach ($urls as $key => &$url) {
                 if ($postFilter instanceof PostFilterInterface) {
