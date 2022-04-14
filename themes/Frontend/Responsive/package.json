@@ -40,7 +40,7 @@
     },
     "devDependencies": {
         "grunt": "^1.4.0",
-        "grunt-contrib-clean": "1.1.0",
+        "grunt-contrib-clean": "github:gruntjs/grunt-contrib-clean#main",
         "grunt-contrib-copy": "1.0.0",
         "jest": "^27.5.1"
     }
