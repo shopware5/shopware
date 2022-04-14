@@ -47,7 +47,7 @@ class Contact extends ModelEntity
      *
      * @ORM\Column(name="mail_address", type="string", nullable=false)
      */
-    protected $mailAddress;
+    protected $mailAddress = '';
 
     public function getId(): ?int
     {
