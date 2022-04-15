@@ -39,7 +39,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\CriteriaFactoryInterface;
 use Shopware\Components\ProductStream\FacetFilterInterface;
-use Shopware\Components\ProductStream\Repository as ProductStreamRepository;
+use Shopware\Components\ProductStream\RepositoryInterface as ProductStreamRepositoryInterface;
 use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 use Shopware\Models\Emotion\Emotion;
@@ -70,7 +70,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     private CategoryRepository $categoryRepository;
 
-    private ProductStreamRepository $productStreamRepository;
+    private ProductStreamRepositoryInterface $productStreamRepository;
 
     public function __construct(
         CustomerStreamRepositoryInterface $customerStreamRepository,
@@ -85,7 +85,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         FacetFilterInterface $facetFilter,
         ManufacturerServiceInterface $manufacturerService,
         CategoryRepository $categoryRepository,
-        ProductStreamRepository $productStreamRepository
+        ProductStreamRepositoryInterface $productStreamRepository
     ) {
         $this->customerStreamRepository = $customerStreamRepository;
         $this->contextService = $contextService;
