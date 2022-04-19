@@ -214,6 +214,32 @@ class CheapestPriceTest extends TestCase
         static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
     }
 
+    public function testCheapestWithFallbackWithNumericNumber(): void
+    {
+        $number = '20003';
+        $context = $this->getContext();
+        $data = $this->getConfiguratorProduct($number, $context);
+
+        /**
+         * Switch customer group key, this customer group has
+         * no defined product prices.
+         */
+        $customerGroup = $context->getCurrentCustomerGroup();
+        $customerGroup->setKey('FORCE-FALLBACK');
+
+        $this->helper->createProduct($data);
+        $cheapestPrice = $this->helper->getListProduct($number, $context)->getCheapestPrice();
+        static::assertInstanceOf(Price::class, $cheapestPrice);
+
+        /*
+         * Expect that no FORCE-FALLBACK customer group prices found.
+         */
+        static::assertEquals('PHP', $cheapestPrice->getCustomerGroup()->getKey());
+        static::assertEquals(50, $cheapestPrice->getCalculatedPrice());
+        static::assertEquals(60, $cheapestPrice->getCalculatedPseudoPrice());
+        static::assertEquals(100, $cheapestPrice->getCalculatedReferencePrice());
+    }
+
     public function testCheapestWithPriceGroup(): void
     {
         $number = __FUNCTION__;
