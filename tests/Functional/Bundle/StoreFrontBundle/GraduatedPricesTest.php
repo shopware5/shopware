@@ -92,6 +92,25 @@ class GraduatedPricesTest extends TestCase
         }
     }
 
+    public function testFallbackGraduationWithNumericNumber(): void
+    {
+        $number = '20003';
+        $context = $this->getContext();
+        $data = $this->getProduct($number, $context);
+
+        $this->helper->createProduct($data);
+
+        $context->getCurrentCustomerGroup()->setKey('NOT');
+
+        $graduation = $this->helper->getListProduct($number, $context)->getPrices();
+
+        static::assertCount(3, $graduation);
+        foreach ($graduation as $price) {
+            static::assertEquals('BACK', $price->getCustomerGroup()->getKey());
+            static::assertGreaterThan(0, $price->getCalculatedPrice());
+        }
+    }
+
     public function testVariantGraduation(): void
     {
         $number = __FUNCTION__;
