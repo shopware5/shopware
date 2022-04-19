@@ -701,7 +701,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         }
 
         $backendPath = $this->getExistingBackendEmotionPath();
-        if ($backendPath === false) {
+        if (!\is_string($backendPath)) {
             return;
         }
 
@@ -931,10 +931,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         return $cacheRouteInstaller->removeHttpCacheRoute($route);
     }
 
-    /**
-     * @return Form
-     */
-    private function initForm()
+    private function initForm(): Form
     {
         $info = $this->Info();
         $formRepository = $this->Forms();
@@ -957,10 +954,7 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
         return $form;
     }
 
-    /**
-     * @return bool|string
-     */
-    private function getExistingBackendEmotionPath()
+    private function getExistingBackendEmotionPath(): ?string
     {
         $backendPath = $this->Path() . '/Views/emotion_components/backend/';
 
@@ -973,6 +967,6 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             return $backendPath;
         }
 
-        return false;
+        return null;
     }
 }
