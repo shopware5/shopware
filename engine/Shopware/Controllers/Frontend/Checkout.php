@@ -2151,7 +2151,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             ->where('countries.id = :countryId')
             ->setParameter(':countryId', $countryId)
             ->execute()
-            ->fetchColumn();
+            ->fetchOne();
 
         $countryTranslations = $this->get('modules')->sAdmin()->sGetCountryTranslation();
 
@@ -2167,7 +2167,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return $allowedByDefault;
         }
 
-        return $countryTranslations[$countryId]['allow_shipping'];
+        return (bool) $countryTranslations[$countryId]['allow_shipping'];
     }
 
     private function validatePostMethod(): void
