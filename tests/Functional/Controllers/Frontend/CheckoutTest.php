@@ -39,6 +39,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware_Components_Translation;
 use Symfony\Component\HttpFoundation\Request;
 
 class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
@@ -47,6 +48,8 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 
     private const PRODUCT_NUMBER = 'SW10239';
     private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
+    private const ENGLISH_SHOP_ID = 2;
+    private const COUNTRY_SETTINGS_TRANSLATION_KEY = 'config_countries';
 
     private Connection $connection;
 
@@ -221,6 +224,31 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $cart = $this->View()->getAssign('sBasket');
 
         static::assertSame(0.0, $cart[CheckoutKey::AMOUNT]);
+    }
+
+    public function testCartActionWithEnglishTranslationAndWithTranslatedCountrySettings(): void
+    {
+        $this->Request()->setCookie('shop', self::ENGLISH_SHOP_ID);
+
+        $this->getContainer()->get(Shopware_Components_Translation::class)->write(
+            self::ENGLISH_SHOP_ID,
+            self::COUNTRY_SETTINGS_TRANSLATION_KEY,
+            1,
+            [
+                self::ENGLISH_SHOP_ID => [
+                    'allow_shipping' => '1',
+                ],
+            ]
+        );
+
+        $this->dispatch('/checkout/cart');
+
+        $cart = $this->View()->getAssign('sBasket');
+
+        static::assertSame(0.0, $cart[CheckoutKey::AMOUNT]);
+
+        $this->Request()->clearCookies();
+        $this->connection->delete('s_core_translations', ['objecttype' => self::COUNTRY_SETTINGS_TRANSLATION_KEY]);
     }
 
     public function testRedirectShippingPaymentPageOnEmptyBasket(): void
