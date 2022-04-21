@@ -33,9 +33,11 @@ use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Exception;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
 use Shopware\Models\Shop\Shop;
+use Shopware\Models\Tax\Tax;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Plugins_Backend_Auth_Bootstrap as AuthPlugin;
@@ -47,8 +49,10 @@ class OrderTest extends ControllerTestCase
     use DatabaseTransactionBehaviour;
 
     private const TAX_RULE_ID = 9999;
+    private const ORDER_DETAIL_ID = 6789;
     private const ORDER_ID = 12345;
     private const CUSTOMER_ID = 9999;
+    private const NEW_TAX_ID = 1234;
 
     private Connection $connection;
 
@@ -251,6 +255,48 @@ class OrderTest extends ControllerTestCase
         static::assertTrue($this->View()->getAssign('success'), (string) $this->View()->getAssign('message'));
 
         static::assertSame($expectedTaxRate, $data['taxRate']);
+    }
+
+    public function testSavePositionActionWithDifferentTax(): void
+    {
+        $this->prepareTestSavePositionActionWithDifferentTax();
+
+        $order = $this->modelManager->find(Order::class, self::ORDER_ID);
+        static::assertInstanceOf(Order::class, $order);
+
+        $this->Request()->setMethod(Request::METHOD_POST);
+        $this->Request()->setPost([
+            'id' => self::ORDER_DETAIL_ID,
+            'orderId' => self::ORDER_ID,
+            'mode' => 0,
+            'articleId' => 141,
+            'articleDetailId' => null,
+            'articleNumber' => 'SW10141',
+            'articleName' => 'Fahrerhandschuh aus Peccary Leder',
+            'quantity' => 1,
+            'statusId' => 0,
+            'statusDescription' => '',
+            'price' => 70.58,
+            'taxId' => self::NEW_TAX_ID,
+            'taxRate' => 0,
+            'taxDescription' => '',
+            'inStock' => 0,
+            'total' => 70.58,
+            'changed' => $order->getChanged()->format(DateTimeInterface::ISO8601),
+        ]);
+
+        $this->authPlugin->setNoAuth();
+        $this->dispatch('/backend/order/savePosition');
+
+        $order = $this->modelManager->find(Order::class, self::ORDER_ID);
+        static::assertInstanceOf(Order::class, $order);
+        $firstDetail = $order->getDetails()->first();
+        static::assertInstanceOf(Detail::class, $firstDetail);
+        static::assertSame(self::ORDER_DETAIL_ID, $firstDetail->getId());
+        $tax = $firstDetail->getTax();
+        static::assertInstanceOf(Tax::class, $tax);
+
+        static::assertSame(self::NEW_TAX_ID, $tax->getId());
     }
 
     /**
@@ -802,6 +848,29 @@ class OrderTest extends ControllerTestCase
 
         $orderSql = file_get_contents(__DIR__ . '/_fixtures/order/order.sql');
         static::assertIsString($orderSql);
-        $this->connection->executeStatement($orderSql, ['orderId' => self::ORDER_ID, 'customerId' => self::CUSTOMER_ID]);
+        $this->connection->executeStatement($orderSql, [
+            'orderDetailId' => self::ORDER_DETAIL_ID,
+            'orderId' => self::ORDER_ID,
+            'customerId' => self::CUSTOMER_ID,
+        ]);
+    }
+
+    private function prepareTestSavePositionActionWithDifferentTax(): void
+    {
+        $taxRuleSQL = file_get_contents(__DIR__ . '/_fixtures/order/new_tax.sql');
+        static::assertIsString($taxRuleSQL);
+        $this->connection->executeStatement($taxRuleSQL, ['taxRuleId' => self::NEW_TAX_ID]);
+
+        $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
+        static::assertIsString($customerSql);
+        $this->connection->executeStatement($customerSql, ['customerId' => self::CUSTOMER_ID]);
+
+        $orderSql = file_get_contents(__DIR__ . '/_fixtures/order/order.sql');
+        static::assertIsString($orderSql);
+        $this->connection->executeStatement($orderSql, [
+            'orderDetailId' => self::ORDER_DETAIL_ID,
+            'orderId' => self::ORDER_ID,
+            'customerId' => self::CUSTOMER_ID,
+        ]);
     }
 }

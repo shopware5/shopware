@@ -2032,10 +2032,16 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      */
     private function checkTaxRule(array $data, Order $order): array
     {
-        if (empty($data['taxId'])) {
+        $taxId = $data['taxId'];
+        if (empty($taxId)) {
             unset($data['tax']);
 
             return $data;
+        }
+        $tax = $this->getManager()->find(Tax::class, $taxId);
+        if ($tax instanceof Tax) {
+            $data['tax'] = $tax;
+            $data['taxRate'] = (float) $tax->getTax();
         }
 
         $shop = $order->getShop();
@@ -2058,7 +2064,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $areaId,
             $countryId
         );
-        $taxRule = $shopContext->getTaxRule($data['taxId']);
+        $taxRule = $shopContext->getTaxRule($taxId);
         if ($taxRule instanceof TaxStruct) {
             $data['taxRate'] = (float) $taxRule->getTax();
         }
