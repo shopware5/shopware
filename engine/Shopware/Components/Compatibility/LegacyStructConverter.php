@@ -337,7 +337,7 @@ class LegacyStructConverter
         $promotion['linkVariant'] = $this->config->get('baseFile') .
             '?sViewport=detail&sArticle=' . $promotion['articleID'] . '&number=' . $promotion['ordernumber'];
 
-        if ($this->config->get('useShortDescriptionInListing') && \strlen($promotion['description']) > 5) {
+        if ($this->config->get('useShortDescriptionInListing') && \strlen($promotion['description'] ?? '') > 5) {
             $promotion['description_long'] = $promotion['description'];
         }
 
