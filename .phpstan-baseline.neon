@@ -20701,11 +20701,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/Bootstrap.php
 
 		-
-			message: "#^Parameter \\#1 \\$directory of class DirectoryIterator constructor expects string, string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Bootstrap.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\CachedConfigReader\\:\\:getByPluginName\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/CachedConfigReader.php
@@ -54101,36 +54096,11 @@ parameters:
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:stripxssDataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testSql\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testStripTagsDisabled\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testStripTagsDisabled\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testStripTagsEnabled\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testStripTagsEnabled\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Plugin\\\\Frontend\\\\InputFilter\\\\FilterTest\\:\\:testXssFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Plugin/Frontend/InputFilter/FilterTest.php

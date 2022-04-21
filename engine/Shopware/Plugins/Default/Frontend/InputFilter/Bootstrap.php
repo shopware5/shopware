@@ -148,21 +148,32 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         );
 
         $whiteList = \array_key_exists($route, $whiteList) ? $whiteList[$route] : [];
-
         foreach ($process as $key => $val) {
             foreach ($val as $k => $v) {
                 unset($process[$key][$k]);
                 $stripTags = \in_array($k, $whiteList) ? false : $stripTagsConf;
-                $filteredKey = self::filterValue($k, $regex, $stripTags);
+
+                if (\is_string($k)) {
+                    $filteredKey = self::filterValue($k, $regex, $stripTags);
+                } else {
+                    $filteredKey = $k;
+                }
+
                 if ($filteredKey === '' || $filteredKey === null) {
                     continue;
                 }
+
                 if (\is_array($v)) {
-                    $process[$key][$filteredKey] = $v;
-                    $process[] = &$process[$key][self::filterValue($k, $regex, $stripTags)];
-                } else {
-                    $process[$key][$filteredKey] = self::filterValue($v, $regex, $stripTags);
+                    $process[$key][$filteredKey] = self::filterArrayValue($v, $regex, $stripTags);
+                    continue;
                 }
+
+                if (\is_string($v)) {
+                    $process[$key][$filteredKey] = self::filterValue($v, $regex, $stripTags);
+                    continue;
+                }
+
+                $process[$key][$filteredKey] = $v;
             }
         }
 
@@ -185,16 +196,54 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      */
     public static function filterValue($value, $regex, $stripTags = true)
     {
-        if (!empty($value)) {
-            if ($stripTags) {
-                $value = strip_tags($value);
-            }
-            if (preg_match($regex, $value)) {
-                $value = null;
-            }
+        if (empty($value)) {
+            return null;
+        }
+
+        if ($stripTags) {
+            $value = strip_tags($value);
+        }
+
+        if (preg_match($regex, $value)) {
+            return null;
         }
 
         return $value;
+    }
+
+    /**
+     * @param array<string|int, mixed> $value
+     *
+     * @return array<string|int, mixed>|null
+     */
+    public static function filterArrayValue(array $value, string $regex, bool $stripTags = true): ?array
+    {
+        $newReturn = [];
+        foreach ($value as $valueKey => $valueValue) {
+            if (\is_int($valueKey)) {
+                $filteredKey = $valueKey;
+            } else {
+                $filteredKey = self::filterValue($valueKey, $regex, $stripTags);
+            }
+
+            if ($filteredKey === '' || $filteredKey === null) {
+                continue;
+            }
+
+            $filteredValue = $valueValue;
+
+            if (\is_array($valueValue)) {
+                $filteredValue = self::filterArrayValue($valueValue, $regex, $stripTags);
+            }
+
+            if (\is_string($valueValue)) {
+                $filteredValue = self::filterValue($valueValue, $regex, $stripTags);
+            }
+
+            $newReturn[$filteredKey] = $filteredValue;
+        }
+
+        return $newReturn;
     }
 
     public function getCapabilities()
