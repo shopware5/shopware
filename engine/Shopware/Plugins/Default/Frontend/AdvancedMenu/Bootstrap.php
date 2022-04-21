@@ -351,8 +351,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     private function convertCategories(array $categories): array
     {
         $converter = Shopware()->Container()->get(LegacyStructConverter::class);
+        $eventManager = Shopware()->Container()->get('events');
 
-        return array_map(function (Category $category) use ($converter) {
+        return array_map(function (Category $category) use ($converter, $eventManager) {
             $data = $converter->convertCategoryStruct($category);
 
             $data['flag'] = false;
@@ -363,7 +364,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
                 $data['link'] = $category->getExternalLink();
             }
 
-            return $data;
+            return $eventManager->filter('Shopware_Plugins_AdvancedMenu_ConvertCategory', $data, [
+                'category' => $category,
+            ]);
         }, $categories);
     }
 }
