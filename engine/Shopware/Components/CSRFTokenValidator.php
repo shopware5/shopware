@@ -28,12 +28,21 @@ use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Action;
 use Enlight_Controller_ActionEventArgs as ActionEventArgs;
 use Enlight_Event_EventArgs;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class CSRFTokenValidator implements SubscriberInterface
 {
+    public const CSRF_SESSION_KEY = '__csrf_token-';
+
+    public const CSRF_TOKEN_ARGUMENT = '__csrf_token';
+
+    public const CSRF_TOKEN_HEADER = 'X-CSRF-Token';
+
     /**
      * @var ContainerInterface
      */
@@ -42,7 +51,7 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * @var string
      */
-    private $tokenName = 'X-CSRF-Token';
+    private $tokenName = self::CSRF_TOKEN_HEADER;
 
     /**
      * @var bool
@@ -54,15 +63,26 @@ class CSRFTokenValidator implements SubscriberInterface
      */
     private $isEnabledBackend;
 
+    private ContextServiceInterface $contextService;
+
+    private Shopware_Components_Config $componentsConfig;
+
     /**
      * @param bool $isEnabledFrontend
      * @param bool $isEnabledBackend
      */
-    public function __construct(ContainerInterface $container, $isEnabledFrontend = true, $isEnabledBackend = true)
-    {
+    public function __construct(
+        ContainerInterface $container,
+        ContextServiceInterface $contextService,
+        Shopware_Components_Config $componentsConfig,
+        $isEnabledFrontend = true,
+        $isEnabledBackend = true
+    ) {
         $this->container = $container;
         $this->isEnabledFrontend = (bool) $isEnabledFrontend;
         $this->isEnabledBackend = (bool) $isEnabledBackend;
+        $this->contextService = $contextService;
+        $this->componentsConfig = $componentsConfig;
     }
 
     /**
@@ -98,7 +118,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $token = $controller->Request()->getHeader($this->tokenName);
 
         if (empty($token)) {
-            $token = $controller->Request()->getParam('__csrf_token');
+            $token = $controller->Request()->getParam(self::CSRF_TOKEN_ARGUMENT);
         }
 
         if (!hash_equals($expected, $token)) {
@@ -120,6 +140,7 @@ class CSRFTokenValidator implements SubscriberInterface
         /** @var Enlight_Controller_Action $controller */
         $controller = $args->getSubject();
         $request = $controller->Request();
+        $response = $controller->Response();
 
         // do not check internal sub-requests or validated requests
         if ($request->getAttribute('_isSubrequest') || $request->getAttribute('isValidated')) {
@@ -139,7 +160,7 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        if (!$this->checkRequest($request)) {
+        if (!$this->checkRequest($request, $response)) {
             throw new CSRFTokenValidationException(sprintf('The provided X-CSRF-Token for path "%s" is invalid. Please go back, reload the page and try again.', $request->getRequestUri()));
         }
 
@@ -147,34 +168,53 @@ class CSRFTokenValidator implements SubscriberInterface
         $request->setAttribute('isValidated', true);
     }
 
-    /**
-     * Check if the submitted CSRF token matches with the token stored in the cookie or header
-     *
-     * @return bool
-     */
-    private function checkRequest(Request $request)
+    public function regenerateToken(Request $request, Response $response): string
     {
-        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
-        $name = '__csrf_token-' . $context->getShop()->getId();
+        $context = $this->contextService->getShopContext();
 
-        if ($context->getShop()->getParentId() && $this->container->get(Shopware_Components_Config::class)->get('shareSessionBetweenLanguageShops')) {
-            $name = '__csrf_token-' . $context->getShop()->getParentId();
+        $name = self::CSRF_SESSION_KEY . $context->getShop()->getId();
+
+        if ($context->getShop()->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
+            $name = self::CSRF_SESSION_KEY . $context->getShop()->getParentId();
         }
 
-        $token = $request->cookies->get($name);
+        $token = Random::getAlphanumericString(30);
+        $this->container->get('session')->set($name, $token);
+        $response->headers->setCookie(new Cookie($name, $token, 0, '/', null, $request->isSecure(), false));
 
-        $requestToken = $request->get('__csrf_token', $request->headers->get('X-CSRF-Token'));
+        return $token;
+    }
 
-        return hash_equals($token, $requestToken);
+    /**
+     * Check if the submitted CSRF token in cookie or header matches with the token stored in the session
+     */
+    private function checkRequest(Request $request, Response $response): bool
+    {
+        $context = $this->contextService->getShopContext();
+        $name = self::CSRF_SESSION_KEY . $context->getShop()->getId();
+
+        if ($context->getShop()->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
+            $name = self::CSRF_SESSION_KEY . $context->getShop()->getParentId();
+        }
+
+        $token = $this->container->get('session')->get($name);
+
+        $requestToken = $request->get(self::CSRF_TOKEN_ARGUMENT, $request->headers->get(self::CSRF_TOKEN_HEADER));
+
+        $isValidToken = hash_equals($token, $requestToken);
+
+        if (!$isValidToken) {
+            $this->regenerateToken($request, $response);
+        }
+
+        return $isValidToken;
     }
 
     /**
      * Check if the controller has opted in for CSRF whitelisting and if the
      * called action is on the whitelist
-     *
-     * @return bool
      */
-    private function isWhitelisted(Enlight_Controller_Action $controller)
+    private function isWhitelisted(Enlight_Controller_Action $controller): bool
     {
         if (!($controller instanceof CSRFWhitelistAware)) {
             return false;
@@ -191,10 +231,8 @@ class CSRFTokenValidator implements SubscriberInterface
     /**
      * Check if a controller has opted in for CSRF protection and if the called action
      * should be protected
-     *
-     * @return bool
      */
-    private function isProtected(Enlight_Controller_Action $controller)
+    private function isProtected(Enlight_Controller_Action $controller): bool
     {
         if (!($controller instanceof CSRFGetProtectionAware)) {
             return false;
