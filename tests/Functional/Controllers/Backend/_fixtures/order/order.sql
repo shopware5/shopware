@@ -10,7 +10,7 @@ VALUES (:orderId, '20003', :customerId, 95.57, 79.65, 24.99, 20.83, 20, '2021-12
 INSERT INTO `s_order_details` (`id`, `orderID`, `ordernumber`, `articleID`, `articleordernumber`, `price`, `quantity`,
                                `name`, `status`, `shipped`, `shippedgroup`, `releasedate`, `modus`, `esdarticle`,
                                `taxID`, `tax_rate`, `config`, `ean`, `unit`, `pack_unit`, `articleDetailID`)
-VALUES (12345, :orderId, '20003', 141, 'SW10141', 70.58, 1, 'Fahrerhandschuh aus Peccary Leder', 0, 0, 0,
+VALUES (:orderDetailId, :orderId, '20003', 141, 'SW10141', 70.58, 1, 'Fahrerhandschuh aus Peccary Leder', 0, 0, 0,
         '0000-00-00', 0, 0, 1, 20, '', '', '', '', 288);
 
 INSERT INTO `s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`,
