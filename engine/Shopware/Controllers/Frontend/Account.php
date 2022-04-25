@@ -544,9 +544,11 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
           FROM s_user
           WHERE id = ?';
 
-        $customer = $this->get(Connection::class)->fetchAssociative($sql, [$customerId]);
+        /* @var Connection $connection */
+        $connection = $this->get(Connection::class);
+        $customer = $connection->fetchAssociative($sql, [$customerId]);
         $email = $customer['email'];
-        $customer['attributes'] = $this->get(Connection::class)->fetchAssociative('SELECT * FROM s_user_attributes WHERE userID = ?', [$customerId]);
+        $customer['attributes'] = $connection->fetchAssociative('SELECT * FROM s_user_attributes WHERE userID = ?', [$customerId]);
 
         $context['user'] = $customer;
 
@@ -555,9 +557,21 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $mail->addTo($email);
         $mail->send();
 
+        // Invalidate existing hashes
+        $connection->update(
+            's_core_optin',
+            [
+                'datum' => (new DateTimeImmutable('-1 day'))->format(DATE_ATOM),
+            ],
+            [
+                'type' => 'swPassword',
+                'data' => $customerId,
+            ]
+        );
+
         // Add the hash to the optin table
         $sql = "INSERT INTO `s_core_optin` (`type`, `datum`, `hash`, `data`) VALUES ('swPassword', NOW(), ?, ?)";
-        Shopware()->Db()->query($sql, [$hash, $customerId]);
+        $connection->executeStatement($sql, [$hash, $customerId]);
 
         return [];
     }
@@ -580,13 +594,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             $this->View()->assign('sErrorMessages', [$ex->getMessage()]);
         }
 
-        if (!$customer instanceof Customer) {
-            $this->View()->assign('sErrorMessages', ['Customer not found']);
-
-            return;
-        }
-
-        if (!$this->Request()->isPost()) {
+        if (!$this->Request()->isPost() || !$customer instanceof Customer) {
             return;
         }
 
@@ -845,7 +853,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             ->findOneBy(['hash' => $hash, 'type' => 'swPassword']);
 
         if (!$confirmModel) {
-            throw new RuntimeException($resetPasswordNamespace->get('PasswordResetNewLinkError', 'Confirmation link not found. Please check the spelling. Note that the confirmation link is only valid for 2 hours. After that you have to require a new confirmation link.'));
+            throw new RuntimeException($resetPasswordNamespace->get('PasswordResetNewLinkError', 'Confirmation link not found. Note that the confirmation link is only valid for 2 hours. After that you have to request a new confirmation link (this process invalidates all previous confirmation links).'));
         }
 
         $customer = $this->get(ModelManager::class)->find(Customer::class, $confirmModel->getData());
