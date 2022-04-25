@@ -26,6 +26,7 @@ use Enlight_Controller_Request_RequestHttp as Request;
 use Shopware\Bundle\ControllerBundle\Exceptions\ResourceNotFoundException;
 use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfigurationInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
@@ -34,7 +35,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\CustomFacetServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\CustomSortingServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ManufacturerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Manufacturer;
-use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\CriteriaFactoryInterface;
@@ -540,7 +540,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         foreach ($facets as $facet) {
             $customFacet = $facet->getFacet();
 
-            if ($customFacet instanceof CustomFacet) {
+            if ($customFacet instanceof FacetInterface) {
                 $criteria->addFacet($customFacet);
             }
         }

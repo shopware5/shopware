@@ -1,0 +1,2 @@
+INSERT INTO `s_categories` (`parent`, `path`, `description`, `position`, `left`, `right`, `level`, `added`, `changed`, `metakeywords`, `metadescription`, `cmsheadline`, `cmstext`, `template`, `active`, `blog`, `external`, `hidefilter`, `hidetop`, `mediaID`, `product_box_layout`, `meta_title`, `stream_id`, `hide_sortings`, `sorting_ids`, `facet_ids`, `external_target`, `shops`)
+VALUES (5, '|5|3|', 'Test', NULL, 0, 0, 0, '2022-04-25 11:03:14', '2022-04-25 11:03:20', NULL, '', '', '', NULL, 1, 0, '', 0, 0, NULL, NULL, '', :streamId, 0, '', '', '', NULL);

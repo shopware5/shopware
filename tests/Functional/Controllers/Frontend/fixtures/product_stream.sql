@@ -1,0 +1,2 @@
+INSERT INTO `s_product_streams` (`name`, `conditions`, `type`, `sorting`, `description`, `sorting_id`)
+VALUES ('test', '{\"Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\ImmediateDeliveryCondition\":\"1\",\"Shopware\\\\Bundle\\\\SearchBundle\\\\Condition\\\\CategoryCondition\":{\"categoryIds\":[5]}}', 1, '\"{\\\"Shopware\\\\\\\\Bundle\\\\\\\\SearchBundle\\\\\\\\Sorting\\\\\\\\PriceSorting\\\":{\\\"direction\\\":\\\"ASC\\\"}}\"', '', 3);

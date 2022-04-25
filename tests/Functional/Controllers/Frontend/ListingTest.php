@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,18 +27,22 @@
 
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Controller_Exception;
+use Shopware\Models\Category\Category;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ListingTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
 
     /**
-     * Test that requesting an existing category-id is successfull
+     * Test that requesting an existing category-id is successful
      */
-    public function testDispatchExistingCategory()
+    public function testDispatchExistingCategory(): void
     {
         $this->dispatch('/cat/?sCategory=14');
         static::assertEquals(200, $this->Response()->getHttpResponseCode());
@@ -43,7 +50,7 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
 
     public function testDispatchExistingCategoryWithPageNotAvailable(): void
     {
-        static::expectException(Enlight_Controller_Exception::class);
+        $this->expectException(Enlight_Controller_Exception::class);
         $this->dispatch('/cat/?sCategory=14&sPage=2');
         static::assertEquals(200, $this->Response()->getHttpResponseCode());
     }
@@ -51,7 +58,7 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Test that requesting a non-existing category-id throws an error
      */
-    public function testDispatchNonExistingCategory()
+    public function testDispatchNonExistingCategory(): void
     {
         $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=4711');
@@ -62,7 +69,7 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Test that requesting an empty category-id throws an error
      */
-    public function testDispatchEmptyCategoryId()
+    public function testDispatchEmptyCategoryId(): void
     {
         $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=');
@@ -73,7 +80,7 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Test that requesting a category-id of a subshop throws an error
      */
-    public function testDispatchSubshopCategoryId()
+    public function testDispatchSubshopCategoryId(): void
     {
         $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=43');
@@ -84,7 +91,7 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Test that requesting a blog category-id creates a redirect
      */
-    public function testDispatchBlogCategory()
+    public function testDispatchBlogCategory(): void
     {
         $this->expectException('Enlight_Exception');
         $this->dispatch('/cat/?sCategory=17');
@@ -98,25 +105,28 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-11418
      */
-    public function testHomeRedirect()
+    public function testHomeRedirect(): void
     {
-        $mainCategory = Shopware()->Shop()->getCategory()->getId();
+        $mainCategory = $this->getContainer()->get('shop')->getCategory();
+        static::assertInstanceOf(Category::class, $mainCategory);
+        $mainCategoryId = $mainCategory->getId();
 
-        $this->dispatch('/cat/index/sCategory/' . $mainCategory);
+        $this->dispatch(sprintf('/cat/index/sCategory/%s', $mainCategoryId));
 
         static::assertEquals(301, $this->Response()->getHttpResponseCode());
     }
 
-    public function testManufacturerPage()
+    public function testManufacturerPage(): void
     {
         $this->dispatch('/das-blaue-haus/');
 
-        $source = $this->Response()->getBody();
+        $responseBody = $this->Response()->getBody();
+        static::assertIsString($responseBody);
 
-        static::assertStringContainsString('blaueshaus_200x200.png', $source);
+        static::assertStringContainsString('blaueshaus_200x200.png', $responseBody);
     }
 
-    public function testWithoutImageManufacturerPage()
+    public function testWithoutImageManufacturerPage(): void
     {
         $sql = <<<'SQL'
         UPDATE s_articles_supplier
@@ -124,12 +134,35 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
         WHERE img = 'media/image/blaueshaus.png';
 SQL;
 
-        Shopware()->Db()->executeUpdate($sql);
+        $this->getContainer()->get(Connection::class)->executeStatement($sql);
 
         $this->dispatch('/das-blaue-haus/');
 
-        $source = $this->Response()->getBody();
+        $responseBody = $this->Response()->getBody();
+        static::assertIsString($responseBody);
 
-        static::assertStringNotContainsString('blaueshaus_200x200.png', $source);
+        static::assertStringNotContainsString('blaueshaus_200x200.png', $responseBody);
+    }
+
+    public function testCategoryWithProductStream(): void
+    {
+        $connection = $this->getContainer()->get(Connection::class);
+
+        $createStreamSQL = file_get_contents(__DIR__ . '/fixtures/product_stream.sql');
+        static::assertIsString($createStreamSQL);
+        $connection->executeStatement($createStreamSQL);
+        $streamId = (int) $connection->lastInsertId();
+
+        $createCategoryWithStreamSQL = file_get_contents(__DIR__ . '/fixtures/category_with_product_stream.sql');
+        static::assertIsString($createCategoryWithStreamSQL);
+        $connection->executeStatement($createCategoryWithStreamSQL, ['streamId' => $streamId]);
+        $categoryId = (int) $connection->lastInsertId();
+
+        $this->dispatch(sprintf('/cat/?sCategory=%d', $categoryId));
+
+        static::assertEquals(200, $this->Response()->getHttpResponseCode());
+        $responseBody = $this->Response()->getBody();
+        static::assertIsString($responseBody);
+        static::assertStringContainsString('filter-panel--content', $responseBody, 'No filters available in the HTML');
     }
 }
