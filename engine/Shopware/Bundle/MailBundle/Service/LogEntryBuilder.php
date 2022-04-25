@@ -227,7 +227,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
         foreach ($knownRecipients as $recipient) {
             unset($unknownRecipients[$recipient['mail_address']]);
 
-            $associatedContacts[] = $this->entityManager->getPartialReference(
+            $associatedContacts[] = $this->entityManager->getReference(
                 Contact::class,
                 $recipient['id']
             );
@@ -239,7 +239,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
 
             $this->persistContact($contact);
 
-            $associatedContacts[] = $this->entityManager->getPartialReference(
+            $associatedContacts[] = $this->entityManager->getReference(
                 Contact::class,
                 $contact->getId()
             );
