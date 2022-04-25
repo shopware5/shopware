@@ -4,6 +4,9 @@
     {if $NotifyValid == true}
         {$messageType="success"}
         {s name="DetailNotifyInfoValid" assign="messageContent"}{/s}
+    {elseif $NotifyCaptchaError == true}
+        {$messageType="error"}
+        {s name='DetailNotifyCaptchaInvalid' assign="messageContent"}{/s}
     {elseif $NotifyInvalid == true && $NotifyAlreadyRegistered != true}
         {$messageType="warning"}
         {s name="DetailNotifyInfoInvalid" assign="messageContent"}{/s}
@@ -38,6 +41,15 @@
                     <button type="submit" class="notification--button btn is--center block">
                         <i class="icon--mail"></i>
                     </button>
+                {/block}
+
+                {* Captcha *}
+                {block name='frontend_account_index_form_captcha'}
+                    <div class="is--align-center notification--captcha">
+                        {$captchaName = {config name="notificationCaptchaConfig"}}
+                        {$captchaHasError = $NotifyCaptchaError}
+                        {include file="widgets/captcha/custom_captcha.tpl" captchaName=$captchaName captchaHasError=$captchaHasError}
+                    </div>
                 {/block}
 
                 {* Data protection information *}

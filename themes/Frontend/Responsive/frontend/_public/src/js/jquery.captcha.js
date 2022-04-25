@@ -109,6 +109,8 @@
                 cache: false,
                 success: function (response) {
                     $el.html(response);
+                    $el.parent('div').addClass('panel--body is--wide');
+                    $el.parent('div').css('display', 'inline-block');
                     $.publish('plugin/swCaptcha/onSendRequestSuccess', [me]);
                 }
             });

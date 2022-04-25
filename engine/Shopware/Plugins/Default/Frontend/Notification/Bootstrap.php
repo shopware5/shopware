@@ -22,6 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Shopware\Components\Captcha\CaptchaValidator;
+use Shopware\Components\Captcha\NoCaptcha;
 use Shopware\Components\Random;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Validator\EmailValidator;
@@ -35,6 +38,8 @@ use Shopware\Components\Validator\EmailValidator;
  */
 class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
+    private const CONFIG_NOTIFY_CAPTCHA = 'notificationCaptchaConfig';
+
     /**
      * Installation of plugin
      * Create-Events to include custom code on product detail page
@@ -95,7 +100,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         if (!empty($notificationProducts)) {
             $sql = 'SELECT `ordernumber` FROM `s_articles_details` WHERE `articleID`=?';
-            $ordernumbers = $this->get('dbal_connection')->fetchColumn($sql, [$id]);
+            $ordernumbers = $this->get(Connection::class)->fetchColumn($sql, [$id]);
 
             if (!empty($ordernumbers)) {
                 foreach ($ordernumbers as $ordernumber) {
@@ -123,7 +128,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      *
      * @static
      *
-     * @return
+     * @throws Exception
      */
     public function onNotifyAction(Enlight_Event_EventArgs $args)
     {
@@ -138,8 +143,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $sError = false;
         $action->View()->assign('NotifyEmailError', false);
         $notifyOrderNumber = $action->Request()->getParam('notifyOrdernumber');
-        /** @var \Doctrine\DBAL\Connection $connection */
-        $connection = $this->get('dbal_connection');
+        $connection = $this->get(Connection::class);
 
         /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
         $session = $this->get('session');
@@ -147,6 +151,19 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $sNotificatedArticles = $session->get('sNotificatedArticles', []);
 
         if (!empty($notifyOrderNumber)) {
+            $captchaValidator = $this->get(CaptchaValidator::class);
+            $config = $this->get(Shopware_Components_Config::class);
+
+            if ($config->get(self::CONFIG_NOTIFY_CAPTCHA) !== NoCaptcha::CAPTCHA_METHOD) {
+                if (!empty($config->get('CaptchaColor'))) {
+                    if (!$captchaValidator->validateByName($config->get(self::CONFIG_NOTIFY_CAPTCHA), $action->Request())) {
+                        $sError = true;
+                        $action->View()->assign('NotifyCaptchaError', true);
+                        $action->View()->assign('ShowNotification', true);
+                    }
+                }
+            }
+
             $validator = $this->get(EmailValidator::class);
             if (empty($email) || !$validator->isValid($email)) {
                 $sError = true;
@@ -219,7 +236,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             }
         }
 
-        return $action->forward('index');
+        $action->forward('index');
     }
 
     /**
@@ -237,8 +254,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         /** @var Enlight_Controller_Action $action */
         $action = $args->getSubject();
 
-        /** @var \Doctrine\DBAL\Connection $db */
-        $db = $this->get('dbal_connection');
+        /** @var Connection $db */
+        $db = $this->get(Connection::class);
 
         /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
         $session = $this->get('session');
@@ -329,7 +346,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
     {
         $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
 
-        $conn = $this->get(\Doctrine\DBAL\Connection::class);
+        $conn = $this->get(Connection::class);
 
         $notifications = $conn->createQueryBuilder()
             ->select(
