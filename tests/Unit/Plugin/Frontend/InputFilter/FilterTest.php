@@ -229,6 +229,10 @@ class FilterTest extends TestCase
                 'input' => 'jemand@fara-data-foo.com',
                 'expected' => 'jemand@fara-data-foo.com',
             ],
+            [
+                'input' => '',
+                'expected' => '',
+            ],
         ];
     }
 
