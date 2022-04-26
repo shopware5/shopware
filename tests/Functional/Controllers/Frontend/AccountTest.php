@@ -154,6 +154,33 @@ class AccountTest extends ControllerTestCase
         static::assertNotNull($response);
     }
 
+    /**
+     * Asserts, that no password change takes place, when an old hash is used.
+     */
+    public function testExistingHashIsInvalidated(): void
+    {
+        $hash = $this->getNextResetHash('test@example.com');
+        $secondHash = $this->getNextResetHash('test@example.com');
+        $before = $this->getPasswordForEmail('test@example.com');
+
+        $this->Request()
+            ->setMethod('POST')
+            ->setPost(
+                [
+                    'hash' => $hash,
+                    'password' => [
+                        'password' => 'fd12179f-d454-42e4-ae90-9271f806088d',
+                        'passwordConfirmation' => 'fd12179f-d454-42e4-ae90-9271f806088d',
+                    ],
+                ]
+            );
+        $this->dispatch('account/resetPassword');
+
+        $changed = $this->getPasswordForEmail('test@example.com');
+
+        static::assertSame($before, $changed);
+    }
+
     private function getNextResetHash(string $mail): string
     {
         // Request a variant that is not the default one
@@ -173,6 +200,6 @@ class AccountTest extends ControllerTestCase
 
     private function getPasswordForEmail(string $email): ?string
     {
-        return $this->connection->fetchOne('SELECT `password` FROM `s_user` WHERE `email` = :email', ['email' => $email]);
+        return $this->connection->fetchOne('SELECT `password` FROM `s_user` WHERE `email` = :email', ['email' => $email]) ?: null;
     }
 }
