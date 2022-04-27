@@ -28926,11 +28926,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Search.php
 
 		-
-			message: "#^Call to an undefined method Shopware\\\\Components\\\\Model\\\\QueryBuilder\\:\\:execute\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:convertSite\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
@@ -29001,22 +28996,12 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:getSupplierForSitemap\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:getSupplierPages\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:getTranslationKeys\\(\\) has parameter \\$array with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:indexAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
@@ -33541,16 +33526,6 @@ parameters:
 			path: engine/Shopware/Models/Category/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getCategoryPathQuery\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getCategoryPathQuery\\(\\) has parameter \\$fields with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getFullChildrenList\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Category/Repository.php
@@ -33566,32 +33541,7 @@ parameters:
 			path: engine/Shopware/Models/Category/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getPathById\\(\\) has parameter \\$field with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getPathById\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
-			message: "#^Parameter \\#2 \\$fallback of method Shopware_Components_Translation\\:\\:readWithFallback\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
-			message: "#^Parameter \\#2 \\$field of method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getCategoryPathBefore\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
-			message: "#^Parameter \\#3 \\$separator of method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getCategoryPathBefore\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
-			message: "#^Variable \\$translations in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Category/Repository.php
 

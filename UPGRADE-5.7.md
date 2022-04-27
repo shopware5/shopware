@@ -10,8 +10,13 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Additions
 
+* Added missing dependency `doctrine/annotations`, which was an indirect dependency before
+
 ### Changes
 
+* Updated `doctrine/common` to version 3.3.0
+* Updated `doctrine/dbal` to version 2.13.8
+* Updated `doctrine/persistence` to version 2.5.1
 * Updated `elasticsearch/elasticsearch` to version 7.17.0
 * Updated `phpunit/phpunit` to version 9.5.20
 * Updated `symfony/browser-kit` to version 4.4.37
@@ -33,7 +38,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/validator` to version 4.4.41
 * Updated `symfony/web-link` to version 4.4.37
 * Updated several indirect dependencies
-
 
 ### Removals
 
