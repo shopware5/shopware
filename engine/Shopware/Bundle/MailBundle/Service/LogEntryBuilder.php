@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -48,20 +50,11 @@ class LogEntryBuilder implements LogEntryBuilderInterface
     public const SHOP_ASSOCIATION = 'shop';
     public const SHOP_ID_ASSOCIATION = 'shopId';
 
-    /**
-     * @var EntityManagerInterface
-     */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    /**
-     * @var MailRepository
-     */
-    private $mailRepository;
+    private MailRepository $mailRepository;
 
-    /**
-     * @var OrderRepository
-     */
-    private $orderRepository;
+    private OrderRepository $orderRepository;
 
     public function __construct(EntityManagerInterface $entityManager)
     {
@@ -77,9 +70,9 @@ class LogEntryBuilder implements LogEntryBuilderInterface
     {
         $logEntry = new Log();
 
-        $logEntry->setSubject(iconv_mime_decode($mail->getSubject()));
+        $logEntry->setSubject((string) iconv_mime_decode($mail->getSubject()));
         $logEntry->setSender($mail->getFrom());
-        $logEntry->setSentAt(new DateTime($mail->getDate()));
+        $logEntry->setSentAt(new DateTime((string) $mail->getDate()));
         $logEntry->setContentText($mail->getPlainBodyText());
 
         if ($mail->getBodyHtml() instanceof Zend_Mime_Part) {
@@ -111,7 +104,6 @@ class LogEntryBuilder implements LogEntryBuilderInterface
 
     protected function assignOrder(Log $logEntry, Enlight_Components_Mail $mail): void
     {
-        /** @var Order|null $order */
         $order = $this->resolveOrderByAssociation($mail);
 
         if ($order !== null) {
@@ -120,7 +112,6 @@ class LogEntryBuilder implements LogEntryBuilderInterface
             return;
         }
 
-        /** @var Order|null $order */
         $order = $this->resolveOrderByType($logEntry->getType());
 
         if ($order !== null) {
@@ -137,7 +128,6 @@ class LogEntryBuilder implements LogEntryBuilderInterface
         }
 
         if ($mail->getAssociation(self::SHOP_ID_ASSOCIATION) !== null) {
-            /** @var Shop $shop */
             $shop = $this->entityManager->getPartialReference(
                 Shop::class,
                 $mail->getAssociation(self::SHOP_ID_ASSOCIATION)
@@ -227,10 +217,13 @@ class LogEntryBuilder implements LogEntryBuilderInterface
         foreach ($knownRecipients as $recipient) {
             unset($unknownRecipients[$recipient['mail_address']]);
 
-            $associatedContacts[] = $this->entityManager->getReference(
+            $contact = $this->entityManager->getReference(
                 Contact::class,
                 $recipient['id']
             );
+            if ($contact instanceof Contact) {
+                $associatedContacts[] = $contact;
+            }
         }
 
         foreach (array_keys($unknownRecipients) as $recipient) {
@@ -239,13 +232,15 @@ class LogEntryBuilder implements LogEntryBuilderInterface
 
             $this->persistContact($contact);
 
-            $associatedContacts[] = $this->entityManager->getReference(
+            $fetchedContact = $this->entityManager->getReference(
                 Contact::class,
                 $contact->getId()
             );
+            if ($fetchedContact instanceof Contact) {
+                $associatedContacts[] = $fetchedContact;
+            }
         }
 
-        /** @var ArrayCollection<Contact> $collection */
         $collection = new ArrayCollection($associatedContacts);
         $logEntry->setRecipients($collection);
     }
@@ -275,8 +270,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
             return;
         }
 
-        $orderRepository = $this->entityManager->getRepository(Order::class);
-        $documents = $orderRepository->getDocuments([$logEntry->getOrder()->getId()]);
+        $documents = $this->entityManager->getRepository(Order::class)->getDocuments([$logEntry->getOrder()->getId()]);
         $filenameIdMap = [];
 
         foreach ($documents as $document) {
@@ -287,15 +281,15 @@ class LogEntryBuilder implements LogEntryBuilderInterface
             }
         }
 
-        /** @var Zend_Mime_Part $part */
         foreach ($mail->getParts() as $part) {
             if (isset($filenameIdMap[$part->filename])) {
-                /** @var Document $document */
                 $document = $this->entityManager->getPartialReference(
                     Document::class,
                     $filenameIdMap[$part->filename]
                 );
-                $logEntry->addDocument($document);
+                if ($document instanceof Document) {
+                    $logEntry->addDocument($document);
+                }
             }
         }
     }

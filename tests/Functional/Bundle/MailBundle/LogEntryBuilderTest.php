@@ -40,26 +40,45 @@ class LogEntryBuilderTest extends TestCase
     use DatabaseTransactionBehaviour;
     use MailBundleTestTrait;
 
+    private const TEST_MAIL = 'foo@test.com';
+
     private LogEntryBuilderInterface $builder;
+
+    private ModelManager $modelManager;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $entityManager = $this->getContainer()->get(ModelManager::class);
-        $this->builder = new LogEntryBuilder($entityManager);
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
+        $this->builder = new LogEntryBuilder($this->modelManager);
     }
 
     public function testBuildWithSimpleMail(): void
     {
         $mail = $this->createSimpleMail();
-        $entry = $this->builder->build($mail);
+        $log = $this->builder->build($mail);
 
-        static::assertNotNull($entry);
+        static::assertSame($mail->getSubject(), $log->getSubject());
+        static::assertSame($mail->getFrom(), $log->getSender());
+        static::assertInstanceOf(Contact::class, $log->getRecipients()->first());
+        static::assertSame($mail->getPlainBodyText(), $log->getContentText());
+    }
 
-        static::assertSame($mail->getSubject(), $entry->getSubject());
-        static::assertSame($mail->getFrom(), $entry->getSender());
-        static::assertInstanceOf(Contact::class, $entry->getRecipients()->first());
-        static::assertSame($mail->getPlainBodyText(), $entry->getContentText());
+    public function testBuildWithDetachedRecipient(): void
+    {
+        $contact = new Contact();
+        $contact->setMailAddress(self::TEST_MAIL);
+        $this->modelManager->persist($contact);
+        $this->modelManager->flush($contact);
+        $this->modelManager->detach($contact);
+
+        $mail = $this->createSimpleMail();
+        $mail->clearRecipients();
+        $mail->addTo(self::TEST_MAIL);
+
+        $recipient = $this->builder->build($mail)->getRecipients()->first();
+        static::assertInstanceOf(Contact::class, $recipient);
+        static::assertSame(self::TEST_MAIL, $recipient->getMailAddress());
     }
 }

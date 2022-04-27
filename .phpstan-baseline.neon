@@ -7896,16 +7896,6 @@ parameters:
 			path: engine/Shopware/Bundle/MailBundle/Service/LogEntryBuilder.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$collection contains generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogEntryBuilder.php
-
-		-
-			message: "#^Parameter \\#1 \\$subject of method Shopware\\\\Models\\\\Mail\\\\Log\\:\\:setSubject\\(\\) expects string\\|null, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MailBundle/Service/LogEntryBuilder.php
-
-		-
 			message: "#^Parameter \\#1 \\$body of method Zend_Mail\\:\\:createAttachment\\(\\) expects string, string\\|false given\\.$#"
 			count: 2
 			path: engine/Shopware/Bundle/MailBundle/Service/LogEntryMailBuilder.php
