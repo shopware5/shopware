@@ -2,9 +2,9 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
-## 5.7.9
+## 5.7.10
 
-[View all changes from v5.7.8...v5.7.9](https://github.com/shopware/shopware/compare/v5.7.8...v5.7.9)
+[View all changes from v5.7.9...v5.7.10](https://github.com/shopware/shopware/compare/v5.7.9...v5.7.10)
 
 ### Deprecations
 
@@ -12,10 +12,40 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
-* Updated npm dependencies in `themes/package.json`
-* Updated npm dependencies in `themes/Frontend/Responsive/package.json`
+* Updated `elasticsearch/elasticsearch` to version 7.17.0
+* Updated `phpunit/phpunit` to version 9.5.20
+* Updated `symfony/browser-kit` to version 4.4.37
+* Updated `symfony/config` to version 4.4.41
+* Updated `symfony/console` to version 4.4.41
+* Updated `symfony/dependency-injection` to version 4.4.41
+* Updated `symfony/dom-crawler` to version 4.4.39
+* Updated `symfony/expression-language` to version 4.4.41
+* Updated `symfony/filesystem` to version 4.4.39
+* Updated `symfony/finder` to version 4.4.41
+* Updated `symfony/form` to version 4.4.41
+* Updated `symfony/http-foundation` to version 4.4.41
+* Updated `symfony/http-kernel` to version 4.4.41
+* Updated `symfony/options-resolver` to version 4.4.37
+* Updated `symfony/polyfill-php80` to version 1.25.0
+* Updated `symfony/polyfill-php81` to version 1.25.0
+* Updated `symfony/process` to version 4.4.41
+* Updated `symfony/serializer` to version 5.4.8
+* Updated `symfony/validator` to version 4.4.41
+* Updated `symfony/web-link` to version 4.4.37
+* Updated several indirect dependencies
+
 
 ### Removals
+
+
+## 5.7.9
+
+[View all changes from v5.7.8...v5.7.9](https://github.com/shopware/shopware/compare/v5.7.8...v5.7.9)
+
+### Changes
+
+* Updated npm dependencies in `themes/package.json`
+* Updated npm dependencies in `themes/Frontend/Responsive/package.json`
 
 
 ## 5.7.8
