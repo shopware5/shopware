@@ -14,10 +14,19 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
+* Updated `bamarni/composer-bin-plugin` to version 1.5.0
+* Updated `behat/mink` to version 1.10.0
+* Updated `behat/mink-selenium2-driver` to version 1.6.0
 * Updated `doctrine/common` to version 3.3.0
 * Updated `doctrine/dbal` to version 2.13.8
 * Updated `doctrine/persistence` to version 2.5.1
 * Updated `elasticsearch/elasticsearch` to version 7.17.0
+* Updated `friendsofphp/proxy-manager-lts` to version 1.0.7
+* Updated `google/cloud-storage` to version 1.26.2
+* Updated `guzzlehttp/guzzle` to version 7.4.2
+* Updated `laminas/laminas-escaper` to version 2.10.0
+* Updated `monolog/monolog` to version 2.5.0
+* Updated `mpdf/mpdf` to version 8.1.1
 * Updated `phpunit/phpunit` to version 9.5.20
 * Updated `symfony/browser-kit` to version 4.4.37
 * Updated `symfony/config` to version 4.4.41

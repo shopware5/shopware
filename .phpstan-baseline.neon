@@ -49851,11 +49851,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Page/Detail.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and true will always evaluate to false\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Page/Detail.php
-
-		-
 			message: "#^Variable \\$option in PHPDoc tag @var does not exist\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Page/Detail.php
@@ -50802,11 +50797,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$youtube of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\:\\:checkYoutubeVideo\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Element\\\\YouTube, Shopware\\\\Tests\\\\Mink\\\\Element\\\\MultipleElement given\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string and true will always evaluate to false\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
