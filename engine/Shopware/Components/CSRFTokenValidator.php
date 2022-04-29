@@ -148,6 +148,8 @@ class CSRFTokenValidator implements SubscriberInterface
         }
 
         if ($request->isGet() && !$this->isProtected($controller)) {
+            $this->updateCsrfTokenIfNotAvailable($request, $response);
+
             return;
         }
 
@@ -172,14 +174,12 @@ class CSRFTokenValidator implements SubscriberInterface
     public function regenerateToken(Request $request, Response $response): string
     {
         $shop = $this->contextService->getShopContext()->getShop();
-        $name = self::CSRF_SESSION_KEY . $shop->getId();
-
-        if ($shop->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
-            $name = self::CSRF_SESSION_KEY . $shop->getParentId();
-        }
+        $name = $this->getCsrfName();
 
         $token = Random::getAlphanumericString(30);
         $this->container->get('session')->set($name, $token);
+
+        $response->headers->clearCookie($name);
 
         /*
          * Appending a '/' to the $basePath is not strictly necessary, but it is
@@ -200,17 +200,36 @@ class CSRFTokenValidator implements SubscriberInterface
         return $token;
     }
 
-    /**
-     * Check if the submitted CSRF token in cookie or header matches with the token stored in the session
-     */
-    private function checkRequest(Request $request, Response $response): bool
+    private function updateCsrfTokenIfNotAvailable(Request $request, Response $response): void
+    {
+        $name = $this->getCsrfName();
+
+        if ($this->container->get('session')->has($name)) {
+            return;
+        }
+
+        $this->regenerateToken($request, $response);
+    }
+
+    private function getCsrfName(): string
     {
         $shop = $this->contextService->getShopContext()->getShop();
+
         $name = self::CSRF_SESSION_KEY . $shop->getId();
 
         if ($shop->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
             $name = self::CSRF_SESSION_KEY . $shop->getParentId();
         }
+
+        return $name;
+    }
+
+    /**
+     * Check if the submitted CSRF token in cookie or header matches with the token stored in the session
+     */
+    private function checkRequest(Request $request, Response $response): bool
+    {
+        $name = $this->getCsrfName();
 
         $token = $this->container->get('session')->get($name);
 
