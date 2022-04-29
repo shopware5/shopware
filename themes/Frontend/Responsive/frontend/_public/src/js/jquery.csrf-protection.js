@@ -174,7 +174,6 @@
                 $.ajax({
                     url: window.csrfConfig.generateUrl,
                     success: function(response, status, xhr) {
-                        me.saveToken(xhr.getResponseHeader('x-csrf-token'));
                         $.publish('plugin/swCsrfProtection/requestToken', [me, me.getToken()]);
                         me.afterInit();
                     }
@@ -183,15 +182,11 @@
         },
 
         /**
-         * Save token into a cookie
+         * @deprecated will be removed with v5.8.0
+         *
          * @param token
          */
-        saveToken: function(token) {
-            var me = this,
-                basePath = window.csrfConfig.basePath || '/';
-
-            document.cookie = me.storageKey + '=' + token + '; path=' + basePath + ($.isSecure() ? '; secure;' : '');
-        },
+        saveToken: function(token) {},
 
         /**
          * Initialize the CSRF protection
