@@ -39,7 +39,6 @@ use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
-use Shopware\Components\CSRFTokenValidator;
 use Shopware\Components\HolidayTableUpdater;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
@@ -206,8 +205,6 @@ class sAdmin implements \Enlight_Hook
         'payment' => [],
     ];
 
-    private CSRFTokenValidator $csrfTokenValidator;
-
     public function __construct(
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Enlight_Event_EventManager $eventManager = null,
@@ -222,8 +219,7 @@ class sAdmin implements \Enlight_Hook
         EmailValidatorInterface $emailValidator = null,
         Shopware_Components_Translation $translationComponent = null,
         Connection $connection = null,
-        OptInLoginServiceInterface $optInLoginService = null,
-        CSRFTokenValidator $csrfTokenValidator = null
+        OptInLoginServiceInterface $optInLoginService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -247,7 +243,6 @@ class sAdmin implements \Enlight_Hook
         $this->optInLoginService = $optInLoginService ?: Shopware()->Container()->get(OptInLoginService::class);
         $this->conditionalLineItemService = Shopware()->Container()->get(ConditionalLineItemServiceInterface::class);
         $this->cartOrderNumberProvider = Shopware()->Container()->get(CartOrderNumberProviderInterface::class);
-        $this->csrfTokenValidator = $csrfTokenValidator ?: Shopware()->Container()->get(CSRFTokenValidator::class);
     }
 
     /**
@@ -717,8 +712,6 @@ class sAdmin implements \Enlight_Hook
         $this->sSYSTEM->sCurrency = $shop->getCurrency()->toArray();
 
         $this->contextService->initializeContext();
-
-        $this->csrfTokenValidator->regenerateToken($this->front->Request(), $this->front->Response());
 
         if (!$this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sRefreshBasket();
@@ -3276,8 +3269,6 @@ class sAdmin implements \Enlight_Hook
         $this->session->offsetSet('sUserPasswordChangeDate', $getUser['password_change_date']);
         $this->session->offsetSet('sUserId', $userId);
         $this->session->offsetSet('sNotesQuantity', $this->moduleManager->Basket()->sCountNotes());
-
-        $this->csrfTokenValidator->regenerateToken($this->front->Request(), $this->front->Response());
 
         if (!$this->sCheckUser()) {
             return;

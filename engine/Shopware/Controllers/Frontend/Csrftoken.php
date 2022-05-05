@@ -22,18 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Components\CSRFTokenValidator;
-use Symfony\Component\HttpFoundation\Request;
-
 class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
 {
-    private CSRFTokenValidator $CSRFTokenValidator;
-
-    public function __construct(CSRFTokenValidator $CSRFTokenValidator)
-    {
-        $this->CSRFTokenValidator = $CSRFTokenValidator;
-    }
-
     /**
      * Loads auth and script renderer resource
      */
@@ -45,10 +35,10 @@ class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
     /**
      * Generates a token and fills the cookie and session
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        $token = $this->CSRFTokenValidator->regenerateToken($request, $this->Response());
+        $token = \Shopware\Components\Random::getAlphanumericString(30);
 
-        $this->Response()->headers->set(CSRFTokenValidator::CSRF_TOKEN_HEADER, $token);
+        $this->Response()->headers->set('x-csrf-token', $token);
     }
 }
