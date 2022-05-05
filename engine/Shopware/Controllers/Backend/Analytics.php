@@ -1252,7 +1252,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $preparedData = [];
         foreach ($data as $key => $row) {
-            $newRow = [];
+            $newRow = $row;
 
             $newRow['orderCount'] = isset($row['orderCount']) ? (int) $row['orderCount'] : 0;
             $newRow['turnover'] = isset($row['turnover']) ? (float) $row['turnover'] : 0.0;

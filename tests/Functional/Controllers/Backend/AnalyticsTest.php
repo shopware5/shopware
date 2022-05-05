@@ -29,6 +29,10 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Event_EventArgs;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
@@ -36,11 +40,14 @@ use Shopware\Models\Analytics\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Controllers_Backend_Analytics;
 
 class AnalyticsTest extends ControllerTestCase
 {
     use DatabaseTransactionBehaviour;
     use ContainerTrait;
+
+    private const TEST_SELECT_KEY = 'testOrderCount';
 
     private Connection $connection;
 
@@ -158,6 +165,29 @@ class AnalyticsTest extends ControllerTestCase
 
         static::assertSame('text/csv; charset=utf-8', $this->Response()->getHeader('Content-Type'));
         static::assertSame('attachment;filename=visitors.csv', $this->Response()->getHeader('content-disposition'));
+    }
+
+    public function testGetOverview(): void
+    {
+        $this->getContainer()->get('events')->addListener('Shopware_Analytics_ShopStatisticTurnover', function (Enlight_Event_EventArgs $args) {
+            $queryBuilder = $args->getReturn();
+            $queryBuilder->addSelect(sprintf('COUNT(orders.id) as %s', self::TEST_SELECT_KEY));
+        });
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams([
+            'fromDate' => '2012-01-01',
+            'toDate' => '2013-01-01',
+        ]);
+
+        $analyticsController = new Shopware_Controllers_Backend_Analytics();
+        $analyticsController->setContainer($this->getContainer());
+        $analyticsController->setRequest($request);
+        $analyticsController->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+        $analyticsController->getOverviewAction();
+
+        $assignedData = $analyticsController->View()->getAssign('data');
+        static::assertArrayHasKey(self::TEST_SELECT_KEY, $assignedData[0]);
     }
 
     public function testGetOrdersOfCustomers(): void
