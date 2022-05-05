@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,9 +33,6 @@ use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Theme\LessDefinition;
 use Shopware\Models\Config\Element;
 
-/**
- * Shopware AdvancedMenu Plugin
- */
 class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     public function install()
@@ -72,6 +71,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return 'Erweitertes Menü';
     }
 
+    /**
+     * @return ArrayCollection<int, LessDefinition>
+     */
     public function onCollectLessFiles(): ArrayCollection
     {
         $lessDir = __DIR__ . '/Views/frontend/_public/src/less/';
@@ -86,6 +88,9 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         return new ArrayCollection([$less]);
     }
 
+    /**
+     * @return ArrayCollection<int, string>
+     */
     public function onCollectJavascriptFiles(): ArrayCollection
     {
         $jsDir = __DIR__ . '/Views/frontend/_public/src/js/';
@@ -99,20 +104,20 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     {
         $config = $this->Config();
 
-        if (!$config->show) {
+        if (!$config->get('show')) {
             return;
         }
 
         $view = $args->getSubject()->View();
-        $parent = Shopware()->Shop()->get('parentID');
-        $categoryId = $args->getRequest()->getParam('sCategory', $parent);
+        $parent = (int) $this->get('shop')->get('parentID');
+        $categoryId = (int) $args->getRequest()->getParam('sCategory', $parent);
 
-        $menu = $this->getAdvancedMenu($parent, $categoryId, (int) $config->levels);
+        $menu = $this->getAdvancedMenu($parent, $categoryId, (int) $config->get('levels'));
 
         $view->assign('sAdvancedMenu', $menu);
-        $view->assign('columnAmount', $config->columnAmount);
+        $view->assign('columnAmount', $config->get('columnAmount'));
 
-        $view->assign('hoverDelay', $config->hoverDelay);
+        $view->assign('hoverDelay', $config->get('hoverDelay'));
 
         $view->addTemplateDir($this->Path() . 'Views');
     }
@@ -124,11 +129,11 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
      * @param int $activeCategoryId
      * @param int $depth
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    public function getAdvancedMenu($category, $activeCategoryId, $depth = null)
+    public function getAdvancedMenu($category, $activeCategoryId, $depth)
     {
-        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
+        $context = $this->get(ContextServiceInterface::class)->getShopContext();
 
         $cacheKey = sprintf(
             'Shopware_AdvancedMenu_Tree_%s_%s_%s',
@@ -137,19 +142,18 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             ($this->Config()->get('includeCustomergroup') ? $context->getCurrentCustomerGroup()->getId() : 'x')
         );
 
-        $eventManager = $this->get('events');
-        $cacheKey = $eventManager->filter('Shopware_Plugins_AdvancedMenu_CacheKey', $cacheKey, [
+        $cacheKey = $this->get('events')->filter('Shopware_Plugins_AdvancedMenu_CacheKey', $cacheKey, [
             'shopContext' => $context,
             'config' => $this->Config(),
         ]);
 
-        $cache = Shopware()->Container()->get(Zend_Cache_Core::class);
+        $cache = $this->get(Zend_Cache_Core::class);
 
         if ($this->Config()->get('caching') && $cache->test($cacheKey)) {
             $menu = $cache->load($cacheKey, true);
         } else {
-            $ids = $this->getCategoryIdsOfDepth($category, $depth);
-            $categories = Shopware()->Container()->get(CategoryServiceInterface::class)->getList($ids, $context);
+            $ids = $this->getCategoryIdsOfDepth($category, (int) $depth);
+            $categories = $this->get(CategoryServiceInterface::class)->getList($ids, $context);
             $categoriesArray = $this->convertCategories($categories);
             $categoryTree = $this->getCategoriesOfParent($category, $categoriesArray);
             if ($this->Config()->get('caching')) {
@@ -159,9 +163,8 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
         }
 
         $categoryPath = $this->getCategoryPath($activeCategoryId);
-        $menu = $this->setActiveFlags($menu, $categoryPath);
 
-        return $menu;
+        return $this->setActiveFlags($menu, $categoryPath);
     }
 
     private function subscribeEvents(): void
@@ -265,10 +268,10 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * @param array[] $categories
-     * @param int[]   $actives
+     * @param array<array<string, mixed>> $categories
+     * @param array<int>                  $actives
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
     private function setActiveFlags(array $categories, array $actives): array
     {
@@ -284,59 +287,57 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * @throws Exception
-     *
-     * @return int[]
+     * @return array<int>
      */
     private function getCategoryPath(int $categoryId): array
     {
-        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
+        $pathString = (string) $this->get(Connection::class)->createQueryBuilder()
+            ->select('category.path')
+            ->from('s_categories', 'category')
+            ->where('category.id = :id')
+            ->setParameter(':id', $categoryId)
+            ->execute()
+            ->fetch(PDO::FETCH_COLUMN);
 
-        $query->select('category.path')
-              ->from('s_categories', 'category')
-              ->where('category.id = :id')
-              ->setParameter(':id', $categoryId);
-
-        $path = $query->execute()->fetch(PDO::FETCH_COLUMN);
-        $path = explode('|', $path);
-        $path = array_filter($path);
+        $path = array_filter(explode('|', $pathString));
+        $path = array_map('\intval', $path);
         $path[] = $categoryId;
 
         return $path;
     }
 
     /**
-     * @throws Exception
-     *
-     * @return int[]
+     * @return array<int>
      */
     private function getCategoryIdsOfDepth(int $parentId, int $depth): array
     {
-        $query = Shopware()->Container()->get(Connection::class)->createQueryBuilder();
-        $query->select('DISTINCT category.id')
-              ->from('s_categories', 'category')
-              ->where('category.path LIKE :path')
-              ->andWhere('category.active = 1')
-              ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
-              ->orderBy('category.position')
-              ->setParameter(':depth', $depth)
-              ->setParameter(':path', '%|' . $parentId . '|%');
-
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $this->get(Connection::class)->createQueryBuilder()
+            ->select('DISTINCT category.id')
+            ->from('s_categories', 'category')
+            ->where('category.path LIKE :path')
+            ->andWhere('category.active = 1')
+            ->andWhere('ROUND(LENGTH(path) - LENGTH(REPLACE (path, "|", "")) - 1) <= :depth')
+            ->orderBy('category.position')
+            ->setParameter(':depth', $depth)
+            ->setParameter(':path', '%|' . $parentId . '|%')
+            ->execute()
+            ->fetchAll(PDO::FETCH_COLUMN);
     }
 
+    /**
+     * @param array<array<string, mixed>> $categories
+     *
+     * @return array<array<string, mixed>>
+     */
     private function getCategoriesOfParent(int $parentId, array $categories): array
     {
         $result = [];
 
         foreach ($categories as $category) {
-            if ($category['parentId'] != $parentId) {
+            if ((int) $category['parentId'] !== $parentId) {
                 continue;
             }
-            $children = $this->getCategoriesOfParent($category['id'], $categories);
+            $children = $this->getCategoriesOfParent((int) $category['id'], $categories);
             $category['sub'] = $children;
             $category['activeCategories'] = \count($children);
             $result[] = $category;
@@ -346,25 +347,27 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * @param Category[] $categories
+     * @param array<Category> $categories
+     *
+     * @return array<array<string, mixed>>
      */
     private function convertCategories(array $categories): array
     {
-        $converter = Shopware()->Container()->get(LegacyStructConverter::class);
-        $eventManager = Shopware()->Container()->get('events');
+        $converter = $this->get(LegacyStructConverter::class);
+        $eventManager = $this->get('events');
 
         return array_map(function (Category $category) use ($converter, $eventManager) {
-            $data = $converter->convertCategoryStruct($category);
+            $convertedCategory = $converter->convertCategoryStruct($category);
 
-            $data['flag'] = false;
+            $convertedCategory['flag'] = false;
             if ($category->getMedia()) {
-                $data['media']['path'] = $category->getMedia()->getFile();
+                $convertedCategory['media']['path'] = $category->getMedia()->getFile();
             }
             if (!empty($category->getExternalLink())) {
-                $data['link'] = $category->getExternalLink();
+                $convertedCategory['link'] = $category->getExternalLink();
             }
 
-            return $eventManager->filter('Shopware_Plugins_AdvancedMenu_ConvertCategory', $data, [
+            return $eventManager->filter('Shopware_Plugins_AdvancedMenu_ConvertCategory', $convertedCategory, [
                 'category' => $category,
             ]);
         }, $categories);
