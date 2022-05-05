@@ -161,7 +161,6 @@ class CSRFTokenValidator implements SubscriberInterface
         }
 
         if (!$this->checkRequest($request, $response)) {
-            $this->regenerateToken($request, $response);
             throw new CSRFTokenValidationException(sprintf('The provided X-CSRF-Token for path "%s" is invalid. Please go back, reload the page and try again.', $request->getRequestUri()));
         }
 
@@ -200,17 +199,15 @@ class CSRFTokenValidator implements SubscriberInterface
 
         $token = $this->container->get('session')->get($name);
 
-        if (!\is_string($token)) {
-            return false;
-        }
-
         $requestToken = $request->get(self::CSRF_TOKEN_ARGUMENT, $request->headers->get(self::CSRF_TOKEN_HEADER));
 
-        if (!\is_string($requestToken)) {
-            return false;
+        $isValidToken = hash_equals($token, $requestToken);
+
+        if (!$isValidToken) {
+            $this->regenerateToken($request, $response);
         }
 
-        return hash_equals($token, $requestToken);
+        return $isValidToken;
     }
 
     /**
