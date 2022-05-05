@@ -24,6 +24,8 @@
 
 class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
 {
+    private const CSRF_TOKEN_HEADER = 'x-csrf-token';
+
     /**
      * Loads auth and script renderer resource
      */
@@ -39,6 +41,6 @@ class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
     {
         $token = \Shopware\Components\Random::getAlphanumericString(30);
 
-        $this->Response()->headers->set('x-csrf-token', $token);
+        $this->Response()->headers->set(self::CSRF_TOKEN_HEADER, $token);
     }
 }
