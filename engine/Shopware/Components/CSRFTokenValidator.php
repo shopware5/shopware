@@ -148,8 +148,6 @@ class CSRFTokenValidator implements SubscriberInterface
         }
 
         if ($request->isGet() && !$this->isProtected($controller)) {
-            $this->updateCsrfTokenIfNotAvailable($request, $response);
-
             return;
         }
 
@@ -173,55 +171,19 @@ class CSRFTokenValidator implements SubscriberInterface
 
     public function regenerateToken(Request $request, Response $response): string
     {
-        $shop = $this->contextService->getShopContext()->getShop();
-        $name = $this->getCsrfName();
+        $context = $this->contextService->getShopContext();
+
+        $name = self::CSRF_SESSION_KEY . $context->getShop()->getId();
+
+        if ($context->getShop()->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
+            $name = self::CSRF_SESSION_KEY . $context->getShop()->getParentId();
+        }
 
         $token = Random::getAlphanumericString(30);
         $this->container->get('session')->set($name, $token);
-
-        $response->headers->clearCookie($name);
-
-        /*
-         * Appending a '/' to the $basePath is not strictly necessary, but it is
-         * done to all cookie base paths in the
-         * `themes/Frontend/Bare/frontend/index/index.tpl` template. It's done
-         * here as well for compatibility reasons.
-         */
-        $response->headers->setCookie(new Cookie(
-            $name,
-            $token,
-            0,
-            sprintf('%s/', $shop->getPath() ?: ''),
-            null,
-            $shop->getSecure(),
-            false
-        ));
+        $response->headers->setCookie(new Cookie($name, $token, 0, '/', null, $request->isSecure(), false));
 
         return $token;
-    }
-
-    private function updateCsrfTokenIfNotAvailable(Request $request, Response $response): void
-    {
-        $name = $this->getCsrfName();
-
-        if ($this->container->get('session')->has($name)) {
-            return;
-        }
-
-        $this->regenerateToken($request, $response);
-    }
-
-    private function getCsrfName(): string
-    {
-        $shop = $this->contextService->getShopContext()->getShop();
-
-        $name = self::CSRF_SESSION_KEY . $shop->getId();
-
-        if ($shop->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
-            $name = self::CSRF_SESSION_KEY . $shop->getParentId();
-        }
-
-        return $name;
     }
 
     /**
@@ -229,7 +191,12 @@ class CSRFTokenValidator implements SubscriberInterface
      */
     private function checkRequest(Request $request, Response $response): bool
     {
-        $name = $this->getCsrfName();
+        $context = $this->contextService->getShopContext();
+        $name = self::CSRF_SESSION_KEY . $context->getShop()->getId();
+
+        if ($context->getShop()->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
+            $name = self::CSRF_SESSION_KEY . $context->getShop()->getParentId();
+        }
 
         $token = $this->container->get('session')->get($name);
 

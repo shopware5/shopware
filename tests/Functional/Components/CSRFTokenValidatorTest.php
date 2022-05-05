@@ -47,14 +47,11 @@ class CSRFTokenValidatorTest extends TestCase
 
     public const EXISTING_ACTION_NAME = 'foo';
 
-    private const CSRF_TOKEN_FOR_SHOP_ONE = '__csrf_token-1';
-
     /**
      * @before
      */
     public function enableCsrfInFrontend(): void
     {
-        $this->getContainer()->get('session')->offsetUnset(self::CSRF_TOKEN_FOR_SHOP_ONE);
         Utils::hijackProperty($this->getContainer()->get(CSRFTokenValidator::class), 'isEnabledFrontend', true);
     }
 
@@ -63,7 +60,6 @@ class CSRFTokenValidatorTest extends TestCase
      */
     public function disableCsrfInFrontend(): void
     {
-        $this->getContainer()->get('session')->offsetUnset(self::CSRF_TOKEN_FOR_SHOP_ONE);
         Utils::hijackProperty($this->getContainer()->get(CSRFTokenValidator::class), 'isEnabledFrontend', false);
     }
 
@@ -89,7 +85,7 @@ class CSRFTokenValidatorTest extends TestCase
 
         $tokenValidator->checkFrontendTokenValidation($enlightEventArgs);
 
-        static::assertIsString($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
+        static::assertNotNull($this->getContainer()->get('session')->get('__csrf_token-1'));
         static::assertTrue($incomingRequest->getAttribute('isValidated'));
     }
 
@@ -119,8 +115,8 @@ class CSRFTokenValidatorTest extends TestCase
             static::assertInstanceOf(CSRFTokenValidationException::class, $e);
         }
 
-        static::assertIsString($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
-        static::assertNotEquals($token, $this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
+        static::assertNotNull($this->getContainer()->get('session')->get('__csrf_token-1'));
+        static::assertNotEquals($token, $this->getContainer()->get('session')->get('__csrf_token-1'));
     }
 
     public function testCsrfExceptionIsThrownWhenNoSession(): void
@@ -145,7 +141,7 @@ class CSRFTokenValidatorTest extends TestCase
             static::assertInstanceOf(CSRFTokenValidationException::class, $e);
         }
 
-        static::assertIsString($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
+        static::assertNotNull($this->getContainer()->get('session')->get('__csrf_token-1'));
     }
 
     public function testCsrfExceptionIsThrownWhenNoRequestCsrfIsSet(): void
@@ -171,51 +167,7 @@ class CSRFTokenValidatorTest extends TestCase
             static::assertInstanceOf(CSRFTokenValidationException::class, $e);
         }
 
-        static::assertIsString($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
-    }
-
-    public function testCsrfTokenIsUpdatedIfItIsNotAvailableInTheSessionAndIsGetRequest(): void
-    {
-        $tokenValidator = $this->getContainer()->get(CSRFTokenValidator::class);
-        $this->getContainer()->get(ContextServiceInterface::class)->createShopContext(1);
-
-        static::assertNull($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
-
-        $controller = new NotProtectionAwareController();
-        $incomingRequest = new Enlight_Controller_Request_RequestTestCase();
-        $incomingRequest->setMethod('GET');
-        $createResponse = new Enlight_Controller_Response_ResponseTestCase();
-        $controller->setRequest($incomingRequest);
-        $controller->setResponse($createResponse);
-        $enlightEventArgs = new Enlight_Event_EventArgs([
-            'subject' => $controller,
-        ]);
-
-        $tokenValidator->checkFrontendTokenValidation($enlightEventArgs);
-
-        static::assertIsString($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
-    }
-
-    public function testCsrfTokenIsNotUpdatedIfItIsNotAvailableInTheSession(): void
-    {
-        $tokenValidator = $this->getContainer()->get(CSRFTokenValidator::class);
-        $this->getContainer()->get(ContextServiceInterface::class)->createShopContext(1);
-
-        static::assertNull($this->getContainer()->get('session')->get(self::CSRF_TOKEN_FOR_SHOP_ONE));
-
-        $controller = new MockController();
-        $incomingRequest = new Enlight_Controller_Request_RequestTestCase();
-        $incomingRequest->setMethod('GET');
-        $incomingRequest->setActionName(self::EXISTING_ACTION_NAME);
-        $createResponse = new Enlight_Controller_Response_ResponseTestCase();
-        $controller->setRequest($incomingRequest);
-        $controller->setResponse($createResponse);
-        $enlightEventArgs = new Enlight_Event_EventArgs([
-            'subject' => $controller,
-        ]);
-
-        $this->expectException(CSRFTokenValidationException::class);
-        $tokenValidator->checkFrontendTokenValidation($enlightEventArgs);
+        static::assertNotNull($this->getContainer()->get('session')->get('__csrf_token-1'));
     }
 }
 
@@ -227,8 +179,4 @@ class MockController extends Enlight_Controller_Action implements CSRFGetProtect
             'foo',
         ];
     }
-}
-
-class NotProtectionAwareController extends Enlight_Controller_Action
-{
 }
