@@ -331,9 +331,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * @param array<string, mixed> $categoryContent
      *
-     * @return array{controller?: string, sArticle?: int}
+     * @return string|array{controller?: string, sArticle?: int}
      */
-    private function getRedirectLocation(array $categoryContent, bool $hasEmotion, ShopContextInterface $context): array
+    private function getRedirectLocation(array $categoryContent, bool $hasEmotion, ShopContextInterface $context)
     {
         $location = [];
 
