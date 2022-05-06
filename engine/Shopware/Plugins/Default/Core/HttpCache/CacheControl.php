@@ -221,6 +221,10 @@ class CacheControl
             $tags[] = 'checkout';
         }
 
+        if (!empty($this->session->offsetGet('sCountry'))) {
+            $tags[] = 'price';
+        }
+
         if ($request->getCookie('slt')) {
             $tags[] = 'slt';
         }
@@ -250,6 +254,10 @@ class CacheControl
         $tags = [];
         if (empty($this->session->offsetGet('sBasketQuantity')) && empty($this->session->offsetGet('sNotesQuantity'))) {
             $tags[] = 'checkout';
+        }
+
+        if (empty($this->session->offsetGet('sCountry'))) {
+            $tags[] = 'price';
         }
 
         if ($action === 'frontend/compare/delete_all') {

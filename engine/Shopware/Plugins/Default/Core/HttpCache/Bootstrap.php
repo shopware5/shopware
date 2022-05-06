@@ -275,6 +275,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
             "widgets/lastArticles detail\n" .
             "widgets/checkout checkout\n" .
             "widgets/compare compare\n" .
+            "widgets/listing price\n" .
             "widgets/emotion price\n",
         ]);
 
