@@ -118,7 +118,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion'], $shopContext);
-        if (!empty($location)) {
+        if (null !== $location) {
             $this->redirect($location, ['code' => 301]);
 
             return;
@@ -331,19 +331,21 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * @param array<string, mixed> $categoryContent
      *
-     * @return array{controller?: string, sArticle?: int}
+     * @return string|null
      */
-    private function getRedirectLocation(array $categoryContent, bool $hasEmotion, ShopContextInterface $context): array
+    private function getRedirectLocation(array $categoryContent, bool $hasEmotion, ShopContextInterface $context): ?string
     {
-        $location = [];
+        if (!empty($categoryContent['external'])) {
+            return $categoryContent['external'];
+        }
+
+        if ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
+            return $this->Front()->Router()->assemble(['controller' => 'index']);
+        }
 
         $checkRedirect = ($hasEmotion && $this->Request()->getParam('sPage')) || (!$hasEmotion);
 
-        if (!empty($categoryContent['external'])) {
-            $location = $categoryContent['external'];
-        } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
-            $location = ['controller' => 'index'];
-        } elseif ($checkRedirect && $this->config->get('categoryDetailLink')) {
+        if ($checkRedirect && $this->config->get('categoryDetailLink')) {
             $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($this->Request(), $context);
 
             $criteria->resetFacets()
@@ -358,11 +360,15 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
             if (\count($result->getProducts()) === 1) {
                 $products = $result->getProducts();
                 $first = array_shift($products);
-                $location = ['controller' => 'detail', 'sArticle' => $first->getId()];
+
+                return $this->Front()->Router()->assemble([
+                    'controller' => 'detail',
+                    'sArticle' => $first->getId()
+                ]);
             }
         }
 
-        return $location;
+        return null;
     }
 
     /**
