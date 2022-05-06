@@ -25,26 +25,74 @@ workflow:
           when: never
         - if: '$CI_COMMIT_BRANCH'
 
+.composer-cache: &composer-cache
+    key:
+        files:
+            - 'composer.lock'
+            - 'recovery/common/composer.lock'
+    paths:
+        - 'vendor/'
+        - 'recovery/common/vendor/'
+        - 'vendor-bin/'
+        - '.htaccess'
+        - '.make.install.composer-dependencies'
+    policy: pull-push
+
+.npm-cache: &npm-cache
+    key:
+        files:
+            - 'themes/package-lock.json'
+            - 'themes/Frontend/Responsive/package-lock.json'
+    paths:
+        - 'themes/node_modules/'
+        - 'themes/Frontend/Responsive/node_modules/'
+        - '.make.install.npm-dependencies'
+    policy: pull-push
+
 stages:
+    - Prepare Files
     - Static analysis
     - PHPUnit
     - End-to-end testing
     - Security
+    - Build Image
 
 default:
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
+
+# Stage: Prepare Files
+
+Install Required PHP Files:
+    tags:
+        - t3.nano
+    stage: Prepare Files
+    script:
+        - make .make.install.composer-dependencies
+    cache:
+        <<: *composer-cache
+
+Install Required JS Files:
+    tags:
+        - t3.nano
+    image: node:alpine
+    stage: Prepare Files
     before_script:
-        - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
-        - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
-        # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/27921#note_38132416
-        - eval export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME SW_HOST SW_BASE_PATH ELASTICSEARCH_HOST
+        - apk add --no-cache make bash
+    script:
+        - make .make.install.npm-dependencies
+    cache:
+        <<: *npm-cache
 
 PHP analyze:
     tags:
         - m5.large
+    cache:
+        - <<: *composer-cache
+          policy: pull
     stage: Static analysis
-    script:
+    before_script:
         - make init
+    script:
         - make check-code
     services:
         -   name: mysql:5.7
@@ -53,25 +101,34 @@ PHP analyze:
 JavaScript checks:
     tags:
         - t3.nano
+    cache:
+        - <<: *npm-cache
+          policy: pull
     stage: Static analysis
     image: node:alpine
     before_script:
-        - apk add --no-cache make bash
+        - apk add bash make
     script:
-        - make install-theme-depencencies
         - make check-js-code
         - make test-jest
 
 .phpunit_base:
     tags:
         - t3.medium
+    cache:
+        - <<: *composer-cache
+          policy: pull
+    before_script: # TODO: (SW-26726) Remove this and see if anything breaks.
+        - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
+        - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
+        # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/27921#note_38132416
+        - eval export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME SW_HOST SW_BASE_PATH ELASTICSEARCH_HOST
     stage: PHPUnit
     services:
         -   name: mysql:5.7
             alias: mysql
     script:
         - make test-phpunit
-
     artifacts:
         expire_in: 1 week
         reports:
@@ -194,3 +251,49 @@ Mink:
         - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
           when: manual
           allow_failure: true
+
+Prepare Artifacts:
+    tags:
+        - t3.nano
+    image: debian:11-slim
+    stage: Build Image
+    needs:
+        - job: Install Required PHP Files
+          artifacts: false
+        - job: Install Required JS Files
+          artifacts: false
+    cache:
+        - <<: *composer-cache
+          policy: pull
+        - <<: *npm-cache
+          policy: pull
+    script:
+        - ls -lah ./*
+    artifacts:
+        paths:
+            - '$CI_PROJECT_DIR/'
+        exclude:
+            - '.git'
+            - '.git/**'
+        expire_in: 3h
+    rules:
+        - if: '$CI_COMMIT_REF_PROTECTED == "true"'
+
+Build Image:
+    stage: Build Image
+    needs:
+        - job: Prepare Artifacts
+          artifacts: false
+    inherit:
+        variables: false
+    variables:
+        UPSTREAM_PROJECT_ID: '$CI_PROJECT_ID'
+        UPSTREAM_REF_NAME: '$CI_COMMIT_REF_NAME'
+        UPSTREAM_COMMIT_SHA: '$CI_COMMIT_SHORT_SHA'
+        UPSTREAM_JOB_NAME: 'Prepare+Artifacts'
+        BASE_IMAGE_TAG: '7.4'
+    trigger:
+        project: shopware/5/product/image
+        branch: pt-12693/add-aio-image # TODO: Change to master, once the AIO image job is finished.
+    rules:
+        - if: '$CI_COMMIT_REF_PROTECTED == "true"'
