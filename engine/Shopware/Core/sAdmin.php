@@ -718,7 +718,7 @@ class sAdmin implements \Enlight_Hook
 
         $this->contextService->initializeContext();
 
-        $this->csrfTokenValidator->regenerateToken($this->front->Request(), $this->front->Response());
+        $this->csrfTokenValidator->clearExistingCookie();
 
         if (!$this->config->get('clearBasketAfterLogout')) {
             $this->moduleManager->Basket()->sRefreshBasket();
@@ -3277,7 +3277,7 @@ class sAdmin implements \Enlight_Hook
         $this->session->offsetSet('sUserId', $userId);
         $this->session->offsetSet('sNotesQuantity', $this->moduleManager->Basket()->sCountNotes());
 
-        $this->csrfTokenValidator->regenerateToken($this->front->Request(), $this->front->Response());
+        $this->csrfTokenValidator->clearExistingCookie();
 
         if (!$this->sCheckUser()) {
             return;

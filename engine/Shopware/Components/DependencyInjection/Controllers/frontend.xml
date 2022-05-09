@@ -38,7 +38,6 @@
         </service>
 
         <service id="shopware_controllers_frontend_csrftoken" class="Shopware_Controllers_Frontend_Csrftoken">
-            <argument type="service" id="shopware.csrftoken_validator"/>
             <tag name="shopware.controller" module="frontend" controller="csrftoken"/>
         </service>
 

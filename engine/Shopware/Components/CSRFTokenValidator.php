@@ -33,15 +33,16 @@ use Shopware_Components_Config;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CSRFTokenValidator implements SubscriberInterface
 {
-    public const CSRF_SESSION_KEY = '__csrf_token-';
+    public const CSRF_KEY = '__csrf_token-';
 
     public const CSRF_TOKEN_ARGUMENT = '__csrf_token';
 
     public const CSRF_TOKEN_HEADER = 'X-CSRF-Token';
+
+    private const CSRF_WAS_VALIDATED = 'isValidated';
 
     /**
      * @var ContainerInterface
@@ -140,16 +141,13 @@ class CSRFTokenValidator implements SubscriberInterface
         /** @var Enlight_Controller_Action $controller */
         $controller = $args->getSubject();
         $request = $controller->Request();
-        $response = $controller->Response();
 
         // do not check internal sub-requests or validated requests
-        if ($request->getAttribute('_isSubrequest') || $request->getAttribute('isValidated')) {
+        if ($request->getAttribute('_isSubrequest') || $request->getAttribute(self::CSRF_WAS_VALIDATED)) {
             return;
         }
 
         if ($request->isGet() && !$this->isProtected($controller)) {
-            $this->updateCsrfTokenIfNotAvailable($request, $response);
-
             return;
         }
 
@@ -162,76 +160,40 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        if (!$this->checkRequest($request, $response)) {
-            $this->regenerateToken($request, $response);
+        if (!$this->checkRequest($request)) {
             throw new CSRFTokenValidationException(sprintf('The provided X-CSRF-Token for path "%s" is invalid. Please go back, reload the page and try again.', $request->getRequestUri()));
         }
 
         // mark request as validated to avoid double validation
-        $request->setAttribute('isValidated', true);
+        $request->setAttribute(self::CSRF_WAS_VALIDATED, true);
     }
 
-    public function regenerateToken(Request $request, Response $response): string
+    public function clearExistingCookie(): void
     {
         $shop = $this->contextService->getShopContext()->getShop();
         $name = $this->getCsrfName();
 
-        $token = Random::getAlphanumericString(30);
-        $this->container->get('session')->set($name, $token);
-
-        $response->headers->clearCookie($name);
-
-        /*
-         * Appending a '/' to the $basePath is not strictly necessary, but it is
-         * done to all cookie base paths in the
-         * `themes/Frontend/Bare/frontend/index/index.tpl` template. It's done
-         * here as well for compatibility reasons.
-         */
-        $response->headers->setCookie(new Cookie(
+        $front = $this->container->get('front');
+        $response = $front->Response();
+        $response->headers->clearCookie(
             $name,
-            $token,
-            0,
             sprintf('%s/', $shop->getPath() ?: ''),
-            null,
+            '',
             $shop->getSecure(),
             false
-        ));
-
-        return $token;
-    }
-
-    private function updateCsrfTokenIfNotAvailable(Request $request, Response $response): void
-    {
-        $name = $this->getCsrfName();
-
-        if ($this->container->get('session')->has($name)) {
-            return;
-        }
-
-        $this->regenerateToken($request, $response);
-    }
-
-    private function getCsrfName(): string
-    {
-        $shop = $this->contextService->getShopContext()->getShop();
-
-        $name = self::CSRF_SESSION_KEY . $shop->getId();
-
-        if ($shop->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
-            $name = self::CSRF_SESSION_KEY . $shop->getParentId();
-        }
-
-        return $name;
+        );
     }
 
     /**
-     * Check if the submitted CSRF token in cookie or header matches with the token stored in the session
+     * Check if the submitted CSRF token matches with the token stored in the cookie or header
+     *
+     * @return bool
      */
-    private function checkRequest(Request $request, Response $response): bool
+    private function checkRequest(Request $request)
     {
         $name = $this->getCsrfName();
 
-        $token = $this->container->get('session')->get($name);
+        $token = $request->cookies->get($name);
 
         if (!\is_string($token)) {
             return false;
@@ -244,6 +206,19 @@ class CSRFTokenValidator implements SubscriberInterface
         }
 
         return hash_equals($token, $requestToken);
+    }
+
+    private function getCsrfName(): string
+    {
+        $shop = $this->contextService->getShopContext()->getShop();
+
+        $name = self::CSRF_KEY . $shop->getId();
+
+        if ($shop->getParentId() && $this->componentsConfig->get('shareSessionBetweenLanguageShops')) {
+            $name = self::CSRF_KEY . $shop->getParentId();
+        }
+
+        return $name;
     }
 
     /**

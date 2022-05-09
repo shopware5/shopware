@@ -177,7 +177,3 @@ parameters:
         - # For testing purposes the constructor of the price struct gets strings
             message: '#Parameter .* of class Shopware\\Components\\Cart\\Struct\\Price constructor expects float.*string given#'
             path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
-
-        - # The Enlight_Response and Enlight_Request interfaces do not extend from Symfony, and therefore we have to find a unified usage pattern
-            message: '#Parameter .* of method Shopware\\Components\\CSRFTokenValidator\:\:regenerateToken\(\) expects Symfony\\Component\\HttpFoundation\\Request.* given#'
-            path: engine/Shopware/Core/sAdmin.php
