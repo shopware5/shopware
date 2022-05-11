@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,18 +27,17 @@
 namespace Shopware\Tests\Unit\Model;
 
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Model\DBAL\Constraints;
+use Shopware\Components\Model\DBAL\Constraints\OrderNumber;
 use Shopware\Components\Model\DBAL\Validator\OrderNumberValidator;
 use Shopware\Components\OrderNumberValidator\RegexOrderNumberValidator;
 use stdClass;
+use Symfony\Component\Validator\Constraints\IsTrue;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use TypeError;
 
 class OrderNumberValidatorTest extends TestCase
 {
-    /**
-     * @var OrderNumberValidator
-     */
-    private $validator;
+    private OrderNumberValidator $validator;
 
     public function setUp(): void
     {
@@ -50,15 +51,14 @@ class OrderNumberValidatorTest extends TestCase
             ['somearray', 'somearray'],
             function () {},
             new stdClass(),
-            new Constraints\OrderNumber(),
+            new OrderNumber(),
         ];
 
-        $catch = null;
         foreach ($values as $value) {
             $catch = $value;
             try {
-                $this->validator->validate($value, new \Shopware\Components\Model\DBAL\Constraints\OrderNumber());
-            } catch (\Symfony\Component\Validator\Exception\UnexpectedTypeException $exception) {
+                $this->validator->validate($value, new OrderNumber());
+            } catch (UnexpectedTypeException $exception) {
                 $catch = null;
             }
 
@@ -68,17 +68,18 @@ class OrderNumberValidatorTest extends TestCase
 
     public function testEmptyValue(): void
     {
-        static::assertNull($this->validator->validate(null, new Constraints\OrderNumber()));
-        static::assertNull($this->validator->validate(0, new Constraints\OrderNumber()));
-        static::assertNull($this->validator->validate('', new Constraints\OrderNumber()));
+        $this->expectNotToPerformAssertions();
+        $this->validator->validate(null, new OrderNumber());
+        $this->validator->validate(0, new OrderNumber());
+        $this->validator->validate('', new OrderNumber());
     }
 
     public function testWrongConstraint(): void
     {
-        $this->expectException(\Symfony\Component\Validator\Exception\UnexpectedTypeException::class);
+        $this->expectException(UnexpectedTypeException::class);
         $this->expectExceptionMessage("Expected argument of type \"Shopware\Components\Model\DBAL\Constraints\OrderNumber\", \"Symfony\Component\Validator\Constraints\IsTrue\" given");
 
-        $this->validator->validate(null, new \Symfony\Component\Validator\Constraints\IsTrue());
+        $this->validator->validate(null, new IsTrue());
     }
 
     public function testEmptyConstraint(): void

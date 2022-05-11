@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Components\Theme;
 use Enlight_Components_Test_TestCase;
 use Enlight_Event_EventManager;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionClass;
+use Shopware\Components\Form\Persister\Theme as ThemePersister;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Components\Theme\Configurator;
@@ -35,6 +35,8 @@ use Shopware\Components\Theme\PathResolver;
 use Shopware\Components\Theme\Util;
 use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Template;
+use Shopware\Tests\TestReflectionHelper;
+use Shopware\Themes\TestBare\Theme as TestBareTheme;
 use Shopware\Themes\TestResponsive\Theme;
 
 class Base extends Enlight_Components_Test_TestCase
@@ -84,17 +86,17 @@ class Base extends Enlight_Components_Test_TestCase
      */
     protected function getFormPersister()
     {
-        return $this->createMock(\Shopware\Components\Form\Persister\Theme::class);
+        return $this->createMock(ThemePersister::class);
     }
 
     /**
-     * @return \Shopware\Themes\TestBare\Theme
+     * @return TestBareTheme
      */
     protected function getBareTheme()
     {
         require_once __DIR__ . '/Themes/TestBare/Theme.php';
 
-        return new \Shopware\Themes\TestBare\Theme();
+        return new TestBareTheme();
     }
 
     /**
@@ -131,18 +133,14 @@ class Base extends Enlight_Components_Test_TestCase
     /**
      * Call protected/private method of a class.
      *
-     * @param object &$object    Instantiated object that we will run method on
+     * @param object $object     Instantiated object that we will run method on
      * @param string $methodName Method name to call
      * @param array  $parameters array of parameters to pass into method
      *
      * @return mixed method return
      */
-    protected function invokeMethod(&$object, $methodName, array $parameters = [])
+    protected function invokeMethod(object $object, string $methodName, array $parameters = [])
     {
-        $reflection = new ReflectionClass(\get_class($object));
-        $method = $reflection->getMethod($methodName);
-        $method->setAccessible(true);
-
-        return $method->invokeArgs($object, $parameters);
+        return TestReflectionHelper::getMethod(\get_class($object), $methodName)->invokeArgs($object, $parameters);
     }
 }

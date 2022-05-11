@@ -26,6 +26,7 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader\StoreValueParser;
 
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory;
@@ -124,6 +125,7 @@ class StoreXmlValueParserTest extends TestCase
                 $elementIndex
             )
         );
+        static::assertInstanceOf(DOMNodeList::class, $stores);
 
         return $stores->item(0);
     }

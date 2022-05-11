@@ -311,11 +311,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
 
 		-
-			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeQuery\\(\\) return type has no value type specified in iterable type Zend_Db_Statement_Pdo\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
-
-		-
 			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:executeUpdate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
@@ -327,11 +322,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:query\\(\\) has parameter \\$bind with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
-
-		-
-			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:query\\(\\) return type has no value type specified in iterable type Zend_Db_Statement_Pdo\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
 
@@ -2051,11 +2041,6 @@ parameters:
 			path: engine/Library/Enlight/Hook/ProxyFactory.php
 
 		-
-			message: "#^Cannot assign offset '0' to string\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
 			message: "#^Method Enlight_Loader\\:\\:autoload\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Loader.php
@@ -2082,11 +2067,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Loader\\:\\:setIncludePath\\(\\) has parameter \\$path with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Loader.php
-
-		-
-			message: "#^Method Enlight_Loader\\:\\:setIncludePath\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Loader.php
 
@@ -2147,7 +2127,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$plugins\\.$#"
-			count: 7
+			count: 6
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
 
 		-
@@ -3321,11 +3301,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/ProductRepository.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\Registry\\:\\:__construct\\(\\) has parameter \\$repositories with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Repository/Registry.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Repository\\\\RepositoryInterface\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Repository/RepositoryInterface.php
@@ -3831,11 +3806,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/BatchableProviderInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkCollector\\:\\:__construct\\(\\) has parameter \\$providers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkCollector.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkCollector\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkCollector.php
@@ -3857,11 +3827,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkCollector\\:\\:moveUpdatedOrdersData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkCollector.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkCollector\\:\\:\\$providers type has no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkCollector.php
 
@@ -5131,11 +5096,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/XmlReader/ContentTypesReader.php
 
 		-
-			message: "#^Parameter \\#1 \\$list of static method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\XmlReader\\\\ContentTypesReader\\:\\:parseList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Services/XmlReader/ContentTypesReader.php
-
-		-
 			message: "#^Parameter \\#1 \\$root of static method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\XmlReader\\\\ContentTypesReader\\:\\:xmlToArray\\(\\) expects DOMNode, DOMElement\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/XmlReader/ContentTypesReader.php
@@ -5321,99 +5281,14 @@ parameters:
 			path: engine/Shopware/Bundle/CookieBundle/CookieGroupCollection.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:addDefaultCookies\\(\\) has parameter \\$cookieCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:addDefaultGroups\\(\\) has parameter \\$cookieGroupCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:assignCookiesToGroups\\(\\) has parameter \\$cookieCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:assignCookiesToGroups\\(\\) has parameter \\$cookieGroupCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:collect\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:collectCookieGroups\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:sortCookies\\(\\) has parameter \\$cookieCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollector\\:\\:sortCookies\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollector.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollectorInterface\\:\\:collect\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollectorInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieCollectorInterface\\:\\:collectCookieGroups\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieCollectorInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandler\\:\\:__construct\\(\\) has parameter \\$cookieGroupCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandler\\:\\:getCookies\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandler\\:\\:getTechnicallyRequiredCookies\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandler\\:\\:isCookieAllowedByPreferences\\(\\) has parameter \\$preferences with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandler.php
 
 		-
-			message: "#^Property Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandler\\:\\:\\$cookieGroupCollection type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandlerInterface\\:\\:getCookies\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandlerInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandlerInterface\\:\\:getTechnicallyRequiredCookies\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandlerInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieHandlerInterface\\:\\:isCookieAllowedByPreferences\\(\\) has parameter \\$preferences with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CookieBundle/Services/CookieHandlerInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieRemoveHandler\\:\\:hasCookieWithTechnicalName\\(\\) has parameter \\$cookieCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Services/CookieRemoveHandler.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Services\\\\CookieRemoveHandler\\:\\:removeInvalidCookiesFromPreferences\\(\\) has parameter \\$preferences with no value type specified in iterable type array\\.$#"
@@ -5434,16 +5309,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$value of class Symfony\\\\Component\\\\HttpFoundation\\\\Cookie constructor expects string\\|null, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CookieBundle/Services/CookieRemoveHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CookieBundle\\\\Structs\\\\CookieGroupStruct\\:\\:getCookies\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Structs/CookieGroupStruct.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\CookieBundle\\\\Structs\\\\CookieGroupStruct\\:\\:\\$cookies type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CookieBundle/Structs/CookieGroupStruct.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundle\\\\Condition\\\\AgeCondition\\:\\:__construct\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
@@ -5504,16 +5369,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\CustomerNumberSearch\\:\\:hydrate\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/CustomerNumberSearch.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\HandlerRegistry\\:\\:__construct\\(\\) has parameter \\$conditionHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/HandlerRegistry.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\HandlerRegistry\\:\\:__construct\\(\\) has parameter \\$sortingHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/HandlerRegistry.php
 
 		-
 			message: "#^Argument of an invalid type Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Customer supplied for foreach, only iterables are supported\\.$#"
@@ -5729,11 +5584,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\SearchIndexerInterface\\:\\:populate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/SearchIndexerInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\BacklogProcessor\\:\\:__construct\\(\\) has parameter \\$synchronizers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ESIndexingBundle/BacklogProcessor.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ESIndexingBundle\\\\BacklogProcessor\\:\\:add\\(\\) has no return type specified\\.$#"
@@ -6941,11 +6791,6 @@ parameters:
 			path: engine/Shopware/Bundle/ESIndexingBundle/TextMappingInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Service\\\\EmotionElementService\\:\\:__construct\\(\\) has parameter \\$componentHandler with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/EmotionElementService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Service\\\\EmotionElementService\\:\\:handleElement\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EmotionBundle/Service/EmotionElementService.php
@@ -7591,11 +7436,6 @@ parameters:
 			path: engine/Shopware/Bundle/EsBackendBundle/EsAwareRepository.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\EsBackendIndexer\\:\\:__construct\\(\\) has parameter \\$repositories with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/EsBackendIndexer.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\EsBackendIndexer\\:\\:cleanupIndices\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/EsBackendIndexer.php
@@ -8166,11 +8006,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/MediaService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceFactory\\:\\:__construct\\(\\) has parameter \\$adapterFactories with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/MediaServiceFactory.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceFactory\\:\\:__construct\\(\\) has parameter \\$cdnConfig with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/MediaServiceFactory.php
@@ -8276,11 +8111,6 @@ parameters:
 			path: engine/Shopware/Bundle/MediaBundle/Optimizer/PngoutOptimizer.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\OptimizerService\\:\\:__construct\\(\\) has parameter \\$optimizers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/MediaBundle/OptimizerService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\MediaBundle\\\\OptimizerService\\:\\:getMimeTypeByFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/MediaBundle/OptimizerService.php
@@ -8333,11 +8163,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$productNumber of method Shopware\\\\Bundle\\\\OrderBundle\\\\Service\\\\StockService\\:\\:updateProductInStock\\(\\) expects string, string\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/OrderBundle/Service/StockService.php
-
-		-
-			message: "#^Parameter \\#2 \\$quantity of method Shopware\\\\Bundle\\\\OrderBundle\\\\Service\\\\StockService\\:\\:updateProductInStock\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/OrderBundle/Service/StockService.php
 
 		-
@@ -9896,11 +9721,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundle/Sorting/Sorting.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\StoreFrontCriteriaFactory\\:\\:__construct\\(\\) has parameter \\$requestHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/StoreFrontCriteriaFactory.php
-
-		-
 			message: "#^Parameter \\#1 \\$request of method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandlerInterface\\:\\:handleRequest\\(\\) expects Enlight_Controller_Request_RequestHttp, Enlight_Controller_Request_Request given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/StoreFrontCriteriaFactory.php
@@ -9956,11 +9776,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/PriceHelperInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ProductNumberSearch\\:\\:__construct\\(\\) has parameter \\$facetHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\ProductNumberSearch\\:\\:assertCollectionIsInstanceOf\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/ProductNumberSearch.php
@@ -9984,16 +9799,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilder\\:\\:addState\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilder.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilderFactory\\:\\:__construct\\(\\) has parameter \\$conditionHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilderFactory.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilderFactory\\:\\:__construct\\(\\) has parameter \\$sortingHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/QueryBuilderFactory.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\QueryBuilderFactory\\:\\:addConditions\\(\\) has no return type specified\\.$#"
@@ -10256,11 +10061,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleES/FacetHandler/PropertyFacetHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\HandlerRegistry\\:\\:__construct\\(\\) has parameter \\$handlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleES/HandlerRegistry.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\HandlerRegistry\\:\\:getHandler\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleES/HandlerRegistry.php
@@ -10426,11 +10226,6 @@ parameters:
 			path: engine/Shopware/Bundle/SitemapBundle/Provider/StaticUrlProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\ConfigHandler\\:\\:__construct\\(\\) has parameter \\$configHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Service/ConfigHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\ConfigHandler\\:\\:addUrls\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Service/ConfigHandler.php
@@ -10494,11 +10289,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\SitemapWriter\\:\\:\\$files type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Service/SitemapWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\UrlFilter\\:\\:__construct\\(\\) has parameter \\$filterHandler with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SitemapBundle/Service/UrlFilter.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\UrlFilter\\:\\:addFilterContainer\\(\\) has no return type specified\\.$#"
@@ -16206,11 +15996,6 @@ parameters:
 			path: engine/Shopware/Components/CacheSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Captcha\\\\CaptchaRepository\\:\\:__construct\\(\\) has parameter \\$captchas with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Captcha/CaptchaRepository.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\BasketHelper\\:\\:addProportionalDiscount\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/BasketHelper.php
@@ -16244,11 +16029,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\CartOrderNumberProviderInterface\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/CartOrderNumberProviderInterface.php
-
-		-
-			message: "#^Parameter \\#2 \\$y of method Doctrine\\\\DBAL\\\\Query\\\\Expression\\\\ExpressionBuilder\\:\\:in\\(\\) expects array\\<string\\>\\|string, array\\<int, \\(int\\|string\\)\\> given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/CartPersistService.php
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\Cart\\\\CartPersistService\\:\\:\\$cart type has no value type specified in iterable type array\\.$#"
@@ -16451,11 +16231,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/TaxAggregator.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\Cart\\\\TaxAggregator\\:\\:\\$automaticTaxMode is never read, only written\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/TaxAggregator.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregatorInterface\\:\\:positionsTaxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/TaxAggregatorInterface.php
@@ -16522,16 +16297,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Components_Check_Path\\:\\:compare\\(\\) should return string but returns bool\\|string\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Check/Path.php
-
-		-
-			message: "#^Method Shopware_Components_Check_Path\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Iterator\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Check/Path.php
-
-		-
-			message: "#^Method Shopware_Components_Check_Path\\:\\:getList\\(\\) return type has no value type specified in iterable type Iterator\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/Path.php
 
@@ -16976,11 +16741,6 @@ parameters:
 			path: engine/Shopware/Components/CsvIterator.php
 
 		-
-			message: "#^Cannot access offset mixed on array\\|int\\|false\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CsvIterator.php
-
-		-
 			message: "#^Class Shopware_Components_CsvIterator implements generic interface Iterator but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Shopware/Components/CsvIterator.php
@@ -17337,7 +17097,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Shopware_Models_Document_Order\\:\\:\\$order\\.$#"
-			count: 12
+			count: 11
 			path: engine/Shopware/Components/Document.php
 
 		-
@@ -18046,11 +17806,6 @@ parameters:
 			path: engine/Shopware/Components/Emotion/Preset/PresetDataSynchronizer.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizer\\:\\:__construct\\(\\) has parameter \\$componentHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Emotion/Preset/PresetDataSynchronizer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Emotion\\\\Preset\\\\PresetDataSynchronizer\\:\\:findComponentHandler\\(\\) has parameter \\$element with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Emotion/Preset/PresetDataSynchronizer.php
@@ -18214,11 +17969,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\Exception\\\\DuplicateFilesystemFactoryException\\:\\:fromAdapterType\\(\\) has parameter \\$type with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Filesystem/Exception/DuplicateFilesystemFactoryException.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\FilesystemFactory\\:\\:__construct\\(\\) has parameter \\$adapterFactories with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Filesystem/FilesystemFactory.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Filesystem\\\\FilesystemFactory\\:\\:checkDuplicates\\(\\) has no return type specified\\.$#"
@@ -18641,11 +18391,6 @@ parameters:
 			path: engine/Shopware/Components/HttpCache/DefaultRouteService.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\DynamicCacheTimeService\\:\\:__construct\\(\\) has parameter \\$invalidationDateProvider with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/DynamicCacheTimeService.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\InvalidationDate\\\\BlogDate\\:\\:getNextDateQuery\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/InvalidationDate/BlogDate.php
@@ -18749,11 +18494,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\HttpCache\\\\Store\\:\\:\\$ignoredUrlParameters type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/Store.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProviderFactory\\:\\:__construct\\(\\) has parameter \\$urlProviders with no value type specified in iterable type IteratorAggregate\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/UrlProviderFactory.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\UrlProviderFactory\\:\\:getAllProviders\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -20916,11 +20656,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$plugins\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
 			message: "#^Call to an undefined method Enlight_Plugin_Bootstrap\\:\\:Info\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/Namespace.php
@@ -21006,11 +20741,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/RequirementValidator.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\ResourceSubscriber\\:\\:collectResourceFiles\\(\\) should return array\\<string\\> but returns array\\<int, string\\|false\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/ResourceSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\ResourceSubscriber\\:\\:onCollectCss\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/ResourceSubscriber.php
@@ -21019,16 +20749,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\ResourceSubscriber\\:\\:onCollectJavascript\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/ResourceSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlPluginInfoReader\\:\\:getChildren\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlPluginInfoReader\\:\\:getChildrenValues\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlPluginInfoReader\\:\\:parseInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -21042,11 +20762,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlPluginInfoReader\\:\\:read\\(\\) has parameter \\$file with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$entries contains generic class DOMNodeList but does not specify its types\\: TNode$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
 
@@ -21066,11 +20781,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/XmlReader/StoreValueParser/StoreXmlValueParser.php
 
 		-
-			message: "#^Cannot access property \\$nodeValue on DOMElement\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlConfigReader.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlConfigReader\\:\\:parseElementNodeList\\(\\) has parameter \\$list with generic class DOMNodeList but does not specify its types\\: TNode$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlConfigReader.php
@@ -21083,16 +20793,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlConfigReader\\:\\:parseFile\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlConfigReader.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlConfigReader\\:\\:parseElementNodeList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlConfigReader.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseTranslatableNodeList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 2
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlConfigReader.php
 
 		-
@@ -21114,21 +20814,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlCronjobReader\\:\\:parseList\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlCronjobReader.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlCronjobReader\\:\\:parseList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlCronjobReader.php
-
-		-
-			message: "#^Argument of an invalid type DOMNodeList\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
-
-		-
-			message: "#^Cannot access property \\$length on DOMNodeList\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlMenuReader\\:\\:parseEntry\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -21156,11 +20841,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
 
 		-
-			message: "#^Cannot call method item\\(\\) on DOMNodeList\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlPluginReader\\:\\:parseBlacklist\\(\\) has parameter \\$items with generic class DOMNodeList but does not specify its types\\: TNode$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
@@ -21178,11 +20858,6 @@ parameters:
 		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlPluginReader\\:\\:parseRequiredPlugins\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseTranslatableNodeList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 2
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
 
 		-
@@ -21244,11 +20919,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderInterface\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\CookieRemoveSubscriber\\:\\:convertToArray\\(\\) has parameter \\$cookieGroupCollection with no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Privacy/CookieRemoveSubscriber.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Privacy\\\\CookieRemoveSubscriber\\:\\:convertToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -21701,11 +21371,6 @@ parameters:
 			path: engine/Shopware/Components/Snippet/SnippetValidator.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function parse_ini_file expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Snippet/SnippetValidator.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Snippet\\\\Writer\\\\DatabaseWriter\\:\\:insertBatch\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Snippet/Writer/DatabaseWriter.php
@@ -21932,21 +21597,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\:\\:createColorPickerField\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\:\\:createConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\:\\:createConfigSets\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\:\\:createConfigSets\\(\\) has parameter \\$collection with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Components/Theme.php
 
@@ -22309,66 +21959,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\Theme\\\\Configuration\\:\\:\\$config type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Configuration.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:getContainerNames\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:getElements\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:getExistingConfigSet\\(\\) has parameter \\$collection with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:getLayout\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:getTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:injectConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:removeUnused\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:removeUnused\\(\\) has parameter \\$containers with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:removeUnused\\(\\) has parameter \\$fields with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:synchronize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:synchronizeSets\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Configurator\\:\\:validateConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Configurator.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\DBALTimestampPersistor\\:\\:updateTimestamp\\(\\) has no return type specified\\.$#"
@@ -23219,6 +22809,11 @@ parameters:
 			message: "#^Method Shopware_Controllers_Api_Translations\\:\\:putAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Api/Translations.php
+
+		-
+			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			count: 1
+			path: engine/Shopware/Controllers/Backend/Analytics.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getModelFields\\(\\) should return array\\<string, array\\{alias\\: string, type\\: string\\|null\\}\\> but returns array\\<string, string\\>\\.$#"
@@ -25312,11 +24907,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:fetchAttributes\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerQuickView\\:\\:getList\\(\\) should return array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Customer\\\\Customer\\>, total\\: int\\} but returns array\\{data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Customer\\\\Customer\\>, total\\: int, success\\?\\: true\\}\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
@@ -27426,11 +27016,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/UserManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$role of method Shopware_Controllers_Backend_UserManager\\:\\:getResourceNode\\(\\) expects Shopware\\\\Models\\\\User\\\\Role\\|null, int\\|Shopware\\\\Models\\\\User\\\\Role\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UserManager.php
-
-		-
 			message: "#^Parameter \\#1 \\$list of method Shopware_Controllers_Backend_Vote\\:\\:assignShops\\(\\) expects array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\>, total\\: int\\}, array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Article\\\\Vote\\>, total\\: int\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Vote.php
@@ -28146,7 +27731,7 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getBasket\\(\\) should return array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\} but returns array\\{content\\?\\: mixed, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}\\.$#"
+			message: "#^Method Shopware_Controllers_Frontend_Checkout\\:\\:getBasket\\(\\) should return array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\} but returns array\\{content\\?\\: mixed, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountWithTax\\?\\: string, sCurrencyId\\: mixed, sCurrencyName\\: mixed, sCurrencyFactor\\: mixed, \\.\\.\\.\\}\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -28326,12 +27911,12 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Parameter \\#1 \\$basket of method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}, array\\{content\\?\\: array\\<array\\<string, mixed\\>\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\: float, \\.\\.\\.\\} given\\.$#"
+			message: "#^Parameter \\#1 \\$basket of method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}, array\\{content\\?\\: array\\<array\\<string, mixed\\>\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, sCurrencyId\\: mixed, sCurrencyName\\: mixed, \\.\\.\\.\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
 		-
-			message: "#^Parameter \\#1 \\$basket of method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}, array\\{content\\?\\: array\\<array\\<string, mixed\\>\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\} given\\.$#"
+			message: "#^Parameter \\#1 \\$basket of method Shopware_Controllers_Frontend_Checkout\\:\\:getTaxRates\\(\\) expects array\\{content\\?\\: array\\<string, mixed\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountNumeric\\: float, AmountNetNumeric\\: float, AmountWithTax\\?\\: string, AmountWithTaxNumeric\\?\\: float, \\.\\.\\.\\}, array\\{content\\?\\: array\\<array\\<string, mixed\\>\\>, Amount\\?\\: string, AmountNet\\?\\: string, Quantity\\?\\: int, AmountWithTax\\?\\: string, sCurrencyId\\: mixed, sCurrencyName\\: mixed, sCurrencyFactor\\: mixed, \\.\\.\\.\\} given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -28412,7 +27997,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
-			count: 5
+			count: 3
 			path: engine/Shopware/Controllers/Frontend/Detail.php
 
 		-
@@ -28493,21 +28078,6 @@ parameters:
 		-
 			message: "#^Binary operation \"\\.\" between ' ' and array\\|string\\|false results in an error\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Cannot access offset 0 on array\\<int, string\\>\\|false\\.$#"
-			count: 3
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Cannot access offset 1 on array\\<int, string\\>\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Forms.php
-
-		-
-			message: "#^Cannot access offset 2 on array\\<int, string\\>\\|false\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Frontend/Forms.php
 
 		-
@@ -28647,7 +28217,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
-			count: 3
+			count: 2
 			path: engine/Shopware/Controllers/Frontend/Newsletter.php
 
 		-
@@ -30986,31 +30556,6 @@ parameters:
 			path: engine/Shopware/Core/sExport.php
 
 		-
-			message: "#^Access to an undefined property object\\:\\:\\$_GET\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$sCONFIG\\.$#"
-			count: 7
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$sCurrency\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$sMODULES\\.$#"
-			count: 6
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Access to an undefined property object\\:\\:\\$sSESSION_ID\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sMarketing.php
@@ -31098,21 +30643,6 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Property sMarketing\\:\\:\\$additionalTextService \\(Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\AdditionalTextServiceInterface\\) does not accept Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\AdditionalTextServiceInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Property sMarketing\\:\\:\\$category \\(Shopware\\\\Models\\\\Category\\\\Category\\) does not accept Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Property sMarketing\\:\\:\\$contextService \\(Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\) does not accept Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\|null\\.$#"
-			count: 1
 			path: engine/Shopware/Core/sMarketing.php
 
 		-
@@ -35656,11 +35186,6 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function file_get_contents expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Media.php
@@ -39496,51 +39021,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
 
 		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sBasketAmount\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sBasketQuantity\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sCategories\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sCategoryCurrent\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sCategoryStart\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sCustomPage\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sNotesQuantity\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sUserLoggedIn\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property sSystem\\:\\:\\$_GET\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
-
-		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
 			count: 4
 			path: engine/Shopware/Plugins/Default/Core/ControllerBase/Bootstrap.php
@@ -40746,16 +40226,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php
 
 		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sArticle\\.$#"
-			count: 3
-			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$sCategoryContent\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
-
-		-
 			message: "#^Cannot call method getControllerName\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Seo/Bootstrap.php
@@ -41741,39 +41211,9 @@ parameters:
 			path: tests/Functional/Bundle/ContentTypeBundle/Services/ExtjsBuilderTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CookieBundle\\\\Services\\\\ExampleTestSubscriber\\:\\:addInvalidCookie\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CookieBundle\\\\Services\\\\ExampleTestSubscriber\\:\\:addInvalidCookieGroup\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CookieBundle\\\\Services\\\\ExampleTestSubscriber\\:\\:addValidCookie\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CookieBundle\\\\Services\\\\ExampleTestSubscriber\\:\\:addValidCookieGroup\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$collection has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieGroupCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
 			message: "#^You should use assertCount\\(\\$expectedCount, \\$variable\\) instead of assertSame\\(\\$expectedCount, \\$variable\\-\\>count\\(\\)\\)\\.$#"
 			count: 5
 			path: tests/Functional/Bundle/CookieBundle/Services/CookieCollectorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CookieBundle\\\\Services\\\\RegexCookieSubscriber\\:\\:addCookie\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CookieBundle/Services/CookieHandlerTest.php
 
 		-
 			message: "#^You should use assertCount\\(\\$expectedCount, \\$variable\\) instead of assertSame\\(\\$expectedCount, \\$variable\\-\\>count\\(\\)\\)\\.$#"
@@ -44556,11 +43996,6 @@ parameters:
 			path: tests/Functional/Components/Privacy/ConfigDependentIpAnonymizerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\PreserveCookieFromRemovingSubscriber\\:\\:addCookie\\(\\) return type has no value type specified in iterable type Shopware\\\\Bundle\\\\CookieBundle\\\\CookieCollection\\.$#"
-			count: 1
-			path: tests/Functional/Components/Privacy/CookieRemoveSubscriberTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\IpAnonymizerTest\\:\\:testIpAnonymizer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Privacy/IpAnonymizerTest.php
@@ -44646,46 +44081,6 @@ parameters:
 			path: tests/Functional/Components/Theme/Base.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\ConfiguratorTest\\:\\:testContainerNames\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\ConfiguratorTest\\:\\:testRemoveUnused\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\ConfiguratorTest\\:\\:testSynchronizeSetsAdd\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\ConfiguratorTest\\:\\:testSynchronizeSetsRemove\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\ConfiguratorTest\\:\\:testValidateConfigException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\ConfiguratorTest\\:\\:testValidateConfigSuccess\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of class Shopware\\\\Components\\\\Form\\\\Field\\\\Text constructor expects string, null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$name of method Shopware\\\\Components\\\\Form\\\\Base\\:\\:setName\\(\\) expects string, null given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/ConfiguratorTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\InheritanceTest\\:\\:getDummyTemplates\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Theme/InheritanceTest.php
@@ -44761,11 +44156,6 @@ parameters:
 			path: tests/Functional/Components/Theme/InstallerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Themes\\\\TestBare\\\\Theme\\:\\:createConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Themes/TestBare/Theme.php
-
-		-
 			message: "#^Property Shopware\\\\Themes\\\\TestBare\\\\Theme\\:\\:\\$css type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Theme/Themes/TestBare/Theme.php
@@ -44781,21 +44171,6 @@ parameters:
 			path: tests/Functional/Components/Theme/Themes/TestBare/Theme.php
 
 		-
-			message: "#^Method Shopware\\\\Themes\\\\TestResponsive\\\\Theme\\:\\:createConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Themes/TestResponsive/Theme.php
-
-		-
-			message: "#^Method Shopware\\\\Themes\\\\TestResponsive\\\\Theme\\:\\:createConfigSets\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Themes/TestResponsive/Theme.php
-
-		-
-			message: "#^Method Shopware\\\\Themes\\\\TestResponsive\\\\Theme\\:\\:createConfigSets\\(\\) has parameter \\$collection with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Themes/TestResponsive/Theme.php
-
-		-
 			message: "#^Property Shopware\\\\Themes\\\\TestResponsive\\\\Theme\\:\\:\\$css type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Theme/Themes/TestResponsive/Theme.php
@@ -44808,11 +44183,6 @@ parameters:
 		-
 			message: "#^Parameter \\#1 \\$file of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setFile\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile, Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\File given\\.$#"
 			count: 2
-			path: tests/Functional/Components/Thumbnail/ManagerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function unlink expects string, string\\|false given\\.$#"
-			count: 1
 			path: tests/Functional/Components/Thumbnail/ManagerTest.php
 
 		-
@@ -46806,11 +46176,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeMyBillingAddress\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeMyEmailWithPasswordToWithConfirmation\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/AccountContext.php
@@ -46876,17 +46241,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeMyShippingAddress\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeTheCurrentAddressTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeTheCurrentAddressTo\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
@@ -46897,11 +46252,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeThePaymentMethodTo\\(\\) has parameter \\$payment with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iChangeThePaymentMethodTo\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
@@ -46937,11 +46287,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iCreateANewAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iCreateANewAddress\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
@@ -47012,11 +46357,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iRegisterMe\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\AccountContext\\:\\:iRegisterMe\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/AccountContext.php
 
@@ -47151,17 +46491,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/BlogContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BlogContext\\:\\:iShouldSeeAnAverageEvaluationOfFromFollowingComments\\(\\) has parameter \\$comments with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/BlogContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BlogContext\\:\\:iWriteAComment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\BlogContext\\:\\:iWriteAComment\\(\\) has parameter \\$data with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/BlogContext.php
 
@@ -47296,11 +46626,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:iChangeTheAddress\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:iChangeTheShippingMethodTo\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
@@ -47371,11 +46696,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:iCreateTheAddress\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:iOpenTheCartPage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
@@ -47392,11 +46712,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:iProceedToCheckoutAs\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:iProceedToCheckoutAs\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
@@ -47496,11 +46811,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:myFinishedOrderShouldLookLikeThis\\(\\) has parameter \\$positions with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:removeCustomDispatchSurcharge\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
@@ -47546,11 +46856,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theAggregationsShouldLookLikeThis\\(\\) has parameter \\$aggregations with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theArticleHasNoActivePriceGroup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
@@ -47581,17 +46886,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theCartContainsTheFollowingProducts\\(\\) has parameter \\$items with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theCartShouldContainTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theCartShouldContainTheFollowingProducts\\(\\) has parameter \\$items with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
@@ -47601,17 +46896,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theCustomerGroupExist\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theFollowingProductExist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theFollowingProductExist\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
@@ -47621,17 +46906,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:theManufacturerExist\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:thereIsACategoryDefined\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\CheckoutContext\\:\\:thereIsACategoryDefined\\(\\) has parameter \\$table with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/CheckoutContext.php
 
@@ -47721,11 +46996,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iChooseTheFollowingArticleConfiguration\\(\\) has parameter \\$configuration with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iPutTheArticleTimesIntoTheBasket\\(\\) has parameter \\$quantity with no type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
@@ -47736,17 +47006,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations\\(\\) has parameter \\$evaluations with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iSubmitTheNotificationFormWith\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\DetailContext\\:\\:iWriteAnEvaluation\\(\\) has parameter \\$data with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/DetailContext.php
 
@@ -48526,11 +47786,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ExportContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ExportContext\\:\\:iShouldSeeFeedWithFormatInTheExport\\(\\) has parameter \\$entries with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ExportContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ExportContext\\:\\:parseCsv\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ExportContext.php
@@ -48552,11 +47807,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ExportContext\\:\\:validate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ExportContext\\:\\:validate\\(\\) has parameter \\$entries with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ExportContext.php
 
@@ -48617,11 +47867,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\FormContext\\:\\:iSubmitTheInquiryFormWith\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/FormContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\FormContext\\:\\:iSubmitTheInquiryFormWith\\(\\) has parameter \\$data with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/FormContext.php
 
@@ -48806,16 +48051,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:hasNamedButtons\\(\\) should return array\\<string\\>\\|bool but returns array\\<string, mixed\\>\\|true\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:hasNamedLinks\\(\\) should return array\\<string\\>\\|bool but returns array\\<string, mixed\\>\\|true\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:pressNamedButton\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
@@ -48916,11 +48151,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ListingContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ListingContext\\:\\:iAmOnTheListingPage\\(\\) has parameter \\$params with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ListingContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ListingContext\\:\\:iAmOnTheListingPageForCategoryOnPage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ListingContext.php
@@ -48976,11 +48206,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ListingContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ListingContext\\:\\:iSetTheFilterTo\\(\\) has parameter \\$filter with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ListingContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ListingContext\\:\\:iShouldNotBeAbleToBrowseToPage\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ListingContext.php
@@ -49027,11 +48252,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ListingContext\\:\\:theArticleOnPositionShouldHaveThisProperties\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ListingContext\\:\\:theArticleOnPositionShouldHaveThisProperties\\(\\) has parameter \\$properties with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ListingContext.php
 
@@ -49121,17 +48341,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/NoteContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\NoteContext\\:\\:theNoteContainsTheFollowingProducts\\(\\) has parameter \\$items with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/NoteContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\NoteContext\\:\\:theNoteShouldContainTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\NoteContext\\:\\:theNoteShouldContainTheFollowingProducts\\(\\) has parameter \\$items with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/NoteContext.php
 
@@ -50506,11 +49716,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImageAndMapping\\(\\) has parameter \\$mapping with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImageAndMapping\\(\\) has parameter \\$position with no type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
@@ -50521,22 +49726,12 @@ parameters:
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeABannerSlider\\(\\) has parameter \\$slides with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeABannerWithMapping\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeABannerWithMapping\\(\\) has parameter \\$image with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeABannerWithMapping\\(\\) has parameter \\$mapping with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
@@ -50571,11 +49766,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeAManufacturerSlider\\(\\) has parameter \\$manufacturers with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeAYoutubeVideo\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
@@ -50591,11 +49781,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeAnArticle\\(\\) has parameter \\$data with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeAnArticle\\(\\) has parameter \\$position with no type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
@@ -50606,17 +49791,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeAnArticleSlider\\(\\) has parameter \\$articles with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeSomeBlogArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iShouldSeeSomeBlogArticles\\(\\) has parameter \\$articles with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
@@ -50632,11 +49807,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iSubscribeToTheNewsletterWith\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:iSubscribeToTheNewsletterWith\\(\\) has parameter \\$additionalData with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
@@ -50682,11 +49852,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:theComparisonShouldContainTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\ShopwareContext\\:\\:theComparisonShouldContainTheFollowingProducts\\(\\) has parameter \\$items with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/ShopwareContext.php
 
@@ -50746,22 +49911,12 @@ parameters:
 			path: tests/Mink/features/bootstrap/SitemapContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\SitemapContext\\:\\:iShouldSeeTheGroup\\(\\) has parameter \\$entries with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/SitemapContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\SitemapContext\\:\\:iShouldSeeTheGroup\\(\\) has parameter \\$name with no type specified\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/SitemapContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\SitemapContext\\:\\:iShouldSeeTheGroupWithLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\SitemapContext\\:\\:iShouldSeeTheGroupWithLink\\(\\) has parameter \\$entries with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/SitemapContext.php
 
@@ -50777,11 +49932,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\SitemapContext\\:\\:thereShouldBeTheseLinksInTheXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\SitemapContext\\:\\:thereShouldBeTheseLinksInTheXml\\(\\) has parameter \\$links with no value type specified in iterable type Behat\\\\Gherkin\\\\Node\\\\TableNode\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/SitemapContext.php
 
@@ -51536,22 +50686,12 @@ parameters:
 			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\Service\\\\FilterHandlers\\:\\:getIterator\\(\\) return type has no value type specified in iterable type Traversable\\<mixed, mixed\\>\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\Service\\\\UrlFilterTest\\:\\:getFilterContainerFactory\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\Service\\\\UrlFilterTest\\:\\:getUrlFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\Service\\\\UrlFilterTest\\:\\:getUrlFilter\\(\\) has parameter \\$filterHandlers with no value type specified in iterable type IteratorAggregate\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
 
@@ -52787,7 +51927,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_GET\\.$#"
-			count: 12
+			count: 11
 			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
 
 		-
@@ -52817,7 +51957,7 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
-			count: 12
+			count: 11
 			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
@@ -53361,11 +52501,6 @@ parameters:
 			path: tests/Unit/Components/Plugin/RequirementValidatorTest.php
 
 		-
-			message: "#^Cannot call method item\\(\\) on DOMNodeList\\|false\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/XmlReader/StoreValueParser/StoreExtjsValueParserTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\XmlReader\\\\StoreValueParser\\\\StoreExtjsValueParserTest\\:\\:getStoreElement\\(\\) should return DOMElement but returns DOMNode\\|null\\.$#"
 			count: 1
 			path: tests/Unit/Components/Plugin/XmlReader/StoreValueParser/StoreExtjsValueParserTest.php
@@ -53374,11 +52509,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\XmlReader\\\\StoreValueParser\\\\StoreExtjsValueParserTest\\:\\:\\$parser \\(Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\StoreValueParser\\\\StoreXmlValueParser\\) does not accept Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\StoreValueParser\\\\StoreValueParserInterface\\.$#"
 			count: 1
 			path: tests/Unit/Components/Plugin/XmlReader/StoreValueParser/StoreExtjsValueParserTest.php
-
-		-
-			message: "#^Cannot call method item\\(\\) on DOMNodeList\\|false\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/XmlReader/StoreValueParser/StoreXmlValueParserTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\XmlReader\\\\StoreValueParser\\\\StoreXmlValueParserTest\\:\\:__construct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
@@ -53419,56 +52549,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlPluginReaderTest\\:\\:readFile\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Unit/Components/Plugin/XmlReader/XmlPluginReaderTest.php
-
-		-
-			message: "#^Cannot call method getAttribute\\(\\) on DOMNode\\|null\\.$#"
-			count: 2
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Cannot call method getElementsByTagName\\(\\) on DOMNode\\|null\\.$#"
-			count: 1
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Cannot call method item\\(\\) on DOMNodeList\\|false\\.$#"
-			count: 7
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$element of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:getElementChildValueByName\\(\\) expects DOMElement, DOMNode\\|null given\\.$#"
-			count: 3
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:getFirstChildren\\(\\) expects DOMNode, DOMNode\\|null given\\.$#"
-			count: 2
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseStoreNodeList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 3
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$list of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseTranslatableNodeList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 3
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$optionsList of static method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseOptionsNodeList\\(\\) expects DOMNodeList, DOMNodeList\\|false given\\.$#"
-			count: 3
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertArrayHasKey\\(\\) expects array\\|ArrayAccess, array\\|null given\\.$#"
-			count: 2
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertCount\\(\\) expects Countable\\|iterable, array\\|null given\\.$#"
-			count: 2
-			path: tests/Unit/Components/Plugin/XmlReader/XmlReaderBaseTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\QueryAliasMapperTest\\:\\:testAliasesCanBeRetrieved\\(\\) has no return type specified\\.$#"
@@ -53703,11 +52783,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$constraint of method Shopware\\\\Components\\\\Model\\\\DBAL\\\\Validator\\\\OrderNumberValidator\\:\\:validate\\(\\) expects Symfony\\\\Component\\\\Validator\\\\Constraint, null given\\.$#"
 			count: 1
-			path: tests/Unit/Model/OrderNumberValidatorTest.php
-
-		-
-			message: "#^Result of method Shopware\\\\Components\\\\Model\\\\DBAL\\\\Validator\\\\OrderNumberValidator\\:\\:validate\\(\\) \\(void\\) is used\\.$#"
-			count: 3
 			path: tests/Unit/Model/OrderNumberValidatorTest.php
 
 		-

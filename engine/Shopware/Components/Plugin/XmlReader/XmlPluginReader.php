@@ -26,6 +26,7 @@ namespace Shopware\Components\Plugin\XmlReader;
 
 use DOMDocument;
 use DOMElement;
+use DOMNode;
 use DOMNodeList;
 use DOMXPath;
 
@@ -44,7 +45,6 @@ class XmlPluginReader extends XmlReaderBase
 
         $blacklist = [];
 
-        /** @var DOMElement $item */
         foreach ($items as $item) {
             $blacklist[] = $item->nodeValue;
         }
@@ -57,18 +57,31 @@ class XmlPluginReader extends XmlReaderBase
         $xpath = new DOMXPath($xml);
 
         $plugin = $xpath->query('//plugin');
+        if (!$plugin instanceof DOMNodeList) {
+            return [];
+        }
 
-        /** @var DOMElement $pluginData */
         $pluginData = $plugin->item(0);
+        if (!$pluginData instanceof DOMElement) {
+            return [];
+        }
 
         $info = [];
 
-        if ($label = self::parseTranslatableNodeList($xpath->query('//plugin/label'))) {
-            $info['label'] = $label;
+        $label = $xpath->query('//plugin/label');
+        if ($label instanceof DOMNodeList) {
+            $label = self::parseTranslatableNodeList($label);
+            if ($label) {
+                $info['label'] = $label;
+            }
         }
 
-        if ($description = self::parseTranslatableNodeList($xpath->query('//plugin/description'))) {
-            $info['description'] = $description;
+        $description = $xpath->query('//plugin/description');
+        if ($description instanceof DOMNodeList) {
+            $description = self::parseTranslatableNodeList($description);
+            if ($description) {
+                $info['description'] = $description;
+            }
         }
 
         $simpleFields = ['version', 'license', 'author', 'copyright', 'link'];
@@ -78,26 +91,27 @@ class XmlPluginReader extends XmlReaderBase
             }
         }
 
-        /** @var DOMElement $changelog */
         foreach ($pluginData->getElementsByTagName('changelog') as $changelog) {
             $version = $changelog->getAttribute('version');
 
-            /** @var DOMElement $changes */
             foreach ($changelog->getElementsByTagName('changes') as $changes) {
                 $lang = $changes->getAttribute('lang') ?: 'en';
                 $info['changelog'][$version][$lang][] = $changes->nodeValue;
             }
         }
 
-        $compatibility = $xpath->query('//plugin/compatibility')->item(0);
-        if ($compatibility !== null) {
-            $info['compatibility'] = [
-                'minVersion' => $compatibility->getAttribute('minVersion'),
-                'maxVersion' => $compatibility->getAttribute('maxVersion'),
-                'blacklist' => self::parseBlacklist(
-                    $compatibility->getElementsByTagName('blacklist')
-                ),
-            ];
+        $compatibility = $xpath->query('//plugin/compatibility');
+        if ($compatibility instanceof DOMNodeList) {
+            $compatibility = $compatibility->item(0);
+            if ($compatibility instanceof DOMNode) {
+                $info['compatibility'] = [
+                    'minVersion' => $compatibility->getAttribute('minVersion'),
+                    'maxVersion' => $compatibility->getAttribute('maxVersion'),
+                    'blacklist' => self::parseBlacklist(
+                        $compatibility->getElementsByTagName('blacklist')
+                    ),
+                ];
+            }
         }
 
         $requiredPlugins = self::getFirstChildren(
@@ -118,7 +132,6 @@ class XmlPluginReader extends XmlReaderBase
 
         $requiredPlugins = $requiredPluginNode->getElementsByTagName('requiredPlugin');
 
-        /** @var DOMElement $requiredPlugin */
         foreach ($requiredPlugins as $requiredPlugin) {
             $plugin = [];
 

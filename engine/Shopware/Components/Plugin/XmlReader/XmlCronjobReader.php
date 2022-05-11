@@ -36,9 +36,10 @@ class XmlCronjobReader extends XmlReaderBase
 
     protected function parseFile(DOMDocument $xml): array
     {
-        $xpath = new DOMXPath($xml);
-
-        $nodeList = $xpath->query('//cronjobs/cronjob');
+        $nodeList = (new DOMXPath($xml))->query('//cronjobs/cronjob');
+        if (!$nodeList instanceof DOMNodeList) {
+            return [];
+        }
 
         return $this->parseList($nodeList);
     }
@@ -51,7 +52,6 @@ class XmlCronjobReader extends XmlReaderBase
 
         $items = [];
 
-        /** @var DOMElement $item */
         foreach ($list as $item) {
             $items[] = $this->parseItem($item);
         }

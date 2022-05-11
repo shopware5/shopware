@@ -35,6 +35,8 @@ parameters:
         - %currentWorkingDirectory%/engine/Shopware
         - %currentWorkingDirectory%/tests
         - %currentWorkingDirectory%/engine/Library/Enlight
+        - %currentWorkingDirectory%/themes/Frontend/Bare/Theme.php
+        - %currentWorkingDirectory%/themes/Frontend/Responsive/Theme.php
     excludePaths:
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Local

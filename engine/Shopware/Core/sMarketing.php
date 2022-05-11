@@ -27,6 +27,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface as StorefrontMediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Components\Compatibility\LegacyStructConverter;
@@ -42,7 +43,7 @@ class sMarketing implements Enlight_Hook
     /**
      * Pointer to Shopware-Core-public functions
      *
-     * @var object
+     * @var sSystem
      */
     public $sSYSTEM;
 
@@ -63,52 +64,41 @@ class sMarketing implements Enlight_Hook
      */
     public $customerGroupId;
 
-    /**
-     * @var Category
-     */
-    private $category;
+    private ContextServiceInterface $contextService;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
+    private AdditionalTextServiceInterface $additionalTextService;
 
-    /**
-     * @var AdditionalTextServiceInterface
-     */
-    private $additionalTextService;
+    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
-    /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    private $db;
+    private Shopware_Components_Config $config;
+
+    private sArticles $productModule;
+
+    private Enlight_Controller_Front $front;
 
     public function __construct(
         ContextServiceInterface $contextService = null,
-        AdditionalTextServiceInterface $additionalTextService = null
+        AdditionalTextServiceInterface $additionalTextService = null,
+        Shopware_Components_Config $config = null,
+        sArticles $productModule = null,
+        Enlight_Controller_Front $front = null
     ) {
-        $this->category = Shopware()->Shop()->getCategory();
-        $this->categoryId = $this->category->getId();
+        $this->categoryId = (int) Shopware()->Shop()->getCategory()->getId();
         $this->customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
 
-        $this->contextService = $contextService;
-        $this->additionalTextService = $additionalTextService;
-
-        if ($this->contextService == null) {
-            $this->contextService = Shopware()->Container()->get(ContextServiceInterface::class);
-        }
-
-        if ($this->additionalTextService == null) {
-            $this->additionalTextService = Shopware()->Container()->get(AdditionalTextServiceInterface::class);
-        }
+        $this->contextService = $contextService ?? Shopware()->Container()->get(ContextServiceInterface::class);
+        $this->additionalTextService = $additionalTextService ?? Shopware()->Container()->get(AdditionalTextServiceInterface::class);
 
         $this->db = Shopware()->Db();
+        $this->config = $config ?? Shopware()->Config();
+        $this->productModule = $productModule ?? Shopware()->Modules()->Articles();
+        $this->front = $front ?: Shopware()->Front();
     }
 
     public function sGetSimilaryShownArticles($articleId, $limit = 0)
     {
         if (empty($limit)) {
-            $limit = empty($this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR']) ? 4 : (int) $this->sSYSTEM->sCONFIG['sMAXCROSSSIMILAR'];
+            $limit = empty($this->config->get('sMAXCROSSSIMILAR')) ? 4 : (int) $this->config->get('sMAXCROSSSIMILAR');
         }
         $limit = (int) $limit;
 
@@ -171,7 +161,7 @@ class sMarketing implements Enlight_Hook
     public function sGetAlsoBoughtArticles($articleID, $limit = 0)
     {
         if (empty($limit)) {
-            $limit = empty($this->sSYSTEM->sCONFIG['sMAXCROSSALSOBOUGHT']) ? 4 : (int) $this->sSYSTEM->sCONFIG['sMAXCROSSALSOBOUGHT'];
+            $limit = empty($this->config->get('sMAXCROSSALSOBOUGHT')) ? 4 : (int) $this->config->get('sMAXCROSSALSOBOUGHT');
         }
         $limit = (int) $limit;
         $where = '';
@@ -262,7 +252,7 @@ class sMarketing implements Enlight_Hook
 
         $mediaIds = $this->getMediaIdsOfPath($images);
         $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
-        $medias = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::class)->getList($mediaIds, $context);
+        $medias = Shopware()->Container()->get(StorefrontMediaServiceInterface::class)->getList($mediaIds, $context);
 
         foreach ($getBanners as &$getAffectedBanners) {
             // converting to old format
@@ -388,16 +378,16 @@ class sMarketing implements Enlight_Hook
             }
 
             if (empty($premium['available'])) {
-                $premium['sDifference'] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice(
+                $premium['sDifference'] = $this->productModule->sFormatPrice(
                     $premium['startprice'] - $sBasketAmount
                 );
             }
-            $premium['sArticle'] = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById(
+            $premium['sArticle'] = $this->productModule->sGetPromotionById(
                 'fix',
                 0,
                 $premium['articleID']
             );
-            $premium['startprice'] = $this->sSYSTEM->sMODULES['sArticles']->sFormatPrice($premium['startprice']);
+            $premium['startprice'] = $this->productModule->sFormatPrice($premium['startprice']);
             $premium['sVariants'] = $this->getVariantDetailsForPremiumProducts(
                 $premium['articleID'],
                 $premium['main_detail_id']
@@ -414,13 +404,13 @@ class sMarketing implements Enlight_Hook
             $categoryId = $this->categoryId;
         }
 
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDMAX'])) {
-            $tagSize = (int) $this->sSYSTEM->sCONFIG['sTAGCLOUDMAX'];
+        if (!empty($this->config->get('sTAGCLOUDMAX'))) {
+            $tagSize = (int) $this->config->get('sTAGCLOUDMAX');
         } else {
             $tagSize = 50;
         }
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGTIME'])) {
-            $tagTime = (int) $this->sSYSTEM->sCONFIG['sTAGTIME'];
+        if (!empty($this->config->get('sTAGTIME'))) {
+            $tagTime = (int) $this->config->get('sTAGTIME');
         } else {
             $tagTime = 3;
         }
@@ -463,21 +453,21 @@ class sMarketing implements Enlight_Hook
         if (empty($products)) {
             return [];
         }
-        $products = $this->sSYSTEM->sMODULES['sArticles']->sGetTranslations($products, 'article');
+        $products = $this->productModule->sGetTranslations($products, 'article');
 
         $pos = 1;
         $anz = \count($products);
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'])) {
-            $steps = (int) $this->sSYSTEM->sCONFIG['sTAGCLOUDSPLIT'];
+        if (!empty($this->config->get('sTAGCLOUDSPLIT'))) {
+            $steps = (int) $this->config->get('sTAGCLOUDSPLIT');
         } else {
             $steps = 3;
         }
-        if (!empty($this->sSYSTEM->sCONFIG['sTAGCLOUDCLASS'])) {
-            $class = (string) $this->sSYSTEM->sCONFIG['sTAGCLOUDCLASS'];
+        if (!empty($this->config->get('sTAGCLOUDCLASS'))) {
+            $class = (string) $this->config->get('sTAGCLOUDCLASS');
         } else {
             $class = 'tag';
         }
-        $link = $this->sSYSTEM->sCONFIG['sBASEFILE'] . '?sViewport=detail&sArticle=';
+        $link = $this->config->get('sBASEFILE') . '?sViewport=detail&sArticle=';
 
         foreach ($products as $productId => $product) {
             $name = strip_tags(html_entity_decode($product['articleName'], ENT_QUOTES, 'UTF-8'));
@@ -512,7 +502,7 @@ class sMarketing implements Enlight_Hook
     public function sGetSimilarArticles($articleId = null, $limit = null)
     {
         $limit = empty($limit) ? 6 : (int) $limit;
-        $productId = empty($articleId) ? (int) $this->sSYSTEM->_GET['sArticle'] : (int) $articleId;
+        $productId = (empty($articleId) && $this->front->Request()) ? (int) $this->front->Request()->getParam('sArticle') : (int) $articleId;
         $sql = <<<SQL
 SELECT u.articleID, u.articleName, u.Rel
   FROM (
@@ -631,7 +621,7 @@ SQL;
         $similarProducts = [];
         if (!empty($similarProductIds)) {
             foreach ($similarProductIds as $similarProductId) {
-                $product = $this->sSYSTEM->sMODULES['sArticles']->sGetPromotionById('fix', 0, (int) $similarProductId);
+                $product = $this->productModule->sGetPromotionById('fix', 0, (int) $similarProductId);
                 if (!empty($product)) {
                     $similarProducts[] = $product;
                 }

@@ -30,8 +30,8 @@ use DOMNode;
 use DOMNodeList;
 use Exception;
 use InvalidArgumentException;
+use RuntimeException;
 use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserFactory;
-use Shopware\Components\Plugin\XmlReader\StoreValueParser\StoreValueParserInterface;
 use Symfony\Component\Config\Util\XmlUtils;
 
 abstract class XmlReaderBase implements XmlReaderInterface
@@ -65,14 +65,16 @@ abstract class XmlReaderBase implements XmlReaderInterface
 
         $translations = [];
 
-        /** @var DOMElement $item */
         foreach ($list as $item) {
             $language = $item->getAttribute('lang') ?: self::DEFAULT_LANG;
+            if (!\is_string($language)) {
+                throw new RuntimeException('"lang" attribute needs to be a string');
+            }
 
             // XSD Requires en-GB, Zend uses en_GB
             $language = str_replace('-', '_', $language);
 
-            $translations[$language] = trim($item->nodeValue);
+            $translations[$language] = trim((string) $item->nodeValue);
         }
 
         return $translations;
@@ -88,14 +90,16 @@ abstract class XmlReaderBase implements XmlReaderInterface
 
         $translations = [];
 
-        /** @var DOMElement $item */
         foreach ($list as $item) {
             $language = $item->getAttribute('lang') ?: self::DEFAULT_LANG;
+            if (!\is_string($language)) {
+                throw new RuntimeException('"lang" attribute needs to be a string');
+            }
 
             // XSD Requires en-GB, Zend uses en_GB
             $language = str_replace('-', '_', $language);
 
-            $translations[$language] = trim($item->nodeValue);
+            $translations[$language] = trim((string) $item->nodeValue);
         }
 
         return $translations;
@@ -147,15 +151,14 @@ abstract class XmlReaderBase implements XmlReaderInterface
             return null;
         }
 
-        /** @var DOMElement $storeItem */
         $storeItem = $list->item(0);
+        if (!$storeItem instanceof DOMElement) {
+            return null;
+        }
 
         $type = $storeItem->getAttribute('type') ?: 'xml';
 
-        /** @var StoreValueParserInterface $parser */
-        $parser = StoreValueParserFactory::create($type);
-
-        return $parser->parse($storeItem);
+        return StoreValueParserFactory::create($type)->parse($storeItem);
     }
 
     public static function parseOptionsNodeList(DOMNodeList $optionsList): ?array
@@ -172,7 +175,6 @@ abstract class XmlReaderBase implements XmlReaderInterface
 
         $options = [];
 
-        /** @var DOMElement $option */
         foreach ($optionList as $option) {
             if ($option instanceof DOMElement) {
                 $options[$option->nodeName] = XmlUtils::phpize($option->nodeValue);

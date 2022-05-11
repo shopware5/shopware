@@ -175,13 +175,13 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This methods return the current CSV row data.
      *
-     * @return array The row as an one-dimensional array
+     * @return array The row as a one-dimensional array
      */
     public function current()
     {
         $data = [];
         foreach ($this->_header as $key => $name) {
-            $data[$name] = isset($this->_current[$key]) ? $this->_current[$key] : '';
+            $data[$name] = (\is_array($this->_current) && isset($this->_current[$key])) ? $this->_current[$key] : '';
         }
 
         return $data;
