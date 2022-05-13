@@ -257,11 +257,6 @@ Prepare Artifacts:
         - t3.nano
     image: debian:11-slim
     stage: Build Image
-    needs:
-        - job: Install Required PHP Files
-          artifacts: false
-        - job: Install Required JS Files
-          artifacts: false
     cache:
         - <<: *composer-cache
           policy: pull
@@ -277,7 +272,7 @@ Prepare Artifacts:
             - '.git/**'
         expire_in: 3h
     rules:
-        - if: '$CI_COMMIT_REF_PROTECTED == "true"'
+       - if: '$CI_COMMIT_REF_PROTECTED == "true"'
 
 Build Image:
     stage: Build Image
@@ -296,4 +291,4 @@ Build Image:
         project: shopware/5/product/image
         branch: pt-12693/add-aio-image # TODO: Change to master, once the AIO image job is finished.
     rules:
-        - if: '$CI_COMMIT_REF_PROTECTED == "true"'
+       - if: '$CI_COMMIT_REF_PROTECTED == "true"'
