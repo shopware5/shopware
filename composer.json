@@ -108,7 +108,7 @@
         "phpstan/extension-installer": "1.1.0",
         "phpstan/phpstan": "1.6.8",
         "phpstan/phpstan-doctrine": "1.2.6",
-        "phpstan/phpstan-phpunit": "1.0.0",
+        "phpstan/phpstan-phpunit": "1.1.1",
         "phpstan/phpstan-symfony": "1.1.2",
         "phpunit/phpunit": "^9.4",
         "sensiolabs/behat-page-object-extension": "2.3.4",
