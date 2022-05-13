@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0e99e6850cafc2a20e4e9dab4c1807ee",
+    "content-hash": "75481ff55d0edfdd45a18f080c0f83d3",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8350,16 +8350,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.1.2",
+            "version": "1.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "96ee630098c49c1c25326ae51b027e469bfd2064"
+                "reference": "4bdffcf1033b6c60662a28419d0192e0dda5684f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/96ee630098c49c1c25326ae51b027e469bfd2064",
-                "reference": "96ee630098c49c1c25326ae51b027e469bfd2064",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/4bdffcf1033b6c60662a28419d0192e0dda5684f",
+                "reference": "4bdffcf1033b6c60662a28419d0192e0dda5684f",
                 "shasum": ""
             },
             "require": {
@@ -8376,8 +8376,10 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
                 "phpunit/phpunit": "^9.5",
+                "psr/container": "1.0 || 1.1.1",
                 "symfony/config": "^4.2 || ^5.0",
                 "symfony/console": "^4.0 || ^5.0",
+                "symfony/dependency-injection": "^4.0 || ^5.0",
                 "symfony/form": "^4.0 || ^5.0",
                 "symfony/framework-bundle": "^4.4 || ^5.0",
                 "symfony/http-foundation": "^5.1",
@@ -8416,9 +8418,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.1.2"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.1.8"
             },
-            "time": "2022-01-18T16:08:22+00:00"
+            "time": "2022-03-24T07:56:03+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
