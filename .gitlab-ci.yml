@@ -252,43 +252,19 @@ Mink:
           when: manual
           allow_failure: true
 
-Prepare Artifacts:
-    tags:
-        - t3.nano
-    image: debian:11-slim
-    stage: Build Image
-    cache:
-        - <<: *composer-cache
-          policy: pull
-        - <<: *npm-cache
-          policy: pull
-    script:
-        - ls -lah ./*
-    artifacts:
-        paths:
-            - '$CI_PROJECT_DIR/'
-        exclude:
-            - '.git'
-            - '.git/**'
-        expire_in: 3h
-    rules:
-       - if: '$CI_COMMIT_REF_PROTECTED == "true"'
-
 Build Image:
     stage: Build Image
-    needs:
-        - job: Prepare Artifacts
-          artifacts: false
     inherit:
         variables: false
     variables:
-        UPSTREAM_PROJECT_ID: '$CI_PROJECT_ID'
         UPSTREAM_REF_NAME: '$CI_COMMIT_REF_NAME'
         UPSTREAM_COMMIT_SHA: '$CI_COMMIT_SHORT_SHA'
-        UPSTREAM_JOB_NAME: 'Prepare+Artifacts'
-        BASE_IMAGE_TAG: '7.4'
+        UPSTREAM_CI_COMMIT_REF_PROTECTED: '$CI_COMMIT_REF_PROTECTED'
+        PHP_VERSION: '8.0'
+        COMPOSER_VERSION: '2'
+        NODE_VERSION: '18'
     trigger:
         project: shopware/5/product/image
-        branch: pt-12693/add-aio-image # TODO: Change to master, once the AIO image job is finished.
+        branch: master
     rules:
        - if: '$CI_COMMIT_REF_PROTECTED == "true"'
