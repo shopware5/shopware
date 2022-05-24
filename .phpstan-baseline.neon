@@ -2961,11 +2961,6 @@ parameters:
 			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AddressFormType.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AttributeFormType\\:\\:buildForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AttributeFormType.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AttributeFormType\\:\\:configureOptions\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AttributeFormType.php
@@ -19381,11 +19376,6 @@ parameters:
 			path: engine/Shopware/Components/Model/ModelManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$className of method Doctrine\\\\ORM\\\\EntityManager\\:\\:getClassMetadata\\(\\) expects string, class\\-string\\<Shopware\\\\Components\\\\Model\\\\ModelEntity\\>\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelManager.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\ProxyAwareRepositoryFactory\\:\\:\\$repositoryList with generic interface Doctrine\\\\Persistence\\\\ObjectRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ProxyAwareRepositoryFactory.php
@@ -19776,16 +19766,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getEntities\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getEntityForAttribute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getEntityForPrefix\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
@@ -19817,11 +19797,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getPrefixForEntity\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getPrefixedColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
@@ -19867,16 +19842,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$columns has no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$columnsNotToShowInGrid has no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$entities has no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 

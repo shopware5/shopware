@@ -746,9 +746,9 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      * model and if the $search parameter contains a search value, the function creates an orWhere
      * condition for each model field with a like operation.
      *
-     * @param string $association
-     * @param string $model
-     * @param string $search
+     * @param string                    $association
+     * @param class-string<ModelEntity> $model
+     * @param string                    $search
      *
      * @return QueryBuilder
      */
@@ -960,16 +960,17 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      * Helper function which return the model name of an association for
      * the passed model and property name.
      *
-     * @param string $model
-     * @param string $property
+     * @param class-string<TEntityClass> $model
+     * @param string                     $property
      *
-     * @return string
+     * @return class-string<ModelEntity>
      */
     protected function getAssociatedModelByProperty($model, $property)
     {
-        $metaData = $this->getManager()->getClassMetadata($model);
+        /** @var class-string<ModelEntity> $targetClass */
+        $targetClass = $this->getManager()->getClassMetadata($model)->getAssociationTargetClass($property);
 
-        return $metaData->getAssociationTargetClass($property);
+        return $targetClass;
     }
 
     /**
@@ -978,14 +979,15 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      * This function is used to reload association listings over the {@link #reloadAssociation}
      * function.
      *
-     * @param string $model
-     * @param string $property
+     * @param class-string<TEntityClass> $model
+     * @param string                     $property
      *
      * @return array<string, mixed>
      */
     protected function getOwningSideAssociation($model, $property)
     {
         $metaData = $this->getManager()->getClassMetadata($model);
+        /** @var array{targetEntity: class-string<ModelEntity>, mappedBy: string, isOwningSide: bool} $mapping */
         $mapping = $metaData->getAssociationMapping($property);
 
         if ($mapping['isOwningSide']) {
@@ -1016,7 +1018,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      * to sort the query builder.
      *
      * @param array<array{property: string, direction: string}> $sort
-     * @param string                                            $model
+     * @param class-string<ModelEntity>                         $model
      * @param string                                            $alias
      * @param array<string>                                     $whiteList
      *
@@ -1075,7 +1077,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *  )
      *
      * @param array<array{property: string, operator: string|null, value: mixed, expression?: string}> $filters   - List of filter conditions in Ext JS format
-     * @param string                                                                                   $model     - Full name of the selected model
+     * @param class-string<ModelEntity>                                                                $model     - Full name of the selected model
      * @param string                                                                                   $alias     - Query alias of the FROM query path
      * @param array<string>                                                                            $whiteList - Array of filterable fields, or an empty array
      *
@@ -1204,8 +1206,8 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *
      * The returned array is associated with the model field names.
      *
-     * @param string      $model - Model class name
-     * @param string|null $alias - Allows to add an query alias like 'article.name'.
+     * @param class-string<ModelEntity> $model - Model class name
+     * @param string|null               $alias - Allows to add an query alias like 'article.name'.
      *
      * @return array<string, array{alias: string, type: string|null}>
      */

@@ -75,6 +75,11 @@ class AttributeFormType extends AbstractType
         $resolver->setDefaults(['allow_extra_fields' => true]);
     }
 
+    /**
+     * @param array{data_class: class-string<ModelEntity>} $options
+     *
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $metaData = $this->entityManager->getClassMetadata($options['data_class']);

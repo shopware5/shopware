@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository;
 
 use Shopware\Bundle\AttributeBundle\Repository\Reader\ReaderInterface;
 use Shopware\Bundle\AttributeBundle\Repository\Searcher\SearcherInterface;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 
 class GenericRepository implements RepositoryInterface
@@ -46,12 +47,12 @@ class GenericRepository implements RepositoryInterface
     protected $entityManager;
 
     /**
-     * @var string
+     * @var class-string<ModelEntity>
      */
     protected $entity;
 
     /**
-     * @param string $entity
+     * @param class-string<ModelEntity> $entity
      */
     public function __construct(
         $entity,
@@ -72,7 +73,7 @@ class GenericRepository implements RepositoryInterface
      */
     public function supports($entity)
     {
-        return $entity == $this->entity;
+        return $entity === $this->entity;
     }
 
     /**

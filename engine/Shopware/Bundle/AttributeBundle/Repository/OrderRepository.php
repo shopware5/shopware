@@ -30,6 +30,7 @@ use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 use Shopware\Bundle\EsBackendBundle\EsAwareRepository;
 use Shopware\Bundle\ESIndexingBundle\LastIdQuery;
 use Shopware\Bundle\ESIndexingBundle\TextMappingInterface;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 
 class OrderRepository extends GenericRepository implements EsAwareRepository
@@ -40,7 +41,7 @@ class OrderRepository extends GenericRepository implements EsAwareRepository
     private $textMapping;
 
     /**
-     * @param string $entity
+     * @param class-string<ModelEntity> $entity
      */
     public function __construct(
         $entity,
