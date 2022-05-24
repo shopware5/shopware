@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,15 +30,15 @@ use Shopware_Controllers_Backend_Benchmark;
 
 class BenchmarkControllerTest extends BenchmarkControllerTestCase
 {
-    public const CONTROLLER_NAME = Shopware_Controllers_Backend_Benchmark::class;
+    protected const CONTROLLER_NAME = Shopware_Controllers_Backend_Benchmark::class;
 
     /**
      * @group BenchmarkBundle
      */
-    public function testSaveIndustryAction()
+    public function testSaveIndustryAction(): void
     {
-        /** @var Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
+        static::assertInstanceOf(Shopware_Controllers_Backend_Benchmark::class, $controller);
 
         $this->installDemoData('benchmark_config');
 
@@ -45,16 +47,16 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $controller->saveIndustryAction();
 
-        static::assertEquals(15, $this->loadSettingColumn('config.industry'));
+        static::assertSame('15', $this->loadSettingColumn('config.industry'));
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testSetActiveAction()
+    public function testSetActiveAction(): void
     {
-        /** @var Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
+        static::assertInstanceOf(Shopware_Controllers_Backend_Benchmark::class, $controller);
 
         $this->installDemoData('benchmark_config');
 
@@ -63,16 +65,16 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $controller->setActiveAction();
 
-        static::assertEquals(1, $this->loadSettingColumn('config.active'));
+        static::assertSame('1', $this->loadSettingColumn('config.active'));
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testSaveTypeAction()
+    public function testSaveTypeAction(): void
     {
-        /** @var Shopware_Controllers_Backend_Benchmark $controller */
         $controller = $this->getController();
+        static::assertInstanceOf(Shopware_Controllers_Backend_Benchmark::class, $controller);
 
         $this->installDemoData('benchmark_config');
 
@@ -81,6 +83,6 @@ class BenchmarkControllerTest extends BenchmarkControllerTestCase
 
         $controller->saveTypeAction();
 
-        static::assertEquals('b2c', $this->loadSettingColumn('config.type'));
+        static::assertSame('b2c', $this->loadSettingColumn('config.type'));
     }
 }

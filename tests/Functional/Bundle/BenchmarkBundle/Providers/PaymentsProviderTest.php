@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,24 +27,25 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\PaymentsProvider;
 
 class PaymentsProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\PaymentsProvider::class;
-    public const EXPECTED_KEYS_COUNT = 6;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = PaymentsProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 6;
+    protected const EXPECTED_TYPES = [
         'activePayments' => IsType::TYPE_INT,
         'paymentsWithSurcharge' => IsType::TYPE_INT,
         'paymentsWithReduction' => IsType::TYPE_INT,
         'paymentsWithPercentagePrice' => IsType::TYPE_INT,
         'paymentsWithAbsolutePrice' => IsType::TYPE_INT,
-        'paymentsUsages' => IsType::TYPE_ARRAY,
+        'paymentUsages' => IsType::TYPE_ARRAY,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalActivePayments()
+    public function testGetTotalActivePayments(): void
     {
         $this->installDemoData('payments');
 
@@ -54,7 +57,7 @@ class PaymentsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetPaymentsWithSurcharge()
+    public function testGetPaymentsWithSurcharge(): void
     {
         $this->installDemoData('payments');
 
@@ -66,7 +69,7 @@ class PaymentsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetPaymentsWithReduction()
+    public function testGetPaymentsWithReduction(): void
     {
         $this->installDemoData('payments');
 
@@ -78,7 +81,7 @@ class PaymentsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetPaymentsWithPercentagePrice()
+    public function testGetPaymentsWithPercentagePrice(): void
     {
         $this->installDemoData('payments');
 
@@ -90,7 +93,7 @@ class PaymentsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetPaymentsWithAbsolutePrice()
+    public function testGetPaymentsWithAbsolutePrice(): void
     {
         $this->installDemoData('payments');
 
@@ -102,7 +105,7 @@ class PaymentsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalActivePaymentsPerShop()
+    public function testGetTotalActivePaymentsPerShop(): void
     {
         $this->installDemoData('payments');
 

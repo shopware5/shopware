@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,26 +32,26 @@ use Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider;
 
 class OrdersProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = OrdersProvider::class;
-    public const EXPECTED_KEYS_COUNT = 1;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = OrdersProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 1;
+    protected const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
     ];
 
-    public function testGetArrayKeysFit()
+    public function testGetArrayKeysFit(): void
     {
-        $dbalConnection = Shopware()->Container()->get(Connection::class);
+        $dbalConnection = $this->getContainer()->get(Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
-        $dbalConnection->exec($basicContent);
+        $dbalConnection->executeStatement($basicContent);
 
         parent::testGetArrayKeysFit();
     }
 
-    public function testGetValidateTypes()
+    public function testGetValidateTypes(): void
     {
-        $dbalConnection = Shopware()->Container()->get(Connection::class);
+        $dbalConnection = $this->getContainer()->get(Connection::class);
         $basicContent = $this->openDemoDataFile('basic_setup');
-        $dbalConnection->exec($basicContent);
+        $dbalConnection->executeStatement($basicContent);
 
         parent::testGetValidateTypes();
     }
@@ -57,7 +59,7 @@ class OrdersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersList()
+    public function testGetOrdersList(): void
     {
         $this->resetConfig();
         $this->installDemoData('orders_detailed');
@@ -114,6 +116,7 @@ class OrdersProviderTest extends ProviderTestCase
             $currentDetailId = $orderItem['detailId'];
             unset($orderItem['detailId']);
         }
+        unset($orderItem);
 
         static::assertSame([
             [
@@ -135,16 +138,16 @@ class OrdersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersListBatch()
+    public function testGetOrdersListBatch(): void
     {
         $this->installDemoData('orders_detailed');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=1;');
         $singleResult = $this->getBenchmarkData();
 
         static::assertCount(1, $singleResult['list']);
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=5;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=5;');
         $multipleResults = $this->getBenchmarkData();
 
         static::assertCount(5, $multipleResults['list']);
@@ -153,11 +156,11 @@ class OrdersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersListDateConsidered()
+    public function testGetOrdersListDateConsidered(): void
     {
         $this->installDemoData('orders_detailed');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
         $resultData = $this->getBenchmarkData();
 
         static::assertSame(5, $resultData['list'][0]['orderId']);
@@ -166,11 +169,11 @@ class OrdersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersListMultipleExecutionsFetchesNewOrders()
+    public function testGetOrdersListMultipleExecutionsFetchesNewOrders(): void
     {
         $this->installDemoData('orders_detailed');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1;');
         $firstResult = $this->getBenchmarkData();
 
         $this->sendStatistics();
@@ -180,7 +183,7 @@ class OrdersProviderTest extends ProviderTestCase
         static::assertSame(5, $firstResult['list'][0]['orderId']);
         static::assertSame(6, $secondResult['list'][0]['orderId']);
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=2;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=2;');
         $thirdResultSet = $this->getBenchmarkData();
 
         $this->sendStatistics();
@@ -198,26 +201,26 @@ class OrdersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersListIdConfigGetsUpdated()
+    public function testGetOrdersListIdConfigGetsUpdated(): void
     {
         $this->installDemoData('orders_detailed');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1 WHERE shop_id=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=4, batch_size=1 WHERE shop_id=1;');
         $this->sendStatistics();
 
-        static::assertSame(5, (int) Shopware()->Db()->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
+        static::assertSame(5, (int) $this->getContainer()->get('dbal_connection')->fetchOne('SELECT last_order_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetOrdersListPerShop()
+    public function testGetOrdersListPerShop(): void
     {
         $this->installDemoData('orders_detailed');
         $this->installDemoData('second_config');
         $provider = $this->getProvider();
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=10;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_order_id=0, batch_size=10;');
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
         static::assertCount(7, $resultData['list']);

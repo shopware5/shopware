@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -38,12 +40,18 @@ class ViewMock extends Enlight_View_Default
         return $this->template;
     }
 
-    public function loadTemplate($template)
+    public function loadTemplate($template_name)
     {
-        $this->template = $template;
+        $this->template = $template_name;
+
+        return $this;
     }
 
+    /**
+     * @param string $spec
+     */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
     {
+        return $this;
     }
 }

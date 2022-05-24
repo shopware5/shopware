@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,52 +26,50 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
-use Exception;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-abstract class BenchmarkTestCase extends \PHPUnit\Framework\TestCase
+abstract class BenchmarkTestCase extends TestCase
 {
     use DatabaseTransactionBehaviour;
+    use ContainerTrait;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
+        $this->getContainer()->get(ModelManager::class)->clear();
     }
 
-    /**
-     * @param string $dataName
-     */
-    protected function installDemoData($dataName)
+    protected function installDemoData(string $dataName): void
     {
-        $dbalConnection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbalConnection = $this->getContainer()->get(Connection::class);
 
         $fileContent = $this->openDemoDataFile($dataName);
-        $dbalConnection->exec($fileContent);
+        $dbalConnection->executeStatement($fileContent);
     }
 
-    protected function getAssetsFolder()
+    protected function getAssetsFolder(): string
     {
         return __DIR__ . '/assets/';
     }
 
-    /**
-     * @param string $fileName
-     *
-     * @throws Exception
-     *
-     * @return bool|string
-     */
-    protected function openDemoDataFile($fileName)
+    protected function openDemoDataFile(string $fileName): string
     {
         $fileName .= '.sql';
         $path = $this->getAssetsFolder();
         $filePath = $path . $fileName;
         if (!file_exists($filePath)) {
-            throw new Exception(sprintf('File with name %s does not exist in path %s', $fileName, $path));
+            throw new RuntimeException(sprintf('File with name %s does not exist in path %s', $fileName, $path));
         }
 
-        return file_get_contents($filePath);
+        $content = file_get_contents($filePath);
+        static::assertIsString($content);
+
+        return $content;
     }
 }

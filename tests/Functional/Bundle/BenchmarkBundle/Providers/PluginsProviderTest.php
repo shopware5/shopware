@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,12 +27,13 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\PluginsProvider;
 
 class PluginsProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\PluginsProvider::class;
-    public const EXPECTED_KEYS_COUNT = 2;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = PluginsProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 2;
+    protected const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,
         'shopwarePlugins' => IsType::TYPE_ARRAY,
     ];
@@ -38,7 +41,7 @@ class PluginsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalPlugins()
+    public function testGetTotalPlugins(): void
     {
         $this->installDemoData('plugins');
 
@@ -50,13 +53,13 @@ class PluginsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetShopwarePlugins()
+    public function testGetShopwarePlugins(): void
     {
         $this->installDemoData('plugins');
 
         $resultData = $this->getBenchmarkData();
 
-        static::assertTrue(array_intersect([
+        static::assertSame([
             [
                 'name' => 'SwagExample2',
                 'active' => 0,
@@ -70,7 +73,7 @@ class PluginsProviderTest extends ProviderTestCase
                 'name' => 'SwagExample5',
                 'active' => 0,
             ],
-        ], $resultData['shopwarePlugins']) === [
+        ], array_intersect([
             [
                 'name' => 'SwagExample2',
                 'active' => 0,
@@ -84,6 +87,6 @@ class PluginsProviderTest extends ProviderTestCase
                 'name' => 'SwagExample5',
                 'active' => 0,
             ],
-        ]);
+        ], $resultData['shopwarePlugins']));
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,12 +27,13 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\AnalyticsProvider;
 
 class AnalyticsProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\AnalyticsProvider::class;
-    public const EXPECTED_KEYS_COUNT = 2;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = AnalyticsProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 2;
+    protected const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
         'listByDevice' => IsType::TYPE_ARRAY,
     ];
@@ -38,7 +41,7 @@ class AnalyticsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalVisits()
+    public function testGetTotalVisits(): void
     {
         $this->installDemoData('analytics');
 
@@ -50,7 +53,7 @@ class AnalyticsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalVisitsByDevice()
+    public function testGetTotalVisitsByDevice(): void
     {
         $this->installDemoData('analytics');
 
@@ -71,7 +74,7 @@ class AnalyticsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalVisitsByShop()
+    public function testGetTotalVisitsByShop(): void
     {
         $this->installDemoData('analytics');
         $provider = $this->getProvider();

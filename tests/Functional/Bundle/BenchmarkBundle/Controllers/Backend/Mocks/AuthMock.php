@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,7 +28,7 @@ namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\M
 
 class AuthMock
 {
-    public function getIdentity()
+    public function getIdentity(): IdentityMock
     {
         return new IdentityMock();
     }
@@ -34,7 +36,7 @@ class AuthMock
 
 class IdentityMock
 {
-    public $locale;
+    public LocaleMock $locale;
 
     public function __construct()
     {
@@ -44,7 +46,7 @@ class IdentityMock
 
 class LocaleMock
 {
-    public function getId()
+    public function getId(): int
     {
         return 1;
     }

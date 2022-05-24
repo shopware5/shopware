@@ -3801,11 +3801,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Service/TypeMappingInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BatchableProviderInterface\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/BatchableProviderInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkCollector\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkCollector.php
@@ -3834,11 +3829,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkCollectorInterface\\:\\:get\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkCollectorInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkProviderInterface\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/BenchmarkProviderInterface.php
 
 		-
 			message: "#^Cannot call method warning\\(\\) on Psr\\\\Log\\\\LoggerInterface\\|null\\.$#"
@@ -3996,11 +3986,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Hydrator/StatisticsResponseHydrator.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\AnalyticsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/AnalyticsProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\AnalyticsProvider\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/AnalyticsProvider.php
@@ -4022,11 +4007,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\CategoriesProvider\\:\\:buildTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/CategoriesProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\CategoriesProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/CategoriesProvider.php
 
@@ -4054,11 +4034,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\CategoriesProvider\\:\\:\\$categoryIds type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/CategoriesProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\CustomersProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/CustomersProvider.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\CustomersProvider\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -4091,11 +4066,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/CustomersProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\EmotionsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/EmotionsProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\EmotionsProvider\\:\\:getElementUsages\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/EmotionsProvider.php
@@ -4116,11 +4086,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/EmotionsProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ManufacturerProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ManufacturerProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ManufacturerProvider\\:\\:getPossibleCategoryIds\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ManufacturerProvider.php
@@ -4133,11 +4098,6 @@ parameters:
 		-
 			message: "#^Cannot call method format\\(\\) on DateTime\\|false\\.$#"
 			count: 2
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/OrdersProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\OrdersProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/OrdersProvider.php
 
 		-
@@ -4266,11 +4226,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/OrdersProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\PaymentsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/PaymentsProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\PaymentsProvider\\:\\:getMatchedPaymentUsages\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/PaymentsProvider.php
@@ -4291,11 +4246,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/PaymentsProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\PluginsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/PluginsProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\PluginsProvider\\:\\:getShopwarePlugins\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/PluginsProvider.php
@@ -4307,11 +4257,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ProductsProvider\\:\\:getBasicProductData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ProductsProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ProductsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ProductsProvider.php
 
@@ -4356,11 +4301,6 @@ parameters:
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ProductsProvider.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ShipmentsProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ShipmentsProvider.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ShipmentsProvider\\:\\:getMatchedShipmentList\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ShipmentsProvider.php
@@ -4394,16 +4334,6 @@ parameters:
 			message: "#^Property Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ShipmentsProvider\\:\\:\\$shipmentIds type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ShipmentsProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ShopProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ShopProvider.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ShopwareProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/BenchmarkBundle/Provider/ShopwareProvider.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\BenchmarkBundle\\\\Provider\\\\ShopwareProvider\\:\\:getExtensions\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -18979,16 +18909,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\ManualSorting\\\\ProductLoaderInterface\\:\\:load\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ManualSorting/ProductLoaderInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\MemoryLimit\\:\\:setMinimumMemoryLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MemoryLimit.php
-
-		-
-			message: "#^Parameter \\#1 \\$memoryLimit of static method Shopware\\\\Components\\\\MemoryLimit\\:\\:convertToBytes\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MemoryLimit.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Migrations\\\\AbstractMigration\\:\\:getSql\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -39887,7 +39807,7 @@ parameters:
 
 		-
 			message: "#^Offset 'sSepaUseBillingData' does not exist on array\\|null\\.$#"
-			count: 6
+			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
 
 		-
@@ -40714,471 +40634,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AttributeBundle\\\\SchemaOperatorTest\\:\\:iterateTypeArray\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AttributeBundle/SchemaOperatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkTestCase\\:\\:getAssetsFolder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkTestCase\\:\\:installDemoData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkTestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, bool\\|string given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/BenchmarkTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTest\\:\\:testSaveIndustryAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTest\\:\\:testSaveTypeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTest\\:\\:testSetActiveAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkControllerTest.php
-
-		-
-			message: "#^Access to undefined constant Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTestCase\\:\\:CONTROLLER_NAME\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkControllerTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTestCase\\:\\:getAssetsFolder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkControllerTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTestCase\\:\\:setSetting\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkControllerTestCase.php
-
-		-
-			message: "#^Call to an undefined method Enlight_View_Default\\:\\:getTemplate\\(\\)\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkLocalOverviewControllerTest\\:\\:testRenderActionShouldLoadCustom\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkLocalOverviewControllerTest\\:\\:testRenderActionShouldLoadStart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkLocalOverviewControllerTest.php
-
-		-
-			message: "#^Call to an undefined method Enlight_Controller_Response_ResponseHttp\\:\\:getHeader\\(\\)\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:getController\\(\\) should return Shopware_Controllers_Backend_BenchmarkOverview but returns Enlight_Class\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testIndexActionShouldRedirectCachedActive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testIndexActionShouldRedirectCachedFreshStatistics\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testIndexActionShouldRedirectLocalStart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testIndexActionShouldRedirectWaitingActiveOutdated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testIndexActionShouldRedirectWaitingFreshStatisticsNoCachedTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testIndexActionShouldRedirectWaitingInactive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkOverviewControllerTest\\:\\:testRenderActionShouldRenderCachedTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$value of method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\BenchmarkControllerTestCase\\:\\:setSetting\\(\\) expects string, int given\\.$#"
-			count: 8
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/BenchmarkOverviewControllerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\Mocks\\\\AuthMock\\:\\:getIdentity\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/AuthMock.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\Mocks\\\\LocaleMock\\:\\:getId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/AuthMock.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\Mocks\\\\IdentityMock\\:\\:\\$locale has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/AuthMock.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\Mocks\\\\ViewMock\\:\\:assign\\(\\) has parameter \\$spec with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/ViewMock.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\Mocks\\\\ViewMock\\:\\:assign\\(\\) should return Enlight_View but return statement is missing\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/ViewMock.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Controllers\\\\Backend\\\\Mocks\\\\ViewMock\\:\\:loadTemplate\\(\\) should return Enlight_View_Default but return statement is missing\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/ViewMock.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\AnalyticsProviderTest\\:\\:testGetTotalVisits\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/AnalyticsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\AnalyticsProviderTest\\:\\:testGetTotalVisitsByDevice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/AnalyticsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\AnalyticsProviderTest\\:\\:testGetTotalVisitsByShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/AnalyticsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CategoriesProviderTest\\:\\:testGetAverageProductsPerCategoryPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CategoriesProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CategoriesProviderTest\\:\\:testGetCategoryTreePerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CategoriesProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CategoriesProviderTest\\:\\:testGetMaxProductsPerCategoryPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CategoriesProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testGetCustomersList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testGetCustomersListConsidersBatchSize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testGetCustomersListConsidersLastCustomerId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testGetCustomersListPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testGetCustomersListUpdatesCustomerId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testGetCustomersTurnOver\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\CustomersProviderTest\\:\\:testMatchGenders\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/CustomersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetElementUsages\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetElementUsagesPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetLandingPageEmotions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetTimedEmotions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetTotalEmotions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetTotalEmotionsPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\EmotionsProviderTest\\:\\:testGetViewportUsages\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/EmotionsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ManufacturerProviderTest\\:\\:testGetTotalSuppliersPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ManufacturerProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetArrayKeysFit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetOrdersList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetOrdersListBatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetOrdersListDateConsidered\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetOrdersListIdConfigGetsUpdated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetOrdersListMultipleExecutionsFetchesNewOrders\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetOrdersListPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\OrdersProviderTest\\:\\:testGetValidateTypes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, bool\\|string given\\.$#"
-			count: 2
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/OrdersProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PaymentsProviderTest\\:\\:testGetPaymentsWithAbsolutePrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PaymentsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PaymentsProviderTest\\:\\:testGetPaymentsWithPercentagePrice\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PaymentsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PaymentsProviderTest\\:\\:testGetPaymentsWithReduction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PaymentsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PaymentsProviderTest\\:\\:testGetPaymentsWithSurcharge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PaymentsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PaymentsProviderTest\\:\\:testGetTotalActivePayments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PaymentsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PaymentsProviderTest\\:\\:testGetTotalActivePaymentsPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PaymentsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PluginsProviderTest\\:\\:testGetShopwarePlugins\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PluginsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\PluginsProviderTest\\:\\:testGetTotalPlugins\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/PluginsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetProductImages\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetProductListBasic\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetProductListBasicConsidersBatchSize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetProductListBasicConsidersLastProductId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetProductListBasicPerShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetProductListBasicUpdatesLastProductId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProductsProviderTest\\:\\:testGetVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProductsProviderTest.php
-
-		-
-			message: "#^Access to undefined constant Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:EXPECTED_KEYS_COUNT\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Access to undefined constant Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:EXPECTED_TYPES\\.$#"
-			count: 3
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Access to undefined constant Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:SERVICE_ID\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Caught class PHPUnit_Framework_ExpectationFailedException not found\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:checkForTypes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:checkForTypes\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:checkForTypes\\(\\) has parameter \\$expectedTypes with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:getAssetsFolder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:installDemoData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:resetConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:testGetArrayKeysFit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:testGetValidateTypes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, bool\\|string given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Parameter \\#3 \\$criteria of method Doctrine\\\\DBAL\\\\Connection\\:\\:update\\(\\) expects array\\<string, mixed\\>, array\\<int, string\\> given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\Providers\\\\ProviderTestCase\\:\\:\\$provider \\(Shopware\\\\Bundle\\\\BenchmarkBundle\\\\BenchmarkProviderInterface\\) does not accept object\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Benchmark\\\\BenchmarkConfig\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/StatisticsClientTest.php
-
-		-
-			message: "#^Cannot call method getLastProductId\\(\\) on Shopware\\\\Models\\\\Benchmark\\\\BenchmarkConfig\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/StatisticsClientTest.php
-
-		-
-			message: "#^Cannot call method getShopId\\(\\) on Shopware\\\\Models\\\\Benchmark\\\\BenchmarkConfig\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/StatisticsClientTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\BenchmarkBundle\\\\StatisticsClientTest\\:\\:testResetBenchmarkData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/BenchmarkBundle/StatisticsClientTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\ExtjsBuilderTest\\:\\:dataProviderColumnFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -50169,51 +49624,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\ArrayCollectionTest\\:\\:testArrayCollectionSet\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/ArrayCollectionTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\BarBenchmarkProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\CategoryMock\\:\\:getId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\FooBenchmarkProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ProviderTest\\:\\:testGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ProviderTest\\:\\:testGetShouldThrowExceptionNoShopProvider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ShopBenchmarkProvider\\:\\:getBenchmarkData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ShopContextMock\\:\\:getShop\\(\\) should return Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Shop but returns Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ShopMock\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ShopMock\\:\\:getCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\BenchmarkBundle\\\\ShopMock\\:\\:getId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/BenchmarkBundle/ProviderTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\ContentTypeBundle\\\\Field\\\\Shopware\\\\AbstractGridFieldTest\\:\\:fieldProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
