@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,41 +27,42 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\CustomersProvider;
 
 class CustomersProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\CustomersProvider::class;
-    public const EXPECTED_KEYS_COUNT = 1;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = CustomersProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 1;
+    protected const EXPECTED_TYPES = [
         'list' => IsType::TYPE_ARRAY,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersList()
+    public function testGetCustomersList(): void
     {
         $this->resetConfig();
         $this->installDemoData('customers');
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        static::assertEquals(1993, $customersList[0]['birthYear']);
-        static::assertEquals(1, $customersList[0]['birthMonth']);
+        static::assertSame(1993, $customersList[0]['birthYear']);
+        static::assertSame(1, $customersList[0]['birthMonth']);
 
-        static::assertEquals(1, $customersList[0]['registered']);
-        static::assertEquals(0, $customersList[1]['registered']);
+        static::assertTrue($customersList[0]['registered']);
+        static::assertFalse($customersList[1]['registered']);
 
-        static::assertEquals('2013-11-25', $customersList[5]['registerDate']);
+        static::assertSame('2013-11-25', $customersList[5]['registerDate']);
 
-        static::assertEquals(1, $customersList[4]['hasNewsletter']);
-        static::assertEquals(0, $customersList[5]['hasNewsletter']);
+        static::assertTrue($customersList[4]['hasNewsletter']);
+        static::assertFalse($customersList[5]['hasNewsletter']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testMatchGenders()
+    public function testMatchGenders(): void
     {
         $this->resetConfig();
         $this->installDemoData('customers');
@@ -75,7 +78,7 @@ class CustomersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersTurnOver()
+    public function testGetCustomersTurnOver(): void
     {
         $this->resetConfig();
         $this->installDemoData('customers');
@@ -83,14 +86,14 @@ class CustomersProviderTest extends ProviderTestCase
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        static::assertEquals(750, $customersList[3]['turnOver']);
-        static::assertEquals(850, $customersList[4]['turnOver']);
+        static::assertSame(750.0, $customersList[3]['turnOver']);
+        static::assertSame(850.0, $customersList[4]['turnOver']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersListPerShop()
+    public function testGetCustomersListPerShop(): void
     {
         $this->installDemoData('customers');
         $this->installDemoData('second_config');
@@ -108,12 +111,12 @@ class CustomersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersListConsidersBatchSize()
+    public function testGetCustomersListConsidersBatchSize(): void
     {
         $this->resetConfig();
         $this->installDemoData('customers');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=0, batch_size=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_customer_id=0, batch_size=1;');
 
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
@@ -124,31 +127,31 @@ class CustomersProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersListConsidersLastCustomerId()
+    public function testGetCustomersListConsidersLastCustomerId(): void
     {
         $this->resetConfig();
         $this->installDemoData('customers');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1;');
 
         $resultData = $this->getBenchmarkData();
         $customersList = $resultData['list'];
 
-        static::assertEquals(850, $customersList[0]['turnOver']);
+        static::assertSame(850.0, $customersList[0]['turnOver']);
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCustomersListUpdatesCustomerId()
+    public function testGetCustomersListUpdatesCustomerId(): void
     {
         $this->resetConfig();
         $this->installDemoData('customers');
 
-        Shopware()->Db()->exec('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1 WHERE shop_id=1;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('UPDATE `s_benchmark_config` SET last_customer_id=4, batch_size=1 WHERE shop_id=1;');
 
         $this->sendStatistics();
 
-        static::assertEquals(5, Shopware()->Db()->fetchOne('SELECT last_customer_id FROM s_benchmark_config WHERE shop_id=1'));
+        static::assertSame('5', (string) $this->getContainer()->get('dbal_connection')->fetchOne('SELECT last_customer_id FROM s_benchmark_config WHERE shop_id=1'));
     }
 }

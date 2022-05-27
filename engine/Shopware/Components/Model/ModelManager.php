@@ -37,6 +37,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use InvalidArgumentException;
 use ReflectionProperty;
+use RuntimeException;
 use Shopware\Components\Model\Query\SqlWalker;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -324,6 +325,9 @@ class ModelManager extends EntityManager
             $className = get_parent_class($entity);
         } else {
             $className = \get_class($entity);
+        }
+        if (!\is_string($className)) {
+            throw new RuntimeException('Could not get class name');
         }
         $metadata = $this->getClassMetadata($className);
         $data = [];

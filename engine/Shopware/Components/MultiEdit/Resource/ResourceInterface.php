@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\MultiEdit\Resource;
 
+use Shopware\Components\Model\ModelEntity;
+
 interface ResourceInterface
 {
     /**
@@ -34,9 +36,9 @@ interface ResourceInterface
     /**
      * Returns values to be suggested for the current attribute
      *
-     * @param string $attribute
-     * @param string $operator
-     * @param array  $queryConfig
+     * @param class-string<ModelEntity> $attribute
+     * @param string                    $operator
+     * @param array                     $queryConfig
      */
     public function getValuesFor($attribute, $operator, $queryConfig);
 

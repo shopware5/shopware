@@ -164,7 +164,7 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}> $filter
+     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string, operator?: string|null}> $filter
      *
      * @return QueryBuilder
      */
@@ -260,8 +260,8 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param string|OrderBy|array<array{property: string, direction: string}> $orderBy the ordering expression
-     * @param string                                                           $order   the ordering direction
+     * @param string|OrderBy|array<array{property: string, direction?: string}> $orderBy the ordering expression
+     * @param string                                                            $order   the ordering direction
      *
      * @return QueryBuilder
      */

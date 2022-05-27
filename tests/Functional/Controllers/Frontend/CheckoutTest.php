@@ -254,6 +254,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
     public function testRedirectShippingPaymentPageOnEmptyBasket(): void
     {
         $this->loginFrontendUser();
+        $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
 
         $this->Request()->setMethod('GET');
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);

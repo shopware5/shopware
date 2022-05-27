@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,23 +28,23 @@ namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
 use DateTime;
 use Enlight_Controller_Response_ResponseHttp;
+use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Event_EventArgs;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend\Mocks\AuthMock;
 use Shopware_Controllers_Backend_BenchmarkOverview;
 
 class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
 {
-    public const CONTROLLER_NAME = Shopware_Controllers_Backend_BenchmarkOverview::class;
+    protected const CONTROLLER_NAME = Shopware_Controllers_Backend_BenchmarkOverview::class;
 
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexActionShouldRedirectLocalStart()
+    public function testIndexActionShouldRedirectLocalStart(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
-        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('DELETE FROM s_benchmark_config;');
         $controller->indexAction();
 
         $redirect = $this->getRedirect($controller->Response());
@@ -53,13 +55,12 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexActionShouldRedirectCachedFreshStatistics()
+    public function testIndexActionShouldRedirectCachedFreshStatistics(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('industry', 1);
+        $this->setSetting('industry', '1');
         $this->setSetting('last_received', date('Y-m-d H:i:s'));
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
 
@@ -73,13 +74,12 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexActionShouldRedirectWaitingFreshStatisticsNoCachedTemplate()
+    public function testIndexActionShouldRedirectWaitingFreshStatisticsNoCachedTemplate(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('industry', 1);
+        $this->setSetting('industry', '1');
         $this->setSetting('last_received', date('Y-m-d H:i:s'));
 
         $controller->indexAction();
@@ -92,14 +92,13 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexActionShouldRedirectWaitingInactive()
+    public function testIndexActionShouldRedirectWaitingInactive(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('industry', 1);
-        $this->setSetting('active', 0);
+        $this->setSetting('industry', '1');
+        $this->setSetting('active', '0');
 
         $controller->indexAction();
 
@@ -111,15 +110,14 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexActionShouldRedirectWaitingActiveOutdated()
+    public function testIndexActionShouldRedirectWaitingActiveOutdated(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('industry', 1);
+        $this->setSetting('industry', '1');
         $this->setSetting('last_received', date('Y-m-d H:i:s', strtotime('-31 days')));
-        $this->setSetting('active', 1);
+        $this->setSetting('active', '1');
 
         $controller->indexAction();
 
@@ -131,15 +129,14 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testIndexActionShouldRedirectCachedActive()
+    public function testIndexActionShouldRedirectCachedActive(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $this->installDemoData('benchmark_config');
-        $this->setSetting('industry', 1);
+        $this->setSetting('industry', '1');
         $this->setSetting('last_received', date('Y-m-d H:i:s', strtotime('-3 days')));
-        $this->setSetting('active', 1);
+        $this->setSetting('active', '1');
         $this->setSetting('cached_template', '<h2>Placeholder</h2>');
 
         $controller->indexAction();
@@ -149,9 +146,8 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         static::assertStringContainsString('BenchmarkOverview/render', $redirect);
     }
 
-    public function testRenderActionShouldRenderCachedTemplate()
+    public function testRenderActionShouldRenderCachedTemplate(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkOverview $controller */
         $controller = $this->getController();
 
         $now = new DateTime('now');
@@ -164,24 +160,21 @@ class BenchmarkOverviewControllerTest extends BenchmarkControllerTestCase
         $controller->renderAction();
     }
 
-    /**
-     * @return Shopware_Controllers_Backend_BenchmarkOverview
-     */
-    protected function getController()
+    protected function getController(): Shopware_Controllers_Backend_BenchmarkOverview
     {
         $controller = parent::getController();
+        static::assertInstanceOf(Shopware_Controllers_Backend_BenchmarkOverview::class, $controller);
 
-        Shopware()->Container()->set('auth', new AuthMock());
+        $this->getContainer()->set('auth', new AuthMock());
         Shopware()->Plugins()->Backend()->Auth()->onInitResourceAuth(new Enlight_Event_EventArgs());
 
         return $controller;
     }
 
-    /**
-     * @return string
-     */
-    private function getRedirect(Enlight_Controller_Response_ResponseHttp $response)
+    private function getRedirect(Enlight_Controller_Response_ResponseHttp $response): string
     {
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
+
         return $response->getHeader('Location');
     }
 }

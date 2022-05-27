@@ -26,6 +26,7 @@ namespace Shopware\Components\Plugin\XmlReader;
 
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use RuntimeException;
 use Symfony\Component\Config\Util\XmlUtils;
@@ -39,17 +40,17 @@ class XmlMenuReader extends XmlReaderBase
 
     protected function parseFile(DOMDocument $xml): array
     {
-        $xpath = new DOMXPath($xml);
+        $entries = (new DOMXPath($xml))->query('//entries/entry');
 
-        $entries = $xpath->query('//entries/entry');
-
-        if ($entries->length === 0) {
+        if (!$entries instanceof DOMNodeList || $entries->length === 0) {
             throw new RuntimeException('Required element "entry" is missing.');
         }
 
         $menu = [];
         foreach ($entries as $entry) {
-            $menu[] = $this->parseEntry($entry);
+            if ($entry instanceof DOMElement) {
+                $menu[] = $this->parseEntry($entry);
+            }
         }
 
         return $menu;
@@ -64,10 +65,7 @@ class XmlMenuReader extends XmlReaderBase
             false
         );
 
-        $label = $label = self::parseTranslatableElement(
-            $entry,
-            'label'
-        );
+        $label = self::parseTranslatableElement($entry, 'label');
 
         if ($label !== null) {
             $menuEntry['label'] = $label;

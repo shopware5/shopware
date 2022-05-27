@@ -55,6 +55,9 @@ class ContentTypesReader extends XmlReaderBase
     protected function parseFile(DOMDocument $xml): array
     {
         $nodeList = (new DOMXPath($xml))->query('//types/type');
+        if (!$nodeList instanceof DOMNodeList) {
+            return [];
+        }
 
         return self::parseList($nodeList);
     }

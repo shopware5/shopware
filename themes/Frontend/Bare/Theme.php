@@ -25,10 +25,11 @@
 namespace Shopware\Themes\Bare;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Form as Form;
+use Shopware\Components\Form\Container\TabContainer;
+use Shopware\Components\Theme as BaseTheme;
 use Shopware\Components\Theme\ConfigSet;
 
-class Theme extends \Shopware\Components\Theme
+class Theme extends BaseTheme
 {
     /**
      * Defines the human readable theme name
@@ -65,10 +66,7 @@ class Theme extends \Shopware\Components\Theme
      */
     protected $injectBeforePlugins = true;
 
-    /**
-     * @param Form\Container\TabContainer $container
-     */
-    public function createConfig(Form\Container\TabContainer $container)
+    public function createConfig(TabContainer $container)
     {
         $tab = $this->createTab(
             'bareMain',
@@ -189,9 +187,6 @@ class Theme extends \Shopware\Components\Theme
         $container->addTab($tab);
     }
 
-    /**
-     * @param ArrayCollection $collection
-     */
     public function createConfigSets(ArrayCollection $collection)
     {
         $set = new ConfigSet();
@@ -211,12 +206,9 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Helper function to get the attribute of a checkbox field which shows a description label
      *
-     * @param string $snippetName
-     * @param string $labelType
-     *
-     * @return array
+     * @return array{attributes: array<string, string>}
      */
-    private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
+    private function getLabelAttribute(string $snippetName, string $labelType = 'boxLabel'): array
     {
         $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
 

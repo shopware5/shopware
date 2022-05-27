@@ -24,10 +24,12 @@
 
 namespace Shopware\Bundle\AttributeBundle\Repository;
 
+use Shopware\Components\Model\ModelEntity;
+
 class SearchCriteria
 {
     /**
-     * @var string
+     * @var class-string<ModelEntity>
      */
     public $entity;
 
@@ -67,7 +69,7 @@ class SearchCriteria
     public $params = [];
 
     /**
-     * @param string $entity
+     * @param class-string<ModelEntity> $entity
      */
     public function __construct($entity)
     {

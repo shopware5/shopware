@@ -26,6 +26,7 @@ namespace Shopware\Tests\Functional\Components;
 
 use DateTime;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
+use Enlight_Components_Session_Namespace;
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
@@ -33,6 +34,7 @@ use Shopware_Components_Auth;
 use Shopware_Components_Auth_Adapter_Default;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Zend_Auth_Storage_Session;
 
 class AuthTest extends Enlight_Components_Test_TestCase
 {
@@ -60,6 +62,7 @@ class AuthTest extends Enlight_Components_Test_TestCase
         $this->db = Shopware()->Db();
 
         $this->auth = Shopware_Components_Auth::getInstance();
+        $this->auth->setStorage(new Zend_Auth_Storage_Session(new Enlight_Components_Session_Namespace(new MockArraySessionStorage())));
 
         /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
         $passworEncoderRegistry = Shopware()->Container()->get('passwordencoder');

@@ -103,6 +103,8 @@
         </service>
 
         <service id="shopware_controllers_backend_emotion" class="Shopware_Controllers_Backend_Emotion">
+            <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface"/>
+            <argument type="service" id="events"/>
             <tag name="shopware.controller" module="backend" controller="emotion"/>
         </service>
 

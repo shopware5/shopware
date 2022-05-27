@@ -11,7 +11,7 @@ endif
 
 -include $(ENV_FILE)
 
-.PHONY: init clear-cache check-code test-mink elasticsearch-populate test-phpunit test-phpunit-elasticsearch debug-config clean-make-config clean check-config-variables
+.PHONY: init clear-cache check-code test-mink elasticsearch-populate test-phpunit test-phpunit-coverage-cobertura test-phpunit-coverage-statistic test-phpunit-elasticsearch debug-config clean-make-config clean check-config-variables
 
 init: .make.init
 
@@ -27,34 +27,30 @@ clear-cache: .make.console.executable
 check-code: check-phpstan check-php-cs-fixer
 check-js-code: check-eslint-frontend check-eslint-backend
 
-check-php-cs-fixer:
+check-php-cs-fixer: .make.install.composer-dependencies
 	./vendor/bin/php-cs-fixer fix --dry-run -v
 	./vendor/bin/php-cs-fixer fix --dry-run -v --config engine/Library/Enlight/.php-cs-fixer.php
 
-fix-code-style:
+fix-code-style: .make.install.composer-dependencies
 	php -d memory_limit=-1 ./vendor/bin/php-cs-fixer fix -v
 	php -d memory_limit=-1 ./vendor/bin/php-cs-fixer fix -v --config engine/Library/Enlight/.php-cs-fixer.php
 
-check-phpstan:
+check-phpstan: .make.install.composer-dependencies
 	php ./vendor/bin/phpstan analyze -c .phpstan.neon
 
-check-eslint-frontend:
+check-eslint-frontend: .make.install.npm-dependencies
 	npm run lint --prefix ./themes
 
-fix-eslint-frontend:
+fix-eslint-frontend: .make.install.npm-dependencies
 	npm run fix --prefix ./themes
 
-check-eslint-backend:
+check-eslint-backend: .make.install.npm-dependencies
 	npm run lintBackend --prefix ./themes
 
-fix-eslint-backend:
+fix-eslint-backend: .make.install.npm-dependencies
 	npm run fixBackend --prefix ./themes
 
-install-theme-depencencies:
-	npm install --prefix ./themes
-	npm install --prefix ./themes/Frontend/Responsive
-
-frontend-watch: clear-cache
+frontend-watch: clear-cache .make.install.npm-dependencies
 	./bin/console sw:theme:dump:configuration
 	npm run watch --prefix ./themes
 
@@ -72,11 +68,20 @@ test-phpunit: init
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=elasticSearch
 	./vendor/bin/phpunit --config recovery/common/phpunit.xml.dist --log-junit build/artifacts/test-log.xml
 
+test-phpunit-coverage-cobertura: init
+	php -d pcov.enabled=1 -d pcov.directory="$(CURDIR)" vendor/bin/phpunit --configuration="tests/phpunit.xml.dist" --log-junit="build/artifacts/phpunit.junit.xml" --colors="never" --exclude-group="elasticSearch,pcovAdapterBrokenTest" --testsuite="$(TESTSUITE)" --coverage-cobertura="build/artifacts/phpunit-coverage-$(TESTSUITE).cobertura.xml"
+
+test-phpunit-coverage-statistic: init tests/phpunit-full-coverage.xml
+	php -d pcov.enabled=1 -d pcov.directory="$(CURDIR)" vendor/bin/phpunit --configuration="tests/phpunit-full-coverage.xml" --log-junit="build/artifacts/phpunit.junit.xml" --colors="never" --exclude-group="elasticSearch,pcovAdapterBrokenTest" --testsuite="$(TESTSUITE)" --coverage-text
+
 test-phpunit-elasticsearch: elasticsearch-populate
 	./vendor/bin/phpunit --config tests/phpunit.xml.dist --log-junit build/artifacts/test-log.xml --exclude-group=skipElasticSearch --group=elasticSearch
 
-test-jest:
+test-jest: .make.install.npm-dependencies
 	npm run test --prefix ./themes/Frontend/Responsive
+
+tests/phpunit-full-coverage.xml:
+	sed -e 's/includeUncoveredFiles="false"/includeUncoveredFiles="true"/g' < tests/phpunit.xml.dist > tests/phpunit-full-coverage.xml
 
 elasticsearch-populate: .make.config.build.elasticsearch .make.console.executable
 	./bin/console sw:es:index:populate
@@ -115,11 +120,20 @@ debug-config-test: .make.config.build.debug
 	@sed -e 's/%sw\.host%/$(SW_HOST)/g' -e 's|%sw\.path%|$(SW_BASE_PATH)|g' < ./build/behat.yml.dist > ./tests/Mink/behat.yml
 	touch $@
 
-.make.install:
-	@echo "Read additional variables from $(ENV_FILE)"
+.make.install.composer-dependencies:
 	composer install
 	composer install -d recovery/common
 	composer bin all install
+	cp .htaccess.dist .htaccess
+	touch $@
+
+.make.install.npm-dependencies:
+	npm install --prefix ./themes
+	npm install --prefix ./themes/Frontend/Responsive
+	touch $@
+
+.make.install: .make.install.composer-dependencies
+	@echo "Read additional variables from $(ENV_FILE)"
 	./bin/console sw:database:setup --steps=drop,create,import,importDemodata
 	./bin/console sw:cache:clear
 	./bin/console sw:database:setup --steps=setupShop --shop-url=http://$(SW_HOST)$(SW_BASE_PATH)
@@ -127,16 +141,17 @@ debug-config-test: .make.config.build.debug
 	./bin/console sw:theme:initialize
 	./bin/console sw:firstrunwizard:disable
 	./bin/console sw:admin:create --name="Demo" --email="demo@demo.de" --username="demo" --password="demo" --locale=de_DE -n
-	touch recovery/install/data/install.lock
-	cp .htaccess.dist .htaccess
 	./bin/console sw:config:set installationSurvey false -d
 	./bin/console dbal:run-sql "INSERT IGNORE INTO \`s_core_auth_config\` (\`user_id\`, \`name\`, \`config\`) VALUES (1, 'customer_module', '{\"showWizard\":false}');"
+
+recovery/install/data/install.lock:
+	touch $@
 
 .git/hooks/pre-commit:
 	mkdir -p .git/hooks
 	ln -s ../../build/gitHooks/pre-commit $@
 
-.make.init: clean-make-config .make.config .make.install .git/hooks/pre-commit
+.make.init: clean-make-config .make.config .make.install recovery/install/data/install.lock .git/hooks/pre-commit
 
 .make.console.executable:
 	chmod u+x bin/console

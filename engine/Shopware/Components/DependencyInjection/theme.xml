@@ -51,6 +51,7 @@
             <argument type="service" id="Shopware\Components\Theme\Util" />
             <argument type="service" id="theme_config_persister" />
             <argument type="service" id="Shopware\Components\ContainerAwareEventManager" />
+            <argument type="service" id="corelogger"/>
         </service>
 
         <service id="theme_inheritance" class="Shopware\Components\Theme\Inheritance">

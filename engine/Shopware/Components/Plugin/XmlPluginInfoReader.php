@@ -53,16 +53,10 @@ class XmlPluginInfoReader
         return $this->parseInfo($dom);
     }
 
-    /**
-     * @return array|null
-     */
-    private function parseInfo(DOMDocument $xml)
+    private function parseInfo(DOMDocument $xml): ?array
     {
-        $xpath = new DOMXPath($xml);
-
-        /** @var DOMNodeList|false $entries */
-        $entries = $xpath->query('//plugin');
-        if ($entries === false) {
+        $entries = (new DOMXPath($xml))->query('//plugin');
+        if (!$entries instanceof DOMNodeList) {
             return null;
         }
 
@@ -70,13 +64,13 @@ class XmlPluginInfoReader
         $info = [];
 
         foreach ($this->getChildren($entry, 'label') as $label) {
-            $lang = ($label->getAttribute('lang')) ? $label->getAttribute('lang') : 'en';
+            $lang = ($label->getAttribute('lang')) ?: 'en';
             $info['label'][$lang] = $label->nodeValue;
         }
 
         foreach ($this->getChildren($entry, 'description') as $description) {
-            $lang = ($description->getAttribute('lang')) ? $description->getAttribute('lang') : 'en';
-            $info['description'][$lang] = trim($description->nodeValue);
+            $lang = ($description->getAttribute('lang')) ?: 'en';
+            $info['description'][$lang] = trim((string) $description->nodeValue);
         }
 
         $simpleKeys = ['version', 'license', 'author', 'copyright', 'link'];
@@ -90,7 +84,7 @@ class XmlPluginInfoReader
             $version = $changelog->getAttribute('version');
 
             foreach ($this->getChildren($changelog, 'changes') as $changes) {
-                $lang = ($changes->getAttribute('lang')) ? $changes->getAttribute('lang') : 'en';
+                $lang = ($changes->getAttribute('lang')) ?: 'en';
                 $info['changelog'][$version][$lang][] = $changes->nodeValue;
             }
         }
@@ -115,9 +109,9 @@ class XmlPluginInfoReader
     /**
      * Get child elements by name.
      *
-     * @return DOMElement[]
+     * @return array<DOMElement>
      */
-    private function getChildren(DOMNode $node, $name)
+    private function getChildren(DOMNode $node, string $name): array
     {
         $children = [];
         foreach ($node->childNodes as $child) {
@@ -129,12 +123,7 @@ class XmlPluginInfoReader
         return $children;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return DOMElement|null
-     */
-    private function getFirstChild(DOMNode $node, $name)
+    private function getFirstChild(DOMNode $node, string $name): ?DOMElement
     {
         if ($children = $this->getChildren($node, $name)) {
             return $children[0];
@@ -146,14 +135,14 @@ class XmlPluginInfoReader
     /**
      * Get child element values by name.
      *
-     * @return string[]
+     * @return array<string>
      */
-    private function getChildrenValues(DOMNode $node, $name)
+    private function getChildrenValues(DOMNode $node, string $name): array
     {
         $children = [];
         foreach ($node->childNodes as $child) {
             if ($child instanceof DOMElement && $child->localName === $name) {
-                $children[] = $child->nodeValue;
+                $children[] = (string) $child->nodeValue;
             }
         }
 
@@ -161,11 +150,9 @@ class XmlPluginInfoReader
     }
 
     /**
-     * @param DOMNode $requiredPlugins
-     *
      * @return array<int, array<string, array<string>|string>>
      */
-    private function parseRequiredPlugins($requiredPlugins)
+    private function parseRequiredPlugins(DOMNode $requiredPlugins): array
     {
         $requiredPlugins = $this->getChildren($requiredPlugins, 'requiredPlugin');
         $plugins = [];

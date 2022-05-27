@@ -25,7 +25,6 @@
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Emotion\Emotion;
 use Shopware\Models\Shop\DetachedShop;
 use Shopware\Models\Shop\Shop;
@@ -35,6 +34,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
 {
     /**
      * Shows a category tree
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -131,24 +132,21 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
-     * @param string $keyField
-     * @param string $recursiveField
-     *
      * @return int[]
      */
-    private function getTranslationKeys(array $array, $keyField, $recursiveField)
+    private function getTranslationKeys(array $array, string $keyField, string $recursiveField): array
     {
-        $translationkeys = [];
+        $translationKeys = [];
 
         foreach ($array as $data) {
-            $translationkeys[] = $data[$keyField];
+            $translationKeys[] = $data[$keyField];
 
             if (!empty($data[$recursiveField])) {
-                $translationkeys = array_merge($translationkeys, $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField));
+                $translationKeys = array_merge($translationKeys, $this->getTranslationKeys($data[$recursiveField], $keyField, $recursiveField));
             }
         }
 
-        return $translationkeys;
+        return $translationKeys;
     }
 
     /**
@@ -164,8 +162,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             WHERE shopPages.shop_id = ?
         ';
 
-        $statement = $this->container->get('db')->executeQuery($sql, [$shopId]);
-        $keys = $statement->fetchAll(PDO::FETCH_COLUMN);
+        $keys = $this->container->get('db')->executeQuery($sql, [$shopId])->fetchAll(PDO::FETCH_COLUMN);
 
         $siteRepository = $this->get(ModelManager::class)->getRepository(Site::class);
 
@@ -222,7 +219,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function fetchTranslations(string $type, array $ids): array
     {
-        /** @var DetachedShop $shop */
         $shop = $this->container->get('shop');
 
         $shopId = $shop->getId();
@@ -233,9 +229,8 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
             $fallbackId = $fallbackShop->getId();
         }
 
-        $translator = $this->container->get(Shopware_Components_Translation::class);
-
-        return $translator->readBatchWithFallback($shopId, $fallbackId, $type, $ids, false);
+        return $this->container->get(Shopware_Components_Translation::class)
+            ->readBatchWithFallback($shopId, $fallbackId, $type, $ids, false);
     }
 
     private function fetchTranslation(int $objectKey, array $translations): array
@@ -406,23 +401,16 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
      */
     private function getSupplierForSitemap(): array
     {
-        $context = $this->get(ContextServiceInterface::class)->getShopContext();
-        $categoryId = $context->getShop()->getCategory()->getId();
+        $categoryId = $this->get(ContextServiceInterface::class)->getShopContext()->getShop()->getCategory()->getId();
 
-        /** @var QueryBuilder $query */
-        $query = $this->get(Connection::class)->createQueryBuilder();
-        $query->select(['manufacturer.id', 'manufacturer.name']);
-
-        $query->from('s_articles_supplier', 'manufacturer');
-        $query->innerJoin('manufacturer', 's_articles', 'product', 'product.supplierID = manufacturer.id')
+        return $this->get(Connection::class)->createQueryBuilder()
+            ->select(['manufacturer.id', 'manufacturer.name'])
+            ->from('s_articles_supplier', 'manufacturer')
+            ->innerJoin('manufacturer', 's_articles', 'product', 'product.supplierID = manufacturer.id')
             ->innerJoin('product', 's_articles_categories_ro', 'categories', 'categories.articleID = product.id AND categories.categoryID = :categoryId')
-            ->setParameter(':categoryId', $categoryId);
-
-        $query->groupBy('manufacturer.id');
-
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+            ->setParameter(':categoryId', $categoryId)
+            ->groupBy('manufacturer.id')
+            ->execute()
+            ->fetchAllAssociative();
     }
 }

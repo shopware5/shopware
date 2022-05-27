@@ -25,7 +25,6 @@
 namespace Shopware\Components\Plugin\XmlReader;
 
 use DOMDocument;
-use DOMElement;
 use DOMNodeList;
 use DOMXPath;
 use InvalidArgumentException;
@@ -52,18 +51,26 @@ class XmlConfigReader extends XmlReaderBase
     {
         $xpath = new DOMXPath($xml);
 
-        $form = [];
-        $form['label'] = self::parseTranslatableNodeList(
-            $xpath->query('//config/label')
-        );
+        $form = [
+            'label' => [],
+            'description' => [],
+            'elements' => [],
+        ];
 
-        $form['description'] = self::parseTranslatableNodeList(
-            $xpath->query('//config/description')
-        );
+        $label = $xpath->query('//config/label');
+        if ($label instanceof DOMNodeList) {
+            $form['label'] = self::parseTranslatableNodeList($label);
+        }
 
-        $form['elements'] = $this->parseElementNodeList(
-            $xpath->query('//config/elements/element')
-        );
+        $description = $xpath->query('//config/description');
+        if ($description instanceof DOMNodeList) {
+            $form['description'] = self::parseTranslatableNodeList($description);
+        }
+
+        $elements = $xpath->query('//config/elements/element');
+        if ($elements instanceof DOMNodeList) {
+            $form['elements'] = $this->parseElementNodeList($elements);
+        }
 
         return $form;
     }
@@ -76,7 +83,6 @@ class XmlConfigReader extends XmlReaderBase
 
         $elements = [];
 
-        /** @var DOMElement $item */
         foreach ($list as $item) {
             $element = [];
 

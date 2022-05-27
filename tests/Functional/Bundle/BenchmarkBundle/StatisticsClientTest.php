@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle;
 
+use Doctrine\DBAL\Connection;
 use Psr\Log\NullLogger;
 use Ramsey\Uuid\Uuid;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsSendingException;
@@ -35,7 +38,7 @@ use Shopware\Models\Benchmark\BenchmarkConfig;
 
 class StatisticsClientTest extends BenchmarkTestCase
 {
-    public function testResetBenchmarkData()
+    public function testResetBenchmarkData(): void
     {
         $requestException = new RequestException('Fooo', 420);
 
@@ -51,27 +54,28 @@ class StatisticsClientTest extends BenchmarkTestCase
         $client = new StatisticsClient(
             'foo',
             $httpClient,
-            Shopware()->Container()->get('shopware.benchmark_bundle.hydrator.statistics_response_hydrator'),
+            $this->getContainer()->get('shopware.benchmark_bundle.hydrator.statistics_response_hydrator'),
             new NullLogger(),
-            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
+            $this->getContainer()->get(Connection::class)
         );
 
         $config = new BenchmarkConfig(Uuid::uuid4()->toString());
         $config->setLastProductId(100);
         $config->setShopId(55);
 
-        Shopware()->Models()->persist($config);
-        Shopware()->Models()->flush($config);
+        $this->getContainer()->get('models')->persist($config);
+        $this->getContainer()->get('models')->flush($config);
 
         try {
             $client->sendStatistics(new StatisticsRequest('foo', $config));
         } catch (StatisticsSendingException $e) {
             $oldConfig = $config;
-            $config = Shopware()->Models()->getRepository(BenchmarkConfig::class)->findOneBy(['shopId' => 55]);
+            $config = $this->getContainer()->get('models')->getRepository(BenchmarkConfig::class)->findOneBy(['shopId' => 55]);
+            static::assertInstanceOf(BenchmarkConfig::class, $config);
 
             static::assertNotEquals($config->getId(), $oldConfig->getId());
-            static::assertEquals(0, $config->getLastProductId());
-            static::assertEquals(55, $config->getShopId());
+            static::assertSame(0, $config->getLastProductId());
+            static::assertSame(55, $config->getShopId());
         }
     }
 }

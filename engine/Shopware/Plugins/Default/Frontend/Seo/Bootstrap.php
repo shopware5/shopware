@@ -89,16 +89,16 @@ class Shopware_Plugins_Frontend_Seo_Bootstrap extends Shopware_Components_Plugin
         $queryBlacklist = explode(',', $queryBlacklist);
 
         if (!empty($config['sSEOMETADESCRIPTION'])) {
-            if (!empty($view->sArticle['metaDescription'])) {
-                $metaDescription = $view->sArticle['metaDescription'];
-            } elseif (!empty($view->sArticle['description'])) {
-                $metaDescription = $view->sArticle['description'];
-            } elseif (!empty($view->sArticle['description_long'])) {
-                $metaDescription = $view->sArticle['description_long'];
-            } elseif (!empty($view->sCategoryContent['metaDescription'])) {
-                $metaDescription = $view->sCategoryContent['metaDescription'];
-            } elseif (!empty($view->sCategoryContent['cmstext'])) {
-                $metaDescription = $view->sCategoryContent['cmstext'];
+            if (!empty($view->getAssign('sArticle')['metaDescription'])) {
+                $metaDescription = $view->getAssign('sArticle')['metaDescription'];
+            } elseif (!empty($view->getAssign('sArticle')['description'])) {
+                $metaDescription = $view->getAssign('sArticle')['description'];
+            } elseif (!empty($view->getAssign('sArticle')['description_long'])) {
+                $metaDescription = $view->getAssign('sArticle')['description_long'];
+            } elseif (!empty($view->getAssign('sCategoryContent')['metaDescription'])) {
+                $metaDescription = $view->getAssign('sCategoryContent')['metaDescription'];
+            } elseif (!empty($view->getAssign('sCategoryContent')['cmstext'])) {
+                $metaDescription = $view->getAssign('sCategoryContent')['cmstext'];
             }
             if (!empty($metaDescription)) {
                 $metaDescription = html_entity_decode($metaDescription, ENT_COMPAT, 'UTF-8');

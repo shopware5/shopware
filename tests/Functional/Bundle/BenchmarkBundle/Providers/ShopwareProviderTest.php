@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,10 +27,11 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\ShopwareProvider;
 
 class ShopwareProviderTest extends ProviderTestCase
 {
-    protected const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\ShopwareProvider::class;
+    protected const SERVICE_ID = ShopwareProvider::class;
     protected const EXPECTED_KEYS_COUNT = 16;
     protected const EXPECTED_TYPES = [
         'api' => IsType::TYPE_STRING,

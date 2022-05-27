@@ -25,15 +25,23 @@
 namespace Shopware\Components\Theme;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\AbstractQuery;
 use Enlight_Event_EventManager;
 use Exception;
-use Shopware\Components\Form;
+use Psr\Log\LoggerInterface;
+use Shopware\Components\Form\Container as FormContainer;
+use Shopware\Components\Form\Container\TabContainer;
+use Shopware\Components\Form\Field;
+use Shopware\Components\Form\Interfaces\Container;
+use Shopware\Components\Form\Interfaces\Validate;
+use Shopware\Components\Form\Persister\Theme as ThemePersister;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Theme;
-use Shopware\Models\Shop;
 use Shopware\Models\Shop\Template;
+use Shopware\Models\Shop\TemplateConfig\Element;
+use Shopware\Models\Shop\TemplateConfig\Layout;
 use Shopware\Models\Shop\TemplateConfig\Set;
 
 /**
@@ -53,7 +61,7 @@ class Configurator
     protected $entityManager;
 
     /**
-     * @var Form\Persister\Theme
+     * @var ThemePersister
      */
     protected $persister;
 
@@ -72,17 +80,21 @@ class Configurator
      */
     protected $eventManager;
 
+    private LoggerInterface $logger;
+
     public function __construct(
         ModelManager $entityManager,
         Util $util,
-        Form\Persister\Theme $persister,
-        Enlight_Event_EventManager $eventManager
+        ThemePersister $persister,
+        Enlight_Event_EventManager $eventManager,
+        LoggerInterface $logger
     ) {
         $this->entityManager = $entityManager;
         $this->persister = $persister;
         $this->util = $util;
         $this->eventManager = $eventManager;
         $this->repository = $entityManager->getRepository(Template::class);
+        $this->logger = $logger;
     }
 
     /**
@@ -94,14 +106,21 @@ class Configurator
      * If one of the theme container elements isn't valid the function throws an exception
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function synchronize(Theme $theme)
     {
         //prevents the theme configuration lazy loading
         $template = $this->getTemplate($theme);
+        if (!$template instanceof Template) {
+            $this->logger->error(sprintf('Could not synchronize theme. "%s" instance for theme "%s" not found', Template::class, $theme->getName()));
+
+            return;
+        }
 
         //static main container which generated for each theme configuration.
-        $container = new Form\Container\TabContainer('main_container');
+        $container = new TabContainer('main_container');
 
         //inject the inheritance config container.
         $this->injectConfig($theme, $container);
@@ -151,20 +170,20 @@ class Configurator
      *
      * @throws Exception
      */
-    private function validateConfig(Form\Interfaces\Container $container)
+    private function validateConfig(Container $container): void
     {
         //check if the container implements the validation interface
-        if ($container instanceof Form\Interfaces\Validate) {
+        if ($container instanceof Validate) {
             $container->validate();
         }
 
         foreach ($container->getElements() as $element) {
             //check recursive validation.
-            if ($element instanceof Form\Interfaces\Container) {
+            if ($element instanceof Container) {
                 $this->validateConfig($element);
 
             //check Form\Field validation
-            } elseif ($element instanceof Form\Interfaces\Validate) {
+            } elseif ($element instanceof Validate) {
                 $element->validate();
             }
         }
@@ -176,8 +195,9 @@ class Configurator
      *
      * @throws Exception
      */
-    private function synchronizeSets(Theme $theme, Shop\Template $template)
+    private function synchronizeSets(Theme $theme, Template $template): void
     {
+        /** @var ArrayCollection<int, ConfigSet> $collection */
         $collection = new ArrayCollection();
         $theme->createConfigSets($collection);
 
@@ -198,8 +218,8 @@ class Configurator
             );
 
             // If the set isn't defined, create a new one
-            if (!$existing instanceof Shop\TemplateConfig\Set) {
-                $existing = new Shop\TemplateConfig\Set();
+            if (!$existing instanceof Set) {
+                $existing = new Set();
                 $template->getConfigSets()->add($existing);
             }
 
@@ -223,11 +243,11 @@ class Configurator
         foreach ($template->getConfigSets() as $existing) {
             //check if the current set was synchronized in the foreach before
             $defined = $this->getExistingConfigSet(
-                $synchronized,
+                new ArrayCollection($synchronized),
                 $existing->getName()
             );
 
-            if ($defined instanceof Shop\TemplateConfig\Set) {
+            if ($defined instanceof Set) {
                 continue;
             }
 
@@ -246,12 +266,15 @@ class Configurator
     /**
      * Helper function which removes all unused configuration containers and elements
      * which are stored in the database but not in the passed container.
+     *
+     * @param ArrayCollection<int, Layout>  $containers
+     * @param ArrayCollection<int, Element> $fields
      */
     private function removeUnused(
         ArrayCollection $containers,
         ArrayCollection $fields,
-        Form\Container $container
-    ) {
+        FormContainer $container
+    ): void {
         $structure = $this->getContainerNames($container);
 
         $structure = $this->eventManager->filter('Theme_Configurator_Container_Names_Loaded', $structure, [
@@ -260,14 +283,12 @@ class Configurator
             'container' => $container,
         ]);
 
-        /** @var Shop\TemplateConfig\Layout $layout */
         foreach ($containers as $layout) {
             if (!\in_array($layout->getName(), $structure['containers'])) {
                 $this->entityManager->remove($layout);
             }
         }
 
-        /** @var Shop\TemplateConfig\Element $layout */
         foreach ($fields as $layout) {
             if (!\in_array($layout->getName(), $structure['fields'])) {
                 $this->entityManager->remove($layout);
@@ -283,7 +304,7 @@ class Configurator
      *
      * Used to synchronize the theme configuration in the synchronize() function.
      */
-    private function getTemplate(Theme $theme)
+    private function getTemplate(Theme $theme): ?Template
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select([
@@ -305,39 +326,35 @@ class Configurator
     /**
      * Returns all config containers of the passed template.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     *
-     * @return ArrayCollection
+     * @return ArrayCollection<int, Layout>
      */
-    private function getLayout(Shop\Template $template)
+    private function getLayout(Template $template): ArrayCollection
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select('layout')
-            ->from('Shopware\Models\Shop\TemplateConfig\Layout', 'layout')
+            ->from(Layout::class, 'layout')
             ->where('layout.templateId = :templateId')
             ->setParameter('templateId', $template->getId());
 
-        $layout = $builder->getQuery()->getResult();
+        $layouts = $builder->getQuery()->getResult();
 
-        $layout = $this->eventManager->filter('Theme_Configurator_Layout_Loaded', $layout, [
+        $layouts = $this->eventManager->filter('Theme_Configurator_Layout_Loaded', $layouts, [
             'template' => $template,
         ]);
 
-        return new ArrayCollection($layout);
+        return new ArrayCollection($layouts);
     }
 
     /**
      * Returns all config elements of the passed template.
      *
-     * @param \Shopware\Models\Shop\Template $template
-     *
-     * @return ArrayCollection
+     * @return ArrayCollection<int, Element>
      */
-    private function getElements(Shop\Template $template)
+    private function getElements(Template $template): ArrayCollection
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select('elements')
-            ->from('Shopware\Models\Shop\TemplateConfig\Element', 'elements')
+            ->from(Element::class, 'elements')
             ->where('elements.templateId = :templateId')
             ->setParameter('templateId', $template->getId());
 
@@ -356,11 +373,9 @@ class Configurator
      * Elements which not stored in this array has to be removed by the removeUnused()
      * function
      *
-     * @param \Shopware\Components\Form\Container $container
-     *
-     * @return array
+     * @return array{containers: array<string>, fields: array<string>}
      */
-    private function getContainerNames(Form\Container $container)
+    private function getContainerNames(FormContainer $container): array
     {
         $layout = [
             'containers' => [],
@@ -370,7 +385,7 @@ class Configurator
         $layout['containers'][] = $container->getName();
 
         foreach ($container->getElements() as $element) {
-            if ($element instanceof Form\Container) {
+            if ($element instanceof FormContainer) {
                 $child = $this->getContainerNames($element);
 
                 $layout['containers'] = array_merge(
@@ -382,7 +397,7 @@ class Configurator
                     $layout['fields'],
                     $child['fields']
                 );
-            } elseif ($element instanceof Form\Field) {
+            } elseif ($element instanceof Field) {
                 $layout['fields'][] = $element->getName();
             }
         }
@@ -405,20 +420,19 @@ class Configurator
      * This allows the developer to display the theme configuration of extended
      * themes.
      */
-    private function injectConfig(Theme $theme, Form\Container\TabContainer $container)
+    private function injectConfig(Theme $theme, TabContainer $container): void
     {
         // Check if theme wants to inject parent configuration
         if (!$theme->useInheritanceConfig() || $theme->getExtend() === null) {
             return;
         }
 
-        /** @var Shop\Template $template */
         $template = $this->repository->findOneBy([
             'template' => $theme->getTemplate(),
         ]);
 
         // No parent configured? cancel injection.
-        if (!$template->getParent()) {
+        if (!$template instanceof Template || !$template->getParent() instanceof Template) {
             return;
         }
 
@@ -434,16 +448,12 @@ class Configurator
 
     /**
      * Helper function which checks if the configuration set is
-     * already exists in the passed collection.
+     * already existing in the passed collection.
      *
-     * @param Set[]|ArrayCollection<Set> $collection
-     * @param string                     $name
-     *
-     * @return Shop\TemplateConfig\Set|null
+     * @param Collection<int, Set> $collection
      */
-    private function getExistingConfigSet($collection, $name)
+    private function getExistingConfigSet(Collection $collection, string $name): ?Set
     {
-        /** @var Shop\TemplateConfig\Set $item */
         foreach ($collection as $item) {
             if ($item->getName() === $name) {
                 return $item;

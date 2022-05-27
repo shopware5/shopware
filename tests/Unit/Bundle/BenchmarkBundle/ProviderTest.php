@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,18 +27,20 @@
 namespace Shopware\Tests\Unit\Bundle\BenchmarkBundle;
 
 use ArrayObject;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkCollector;
 use Shopware\Bundle\BenchmarkBundle\BenchmarkProviderInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
+use Shopware\Bundle\StoreFrontBundle\Struct\Category;
+use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
-class ProviderTest extends \PHPUnit\Framework\TestCase
+class ProviderTest extends TestCase
 {
     /**
      * @group BenchmarkBundle
      */
-    public function testGet()
+    public function testGet(): void
     {
         $provider = new BenchmarkCollector(new ArrayObject([
             new ShopBenchmarkProvider(),
@@ -61,7 +65,7 @@ class ProviderTest extends \PHPUnit\Framework\TestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetShouldThrowExceptionNoShopProvider()
+    public function testGetShouldThrowExceptionNoShopProvider(): void
     {
         $provider = new BenchmarkCollector(new ArrayObject([
             new FooBenchmarkProvider(),
@@ -131,22 +135,22 @@ class ShopContextMock extends ShopContext
     }
 }
 
-class ShopMock
+class ShopMock extends Shop
 {
-    public function getId()
+    public function getId(): int
     {
         return 1;
     }
 
-    public function getCategory()
+    public function getCategory(): CategoryMock
     {
         return new CategoryMock();
     }
 }
 
-class CategoryMock
+class CategoryMock extends Category
 {
-    public function getId()
+    public function getId(): int
     {
         return 2;
     }

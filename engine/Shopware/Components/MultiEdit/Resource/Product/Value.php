@@ -25,6 +25,7 @@
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
 use DateTime;
+use Shopware\Components\Model\ModelEntity;
 
 /**
  * Handles request for values suggested to the user
@@ -53,9 +54,9 @@ class Value
      * Suggests values for a given attribute. Optionally we'd be able to filter the suggested values
      * by the operator the user put in front.
      *
-     * @param string $attribute
-     * @param string $operator
-     * @param array  $queryConfig
+     * @param class-string<ModelEntity> $attribute
+     * @param string                    $operator
+     * @param array                     $queryConfig
      *
      * @return array
      */

@@ -390,7 +390,7 @@ class sBasket implements \Enlight_Hook
             $sql,
             ['subject' => $this, 'params' => $params]
         );
-        $basketAmount = $this->db->fetchOne($sql, $params);
+        $basketAmount = (float) $this->db->fetchOne($sql, $params);
 
         // If no products in basket, return
         if (!$basketAmount) {

@@ -99,6 +99,7 @@ Thumbs.db
 /tests/.phpunit.result.cache
 /php-cs-fixer.xml
 .phpunit.result.cache
+tests/phpunit-full-coverage.xml
 
 # scripts
 !/build/composer-post-install-cmd.sh

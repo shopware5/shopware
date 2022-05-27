@@ -29,6 +29,7 @@ use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Event_EventManager;
 use PDO;
 use RuntimeException;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
@@ -80,6 +81,8 @@ class DqlHelper
 
     /**
      * All the entities, the user will be able to access via SwagMultiEdit
+     *
+     * @var array<array{0: class-string<ModelEntity>, 1: string}>
      */
     protected $entities = [
         [Article::class, 'article'],
@@ -101,6 +104,9 @@ class DqlHelper
         [Image::class, 'image'],
     ];
 
+    /**
+     * @var array<string>
+     */
     protected $columnsNotToShowInGrid = [
         'Tax_tax',
         'Detail_kind',
@@ -188,7 +194,7 @@ class DqlHelper
     /**
      * Returns all entities as an array of entities ([0]) and their alias ([1])
      *
-     * @return array
+     * @return array<array{0: class-string<ModelEntity>, 1: string}>
      */
     public function getEntities()
     {
@@ -212,7 +218,9 @@ class DqlHelper
      * Returns the doctrine entity associated to an attribute
      * e.g. ARTICLE.ID => \Shopware\Models\Article\Article
      *
-     * @param string $attribute
+     * @param class-string<ModelEntity> $attribute
+     *
+     * @return class-string<ModelEntity>
      */
     public function getEntityForAttribute($attribute)
     {
@@ -244,7 +252,7 @@ class DqlHelper
      * Returns the prefix for a given entity
      * e.g. \Shopware\Models\Article\Article => article
      *
-     * @param string $entity
+     * @param class-string<ModelEntity> $entity
      */
     public function getPrefixForEntity($entity)
     {
@@ -383,14 +391,14 @@ class DqlHelper
     public function buildMapping()
     {
         foreach ($this->entities as $entity) {
-            list($entity, $prefix) = $entity;
+            [$entity, $prefix] = $entity;
 
             $this->entityToPrefix[$entity] = $prefix;
             $this->prefixToEntity[$prefix] = $entity;
         }
 
         foreach ($this->entities as $entity) {
-            list($entity, $prefix) = $entity;
+            [$entity, $prefix] = $entity;
 
             $columns = $this->getPrefixedColumns($entity);
 
@@ -422,7 +430,7 @@ class DqlHelper
         $result = [];
 
         foreach ($this->getEntities() as $entityArray) {
-            list($entity, $prefix) = $entityArray;
+            [$entity, $prefix] = $entityArray;
             if ($prefix === 'price') {
                 continue;
             }
@@ -982,9 +990,9 @@ class DqlHelper
      * Returns all columns for a given entity prefixed
      * eg.g \Shopware\Models\Article\Article => array('id', 'name', …)
      *
-     * @param string $entity
+     * @param class-string<ModelEntity> $entity
      *
-     * @return array
+     * @return array<string>
      */
     protected function getPrefixedColumns($entity)
     {

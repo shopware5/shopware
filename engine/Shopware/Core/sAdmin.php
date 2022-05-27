@@ -4053,7 +4053,7 @@ SQL;
             ->getNamespace('backend/static/discounts_surcharges')
             ->get('discount_name', 'Warenkorbrabatt');
 
-        $basket_discount = $this->db->fetchOne(
+        $basket_discount = (float) $this->db->fetchOne(
             'SELECT basketdiscount
                 FROM s_core_customergroups_discounts
                 WHERE groupID = ?

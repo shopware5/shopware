@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,22 +32,24 @@ use Shopware_Controllers_Backend_BenchmarkLocalOverview;
 
 class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
 {
-    public const CONTROLLER_NAME = Shopware_Controllers_Backend_BenchmarkLocalOverview::class;
+    protected const CONTROLLER_NAME = Shopware_Controllers_Backend_BenchmarkLocalOverview::class;
 
     /**
      * @group BenchmarkBundle
      */
-    public function testRenderActionShouldLoadStart()
+    public function testRenderActionShouldLoadStart(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
+        static::assertInstanceOf(Shopware_Controllers_Backend_BenchmarkLocalOverview::class, $controller);
 
-        Shopware()->Db()->exec('DELETE FROM s_benchmark_config;');
+        $this->getContainer()->get('dbal_connection')->executeStatement('DELETE FROM s_benchmark_config;');
         $controller->setView(new ViewMock(new Enlight_Template_Manager()));
 
         $controller->renderAction();
 
-        $loadedTemplate = $controller->View()->getTemplate();
+        $view = $controller->View();
+        static::assertInstanceOf(ViewMock::class, $view);
+        $loadedTemplate = $view->getTemplate();
 
         static::assertSame('backend/benchmark/template/local/start.tpl', $loadedTemplate);
     }
@@ -53,10 +57,10 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testRenderActionShouldLoadCustom()
+    public function testRenderActionShouldLoadCustom(): void
     {
-        /** @var Shopware_Controllers_Backend_BenchmarkLocalOverview $controller */
         $controller = $this->getController();
+        static::assertInstanceOf(Shopware_Controllers_Backend_BenchmarkLocalOverview::class, $controller);
 
         $this->installDemoData('benchmark_config');
         $controller->setView(new ViewMock(new Enlight_Template_Manager()));
@@ -64,7 +68,9 @@ class BenchmarkLocalOverviewControllerTest extends BenchmarkControllerTestCase
 
         $controller->renderAction();
 
-        $loadedTemplate = $controller->View()->getTemplate();
+        $view = $controller->View();
+        static::assertInstanceOf(ViewMock::class, $view);
+        $loadedTemplate = $view->getTemplate();
 
         static::assertSame('backend/benchmark/template/local/custom.tpl', $loadedTemplate);
     }

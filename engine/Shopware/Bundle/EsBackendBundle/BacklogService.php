@@ -40,14 +40,12 @@ class BacklogService implements BacklogServiceInterface
 
     public function read(int $amount): array
     {
-        $result = $this->connection->createQueryBuilder()
+        return $this->connection->createQueryBuilder()
             ->select('*')
             ->from('s_es_backend_backlog', 'ba')
             ->setMaxResults($amount)
             ->execute()
             ->fetchAll();
-
-        return $result;
     }
 
     /**

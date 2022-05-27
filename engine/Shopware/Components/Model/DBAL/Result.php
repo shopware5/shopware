@@ -83,7 +83,7 @@ class Result
         }
 
         $statement = $builder->execute();
-        if (\is_int($statement)) {
+        if (\is_int($statement) || \is_string($statement)) {
             throw new RuntimeException('QueryBuilder statement not valid');
         }
         $this->statement = $statement;

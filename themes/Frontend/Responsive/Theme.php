@@ -25,10 +25,13 @@
 namespace Shopware\Themes\Responsive;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Shopware\Components\Form as Form;
+use Shopware\Components\Form\Container\FieldSet;
+use Shopware\Components\Form\Container\Tab;
+use Shopware\Components\Form\Container\TabContainer;
+use Shopware\Components\Theme as BaseTheme;
 use Shopware\Components\Theme\ConfigSet;
 
-class Theme extends \Shopware\Components\Theme
+class Theme extends BaseTheme
 {
     /**
      * Defines the extended Theme.
@@ -38,7 +41,7 @@ class Theme extends \Shopware\Components\Theme
     protected $extend = 'Bare';
 
     /**
-     * Defines the human readable theme name which is displayed in the backend.
+     * Defines the human-readable theme name which is displayed in the backend.
      *
      * @var string
      */
@@ -73,7 +76,7 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Javascript files which will be used in the theme.
      *
-     * @var array
+     * @var array<string>
      */
     protected $javascript = [
         // Third party plugins / libraries
@@ -142,13 +145,13 @@ class Theme extends \Shopware\Components\Theme
         'src/js/jquery.shopware-responsive.js',
         'src/js/jquery.invalid-tos-jump.js',
         'src/js/jquery.notification-message-close.js',
-        'src/js/jquery.cookie-consent-manager.js'
+        'src/js/jquery.cookie-consent-manager.js',
     ];
 
     /**
      * Holds default fieldSet configuration.
      *
-     * @var array
+     * @var array{layout: string, height: int, flex: int, defaults: array{columnWidth: float, labelWidth: int, margin: string}}
      */
     private $fieldSetDefaults = [
         'layout' => 'column',
@@ -160,7 +163,7 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Holds default theme colors.
      *
-     * @var array
+     * @var array<string, string>
      */
     private $themeColorDefaults = [
         'brand-primary' => '#D9400B',
@@ -240,7 +243,7 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Holds default font configuration.
      *
-     * @var array
+     * @var array<string, string|int>
      */
     private $themeFontDefaults = [
         'font-base-stack' => '"Open Sans", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;',
@@ -262,10 +265,7 @@ class Theme extends \Shopware\Components\Theme
         'btn-icon-size' => 10,
     ];
 
-    /**
-     * @param Form\Container\TabContainer $container
-     */
-    public function createConfig(Form\Container\TabContainer $container)
+    public function createConfig(TabContainer $container)
     {
         $container->addTab($this->createMainConfigTab());
 
@@ -280,8 +280,6 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to merge default theme colors with color schemes.
-     *
-     * @param ArrayCollection $collection
      */
     public function createConfigSets(ArrayCollection $collection)
     {
@@ -409,7 +407,7 @@ class Theme extends \Shopware\Components\Theme
         $collection->add($set);
     }
 
-    private function createBasicFieldSet()
+    private function createBasicFieldSet(): FieldSet
     {
         $attributes = array_merge($this->fieldSetDefaults, ['height' => 130]);
         $fieldSet = $this->createFieldSet(
@@ -452,10 +450,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the child-tabs of ("Responsive colors").
-     *
-     * @return Form\Container\Tab
      */
-    private function createBottomTabPanel()
+    private function createBottomTabPanel(): TabContainer
     {
         $tabPanel = $this->createTabPanel(
             'bottom_tab_panel',
@@ -477,10 +473,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("General").
-     *
-     * @return Form\Container\Tab
      */
-    private function createGeneralTab()
+    private function createGeneralTab(): Tab
     {
         $tab = $this->createTab(
             'general_tab',
@@ -658,10 +652,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Typography").
-     *
-     * @return Form\Container\Tab
      */
-    private function createTypographyTab()
+    private function createTypographyTab(): Tab
     {
         $tab = $this->createTab(
             'typo_tab',
@@ -778,10 +770,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Buttons & Panels").
-     *
-     * @return Form\Container\Tab
      */
-    private function createButtonsTab()
+    private function createButtonsTab(): Tab
     {
         $tab = $this->createTab(
             'buttons_tab',
@@ -1016,10 +1006,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Forms").
-     *
-     * @return Form\Container\Tab
      */
-    private function createFormsTab()
+    private function createFormsTab(): Tab
     {
         $tab = $this->createTab(
             'forms_tab',
@@ -1178,10 +1166,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the tab ("Tables & Badges").
-     *
-     * @return Form\Container\Tab
      */
-    private function createTablesTab()
+    private function createTablesTab(): Tab
     {
         $tab = $this->createTab(
             'tables_tab',
@@ -1323,10 +1309,8 @@ class Theme extends \Shopware\Components\Theme
 
     /**
      * Helper function to create the main tab ("Responsive configuration").
-     *
-     * @return Form\Container\Tab
      */
-    private function createMainConfigTab()
+    private function createMainConfigTab(): Tab
     {
         $tab = $this->createTab(
             'responsiveMain',
@@ -1559,11 +1543,9 @@ class Theme extends \Shopware\Components\Theme
     /**
      * Helper function to get the attribute of a checkbox field which shows a description label.
      *
-     * @param $snippetName
-     *
-     * @return array
+     * @return array{attributes: array<string, string>}
      */
-    private function getLabelAttribute($snippetName, $labelType = 'boxLabel')
+    private function getLabelAttribute(string $snippetName, string $labelType = 'boxLabel'): array
     {
         $description = Shopware()->Snippets()->getNamespace('themes/bare/backend/config')->get($snippetName);
 

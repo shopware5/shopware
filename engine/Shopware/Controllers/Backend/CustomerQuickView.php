@@ -233,7 +233,7 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
     }
 
     /**
-     * @return array{data: array<array<string, mixed>>, total: int}
+     * @return array{success: true, data: array<array<string, mixed>>, total: int}
      */
     private function loadFromRepository(): array
     {
@@ -309,6 +309,6 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             }
         }
 
-        return ['data' => array_values($sortedData), 'total' => $result->getCount()];
+        return ['success' => true, 'data' => array_values($sortedData), 'total' => $result->getCount()];
     }
 }

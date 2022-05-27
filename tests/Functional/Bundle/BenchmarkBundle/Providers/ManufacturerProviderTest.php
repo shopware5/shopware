@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,19 +27,20 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\ManufacturerProvider;
 
 class ManufacturerProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\ManufacturerProvider::class;
-    public const EXPECTED_KEYS_COUNT = 1;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = ManufacturerProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 1;
+    protected const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,
     ];
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalSuppliersPerShop()
+    public function testGetTotalSuppliersPerShop(): void
     {
         $this->installDemoData('suppliers');
 

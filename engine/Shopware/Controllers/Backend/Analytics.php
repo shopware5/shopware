@@ -373,19 +373,19 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         }
 
         foreach ($referrer as &$ref) {
-            if ($ref['orderCount'] != 0) {
+            if ($ref['orderCount'] !== 0) {
                 $ref['average'] = round($ref['turnover'] / $ref['orderCount'], 2);
             } else {
                 $ref['average'] = 0;
             }
 
-            if ($ref['newCustomers'] != 0) {
+            if ($ref['newCustomers'] !== 0) {
                 $ref['averageNewCustomer'] = round($ref['turnoverNewCustomer'] / $ref['newCustomers'], 2);
             } else {
                 $ref['averageNewCustomer'] = 0;
             }
 
-            if ($ref['regularCustomers'] != 0) {
+            if ($ref['regularCustomers'] !== 0) {
                 $ref['averageRegularCustomer'] = round($ref['turnoverRegularCustomer'] / $ref['regularCustomers'], 2);
             } else {
                 $ref['averageRegularCustomer'] = 0;
@@ -1252,7 +1252,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
     {
         $preparedData = [];
         foreach ($data as $key => $row) {
-            $newRow = [];
+            $newRow = $row;
 
             $newRow['orderCount'] = isset($row['orderCount']) ? (int) $row['orderCount'] : 0;
             $newRow['turnover'] = isset($row['turnover']) ? (float) $row['turnover'] : 0.0;

@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/config.xsd">
 
     <label lang="en">My Form Label</label>
-    <label lang="de">Mein Form</label>
+    <label lang="de">Meine Form</label>
 
     <description>My description</description>
     <description lang="de">Meine Beschreibung</description>

@@ -26,6 +26,7 @@ namespace Shopware\Bundle\AttributeBundle\Repository\Searcher;
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Model\SearchBuilder;
@@ -33,7 +34,7 @@ use Shopware\Components\Model\SearchBuilder;
 class GenericSearcher implements SearcherInterface
 {
     /**
-     * @var string
+     * @var class-string<ModelEntity>
      */
     protected $entity;
 
@@ -48,8 +49,8 @@ class GenericSearcher implements SearcherInterface
     protected $searchBuilder;
 
     /**
-     * @param string        $entity
-     * @param SearchBuilder $searchBuilder
+     * @param class-string<ModelEntity> $entity
+     * @param SearchBuilder             $searchBuilder
      */
     public function __construct($entity, ModelManager $entityManager, SearchBuilder $searchBuilder = null)
     {
@@ -66,7 +67,6 @@ class GenericSearcher implements SearcherInterface
      */
     public function search(SearchCriteria $criteria)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->createQuery($criteria);
 
         $builder->setFirstResult($criteria->offset)
@@ -86,7 +86,7 @@ class GenericSearcher implements SearcherInterface
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @return QueryBuilder
      */
     protected function createQuery(SearchCriteria $criteria)
     {

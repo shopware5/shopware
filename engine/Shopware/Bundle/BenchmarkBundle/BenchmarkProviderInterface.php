@@ -34,7 +34,7 @@ interface BenchmarkProviderInterface
     public function getName();
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     public function getBenchmarkData(ShopContextInterface $shopContext);
 }

@@ -210,7 +210,7 @@ class Product implements ResourceInterface
                     if (!\is_string($price)) {
                         throw new RuntimeException('Price needs to be a string');
                     }
-                    $price = $tax != 0 ? $price / $tax : 0;
+                    $price = $tax != 0 ? (((float) $price) / $tax) : 0;
                     $setter = 'set' . ucfirst($field['field']);
                     $priceModel->$setter($price);
                 }

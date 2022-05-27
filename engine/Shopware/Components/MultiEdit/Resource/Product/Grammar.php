@@ -85,7 +85,7 @@ class Grammar
         $columnInfo = [];
 
         foreach ($this->getDqlHelper()->getEntities() as $entity) {
-            list($entity, $prefix) = $entity;
+            [$entity, $prefix] = $entity;
             $newMapping = [];
             $mappings = $this->getDqlHelper()->getEntityManager()->getClassMetadata($entity)->fieldMappings;
             foreach ($mappings as $key => $value) {

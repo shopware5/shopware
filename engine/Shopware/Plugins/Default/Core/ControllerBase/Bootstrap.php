@@ -67,10 +67,10 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $shop = Shopware()->Shop();
         $view->assign('Controller', $args->getSubject()->Request()->getControllerName());
 
-        $view->assign('sBasketQuantity', $view->sBasketQuantity ?: 0);
-        $view->assign('sBasketAmount', $view->sBasketAmount ?: 0);
-        $view->assign('sNotesQuantity', $view->sNotesQuantity ?: 0);
-        $view->assign('sUserLoggedIn', $view->sUserLoggedIn ?: false);
+        $view->assign('sBasketQuantity', $view->getAssign('sBasketQuantity') ?: 0);
+        $view->assign('sBasketAmount', $view->getAssign('sBasketAmount') ?: 0);
+        $view->assign('sNotesQuantity', $view->getAssign('sNotesQuantity') ?: 0);
+        $view->assign('sUserLoggedIn', $view->getAssign('sUserLoggedIn') ?: false);
 
         $view->assign('Shop', $shop);
         if (!$shop->getLocale() instanceof ShopLocale) {
@@ -79,12 +79,12 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
         $view->assign('Locale', $shop->getLocale()->getLocale());
 
         $view->assign('sCategoryStart', $shop->getCategory()->getId());
-        $view->assign('sCategoryCurrent', $this->getCategoryCurrent($view->sCategoryStart));
-        $view->assign('sCategories', $this->getCategories($view->sCategoryCurrent));
-        $view->assign('sMainCategories', $view->sCategories);
+        $view->assign('sCategoryCurrent', $this->getCategoryCurrent($view->getAssign('sCategoryStart')));
+        $view->assign('sCategories', $this->getCategories($view->getAssign('sCategoryCurrent')));
+        $view->assign('sMainCategories', $view->getAssign('sCategories'));
         $view->assign('sOutputNet', Shopware()->Session()->get('sOutputNet'));
 
-        $activePage = isset($view->sCustomPage['id']) ? $view->sCustomPage['id'] : null;
+        $activePage = $view->getAssign('sCustomPage')['id'] ?? null;
         $view->assign('sMenu', $this->getMenu($shop->getId(), $activePage));
 
         $view->assign('sShopname', Shopware()->Config()->get('shopName'));
@@ -113,7 +113,9 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     {
         if (!empty(Shopware()->System()->_GET['sCategory'])) {
             return (int) Shopware()->System()->_GET['sCategory'];
-        } elseif (Shopware()->Front()->Request()->get('sCategory')) {
+        }
+
+        if (Shopware()->Front()->Request()->get('sCategory')) {
             return (int) Shopware()->Front()->Request()->get('sCategory');
         }
 

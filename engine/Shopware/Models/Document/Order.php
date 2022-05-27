@@ -804,7 +804,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
             $this->_shipping['state'] = new ArrayObject($countryState, ArrayObject::ARRAY_AS_PROPS);
         }
 
-        if ($this->_shipping !== null) {
+        if ($this->_shipping !== null && !empty($this->_shipping['id'])) {
             $attributes = Shopware()->Db()->fetchRow(
                 'SELECT * FROM s_order_shippingaddress_attributes WHERE shippingID = ?',
                 [$this->_shipping['id']]

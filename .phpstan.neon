@@ -35,6 +35,8 @@ parameters:
         - %currentWorkingDirectory%/engine/Shopware
         - %currentWorkingDirectory%/tests
         - %currentWorkingDirectory%/engine/Library/Enlight
+        - %currentWorkingDirectory%/themes/Frontend/Bare/Theme.php
+        - %currentWorkingDirectory%/themes/Frontend/Responsive/Theme.php
     excludePaths:
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Community
         - %currentWorkingDirectory%/engine/Shopware/Plugins/Local
@@ -177,3 +179,7 @@ parameters:
         - # For testing purposes the constructor of the price struct gets strings
             message: '#Parameter .* of class Shopware\\Components\\Cart\\Struct\\Price constructor expects float.*string given#'
             path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
+
+        - # The doctrine extension has problems with detecting the select within an if condition. see https://github.com/phpstan/phpstan-doctrine/issues/331
+            message: '#Error: Expected Doctrine\\ORM\\Query\\Lexer::T_FROM, got end of string#'
+            path: engine/Shopware/Components/Api/Resource/EmotionPreset.php

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,62 +26,50 @@
 
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Controllers\Backend;
 
-use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Connection;
 use Enlight_Class;
-use Enlight_Controller_Action;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
 use Shopware\Tests\Functional\Bundle\BenchmarkBundle\BenchmarkTestCase;
+use Shopware_Controllers_Backend_ExtJs;
 
 class BenchmarkControllerTestCase extends BenchmarkTestCase
 {
-    protected function getAssetsFolder()
+    protected const CONTROLLER_NAME = '';
+
+    protected function getAssetsFolder(): string
     {
         return __DIR__ . '/assets/';
     }
 
-    /**
-     * @return Enlight_Class
-     */
-    protected function getController()
+    protected function getController(): Shopware_Controllers_Backend_ExtJs
     {
-        /** @var Enlight_Controller_Action $controller */
-        $controller = Enlight_Class::Instance($this::CONTROLLER_NAME);
+        $controller = Enlight_Class::Instance(static::CONTROLLER_NAME);
+        static::assertInstanceOf(Shopware_Controllers_Backend_ExtJs::class, $controller);
 
         $controller->initController(new Enlight_Controller_Request_RequestTestCase(), new Enlight_Controller_Response_ResponseTestCase());
 
-        $controller->setContainer(Shopware()->Container());
+        $controller->setContainer($this->getContainer());
         $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;
     }
 
-    /**
-     * @param string $select
-     *
-     * @return string
-     */
-    protected function loadSettingColumn($select)
+    protected function loadSettingColumn(string $select): string
     {
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $queryBuilder = $this->getContainer()->get(Connection::class)->createQueryBuilder();
 
-        return $queryBuilder->select($select)
+        return (string) $queryBuilder->select($select)
             ->from('s_benchmark_config', 'config')
             ->execute()
-            ->fetchColumn();
+            ->fetchOne();
     }
 
-    /**
-     * @param string $key
-     * @param string $value
-     */
-    protected function setSetting($key, $value)
+    protected function setSetting(string $key, string $value): void
     {
-        /** @var QueryBuilder $queryBuilder */
-        $queryBuilder = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $queryBuilder = $this->getContainer()->get(Connection::class)->createQueryBuilder();
 
         $queryBuilder->update('s_benchmark_config', 'config')
             ->set($key, ':value')

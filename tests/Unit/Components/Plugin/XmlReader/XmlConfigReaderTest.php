@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,15 +29,13 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 use DOMNodeList;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use Shopware\Components\Plugin\XmlReader\XmlConfigReader;
+use Shopware\Components\Plugin\XmlReader\XmlReaderBase;
+use Shopware\Tests\TestReflectionHelper;
 
 class XmlConfigReaderTest extends TestCase
 {
-    /**
-     * @var XmlConfigReader
-     */
-    private $configReader;
+    private XmlConfigReader $configReader;
 
     protected function setUp(): void
     {
@@ -52,7 +52,7 @@ class XmlConfigReaderTest extends TestCase
         static::assertArrayHasKey('en', $result['label']);
         static::assertArrayHasKey('de', $result['label']);
         static::assertEquals('My Form Label', $result['label']['en']);
-        static::assertEquals('Mein Form', $result['label']['de']);
+        static::assertEquals('Meine Form', $result['label']['de']);
 
         //form description
         static::assertArrayHasKey('description', $result);
@@ -133,9 +133,7 @@ class XmlConfigReaderTest extends TestCase
 
     public function testParseElementNodeListEmpty(): void
     {
-        $reflection = new ReflectionClass(\get_class($this->configReader));
-        $method = $reflection->getMethod('parseElementNodeList');
-        $method->setAccessible(true);
+        $method = TestReflectionHelper::getMethod(\get_class($this->configReader), 'parseElementNodeList');
 
         $result = $method->invokeArgs($this->configReader, [new DOMNodeList()]);
 
@@ -147,19 +145,19 @@ class XmlConfigReaderTest extends TestCase
     {
         //default value SCOPE_LOCALE
         static::assertEquals(
-            XmlConfigReader::SCOPE_LOCALE,
+            XmlReaderBase::SCOPE_LOCALE,
             XmlConfigReader::validateAttributeScope('')
         );
 
         //SCOPE_LOCALE
         static::assertEquals(
-            XmlConfigReader::SCOPE_LOCALE,
+            XmlReaderBase::SCOPE_LOCALE,
             XmlConfigReader::validateAttributeScope('locale')
         );
 
         //SCOPE_SHOP
         static::assertEquals(
-            XmlConfigReader::SCOPE_SHOP,
+            XmlReaderBase::SCOPE_SHOP,
             XmlConfigReader::validateAttributeScope('shop')
         );
     }

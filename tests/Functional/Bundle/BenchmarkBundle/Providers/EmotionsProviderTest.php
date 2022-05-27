@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,12 +27,13 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\EmotionsProvider;
 
 class EmotionsProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\EmotionsProvider::class;
-    public const EXPECTED_KEYS_COUNT = 5;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = EmotionsProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 5;
+    protected const EXPECTED_TYPES = [
         'total' => IsType::TYPE_INT,
         'landingPages' => IsType::TYPE_INT,
         'timed' => IsType::TYPE_INT,
@@ -41,7 +44,7 @@ class EmotionsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalEmotions()
+    public function testGetTotalEmotions(): void
     {
         $this->installDemoData('emotions');
 
@@ -53,7 +56,7 @@ class EmotionsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTimedEmotions()
+    public function testGetTimedEmotions(): void
     {
         $this->installDemoData('emotions');
 
@@ -65,7 +68,7 @@ class EmotionsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetLandingPageEmotions()
+    public function testGetLandingPageEmotions(): void
     {
         $this->installDemoData('emotions');
 
@@ -77,37 +80,40 @@ class EmotionsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetElementUsages()
+    public function testGetElementUsages(): void
     {
         $this->installDemoData('emotions');
 
         $resultData = $this->getBenchmarkData();
 
-        static::assertTrue(array_intersect([
+        static::assertSame([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
-        ], $resultData['elementUsages']) === [
+        ], array_intersect([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
-        ]);
+        ], $resultData['elementUsages']));
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetViewportUsages()
+    public function testGetViewportUsages(): void
     {
         $this->installDemoData('emotions');
 
         $resultData = $this->getBenchmarkData();
 
-        static::assertTrue(array_intersect(['4', '2', '4', '3', '4'], $resultData['viewportUsages']) === ['4', '2', '4', '3', '4']);
+        static::assertSame(
+            ['4', '2', '4', '3', '4'],
+            array_intersect(['4', '2', '4', '3', '4'], $resultData['viewportUsages'])
+        );
     }
 
     /**
      * @group BenchmarkBundle
      */
-    public function testGetTotalEmotionsPerShop()
+    public function testGetTotalEmotionsPerShop(): void
     {
         $this->installDemoData('emotions');
 
@@ -123,28 +129,28 @@ class EmotionsProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetElementUsagesPerShop()
+    public function testGetElementUsagesPerShop(): void
     {
         $this->installDemoData('emotions');
 
         $provider = $this->getProvider();
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(1));
-        static::assertTrue(array_intersect([
+        static::assertSame([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
-        ], $resultData['elementUsages']) === [
+        ], array_intersect([
             ['elementCount' => 3, 'elementName' => 'example-element-1'],
             ['elementCount' => 2, 'elementName' => 'example-element-2'],
-        ]);
+        ], $resultData['elementUsages']));
 
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
-        static::assertTrue(array_intersect([
+        static::assertSame([
             ['elementCount' => 2, 'elementName' => 'example-element-1'],
             ['elementCount' => 1, 'elementName' => 'example-element-2'],
-        ], $resultData['elementUsages']) === [
+        ], array_intersect([
             ['elementCount' => 2, 'elementName' => 'example-element-1'],
             ['elementCount' => 1, 'elementName' => 'example-element-2'],
-        ]);
+        ], $resultData['elementUsages']));
     }
 }

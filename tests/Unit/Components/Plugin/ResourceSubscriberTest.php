@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Unit\Components\Plugin;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Enlight_Event_EventArgs;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\ResourceSubscriber;
@@ -50,6 +51,7 @@ class ResourceSubscriberTest extends TestCase
     {
         $subscriber = new ResourceSubscriber(__DIR__ . '/examples/TestPlugin');
 
+        static::assertInstanceOf(ArrayCollection::class, $subscriber->onCollectCss());
         static::assertSame(
             [
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/css/foo/bar.css',
@@ -58,6 +60,7 @@ class ResourceSubscriberTest extends TestCase
             $subscriber->onCollectCss()->toArray()
         );
 
+        static::assertInstanceOf(ArrayCollection::class, $subscriber->onCollectJavascript());
         static::assertSame(
             [
                 __DIR__ . '/examples/TestPlugin/Resources/frontend/js/foo.js',

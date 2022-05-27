@@ -576,8 +576,13 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             if (!empty($value)) {
                 switch ($element['typ']) {
                     case 'date':
-                        $values = preg_split('#[^0-9]#', $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
-                        if (\is_array($values) && \count($values) !== 3) {
+                        $values = preg_split('#\D#', $inputs[$element['id']], -1, PREG_SPLIT_NO_EMPTY);
+                        if (!\is_array($values)) {
+                            unset($value);
+                            $valid = false;
+                            break;
+                        }
+                        if (\count($values) !== 3) {
                             unset($value);
                             $valid = false;
                             break;

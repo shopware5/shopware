@@ -29,9 +29,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface BatchableProviderInterface extends BenchmarkProviderInterface
 {
     /**
-     * @param int $batchSize
+     * @param int|null $batchSize
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getBenchmarkData(ShopContextInterface $shopContext, $batchSize = null);
 }

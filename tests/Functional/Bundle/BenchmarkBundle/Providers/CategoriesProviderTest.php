@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,12 +27,13 @@
 namespace Shopware\Tests\Functional\Bundle\BenchmarkBundle\Providers;
 
 use PHPUnit\Framework\Constraint\IsType;
+use Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider;
 
 class CategoriesProviderTest extends ProviderTestCase
 {
-    public const SERVICE_ID = \Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider::class;
-    public const EXPECTED_KEYS_COUNT = 2;
-    public const EXPECTED_TYPES = [
+    protected const SERVICE_ID = CategoriesProvider::class;
+    protected const EXPECTED_KEYS_COUNT = 2;
+    protected const EXPECTED_TYPES = [
         'products' => [
             'average' => IsType::TYPE_FLOAT,
             'max' => IsType::TYPE_INT,
@@ -41,7 +44,7 @@ class CategoriesProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetAverageProductsPerCategoryPerShop()
+    public function testGetAverageProductsPerCategoryPerShop(): void
     {
         $this->installDemoData('category_products');
 
@@ -56,7 +59,7 @@ class CategoriesProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetMaxProductsPerCategoryPerShop()
+    public function testGetMaxProductsPerCategoryPerShop(): void
     {
         $this->installDemoData('category_products');
 
@@ -71,7 +74,7 @@ class CategoriesProviderTest extends ProviderTestCase
     /**
      * @group BenchmarkBundle
      */
-    public function testGetCategoryTreePerShop()
+    public function testGetCategoryTreePerShop(): void
     {
         $this->installDemoData('category_products');
 
@@ -85,9 +88,9 @@ class CategoriesProviderTest extends ProviderTestCase
         // Child of "Example 3", name "Example 5"
         static::assertCount(1, $resultData['tree'][0]['children'][1]['children'][0]['children']);
 
-        static::assertEquals(0, $resultData['tree'][0]['children'][1]['active']);
-        static::assertEquals(1, $resultData['tree'][0]['children'][1]['children'][0]['active']);
-        static::assertEquals(1, $resultData['tree'][0]['children'][0]['hasProductStream']);
+        static::assertFalse($resultData['tree'][0]['children'][1]['active']);
+        static::assertTrue($resultData['tree'][0]['children'][1]['children'][0]['active']);
+        static::assertTrue($resultData['tree'][0]['children'][0]['hasProductStream']);
 
         $provider = $this->getProvider();
         $resultData = $provider->getBenchmarkData($this->getShopContextByShopId(2));
@@ -97,7 +100,7 @@ class CategoriesProviderTest extends ProviderTestCase
         // First child of "Example Parent 2", name "Example 4"
         static::assertCount(0, $resultData['tree'][0]['children'][0]['children']);
 
-        static::assertEquals(1, $resultData['tree'][0]['active']);
-        static::assertEquals(0, $resultData['tree'][0]['children'][0]['active']);
+        static::assertTrue($resultData['tree'][0]['active']);
+        static::assertFalse($resultData['tree'][0]['children'][0]['active']);
     }
 }

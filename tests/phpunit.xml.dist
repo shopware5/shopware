@@ -8,24 +8,84 @@
          beStrictAboutResourceUsageDuringSmallTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-  <coverage>
-    <include>
-      <directory suffix=".php">../engine/Shopware/</directory>
-    </include>
-    <exclude>
-      <directory>../engine/Shopware/Plugins/Community</directory>
-      <directory>../engine/Shopware/Components/Xml</directory>
-    </exclude>
-  </coverage>
-  <testsuites>
-    <testsuite name="Shopware_AllTests">
-      <directory>./Unit</directory>
-      <directory>./Functional</directory>
-    </testsuite>
-  </testsuites>
-  <groups>
-    <exclude>
-      <group>disable</group>
-    </exclude>
-  </groups>
+    <coverage includeUncoveredFiles="false">
+        <include>
+            <directory suffix=".php">../engine/Shopware/</directory>
+        </include>
+        <exclude>
+            <directory>../engine/Shopware/Plugins/Community</directory>
+            <directory>../engine/Shopware/Components/Xml</directory>
+        </exclude>
+    </coverage>
+    <testsuites>
+        <testsuite name="all">
+            <directory>./Unit</directory>
+            <directory>./Functional</directory>
+        </testsuite>
+        <testsuite name="unit">
+            <directory>./Unit</directory>
+        </testsuite>
+        <testsuite name="unit_bundle">
+            <directory>./Unit/Bundle</directory>
+        </testsuite>
+        <testsuite name="unit_components">
+            <directory>./Unit/Components</directory>
+        </testsuite>
+        <testsuite name="unit_controllers">
+            <directory>./Unit/Controllers</directory>
+        </testsuite>
+        <testsuite name="unit_core">
+            <directory>./Unit/Core</directory>
+        </testsuite>
+        <testsuite name="unit_library">
+            <directory>./Unit/Library</directory>
+        </testsuite>
+        <testsuite name="unit_model">
+            <directory>./Unit/Model</directory>
+        </testsuite>
+        <testsuite name="unit_plugin">
+            <directory>./Unit/Plugin</directory>
+        </testsuite>
+        <testsuite name="functional">
+            <directory>./Functional</directory>
+        </testsuite>
+        <testsuite name="functional_api">
+            <directory>./Functional/Api</directory>
+        </testsuite>
+        <testsuite name="functional_bundle">
+            <directory>./Functional/Bundle</directory>
+        </testsuite>
+        <testsuite name="functional_commands">
+            <directory>./Functional/Commands</directory>
+        </testsuite>
+        <testsuite name="functional_components">
+            <directory>./Functional/Components</directory>
+        </testsuite>
+        <testsuite name="functional_controllers">
+            <directory>./Functional/Controllers</directory>
+        </testsuite>
+        <testsuite name="functional_core">
+            <directory>./Functional/Core</directory>
+        </testsuite>
+        <testsuite name="functional_library">
+            <directory>./Functional/Library</directory>
+        </testsuite>
+        <testsuite name="functional_models">
+            <directory>./Functional/Models</directory>
+        </testsuite>
+        <testsuite name="functional_plugins">
+            <directory>./Functional/Plugins</directory>
+        </testsuite>
+        <testsuite name="functional_recovery">
+            <directory>./Functional/Recovery</directory>
+        </testsuite>
+        <testsuite name="functional_regressions">
+            <directory>./Functional/Regressions</directory>
+        </testsuite>
+    </testsuites>
+    <groups>
+        <exclude>
+            <group>disable</group>
+        </exclude>
+    </groups>
 </phpunit>
