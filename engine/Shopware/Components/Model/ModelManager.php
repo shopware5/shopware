@@ -353,13 +353,11 @@ class ModelManager extends EntityManager
                     $data[$key] = $this->serializeEntity($data[$key]);
                 }
             } elseif ($mapping['isOwningSide'] && $mapping['type'] & ClassMetadata::TO_ONE) {
-                if ($metadata->reflFields[$field]->getValue($entity) !== null) {
-                    $data[$key] = $this->getUnitOfWork()->getEntityIdentifier(
-                        $metadata->reflFields[$field]->getValue($entity)
-                    );
+                $association = $metadata->reflFields[$field]->getValue($entity);
+                if (\is_object($association) && $this->getUnitOfWork()->isInIdentityMap($association)) {
+                    $data[$key] = $this->getUnitOfWork()->getEntityIdentifier($association);
                 } else {
-                    // In some case the relationship may not exist, but we want
-                    // to know about it
+                    // In some case the relationship may not exist, but we want to know about it
                     $data[$key] = null;
                 }
             }
