@@ -85,13 +85,13 @@ class Shopware_Components_SimilarShown extends Enlight_Class
             VALUES (:article_id, :related_article_id, :viewed, :init_date)
         ');
 
-        //iterate all selected articles which has to be initialed
+        // iterate all selected articles which has to be initialed
         foreach ($articles as $articleId) {
-            //now we select all similar articles of the s_emarketing_lastarticles table
+            // now we select all similar articles of the s_emarketing_lastarticles table
             $preparedSelect->execute(['articleId' => $articleId]);
             $combinations = $preparedSelect->fetchAll();
 
-            //at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
+            // at least we have to insert each combination in the aggregate s_articles_similar_shown_ro table.
             foreach ($combinations as $combination) {
                 $preparedInsert->execute($combination);
             }
@@ -142,10 +142,10 @@ class Shopware_Components_SimilarShown extends Enlight_Class
      */
     public function getSimilarShownValidationTime()
     {
-        //get similar shown validation time
+        // get similar shown validation time
         $interval = Shopware()->Config()->get('similarValidationTime', 10);
 
-        //create a new date time object to create the current date subtract the configured date interval.
+        // create a new date time object to create the current date subtract the configured date interval.
         $orderTime = new DateTime();
         $orderTime->sub(new DateInterval('P' . $interval . 'D'));
 

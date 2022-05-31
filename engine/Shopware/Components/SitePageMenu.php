@@ -170,7 +170,7 @@ class SitePageMenu
             }
             $id = (int) $site['id'];
 
-            //call recursive for tree building
+            // call recursive for tree building
             $site['subPages'] = $this->buildSiteTree(
                 $site['id'],
                 $sites,

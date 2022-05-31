@@ -64,7 +64,7 @@ class InstallerTest extends Base
             $this->getSnippetHandler(),
             Shopware()->Container()->get(\Shopware\Components\Theme\Service::class),
         );
-        //creates a directory iterator for the default theme directory (engine/Shopware/Themes)
+        // creates a directory iterator for the default theme directory (engine/Shopware/Themes)
         $directories = new DirectoryIterator(
             __DIR__ . '/Themes/'
         );

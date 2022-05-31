@@ -62,8 +62,8 @@ class ArticleTest extends AbstractMarketing
 
         $topSeller = array_values($topSeller);
 
-        //the article "2" pseudo sales are set to 1000 so we expect that this will be the first article
-        //in the top seller slider.
+        // the article "2" pseudo sales are set to 1000 so we expect that this will be the first article
+        // in the top seller slider.
         static::assertEquals(4, $topSeller[0]['articleID']);
         static::assertEquals(3, $topSeller[1]['articleID']);
 

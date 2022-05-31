@@ -143,8 +143,8 @@ class AddressFormType extends AbstractType
             'data_class' => AddressAttribute::class,
         ]);
 
-        //dynamic field which contains multiple values
-        //used for extendable data which has not to persist over attributes
+        // dynamic field which contains multiple values
+        // used for extendable data which has not to persist over attributes
         $builder->add('additional', null, [
             'compound' => true,
             'allow_extra_fields' => true,

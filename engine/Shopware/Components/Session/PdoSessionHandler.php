@@ -339,7 +339,7 @@ class PdoSessionHandler implements SessionHandlerInterface
      */
     public function write($sessionId, $data)
     {
-        $maxlifetime = (int) ini_get('session.gc_maxlifetime');
+        $maxlifetime = (int) \ini_get('session.gc_maxlifetime');
 
         try {
             // We use a single MERGE SQL query when supported by the database.
@@ -429,7 +429,7 @@ class PdoSessionHandler implements SessionHandlerInterface
     protected function getConnection()
     {
         if ($this->pdo === null) {
-            $this->connect($this->dsn ?: ini_get('session.save_path'));
+            $this->connect($this->dsn ?: \ini_get('session.save_path'));
         }
 
         return $this->pdo;

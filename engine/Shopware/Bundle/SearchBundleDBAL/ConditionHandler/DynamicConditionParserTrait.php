@@ -106,7 +106,7 @@ trait DynamicConditionParserTrait
             throw new InvalidArgumentException(sprintf('Must specify an operator, please use one of: %s', implode(', ', $validOperators)), 3);
         }
 
-        //Identify each field placeholder value with table alias and a hash of condition properties
+        // Identify each field placeholder value with table alias and a hash of condition properties
         $boundParamName = sprintf(':%s_%s', $tableAlias, md5($field . $operator . json_encode($value)));
         $field = sprintf('%s.%s', $tableAlias, $field);
 
@@ -187,17 +187,17 @@ trait DynamicConditionParserTrait
                 }
                 break;
 
-            case $operator === Condition::OPERATOR_STARTS_WITH && is_scalar($value):
+            case $operator === Condition::OPERATOR_STARTS_WITH && \is_scalar($value):
                 $query->andWhere($query->expr()->like($field, $boundParamName));
                 $query->setParameter($boundParamName, $value . '%');
                 break;
 
-            case $operator === Condition::OPERATOR_ENDS_WITH && is_scalar($value):
+            case $operator === Condition::OPERATOR_ENDS_WITH && \is_scalar($value):
                 $query->andWhere($query->expr()->like($field, $boundParamName));
                 $query->setParameter($boundParamName, '%' . $value);
                 break;
 
-            case $operator === Condition::OPERATOR_CONTAINS && is_scalar($value):
+            case $operator === Condition::OPERATOR_CONTAINS && \is_scalar($value):
                 $query->andWhere($query->expr()->like($field, $boundParamName));
                 $query->setParameter($boundParamName, '%' . $value . '%');
                 break;

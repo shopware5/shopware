@@ -402,7 +402,7 @@ class Repository extends ModelRepository
 
         $shops = $this->getShopsArrayByHost($host);
 
-        //returns the right shop depending on the url
+        // returns the right shop depending on the url
         $shop = $this->findShopForRequest($shops, $requestPath);
 
         if ($shop !== null) {
@@ -494,7 +494,7 @@ class Repository extends ModelRepository
     {
         $shop = null;
         foreach ($shops as $currentShop) {
-            //if the base url matches exactly the basePath we have found the main shop but the loop will continue
+            // if the base url matches exactly the basePath we have found the main shop but the loop will continue
             if ($currentShop['base_url'] === $currentShop['base_path']) {
                 if ($shop === null) {
                     $shop = $currentShop;

@@ -78,7 +78,7 @@ class CacheRouteInstaller
      */
     public function removeHttpCacheRoute($route)
     {
-        //remove cached controller
+        // remove cached controller
         $cacheRoutes = $this->configWriter->get('cacheControllers', 'HttpCache');
         if (empty($cacheRoutes)) {
             return false;
@@ -92,7 +92,7 @@ class CacheRouteInstaller
         $cacheRoutes = $this->implodeHttpCacheRoutes($cacheRoutes);
         $this->configWriter->save('cacheControllers', $cacheRoutes, 'HttpCache');
 
-        //remove no cache tags
+        // remove no cache tags
         $noCacheRoutes = $this->configWriter->get('noCacheControllers', 'HttpCache');
         $noCacheRoutes = $this->explodeHttpCacheRoutes($noCacheRoutes);
         $noCacheRoutes = array_filter($noCacheRoutes, function ($row) use ($route) {

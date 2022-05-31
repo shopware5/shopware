@@ -143,8 +143,8 @@ class Shopware_Controllers_Widgets_Emotion extends Enlight_Controller_Action
 
         $this->View()->assign($viewAssignments);
 
-        //fake to prevent rendering the templates with the widgets module.
-        //otherwise the template engine don't accept to load templates of the `frontend` module
+        // fake to prevent rendering the templates with the widgets module.
+        // otherwise the template engine don't accept to load templates of the `frontend` module
         $this->Request()->setModuleName('frontend');
     }
 

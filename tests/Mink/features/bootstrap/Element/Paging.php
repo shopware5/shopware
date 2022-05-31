@@ -108,9 +108,9 @@ class Paging extends Element implements \Shopware\Tests\Mink\HelperSelectorInter
      */
     public function noElement($locator, $throwException = true)
     {
-        if (Helper::getRequiredSelector($this, $locator)) { //previous or next
+        if (Helper::getRequiredSelector($this, $locator)) { // previous or next
             $result = Helper::countElements($this, $locator);
-        } else { //page number (1, 2, 3, 4, ...)
+        } else { // page number (1, 2, 3, 4, ...)
             $result = !$this->hasLink($locator);
         }
 

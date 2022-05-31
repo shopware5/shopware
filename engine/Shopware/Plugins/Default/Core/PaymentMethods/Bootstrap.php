@@ -123,7 +123,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
         /** @var Enlight_View_Default $view */
         $view = $args->getSubject()->View();
 
-        //if the controller action name equals "load" we have to load all application components
+        // if the controller action name equals "load" we have to load all application components
         if ($args->getRequest()->getActionName() === 'load') {
             $view->addTemplateDir($this->Path() . 'Views/emotion/');
             $view->extendsTemplate(

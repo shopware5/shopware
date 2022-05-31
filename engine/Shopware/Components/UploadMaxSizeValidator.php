@@ -115,7 +115,7 @@ class UploadMaxSizeValidator implements SubscriberInterface
      */
     public function getNormalizedIniPostMaxSize()
     {
-        return strtoupper(trim((string) ini_get('post_max_size')));
+        return strtoupper(trim((string) \ini_get('post_max_size')));
     }
 
     /**

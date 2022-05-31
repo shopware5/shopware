@@ -236,7 +236,7 @@ class sArticlesComparisons implements Enlight_Hook
         $properties = [];
 
         foreach ($articles as $product) {
-            //get all properties in the right order
+            // get all properties in the right order
             $sql = "SELECT
                       options.id,
                       options.name,
@@ -269,7 +269,7 @@ class sArticlesComparisons implements Enlight_Hook
 
             foreach ($productProperties as $productProperty) {
                 if (!\array_key_exists($productProperty['id'], $properties)) {
-                    //the key is not part of the array so add it to the end
+                    // the key is not part of the array so add it to the end
                     $properties[$productProperty['id']] = $this->extractPropertyTranslation($productProperty);
                 }
             }

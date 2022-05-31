@@ -74,7 +74,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         static::assertStringNotContainsStringIgnoringCase('an error has occured', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
         static::assertStringNotContainsStringIgnoringCase('ein fehler ist aufgetreten', $body);
 
-        //search for an emoji, might not be displayed correctly in IDE
+        // search for an emoji, might not be displayed correctly in IDE
         $this->Response()->clearBody();
         $this->dispatch('ajax_search?sSearch=👨‍🚒');
 

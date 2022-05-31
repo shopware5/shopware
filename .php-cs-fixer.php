@@ -67,7 +67,7 @@ return (new Config())
         'global_namespace_import' => true,
         'header_comment' => ['header' => $header, 'separate' => 'bottom', 'comment_type' => 'PHPDoc'],
         'modernize_types_casting' => true,
-        'native_function_invocation' => true,
+        'native_function_invocation' => ['exclude' => ['ini_get'], 'strict' => false],
         'no_alias_functions' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,

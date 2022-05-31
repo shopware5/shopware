@@ -36,7 +36,7 @@ class StoreTest extends TestCase
             'test',
             [],
             true,
-            [          //Set of parameters that must be ignored in the url
+            [          // Set of parameters that must be ignored in the url
                 'foo',
                 '_foo',
                 '__foo',

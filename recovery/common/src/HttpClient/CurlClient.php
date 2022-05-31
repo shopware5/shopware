@@ -93,7 +93,7 @@ class CurlClient implements Client
             throw new ClientException('Invalid URL given');
         }
 
-        //Initializes the cURL instance
+        // Initializes the cURL instance
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

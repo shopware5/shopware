@@ -48,7 +48,7 @@ class MediaTest extends TestCase
         $source = __DIR__ . '/fixtures/test-bild.jpg';
         $dest = __DIR__ . '/fixtures/test-bild-used.jpg';
 
-        //copy image to execute test case multiple times.
+        // copy image to execute test case multiple times.
         @unlink($dest);
         copy($source, $dest);
 
@@ -62,7 +62,7 @@ class MediaTest extends TestCase
         $this->resource->create($data);
         static::assertTrue($mediaService->has($path));
 
-        //check if the thumbnails are generated
+        // check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . 'test-bild-used_140x140.jpg';
         static::assertTrue($mediaService->has($path));
 
@@ -75,7 +75,7 @@ class MediaTest extends TestCase
         $source = __DIR__ . '/fixtures/test-bild.jpg';
         $dest = __DIR__ . '/fixtures/test-bild-with-more-than-50-characaters-more-more-more-more-used.jpg';
 
-        //copy image to execute test case multiple times.
+        // copy image to execute test case multiple times.
         @unlink($dest);
         copy($source, $dest);
 
@@ -86,7 +86,7 @@ class MediaTest extends TestCase
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         static::assertTrue($mediaService->has($pathPicture));
 
-        //check if the thumbnails are generated
+        // check if the thumbnails are generated
         $path = Shopware()->DocPath('media_image_thumbnail') . $media->getName() . '_140x140.jpg';
         static::assertTrue($mediaService->has($path));
 
@@ -134,7 +134,7 @@ class MediaTest extends TestCase
         $source = __DIR__ . '/fixtures/test-bild.jpg';
         $dest = __DIR__ . '/fixtures/test-bild-used.jpg';
 
-        //copy image to execute test case multiple times.
+        // copy image to execute test case multiple times.
         @unlink($dest);
         copy($source, $dest);
 
@@ -149,7 +149,7 @@ class MediaTest extends TestCase
 
         $media = $this->resource->create($data);
 
-        //check if the thumbnails are generated
+        // check if the thumbnails are generated
         $this->resource->update($media->getId(), $updateData);
 
         $mediaPath = $mediaService->read($readPath);
@@ -168,7 +168,7 @@ class MediaTest extends TestCase
         $source = __DIR__ . '/fixtures/test-bild.jpg';
         $dest = __DIR__ . '/fixtures/test-bild-used.foo';
 
-        //copy image to execute test case multiple times.
+        // copy image to execute test case multiple times.
         @unlink($dest);
         copy($source, $dest);
 

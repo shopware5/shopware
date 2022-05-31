@@ -1228,14 +1228,14 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
 
     private function getToDate(): DateTime
     {
-        //if a "to" date passed, format it over the \DateTime object. Otherwise, create a new date with today
+        // if a "to" date passed, format it over the \DateTime object. Otherwise, create a new date with today
         $toDate = $this->Request()->getParam('toDate');
         if (empty($toDate)) {
             $toDate = new DateTime();
         } else {
             $toDate = new DateTime($toDate);
         }
-        //to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
+        // to get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         $toDate = $toDate->add(new DateInterval('P1D'));
 
         return $toDate->sub(new DateInterval('PT1S'));

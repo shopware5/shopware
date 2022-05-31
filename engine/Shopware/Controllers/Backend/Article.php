@@ -752,7 +752,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     public function setPropertyListAction()
     {
         if (!$this->Request()->isPost()) {
-            //don't save the property list on a get request. This will only occur when there is an ext js problem
+            // don't save the property list on a get request. This will only occur when there is an ext js problem
             return;
         }
         $models = $this->get('models');
@@ -794,7 +794,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     $propertyValueModel = $propertyValueRepository->find($value['id']);
                 }
                 if ($propertyValueModel === null) {
-                    //search for property value
+                    // search for property value
                     $propertyValueModel = $propertyValueRepository->findOneBy(
                         [
                             'value' => $value['value'],
@@ -807,7 +807,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     $models->persist($propertyValueModel);
                 }
                 if (!$propertyValues->contains($propertyValueModel)) {
-                    //add only new values
+                    // add only new values
                     $propertyValues->add($propertyValueModel);
                 }
             }
@@ -1595,10 +1595,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
             $paginator = $this->getModelManager()->createPaginator($query);
 
-            //returns the total count of the query
+            // returns the total count of the query
             $totalResult = $paginator->count();
 
-            //returns the customer data
+            // returns the customer data
             $result = $paginator->getIterator()->getArrayCopy();
 
             $products = $this->buildListProducts($result);
@@ -1626,13 +1626,13 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $paginator = $this->getModelManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the customer data
+        // returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
-        //inserts esd attributes into the result
+        // inserts esd attributes into the result
         $result = $this->getEsdListingAttributes($result);
 
         $this->View()->assign([
@@ -1660,10 +1660,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $paginator = $this->getModelManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the customer data
+        // returns the customer data
         $result = $paginator->getIterator()->getArrayCopy();
 
         $this->View()->assign([
@@ -3450,7 +3450,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             return false;
         }
 
-        //create the new variant data
+        // create the new variant data
         $variantData = [
             'active' => 1,
             'configuratorOptions' => $optionsModels,
@@ -3957,7 +3957,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 throw new ModelNotFoundException(Product::class, $relatedData['id']);
             }
 
-            //if the user select the cross
+            // if the user select the cross
             if ($relatedData['cross'] && !$relatedProduct->getRelated()->contains($article)) {
                 $relatedProduct->getRelated()->add($article);
                 $this->get('models')->persist($relatedProduct);
@@ -4014,7 +4014,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 throw new ModelNotFoundException(Product::class, $similarData['id']);
             }
 
-            //if the user select the cross
+            // if the user select the cross
             if ($similarData['cross'] && !$similarProduct->getSimilar()->contains($article)) {
                 $similarProduct->getSimilar()->add($article);
                 $this->get('models')->persist($similarProduct);
@@ -4420,24 +4420,24 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function getCommandMapping($syntax)
     {
-        //we have to explode the current command to resolve the multiple properties.
+        // we have to explode the current command to resolve the multiple properties.
         $paths = explode('.', $syntax);
 
-        //we have to map the different properties to define the start cursor object.
+        // we have to map the different properties to define the start cursor object.
         switch ($paths[0]) {
-            //options are only available for the different product variants
+            // options are only available for the different product variants
             case 'options':
                 $cursor = 'detail';
                 $paths[0] = 'configuratorOptions';
                 break;
-            //all other commands will rout to the product
+            // all other commands will rout to the product
             default:
                 $cursor = 'article';
         }
 
         $commands = [];
 
-        //now we convert the property names to the getter functions.
+        // now we convert the property names to the getter functions.
         foreach ($paths as $path) {
             $commands[] = ['origin' => $path, 'command' => 'get' . ucfirst($path)];
         }

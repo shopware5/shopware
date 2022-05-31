@@ -177,7 +177,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
                 // If the current site is associated with the requested group and has no other groups
                 if (\in_array($key, $groups) && \count($groups) == 1) {
-                    //set group to gDisabled to prevent orphanage
+                    // set group to gDisabled to prevent orphanage
                     Shopware()->Db()->query(
                         'UPDATE s_cms_static SET grouping = ? WHERE id = ?',
                         ['disabled', $site['id']]
@@ -210,13 +210,13 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
      */
     public function deleteSiteAction()
     {
-        //get id
+        // get id
         $params = $this->Request()->getParams();
         $siteId = empty($params['siteId']) ? null : $params['siteId'];
 
         if (!empty($siteId)) {
             try {
-                //remove site
+                // remove site
                 $model = $this->getSiteRepository()->find($siteId);
                 if ($model !== null) {
                     $this->getManager()->remove($model);
@@ -224,15 +224,15 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
 
                 $this->getManager()->flush();
 
-                //set the parentID of all children to 0
-                //we don't want orphans
+                // set the parentID of all children to 0
+                // we don't want orphans
                 $sql = 'UPDATE s_cms_static SET parentID = 0 WHERE parentID = ?';
                 Shopware()->Db()->query($sql, [$siteId]);
 
-                //hand siteId to view
+                // hand siteId to view
                 $this->View()->assign(['success' => true, 'data' => $siteId]);
             } catch (Exception $e) {
-                //catch all errors
+                // catch all errors
                 $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
             }
         }
@@ -245,7 +245,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
      */
     public function saveSiteAction()
     {
-        //get the id from the helperId field
+        // get the id from the helperId field
         $params = $this->Request()->getParams();
         $siteId = empty($params['helperId']) ? null : $params['helperId'];
 

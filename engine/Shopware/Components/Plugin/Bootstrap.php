@@ -503,26 +503,26 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
             throw new Enlight_Exception(sprintf('Controller "%s" can\'t load failure', $controller));
         }
 
-        //register plugin model directory
+        // register plugin model directory
         if (file_exists($this->Path() . 'Models')) {
             $this->registerCustomModels();
         }
 
-        //register plugin views directory
+        // register plugin views directory
         if (file_exists($this->Path() . 'Views')) {
             Shopware()->Template()->addTemplateDir(
                 $this->Path() . 'Views/'
             );
         }
 
-        //register plugin snippet directory
+        // register plugin snippet directory
         if (file_exists($this->Path() . 'Snippets')) {
             Shopware()->Snippets()->addConfigDir(
                 $this->Path() . 'Snippets/'
             );
         }
 
-        //register plugin component directory
+        // register plugin component directory
         if (file_exists($this->Path() . 'Components')) {
             Shopware()->Loader()->registerNamespace(
                 'Shopware_Components',

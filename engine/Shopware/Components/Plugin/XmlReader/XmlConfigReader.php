@@ -86,7 +86,7 @@ class XmlConfigReader extends XmlReaderBase
         foreach ($list as $item) {
             $element = [];
 
-            //attributes
+            // attributes
             $element['scope'] = self::validateAttributeScope(
                 $item->getAttribute('scope')
             );
@@ -101,7 +101,7 @@ class XmlConfigReader extends XmlReaderBase
                 'text'
             );
 
-            //elements
+            // elements
             if ($name = $item->getElementsByTagName('name')->item(0)) {
                 $element['name'] = $name->nodeValue;
             }

@@ -114,7 +114,7 @@ class Cache
             return false;
         }
 
-        if (!ini_get('apc.enabled')) {
+        if (!\ini_get('apc.enabled')) {
             return false;
         }
 

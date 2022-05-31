@@ -72,7 +72,7 @@ class PaymentTokenServiceTest extends Enlight_Components_Test_Controller_TestCas
 
         static::assertArrayHasKey($key, $cookies);
         static::assertNotNull($this->Response()->getHeader('Location'));
-        static::assertEquals(ini_get('session.cookie_path'), $cookies[$key]['path']);
+        static::assertEquals(\ini_get('session.cookie_path'), $cookies[$key]['path']);
 
         $request = Shopware()->Front()->Request();
         static::assertNotNull($request);
@@ -138,7 +138,7 @@ class PaymentTokenServiceTest extends Enlight_Components_Test_Controller_TestCas
         $cookies = $this->Response()->getCookies();
         static::assertArrayHasKey($key, $cookies);
         static::assertNotNull($this->Response()->getHeader('Location'));
-        static::assertEquals(ini_get('session.cookie_path'), $cookies[$key]['path']);
+        static::assertEquals(\ini_get('session.cookie_path'), $cookies[$key]['path']);
 
         Shopware()->Shop()->setBaseUrl($currentUrl);
         Shopware()->Shop()->setBasePath($currentPath);

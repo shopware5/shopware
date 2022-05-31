@@ -33,7 +33,7 @@ class MemoryLimit
      */
     public static function setMinimumMemoryLimit($bytes)
     {
-        $currentLimit = self::convertToBytes(@ini_get('memory_limit'));
+        $currentLimit = self::convertToBytes((string) @ini_get('memory_limit'));
         if ($currentLimit === -1) {
             return;
         }
@@ -46,7 +46,7 @@ class MemoryLimit
     /**
      * @param string $memoryLimit
      *
-     * @return int|string
+     * @return int
      */
     public static function convertToBytes($memoryLimit)
     {

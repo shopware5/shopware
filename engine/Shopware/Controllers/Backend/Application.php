@@ -882,13 +882,13 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                 if ($data[$field]) {
                     $associationModel = $this->getManager()->find($mapping['targetEntity'], $data[$field]);
 
-                    //proxies need to be loaded, otherwise the validation will be failed.
+                    // proxies need to be loaded, otherwise the validation will be failed.
                     if ($associationModel instanceof Proxy && method_exists($associationModel, '__load')) {
                         $associationModel->__load();
                     }
                     $data[$mapping['fieldName']] = $associationModel;
 
-                    //remove the foreign key data.
+                    // remove the foreign key data.
                     if ($field !== $mapping['fieldName']) {
                         unset($data[$field]);
                     }
@@ -1029,12 +1029,12 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         $fields = $this->getModelFields($model, $alias);
         $conditions = [];
         foreach ($sort as $condition) {
-            //check if the passed field is a valid doctrine model field of the configured model.
+            // check if the passed field is a valid doctrine model field of the configured model.
             if (!\array_key_exists($condition['property'], $fields)) {
                 continue;
             }
 
-            //check if the developer limited the sortable fields and the passed property defined in the sort fields parameter.
+            // check if the developer limited the sortable fields and the passed property defined in the sort fields parameter.
             if (!empty($whiteList) && !\in_array($condition['property'], $whiteList, true)) {
                 continue;
             }
@@ -1091,7 +1091,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         foreach ($filters as $condition) {
             if ($condition['property'] === 'search') {
                 foreach ($fields as $name => $field) {
-                    //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                    // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
                     if (!empty($whiteList) && !\in_array($name, $whiteList, true)) {
                         continue;
                     }
@@ -1105,7 +1105,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                     ];
                 }
             } elseif (\array_key_exists($condition['property'], $fields)) {
-                //check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
                 if (!empty($whiteList) && !\in_array($condition['property'], $whiteList, true)) {
                     continue;
                 }
@@ -1166,7 +1166,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                 break;
             case 'date':
             case 'datetime':
-                //validates the date value. If the value is no date value, return
+                // validates the date value. If the value is no date value, return
                 $date = date_parse($value);
 
                 if ($date['error_count'] > 0 || !checkdate((int) $date['month'], (int) $date['day'], (int) $date['year'])) {
@@ -1179,7 +1179,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                     return $value;
                 }
 
-                //search values for date time should added the % wildcards to search for time values.
+                // search values for date time should added the % wildcards to search for time values.
                 if ($field['type'] === 'datetime') {
                     $value = '%' . $value . '%';
                 }

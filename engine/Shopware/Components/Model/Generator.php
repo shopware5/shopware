@@ -511,7 +511,7 @@ class %className% extends ModelEntity
 
         // Check if the passed table is a Shopware attribute table.
         if (strpos($table->getName(), '_attributes')) {
-            //if the table is an attribute table we have to use the class name of the parent table.
+            // if the table is an attribute table we have to use the class name of the parent table.
             $parentClass = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($parentClass);
 

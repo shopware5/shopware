@@ -410,10 +410,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
      */
     public function deleteAction()
     {
-        //get posted customers
+        // get posted customers
         $customers = $this->Request()->getParam('customers', [['id' => $this->Request()->getParam('id')]]);
 
-        //iterate the customers and add the remove action
+        // iterate the customers and add the remove action
         foreach ($customers as $customer) {
             $entity = $this->getRepository()->find($customer['id']);
             if ($entity === null) {
@@ -421,7 +421,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             }
             $this->getManager()->remove($entity);
         }
-        //Performs all of the collected actions.
+        // Performs all of the collected actions.
         $this->getManager()->flush();
 
         $this->View()->assign([
@@ -509,7 +509,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         ]);
 
         if ($shop->getHost()) {
-            //change the url to the subshop url
+            // change the url to the subshop url
             $url = str_replace('://' . $this->Request()->getHttpHost(), '://' . $shop->getHost(), $url);
         }
 

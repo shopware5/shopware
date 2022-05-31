@@ -52,7 +52,7 @@ class PaymentTokenService
     {
         $sessionId = $this->session->get('sessionId');
 
-        return $this->optinService->add(self::TYPE_PAYMENT_TOKEN, (int) ini_get('session.gc_maxlifetime'), [
+        return $this->optinService->add(self::TYPE_PAYMENT_TOKEN, (int) \ini_get('session.gc_maxlifetime'), [
             'name' => session_name(),
             'value' => $sessionId,
         ]);

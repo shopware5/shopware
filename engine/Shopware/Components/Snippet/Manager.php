@@ -313,7 +313,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
                 );
 
                 foreach ($directories as $directory) {
-                    //check valid directory
+                    // check valid directory
                     if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {
                         continue;
                     }
@@ -340,7 +340,7 @@ class Shopware_Components_Snippet_Manager extends Enlight_Components_Snippet_Man
         foreach (new DirectoryIterator(
             $themeDir
         ) as $directory) {
-            //check valid directory
+            // check valid directory
             if ($directory->isDot() || !$directory->isDir() || $directory->getFilename() === '_cache') {
                 continue;
             }

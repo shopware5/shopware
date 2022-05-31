@@ -88,7 +88,7 @@ class PluginInstaller extends Shopware_Controllers_Backend_ExtJs
 
         $plugin = $this->getPluginModel($technicalName);
 
-        //disable plugin and save state
+        // disable plugin and save state
         $active = $plugin->getActive();
         $plugin->setActive(false);
         $this->get(ModelManager::class)->flush();

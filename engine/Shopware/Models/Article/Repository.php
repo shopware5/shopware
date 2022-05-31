@@ -1995,12 +1995,12 @@ class Repository extends ModelRepository
         $builder->groupBy('supplier.id');
 
         if (\is_array($filter) && ($filter[0]['property'] === 'name')) {
-            //filter the displayed columns with the passed filter
+            // filter the displayed columns with the passed filter
             $builder
-                ->where('supplier.name LIKE ?1') //Search only the beginning of the customer number.
-                ->orWhere('supplier.description LIKE ?1'); //Full text search for the first name of the customer
+                ->where('supplier.name LIKE ?1') // Search only the beginning of the customer number.
+                ->orWhere('supplier.description LIKE ?1'); // Full text search for the first name of the customer
 
-            //set the filter parameter for the different columns.
+            // set the filter parameter for the different columns.
             $builder->setParameter(1, '%' . $filter[0]['value'] . '%');
         }
 

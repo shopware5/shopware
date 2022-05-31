@@ -1052,7 +1052,7 @@ class sArticles implements Enlight_Hook
 
         $getGroups = $this->db->fetchAll($sql, [$pricegroup, $this->sSYSTEM->sUSERGROUP]);
 
-        //if there are no discounts for this customergroup don't show "ab:"
+        // if there are no discounts for this customergroup don't show "ab:"
         if (empty($getGroups)) {
             return $cheapestPrice;
         }
@@ -2398,8 +2398,8 @@ class sArticles implements Enlight_Hook
             $promotion['linkDetails'] .= "&sCategory=$category";
         }
 
-        //check if the product has a configured property set which stored in s_filter.
-        //the mini product doesn't contains this data so we have to load this lazy.
+        // check if the product has a configured property set which stored in s_filter.
+        // the mini product doesn't contains this data so we have to load this lazy.
         if (!$product->hasProperties()) {
             return $promotion;
         }
@@ -2627,7 +2627,7 @@ class sArticles implements Enlight_Hook
      */
     private function getDescriptionKeywords($longDescription)
     {
-        //sDescriptionKeywords
+        // sDescriptionKeywords
         $string = strip_tags(html_entity_decode($longDescription, ENT_COMPAT | ENT_HTML401, 'UTF-8'));
         $string = str_replace(',', '', $string);
         $words = preg_split('/ /', $string, -1, PREG_SPLIT_NO_EMPTY);

@@ -72,16 +72,16 @@ class VoteAverageConditionTest extends TestCase
         $this->search(
             [
                 'first' => [
-                    1 => [1],   //shop = 1   1x vote with 1 point
-                    2 => [3],    //shop = 2   1x vote with 3 point
+                    1 => [1],   // shop = 1   1x vote with 1 point
+                    2 => [3],    // shop = 2   1x vote with 3 point
                 ],
                 'second' => [
-                    1 => [4],   //shop = 1   1x vote with 4 points
-                    2 => [4],    //shop = 2   1x vote with 4 points
+                    1 => [4],   // shop = 1   1x vote with 4 points
+                    2 => [4],    // shop = 2   1x vote with 4 points
                 ],
                 'third' => [
-                    1 => [4],   //shop = 1   1x vote with 4 points
-                    2 => [2],    //shop = 2   1x vote with 2 points
+                    1 => [4],   // shop = 1   1x vote with 4 points
+                    2 => [2],    // shop = 2   1x vote with 2 points
                 ],
             ],
             ['first', 'second'],
@@ -101,18 +101,18 @@ class VoteAverageConditionTest extends TestCase
         $this->search(
             [
                 'first' => [
-                    null => [5], //no assignment to shop
-                    1 => [1],   //shop = 1   1x vote with 1 point
-                    2 => [4],    //shop = 2   1x vote with 4 point
+                    null => [5], // no assignment to shop
+                    1 => [1],   // shop = 1   1x vote with 1 point
+                    2 => [4],    // shop = 2   1x vote with 4 point
                 ],
                 'second' => [
                     null => [5],
-                    1 => [4],   //shop = 1   1x vote with 4 points
-                    2 => [3],    //shop = 2   1x vote with 2 points
+                    1 => [4],   // shop = 1   1x vote with 4 points
+                    2 => [3],    // shop = 2   1x vote with 2 points
                 ],
                 'third' => [
-                    1 => [4],   //shop = 1   1x vote with 4 points
-                    2 => [5],    //shop = 2   1x vote with 2 points
+                    1 => [4],   // shop = 1   1x vote with 4 points
+                    2 => [5],    // shop = 2   1x vote with 2 points
                 ],
             ],
             ['first', 'third'],
@@ -132,18 +132,18 @@ class VoteAverageConditionTest extends TestCase
         $this->search(
             [
                 'first' => [
-                    null => [5], //no assignment to shop
-                    1 => [1],   //shop = 1   1x vote with 1 point
-                    2 => [4],    //shop = 2   1x vote with 4 point
+                    null => [5], // no assignment to shop
+                    1 => [1],   // shop = 1   1x vote with 1 point
+                    2 => [4],    // shop = 2   1x vote with 4 point
                 ],
                 'second' => [
                     null => [5],
-                    1 => [4],   //shop = 1   1x vote with 4 points
-                    2 => [3],    //shop = 2   1x vote with 2 points
+                    1 => [4],   // shop = 1   1x vote with 4 points
+                    2 => [3],    // shop = 2   1x vote with 2 points
                 ],
                 'third' => [
-                    1 => [4],   //shop = 1   1x vote with 4 points
-                    2 => [5],    //shop = 2   1x vote with 2 points
+                    1 => [4],   // shop = 1   1x vote with 4 points
+                    2 => [5],    // shop = 2   1x vote with 2 points
                 ],
             ],
             ['second', 'third'],

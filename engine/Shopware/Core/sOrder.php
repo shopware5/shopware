@@ -659,7 +659,7 @@ class sOrder implements Enlight_Hook
                 );
             }
         } catch (Exception $e) {
-            //Payment method code failure
+            // Payment method code failure
         }
 
         $attributeData = $this->eventManager->filter(
@@ -733,7 +733,7 @@ class sOrder implements Enlight_Hook
 
             // Check for individual voucher - code
             if ($basketRow['modus'] == CartPositionsMode::VOUCHER) {
-                //reserve the basket voucher for the current user.
+                // reserve the basket voucher for the current user.
                 $this->reserveVoucher(
                     $basketRow['ordernumber'],
                     $this->sUserData['additional']['user']['id'],

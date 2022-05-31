@@ -716,7 +716,7 @@ class Media extends ModelEntity
     public function onRemove()
     {
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
-        //check if file exist and remove it
+        // check if file exist and remove it
         if ($mediaService->has($this->path)) {
             $mediaService->delete($this->path);
         }

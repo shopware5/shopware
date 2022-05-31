@@ -131,7 +131,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testValidateBooleanAttribute(): void
     {
-        //required="true"
+        // required="true"
         $element1 = $this->xpath->query('//config/elements/element');
         static::assertInstanceOf(DOMNodeList::class, $element1);
         $element1 = $element1->item(0);
@@ -143,7 +143,7 @@ class XmlReaderBaseTest extends TestCase
         static::assertIsBool($element1Result);
         static::assertTrue($element1Result);
 
-        //required not given - passed default value
+        // required not given - passed default value
         $element2 = $this->xpath->query('//config/elements/element');
         static::assertInstanceOf(DOMNodeList::class, $element2);
         $element2 = $element2->item(1);
@@ -158,7 +158,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testParseStoreNodeList(): void
     {
-        //ExtJs Store
+        // ExtJs Store
         $store1 = $this->xpath->query('//config/elements/element[3]/store');
         static::assertInstanceOf(DOMNodeList::class, $store1);
         $store1Result = XmlReaderBase::parseStoreNodeList($store1);
@@ -166,7 +166,7 @@ class XmlReaderBaseTest extends TestCase
         static::assertIsString($store1Result);
         static::assertEquals('EXTJS-STORE', $store1Result);
 
-        //Xml Store
+        // Xml Store
         $store2 = $this->xpath->query('//config/elements/element[4]/store');
         static::assertInstanceOf(DOMNodeList::class, $store2);
         $store2Result = XmlReaderBase::parseStoreNodeList($store2);
@@ -176,7 +176,7 @@ class XmlReaderBaseTest extends TestCase
         static::assertEquals('value2', $store2Result[1][0]);
         static::assertEquals('label2', $store2Result[1][1]['en']);
 
-        //No store found
+        // No store found
         $store3 = $this->xpath->query('//config/elements/element[5]/store');
         static::assertInstanceOf(DOMNodeList::class, $store3);
         $store3Result = XmlReaderBase::parseStoreNodeList($store3);
@@ -200,7 +200,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testParseOptionsNodeListNoOptions(): void
     {
-        //cannot test with file because of the xsd validation
+        // cannot test with file because of the xsd validation
         $dom = new DOMDocument();
         $dom->loadXML('<element></element>');
 
@@ -212,7 +212,7 @@ class XmlReaderBaseTest extends TestCase
 
     public function testParseOptionsNodeListEmptyOptions(): void
     {
-        //cannot test with file because of the xsd validation
+        // cannot test with file because of the xsd validation
         $dom = new DOMDocument();
         $dom->loadXML('<element><options></options></element>');
 

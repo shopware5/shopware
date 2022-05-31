@@ -458,7 +458,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $mail->addTo($this->Request()->getParam('eMail'));
                     $mail->send();
                 } else {
-                    //Save comment
+                    // Save comment
                     $commentData = $this->Request()->getPost();
                     $this->sSaveComment($commentData, $blogArticleId);
                 }

@@ -94,7 +94,7 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testGetList(): void
     {
-        //delete old data
+        // delete old data
         $repositoryData = $this->repository->findBy(['company' => $this->dummyData['company']]);
         foreach ($repositoryData as $testDummy) {
             $this->manager->remove($testDummy);
@@ -128,14 +128,14 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
     public function testSavePartner(): int
     {
         $params = $this->dummyData;
-        //test new partner
+        // test new partner
         $this->Request()->setParams($params);
         $this->dispatch('backend/Partner/savePartner');
         static::assertTrue($this->View()->getAssign('success'));
         static::assertCount(19, $this->View()->getAssign('data'));
         static::assertEquals('streetDummy', $this->View()->getAssign('data')['street']);
 
-        //test update partner
+        // test update partner
         $params['id'] = $this->View()->getAssign('data')['id'];
         $params['street'] = $this->updateStreet;
         $this->Request()->setParams($params);
@@ -210,7 +210,7 @@ class PartnerTest extends Enlight_Components_Test_Controller_TestCase
         $body = $this->Response()->getBody();
         static::assertEmpty($body);
 
-        //delete the new dummy
+        // delete the new dummy
         $this->manager->remove($newDummy);
         $this->manager->flush();
 

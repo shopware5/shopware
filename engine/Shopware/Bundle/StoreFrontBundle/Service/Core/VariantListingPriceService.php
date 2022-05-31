@@ -71,7 +71,7 @@ class VariantListingPriceService implements VariantListingPriceServiceInterface
             return;
         }
 
-        //executed if no price condition included in search request
+        // executed if no price condition included in search request
 
         $this->loadPrices($criteria, $result, $context);
     }

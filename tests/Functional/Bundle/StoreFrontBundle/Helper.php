@@ -513,8 +513,8 @@ class Helper
                 'name' => 'Unit test',
                 'tax' => true,
                 'taxInput' => true,
-                'mode' => false, //use discounts?
-                'discount' => 0, //percentage discount
+                'mode' => false, // use discounts?
+                'discount' => 0, // percentage discount
             ],
             $data
         );

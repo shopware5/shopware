@@ -57,7 +57,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
             return $list;
         }
 
-        //assign shops over additional query to improve performance
+        // assign shops over additional query to improve performance
         $shops = $this->getShops($shopIds);
 
         return $this->assignShops($list, $shops);

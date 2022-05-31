@@ -83,7 +83,7 @@ class PaymentTokenSubscriber implements SubscriberInterface
                     $restoreData->getSessionName(),
                     $restoreData->getValue(),
                     0,
-                    ini_get('session.cookie_path'),
+                    \ini_get('session.cookie_path'),
                     null,
                     $request->isSecure()
                 )

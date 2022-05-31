@@ -53,7 +53,7 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
             $pluginDir . '/Components/'
         );
 
-        //SEPA needs to be active for this. Also, we need to save existing status to later restore it
+        // SEPA needs to be active for this. Also, we need to save existing status to later restore it
         $sepaPaymentMean = Shopware()->Models()->getRepository(Payment::class)->findOneBy(['name' => 'Sepa']);
         static::assertNotNull($sepaPaymentMean);
 
@@ -147,7 +147,7 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
         $paymentId = 6;
         Shopware()->Session()->set('sUserId', $userId);
 
-        //for now, don't test email
+        // for now, don't test email
         Shopware()->Config()->offsetSet('sepaSendEmail', false);
 
         self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);
@@ -218,7 +218,7 @@ class SepaPaymentMethodTest extends Enlight_Components_Test_Plugin_TestCase
         $paymentId = 6;
         Shopware()->Session()->set('sUserId', $userId);
 
-        //for now, don't test email
+        // for now, don't test email
         Shopware()->Config()->offsetSet('sepaSendEmail', false);
 
         self::$sepaPaymentMethod->createPaymentInstance($orderId, $userId, $paymentId);

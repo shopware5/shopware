@@ -196,7 +196,7 @@ EOL
             try {
                 $updated = $this->filter(unserialize($row['objectdata'], ['allowed_classes' => false]), $columns);
             } catch (Exception $e) {
-                //serialize error - continue with next translation
+                // serialize error - continue with next translation
                 continue;
             }
 

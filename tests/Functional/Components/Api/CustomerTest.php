@@ -198,7 +198,7 @@ class CustomerTest extends TestCase
         static::assertEquals($customer->getDefaultBillingAddress()->getAttribute()->getText1(), $testData['billing']['attribute']['text1']);
         static::assertEquals($customer->getDefaultShippingAddress()->getAttribute()->getText1(), $testData['shipping']['attribute']['text1']);
 
-        //test additional address lines
+        // test additional address lines
         static::assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine1(), $testData['shipping']['additionalAddressLine1']);
         static::assertEquals($customer->getDefaultShippingAddress()->getAdditionalAddressLine2(), $testData['shipping']['additionalAddressLine2']);
         static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
@@ -342,7 +342,7 @@ class CustomerTest extends TestCase
         static::assertInstanceOf(Address::class, $customer->getDefaultShippingAddress());
         static::assertEquals($customer->getDefaultBillingAddress()->getFirstname(), $testData['billing']['firstname']);
 
-        //test additional fields
+        // test additional fields
         static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine1(), $testData['billing']['additionalAddressLine1']);
         static::assertEquals($customer->getDefaultBillingAddress()->getAdditionalAddressLine2(), $testData['billing']['additionalAddressLine2']);
 

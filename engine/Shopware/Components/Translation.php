@@ -681,15 +681,15 @@ class Shopware_Components_Translation
         );
 
         foreach ($fallbacks as $id) {
-            //check if fallback ids contains an individual translation
+            // check if fallback ids contains an individual translation
             $existQuery->execute([':language' => $id, ':articleId' => $articleId]);
             $exist = $existQuery->fetch(PDO::FETCH_COLUMN);
 
-            //if shop translation of fallback exists, skip
+            // if shop translation of fallback exists, skip
             if ($exist) {
                 continue;
             }
-            //add fallback translation to s_articles_translation for search requests.
+            // add fallback translation to s_articles_translation for search requests.
             $this->addProductTranslation($articleId, $id, $data);
         }
     }

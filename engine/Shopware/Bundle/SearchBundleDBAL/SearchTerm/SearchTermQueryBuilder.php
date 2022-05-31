@@ -186,7 +186,7 @@ class SearchTermQueryBuilder implements SearchTermQueryBuilderInterface
         $distance = $this->config->get('fuzzySearchMinDistancenTop', 20);
         $query->select('MAX(' . $this->getRelevanceSelection() . ") / 100 * $distance");
 
-        //calculates the tolerance limit
+        // calculates the tolerance limit
         if ($distance) {
             $query->andWhere('(' . $this->getRelevanceSelection() . ') > (' . $query->getSQL() . ')');
         }

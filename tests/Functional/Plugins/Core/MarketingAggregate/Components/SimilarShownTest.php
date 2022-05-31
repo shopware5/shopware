@@ -126,7 +126,7 @@ class SimilarShownTest extends AbstractMarketing
         $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshSimilarShown'");
         static::assertNotEmpty($cron);
 
-        //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
+        // the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshSimilarShown(new Enlight_Event_EventArgs(['subject' => $this]));
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");

@@ -734,7 +734,7 @@ class Repository extends ModelRepository
                     ->andHaving('COUNT(cg.id) = 0');
         }
 
-        //to prevent a temporary table and file sort we have to set the same sort and group by condition
+        // to prevent a temporary table and file sort we have to set the same sort and group by condition
         $builder->groupBy('c.parentId')
             ->addGroupBy('c.position')
             ->addGroupBy('c.id')

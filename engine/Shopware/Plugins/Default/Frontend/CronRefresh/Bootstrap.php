@@ -115,7 +115,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         if ($maximumReferrerAge === 0) {
             $maximumReferrerAge = 90;
         }
-        //negate the value and quote it for the sql statement
+        // negate the value and quote it for the sql statement
         $maximumReferrerAge = (int) $maximumReferrerAge * -1;
         $sql = '
             DELETE FROM s_statistics_referer WHERE `datum` < date_add(current_date, INTERVAL ' . $maximumReferrerAge . ' DAY)
@@ -139,7 +139,7 @@ class Shopware_Plugins_Frontend_CronRefresh_Bootstrap extends Shopware_Component
         if ($maximumAge === 0) {
             $maximumAge = 90;
         }
-        //negate the value and quote it for the sql statement
+        // negate the value and quote it for the sql statement
         $maximumAge = (int) $maximumAge * -1;
         $sql = '
             DELETE FROM  s_statistics_article_impression WHERE `date` < date_add(current_date, INTERVAL ' . $maximumAge . ' DAY)

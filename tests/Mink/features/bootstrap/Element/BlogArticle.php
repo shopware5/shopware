@@ -161,11 +161,11 @@ class BlogArticle extends MultipleElement implements \Shopware\Tests\Mink\Helper
         $title = array_unique($titles);
 
         switch (\count($title)) {
-            //normal case
+            // normal case
             case 1:
                 return current($title);
 
-            //if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
+            // if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
                 $check = [$title];
                 $result = Helper::checkArray($check);

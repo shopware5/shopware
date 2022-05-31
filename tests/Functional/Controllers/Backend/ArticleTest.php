@@ -198,7 +198,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 
         $regulationPrice = $this->getContainer()->get(Connection::class)->fetchOne('SELECT regulation_price FROM s_articles_prices WHERE articleID = ' . $firstArticle['id']);
 
-        //(119 / 119) * 100
+        // (119 / 119) * 100
         static::assertEquals(100, (float) $regulationPrice);
     }
 }

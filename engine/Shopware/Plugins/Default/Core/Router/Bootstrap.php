@@ -237,7 +237,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             }
         }
 
-        //currency switch
+        // currency switch
         if ($cookieKey === 'currency') {
             $path = rtrim((string) $shop->getBasePath(), '/') . '/';
             $response->headers->setCookie(new Cookie($cookieKey, $cookieValue, 0, $path, null, $request->isSecure()));
@@ -389,7 +389,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             $url = '/' . $url;
         }
 
-        //build full redirect url to allow host switches
+        // build full redirect url to allow host switches
         return sprintf(
             '%s://%s%s%s',
             $request->getScheme(),
@@ -406,13 +406,13 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      */
     protected function shouldRedirect(Request $request, Shop $shop)
     {
-        return //for example: template preview, direct shop selection via url
+        return // for example: template preview, direct shop selection via url
             (
                 $request->isGet()
                 && $request->getQuery('__shop') !== null
                 && (int) $request->getQuery('__shop') !== (int) $shop->getId()
             )
-            //for example: shop language switch
+            // for example: shop language switch
             || (
                 $request->isPost()
                 && $request->getPost('__shop') !== null

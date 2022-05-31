@@ -45,7 +45,7 @@ class GenericPaymentMethod extends BasePaymentMethod
      */
     public function savePaymentData($userId, Enlight_Controller_Request_Request $request)
     {
-        //nothing to do, no return expected
+        // nothing to do, no return expected
     }
 
     /**
@@ -53,7 +53,7 @@ class GenericPaymentMethod extends BasePaymentMethod
      */
     public function getCurrentPaymentDataAsArray($userId)
     {
-        //nothing to do, array expected
+        // nothing to do, array expected
         return [];
     }
 

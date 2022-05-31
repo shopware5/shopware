@@ -99,14 +99,14 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testCreateAdminUser(): void
     {
-        //Delete the user in case the username is duplicated
+        // Delete the user in case the username is duplicated
         $this->deleteUserByUsername($this->temporaryAdminUserData['username']);
 
         $this->Request()->setParams($this->temporaryAdminUserData);
 
         $this->dispatch('/backend/UserManager/updateUser');
 
-        //Verify that the admin user creation was successful
+        // Verify that the admin user creation was successful
         static::assertTrue($this->View()->getAssign('success'));
     }
 
@@ -396,7 +396,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
      */
     private function deleteUserByUsername(string $name): void
     {
-        //Delete the admin user if it exists before attempting to create it (else we will have a duplicate user error)
+        // Delete the admin user if it exists before attempting to create it (else we will have a duplicate user error)
         Shopware()->Container()
             ->get(Connection::class)
             ->executeQuery(

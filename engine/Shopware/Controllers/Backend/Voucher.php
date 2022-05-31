@@ -175,7 +175,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $deletePreviousVoucherCodes = $this->Request()->deletePreviousVoucherCodes;
         $createdVoucherCodes = 0;
 
-        //verify the pattern of the code only the first time of batch processing batch
+        // verify the pattern of the code only the first time of batch processing batch
         if (!empty($codePattern) && $deletePreviousVoucherCodes === 'true') {
             if (!$this->validateCodePattern($codePattern, $numberOfUnits)) {
                 $this->View()->assign(['success' => false, 'errorMsg' => 'CodePattern not complex enough']);
@@ -183,7 +183,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
                 return;
             }
         }
-        //first delete available codes
+        // first delete available codes
         if ($deletePreviousVoucherCodes === 'true') {
             $this->deleteAllVoucherCodesById($voucherId);
 
@@ -192,7 +192,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             return;
         }
         do {
-            //generate voucher codes till the numberOfUnits is reached
+            // generate voucher codes till the numberOfUnits is reached
             $this->generateVoucherCodes($voucherId, ($numberOfUnits - $createdVoucherCodes), $codePattern);
 
             $query = $this->getVoucherRepository()->getVoucherCodeCountQuery($voucherId);
@@ -241,7 +241,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
         $this->Response()->headers->set('content-type', 'text/csv; charset=utf-8');
         $this->Response()->headers->set('content-disposition', 'attachment;filename=voucherCodes.csv');
-        //use this to set the BOM to show it in the right way for excel and stuff
+        // use this to set the BOM to show it in the right way for excel and stuff
         echo "\xEF\xBB\xBF";
         $fp = fopen('php://output', 'w');
         if (!\is_resource($fp)) {
@@ -304,7 +304,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             if (!$this->_isAllowed('update', 'voucher')) {
                 return;
             }
-            //edit voucher
+            // edit voucher
             $voucher = $this->getVoucherRepository()->find($voucherId);
             if (!$voucher instanceof Voucher) {
                 throw new ModelNotFoundException(Voucher::class, $voucherId);
@@ -313,11 +313,11 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             if (!$this->_isAllowed('create', 'voucher')) {
                 return;
             }
-            //new voucher
+            // new voucher
             $voucher = new Voucher();
         }
 
-        //save empty values
+        // save empty values
         $params = array_merge([
             'validFrom' => null,
             'validTo' => null,
@@ -432,7 +432,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     protected function generateVoucherCodes($voucherId, $numberOfUnits, $codePattern)
     {
         $values = [];
-        //wrote in standard sql cause in this case its way faster than doctrine models
+        // wrote in standard sql cause in this case its way faster than doctrine models
         $sql = 'INSERT IGNORE INTO s_emarketing_voucher_codes (voucherID, code) VALUES';
         for ($i = 1; $i <= $numberOfUnits; ++$i) {
             $code = $this->generateCode($codePattern);

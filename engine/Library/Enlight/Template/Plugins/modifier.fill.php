@@ -32,10 +32,10 @@ function smarty_modifier_fill($str, $width = 10, $break = '...', $fill = ' ')
 {
     // checks if we have either a integer, float, sting or boolean value
     // If we don't get what we expected, we use some default values
-    if (!is_scalar($break)) {
+    if (!\is_scalar($break)) {
         $break = '...';
     }
-    if (empty($fill) || !is_scalar($fill)) {
+    if (empty($fill) || !\is_scalar($fill)) {
         $fill = ' ';
     }
     if (empty($width) || !is_numeric($width)) {
@@ -44,7 +44,7 @@ function smarty_modifier_fill($str, $width = 10, $break = '...', $fill = ' ')
         $width = (int) $width;
     }
     // if no string is given, just build one string containing the fill pattern
-    if (!is_scalar($str)) {
+    if (!\is_scalar($str)) {
         return str_repeat($fill, $width);
     }
     // If the string longer than the given width shorten the string and append the break pattern

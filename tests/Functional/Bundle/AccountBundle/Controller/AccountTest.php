@@ -126,7 +126,7 @@ class AccountTest extends ControllerTestCase
      */
     public function testHashPostLogin(): void
     {
-        //test with md5 password and without the ignoreAccountMode parameter
+        // test with md5 password and without the ignoreAccountMode parameter
         static::assertEmpty($this->session->offsetGet('sUserId'));
 
         $this->setUserDataToPost();
@@ -145,7 +145,7 @@ class AccountTest extends ControllerTestCase
      */
     public function testWithoutIgnoreLogin(): void
     {
-        //test the internal call of the method with the $ignoreAccountMode parameter
+        // test the internal call of the method with the $ignoreAccountMode parameter
 
         $this->setUserDataToPost();
         $this->dispatch('/');
@@ -163,7 +163,7 @@ class AccountTest extends ControllerTestCase
         static::assertEmpty($result['sErrorMessages']);
 
         $this->logoutUser();
-        //test the internal call of the method without the $ignoreAccountMode parameter
+        // test the internal call of the method without the $ignoreAccountMode parameter
 
         $this->setUserDataToPost();
 
@@ -184,7 +184,7 @@ class AccountTest extends ControllerTestCase
      */
     public function testWithIgnoreLogin(): void
     {
-        //test the internal call of the method without the $ignoreAccountMode parameter
+        // test the internal call of the method without the $ignoreAccountMode parameter
         $this->setUserDataToPost();
 
         $this->dispatch('/');
@@ -207,11 +207,11 @@ class AccountTest extends ControllerTestCase
      */
     private function logoutUser(): void
     {
-        //reset the request
+        // reset the request
         $this->reset();
         $this->Request()->setMethod('POST');
         $this->dispatch('/account/logout');
-        //reset the request
+        // reset the request
         $this->reset();
     }
 

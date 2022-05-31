@@ -55,14 +55,14 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
             return empty($config['shopIds']) || \in_array($context->getShop()->getId(), $config['shopIds']);
         });
 
-        //no active stream detected? display only emotions without customer stream configuration
+        // no active stream detected? display only emotions without customer stream configuration
         if (empty($context->getActiveCustomerStreamIds()) || $withStreams === false) {
             return array_filter($configurations, function ($config) {
                 return $config['customer_stream_ids'] === null;
             });
         }
 
-        //filter emotions which has customer stream configuration for active streams or which has no configuration
+        // filter emotions which has customer stream configuration for active streams or which has no configuration
         $configurations = array_filter(
             $configurations,
             function (array $config) use ($context) {
@@ -74,10 +74,10 @@ class StoreFrontEmotionDeviceConfiguration implements StoreFrontEmotionDeviceCon
             }
         );
 
-        //collect emotion replacements
+        // collect emotion replacements
         $replacements = $this->getReplacements($configurations);
 
-        //remove all emotions which replaced by customer stream emotions
+        // remove all emotions which replaced by customer stream emotions
         return array_filter(
             $configurations,
             function (array $config) use ($replacements) {

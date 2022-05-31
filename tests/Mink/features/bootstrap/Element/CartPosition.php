@@ -129,11 +129,11 @@ class CartPosition extends MultipleElement
         $name = array_unique($names);
 
         switch (\count($name)) {
-            //normal case
+            // normal case
             case 1:
                 return current($name);
 
-            //if articleName is too long, it will be cut. So it's different from the other and has to be checked separately
+            // if articleName is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
                 $check = [$name];
                 $result = Helper::checkArray($check);

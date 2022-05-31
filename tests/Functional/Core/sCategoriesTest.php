@@ -74,7 +74,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testsGetCategoryIdByArticleId()
     {
-        //first category which assigned to the product 2
+        // first category which assigned to the product 2
         static::assertEquals(14, $this->module->sGetCategoryIdByArticleId(2));
 
         // Check that searching in default category or with null is the same
@@ -231,28 +231,28 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function testGetWholeCategoryTree()
     {
-        //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        // set Category "Tees und Zubehör" to inactive so the childs should not be displayed
         $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
         Shopware()->Db()->exec($sql);
 
         $allCategories = $this->module->sGetWholeCategoryTree(3, 3);
 
-        //get "Genusswelten" this category should not have the inactive category "Tees and Zubehör" as subcategory
+        // get "Genusswelten" this category should not have the inactive category "Tees and Zubehör" as subcategory
         $category = $this->getCategoryById($allCategories, 5);
         static::assertIsArray($category);
-        //search for Tees und Zubehör
+        // search for Tees und Zubehör
         $result = $this->getCategoryById($category['sub'], 11);
         static::assertEmpty($result);
 
-        //if the parent category is inactive the child's should not be displayed
-        //category = "Genusswelten" the active child "Tees" and "Tees und Zubehör" should not be return because the father ist inactive
+        // if the parent category is inactive the child's should not be displayed
+        // category = "Genusswelten" the active child "Tees" and "Tees und Zubehör" should not be return because the father ist inactive
         $result = $this->getCategoryById($category['sub'], 12);
         static::assertEmpty($result);
 
         $result = $this->getCategoryById($category['sub'], 13);
         static::assertEmpty($result);
 
-        //set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        // set Category "Tees und Zubehör" to inactive so the childs should not be displayed
         $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
         Shopware()->Db()->exec($sql);
     }
