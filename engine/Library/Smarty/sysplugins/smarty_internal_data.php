@@ -198,7 +198,7 @@ class Smarty_Internal_Data {
      * @param string  $varname        variable name or null
      * @param string  $_ptr           optional pointer to data object
      * @param boolean $search_parents include parent templates?
-     * @return string variable value or or array of variables
+     * @return mixed variable value or array of variables
      */
     public function getTemplateVars($varname = null, $_ptr = null, $search_parents = true)
     {
