@@ -16811,6 +16811,21 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
 
 		-
+			message: "#^Offset 'save_handler' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
+			message: "#^Offset 'save_path' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\?\\: string, use_trans_sid\\: int, name\\: non\\-empty\\-string, cookie_secure\\?\\: true, \\.\\.\\.\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
+			message: "#^Offset 'unitTestEnabled' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\?\\: string, use_trans_sid\\: int, name\\: non\\-empty\\-string, cookie_secure\\?\\: true, \\.\\.\\.\\} in empty\\(\\) does not exist\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
@@ -38774,6 +38789,11 @@ parameters:
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:handleRequirement\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
+
+		-
+			message: "#^Call to function array_key_exists\\(\\) with 'SwagSecurity' and array\\{ErrorHandler\\: string, Router\\: string, System\\: string, ViewportForward\\: string, Shop\\: string, PostFilter\\: string, ControllerBase\\: string, RouterRewrite\\: string, \\.\\.\\.\\} will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
 
 		-
 			message: "#^Cannot access property \\$version on ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Struct\\\\Version\\|null\\.$#"
