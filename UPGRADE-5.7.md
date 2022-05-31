@@ -2,9 +2,9 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
-## 5.7.10
+## 5.7.12
 
-[View all changes from v5.7.9...v5.7.10](https://github.com/shopware/shopware/compare/v5.7.9...v5.7.10)
+[View all changes from v5.7.11...v5.7.12](https://github.com/shopware/shopware/compare/v5.7.11...v5.7.12)
 
 ### Deprecations
 
@@ -50,6 +50,13 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Removals
 
+## 5.7.11
+
+[View all changes from v5.7.10...v5.7.11](https://github.com/shopware/shopware/compare/v5.7.10...v5.7.11)
+
+## 5.7.10
+
+[View all changes from v5.7.9...v5.7.10](https://github.com/shopware/shopware/compare/v5.7.9...v5.7.10)
 
 ## 5.7.9
 
