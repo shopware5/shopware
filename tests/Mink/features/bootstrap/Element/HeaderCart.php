@@ -89,11 +89,4 @@ class HeaderCart extends Element implements \Shopware\Tests\Mink\HelperSelectorI
             Helper::throwException($message);
         }
     }
-
-    public function clickCart()
-    {
-        $element = Helper::findElements($this, 'link');
-
-        $element['link']->click();
-    }
 }

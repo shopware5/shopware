@@ -79,12 +79,12 @@ class FormProvider implements UrlProviderInterface
         }
 
         return $this->router->generateList(
-            array_filter(array_map(
+            array_map(
                 function ($custom) {
                     return ['sViewport' => 'forms', 'sFid' => $custom['id']];
                 },
                 $result
-            )),
+            ),
             $context
         );
     }

@@ -223,11 +223,12 @@ class Helper
      * Finds elements by their selectors
      *
      * @param Page|Element|HelperSelectorInterface $parent
+     * @param array<string>                        $keys
      * @param bool                                 $throwExceptions
      *
      * @throws Exception|PendingException
      *
-     * @return Element[]
+     * @return array<string, Element>
      */
     public static function findElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {
@@ -307,12 +308,13 @@ class Helper
      * Returns the requested element css selectors
      *
      * @param Page|Element|HelperSelectorInterface $parent
+     * @param array<string>                        $keys
      * @param bool                                 $throwExceptions
      *
      * @throws Exception
      * @throws PendingException
      *
-     * @return array
+     * @return array<string, string>
      */
     public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
     {

@@ -46911,17 +46911,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\HeaderCart\\:\\:clickCart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\HeaderCart\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
-
-		-
-			message: "#^Parameter \\#2 \\$keys of static method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:findElements\\(\\) expects array, string given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
 
@@ -47371,11 +47361,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:findElements\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:floatArray\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
@@ -47407,16 +47392,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getPageInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getRequiredSelectors\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getRequiredSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
 

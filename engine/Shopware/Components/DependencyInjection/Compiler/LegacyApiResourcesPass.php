@@ -31,7 +31,7 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /**
  * This class adds to all shopware.api services the tag shopware.api_resource
  *
- * @depracted in 5.6 and will be removed with Shopware 5.8. Please use the tag `shopware.api_resource` instead.
+ * @deprecated in 5.6 and will be removed with Shopware 5.8. Please use the tag `shopware.api_resource` instead.
  */
 class LegacyApiResourcesPass implements CompilerPassInterface
 {
