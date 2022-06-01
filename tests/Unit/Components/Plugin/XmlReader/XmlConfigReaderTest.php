@@ -46,7 +46,7 @@ class XmlConfigReaderTest extends TestCase
     {
         $result = $this->readFile('config.xml');
 
-        //form label
+        // form label
         static::assertArrayHasKey('label', $result);
         static::assertCount(2, $result['label']);
         static::assertArrayHasKey('en', $result['label']);
@@ -54,7 +54,7 @@ class XmlConfigReaderTest extends TestCase
         static::assertEquals('My Form Label', $result['label']['en']);
         static::assertEquals('Meine Form', $result['label']['de']);
 
-        //form description
+        // form description
         static::assertArrayHasKey('description', $result);
         static::assertCount(2, $result['description']);
         static::assertArrayHasKey('en', $result['description']);
@@ -62,10 +62,10 @@ class XmlConfigReaderTest extends TestCase
         static::assertEquals('My Form description', $result['description']['en']);
         static::assertEquals('Meine Form Beschreibung', $result['description']['de']);
 
-        //elements
+        // elements
         static::assertArrayHasKey('elements', $result);
 
-        //first element
+        // first element
         $element1 = $result['elements'][0];
 
         static::assertArrayHasKey('options', $element1);
@@ -75,10 +75,10 @@ class XmlConfigReaderTest extends TestCase
         static::assertEquals('1', $element1['options']['minValue']);
         static::assertEquals('2', $element1['options']['maxValue']);
 
-        //second element store
+        // second element store
         $element2 = $result['elements'][1];
 
-        //element label
+        // element label
         static::assertArrayHasKey('label', $element2);
         static::assertCount(2, $element2['label']);
         static::assertArrayHasKey('en', $element2['label']);
@@ -86,7 +86,7 @@ class XmlConfigReaderTest extends TestCase
         static::assertEquals('My Textfield', $element2['label']['en']);
         static::assertEquals('Mein textfeld', $element2['label']['de']);
 
-        //element description
+        // element description
         static::assertArrayHasKey('description', $element2);
         static::assertCount(2, $element2['description']);
         static::assertArrayHasKey('en', $element2['description']);
@@ -143,19 +143,19 @@ class XmlConfigReaderTest extends TestCase
 
     public function testValidateAttributeScope(): void
     {
-        //default value SCOPE_LOCALE
+        // default value SCOPE_LOCALE
         static::assertEquals(
             XmlReaderBase::SCOPE_LOCALE,
             XmlConfigReader::validateAttributeScope('')
         );
 
-        //SCOPE_LOCALE
+        // SCOPE_LOCALE
         static::assertEquals(
             XmlReaderBase::SCOPE_LOCALE,
             XmlConfigReader::validateAttributeScope('locale')
         );
 
-        //SCOPE_SHOP
+        // SCOPE_SHOP
         static::assertEquals(
             XmlReaderBase::SCOPE_SHOP,
             XmlConfigReader::validateAttributeScope('shop')

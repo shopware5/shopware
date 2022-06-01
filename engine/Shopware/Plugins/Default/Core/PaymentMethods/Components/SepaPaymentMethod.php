@@ -299,7 +299,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
         try {
             $mail->send();
         } catch (Exception $e) {
-            //TODO: Handle email sending failure
+            // TODO: Handle email sending failure
         }
     }
 }

@@ -370,7 +370,7 @@ class Inheritance
             return [];
         }
 
-        //creates a key value array for the configuration.
+        // creates a key value array for the configuration.
         $combinedArray = array_combine(
             array_column($config, 'name'),
             array_column($config, 'value')

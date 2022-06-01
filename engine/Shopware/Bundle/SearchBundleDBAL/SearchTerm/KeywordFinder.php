@@ -162,11 +162,11 @@ class KeywordFinder implements KeywordFinderInterface
                 if (\strlen($term1) < 4) {
                     $relevance = $this->config->get('fuzzySearchMatchFactor', 5);
 
-                //ipod === ipods
+                // ipod === ipods
                 } elseif (\strlen($term1) - \strlen($term2) <= 1) {
                     $relevance = $this->config->get('fuzzySearchExactMatchFactor', 100);
 
-                //digital == digi
+                // digital == digi
                 } elseif ((round(\strlen($term2) / \strlen($term1), 2) * 100) >= $this->config->get('fuzzySearchPartNameDistancen', 25)) {
                     $relevance = $this->config->get('fuzzySearchPatternMatchFactor', 50);
                 }

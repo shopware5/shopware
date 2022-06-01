@@ -65,26 +65,26 @@ class PriceHelper implements PriceHelperInterface
 
         $taxCase = $this->buildTaxCase($context);
 
-        //rounded to filter this value correctly
+        // rounded to filter this value correctly
         // => 2,99999999 displayed as 3,- € but won't be displayed with a filter on price >= 3,- €
         return 'ROUND(' .
 
-            //customer group price (with fallback switch)
+            // customer group price (with fallback switch)
             $priceField .
 
-            //multiplied with the variant min purchase
+            // multiplied with the variant min purchase
             ($considerMinPurchase ? ' * availableVariant.minpurchase' : '') .
 
-            //multiplied with the percentage price group discount
+            // multiplied with the percentage price group discount
             ' * ((100 - IFNULL(priceGroup.discount, 0)) / 100)' .
 
-            //multiplied with the product tax if the current customer group should see gross prices
+            // multiplied with the product tax if the current customer group should see gross prices
             ($current->displayGrossPrices() ? ' * (( ' . $taxCase . ' + 100) / 100)' : '') .
 
-            //multiplied with the percentage discount of the current customer group
+            // multiplied with the percentage discount of the current customer group
             ($discount ? ' * ' . (100 - (float) $discount) / 100 : '') .
 
-            //multiplied with the shop currency factor
+            // multiplied with the shop currency factor
             ($currency->getFactor() ? ' * ' . $currency->getFactor() : '') .
 
         ', 2)';

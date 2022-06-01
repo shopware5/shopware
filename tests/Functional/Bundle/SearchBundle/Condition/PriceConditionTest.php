@@ -148,7 +148,7 @@ class PriceConditionTest extends TestCase
             [
                 'first' => ['EK' => 10],
 
-                //20,- € - 10% price group discount = 18,- €
+                // 20,- € - 10% price group discount = 18,- €
                 'second' => ['prices' => ['EK' => 20], 'priceGroup' => $priceGroup],
                 'third' => ['EK' => 30],
             ],
@@ -177,7 +177,7 @@ class PriceConditionTest extends TestCase
         $this->search(
             [
                 'first' => ['EK' => 10],
-                //20,- € - 30% price group discount = 14,- €
+                // 20,- € - 30% price group discount = 14,- €
                 'second' => ['prices' => ['EK' => 20], 'priceGroup' => $priceGroup],
                 'third' => ['EK' => 30],
             ],

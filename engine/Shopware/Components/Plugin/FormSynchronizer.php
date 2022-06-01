@@ -141,21 +141,21 @@ class FormSynchronizer
             return;
         }
 
-        //elements
+        // elements
         $query = $this->em->getConnection()->createQueryBuilder();
         $query->delete('s_core_config_elements');
         $query->where('id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->execute();
 
-        //saved values
+        // saved values
         $query = $this->em->getConnection()->createQueryBuilder();
         $query->delete('s_core_config_values');
         $query->where('element_id IN (:ids)');
         $query->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
         $query->execute();
 
-        //translations
+        // translations
         $query = $this->em->getConnection()->createQueryBuilder();
         $query->delete('s_core_config_element_translations');
         $query->where('element_id IN (:ids)');

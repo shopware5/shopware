@@ -65,7 +65,7 @@ class ProductStockSubscriber implements SubscriberInterface
 
         $entityManager = $arguments->get('entityManager');
 
-        //returns a change set for the model, which contains all changed properties with the old and new value.
+        // returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = $entityManager->getUnitOfWork()->getEntityChangeSet($orderDetail);
 
         $this->stockService->updateProductDetail(

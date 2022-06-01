@@ -49,7 +49,7 @@ class SearchQueryBuilder
             }
         }
 
-        //use combination for more precision
+        // use combination for more precision
         foreach ($combines as $token) {
             foreach ($fields as $field => $priority) {
                 $bool->add(new MatchQuery($field, $token, ['boost' => $priority * 2]), BoolQuery::SHOULD);

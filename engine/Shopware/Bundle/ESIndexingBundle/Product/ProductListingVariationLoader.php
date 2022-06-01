@@ -309,7 +309,7 @@ class ProductListingVariationLoader
                     $tmp = array_merge($item, [$index => (int) $option->getId()]);
                     sort($tmp, SORT_NUMERIC);
 
-                    //check if this combination is a available combination (out of stock, not active)
+                    // check if this combination is a available combination (out of stock, not active)
                     $isAvailable = false;
                     foreach ($availability as $available) {
                         $available = '-' . $available . '-';
@@ -320,7 +320,7 @@ class ProductListingVariationLoader
                                 $allMatch = false;
                             }
                         }
-                        //all options matched? combination is available, break availability check
+                        // all options matched? combination is available, break availability check
                         if ($allMatch) {
                             $isAvailable = true;
                             break;
@@ -583,7 +583,7 @@ class ProductListingVariationLoader
                 array_diff(array_intersect(array_flip($options), $combination), $expandGroupIds)
             ));
 
-            //filter prices which has configuration matches the current variant configuration
+            // filter prices which has configuration matches the current variant configuration
             $affected = array_filter($prices, function (array $price) use ($tmp, $excludedOptions) {
                 $diff = array_values(array_intersect(array_diff($price['options'], $excludedOptions), $tmp));
 
@@ -592,8 +592,8 @@ class ProductListingVariationLoader
 
             $price = array_column($affected, 'price');
 
-            //build combination key by group ids
-            //store front filters to filtered group "sort by price for `color`"
+            // build combination key by group ids
+            // store front filters to filtered group "sort by price for `color`"
             $key = 'g' . implode('-', $combination);
 
             if (!empty($price)) {

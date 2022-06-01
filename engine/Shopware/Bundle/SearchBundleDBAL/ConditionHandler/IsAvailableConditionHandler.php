@@ -68,13 +68,13 @@ class IsAvailableConditionHandler implements ConditionHandlerInterface, Criteria
         });
 
         if (empty($conditions)) {
-            //variants will ne be splitted => only check if product has an available variant
+            // variants will ne be splitted => only check if product has an available variant
             $this->priceHelper->joinAvailableVariant($query);
 
             return;
         }
 
-        //variants will be displayed => add stock condition
+        // variants will be displayed => add stock condition
         $query->andWhere('(variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)');
     }
 

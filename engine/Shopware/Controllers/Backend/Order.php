@@ -419,7 +419,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $namespace = $this->get('snippets')->getNamespace('backend/order');
 
-        //the backend order module have no function to create a new order so an order id must be passed.
+        // the backend order module have no function to create a new order so an order id must be passed.
         if (empty($orderId)) {
             $this->View()->assign([
                 'success' => false,
@@ -2085,7 +2085,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         if (!empty($data['customerId'])) {
             $data['customer'] = $this->getManager()->find(Customer::class, $data['customerId']);
         } else {
-            //if no customer id passed, we have to unset the array element, otherwise the existing customer model would be overwritten
+            // if no customer id passed, we have to unset the array element, otherwise the existing customer model would be overwritten
             unset($data['customer']);
         }
 

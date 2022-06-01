@@ -65,14 +65,14 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
             $group
         );
 
-        //iterates the passed prices and products and assign the product unit to the prices and the passed customer group
+        // iterates the passed prices and products and assign the product unit to the prices and the passed customer group
         $prices = $this->buildPrices(
             $products,
             $specify,
             $group
         );
 
-        //check if one of the products have no assigned price within the prices variable.
+        // check if one of the products have no assigned price within the prices variable.
         $fallbackProducts = array_filter(
             $products,
             function (ListProduct $product) use ($prices) {
@@ -81,7 +81,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
         );
 
         if (!empty($fallbackProducts)) {
-            //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
+            // if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
             $fallbackPrices = $this->graduatedPricesGateway->getList(
                 $fallbackProducts,
                 $context,
@@ -94,7 +94,7 @@ class GraduatedPricesService implements GraduatedPricesServiceInterface
                 $context->getFallbackCustomerGroup()
             );
 
-            //Do not use array_merge here. Since it will reindex the numbers of fallbackPrices.
+            // Do not use array_merge here. Since it will reindex the numbers of fallbackPrices.
             $prices = $prices + $fallbackPrices;
         }
 

@@ -47,7 +47,7 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    1 => [1, 2],     //shop = 1    1x vote with 1 point    1x vote with 2 points
+                    1 => [1, 2],     // shop = 1    1x vote with 1 point    1x vote with 2 points
                 ],
                 'second' => [
                     1 => [4, 5],
@@ -83,7 +83,7 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    1 => [1, 2],     //shop = 1    1x vote with 1 point    1x vote with 2 points
+                    1 => [1, 2],     // shop = 1    1x vote with 1 point    1x vote with 2 points
                 ],
             ],
             ['first'],
@@ -107,7 +107,7 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    2 => [1, 2],     //shop = 1    1x vote with 1 point    1x vote with 2 points
+                    2 => [1, 2],     // shop = 1    1x vote with 1 point    1x vote with 2 points
                 ],
             ],
             ['first'],
@@ -129,8 +129,8 @@ class VoteAverageFacetTest extends TestCase
         $result = $this->search(
             [
                 'first' => [
-                    null => [1, 2],      //shop = 1    1x vote with 1 point    1x vote with 2 points
-                    1 => [1, 2],         //shop = null    1x vote with 1 point    1x vote with 2 points
+                    null => [1, 2],      // shop = 1    1x vote with 1 point    1x vote with 2 points
+                    1 => [1, 2],         // shop = null    1x vote with 1 point    1x vote with 2 points
                 ],
             ],
             ['first'],

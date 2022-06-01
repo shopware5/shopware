@@ -1530,7 +1530,7 @@ class Article extends Resource implements BatchInterface
                 );
             }
 
-            //no valid entity found, throw exception!
+            // no valid entity found, throw exception!
             if ($relatedProduct === null) {
                 $property = $relatedData['number'] ?: $relatedData['id'];
                 throw new CustomValidationException(sprintf('Related product by number/id "%s" not found', $property));
@@ -1677,8 +1677,8 @@ class Article extends Resource implements BatchInterface
                         $query = $propertyRepository->getPropertyRelationQuery($filters, null, 1, 0);
                         $relation = $query->getOneOrNullResult(self::HYDRATE_OBJECT);
                         if (!$relation instanceof Relation) {
-                            //checks if a new option was created
-                            //because the new option is not written to the database at this point
+                            // checks if a new option was created
+                            // because the new option is not written to the database at this point
                             $groupOption = $this->getCollectionElementByProperty(
                                 $propertyGroup->getOptions(),
                                 'name',
@@ -2249,7 +2249,7 @@ class Article extends Resource implements BatchInterface
                     $media->setDescription($downloadData['name']);
                 }
 
-                try { //persist the model into the model manager
+                try { // persist the model into the model manager
                     $this->getManager()->persist($media);
                 } catch (ORMException $e) {
                     throw new CustomValidationException(sprintf('Some error occurred while loading your image from link "%s"', $downloadData['link']));

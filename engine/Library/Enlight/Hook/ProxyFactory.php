@@ -103,7 +103,7 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         $classImplements = class_implements($class);
         if (!\is_array($classImplements) || !\in_array(Enlight_Hook::class, $classImplements, true)) {
             trigger_error(sprintf('The class "%s" does not implement the Enlight_Hook Interface. It will be thrown in 5.8.', $class), E_USER_WARNING);
-            //throw new Enlight_Hook_Exception('The class' . $class . ' does not implement Enlight_Hook interface.');
+            // throw new Enlight_Hook_Exception('The class' . $class . ' does not implement Enlight_Hook interface.');
         }
 
         $proxyFile = $this->getProxyFileName($class);

@@ -121,7 +121,7 @@ class RewriteGenerator implements GeneratorListInterface
             return $urls;
         }
 
-        //Add query / strtolower
+        // Add query / strtolower
         array_walk($urls, function (&$url, $key) use ($context, $list, $orgQueryList) {
             if (\is_string($url)) {
                 if ($context->isUrlToLower()) {

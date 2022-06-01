@@ -928,7 +928,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
             if ($taxFree) {
                 $system->sUSERGROUPDATA['tax'] = 0;
-                $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; //Old template
+                $system->sCONFIG['sARTICLESOUTPUTNETTO'] = 1; // Old template
                 Shopware()->Session()->set('sUserGroupData', $system->sUSERGROUPDATA);
                 $userData['additional']['charge_vat'] = false;
                 $userData['additional']['show_net'] = false;
@@ -1533,7 +1533,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->front->Request()->setPost('sPayment', (int) $payment['id']);
         $this->admin->sUpdatePayment();
 
-        //if customer logged in and payment switched to fallback, display cart notice. Otherwise anonymous customers will see the message too
+        // if customer logged in and payment switched to fallback, display cart notice. Otherwise anonymous customers will see the message too
         if (Shopware()->Session()->get('sUserId')) {
             $this->flagPaymentBlocked();
         }

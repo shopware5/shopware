@@ -148,7 +148,7 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
         if (!method_exists($plugin, $this->listener)) {
             $name = $this->plugin instanceof Enlight_Plugin_Bootstrap ? $this->plugin->getName() : $this->plugin;
             trigger_error('Listener "' . $this->listener . '" in "' . $name . '" is not callable.', E_USER_ERROR);
-            //throw new Enlight_Exception('Listener "' . $this->listener . '" in "' . $name . '" is not callable.');
+            // throw new Enlight_Exception('Listener "' . $this->listener . '" in "' . $name . '" is not callable.');
             return;
         }
 

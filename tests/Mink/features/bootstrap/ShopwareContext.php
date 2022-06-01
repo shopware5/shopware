@@ -178,19 +178,19 @@ class ShopwareContext extends SubContext
             $link = substr($link, 0, $anchor);
         }
 
-        //Blogartikel-Bewertung
+        // Blogartikel-Bewertung
         if (empty($query)) {
             $mask = '%s/sConfirmation/%s';
         } else {
             parse_str($query, $args);
 
             switch ($args['action']) {
-                //Artikel-Benachrichtigungen
+                // Artikel-Benachrichtigungen
                 case 'notify':
                     $mask = '%s&sNotificationConfirmation=%s&sNotify=1&action=notifyConfirm';
                     break;
 
-                //Artikel-Bewertungen
+                // Artikel-Bewertungen
                 default:
                     $mask = '%s&sConfirmation=%s';
                     break;

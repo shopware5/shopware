@@ -41,7 +41,7 @@ class Utils
             throw new RuntimeException('Could not create closure function');
         }
 
-        return $func(); //faster
+        return $func(); // faster
     }
 
     /**

@@ -351,7 +351,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
      */
     private function getStatisticListTotalCount(Query $dataQuery): ?int
     {
-        //userCurrencyFactor has not to be part of the count parameters
+        // userCurrencyFactor has not to be part of the count parameters
         $originalParameters = $dataQuery->getParameters();
         $countParameters = new ArrayCollection();
 

@@ -397,7 +397,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     ];
                     $row['data'] = !\is_string($row['data']) ? var_export($row['data'], true) : $row['data'];
                 }
-                //get the total count
+                // get the total count
                 $select->reset(Zend_Db_Select::FROM);
                 $select->reset(Zend_Db_Select::LIMIT_COUNT);
                 $select->reset(Zend_Db_Select::LIMIT_OFFSET);

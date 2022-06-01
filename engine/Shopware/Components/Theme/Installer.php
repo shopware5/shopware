@@ -267,7 +267,7 @@ class Installer
                 continue;
             }
 
-            //merge the plugin themes into the already detected plugin themes.
+            // merge the plugin themes into the already detected plugin themes.
             $themes = array_merge($themes, $pluginThemes);
 
             $this->entityManager->flush();

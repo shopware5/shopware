@@ -29,7 +29,8 @@ workflow:
     key:
         files:
             - 'composer.lock'
-            - 'recovery/common/composer.lock'
+#            - 'recovery/common/composer.lock' TODO - SW-26745: Needs to be considered again, but GitLab only allows two files
+            - 'vendor-bin/cs-fixer/composer.lock'
     paths:
         - 'vendor/'
         - 'recovery/common/vendor/'

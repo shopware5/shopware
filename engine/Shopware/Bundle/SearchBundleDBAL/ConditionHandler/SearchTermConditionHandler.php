@@ -65,8 +65,8 @@ class SearchTermConditionHandler implements ConditionHandlerInterface
     {
         $searchQuery = $this->searchTermQueryBuilder->buildQuery($condition->getTerm());
 
-        //no matching products found by the search query builder.
-        //add condition that the result contains no product.
+        // no matching products found by the search query builder.
+        // add condition that the result contains no product.
         if ($searchQuery === null) {
             $query->andWhere('0 = 1');
 

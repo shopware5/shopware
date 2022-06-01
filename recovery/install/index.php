@@ -59,7 +59,7 @@ if (PHP_SAPI === 'cli') {
     return $application->run($input);
 }
 
-//the execution time will be increased, because the import can take a while
+// the execution time will be increased, because the import can take a while
 ini_set('max_execution_time', 120);
 
 // Redirect to no mod rewrite path

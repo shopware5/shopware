@@ -48,27 +48,27 @@ class TopSellerTest extends AbstractMarketing
 
     public function testUpdateElapsedTopSeller()
     {
-        //init top seller to be sure that all articles has a row
+        // init top seller to be sure that all articles has a row
         $this->resetTopSeller();
         $this->TopSeller()->initTopSeller();
 
         $this->Db()->query("UPDATE s_articles_top_seller_ro SET last_cleared = '2010-01-01'");
 
-        //check if the update script was successfully
+        // check if the update script was successfully
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         static::assertCount(0, $topSeller);
 
-        //update only 50 top seller articles to test the limit function
+        // update only 50 top seller articles to test the limit function
         $this->TopSeller()->updateElapsedTopSeller(50);
 
-        //check if only 50 top seller was updated.
+        // check if only 50 top seller was updated.
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         static::assertCount(
             50,
             $topSeller
         );
 
-        //now we can update the all other top seller data
+        // now we can update the all other top seller data
         $this->TopSeller()->updateElapsedTopSeller();
         static::assertCount(
             \count($this->getAllTopSeller()),
@@ -149,7 +149,7 @@ class TopSellerTest extends AbstractMarketing
         $cron = $this->Db()->fetchRow("SELECT * FROM s_crontab WHERE action = 'RefreshTopSeller'");
         static::assertNotEmpty($cron);
 
-        //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
+        // the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshTopSeller();
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
@@ -175,7 +175,7 @@ class TopSellerTest extends AbstractMarketing
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");
         static::assertCount(0, $topSeller);
 
-        //the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
+        // the cron plugin isn't installed, so we can't use a dispatch on /backend/cron
         $this->Plugin()->refreshTopSeller();
 
         $topSeller = $this->getAllTopSeller(" WHERE last_cleared > '2010-01-01' ");

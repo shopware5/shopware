@@ -96,10 +96,10 @@ class Shop extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
+        // returns the category data
         $shops = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $shops, 'total' => $totalResult];

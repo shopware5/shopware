@@ -165,7 +165,7 @@ class Attribute extends Struct implements JsonSerializable, ArrayAccess
 
     private function isValid($value): bool
     {
-        if ($value instanceof JsonSerializable || is_scalar($value) || $value === null) {
+        if ($value instanceof JsonSerializable || \is_scalar($value) || $value === null) {
             return true;
         }
 

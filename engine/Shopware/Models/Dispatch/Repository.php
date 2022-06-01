@@ -460,7 +460,7 @@ class Repository extends ModelRepository
      */
     protected function sortOrderQuery(\Doctrine\ORM\QueryBuilder $builder, $modelPrefix, $orderBy)
     {
-        //order the query with the passed orderBy parameter
+        // order the query with the passed orderBy parameter
         if (!empty($orderBy)) {
             foreach ($orderBy as $order) {
                 if (!isset($order['direction'])) {

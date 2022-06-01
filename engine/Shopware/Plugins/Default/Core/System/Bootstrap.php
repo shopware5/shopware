@@ -124,7 +124,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
                 ', [$system->sUSERGROUP]);
             }
             if (empty($system->sUSERGROUPDATA['tax']) && !empty($system->sUSERGROUPDATA['id'])) {
-                $config['sARTICLESOUTPUTNETTO'] = 1; //Old template
+                $config['sARTICLESOUTPUTNETTO'] = 1; // Old template
                 Shopware()->Session()->set('sOutputNet', true);
             } else {
                 Shopware()->Session()->set('sOutputNet', false);

@@ -285,7 +285,7 @@ class CacheControl
      */
     public function setContextCacheKey(Request $request, ShopContextInterface $context, Response $response)
     {
-        //not logged in => reset global context cookie
+        // not logged in => reset global context cookie
         if (!$this->session->offsetGet('sUserGroup')) {
             $this->resetCookies($request, $response);
 

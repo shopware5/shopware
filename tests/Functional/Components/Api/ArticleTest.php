@@ -2213,15 +2213,15 @@ class ArticleTest extends TestCase
 
         $this->resource->delete($articleId);
 
-        //delete test values in s_filter_values
+        // delete test values in s_filter_values
         $sql = 'DELETE FROM `s_filter_values` WHERE `optionId` = ?';
         Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
-        //delete test values in s_filter_relations
+        // delete test values in s_filter_relations
         $sql = 'DELETE FROM `s_filter_relations` WHERE `optionId` = ?';
         Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
-        //delete test values in s_filter_options
+        // delete test values in s_filter_options
         $builder->delete(\Shopware\Models\Property\Option::class, 'option')->andWhere(
             'option.name = :optionName'
         )->setParameter('optionName', $optionName)->getQuery()->execute();
@@ -2334,15 +2334,15 @@ class ArticleTest extends TestCase
 
         $this->resource->delete($articleId);
 
-        //delete test values in s_filter_values
+        // delete test values in s_filter_values
         $sql = 'DELETE FROM `s_filter_values` WHERE `optionId` = ?';
         Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
-        //delete test values in s_filter_relations
+        // delete test values in s_filter_relations
         $sql = 'DELETE FROM `s_filter_relations` WHERE `optionId` = ?';
         Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
-        //delete test values in s_filter_options
+        // delete test values in s_filter_options
         $builder->delete(\Shopware\Models\Property\Option::class, 'option')->andWhere(
             'option.name = :optionName'
         )->setParameter('optionName', $optionName)->getQuery()->execute();

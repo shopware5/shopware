@@ -874,7 +874,7 @@ class AdminTest extends TestCase
             Shopware()->Db()->insert('s_core_translations', $demoStateData);
         }
 
-        //Hack current context, so next test works
+        // Hack current context, so next test works
         $context = Shopware()->Container()->get('shopware_storefront.context_service')->getShopContext();
         $context->getShop()->setIsDefault(false);
 

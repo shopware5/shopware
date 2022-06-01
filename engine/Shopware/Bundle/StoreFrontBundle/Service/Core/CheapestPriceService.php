@@ -70,7 +70,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
 
         $prices = $this->buildPrices($products, $rules, $group);
 
-        //check if one of the products have no assigned price within the prices variable.
+        // check if one of the products have no assigned price within the prices variable.
         $fallbackProducts = array_filter(
             $products,
             function (BaseProduct $product) use ($prices) {
@@ -82,7 +82,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
             return $this->calculatePriceGroupDiscounts($products, $prices, $context);
         }
 
-        //if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
+        // if some product has no price, we have to load the fallback customer group prices for the fallbackProducts.
         $fallbackPrices = $this->cheapestPriceGateway->getList(
             $fallbackProducts,
             $context,
@@ -95,7 +95,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
             $context->getFallbackCustomerGroup()
         );
 
-        //Do not use array_merge here. Since it will reindex the numbers of fallbackPrices.
+        // Do not use array_merge here. Since it will reindex the numbers of fallbackPrices.
         $prices = $prices + $fallbackPrices;
 
         return $this->calculatePriceGroupDiscounts($products, $prices, $context);

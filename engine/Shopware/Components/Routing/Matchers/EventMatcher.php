@@ -49,7 +49,7 @@ class EventMatcher implements MatcherInterface
         if (str_starts_with($pathInfo, '/backend/') || str_starts_with($pathInfo, '/api/')) {
             return $pathInfo;
         }
-        if ($context->getShopId() === null) { //only frontend
+        if ($context->getShopId() === null) { // only frontend
             return $pathInfo;
         }
 

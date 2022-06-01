@@ -915,7 +915,7 @@ class sAdmin implements \Enlight_Hook
                 $passwordChangeDate,
                 $userMail,
                 $userId,
-                (int) ini_get('session.gc_maxlifetime'),
+                (int) \ini_get('session.gc_maxlifetime'),
             ]
         );
         $getUser = $getUser ?: [];
@@ -3268,7 +3268,7 @@ class sAdmin implements \Enlight_Hook
                 ]
             );
 
-            //destroy cookie
+            // destroy cookie
             $this->front->Response()->setCookie('sUniqueID');
         }
 

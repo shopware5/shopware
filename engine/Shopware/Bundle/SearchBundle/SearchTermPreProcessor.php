@@ -33,16 +33,16 @@ class SearchTermPreProcessor implements SearchTermPreProcessorInterface
      */
     public function process($term)
     {
-        //This fix prevents an exception if the search term includes an character that can not be
-        //displayed with the database charset.
-        //This fix can be removed if all tables are set to utf8mb4_unicode_ci.
+        // This fix prevents an exception if the search term includes an character that can not be
+        // displayed with the database charset.
+        // This fix can be removed if all tables are set to utf8mb4_unicode_ci.
 
-        //converts encoded characters back ('%a5%27' to '?')
+        // converts encoded characters back ('%a5%27' to '?')
         $term = mb_convert_encoding($term, 'UTF-8');
-        //does the replacing of 4byte chars to the Unicode replacement character
+        // does the replacing of 4byte chars to the Unicode replacement character
         $term = (string) preg_replace('/[\xF0-\xF7].../s', '�', $term);
 
-        //we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
+        // we have to strip the / otherwise broken urls would be created e.g. wrong pager urls
         $term = trim(strip_tags(htmlspecialchars_decode(stripslashes($term))));
 
         return str_replace('/', ' ', $term);

@@ -178,7 +178,7 @@ class TranslationTest extends TestCase
     public function testCreateVariantTranslationByNumber(): void
     {
         $data = $this->getDummyData('variant');
-        //Artikel mit Standardkonfigurator rot / 39
+        // Artikel mit Standardkonfigurator rot / 39
         $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
         $data['key'] = $article['ordernumber'];
 

@@ -631,21 +631,21 @@ EOD
                             return false;
                         }
 
-                        //Select
+                        // Select
                         if (empty($fieldType)) {
                             $field->selectOption($fieldValue);
 
                             return true;
                         }
 
-                        //Checkbox
+                        // Checkbox
                         if ($fieldType === 'checkbox') {
                             $field->check();
 
                             return true;
                         }
 
-                        //Text
+                        // Text
                         $field->setValue($fieldValue);
 
                         return true;

@@ -64,7 +64,7 @@ class OrderRecalculationSubscriber implements SubscriberInterface
         $orderDetail = $arguments->get('entity');
         $entityManager = $arguments->get('entityManager');
 
-        //returns a change set for the model, which contains all changed properties with the old and new value.
+        // returns a change set for the model, which contains all changed properties with the old and new value.
         $changeSet = $entityManager->getUnitOfWork()->getEntityChangeSet($orderDetail);
 
         $productChange = $changeSet['articleNumber'][0] !== $changeSet['articleNumber'][1];

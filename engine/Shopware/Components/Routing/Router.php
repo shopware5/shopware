@@ -276,16 +276,16 @@ class Router extends EnlightRouter implements RouterInterface
      */
     public function route(EnlightRequest $request)
     {
-        /* For enlight routing  */
+        /* For enlight routing */
         $this->context->updateFromEnlightRequest($request);
 
         $params = $this->match($request->getPathInfo(), $this->context);
         if ($params !== false) {
-            /* For shopware routing (query === userParams)  */
+            /* For shopware routing (query === userParams) */
             $request->setQuery($params);
         }
 
-        /* For enlight routing  */
+        /* For enlight routing */
         $this->context->updateFromEnlightRequest($request);
         $this->context->setParams([]);
 

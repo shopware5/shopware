@@ -87,10 +87,10 @@ class PaymentMethods extends Resource
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        //returns the total count of the query
+        // returns the total count of the query
         $totalResult = $paginator->count();
 
-        //returns the category data
+        // returns the category data
         $payments = $paginator->getIterator()->getArrayCopy();
 
         return ['data' => $payments, 'total' => $totalResult];

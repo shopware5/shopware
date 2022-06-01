@@ -160,7 +160,7 @@ class Requirements
             return true;
         } elseif (\function_exists($name)) {
             return true;
-        } elseif (($value = ini_get($name)) !== null) {
+        } elseif (($value = \ini_get($name)) !== null) {
             if (strtolower($value) == 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
             } elseif (strtolower($value) == 'on' || (is_numeric($value) && $value == 1)) {
@@ -235,10 +235,10 @@ class Requirements
             'name' => 'opcache.use_cwd',
             'group' => 'core',
             'required' => 1,
-            'version' => ini_get('opcache.use_cwd'),
-            'result' => ini_get('opcache.use_cwd'),
+            'version' => \ini_get('opcache.use_cwd'),
+            'result' => \ini_get('opcache.use_cwd'),
             'notice' => '',
-            'check' => $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1'),
+            'check' => $this->compare('opcache.use_cwd', \ini_get('opcache.use_cwd'), '1'),
             'error' => '',
         ]];
 
@@ -248,10 +248,10 @@ class Requirements
                     'name' => 'opcache.validate_root',
                     'group' => 'core',
                     'required' => 1,
-                    'version' => ini_get('opcache.validate_root'),
-                    'result' => ini_get('opcache.validate_root'),
+                    'version' => \ini_get('opcache.validate_root'),
+                    'result' => \ini_get('opcache.validate_root'),
                     'notice' => '',
-                    'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
+                    'check' => $this->compare('opcache.validate_root', \ini_get('opcache.validate_root'), '1'),
                     'error' => '',
                 ];
             }
@@ -358,7 +358,7 @@ class Requirements
     {
         if (\function_exists('session_save_path')) {
             return (bool) session_save_path();
-        } elseif (ini_get('session.save_path')) {
+        } elseif (\ini_get('session.save_path')) {
             return true;
         }
 
@@ -372,7 +372,7 @@ class Requirements
      */
     private function checkSuhosinGetMaxValueLength()
     {
-        $length = (int) ini_get('suhosin.get.max_value_length');
+        $length = (int) \ini_get('suhosin.get.max_value_length');
         if ($length === 0) {
             return 2000;
         }

@@ -175,7 +175,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         // Under Cygwin, uniqid with more_entropy must be set to true.
         // No effect in other environments.
         $filename = $filename ?: sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), date('c'), uniqid('', true), 'png');
-        $filepath = $filepath ?: (ini_get('upload_tmp_dir') ?: sys_get_temp_dir());
+        $filepath = $filepath ?: (\ini_get('upload_tmp_dir') ?: sys_get_temp_dir());
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
     }
 
@@ -316,12 +316,12 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $em = $this->getService(ModelManager::class);
         $em->generateAttributeModels();
 
-        //refresh s_core_templates
+        // refresh s_core_templates
         $this->registerErrorHandler();
         $this->getService(Installer::class)->synchronize();
         restore_error_handler();
 
-        //get the template id
+        // get the template id
         $sql = sprintf(
             'SELECT id FROM `s_core_templates` WHERE template = "%s"',
             self::$suite->getSetting('template')
@@ -332,7 +332,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             throw new RuntimeException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
         }
 
-        //set the template for shop "Deutsch" and activate SEPA payment method
+        // set the template for shop "Deutsch" and activate SEPA payment method
         $sql = <<<"EOD"
             UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
             UPDATE `s_core_paymentmeans` SET `active`= 1;

@@ -87,9 +87,9 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
                     // Remove comments
                     '#/\*.*?\*/#ms' => '',
                     '#^\s*//.*$#m' => '',
-                    //'#\n\s+#ms' => '',
+                    // '#\n\s+#ms' => '',
                     '#^\s+#ms' => '',
-                    //'#\s+$#ms' => '',
+                    // '#\s+$#ms' => '',
                 ];
 
                 return preg_replace(array_keys($expressions), array_values($expressions), $source);

@@ -81,7 +81,7 @@ class Repository extends ModelRepository
      */
     protected function selectListQuery(\Doctrine\ORM\QueryBuilder $builder)
     {
-        //select the different entities
+        // select the different entities
         $builder->select([
             'documents.id as id',
             'documents.date as date',
@@ -94,7 +94,7 @@ class Repository extends ModelRepository
             'type.name as typeName',
         ]);
 
-        //join the required tables for the order list
+        // join the required tables for the order list
         $builder->from('Shopware\Models\Order\Document\Document', 'documents')
                 ->join('documents.type', 'type');
 

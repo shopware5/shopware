@@ -54,7 +54,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
 
     public function getSubShopsAction()
     {
-        //load shop repository
+        // load shop repository
         $repository = $this->get('models')->getRepository(Shop::class);
 
         $builder = $repository->createQueryBuilder('shops');
@@ -68,10 +68,10 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         $builder->leftJoin('shops.locale', 'shopLocale');
         $query = $builder->getQuery();
 
-        //select all shops as array
+        // select all shops as array
         $data = $query->getArrayResult();
 
-        //return the data and total count
+        // return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -86,12 +86,12 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
         $start = $this->Request()->get('start');
         $limit = $this->Request()->get('limit');
 
-        //order data
+        // order data
         $order = (array) $this->Request()->getParam('sort', []);
 
-        //If a search-filter is set
+        // If a search-filter is set
         if ($this->Request()->get('filter')) {
-            //Get the value itself
+            // Get the value itself
             $filter = $this->Request()->get('filter');
             $filter = $filter[\count($filter) - 1];
             $filterValue = $filter['value'];
@@ -136,10 +136,10 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             if (empty($params['orderNumber'])) {
                 throw new Exception('No ordernumber was entered.');
             }
-            //Fills the model by using the array $params
+            // Fills the model by using the array $params
             $premiumModel->fromArray($params);
 
-            //find the shop-model by using the subShopId
+            // find the shop-model by using the subShopId
             /** @var Shop $shop */
             $shop = $this->get('models')->find(Shop::class, $params['shopId']);
             $premiumModel->setShop($shop);
@@ -148,7 +148,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             $productVariant = $this->getArticleDetailRepository()->findOneBy(['number' => $params['orderNumber']]);
             $premiumModel->setArticleDetail($productVariant);
 
-            //If the product is already set as a premium-product
+            // If the product is already set as a premium-product
             $repository = $this->get('models')->getRepository(Premium::class);
             $result = $repository->findByOrderNumber($params['orderNumber']);
             $result = $this->get('models')->toArray($result);
@@ -159,7 +159,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
                 return;
             }
 
-            //saves the model
+            // saves the model
             $this->get('models')->persist($premiumModel);
             $this->get('models')->flush();
 
@@ -190,7 +190,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
             if (empty($params['orderNumberExport'])) {
                 $params['orderNumberExport'] = $params['orderNumber'];
             }
-            //Replace a comma with a dot
+            // Replace a comma with a dot
             $params['startPrice'] = str_replace(',', '.', $params['startPrice']);
 
             $premiumModel->fromArray($params);

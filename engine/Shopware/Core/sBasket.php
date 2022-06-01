@@ -2741,7 +2741,7 @@ class sBasket implements \Enlight_Hook
 
             $getProducts[$key]['amount'] = $quantity * round($price, 2);
 
-            //reset purchaseunit and save the original value in purchaseunitTemp
+            // reset purchaseunit and save the original value in purchaseunitTemp
             if ($getProducts[$key]['purchaseunit'] > 0) {
                 $getProducts[$key]['purchaseunitTemp'] = $getProducts[$key]['purchaseunit'];
                 $getProducts[$key]['purchaseunit'] = 1;

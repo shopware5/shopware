@@ -159,7 +159,7 @@ class Requirements
             return true;
         }
 
-        $value = ini_get($name);
+        $value = \ini_get($name);
         if ($value !== '' && $value !== false) {
             if (strtolower($value) === 'off' || (is_numeric($value) && $value == 0)) {
                 return false;
@@ -252,29 +252,29 @@ class Requirements
             return [];
         }
 
-        $useCwdOption = $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1');
+        $useCwdOption = $this->compare('opcache.use_cwd', \ini_get('opcache.use_cwd'), '1');
         $opcacheRequirements = [[
             'name' => 'opcache.use_cwd',
             'group' => 'core',
             'required' => 1,
-            'version' => ini_get('opcache.use_cwd'),
-            'result' => ini_get('opcache.use_cwd'),
+            'version' => \ini_get('opcache.use_cwd'),
+            'result' => \ini_get('opcache.use_cwd'),
             'notice' => '',
-            'check' => $this->compare('opcache.use_cwd', ini_get('opcache.use_cwd'), '1'),
+            'check' => $this->compare('opcache.use_cwd', \ini_get('opcache.use_cwd'), '1'),
             'error' => '',
         ]];
 
         try {
             if (fileinode('/') > 2) {
-                $validateRootOption = $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1');
+                $validateRootOption = $this->compare('opcache.validate_root', \ini_get('opcache.validate_root'), '1');
                 $opcacheRequirements[] = [
                     'name' => 'opcache.validate_root',
                     'group' => 'core',
                     'required' => 1,
-                    'version' => ini_get('opcache.validate_root'),
-                    'result' => ini_get('opcache.validate_root'),
+                    'version' => \ini_get('opcache.validate_root'),
+                    'result' => \ini_get('opcache.validate_root'),
                     'notice' => '',
-                    'check' => $this->compare('opcache.validate_root', ini_get('opcache.validate_root'), '1'),
+                    'check' => $this->compare('opcache.validate_root', \ini_get('opcache.validate_root'), '1'),
                     'error' => '',
                 ];
             }
@@ -377,7 +377,7 @@ class Requirements
             return (bool) session_save_path();
         }
 
-        if (ini_get('session.save_path')) {
+        if (\ini_get('session.save_path')) {
             return true;
         }
 
@@ -406,7 +406,7 @@ class Requirements
      */
     private function checkSuhosinGetMaxValueLength(): int
     {
-        $length = (int) ini_get('suhosin.get.max_value_length');
+        $length = (int) \ini_get('suhosin.get.max_value_length');
         if ($length === 0) {
             return 2000;
         }

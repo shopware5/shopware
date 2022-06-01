@@ -105,7 +105,7 @@ class ManufacturerGateway implements ManufacturerGatewayInterface
             }
         }
 
-        //sort elements by provided ids, sorting is defined by other queries like `best term match` or `max articles` or `sort alphanumeric`
+        // sort elements by provided ids, sorting is defined by other queries like `best term match` or `max articles` or `sort alphanumeric`
         $sorted = [];
         foreach ($ids as $id) {
             if (!\array_key_exists($id, $manufacturers)) {

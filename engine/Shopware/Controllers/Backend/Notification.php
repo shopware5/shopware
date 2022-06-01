@@ -38,7 +38,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             /** @var array $filter */
             $filter = $this->Request()->getParam('filter', []);
 
-            //order data
+            // order data
             $order = (array) $this->Request()->getParam('sort', []);
 
             $repository = $this->get('models')->getRepository(Article::class);
@@ -79,7 +79,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             /** @var array $filter */
             $filter = $this->Request()->getParam('filter', []);
 
-            //order data
+            // order data
             $order = (array) $this->Request()->getParam('sort', []);
 
             $repository = $this->get('models')->getRepository(Article::class);

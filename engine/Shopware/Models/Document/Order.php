@@ -964,14 +964,14 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $taxRate = Shopware()->Db()->fetchOne($sql, [
                 $approximateTaxRate, // p.e. 19.971195391 (approx. 20% VAT)
                 $approximateTaxRate,
-                $maxDiff, //default: 0.1
+                $maxDiff, // default: 0.1
                 $approximateTaxRate,
                 $approximateTaxRate,
                 $maxDiff,
-                $areaId, //p.e. 3 (Europe)
+                $areaId, // p.e. 3 (Europe)
                 $countryId, // p.e. 23 (AT)
-                $stateId, //p.e. 0
-                $customerGroupId, //p.e. 1 (EK)
+                $stateId, // p.e. 0
+                $customerGroupId, // p.e. 1 (EK)
             ]);
 
         if ($taxRate === false) {

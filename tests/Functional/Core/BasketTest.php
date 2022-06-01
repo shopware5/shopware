@@ -566,18 +566,18 @@ class BasketTest extends TestCase
 
         $ordernumberExport = 'test' . random_int(1000, 9999);
 
-        //Insert a new Premium product that has a ordernumber_export different from the ordernumber
+        // Insert a new Premium product that has a ordernumber_export different from the ordernumber
         $this->connection->insert('s_addon_premiums', ['startprice' => 0, 'ordernumber' => 'SW10137', 'ordernumber_export' => $ordernumberExport, 'subshopID' => 0]);
 
-        //sInsertPremium gets the premium to add from the Request, therefore we do set it here
+        // sInsertPremium gets the premium to add from the Request, therefore we do set it here
         $front = $this->getContainer()->get('front');
         static::assertInstanceOf(Enlight_Controller_Request_Request::class, $front->Request());
         $front->Request()->setQuery('sAddPremium', 'SW10137');
 
-        //add the premium item to the basket
+        // add the premium item to the basket
         $this->module->sInsertPremium();
 
-        //check if the ordernumber_export from s_addon_premiums has been added to s_order_basket as ordernumber
+        // check if the ordernumber_export from s_addon_premiums has been added to s_order_basket as ordernumber
         static::assertEquals(
             $ordernumberExport,
             $this->connection->fetchOne(

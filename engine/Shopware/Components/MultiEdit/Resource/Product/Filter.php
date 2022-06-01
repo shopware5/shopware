@@ -163,7 +163,7 @@ class Filter
             'partial article.{id, name}',
         ])
         ->from(Detail::class, 'detail')
-        //~ ->leftJoin('detail.article', 'article')
+        // ~ ->leftJoin('detail.article', 'article')
         ->where('detail.id = ?1')
         ->setParameter(1, $detailId);
 

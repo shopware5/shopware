@@ -103,22 +103,22 @@ class ShopRepositoryTest extends ControllerTestCase
         // Tests copied for SW-6768
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en', 'testShop3');
 
-        //check virtual url with superfluous / like localhost/en/
+        // check virtual url with superfluous / like localhost/en/
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/', 'testShop3');
 
-        //check virtual url with direct controller call like localhost/en/blog
+        // check virtual url with direct controller call like localhost/en/blog
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/blog', 'testShop3');
 
-        //check base shop with direct controller call like localhost/en/blog
+        // check base shop with direct controller call like localhost/en/blog
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/blog', $this->mainShop['name']);
 
-        //check without virtual url but an url with the same beginning like localhost/entsorgung
+        // check without virtual url but an url with the same beginning like localhost/entsorgung
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/entsorgung', $this->mainShop['name']);
 
-        //check different virtual url with like localhost/ente
+        // check different virtual url with like localhost/ente
         $this->callGetActiveShopByRequest($this->mainShop['base_path'] . '/en/uk', 'testShop2');
 
-        //check without virtual url it has to choose the main shop instead of the language shop without the virtual url
+        // check without virtual url it has to choose the main shop instead of the language shop without the virtual url
         $this->callGetActiveShopByRequest($this->mainShop['base_path'], $this->mainShop['name']);
 
         // These are just some basic urls

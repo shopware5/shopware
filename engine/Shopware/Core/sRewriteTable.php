@@ -542,7 +542,7 @@ class sRewriteTable implements Enlight_Hook
             ->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 
-        //get all blog category ids
+        // get all blog category ids
         $blogCategoryIds = [];
         foreach ($blogCategories as $blogCategory) {
             $blogCategoryIds[] = $blogCategory['id'];
@@ -696,10 +696,10 @@ class sRewriteTable implements Enlight_Hook
      */
     public function sCreateRewriteTableContent($offset = null, $limit = null, ShopContextInterface $context = null)
     {
-        //form urls
+        // form urls
         $this->insertFormUrls($offset, $limit, $context);
 
-        //static pages urls
+        // static pages urls
         $this->insertStaticPageUrls($offset, $limit, $context);
     }
 

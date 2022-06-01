@@ -125,7 +125,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $controller = Zend_Json::encode($controller);
         $this->View()->assign('controller', $controller, true);
 
-        $this->View()->assign('maxParameterLength', (int) ini_get('suhosin.get.max_value_length') + 0, true);
+        $this->View()->assign('maxParameterLength', (int) \ini_get('suhosin.get.max_value_length') + 0, true);
 
         $firstRunWizardEnabled = $this->isFirstRunWizardEnabled($identity);
         $sbpLogin = 0;

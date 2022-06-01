@@ -106,7 +106,7 @@ class CategoryGateway implements CategoryGatewayInterface
     {
         $data = $this->getQuery($ids, $context)->execute()->fetchAll(PDO::FETCH_ASSOC);
 
-        //use php usort instead of running mysql order by to prevent file-sort and temporary table statement
+        // use php usort instead of running mysql order by to prevent file-sort and temporary table statement
         usort($data, function ($a, $b) {
             if ($a['__category_position'] === $b['__category_position']) {
                 return $a['__category_id'] <=> $b['__category_id'];

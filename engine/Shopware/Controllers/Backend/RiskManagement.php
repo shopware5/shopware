@@ -110,7 +110,7 @@ class Shopware_Controllers_Backend_RiskManagement extends Shopware_Controllers_B
             unset($params['action']);
             unset($params['_dc']);
 
-            //2-dimensional array
+            // 2-dimensional array
             if ($params[0]) {
                 $data = [];
                 foreach ($params as $values) {
