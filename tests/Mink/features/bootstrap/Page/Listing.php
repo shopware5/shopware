@@ -154,7 +154,7 @@ class Listing extends Page implements HelperSelectorInterface
      */
     public function checkView($view)
     {
-        $elements = array_filter(Helper::findElements($this, ['viewTable', 'viewList'], false));
+        $elements = Helper::findElements($this, ['viewTable', 'viewList'], false);
 
         if (key($elements) !== $view) {
             $message = sprintf('"%s" is active! (should be "%s")', key($elements), $view);

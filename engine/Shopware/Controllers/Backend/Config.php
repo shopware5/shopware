@@ -261,10 +261,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getListAction()
     {
-        /** @var string $name */
-        $name = $this->Request()->get('_repositoryClass');
-
-        /** @var QueryBuilder $builder */
+        $name = (string) $this->Request()->get('_repositoryClass');
         $builder = $this->getRepository($name)->createQueryBuilder($name);
 
         switch ($name) {
@@ -458,8 +455,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
      */
     public function getValuesAction()
     {
-        $name = $this->Request()->get('_repositoryClass');
-        /** @var QueryBuilder $builder */
+        $name = (string) $this->Request()->get('_repositoryClass');
         $builder = $this->getRepository($name)->createQueryBuilder($name);
 
         switch ($name) {

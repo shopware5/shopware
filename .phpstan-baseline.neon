@@ -16811,6 +16811,26 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
 
 		-
+			message: "#^Offset 'save_handler' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-empty\\-string, \\.\\.\\.\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
+			message: "#^Offset 'save_handler' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
+			message: "#^Offset 'save_path' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-empty\\-string, \\.\\.\\.\\} in isset\\(\\) does not exist\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
+			message: "#^Offset 'unitTestEnabled' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-empty\\-string, \\.\\.\\.\\} in empty\\(\\) does not exist\\.$#"
+			count: 1
+			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
+
+		-
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
@@ -38776,6 +38796,11 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
 
 		-
+			message: "#^Call to function array_key_exists\\(\\) with 'SwagSecurity' and array\\{ErrorHandler\\: string, Router\\: string, System\\: string, ViewportForward\\: string, Shop\\: string, PostFilter\\: string, ControllerBase\\: string, RouterRewrite\\: string, \\.\\.\\.\\} will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
+
+		-
 			message: "#^Cannot access property \\$version on ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Struct\\\\Version\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
@@ -46886,17 +46911,7 @@ parameters:
 			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\HeaderCart\\:\\:clickCart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Element\\\\HeaderCart\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
-
-		-
-			message: "#^Parameter \\#2 \\$keys of static method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:findElements\\(\\) expects array, string given\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Element/HeaderCart.php
 
@@ -47346,11 +47361,6 @@ parameters:
 			path: tests/Mink/features/bootstrap/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:findElements\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:floatArray\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
@@ -47382,16 +47392,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getPageInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getRequiredSelectors\\(\\) has parameter \\$keys with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/features/bootstrap/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Helper\\:\\:getRequiredSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/features/bootstrap/Helper.php
 

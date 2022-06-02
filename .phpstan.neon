@@ -1,5 +1,6 @@
 includes:
-	- .phpstan-baseline.neon
+    - .phpstan-baseline.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 services:
     -
@@ -183,3 +184,6 @@ parameters:
         - # The doctrine extension has problems with detecting the select within an if condition. see https://github.com/phpstan/phpstan-doctrine/issues/331
             message: '#Error: Expected Doctrine\\ORM\\Query\\Lexer::T_FROM, got end of string#'
             path: engine/Shopware/Components/Api/Resource/EmotionPreset.php
+
+        # This is a bleeding edge feature and not working well since now. See https://github.com/phpstan/phpstan-doctrine/issues/332
+        - '#Parameter .* of method Doctrine\\ORM\\.*::.*\(\) expects .*literal-string.* given#'
