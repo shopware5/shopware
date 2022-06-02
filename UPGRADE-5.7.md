@@ -23,11 +23,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/orm` to version 2.12.2
 * Updated `doctrine/persistence` to version 2.5.3
 * Updated `elasticsearch/elasticsearch` to version 7.17.0
-* Updated `friendsofphp/proxy-manager-lts` to version 1.0.7
-* Updated `google/cloud-storage` to version 1.26.2
+* Updated `friendsofphp/proxy-manager-lts` to version 1.0.12
+* Updated `google/cloud-storage` to version 1.27.1
 * Updated `guzzlehttp/guzzle` to version 7.4.2
 * Updated `laminas/laminas-escaper` to version 2.10.0
-* Updated `monolog/monolog` to version 2.5.0
+* Updated `monolog/monolog` to version 2.6.0
 * Updated `mpdf/mpdf` to version 8.1.1
 * Updated `phpunit/phpunit` to version 9.5.20
 * Updated `symfony/browser-kit` to version 4.4.37
