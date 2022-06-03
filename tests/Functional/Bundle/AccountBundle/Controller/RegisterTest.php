@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,15 +27,17 @@
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Controller_Response_Response;
 use InvalidArgumentException;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
-use Shopware_Components_Config;
-use Zend_Cache_Core;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
-class RegisterTest extends Enlight_Components_Test_Controller_TestCase
+class RegisterTest extends ControllerTestCase
 {
+    use ContainerTrait;
+
     public const TEST_MAIL = 'unittest@mail.com';
     public const SAVE_URL = '/register/saveRegister/sTarget/account/sTargetAction/index';
     public const CONFIRM_URL_PREFIX = '/register/confirmValidation/sConfirmation/';
@@ -47,20 +51,20 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
     public function setUp(): void
     {
         parent::setUp();
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
-        $this->deleteCustomer(self::TEST_MAIL);
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
+        $this->getContainer()->get(Connection::class)->beginTransaction();
+        $this->deleteCustomer();
+        $this->getContainer()->get(ModelManager::class)->clear();
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollback();
-        $this->deleteCustomer(self::TEST_MAIL);
-        Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class)->clear();
+        $this->getContainer()->get(Connection::class)->rollBack();
+        $this->deleteCustomer();
+        $this->getContainer()->get(ModelManager::class)->clear();
     }
 
-    public function testSimpleRegistration()
+    public function testSimpleRegistration(): void
     {
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -71,7 +75,6 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         $this->sendRequestAndAssertCustomer(
-            self::TEST_MAIL,
             [
                 'firstname' => 'first name',
                 'lastname' => 'last name',
@@ -93,7 +96,7 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testDoubleOptInRegistration()
+    public function testDoubleOptInRegistration(): void
     {
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -103,10 +106,10 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
             ],
         ]);
 
-        $this->sendRequestAndAssertCustomerWithDoubleOptIn(self::TEST_MAIL);
+        $this->sendRequestAndAssertCustomerWithDoubleOptIn();
     }
 
-    public function testRegistrationWithShipping()
+    public function testRegistrationWithShipping(): void
     {
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -120,7 +123,6 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         $this->sendRequestAndAssertCustomer(
-            self::TEST_MAIL,
             ['firstname' => 'first name'],
             ['street' => 'street'],
             [
@@ -137,7 +139,7 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testCompanyRegistration()
+    public function testCompanyRegistration(): void
     {
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -154,7 +156,6 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         $this->sendRequestAndAssertCustomer(
-            self::TEST_MAIL,
             [
                 'firstname' => 'first name',
             ],
@@ -167,7 +168,7 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testFastRegistration()
+    public function testFastRegistration(): void
     {
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -181,7 +182,6 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         $this->sendRequestAndAssertCustomer(
-            self::TEST_MAIL,
             [
                 'firstname' => 'first name',
                 'lastname' => 'last name',
@@ -198,9 +198,9 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    public function testDefaultPayment()
+    public function testDefaultPayment(): void
     {
-        Shopware()->Session()->offsetSet('sPaymentID', 6);
+        $this->getContainer()->get('session')->offsetSet('sPaymentID', 6);
 
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
@@ -211,7 +211,6 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ]);
 
         $this->sendRequestAndAssertCustomer(
-            self::TEST_MAIL,
             [
                 'firstname' => 'first name',
                 'paymentID' => 6,
@@ -228,26 +227,31 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         );
     }
 
-    private function sendRequestAndAssertCustomer($email, $personal, $billing = [], $shipping = [])
+    /**
+     * @param array<string, mixed> $personal
+     * @param array<string, mixed> $billing
+     * @param array<string, mixed> $shipping
+     */
+    private function sendRequestAndAssertCustomer(array $personal, array $billing = [], array $shipping = []): void
     {
-        $this->doubleOptinSet(false);
+        $this->doubleOptInSet(false);
         $response = $this->dispatch(self::SAVE_URL);
 
         static::assertEquals(302, $response->getHttpResponseCode());
 
         static::assertStringEndsWith(
             '/account',
-            $this->getHeaderLocation($response)
+            $this->getHeaderLocation($response) ?? ''
         );
 
-        $session = Shopware()->Container()->get('session');
-        static::assertNotEmpty($session->offsetGet('sUserId'));
+        $session = $this->getContainer()->get('session');
+        static::assertNotEmpty($session->get('sUserId'));
 
-        $customer = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
+        $customer = $this->getContainer()->get(Connection::class)->fetchAssociative(
             'SELECT * FROM s_user WHERE email = :mail AND active = 1 AND doubleOptinEmailSentDate IS NULL LIMIT 1',
-            [':mail' => $email]
+            [':mail' => self::TEST_MAIL]
         );
-        static::assertNotEmpty($customer);
+        static::assertIsArray($customer);
 
         if (!empty($personal)) {
             foreach ($personal as $key => $value) {
@@ -257,99 +261,98 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         if (!empty($billing)) {
-            $this->assertAddress($email, $billing);
+            $this->assertAddress(self::TEST_MAIL, $billing);
         }
 
         if (!empty($shipping)) {
-            $this->assertAddress($email, $shipping, 'shipping');
+            $this->assertAddress(self::TEST_MAIL, $shipping, 'shipping');
         }
     }
 
-    private function sendRequestAndAssertCustomerWithDoubleOptIn($email)
+    private function sendRequestAndAssertCustomerWithDoubleOptIn(): void
     {
-        $this->doubleOptinSet(true);
+        $this->doubleOptInSet(true);
         $this->dispatch(self::SAVE_URL);
 
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->getContainer()->get(Connection::class);
 
-        $customer = $connection->fetchAssoc(
+        $customer = $connection->fetchAssociative(
             'SELECT id, doubleOptinEmailSentDate FROM s_user WHERE email = :mail AND active = 0 AND doubleOptinEmailSentDate IS NOT NULL LIMIT 1',
-            [':mail' => $email]
+            [':mail' => self::TEST_MAIL]
         );
 
-        static::assertNotEmpty($customer);
+        static::assertIsArray($customer);
 
-        $optin = $connection->fetchAssoc(
+        $optIn = $connection->fetchAssociative(
             'SELECT type, data, hash FROM s_core_optin WHERE datum = :datum LIMIT 1',
             [':datum' => $customer['doubleOptinEmailSentDate']]
         );
+        static::assertIsArray($optIn);
 
-        static::assertNotEmpty($optin);
-        static::assertEquals('swRegister', $optin['type']);
-        static::assertNotEmpty($optin['data']);
+        static::assertNotEmpty($optIn);
+        static::assertEquals('swRegister', $optIn['type']);
+        static::assertNotEmpty($optIn['data']);
 
-        $data = unserialize($optin['data']);
+        $data = unserialize($optIn['data']);
         static::assertEquals($customer['id'], $data['customerId']);
-        $this->sendRequestAndAssertDOIConfirmation($email, $optin['hash']);
+        $this->sendRequestAndAssertDOIConfirmation($optIn['hash']);
     }
 
-    private function sendRequestAndAssertDOIConfirmation($email, $hash)
+    private function sendRequestAndAssertDOIConfirmation(string $hash): void
     {
-        /** @var Connection $connection */
-        $connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->getContainer()->get(Connection::class);
 
         // Create broken data
         $connection->executeQuery(
             'INSERT INTO s_core_optin (type, datum, hash, data)
-             SELECT type, (datum - INTERVAL 1 MINUTE), CONCAT(hash,\'X\'), \'I am definitly not working\' 
+             SELECT type, (datum - INTERVAL 1 MINUTE), CONCAT(hash,\'X\'), \'I am definitely not working\'
              FROM s_core_optin
              WHERE hash = :hash',
             [':hash' => $hash]
         );
 
         $this->reset();
-        $this->doubleOptinSet(true);
+        $this->doubleOptInSet(true);
         $this->dispatch(self::CONFIRM_URL_PREFIX . $hash);
 
-        $customer = $connection->fetchAssoc(
+        $customer = $connection->fetchAssociative(
             'SELECT doubleOptinEmailSentDate FROM s_user WHERE email = :mail AND active = 1 AND doubleOptinEmailSentDate IS NOT NULL AND doubleOptinConfirmDate IS NOT NULL LIMIT 1',
-            [':mail' => $email]
+            [':mail' => self::TEST_MAIL]
         );
-        static::assertNotEmpty($customer);
+        static::assertIsArray($customer);
 
-        $optin = $connection->fetchAssoc(
+        $optIn = $connection->fetchAssociative(
             'SELECT * FROM s_core_optin WHERE datum = :datum LIMIT 1',
             [':datum' => $customer['doubleOptinEmailSentDate']]
         );
-        static::assertEmpty($optin);
+        static::assertFalse($optIn);
 
         // Test broken data
         $this->reset();
-        $this->doubleOptinSet(true);
+        $this->doubleOptInSet(true);
         $this->expectException(InvalidArgumentException::class);
         $this->dispatch(self::CONFIRM_URL_PREFIX . $hash . 'X');
     }
 
-    private function deleteCustomer($email)
+    private function deleteCustomer(): void
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery(
+        $this->getContainer()->get(Connection::class)->executeQuery(
             'DELETE FROM s_user WHERE email = :mail',
-            [':mail' => $email]
+            [':mail' => self::TEST_MAIL]
         );
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getPersonalData($data = [])
+    private function getPersonalData(array $data = []): array
     {
         return array_merge([
             'salutation' => 'mr',
             'customer_type' => Customer::CUSTOMER_TYPE_PRIVATE,
-            'password' => 'defaultpassword',
+            'password' => 'defaultPassword',
             'email' => self::TEST_MAIL,
             'firstname' => 'first name',
             'lastname' => 'last name',
@@ -357,7 +360,12 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ], $data);
     }
 
-    private function getShippingData($data = [])
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function getShippingData(array $data = []): array
     {
         return array_merge([
             'salutation' => 'ms',
@@ -372,7 +380,12 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         ], $data);
     }
 
-    private function getBillingData($data = [])
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function getBillingData(array $data = []): array
     {
         return array_merge([
             'street' => 'street',
@@ -384,23 +397,21 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param string $email
-     * @param array  $data
-     * @param string $type
+     * @param array<string, mixed> $data
      */
-    private function assertAddress($email, $data, $type = 'billing')
+    private function assertAddress(string $email, array $data, string $type = 'billing'): void
     {
         $column = 'default_billing_address_id';
         if ($type !== 'billing') {
             $column = 'default_shipping_address_id';
         }
 
-        $address = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->fetchAssoc(
+        $address = $this->getContainer()->get(Connection::class)->fetchAssociative(
             'SELECT address.* FROM s_user_addresses address, s_user user WHERE user.' . $column . ' = address.id AND user.email = :mail',
             [':mail' => $email]
         );
 
-        static::assertNotEmpty($address);
+        static::assertIsArray($address);
 
         foreach ($data as $key => $value) {
             static::assertArrayHasKey($key, $address);
@@ -408,13 +419,9 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         }
     }
 
-    /**
-     * @return string|null
-     */
-    private function getHeaderLocation(Enlight_Controller_Response_Response $response)
+    private function getHeaderLocation(Enlight_Controller_Response_Response $response): ?string
     {
-        $headers = $response->getHeaders();
-        foreach ($headers as $header) {
+        foreach ($response->getHeaders() as $header) {
             if ($header['name'] === 'Location') {
                 return $header['value'];
             }
@@ -423,13 +430,8 @@ class RegisterTest extends Enlight_Components_Test_Controller_TestCase
         return null;
     }
 
-    /**
-     * @param bool $switch
-     */
-    private function doubleOptinSet($switch)
+    private function doubleOptInSet(bool $switch): void
     {
-        Shopware()->Container()->get(\Shopware\Components\ConfigWriter::class)->save('optinregister', $switch, null, Shopware()->Shop()->getId());
-        Shopware()->Container()->get(Shopware_Components_Config::class)->setShop(Shopware()->Shop());
-        Shopware()->Container()->get(Zend_Cache_Core::class)->clean();
+        $this->setConfig('optinregister', $switch);
     }
 }

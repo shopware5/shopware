@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,31 +27,44 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Controller_Exception;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Symfony\Component\HttpFoundation\Response;
 
-class ListingTest extends Enlight_Components_Test_Controller_TestCase
+class ListingTest extends ControllerTestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private const CATEGORY_LINK = '/cat/?sCategory=%s';
+
+    private ModelManager $modelManager;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
+    }
 
     /**
      * Test that requesting an existing category-id is successful
      */
     public function testDispatchExistingCategory(): void
     {
-        $this->dispatch('/cat/?sCategory=14');
-        static::assertEquals(200, $this->Response()->getHttpResponseCode());
+        $this->dispatch(sprintf(self::CATEGORY_LINK, 14));
+        static::assertSame(Response::HTTP_OK, $this->Response()->getHttpResponseCode());
     }
 
     public function testDispatchExistingCategoryWithPageNotAvailable(): void
     {
         $this->expectException(Enlight_Controller_Exception::class);
-        $this->dispatch('/cat/?sCategory=14&sPage=2');
-        static::assertEquals(200, $this->Response()->getHttpResponseCode());
+        $this->dispatch(sprintf(self::CATEGORY_LINK . '&sPage=2', 14));
+        static::assertSame(Response::HTTP_OK, $this->Response()->getHttpResponseCode());
     }
 
     /**
@@ -61,8 +73,8 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     public function testDispatchNonExistingCategory(): void
     {
         $this->expectException('Enlight_Exception');
-        $this->dispatch('/cat/?sCategory=4711');
-        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        $this->dispatch(sprintf(self::CATEGORY_LINK, 4711));
+        static::assertSame(Response::HTTP_NOT_FOUND, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
     }
 
@@ -72,8 +84,8 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     public function testDispatchEmptyCategoryId(): void
     {
         $this->expectException('Enlight_Exception');
-        $this->dispatch('/cat/?sCategory=');
-        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        $this->dispatch(sprintf(self::CATEGORY_LINK, ''));
+        static::assertSame(Response::HTTP_NOT_FOUND, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
     }
 
@@ -83,8 +95,8 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     public function testDispatchSubshopCategoryId(): void
     {
         $this->expectException('Enlight_Exception');
-        $this->dispatch('/cat/?sCategory=43');
-        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        $this->dispatch(sprintf(self::CATEGORY_LINK, 43));
+        static::assertSame(Response::HTTP_NOT_FOUND, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
     }
 
@@ -94,9 +106,56 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
     public function testDispatchBlogCategory(): void
     {
         $this->expectException('Enlight_Exception');
-        $this->dispatch('/cat/?sCategory=17');
-        static::assertEquals(404, $this->Response()->getHttpResponseCode());
+        $this->dispatch(sprintf(self::CATEGORY_LINK, 17));
+        static::assertSame(Response::HTTP_NOT_FOUND, $this->Response()->getHttpResponseCode());
         static::assertTrue($this->Response()->isRedirect());
+    }
+
+    public function testExternalLink(): void
+    {
+        $externalLink = 'https://www.google.com';
+
+        $category = $this->createNewCategory();
+        $category->setExternal($externalLink);
+        $this->modelManager->persist($category);
+        $this->modelManager->flush($category);
+
+        $this->dispatch(sprintf(self::CATEGORY_LINK, $category->getId()));
+
+        static::assertSame(Response::HTTP_MOVED_PERMANENTLY, $this->Response()->getHttpResponseCode());
+        static::assertTrue($this->Response()->isRedirect());
+
+        static::assertStringContainsString($externalLink, $this->Response()->getHeader('location'));
+    }
+
+    public function testCategoryRedirectToProductDetailPageDirectly(): void
+    {
+        $this->setConfig('categoryDetailLink', true);
+
+        $category = $this->createNewCategory();
+        $this->modelManager->persist($category);
+        $this->modelManager->flush($category);
+
+        $product = $this->modelManager->getRepository(Product::class)->findOneBy(['active' => true]);
+        static::assertInstanceOf(Product::class, $product);
+
+        $productCategories = $product->getCategories();
+        $productCategories->add($category);
+        $product->setCategories($productCategories);
+
+        $this->modelManager->persist($product);
+        $this->modelManager->flush($product);
+        $this->modelManager->clear();
+
+        $this->dispatch(sprintf(self::CATEGORY_LINK, $category->getId()));
+
+        static::assertSame(Response::HTTP_MOVED_PERMANENTLY, $this->Response()->getHttpResponseCode());
+        static::assertTrue($this->Response()->isRedirect());
+
+        $firstSpace = strpos($product->getName(), ' ');
+        static::assertIsInt($firstSpace);
+        $firstPartOfProductName = strtolower(substr($product->getName(), 0, $firstSpace));
+        static::assertStringContainsString($firstPartOfProductName, $this->Response()->getHeader('location'));
     }
 
     /**
@@ -111,9 +170,9 @@ class ListingTest extends Enlight_Components_Test_Controller_TestCase
         static::assertInstanceOf(Category::class, $mainCategory);
         $mainCategoryId = $mainCategory->getId();
 
-        $this->dispatch(sprintf('/cat/index/sCategory/%s', $mainCategoryId));
+        $this->dispatch(sprintf(self::CATEGORY_LINK, $mainCategoryId));
 
-        static::assertEquals(301, $this->Response()->getHttpResponseCode());
+        static::assertSame(Response::HTTP_MOVED_PERMANENTLY, $this->Response()->getHttpResponseCode());
     }
 
     public function testManufacturerPage(): void
@@ -158,11 +217,24 @@ SQL;
         $connection->executeStatement($createCategoryWithStreamSQL, ['streamId' => $streamId]);
         $categoryId = (int) $connection->lastInsertId();
 
-        $this->dispatch(sprintf('/cat/?sCategory=%d', $categoryId));
+        $this->dispatch(sprintf(self::CATEGORY_LINK, $categoryId));
 
-        static::assertEquals(200, $this->Response()->getHttpResponseCode());
+        static::assertSame(Response::HTTP_OK, $this->Response()->getHttpResponseCode());
         $responseBody = $this->Response()->getBody();
         static::assertIsString($responseBody);
         static::assertStringContainsString('filter-panel--content', $responseBody, 'No filters available in the HTML');
+    }
+
+    private function createNewCategory(): Category
+    {
+        $mainCategory = $this->modelManager->find(Category::class, 3);
+        static::assertInstanceOf(Category::class, $mainCategory);
+
+        $category = new Category();
+        $category->setName('Test');
+        $category->setParent($mainCategory);
+        $category->setActive(true);
+
+        return $category;
     }
 }
