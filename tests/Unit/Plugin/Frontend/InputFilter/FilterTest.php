@@ -148,6 +148,21 @@ class FilterTest extends TestCase
     }
 
     /**
+     * @dataProvider stripAntiXssDataProvider
+     *
+     * @param array<mixed> $additions
+     */
+    public function testAntiXssFilter(string $input, ?string $expected, array $additions = []): void
+    {
+        $result = Shopware_Plugins_Frontend_InputFilter_Bootstrap::filterValue($input, '/(?!x)x/', ...$additions);
+
+        static::assertEquals(
+            $expected,
+            $result
+        );
+    }
+
+    /**
      * @dataProvider stripxssArrayDataProvider
      *
      * @param array<mixed, mixed>  $input
@@ -232,6 +247,37 @@ class FilterTest extends TestCase
             [
                 'input' => '',
                 'expected' => '',
+            ],
+            [
+                'input' => '"%26%2362%26%2360img/src%26%2361x%20onerror%26%2361alert()%26%2362',
+                'expected' => '"><img/>',
+            ],
+        ];
+    }
+
+    /**
+     * @return array<array<string, mixed>>
+     */
+    public function stripAntiXssDataProvider(): array
+    {
+        return [
+            [
+                'input' => '<li style="list-style-image: url(javascript:alert(0))">',
+                'expected' => '<li >',
+                'additions' => [
+                    false,
+                    [],
+                    ['style'],
+                ],
+            ],
+            [
+                'input' => '<iframe width="560" onclick="alert(\'xss\')" height="315" src="https://www.youtube.com/embed/foobar?rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>',
+                'expected' => '<iframe width="560"  height="315" src="https://www.youtube.com/embed/foobar?rel=0&controls=0&showinfo=0" frameborder="0" allowfullscreen></iframe>',
+                'additions' => [
+                    false,
+                    ['iframe'],
+                    [],
+                ],
             ],
         ];
     }
