@@ -275,7 +275,7 @@ class sCategories implements Enlight_Hook
      *
      * @param int $id Id of the category
      *
-     * @return array Array of categories in path
+     * @return array<array{id: int, name: string, blog: bool, link: string}> Array of categories in path
      */
     public function sGetCategoriesByParent($id)
     {

@@ -50,7 +50,7 @@ abstract class Enlight_Components_Test_TestCase extends TestCase
     /**
      * Allows to set a Shopware config
      *
-     * @param bool|string|null $value
+     * @param bool|float|int|string|null $value
      */
     protected function setConfig(string $name, $value): void
     {

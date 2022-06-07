@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
@@ -39,10 +42,9 @@ class NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
 
-        /** @var string $sql */
         $sql = file_get_contents(__DIR__ . '/_fixtures/newsletter/mail.sql');
         static::assertIsString($sql);
-        Shopware()->Models()->getConnection()->exec($sql);
+        $this->getContainer()->get(Connection::class)->executeStatement($sql);
     }
 
     /**
@@ -51,14 +53,18 @@ class NewsletterTest extends Enlight_Components_Test_Plugin_TestCase
     public function testNewsletterLock(): void
     {
         $this->Front()->setParam('noViewRenderer', false);
-        Shopware()->Config()->offsetSet('MailCampaignsPerCall', 1);
+        $this->setConfig('MailCampaignsPerCall', 1);
 
         $this->dispatch('/backend/newsletter/cron');
-        static::assertMatchesRegularExpression('#[0-9]+ Recipients fetched#', $this->Response()->getBody());
+        $responseBody = $this->Response()->getBody();
+        static::assertIsString($responseBody);
+        static::assertMatchesRegularExpression('#\d+ Recipients fetched#', $responseBody);
         $this->reset();
 
         $this->dispatch('/backend/newsletter/cron');
-        static::assertMatchesRegularExpression('#Wait [0-9]+ seconds ...#', $this->Response()->getBody());
+        $responseBody = $this->Response()->getBody();
+        static::assertIsString($responseBody);
+        static::assertMatchesRegularExpression('#Wait \d+ seconds ...#', $responseBody);
         $this->reset();
     }
 

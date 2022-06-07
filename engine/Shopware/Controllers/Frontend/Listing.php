@@ -40,9 +40,11 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\ProductStream\CriteriaFactoryInterface;
 use Shopware\Components\ProductStream\FacetFilterInterface;
 use Shopware\Components\ProductStream\RepositoryInterface as ProductStreamRepositoryInterface;
+use Shopware\Models\Category\Category;
 use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 use Shopware\Models\Emotion\Emotion;
+use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 {
@@ -118,8 +120,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         );
 
         $location = $this->getRedirectLocation($categoryContent, $emotionConfiguration['hasEmotion'], $shopContext);
-        if (!empty($location)) {
-            $this->redirect($location, ['code' => 301]);
+        if (\is_string($location)) {
+            $this->redirect($location, ['code' => Response::HTTP_MOVED_PERMANENTLY]);
 
             return;
         }
@@ -156,7 +158,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
-        $config = $this->getEmotionConfiguration($categoryId, true, $categoryContent['streamId']);
+        $config = $this->getEmotionConfiguration($categoryId, true, $categoryContent['streamId'] ?? null);
 
         $config = array_merge($config, [
             'sBanner' => Shopware()->Modules()->Marketing()->sBanner($categoryId),
@@ -257,7 +259,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      *
      * @param int $categoryId
      *
-     * @return array listing breadcrumb
+     * @return array<array{id: int, name: string, blog: bool, link: string}> listing breadcrumb
      *
      * @deprecated in 5.6, will be private in 5.8
      */
@@ -275,7 +277,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      * @param bool $withStreams
      * @param int  $streamId
      *
-     * @return array{emotions: array, hasEmotion: bool, showListing: bool, isHomePage: bool, showListingButton: bool}
+     * @return array{emotions: array<array<string, mixed>>, hasEmotion: bool, showListing: bool, isHomePage: bool, showListingButton: bool}
      */
     protected function getEmotionConfiguration($categoryId, $withStreams = false, $streamId = null)
     {
@@ -330,39 +332,42 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
     /**
      * @param array<string, mixed> $categoryContent
-     *
-     * @return array{controller?: string, sArticle?: int}
      */
-    private function getRedirectLocation(array $categoryContent, bool $hasEmotion, ShopContextInterface $context): array
+    private function getRedirectLocation(array $categoryContent, bool $hasEmotion, ShopContextInterface $context): ?string
     {
-        $location = [];
+        if (\is_string($categoryContent['external']) && $categoryContent['external'] !== '') {
+            return $categoryContent['external'];
+        }
+
+        if ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
+            return $this->Front()->Router()->assemble(['controller' => 'index']);
+        }
 
         $checkRedirect = ($hasEmotion && $this->Request()->getParam('sPage')) || (!$hasEmotion);
 
-        if (!empty($categoryContent['external'])) {
-            $location = $categoryContent['external'];
-        } elseif ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
-            $location = ['controller' => 'index'];
-        } elseif ($checkRedirect && $this->config->get('categoryDetailLink')) {
-            $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($this->Request(), $context);
-
-            $criteria->resetFacets()
-                ->resetConditions()
-                ->resetSorting()
-                ->offset(0)
-                ->limit(2)
-                ->setFetchCount(false);
-
-            $result = $this->productNumberSearch->search($criteria, $context);
-
-            if (\count($result->getProducts()) === 1) {
-                $products = $result->getProducts();
-                $first = array_shift($products);
-                $location = ['controller' => 'detail', 'sArticle' => $first->getId()];
-            }
+        if (!$checkRedirect || !$this->config->get('categoryDetailLink')) {
+            return null;
         }
 
-        return $location;
+        $criteria = $this->storeFrontCriteriaFactory->createListingCriteria($this->Request(), $context);
+        $criteria->resetFacets()
+            ->resetConditions()
+            ->resetSorting()
+            ->offset(0)
+            ->limit(2)
+            ->setFetchCount(false);
+        $result = $this->productNumberSearch->search($criteria, $context);
+        if (\count($result->getProducts()) !== 1) {
+            return null;
+        }
+
+        $products = $result->getProducts();
+        $firstProducts = array_shift($products);
+
+        return $this->Front()->Router()->assemble([
+            'controller' => 'detail',
+            'sArticle' => $firstProducts->getId(),
+        ]);
     }
 
     /**
@@ -398,7 +403,12 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function isValidCategoryPath(int $categoryId): bool
     {
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+        $category = $this->get('shop')->getCategory();
+        if (!$category instanceof Category) {
+            return false;
+        }
+
+        $defaultShopCategoryId = $category->getId();
 
         $categoryPath = $this->categoryRepository->getPathById($categoryId);
 
@@ -408,7 +418,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
 
         if (!\array_key_exists($defaultShopCategoryId, $categoryPath)) {
             $this->Request()->setQuery('sCategory', $defaultShopCategoryId);
-            $this->Response()->setStatusCode(404);
+            $this->Response()->setStatusCode(Response::HTTP_NOT_FOUND);
 
             return false;
         }
@@ -422,7 +432,12 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function isShopsBaseCategoryPage(int $categoryId): bool
     {
-        $defaultShopCategoryId = Shopware()->Shop()->getCategory()->getId();
+        $category = $this->get('shop')->getCategory();
+        if (!$category instanceof Category) {
+            return false;
+        }
+
+        $defaultShopCategoryId = $category->getId();
 
         $queryParamsWhiteList = ['controller', 'action', 'sCategory', 'sViewport', 'rewriteUrl', 'module'];
         $queryParamsNames = array_keys($this->Request()->getParams());
@@ -434,7 +449,8 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     /**
      * Determines if the product listing has to be loaded/shown at all
      *
-     * @param array<string, mixed> $emotions
+     * @param array<array<string, mixed>> $emotions
+     * @param array<int>                  $devicesWithEmotion
      */
     private function hasListing(array $emotions, array $devicesWithEmotion): bool
     {
@@ -476,7 +492,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      *
      * @param array<string, mixed> $emotions
      *
-     * @return int[]
+     * @return array<int>
      */
     private function getDevicesWithListing(array $emotions): array
     {
@@ -653,7 +669,9 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
     }
 
     /**
-     * @param array<string, mixed> $emotions
+     * @param array<array<string, mixed>> $emotions
+     *
+     * @return array<array<string, mixed>>
      */
     private function filterListingEmotions(array $emotions): array
     {
