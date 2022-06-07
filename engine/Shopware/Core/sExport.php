@@ -1709,7 +1709,7 @@ class sExport implements Enlight_Hook
             return false;
         }
 
-        $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=2 AND bind_sql IS NOT NULL';
+        $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=2 AND active=1 AND bind_sql IS NOT NULL';
         $statements = $this->db->fetchPairs($sql);
 
         $sql_where = '';
