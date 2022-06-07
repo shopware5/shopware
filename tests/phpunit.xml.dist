@@ -11,10 +11,11 @@
     <coverage includeUncoveredFiles="false">
         <include>
             <directory suffix=".php">../engine/Shopware/</directory>
+            <directory suffix=".php">../engine/Library/Enlight/</directory>
         </include>
         <exclude>
             <directory>../engine/Shopware/Plugins/Community</directory>
-            <directory>../engine/Shopware/Components/Xml</directory>
+            <directory>../engine/Shopware/Plugins/Local</directory>
         </exclude>
     </coverage>
     <testsuites>

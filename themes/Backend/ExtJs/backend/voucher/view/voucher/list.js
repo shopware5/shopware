@@ -327,6 +327,7 @@ Ext.define('Shopware.apps.Voucher.view.voucher.List', {
      * @param value
      */
     valueRenderer: function (value, p, r) {
+        value = String(value);
         if (r.data.percental == 1){
             return value.replace(/[.,]/, Ext.util.Format.decimalSeparator) + " %";
         }
