@@ -58,14 +58,12 @@ class TestContext extends ShopContext
         $this->currency = $currency;
     }
 
-    public function setCurrentCustomerGroup(
-        Group $currentCustomerGroup): void
+    public function setCurrentCustomerGroup(Group $currentCustomerGroup): void
     {
         $this->currentCustomerGroup = $currentCustomerGroup;
     }
 
-    public function setFallbackCustomerGroup(
-        Group $fallbackCustomerGroup): void
+    public function setFallbackCustomerGroup(Group $fallbackCustomerGroup): void
     {
         $this->fallbackCustomerGroup = $fallbackCustomerGroup;
     }

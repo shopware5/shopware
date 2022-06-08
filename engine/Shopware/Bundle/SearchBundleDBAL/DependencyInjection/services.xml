@@ -147,6 +147,7 @@
         <service id="shopware_searchdbal.has_pseudo_price_condition_handler_dbal" class="Shopware\Bundle\SearchBundleDBAL\ConditionHandler\HasPseudoPriceConditionHandler">
             <argument type="service" id="shopware_searchdbal.listing_price_switcher"/>
             <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface"/>
+            <argument type="service" id="Shopware\Bundle\SearchBundleDBAL\ListingPriceHelper"/>
             <tag name="condition_handler_dbal"/>
         </service>
 
