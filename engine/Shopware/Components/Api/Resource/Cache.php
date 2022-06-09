@@ -130,9 +130,6 @@ class Cache extends Resource implements BatchInterface
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIdByData($data)
     {
         return $data['id'] ?? false;

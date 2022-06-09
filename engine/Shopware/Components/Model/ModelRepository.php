@@ -34,11 +34,11 @@ use Enlight_Hook;
  * These standard function must later be implemented in the various models.
  *
  * <code>
- * $modelRepository = new Shopware\Components\Models\ModelRepository;
+ * $modelRepository = new \Shopware\Components\Models\ModelRepository();
  * $modelRepository->createQueryBuilder();
  * </code>
  *
- * @template TEntityClass of object
+ * @template TEntityClass of ModelEntity
  * @extends EntityRepository<TEntityClass>
  */
 class ModelRepository extends EntityRepository implements Enlight_Hook

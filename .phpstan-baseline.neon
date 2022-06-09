@@ -13906,11 +13906,6 @@ parameters:
 			path: engine/Shopware/Components/AddLinkHeaderSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\BatchInterface\\:\\:getIdByData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/BatchInterface.php
-
-		-
 			message: "#^Cannot call method setAcl\\(\\) on object\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Manager.php
@@ -14077,11 +14072,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getFullResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getIdByData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
@@ -14417,11 +14407,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Cache\\:\\:getCacheInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Cache.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Cache\\:\\:getIdByData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Cache.php
 
@@ -15126,21 +15111,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Shop.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:checkRequirements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:checkRequirements\\(\\) has parameter \\$checkData with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:checkRequirements\\(\\) has parameter \\$data with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
@@ -15161,27 +15131,12 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getIdByData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getObjectTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:getRepository\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:saveTranslation\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:setTranslationComponent\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
@@ -15192,11 +15147,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:updateByNumber\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Translation.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Api\\\\Resource\\\\Translation\\:\\:\\$repository with generic class Doctrine\\\\ORM\\\\EntityRepository does not specify its types\\: TEntityClass$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Translation.php
 
@@ -15322,11 +15272,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableOption\\(\\) has parameter \\$optionData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getIdByData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
@@ -42229,11 +42174,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$id of method Shopware\\\\Components\\\\Api\\\\Resource\\\\PropertyGroup\\:\\:update\\(\\) expects int, string given\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/PropertyGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\TranslationTest\\:\\:getDummyData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/TranslationTest.php
 
 		-
 			message: "#^Cannot access offset 'configuratorOptions' on array\\|Shopware\\\\Models\\\\Article\\\\Detail\\.$#"

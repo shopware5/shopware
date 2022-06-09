@@ -26,24 +26,37 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Api\Resource\Translation as TranslationResource;
-use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Translation\Translation;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class TranslationTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
+    private const PRODUCT_TYPE = 'article';
+
     /**
      * @var TranslationResource
      */
     protected $resource;
 
-    /**
-     * @return TranslationResource
-     */
-    public function createResource()
+    private Connection $connection;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->connection = $this->getContainer()->get(Connection::class);
+    }
+
+    public function createResource(): TranslationResource
     {
         return new TranslationResource();
     }
@@ -58,7 +71,7 @@ class TranslationTest extends TestCase
         }
     }
 
-    public function testArticleTranslationList(): void
+    public function testProductTranslationList(): void
     {
         $list = $this->resource->getList(0, 5, [
             [
@@ -68,18 +81,13 @@ class TranslationTest extends TestCase
         ]);
 
         foreach ($list['data'] as $item) {
-            $article = Shopware()->Models()->find(Article::class, $item['key']);
-
-            static::assertInstanceOf(Article::class, $article);
-
-            static::assertEquals(
-                TranslationResource::TYPE_PRODUCT,
-                $item['type']
-            );
+            $product = $this->getContainer()->get('models')->find(ProductModel::class, $item['key']);
+            static::assertInstanceOf(ProductModel::class, $product);
+            static::assertSame(TranslationResource::TYPE_PRODUCT, $item['type']);
         }
     }
 
-    public function testSingleArticleTranslation(): void
+    public function testSingleProductTranslation(): void
     {
         $list = $this->resource->getList(0, 1, [
             [
@@ -88,7 +96,10 @@ class TranslationTest extends TestCase
             ],
             [
                 'property' => 'translation.key',
-                'value' => Shopware()->Db()->fetchOne("SELECT objectkey FROM s_core_translations WHERE objecttype='article' LIMIT 1"),
+                'value' => $this->connection->fetchOne(
+                    'SELECT objectkey FROM s_core_translations WHERE objecttype=:type LIMIT 1',
+                    ['type' => self::PRODUCT_TYPE]
+                ),
             ],
             [
                 'property' => 'translation.shopId',
@@ -99,75 +110,9 @@ class TranslationTest extends TestCase
         static::assertCount(1, $list['data']);
         $data = $list['data'][0];
 
-        static::assertEquals(
-            TranslationResource::TYPE_PRODUCT,
-            $data['type']
-        );
-
+        static::assertSame(TranslationResource::TYPE_PRODUCT, $data['type']);
         static::assertArrayHasKey('name', $data['data']);
         static::assertArrayHasKey('descriptionLong', $data['data']);
-    }
-
-    public function testCreateArticle(): int
-    {
-        $data = $this->getDummyData('article');
-
-        $translation = $this->resource->create($data);
-
-        static::assertInstanceOf(Translation::class, $translation);
-        static::assertEquals(
-            $data['key'],
-            $translation->getKey(),
-            'Translation key do not match'
-        );
-        static::assertEquals(
-            $data['type'],
-            $translation->getType(),
-            'Translation type do not match'
-        );
-        static::assertEquals(
-            $data['data'],
-            $this->resource->getTranslationComponent()->unFilterData(
-                'article',
-                $translation->getData()
-            ),
-            'Translation data do not match'
-        );
-
-        return $translation->getKey();
-    }
-
-    public function testCreateArticleByNumber(): int
-    {
-        $data = $this->getDummyData('article');
-        $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
-        $data['key'] = $article['ordernumber'];
-
-        $translation = $this->resource->createByNumber($data);
-
-        static::assertInstanceOf(Translation::class, $translation);
-
-        static::assertEquals(
-            $article['articleID'],
-            $translation->getKey(),
-            'Translation key do not match'
-        );
-
-        static::assertEquals(
-            $data['type'],
-            $translation->getType(),
-            'Translation type do not match'
-        );
-        static::assertEquals(
-            $data['data'],
-            $this->resource->getTranslationComponent()->unFilterData(
-                'article',
-                $translation->getData()
-            ),
-            'Translation data do not match'
-        );
-
-        return (int) $article['articleID'];
     }
 
     /**
@@ -179,86 +124,64 @@ class TranslationTest extends TestCase
     {
         $data = $this->getDummyData('variant');
         // Artikel mit Standardkonfigurator rot / 39
-        $article = Shopware()->Db()->fetchRow("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
-        $data['key'] = $article['ordernumber'];
+        $product = $this->connection->fetchAssociative("SELECT id, ordernumber, articleID FROM s_articles_details WHERE ordernumber = 'SW10201.11'");
+        static::assertIsArray($product);
+        $data['key'] = $product['ordernumber'];
 
         $translation = $this->resource->createByNumber($data);
 
         static::assertInstanceOf(Translation::class, $translation);
 
-        static::assertEquals(
-            $article['id'],
-            $translation->getKey(),
-            'Translation key do not match'
-        );
-
-        static::assertEquals(
-            $data['type'],
-            $translation->getType(),
-            'Translation type do not match'
-        );
-        static::assertEquals(
+        static::assertSame((int) $product['id'], $translation->getKey(), 'Translation key do not match');
+        static::assertSame($data['type'], $translation->getType());
+        static::assertSame(
             $data['data'],
             $this->resource->getTranslationComponent()->unFilterData(
-                'article',
+                self::PRODUCT_TYPE,
                 $translation->getData()
             ),
             'Translation data do not match'
         );
     }
 
-    /**
-     * @depends testCreateArticle
-     */
-    public function testArticleUpdateOverride(int $key): int
+    public function testProductTranslationUpdateOverride(): void
     {
+        $productId = $this->createProduct();
         $this->resource->setResultMode(2);
         $translation = $this->resource->getList(0, 1, [
-            ['property' => 'translation.type', 'value' => 'article'],
-            ['property' => 'translation.key', 'value' => $key],
+            ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+            ['property' => 'translation.key', 'value' => $productId],
             ['property' => 'translation.shopId', 'value' => 2],
         ]);
-
         $translation = $translation['data'][0];
 
         foreach ($translation['data'] as &$fieldTranslation) {
             $fieldTranslation = 'UPDATE - ' . $fieldTranslation;
         }
+        unset($fieldTranslation);
 
-        $updated = $this->resource->update($key, $translation);
+        $updateResult = $this->resource->update($productId, $translation);
+        static::assertInstanceOf(Translation::class, $updateResult);
 
-        static::assertEquals(
-            $translation['key'],
-            $updated->getKey(),
-            'Translation key do not match'
-        );
-        static::assertEquals(
-            $translation['type'],
-            $updated->getType(),
-            'Translation type do not match'
-        );
+        $updatedTranslation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+            ['property' => 'translation.key', 'value' => $productId],
+            ['property' => 'translation.shopId', 'value' => 2],
+        ]);
+        $updatedTranslation = $updatedTranslation['data'][0];
 
-        static::assertEquals(
-            $translation['data'],
-            $this->resource->getTranslationComponent()->unFilterData(
-                'article',
-                $updated->getData()
-            ),
-            'Translation data do not match'
-        );
-
-        return $key;
+        static::assertSame($translation['key'], $updatedTranslation['key'], 'Translation key do not match');
+        static::assertSame($translation['type'], $updatedTranslation['type'], 'Translation type do not match');
+        static::assertSame($translation['data'], $updatedTranslation['data'], 'Translation data do not match');
     }
 
-    /**
-     * @depends testArticleUpdateOverride
-     */
-    public function testArticleUpdateMerge(int $key): void
+    public function testProductTranslationUpdateMerge(): void
     {
+        $productId = $this->createProduct();
         $this->resource->setResultMode(2);
         $translation = $this->resource->getList(0, 1, [
-            ['property' => 'translation.type', 'value' => 'article'],
-            ['property' => 'translation.key', 'value' => $key],
+            ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+            ['property' => 'translation.key', 'value' => $productId],
             ['property' => 'translation.shopId', 'value' => 2],
         ]);
 
@@ -267,34 +190,25 @@ class TranslationTest extends TestCase
             'txtArtikel' => 'Update-2',
         ];
 
-        $updated = $this->resource->update($key, $translation);
+        $updateResult = $this->resource->update($productId, $translation);
+        static::assertInstanceOf(Translation::class, $updateResult);
 
-        static::assertEquals(
-            $translation['key'],
-            $updated->getKey(),
-            'Translation key do not match'
-        );
-        static::assertEquals(
-            $translation['type'],
-            $updated->getType(),
-            'Translation type do not match'
-        );
+        $updatedTranslation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+            ['property' => 'translation.key', 'value' => $productId],
+            ['property' => 'translation.shopId', 'value' => 2],
+        ]);
 
-        $dataTranslation = unserialize($updated->getData());
-        static::assertEquals(
-            $translation['data']['txtArtikel'],
-            $dataTranslation['txtArtikel']
-        );
+        $updatedTranslation = $updatedTranslation['data'][0];
 
-        static::assertEquals(
-            'UPDATE - Dummy Translation',
-            $dataTranslation['txtlangbeschreibung']
-        );
+        static::assertSame($translation['key'], $updatedTranslation['key'], 'Translation key do not match');
+        static::assertSame($translation['type'], $updatedTranslation['type'], 'Translation type do not match');
+        static::assertSame($translation['data']['txtArtikel'], $updatedTranslation['data']['name']);
     }
 
     public function testRecursiveMerge(): void
     {
-        $create = $this->getDummyData('article');
+        $create = $this->getDummyData(self::PRODUCT_TYPE);
 
         $create['type'] = 'recursive';
         $create['data'] = [
@@ -323,84 +237,136 @@ class TranslationTest extends TestCase
             ],
         ];
 
-        $updated = $this->resource->update($created->getKey(), $update);
+        $updateResult = $this->resource->update($created->getKey(), $update);
+        static::assertInstanceOf(Translation::class, $updateResult);
+
+        $updatedTranslation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.key', 'value' => $created->getKey()],
+        ]);
+        $updatedTranslation = $updatedTranslation['data'][0];
 
         $updateData = $update['data'];
-        $updatedData = unserialize($updated->getData());
+        $updatedData = $updatedTranslation['data'];
 
-        static::assertEquals(
-            $updateData['a1'],
-            $updatedData['a1'],
-            'First level not updated'
-        );
-
-        static::assertEquals(
-            $updateData['b1']['a2'],
-            $updatedData['b1']['a2'],
-            'Second level not updated'
-        );
-
-        static::assertEquals(
-            $updateData['b1']['b2']['a3'],
-            $updatedData['b1']['b2']['a3'],
-            'Third level not updated'
-        );
-
-        static::assertEquals(
-            $create['data']['b1']['b2']['b3']['a4'],
-            $updatedData['b1']['b2']['b3']['a4'],
-            'Fourth level not updated'
-        );
+        static::assertSame($updateData['a1'], $updatedData['a1'], 'First level not updated');
+        static::assertSame($updateData['b1']['a2'], $updatedData['b1']['a2'], 'Second level not updated');
+        static::assertSame($updateData['b1']['b2']['a3'], $updatedData['b1']['b2']['a3'], 'Third level not updated');
+        static::assertSame($create['data']['b1']['b2']['b3']['a4'], $updatedData['b1']['b2']['b3']['a4'], 'Fourth level not updated');
     }
 
     public function testBatch(): void
     {
         $translations = [];
         for ($i = 0; $i < 4; ++$i) {
-            $translations[] = $this->getDummyData('article');
+            $translations[] = $this->getDummyData(self::PRODUCT_TYPE);
         }
 
-        $article = Shopware()->Db()->fetchRow(
+        $product = $this->connection->fetchAssociative(
             'SELECT ordernumber, articleID
             FROM s_articles_details
             LIMIT 1'
         );
-        $translations[0]['key'] = $article['ordernumber'];
+        static::assertIsArray($product);
+        $translations[0]['key'] = $product['ordernumber'];
         $translations[0]['useNumberAsId'] = true;
 
-        $results = $this->resource->batch($translations);
-
-        foreach ($results as $result) {
+        foreach ($this->resource->batch($translations) as $result) {
             static::assertTrue($result['success']);
-            static::assertEquals('update', $result['operation']);
+            static::assertSame('update', $result['operation']);
             static::assertNotEmpty($result['data']);
-            static::assertEquals(2, $result['data']['shopId']);
+            static::assertSame(2, $result['data']['shopId']);
         }
     }
 
-    /**
-     * @depends testCreateArticleByNumber
-     */
-    public function testUpdateByNumber(int $productId): void
+    public function testBatchUpdate(): void
     {
-        $translation = $this->getDummyData('article');
-        $product = Shopware()->Db()->fetchRow(
+        $productId1 = $this->createProduct();
+        $productId2 = $this->createProduct();
+
+        $this->resource->setResultMode(2);
+        $translations = $this->resource->getList(
+            0,
+            2,
+            [
+                ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+                ['property' => 'translation.shopId', 'value' => 2],
+            ],
+            [
+                ['property' => 'translation.id', 'direction' => 'DESC'],
+            ]
+        );
+        $translations = $translations['data'];
+
+        foreach ($translations as &$translation) {
+            static::assertContains($translation['key'], [$productId1, $productId2]);
+            foreach ($translation['data'] as &$fieldTranslation) {
+                $fieldTranslation = 'UPDATE - ' . $fieldTranslation;
+            }
+            unset($fieldTranslation);
+        }
+        unset($translation);
+
+        foreach ($this->resource->batch($translations) as $operation) {
+            static::assertTrue($operation['success']);
+            static::assertSame('update', $operation['operation']);
+        }
+
+        $updatedTranslations = $this->resource->getList(
+            0,
+            2,
+            [
+                ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+                ['property' => 'translation.shopId', 'value' => 2],
+            ],
+            [
+                ['property' => 'translation.id', 'direction' => 'DESC'],
+            ]
+        );
+        $updatedTranslations = $updatedTranslations['data'];
+
+        foreach ($updatedTranslations as $key => $updatedTranslation) {
+            static::assertSame(
+                $translations[$key]['key'],
+                $updatedTranslation['key'],
+                'Translation key do not match'
+            );
+            static::assertSame(
+                $translations[$key]['type'],
+                $updatedTranslation['type'],
+                'Translation type do not match'
+            );
+
+            $dataTranslation = $updatedTranslation['data'];
+            static::assertSame(
+                $translations[$key]['data']['name'],
+                $dataTranslation['name']
+            );
+        }
+    }
+
+    public function testUpdateByNumber(): void
+    {
+        $productId = $this->createProductByNumber();
+        $translation = $this->getDummyData(self::PRODUCT_TYPE);
+        $product = $this->connection->fetchAssociative(
             'SELECT ordernumber, articleID
             FROM s_articles_details
-            WHERE articleID = :articleId
+            WHERE articleID = :productId
             LIMIT 1',
-            [':articleId' => $productId]
+            ['productId' => $productId]
         );
+        static::assertIsArray($product);
         $translation['key'] = $product['ordernumber'];
 
         foreach ($translation['data'] as &$data) {
             $data .= '-UpdateByNumber';
         }
+        unset($data);
 
         $result = $this->resource->updateByNumber($product['ordernumber'], $translation);
 
         static::assertInstanceOf(Translation::class, $result);
-        static::assertEquals($result->getKey(), $product['articleID']);
+        static::assertSame($result->getKey(), (int) $product['articleID']);
         $data = unserialize($result->getData());
 
         foreach ($data as $item) {
@@ -411,7 +377,7 @@ class TranslationTest extends TestCase
 
     public function testDelete(): void
     {
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $translation = $this->resource->create($data);
 
         static::assertInstanceOf(Translation::class, $translation);
@@ -419,20 +385,26 @@ class TranslationTest extends TestCase
         unset($data['data']);
 
         $result = $this->resource->delete($data['key'], $data);
-
         static::assertTrue($result);
+
+        $translation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.key', 'value' => $data['key']],
+            ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+        ]);
+        static::assertCount(0, $translation['data']);
     }
 
     public function testDeleteByNumber(): void
     {
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
 
-        $article = Shopware()->Db()->fetchRow(
+        $product = $this->connection->fetchAssociative(
             'SELECT ordernumber, articleID
             FROM s_articles_details
             LIMIT 1'
         );
-        $data['key'] = $article['articleID'];
+        static::assertIsArray($product);
+        $data['key'] = $product['articleID'];
 
         $translation = $this->resource->create($data);
 
@@ -440,9 +412,14 @@ class TranslationTest extends TestCase
 
         unset($data['data']);
 
-        $result = $this->resource->deleteByNumber($article['ordernumber'], $data);
-
+        $result = $this->resource->deleteByNumber($product['ordernumber'], $data);
         static::assertTrue($result);
+
+        $translation = $this->resource->getList(0, 1, [
+            ['property' => 'translation.key', 'value' => $data['key']],
+            ['property' => 'translation.type', 'value' => self::PRODUCT_TYPE],
+        ]);
+        static::assertCount(0, $translation['data']);
     }
 
     public function testLinkNumber(): void
@@ -461,7 +438,8 @@ class TranslationTest extends TestCase
 
     public function testManufacturerNumber(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_articles_supplier LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_articles_supplier LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('supplier', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('supplier', (int) $entity['id'], $entity['name']);
         $this->numberDelete('supplier', $entity['name']);
@@ -469,7 +447,8 @@ class TranslationTest extends TestCase
 
     public function testCountryName(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_core_countries LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_countries', (int) $entity['id'], $entity['countryname']);
         $this->numberUpdate('config_countries', (int) $entity['id'], $entity['countryname']);
         $this->numberDelete('config_countries', $entity['countryname']);
@@ -477,7 +456,8 @@ class TranslationTest extends TestCase
 
     public function testCountryIso(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_core_countries LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_countries', (int) $entity['id'], $entity['countryiso']);
         $this->numberUpdate('config_countries', (int) $entity['id'], $entity['countryiso']);
         $this->numberDelete('config_countries', $entity['countryiso']);
@@ -485,7 +465,8 @@ class TranslationTest extends TestCase
 
     public function testCountryStateName(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_core_countries_states LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_country_states', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('config_country_states', (int) $entity['id'], $entity['name']);
         $this->numberDelete('config_country_states', $entity['name']);
@@ -493,7 +474,8 @@ class TranslationTest extends TestCase
 
     public function testCountryStateCode(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_countries_states LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_core_countries_states LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_country_states', (int) $entity['id'], $entity['shortcode']);
         $this->numberUpdate('config_country_states', (int) $entity['id'], $entity['shortcode']);
         $this->numberDelete('config_country_states', $entity['shortcode']);
@@ -501,7 +483,8 @@ class TranslationTest extends TestCase
 
     public function testDispatchName(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_premium_dispatch LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_premium_dispatch LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_dispatch', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('config_dispatch', (int) $entity['id'], $entity['name']);
         $this->numberDelete('config_dispatch', $entity['name']);
@@ -509,7 +492,8 @@ class TranslationTest extends TestCase
 
     public function testPaymentName(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_core_paymentmeans LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_payment', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('config_payment', (int) $entity['id'], $entity['name']);
         $this->numberDelete('config_payment', $entity['name']);
@@ -517,7 +501,8 @@ class TranslationTest extends TestCase
 
     public function testPaymentDescription(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans LIMIT 1');
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_core_paymentmeans LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('config_payment', (int) $entity['id'], $entity['description']);
         $this->numberUpdate('config_payment', (int) $entity['id'], $entity['description']);
         $this->numberDelete('config_payment', $entity['description']);
@@ -525,8 +510,8 @@ class TranslationTest extends TestCase
 
     public function testFilterSetNumber(): void
     {
-        $entity = Shopware()->Db()->fetchRow('SELECT * FROM s_filter LIMIT 1');
-
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_filter LIMIT 1');
+        static::assertIsArray($entity);
         $this->numberCreate('propertygroup', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('propertygroup', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertygroup', $entity['name']);
@@ -535,7 +520,7 @@ class TranslationTest extends TestCase
     public function testFilterGroupNumber(): void
     {
         $entity = $this->getFilterGroupName();
-
+        static::assertIsArray($entity);
         $this->numberCreate('propertyoption', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('propertyoption', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertyoption', $entity['name']);
@@ -544,7 +529,7 @@ class TranslationTest extends TestCase
     public function testFilterOptionNumber(): void
     {
         $entity = $this->getFilterOptionName();
-
+        static::assertIsArray($entity);
         $this->numberCreate('propertyvalue', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('propertyvalue', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertyvalue', $entity['name']);
@@ -552,10 +537,8 @@ class TranslationTest extends TestCase
 
     public function testConfiguratorGroupNumber(): void
     {
-        $entity = Shopware()->Db()->fetchRow('
-            SELECT * FROM s_article_configurator_groups
-        ');
-
+        $entity = $this->connection->fetchAssociative('SELECT * FROM s_article_configurator_groups');
+        static::assertIsArray($entity);
         $this->numberCreate('configuratorgroup', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('configuratorgroup', (int) $entity['id'], $entity['name']);
         $this->numberDelete('configuratorgroup', $entity['name']);
@@ -564,7 +547,7 @@ class TranslationTest extends TestCase
     public function testConfiguratorOptionNumber(): void
     {
         $entity = $this->getConfiguratorOptionName();
-
+        static::assertIsArray($entity);
         $this->numberCreate('configuratoroption', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('configuratoroption', (int) $entity['id'], $entity['name']);
         $this->numberDelete('configuratoroption', $entity['name']);
@@ -573,7 +556,7 @@ class TranslationTest extends TestCase
     public function testCreateMissingKey(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         unset($data['key']);
         $this->resource->create($data);
     }
@@ -581,7 +564,7 @@ class TranslationTest extends TestCase
     public function testCreateByNumberMissingKey(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         unset($data['key']);
         $this->resource->createByNumber($data);
     }
@@ -589,65 +572,66 @@ class TranslationTest extends TestCase
     public function testUpdateMissingId(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $this->resource->update(0, $data);
     }
 
     public function testUpdateByNumberMissingId(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $this->resource->updateByNumber('', $data);
     }
 
     public function testDeleteMissingId(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $this->resource->delete(0, $data);
     }
 
     public function testDeleteByNumberMissingId(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $this->resource->deleteByNumber('', $data);
     }
 
     public function testDeleteInvalidTranslation(): void
     {
         $this->expectException(NotFoundException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $this->resource->delete(-200, $data);
     }
 
     public function testDeleteByNumberInvalidTranslation(): void
     {
         $this->expectException(NotFoundException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
 
-        $article = Shopware()->Db()->fetchRow('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
-        $data['key'] = $article['articleID'];
+        $product = $this->connection->fetchAssociative('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
+        static::assertIsArray($product);
+        $data['key'] = $product['articleID'];
 
         $this->resource->create($data);
 
         $this->resource->delete($data['key'], $data);
 
-        $this->resource->deleteByNumber($article['ordernumber'], $data);
+        $this->resource->deleteByNumber($product['ordernumber'], $data);
     }
 
     public function testInvalidTypeByNumber(): void
     {
         $this->expectException(CustomValidationException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $data['type'] = 'Invalid';
         $this->resource->createByNumber($data);
     }
 
-    public function testInvalidArticleNumber(): void
+    public function testInvalidProductNumber(): void
     {
         $this->expectException(NotFoundException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $data['key'] = 'Invalid-Order-Number';
         $this->resource->createByNumber($data);
     }
@@ -837,15 +821,15 @@ class TranslationTest extends TestCase
     public function testMissingTypeException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         unset($data['type']);
         $this->resource->create($data);
     }
 
-    public function testMissingshopIdException(): void
+    public function testMissingShopIdException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         unset($data['shopId']);
         $this->resource->create($data);
     }
@@ -853,7 +837,7 @@ class TranslationTest extends TestCase
     public function testMissingDataException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         unset($data['data']);
         $this->resource->create($data);
     }
@@ -861,33 +845,95 @@ class TranslationTest extends TestCase
     public function testMissingDataIsArrayException(): void
     {
         $this->expectException(CustomValidationException::class);
-        $data = $this->getDummyData('article');
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
         $data['data'] = 1;
         $this->resource->create($data);
     }
 
     /**
+     * Override test method of parent class because the translation resource has no "getOne" method
+     *
      * @group disable
      */
     public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException(): void
     {
+        // Do not remove
         static::assertTrue(true);
     }
 
     /**
+     * Override test method of parent class because the translation resource has no "getOne" method
+     *
      * @group disable
      */
     public function testGetOneWithInvalidIdShouldThrowNotFoundException(): void
     {
+        // Do not remove
         static::assertTrue(true);
     }
 
     /**
+     * Override test method of parent class because the translation resource has no "getOne" method
+     *
      * @group disable
      */
     public function testGetOneWithMissingIdShouldThrowParameterMissingException(): void
     {
+        // Do not remove
         static::assertTrue(true);
+    }
+
+    private function createProduct(): int
+    {
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
+
+        $translation = $this->resource->create($data);
+
+        static::assertInstanceOf(Translation::class, $translation);
+        static::assertSame(
+            $data['key'],
+            $translation->getKey(),
+            'Translation key do not match'
+        );
+        static::assertSame(
+            $data['type'],
+            $translation->getType(),
+            'Translation type do not match'
+        );
+        static::assertSame(
+            $data['data'],
+            $this->resource->getTranslationComponent()->unFilterData(
+                self::PRODUCT_TYPE,
+                $translation->getData()
+            ),
+            'Translation data do not match'
+        );
+
+        return $translation->getKey();
+    }
+
+    private function createProductByNumber(): int
+    {
+        $data = $this->getDummyData(self::PRODUCT_TYPE);
+        $product = $this->connection->fetchAssociative('SELECT ordernumber, articleID FROM s_articles_details LIMIT 1');
+        static::assertIsArray($product);
+        $data['key'] = $product['ordernumber'];
+
+        $translation = $this->resource->createByNumber($data);
+
+        static::assertInstanceOf(Translation::class, $translation);
+        static::assertSame((int) $product['articleID'], $translation->getKey(), 'Translation key do not match');
+        static::assertSame($data['type'], $translation->getType(), 'Translation type do not match');
+        static::assertSame(
+            $data['data'],
+            $this->resource->getTranslationComponent()->unFilterData(
+                self::PRODUCT_TYPE,
+                $translation->getData()
+            ),
+            'Translation data do not match'
+        );
+
+        return (int) $product['articleID'];
     }
 
     private function numberCreate(string $type, int $id, string $number): void
@@ -899,7 +945,7 @@ class TranslationTest extends TestCase
 
         static::assertInstanceOf(Translation::class, $translation);
 
-        static::assertEquals($id, $translation->getKey());
+        static::assertSame($id, $translation->getKey());
 
         $translated = $this->resource->getTranslationComponent()->unFilterData(
             $type,
@@ -907,7 +953,7 @@ class TranslationTest extends TestCase
         );
 
         foreach ($data['data'] as $key => $value) {
-            static::assertEquals($value, $translated[$key]);
+            static::assertSame($value, $translated[$key]);
         }
     }
 
@@ -917,12 +963,13 @@ class TranslationTest extends TestCase
         foreach ($data['data'] as &$item) {
             $item .= '-UPDATED';
         }
+        unset($item);
 
         $translation = $this->resource->updateByNumber($number, $data);
 
         static::assertInstanceOf(Translation::class, $translation);
 
-        static::assertEquals($id, $translation->getKey());
+        static::assertSame($id, $translation->getKey());
 
         $translated = $this->resource->getTranslationComponent()->unFilterData(
             $type,
@@ -930,7 +977,7 @@ class TranslationTest extends TestCase
         );
 
         foreach ($data['data'] as $key => $value) {
-            static::assertEquals($value, $translated[$key]);
+            static::assertSame($value, $translated[$key]);
         }
     }
 
@@ -942,7 +989,7 @@ class TranslationTest extends TestCase
     }
 
     /**
-     * @return array{type: string, key: int, data: array, shopId: int}
+     * @return array{type: string, key: int, data: array<string, string>, shopId: int}
      */
     private function getDummyData(string $type, int $shopId = 2): array
     {
@@ -960,7 +1007,7 @@ class TranslationTest extends TestCase
     private function getTypeFields(string $type): array
     {
         switch (strtolower($type)) {
-            case 'article':
+            case self::PRODUCT_TYPE:
                 return [
                     'name' => 'Dummy Translation',
                     'description' => 'Dummy Translation',
@@ -1010,7 +1057,7 @@ class TranslationTest extends TestCase
      */
     private function getFilterGroupName(): array
     {
-        return Shopware()->Db()->fetchRow(
+        $filterOptions = $this->connection->fetchAssociative(
             "SELECT fo.id, CONCAT(f.name, '|', fo.name) as name
              FROM s_filter_options as fo
                 INNER JOIN s_filter_relations as fr
@@ -1019,6 +1066,9 @@ class TranslationTest extends TestCase
                     ON f.id = fr.groupID
              LIMIT 1"
         );
+        static::assertIsArray($filterOptions);
+
+        return $filterOptions;
     }
 
     /**
@@ -1026,7 +1076,7 @@ class TranslationTest extends TestCase
      */
     private function getFilterOptionName(): array
     {
-        return Shopware()->Db()->fetchRow(
+        $filterValues = $this->connection->fetchAssociative(
             "SELECT fv.id, CONCAT(f.name, '|', fo.name, '|', fv.value) as name
              FROM s_filter_values as fv
                  INNER JOIN s_filter_options as fo
@@ -1037,6 +1087,9 @@ class TranslationTest extends TestCase
                      ON f.id = fr.groupID
              LIMIT 1"
         );
+        static::assertIsArray($filterValues);
+
+        return $filterValues;
     }
 
     /**
@@ -1044,12 +1097,15 @@ class TranslationTest extends TestCase
      */
     private function getConfiguratorOptionName(): array
     {
-        return Shopware()->Db()->fetchRow(
+        $configuratorGroups = $this->connection->fetchAssociative(
             "SELECT co.id, CONCAT(cg.name, '|', co.name) as name
              FROM s_article_configurator_groups as cg
                  INNER JOIN s_article_configurator_options as co
                      ON co.group_id = cg.id
              LIMIT 1"
         );
+        static::assertIsArray($configuratorGroups);
+
+        return $configuratorGroups;
     }
 }
