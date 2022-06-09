@@ -432,7 +432,6 @@ class Translation extends Resource implements BatchInterface
             $existing = [];
         } else {
             $existing['data'] = unserialize($existing['data'], ['allowed_classes' => false]);
-            $this->delete($data['key'], $data);
         }
 
         $data = array_replace_recursive(
