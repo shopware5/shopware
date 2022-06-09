@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,6 +32,7 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundleDBAL\ConditionHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\CriteriaAwareInterface;
+use Shopware\Bundle\SearchBundleDBAL\ListingPriceHelper;
 use Shopware\Bundle\SearchBundleDBAL\ListingPriceSwitcher;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\VariantHelperInterface;
@@ -45,10 +48,16 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
 
     private VariantHelperInterface $variantHelper;
 
-    public function __construct(ListingPriceSwitcher $listingPriceSwitcher, VariantHelperInterface $variantHelper)
-    {
+    private ListingPriceHelper $listingPriceHelper;
+
+    public function __construct(
+        ListingPriceSwitcher $listingPriceSwitcher,
+        VariantHelperInterface $variantHelper,
+        ListingPriceHelper $listingPriceHelper
+    ) {
         $this->listingPriceSwitcher = $listingPriceSwitcher;
         $this->variantHelper = $variantHelper;
+        $this->listingPriceHelper = $listingPriceHelper;
     }
 
     /**
@@ -75,7 +84,7 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
         if (!$query->hasState(self::STATE_INCLUDES_PSEUDO_PRICE_VARIANTS)) {
             if (empty($conditions)) {
                 $this->variantHelper->joinVariants($query);
-                $query->leftJoin('allVariants', 's_articles_prices', 'variantPrices', 'variantPrices.articledetailsID = allVariants.id');
+                $this->joinPrices($query, $context);
                 $query->andWhere('variantPrices.pseudoprice > 0');
             } else {
                 $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
@@ -88,5 +97,21 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
     public function setCriteria(Criteria $criteria)
     {
         $this->criteria = $criteria;
+    }
+
+    private function joinPrices(QueryBuilder $query, ShopContextInterface $context): void
+    {
+        $priceTable = $this->listingPriceHelper->getPriceTable($context);
+        $query->innerJoin(
+            'allVariants',
+            '(' . $priceTable->getSQL() . ')',
+            'variantPrices',
+            'variantPrices.articledetailsID = allVariants.id'
+        );
+
+        $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
+        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+            $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
+        }
     }
 }
