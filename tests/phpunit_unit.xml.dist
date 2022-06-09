@@ -9,18 +9,18 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTodoAnnotatedTests="true"
          verbose="true">
-  <coverage includeUncoveredFiles="false">
-    <include>
-      <directory suffix=".php">../engine/Shopware/</directory>
-      <directory suffix=".php">../engine/Library/Enlight/</directory>
-    </include>
-  </coverage>
-  <php>
-    <ini name="error_reporting" value="-1"/>
-  </php>
-  <testsuites>
-    <testsuite name="Unit">
-      <directory>./Unit</directory>
-    </testsuite>
-  </testsuites>
+    <coverage includeUncoveredFiles="false">
+        <include>
+            <directory suffix=".php">../engine/Shopware/</directory>
+            <directory suffix=".php">../engine/Library/Enlight/</directory>
+        </include>
+    </coverage>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>./Unit</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>
