@@ -24,6 +24,7 @@
 
 namespace Shopware\Components;
 
+use Monolog\DateTimeImmutable;
 use Monolog\Logger as BaseLogger;
 
 class Logger extends BaseLogger
@@ -49,10 +50,10 @@ class Logger extends BaseLogger
         $this->log(BaseLogger::DEBUG, $label, ['trace' => true]);
     }
 
-    public function addRecord(int $level, string $message, array $context = []): bool
+    public function addRecord(int $level, string $message, array $context = [], DateTimeImmutable $datetime = null): bool
     {
         $message = str_replace(['[', ']'], ['(', ')'], $message);
 
-        return parent::addRecord($level, $message, $context);
+        return parent::addRecord($level, $message, $context, $datetime);
     }
 }
