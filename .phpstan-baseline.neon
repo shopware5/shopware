@@ -26581,56 +26581,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Supplier.php
 
 		-
-			message: "#^Cannot call method getOffset\\(\\) on DateTimeZone\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getConfigListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getFileListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getOptimizersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getPathListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getTimezoneAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:getVersionListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Systeminfo\\:\\:infoAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Parameter \\#1 \\$timezone of function timezone_open expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
-			message: "#^Parameter \\#2 \\$timezone of class DateTime constructor expects DateTimeZone\\|null, DateTimeZone\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Systeminfo.php
-
-		-
 			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Shop\\\\Template\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Theme.php
@@ -43924,36 +43874,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SupplierTest\\:\\:\\$supplierData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/SupplierTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Backend/SysteminfoTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SysteminfoTest\\:\\:testGetConfigList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/SysteminfoTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SysteminfoTest\\:\\:testGetFileList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/SysteminfoTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SysteminfoTest\\:\\:testGetPathList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/SysteminfoTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SysteminfoTest\\:\\:testGetVersionList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/SysteminfoTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\|string\\|null given\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Backend/SysteminfoTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"

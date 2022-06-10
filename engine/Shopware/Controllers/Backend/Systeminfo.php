@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,6 +24,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
+use Shopware\Bundle\MediaBundle\OptimizerService;
 use Shopware\Components\CSRFWhitelistAware;
 
 /**
@@ -46,7 +50,7 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
     public function preDispatch()
     {
         if (!\in_array($this->Request()->getActionName(), ['index', 'load', 'info'])) {
-            $this->Front()->Plugins()->Json()->setRenderer(true);
+            $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
 
@@ -55,14 +59,16 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
      * The array also contains a status, whether the minimum requirements are met
      * The encoder-configs are excluded, because they are needed in another store
      * getEncoderAction loads those two encoder-configs
+     *
+     * @return void
      */
     public function getConfigListAction()
     {
         $result = $this->get('shopware.requirements')->toArray();
 
-        foreach ($result['checks'] as $key => &$config) {
+        foreach ($result['checks'] as $key => $config) {
             // Those configs mustn't be displayed in the grid
-            if ($config['name'] == 'mod_rewrite') {
+            if ($config['name'] === 'mod_rewrite') {
                 unset($result['checks'][$key]);
             }
         }
@@ -71,6 +77,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 
     /**
      * Function to get all necessary paths and a status, whether the paths are available
+     *
+     * @return void
      */
     public function getPathListAction()
     {
@@ -80,6 +88,8 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
 
     /**
      * Function to get all necessary files and the status, whether those files match with the original Shopware-Files
+     *
+     * @return void
      */
     public function getFileListAction()
     {
@@ -94,71 +104,80 @@ class Shopware_Controllers_Backend_Systeminfo extends Shopware_Controllers_Backe
         $skipList = [
         ];
 
-        $list = new Shopware_Components_Check_File($fileName, Shopware()->DocPath(), $skipList);
+        $list = new Shopware_Components_Check_File(
+            $fileName,
+            $this->container->getParameter('shopware.app.rootDir'),
+            $skipList
+        );
 
         $this->View()->assign(['success' => true, 'data' => $list->toArray()]);
     }
 
     /**
      * Function to get all plugins and its version.
+     *
+     * @return void
      */
     public function getVersionListAction()
     {
-        $select = Shopware()->Db()->select()->from(
-            's_core_plugins',
-            ['version', 'name', 'namespace', 'source']
-        );
-
-        $rows = Shopware()->Db()->fetchAll($select);
+        $rows = $this->get(Connection::class)->createQueryBuilder()
+            ->select(['version', 'name', 'namespace', 'source'])
+            ->from('s_core_plugins')
+            ->execute()
+            ->fetchAllAssociative();
 
         foreach ($rows as $key => $row) {
             $rows[$key]['name'] = $row['namespace'] . '/' . $row['source'] . '/' . $row['name'];
         }
 
-        array_unshift($rows, ['name' => 'Shopware', 'version' => Shopware()->Config()->get('Version')]);
+        array_unshift($rows, ['name' => 'Shopware', 'version' => $this->get('config')->get('Version')]);
 
         $this->View()->assign(['success' => true, 'data' => $rows]);
     }
 
     /**
      * Function to get timezone diff
+     *
+     * @return void
      */
     public function getTimezoneAction()
     {
+        $connection = $this->get(Connection::class);
         $offset = 0;
+        $timeZone = '';
         try {
-            $sql = <<<'SQL'
-                SELECT timeZones.timeZone
-                FROM (
-                    SELECT @@SESSION.time_zone AS timeZone
-                    UNION
-                    SELECT @@system_time_zone AS timeZone
-                ) AS timeZones
-                WHERE timeZone != 'SYSTEM'
-                LIMIT 1
-SQL;
+            $timeZone = $connection->executeQuery('SELECT @@SESSION.time_zone')->fetchOne();
 
-            $timezone = $this->container->get(\Doctrine\DBAL\Connection::class)
-                ->query($sql)
-                ->fetchColumn(0);
+            if ($timeZone === 'SYSTEM') {
+                $timeZone = $connection->executeQuery('SELECT @@system_time_zone')->fetchOne();
+            }
+        } catch (PDOException $e) {
+        }
 
-            if (\in_array($timezone[0], ['-', '+'], true)) {
-                $databaseZone = new DateTimeZone($timezone);
+        if (!empty($timeZone)) {
+            $databaseZone = null;
+            if (\in_array($timeZone[0], ['-', '+'], true)) {
+                $databaseZone = new DateTimeZone($timeZone);
             } else {
-                $databaseZone = timezone_open(timezone_name_from_abbr($timezone));
+                $timeZoneFromAbbr = timezone_name_from_abbr($timeZone);
+                if (\is_string($timeZoneFromAbbr)) {
+                    $databaseZone = timezone_open($timeZoneFromAbbr);
+                    if (!$databaseZone instanceof DateTimeZone) {
+                        $databaseZone = null;
+                    }
+                }
             }
 
             $phpZone = timezone_open(date_default_timezone_get());
-            $databaseTime = new DateTime('now', $databaseZone);
-
-            if (!empty($timezone)) {
+            if ($databaseZone instanceof DateTimeZone && $phpZone instanceof DateTimeZone) {
+                $databaseTime = new DateTime('now', $databaseZone);
                 $offset = abs($databaseZone->getOffset(new DateTime()) - $phpZone->getOffset($databaseTime));
             }
-        } catch (\PDOException $e) {
         }
+
         if (empty($offset)) {
             $sql = 'SELECT UNIX_TIMESTAMP()-' . time();
-            $offset = $this->container->get(\Doctrine\DBAL\Connection::class)->query($sql)->fetchColumn(0);
+            $offset = (int) $connection->executeQuery($sql)->fetchOne();
         }
 
         $this->View()->assign(['success' => true, 'offset' => $offset < 60 ? 0 : round($offset / 60)]);
@@ -166,10 +185,12 @@ SQL;
 
     /**
      * Function to display the phpinfo
+     *
+     * @return void
      */
     public function infoAction()
     {
-        Shopware()->Front()->Plugins()->ViewRenderer()->setNoRender();
+        $this->get('front')->Plugins()->ViewRenderer()->setNoRender();
         $_COOKIE = [];
         $_REQUEST = [];
         $_SERVER['HTTP_COOKIE'] = null;
@@ -179,9 +200,12 @@ SQL;
         phpinfo();
     }
 
+    /**
+     * @return void
+     */
     public function getOptimizersAction()
     {
-        $optimizers = $this->get(\Shopware\Bundle\MediaBundle\OptimizerService::class)->getOptimizers();
+        $optimizers = $this->get(OptimizerService::class)->getOptimizers();
         $optimizerResult = [];
 
         foreach ($optimizers as $optimizer) {
@@ -197,11 +221,6 @@ SQL;
         $this->View()->assign('total', \count($optimizerResult));
     }
 
-    /**
-     * Returns a list with actions which should not be validated for CSRF protection
-     *
-     * @return string[]
-     */
     public function getWhitelistedCSRFActions()
     {
         return [
