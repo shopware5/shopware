@@ -657,11 +657,6 @@ class Article extends Resource implements BatchInterface
         }
     }
 
-    /**
-     * Returns the primary ID of any data set.
-     *
-     * {@inheritdoc}
-     */
     public function getIdByData($data)
     {
         $id = null;

@@ -428,11 +428,6 @@ class Variant extends Resource implements BatchInterface
         return $mapping;
     }
 
-    /**
-     * Returns the primary ID of any data set.
-     *
-     * {@inheritdoc}
-     */
     public function getIdByData($data)
     {
         $id = null;

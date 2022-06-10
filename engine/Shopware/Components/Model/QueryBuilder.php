@@ -164,7 +164,7 @@ class QueryBuilder extends BaseQueryBuilder
      *      )));
      * </code>
      *
-     * @param array<string, string>|array<array{property: string, value: mixed, expression?: string, operator?: string|null}> $filter
+     * @param array<string, mixed>|array<array{property: string, value: mixed, expression?: string, operator?: string|null}> $filter
      *
      * @return QueryBuilder
      */
