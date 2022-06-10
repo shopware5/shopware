@@ -11,6 +11,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Additions
 
 * Added missing dependency `doctrine/annotations`, which was an indirect dependency before
+* Added new optional parameter `dateTime` to `\Shopware\Components\Logger::addRecord` method to be compatible with parent `\Monolog\Logger::addRecord` method
 
 ### Changes
 
@@ -28,7 +29,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `guzzlehttp/guzzle` to version 7.4.4
 * Updated `guzzlehttp/psr7` to version 2.3.0
 * Updated `laminas/laminas-escaper` to version 2.10.0
-* Updated `monolog/monolog` to version 2.6.0
+* Updated `monolog/monolog` to version 2.7.0
 * Updated `mpdf/mpdf` to version 8.1.1
 * Updated `phpunit/phpunit` to version 9.5.20
 * Updated `symfony/browser-kit` to version 4.4.37
