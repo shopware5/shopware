@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\SitemapBundle\Provider;
 
+use DateTimeImmutable;
 use Shopware\Bundle\SitemapBundle\Service\ConfigHandler;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
@@ -60,7 +61,7 @@ class CustomUrlProvider implements UrlProviderInterface
 
             $urls[] = new Url(
                 $sitemapCustomUrl['url'],
-                $sitemapCustomUrl['lastMod'],
+                new DateTimeImmutable($sitemapCustomUrl['lastMod']),
                 $sitemapCustomUrl['changeFreq'],
                 'custom',
                 null,
