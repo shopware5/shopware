@@ -41091,31 +41091,6 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundleDBAL/SearchIndexerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:getCustomUrlProvider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CustomUrlProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:testGetUrlsReturnsAllUrlsForShop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CustomUrlProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:testGetUrlsReturnsAllUrlsForShopIdZero\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CustomUrlProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:testGetUrlsReturnsNoUrls\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CustomUrlProviderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\Provider\\\\CustomUrlProviderTest\\:\\:testGetUrlsReturnsNoUrlsWrongShopId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SitemapBundle/Provider/CustomUrlProviderTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SitemapBundle\\\\SitemapLockTest\\:\\:testLocks\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SitemapBundle/SitemapLockTest.php

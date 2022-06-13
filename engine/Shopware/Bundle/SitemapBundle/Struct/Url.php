@@ -30,51 +30,29 @@ class Url
 {
     /**
      * The Url
-     *
-     * @var string
      */
-    private $loc;
+    private string $loc;
 
     /**
      * Date and time of last modification
-     *
-     * @var DateTimeInterface
      */
-    private $lastmod;
+    private DateTimeInterface $lastmod;
 
     /**
      * Frequency of changing
-     *
-     * @var string
      */
-    private $changefreq;
+    private string $changefreq;
 
     /**
      * Relative priority for this URL
-     *
-     * @var float
      */
-    private $priority;
+    private float $priority;
 
-    /**
-     * @var string
-     */
-    private $resource;
+    private string $resource;
 
-    /**
-     * @var int
-     */
-    private $identifier;
+    private int $identifier;
 
-    /**
-     * @param string            $loc
-     * @param DateTimeInterface $lastmod
-     * @param string            $changefreq
-     * @param string            $resource
-     * @param int|null          $identifier
-     * @param float             $priority
-     */
-    public function __construct($loc, $lastmod, $changefreq, $resource, $identifier, $priority = 0.5)
+    public function __construct(string $loc, DateTimeInterface $lastmod, string $changefreq, string $resource, ?int $identifier, float $priority = 0.5)
     {
         $this->loc = $loc;
         $this->lastmod = $lastmod;
