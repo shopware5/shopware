@@ -30221,11 +30221,6 @@ parameters:
 			path: engine/Shopware/Core/sExport.php
 
 		-
-			message: "#^Method sExport\\:\\:sGetPremiumDispatchSurcharge\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
-
-		-
 			message: "#^Parameter \\#1 \\$search of function str_replace expects array\\|string, string\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php

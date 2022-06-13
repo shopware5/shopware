@@ -49,6 +49,7 @@ use Shopware\Components\Validator\EmailValidator;
 use Shopware\Components\Validator\EmailValidatorInterface;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Mail\Mail;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 
@@ -3045,7 +3046,7 @@ class sAdmin implements \Enlight_Hook
         ]);
 
         $basket = $this->sGetDispatchBasket(empty($country['id']) ? null : $country['id']);
-        if (empty($basket) || $basket['count_article'] == 0) {
+        if (empty($basket) || (int) $basket['count_article'] === 0) {
             return false;
         }
         $country = $this->sGetCountry($basket['countryID']);
@@ -3129,11 +3130,11 @@ class sAdmin implements \Enlight_Hook
 
         if (empty($dispatch['calculation'])) {
             $from = round($basket['weight'], 3);
-        } elseif ($dispatch['calculation'] == 1) {
+        } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_PRICE) {
             $from = round($basket['amount'], 2);
-        } elseif ($dispatch['calculation'] == 2) {
+        } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
             $from = round($basket['count_article']);
-        } elseif ($dispatch['calculation'] == 3) {
+        } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_CUSTOM) {
             $from = round((float) $basket['calculation_value_' . $dispatch['id']], 2);
         } else {
             return false;
@@ -3171,7 +3172,7 @@ class sAdmin implements \Enlight_Hook
         $result['brutto'] = round($result['brutto'], 2);
         if (
             !empty($payment['surcharge'])
-            && $dispatch['surcharge_calculation'] != 2
+            && (int) $dispatch['surcharge_calculation'] !== Dispatch::SURCHARGE_CALCULATION_NEVER
             && (empty($basket['shippingfree']) || empty($dispatch['surcharge_calculation']))
         ) {
             $result['surcharge'] = $payment['surcharge'];
@@ -4008,7 +4009,7 @@ SQL;
         foreach ($dispatches as $dispatch) {
             if (empty($dispatch['calculation'])) {
                 $from = round((float) $basket['weight'], 3);
-            } elseif ($dispatch['calculation'] == 1) {
+            } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_PRICE) {
                 if (
                     ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
                     || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
@@ -4017,9 +4018,9 @@ SQL;
                 } else {
                     $from = round((float) $basket['amount'], 2);
                 }
-            } elseif ($dispatch['calculation'] == 2) {
+            } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
                 $from = (int) $basket['count_article'];
-            } elseif ($dispatch['calculation'] == 3) {
+            } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_CUSTOM) {
                 $from = (int) $basket['calculation_value_' . $dispatch['id']];
             } else {
                 continue;
@@ -4147,7 +4148,7 @@ SQL;
         $payment['surcharge'] = round($payment['surcharge'] * $currencyFactor, 2);
 
         // Fixed surcharge
-        if (!empty($payment['surcharge']) && (empty($dispatch) || $dispatch['surcharge_calculation'] == 3)) {
+        if (!empty($payment['surcharge']) && (empty($dispatch) || (int) $dispatch['surcharge_calculation'] === Dispatch::SURCHARGE_CALCULATION_AS_CART_ITEM)) {
             $surcharge = round($payment['surcharge'], 2);
             $payment['surcharge'] = 0;
 
@@ -4171,7 +4172,7 @@ SQL;
         }
 
         // Percentage surcharge
-        if (!empty($payment['debit_percent']) && (empty($dispatch) || $dispatch['surcharge_calculation'] != 2)) {
+        if (!empty($payment['debit_percent']) && (empty($dispatch) || (int) $dispatch['surcharge_calculation'] !== Dispatch::SURCHARGE_CALCULATION_NEVER)) {
             $amount = (float) $this->db->fetchOne(
                 'SELECT SUM(quantity*price) AS amount
                 FROM s_order_basket
