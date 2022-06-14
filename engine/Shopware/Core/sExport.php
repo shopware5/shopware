@@ -22,6 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
@@ -34,6 +35,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Media\Repository;
@@ -137,6 +139,8 @@ class sExport implements Enlight_Hook
 
     private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
 
+    private Connection $connection;
+
     private Shopware_Components_Config $config;
 
     private ConfiguratorServiceInterface $configuratorService;
@@ -150,13 +154,15 @@ class sExport implements Enlight_Hook
         ContextServiceInterface $contextService = null,
         Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         Shopware_Components_Config $config = null,
-        ConfiguratorServiceInterface $configuratorService = null
+        ConfiguratorServiceInterface $configuratorService = null,
+        Connection $connection = null
     ) {
         $container = Shopware()->Container();
 
         $this->contextService = $contextService ?: $container->get(ContextServiceInterface::class);
         $this->additionalTextService = $container->get(AdditionalTextServiceInterface::class);
         $this->db = $db ?: $container->get('db');
+        $this->connection = $connection ?: $container->get(Connection::class);
         $this->config = $config ?: $container->get(Shopware_Components_Config::class);
         $this->configuratorService = $configuratorService ?: $container->get(ConfiguratorServiceInterface::class);
         $this->cdnConfig = (array) $container->getParameter('shopware.cdn');
@@ -1699,7 +1705,7 @@ class sExport implements Enlight_Hook
     }
 
     /**
-     * @param array $basket
+     * @param array<string, mixed> $basket
      *
      * @return float|false
      */
@@ -1709,8 +1715,8 @@ class sExport implements Enlight_Hook
             return false;
         }
 
-        $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=2 AND bind_sql IS NOT NULL';
-        $statements = $this->db->fetchPairs($sql);
+        $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=:type AND active=1 AND bind_sql IS NOT NULL';
+        $statements = $this->connection->executeQuery($sql, ['type' => Dispatch::TYPE_SURCHARGE])->fetchAllKeyValue();
 
         $sql_where = '';
         foreach ($statements as $dispatchID => $statement) {
@@ -1720,7 +1726,7 @@ class sExport implements Enlight_Hook
         }
         $sql_basket = [];
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->db->quote($value) . " as `$key`";
+            $sql_basket[] = $this->connection->quote($value) . " as `$key`";
         }
         $sql_basket = implode(', ', $sql_basket);
 
@@ -1787,30 +1793,28 @@ class sExport implements Enlight_Hook
             $sql_where
             GROUP BY d.id
         ";
-        $dispatches = $this->db->fetchAll($sql);
+        $dispatches = $this->connection->fetchAllAssociative($sql);
         $surcharge = 0;
         if (!empty($dispatches)) {
             foreach ($dispatches as $dispatch) {
                 if (empty($dispatch['calculation'])) {
                     $from = round($basket['weight'], 3);
-                } elseif ($dispatch['calculation'] == 1) {
+                } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_PRICE) {
                     $from = round($basket['amount'], 2);
-                } elseif ($dispatch['calculation'] == 2) {
+                } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
                     $from = round($basket['count_article']);
-                } elseif ($dispatch['calculation'] == 3) {
+                } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_CUSTOM) {
                     $from = round($basket['calculation_value_' . $dispatch['id']], 2);
                 } else {
                     continue;
                 }
-                $sql = "
-                SELECT `value` , `factor`
-                FROM `s_premium_shippingcosts`
-                WHERE `from` <= $from
-                AND `dispatchID` = {$dispatch['id']}
-                ORDER BY `from` DESC
-                LIMIT 1
-            ";
-                $result = $this->db->fetchRow($sql);
+                $sql = 'SELECT `value` , `factor`
+                        FROM `s_premium_shippingcosts`
+                        WHERE `from` <= $from
+                        AND `dispatchID` = :dispatchId
+                        ORDER BY `from` DESC
+                        LIMIT 1';
+                $result = $this->connection->fetchAssociative($sql, ['dispatchId' => $dispatch['id']]);
                 if (!$result) {
                     continue;
                 }
@@ -1856,11 +1860,11 @@ class sExport implements Enlight_Hook
 
         if (empty($dispatchData['calculation'])) {
             $from = round($basket['weight'], 3);
-        } elseif ($dispatchData['calculation'] == 1) {
+        } elseif ((int) $dispatchData['calculation'] === Dispatch::CALCULATION_PRICE) {
             $from = round($basket['amount'], 2);
-        } elseif ($dispatchData['calculation'] == 2) {
+        } elseif ((int) $dispatchData['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
             $from = round($basket['count_article']);
-        } elseif ($dispatchData['calculation'] == 3) {
+        } elseif ((int) $dispatchData['calculation'] === Dispatch::CALCULATION_CUSTOM) {
             $from = round($basket['calculation_value_' . $dispatchData['id']], 2);
         } else {
             return false;
@@ -1893,7 +1897,7 @@ class sExport implements Enlight_Hook
         }
         $result['shippingcosts'] *= $this->sCurrency['factor'];
         $result['shippingcosts'] = round($result['shippingcosts'], 2);
-        if (!empty($payment['surcharge']) && $dispatchData['surcharge_calculation'] != 2 && (empty($article['shippingfree']) || empty($dispatchData['surcharge_calculation']))) {
+        if (!empty($payment['surcharge']) && (int) $dispatchData['surcharge_calculation'] !== Dispatch::SURCHARGE_CALCULATION_NEVER && (empty($article['shippingfree']) || empty($dispatchData['surcharge_calculation']))) {
             $result['shippingcosts'] += $payment['surcharge'];
         }
 

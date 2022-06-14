@@ -187,3 +187,7 @@ parameters:
 
         # This is a bleeding edge feature and not working well since now. See https://github.com/phpstan/phpstan-doctrine/issues/332
         - '#Parameter .* of method Doctrine\\ORM\\.*::.*\(\) expects .*literal-string.* given#'
+
+        - # Doctrine type is integer. PHPStan allows only specific values
+            message: '#Property Shopware\\Models\\Dispatch\\Dispatch::\$.* type mapping mismatch: database can contain int but property expects 0\|1\|2\|3#'
+            path: engine/Shopware/Models/Dispatch/Dispatch.php

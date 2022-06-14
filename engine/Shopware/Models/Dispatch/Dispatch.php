@@ -56,6 +56,21 @@ use Shopware\Models\Payment\Payment;
  */
 class Dispatch extends ModelEntity
 {
+    public const TYPE_STANDARD = 0;
+    public const TYPE_ALTERNATIVE = 1;
+    public const TYPE_SURCHARGE = 2;
+    public const TYPE_DISCOUNT = 3;
+
+    public const CALCULATION_WEIGHT = 0;
+    public const CALCULATION_PRICE = 1;
+    public const CALCULATION_NUMBER_OF_PRODUCTS = 2;
+    public const CALCULATION_CUSTOM = 3;
+
+    public const SURCHARGE_CALCULATION_ALWAYS = 0;
+    public const SURCHARGE_CALCULATION_EXCLUDE_SHIPPING_FREE_PRODUCTS = 1;
+    public const SURCHARGE_CALCULATION_NEVER = 2;
+    public const SURCHARGE_CALCULATION_AS_CART_ITEM = 3;
+
     /**
      * INVERSE SIDE
      *
@@ -100,9 +115,9 @@ class Dispatch extends ModelEntity
      *  - Standard Shipping == 0
      *  - Alternate Shipping == 1
      *  - Surcharge Shipping == 2
-     *  - Reduction Shipping == 3
+     *  - Discount Shipping == 3
      *
-     * @var int
+     * @var self::TYPE_*
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
@@ -149,10 +164,10 @@ class Dispatch extends ModelEntity
      * Known types:
      *  - 0 == Weight
      *  - 1 == Price
-     *  - 2 == Number of articles
-     *  - 3 == Own Calculation
+     *  - 2 == Number of products
+     *  - 3 == Custom calculation
      *
-     * @var int
+     * @var self::CALCULATION_*
      *
      * @ORM\Column(name="calculation", type="integer", nullable=false)
      */
@@ -162,11 +177,11 @@ class Dispatch extends ModelEntity
      * Type of the calculation
      * Known Types:
      *  - 0 == Always
-     *  - 1 == Exclude dispatch fee free products
+     *  - 1 == Exclude shipping free products
      *  - 2 == Never
      *  - 3 == Display as basket item
      *
-     * @var int
+     * @var self::SURCHARGE_CALCULATION_*
      *
      * @ORM\Column(name="surcharge_calculation", type="integer", nullable=false)
      */
@@ -445,7 +460,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param int $type
+     * @param self::TYPE_* $type
      *
      * @return Dispatch
      */
@@ -457,7 +472,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return self::TYPE_*
      */
     public function getType()
     {
@@ -545,7 +560,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param int $calculation
+     * @param self::CALCULATION_* $calculation
      *
      * @return Dispatch
      */
@@ -557,7 +572,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return self::CALCULATION_*
      */
     public function getCalculation()
     {
@@ -565,7 +580,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @param int $surchargeCalculation
+     * @param self::SURCHARGE_CALCULATION_* $surchargeCalculation
      *
      * @return Dispatch
      */
@@ -577,7 +592,7 @@ class Dispatch extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return self::SURCHARGE_CALCULATION_*
      */
     public function getSurchargeCalculation()
     {

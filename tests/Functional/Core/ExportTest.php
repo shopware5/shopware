@@ -31,7 +31,9 @@ use Enlight_Template_Manager;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use sExport;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
@@ -151,6 +153,50 @@ class ExportTest extends TestCase
         $result = $db->query($sql)->fetchAll()[0];
 
         static::assertArrayHasKey('mainnumber', $result);
+    }
+
+    public function testsGetPremiumDispatchSurcharge(): void
+    {
+        $testSurcharge = new Dispatch();
+        $testSurcharge->setName('Test surcharge');
+        $testSurcharge->setDescription('');
+        $testSurcharge->setComment('');
+        $testSurcharge->setPosition(0);
+        $testSurcharge->setCalculation(Dispatch::CALCULATION_WEIGHT);
+        $testSurcharge->setSurchargeCalculation(Dispatch::SURCHARGE_CALCULATION_ALWAYS);
+        $testSurcharge->setTaxCalculation(0);
+        $testSurcharge->setBindLastStock(0);
+
+        $testSurcharge->setType(Dispatch::TYPE_SURCHARGE);
+        $testSurcharge->setActive(false);
+        $testSurcharge->setBindSql('foo=bar');
+
+        $this->getContainer()->get(ModelManager::class)->persist($testSurcharge);
+        $this->getContainer()->get(ModelManager::class)->flush($testSurcharge);
+
+        $cart = [
+            'instock' => '1',
+            'stockmin' => '1',
+            'laststock' => '0',
+            'weight' => '0.000',
+            'count_article' => '1',
+            'shippingfree' => '0',
+            'amount' => '19.99',
+            'max_tax' => '19.00',
+            'userID' => null,
+            'has_topseller' => '0',
+            'has_comment' => '',
+            'has_esd' => '0',
+            'articleID' => '2',
+            'countryID' => '2',
+            'paymentID' => '5',
+            'customergroupID' => '1',
+            'multishopID' => '1',
+            'sessionID' => null,
+        ];
+        $surcharge = $this->export->sGetPremiumDispatchSurcharge($cart);
+
+        static::assertSame(0.0, $surcharge);
     }
 
     private function generateFeed(int $feedId): string
