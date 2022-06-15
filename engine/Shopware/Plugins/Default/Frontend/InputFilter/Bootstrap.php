@@ -22,11 +22,16 @@
  * our trademarks remain entirely with us.
  */
 
+use voku\helper\AntiXSS;
+
 /**
  * Shopware InputFilter Plugin
  */
 class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
+    public const ALLOWED_ATTRIBUTES_KEY = 'allowedAttributes';
+    public const ALLOWED_HTML_TAGS_KEY = 'allowedHtmlTags';
+
     /**
      * @var string
      */
@@ -36,6 +41,50 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
      * @var string
      */
     public $xssRegex = 'javascript:|src\s*=|\bon[a-z]+\s*=|style\s*=|\bdata-\w+(?!\.)\b\s?=?';
+
+    /**
+     * @var array<string, array<string>>
+     */
+    public array $stripTagsWhiteList = [
+        'frontend/account/login' => [
+            'password',
+        ],
+        'frontend/account/savepassword' => [
+            'password',
+            'passwordConfirmation',
+            'currentPassword',
+        ],
+        'frontend/register/ajax_validate_email' => [
+            'password',
+        ],
+        'frontend/register/ajax_validate_password' => [
+            'password',
+        ],
+        'frontend/register/saveregister' => [
+            'password',
+        ],
+        'frontend/account/resetpassword' => [
+            'password',
+            'passwordConfirmation',
+        ],
+        'frontend/account/saveemail' => [
+            'currentPassword',
+        ],
+    ];
+
+    /**
+     * @var array<string, array<string, array<string, array<string>>>>
+     *
+     * usage:
+     *
+     * 'frontend/account/login' => [
+     *      'password' => [
+     *           self::ALLOWED_ATTRIBUTES_KEY => [],
+     *           self::ALLOWED_HTML_TAGS_KEY => []
+     *       ]
+     *   ]
+     */
+    public array $allowanceList = [];
 
     /**
      * @var string
@@ -102,42 +151,11 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             $regex[] = $config->own_filter;
         }
 
-        if (empty($regex)) {
-            return;
-        }
-
         $regex = '#' . implode('|', $regex) . '#msi';
 
         $userParams = $request->getUserParams();
         $process = [
             &$_GET, &$_POST, &$_COOKIE, &$_REQUEST, &$_SERVER, &$userParams,
-        ];
-
-        $whiteList = [
-            'frontend/account/login' => [
-                'password',
-            ],
-            'frontend/account/savepassword' => [
-                'password',
-                'passwordConfirmation',
-                'currentPassword',
-            ],
-            'frontend/register/ajax_validate_email' => [
-                'password',
-            ],
-            'frontend/register/ajax_validate_password' => [
-                'password',
-            ],
-            'frontend/register/saveregister' => [
-                'password',
-            ],
-            'frontend/account/resetpassword' => [
-                'password',
-                'passwordConfirmation',
-            ],
-            'frontend/account/saveemail' => [
-                'currentPassword',
-            ],
         ];
 
         $route = strtolower(
@@ -147,14 +165,17 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             )
         );
 
-        $whiteList = \array_key_exists($route, $whiteList) ? $whiteList[$route] : [];
+        $stripTagsWhiteList = \array_key_exists($route, $this->stripTagsWhiteList) ? $this->stripTagsWhiteList[$route] : [];
+        $allowanceList = \array_key_exists($route, $this->allowanceList) ? $this->allowanceList[$route] : [];
         foreach ($process as $key => $val) {
             foreach ($val as $k => $v) {
                 unset($process[$key][$k]);
-                $stripTags = \in_array($k, $whiteList) ? false : $stripTagsConf;
+                $stripTags = \in_array($k, $stripTagsWhiteList) ? false : $stripTagsConf;
+                $allowedHtmlTags = \array_key_exists($k, $allowanceList) ? $allowanceList[$k][self::ALLOWED_HTML_TAGS_KEY] : [];
+                $allowedAttributes = \array_key_exists($k, $allowanceList) ? $allowanceList[$k][self::ALLOWED_ATTRIBUTES_KEY] : [];
 
                 if (\is_string($k)) {
-                    $filteredKey = self::filterValue($k, $regex, $stripTags);
+                    $filteredKey = self::filterValue($k, $regex, $stripTags, $allowedHtmlTags, $allowedAttributes);
                 } else {
                     $filteredKey = $k;
                 }
@@ -164,12 +185,12 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
                 }
 
                 if (\is_array($v)) {
-                    $process[$key][$filteredKey] = self::filterArrayValue($v, $regex, $stripTags);
+                    $process[$key][$filteredKey] = self::filterArrayValue($v, $regex, $stripTags, $allowedHtmlTags, $allowedAttributes);
                     continue;
                 }
 
                 if (\is_string($v)) {
-                    $process[$key][$filteredKey] = self::filterValue($v, $regex, $stripTags);
+                    $process[$key][$filteredKey] = self::filterValue($v, $regex, $stripTags, $allowedHtmlTags, $allowedAttributes);
                     continue;
                 }
 
@@ -188,13 +209,15 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
     /**
      * Filter value by regex
      *
-     * @param string $value
-     * @param string $regex
-     * @param bool   $stripTags
+     * @param string        $value
+     * @param string        $regex
+     * @param bool          $stripTags
+     * @param array<string> $allowedHtmlTags
+     * @param array<string> $allowedAttributes
      *
      * @return string|null
      */
-    public static function filterValue($value, $regex, $stripTags = true)
+    public static function filterValue($value, $regex, $stripTags = true, array $allowedHtmlTags = [], array $allowedAttributes = [])
     {
         if (empty($value)) {
             return $value;
@@ -208,22 +231,29 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             return null;
         }
 
-        return $value;
+        $antiXss = new AntiXSS();
+        $antiXss->removeEvilAttributes($allowedHtmlTags);
+        $antiXss->removeEvilHtmlTags($allowedAttributes);
+        $value = $antiXss->xss_clean($value);
+
+        return \str_replace(['&lt;', '&gt;'], ['<', '>'], $value);
     }
 
     /**
      * @param array<string|int, mixed> $value
+     * @param array<string>            $allowedHtmlTags
+     * @param array<string>            $allowedAttributes
      *
      * @return array<string|int, mixed>|null
      */
-    public static function filterArrayValue(array $value, string $regex, bool $stripTags = true): ?array
+    public static function filterArrayValue(array $value, string $regex, bool $stripTags = true, array $allowedHtmlTags = [], array $allowedAttributes = []): ?array
     {
         $newReturn = [];
         foreach ($value as $valueKey => $valueValue) {
             if (\is_int($valueKey)) {
                 $filteredKey = $valueKey;
             } else {
-                $filteredKey = self::filterValue($valueKey, $regex, $stripTags);
+                $filteredKey = self::filterValue($valueKey, $regex, $stripTags, $allowedHtmlTags, $allowedAttributes);
             }
 
             if ($filteredKey === '' || $filteredKey === null) {
@@ -237,7 +267,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
             }
 
             if (\is_string($valueValue)) {
-                $filteredValue = self::filterValue($valueValue, $regex, $stripTags);
+                $filteredValue = self::filterValue($valueValue, $regex, $stripTags, $allowedHtmlTags, $allowedAttributes);
             }
 
             $newReturn[$filteredKey] = $filteredValue;

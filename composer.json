@@ -84,13 +84,16 @@
         "symfony/serializer": "~5.4.0",
         "symfony/validator": "~4.4.34",
         "symfony/web-link": "~4.4.27",
+        "voku/anti-xss": "~4.1.39",
         "wikimedia/less.php": "3.1.0"
     },
     "replace": {
         "paragonie/random_compat": "*",
         "symfony/polyfill-ctype": "*",
         "symfony/polyfill-php72": "*",
-        "symfony/polyfill-php73": "*"
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-mbstring": "*"
     },
     "suggest": {
         "ext-apcu": "*",
