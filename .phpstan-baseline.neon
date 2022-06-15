@@ -39901,11 +39901,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
 		-
-			message: "#^PHPDoc tag @return has invalid value \\(\\)\\: Unexpected token \"\\\\n     \", expected type at offset 167$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Frontend_RouterRewrite_Bootstrap\\:\\:onPreDispatch\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/RouterRewrite/Bootstrap.php

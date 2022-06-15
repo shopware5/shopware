@@ -37,6 +37,7 @@ use Shopware\Bundle\StaticContentBundle\Exception\EsdNotFoundException;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Captcha\CaptchaValidator;
+use Shopware\Components\Captcha\NoCaptcha;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
@@ -49,8 +50,6 @@ use Symfony\Component\Form\FormInterface;
 
 class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 {
-    private const DEFAULT_CAPTCHA_SETTING = 'nocaptcha';
-
     private const CONFIG_PASSWORD_RESET_CAPTCHA = 'passwordResetCaptcha';
 
     /**
@@ -488,7 +487,7 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
     public function sendResetPasswordConfirmationMail($email)
     {
         $snippets = Shopware()->Snippets()->getNamespace('frontend/account/password');
-        if ($this->config->get(self::CONFIG_PASSWORD_RESET_CAPTCHA) !== self::DEFAULT_CAPTCHA_SETTING) {
+        if ($this->config->get(self::CONFIG_PASSWORD_RESET_CAPTCHA) !== NoCaptcha::CAPTCHA_METHOD) {
             if (!empty($this->config->get('CaptchaColor'))) {
                 if (!$this->captchaValidator->validateByName($this->config->get(self::CONFIG_PASSWORD_RESET_CAPTCHA), $this->Request())) {
                     return [

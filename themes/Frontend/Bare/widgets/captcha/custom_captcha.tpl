@@ -7,7 +7,7 @@
     {/block}
 
     {if !$isNoCaptcha}
-        <div class="{if !$isHoneypot }panel--body is--wide{/if}">
+        <div>
             {block name="frontend_widgets_captcha_custom_captcha_placeholder"}
                 <div class="captcha--placeholder"
                     data-captcha="true"
