@@ -6,12 +6,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.11...v5.7.12](https://github.com/shopware/shopware/compare/v5.7.11...v5.7.12)
 
-### Deprecations
-
 ### Additions
 
 * Added missing dependency `doctrine/annotations`, which was an indirect dependency before
 * Added new optional parameter `dateTime` to `\Shopware\Components\Logger::addRecord` method to be compatible with parent `\Monolog\Logger::addRecord` method
+* Added requirement `composer-runtime-api ^2.0` which was already added indirectly in version [5.7.8](#5.7.8)
 
 ### Changes
 
@@ -21,7 +20,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/cache` to version 1.13.0
 * Updated `doctrine/common` to version 3.3.0
 * Updated `doctrine/dbal` to version 2.13.8
-* Updated `doctrine/orm` to version 2.12.2
+* Updated `doctrine/orm` to version 2.12.3
 * Updated `doctrine/persistence` to version 2.5.3
 * Updated `elasticsearch/elasticsearch` to version 7.17.0
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.12
@@ -51,8 +50,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/validator` to version 4.4.41
 * Updated `symfony/web-link` to version 4.4.37
 * Updated several indirect dependencies
-
-### Removals
 
 ## 5.7.11
 
