@@ -48,7 +48,7 @@ class EmotionTest extends TestCase
         $controller = new Shopware_Controllers_Backend_Emotion($mediaServiceMock, $eventManagerMock);
 
         $field = new Field();
-        $field->setValueType('json');
+        $field->setValueType(Field::VALUE_TYPE_JSON);
         $initialValue = [
                 [
                     'position' => 1,
@@ -72,5 +72,22 @@ class EmotionTest extends TestCase
         $processedValue = $processDataFieldValueMethod->invoke($controller, $field, $initialValue);
 
         static::assertSame('[{"position":1,"path":"path\/to\/media.jpg","mediaId":1,"link":""},{"position":2,"mediaId":2,"link":""},{"position":3,"path":"path\/to\/media.jpg","mediaId":3,"link":""}]', $processedValue);
+    }
+
+    public function testProcessDataFieldValueWithNullValue(): void
+    {
+        $processDataFieldValueMethod = TestReflectionHelper::getMethod(Shopware_Controllers_Backend_Emotion::class, 'processDataFieldValue');
+
+        $mediaServiceMock = $this->createMock(MediaServiceInterface::class);
+        $eventManagerMock = $this->createMock(ContainerAwareEventManager::class);
+        $eventManagerMock->expects(static::once())->method('collect')->willReturn(new ArrayCollection());
+        $controller = new Shopware_Controllers_Backend_Emotion($mediaServiceMock, $eventManagerMock);
+
+        $field = new Field();
+        $initialValue = null;
+
+        $processedValue = $processDataFieldValueMethod->invoke($controller, $field, $initialValue);
+
+        static::assertNull($processedValue);
     }
 }

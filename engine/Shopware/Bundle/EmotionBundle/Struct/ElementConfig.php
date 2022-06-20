@@ -26,6 +26,7 @@ namespace Shopware\Bundle\EmotionBundle\Struct;
 
 use JsonSerializable;
 use ReturnTypeWillChange;
+use Shopware\Models\Emotion\Library\Field;
 
 class ElementConfig implements JsonSerializable
 {
@@ -40,7 +41,7 @@ class ElementConfig implements JsonSerializable
     {
         $storage = [];
         foreach ($data as $configElement) {
-            if ($configElement['__emotionLibraryComponentField_value_type'] === 'json') {
+            if ($configElement['__emotionLibraryComponentField_value_type'] === Field::VALUE_TYPE_JSON) {
                 $configElement['__emotionElementValue_value'] = json_decode($configElement['__emotionElementValue_value'], true);
             }
 

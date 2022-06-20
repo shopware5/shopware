@@ -29,6 +29,7 @@ use Doctrine\ORM\NoResultException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Library\Component;
+use Shopware\Models\Emotion\Library\Field;
 use Shopware\Models\Emotion\Preset;
 
 class PresetLoader implements PresetLoaderInterface
@@ -134,7 +135,7 @@ class PresetLoader implements PresetLoaderInterface
                     $data['value'] = $this->mediaService->getUrl($data['value']);
                 }
 
-                if (!empty($data['value']) && strtolower($field['valueType']) === 'json') {
+                if (!empty($data['value']) && strtolower($field['valueType']) === Field::VALUE_TYPE_JSON) {
                     $data['value'] = json_decode($data['value'], true);
                     if (\is_array($data['value'])) {
                         foreach ($data['value'] as $key => &$value) {
