@@ -80,7 +80,7 @@ class UpdateCommand extends Command
             $this->getHelper('question')
         );
 
-        if (!is_dir(UPDATE_FILES_PATH) && !is_dir(UPDATE_ASSET_PATH)) {
+        if (!is_dir(UPDATE_FILES_PATH ?? '') && !is_dir(UPDATE_ASSET_PATH ?? '')) {
             $ioService->writeln('No update files found.');
 
             return 1;
