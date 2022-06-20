@@ -6,12 +6,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.11...v5.7.12](https://github.com/shopware/shopware/compare/v5.7.11...v5.7.12)
 
-### Deprecations
-
 ### Additions
 
 * Added missing dependency `doctrine/annotations`, which was an indirect dependency before
 * Added new optional parameter `dateTime` to `\Shopware\Components\Logger::addRecord` method to be compatible with parent `\Monolog\Logger::addRecord` method
+* Added requirement `composer-runtime-api ^2.0` which was already added indirectly in version [5.7.8](#5.7.8)
 
 ### Changes
 
@@ -51,8 +50,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/validator` to version 4.4.41
 * Updated `symfony/web-link` to version 4.4.37
 * Updated several indirect dependencies
-
-### Removals
 
 ## 5.7.11
 

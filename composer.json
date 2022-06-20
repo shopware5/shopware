@@ -36,6 +36,7 @@
         "ext-zip": "*",
         "ext-zlib": "*",
         "lib-libxml": "*",
+        "composer-runtime-api": "^2.0",
         "bcremer/line-reader": "1.2.0",
         "beberlei/assert": "3.3.2",
         "beberlei/doctrineextensions": "1.3.0",
