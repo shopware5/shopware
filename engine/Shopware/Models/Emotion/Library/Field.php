@@ -33,6 +33,9 @@ use Shopware\Components\Model\ModelEntity;
  */
 class Field extends ModelEntity
 {
+    public const VALUE_TYPE_JSON = 'json';
+    public const VALUE_TYPE_STRING = 'string';
+
     /**
      * Unique identifier field of the element model.
      *

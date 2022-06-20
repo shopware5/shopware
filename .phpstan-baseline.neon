@@ -24836,16 +24836,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:processDataFieldValue\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:processDataFieldValue\\(\\) should return string but returns array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:saveEmotion\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
@@ -24857,16 +24847,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Emotion\\:\\:saveTemplate\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:isEncoded\\(\\) expects string, array\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Emotion.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaServiceInterface\\:\\:normalize\\(\\) expects string, array\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Emotion.php
 

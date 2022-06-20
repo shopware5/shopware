@@ -213,14 +213,14 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
                 $entry = $filterResult;
 
                 switch (strtolower($entry['valueType'])) {
-                    case 'json':
+                    case Field::VALUE_TYPE_JSON:
                         if ($entry['value'] !== '') {
                             $value = Zend_Json::decode($entry['value']);
                         } else {
                             $value = null;
                         }
                         break;
-                    case 'string':
+                    case Field::VALUE_TYPE_STRING:
                     default:
                         $value = $entry['value'];
                         break;
@@ -1356,16 +1356,16 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     /**
      * Method for processing the different value types of the data fields.
      *
-     * @param array|string $value
+     * @param array<array<string, mixed>>|string|null $value
      */
-    private function processDataFieldValue(Field $field, $value): string
+    private function processDataFieldValue(Field $field, $value): ?string
     {
         $valueType = strtolower($field->getValueType());
         $xType = $field->getXType();
 
         $mediaFields = $this->getMediaXTypes();
 
-        if ($valueType === 'json') {
+        if ($valueType === Field::VALUE_TYPE_JSON) {
             if (\is_array($value)) {
                 foreach ($value as &$val) {
                     if (!isset($val['path'])) {
@@ -1379,8 +1379,12 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $value = Zend_Json::encode($value);
         }
 
-        if (\in_array($xType, $mediaFields, true) && $this->mediaService->isEncoded($value)) {
+        if (\is_string($value) && \in_array($xType, $mediaFields, true) && $this->mediaService->isEncoded($value)) {
             $value = $this->mediaService->normalize($value);
+        }
+
+        if (\is_array($value)) {
+            throw new \UnexpectedValueException(sprintf('Use field value type "%s" if arrays should be saved. Got value type "%s" instead', Field::VALUE_TYPE_JSON, $valueType));
         }
 
         return $value;
