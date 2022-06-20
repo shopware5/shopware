@@ -47,7 +47,7 @@
         "doctrine/common": "3.3.0",
         "doctrine/dbal": "2.13.8",
         "doctrine/event-manager": "1.1.1",
-        "doctrine/orm": "2.12.2",
+        "doctrine/orm": "2.12.3",
         "doctrine/persistence": "2.5.3",
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",

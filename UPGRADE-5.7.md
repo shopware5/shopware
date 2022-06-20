@@ -20,7 +20,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/cache` to version 1.13.0
 * Updated `doctrine/common` to version 3.3.0
 * Updated `doctrine/dbal` to version 2.13.8
-* Updated `doctrine/orm` to version 2.12.2
+* Updated `doctrine/orm` to version 2.12.3
 * Updated `doctrine/persistence` to version 2.5.3
 * Updated `elasticsearch/elasticsearch` to version 7.17.0
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.12
