@@ -108,11 +108,11 @@ class Application extends BaseApplication
     {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
             // error was suppressed with the @-operator
-            if (error_reporting() === 0 || $errno === E_USER_DEPRECATED) {
+            if (error_reporting() === 0) {
                 return false;
             }
 
             throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
-        });
+        }, E_ALL ^ E_DEPRECATED ^ E_USER_DEPRECATED);
     }
 }

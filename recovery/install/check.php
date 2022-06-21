@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-error_reporting(-1);
+error_reporting(E_ALL ^ E_DEPRECATED);
 ini_set('display_errors', true);
 
 $tokenFile = __DIR__ . '/tmp/token';
