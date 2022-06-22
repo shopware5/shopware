@@ -30,7 +30,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `laminas/laminas-escaper` to version 2.10.0
 * Updated `monolog/monolog` to version 2.7.0
 * Updated `mpdf/mpdf` to version 8.1.1
-* Updated `phpunit/phpunit` to version 9.5.20
+* Updated `phpunit/phpunit` to version 9.5.21
 * Updated `symfony/browser-kit` to version 4.4.37
 * Updated `symfony/config` to version 4.4.42
 * Updated `symfony/console` to version 4.4.42
