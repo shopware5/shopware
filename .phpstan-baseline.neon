@@ -29806,11 +29806,6 @@ parameters:
 			path: engine/Shopware/Core/sBasket.php
 
 		-
-			message: "#^Method sBasket\\:\\:getAdditionalInfoForUpdateProduct\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
 			message: "#^Method sBasket\\:\\:getBasketImage\\(\\) has parameter \\$image with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php

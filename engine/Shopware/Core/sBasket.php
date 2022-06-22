@@ -2886,9 +2886,9 @@ class sBasket implements \Enlight_Hook
     /**
      * Gets additional product info for sUpdateArticle
      *
-     * @param CartItemStruct[] $cartItems
+     * @param array<CartItemStruct> $cartItems
      */
-    private function getAdditionalInfoForUpdateProduct(array $cartItems)
+    private function getAdditionalInfoForUpdateProduct(array $cartItems): void
     {
         $ids = [];
         foreach ($cartItems as $cartItem) {
@@ -2967,7 +2967,7 @@ SQL;
             }
 
             if (($quantity / $additionalInfo['purchasesteps']) != (int) ($quantity / $additionalInfo['purchasesteps'])) {
-                $quantity = (int) ($quantity / $additionalInfo['purchasesteps']) * $additionalInfo['purchasesteps'];
+                $quantity = (int) (($quantity / $additionalInfo['purchasesteps']) * $additionalInfo['purchasesteps']);
             }
 
             $maxPurchase = $this->config->get('sMAXPURCHASE');
