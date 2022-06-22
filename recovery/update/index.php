@@ -28,9 +28,9 @@ require_once __DIR__ . '/../common/autoload.php';
 $isManual = is_dir(SW_PATH . '/update-assets');
 if ($isManual) {
     \define('UPDATE_IS_MANUAL', true);
-    \define('UPDATE_FILES_PATH', null);
+    \define('UPDATE_FILES_PATH', '');
     \define('UPDATE_ASSET_PATH', SW_PATH . '/update-assets');
-    \define('UPDATE_META_FILE', null);
+    \define('UPDATE_META_FILE', '');
 } else {
     \define('UPDATE_IS_MANUAL', false);
     \define('UPDATE_FILES_PATH', SW_PATH . '/files/update/files');
@@ -41,9 +41,8 @@ if ($isManual) {
 use Shopware\Recovery\Update\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE ^ E_DEPRECATED);
-
 if (PHP_SAPI === 'cli') {
+    error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
     ini_set('display_errors', 1);
 
     $input = new ArgvInput();
