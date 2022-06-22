@@ -86,6 +86,7 @@ class DumpIterator implements SeekableIterator, Countable
      *
      * @throws OutOfBoundsException
      */
+    #[\ReturnTypeWillChange]
     public function seek($position)
     {
         $this->rewind();
@@ -108,6 +109,7 @@ class DumpIterator implements SeekableIterator, Countable
         return $this->count;
     }
 
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         rewind($this->stream);
@@ -131,6 +133,7 @@ class DumpIterator implements SeekableIterator, Countable
         return $this->position;
     }
 
+    #[\ReturnTypeWillChange]
     public function next()
     {
         ++$this->position;
