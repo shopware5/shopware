@@ -25,8 +25,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `elasticsearch/elasticsearch` to version 7.17.0
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.12
 * Updated `google/cloud-storage` to version 1.27.1
-* Updated `guzzlehttp/guzzle` to version 7.4.4
-* Updated `guzzlehttp/psr7` to version 2.3.0
+* Updated `guzzlehttp/guzzle` to version 7.4.5
+* Updated `guzzlehttp/psr7` to version 2.4.0
 * Updated `laminas/laminas-escaper` to version 2.10.0
 * Updated `monolog/monolog` to version 2.7.0
 * Updated `mpdf/mpdf` to version 8.1.1
