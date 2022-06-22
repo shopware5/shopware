@@ -102,6 +102,7 @@ class DumpIterator implements SeekableIterator, Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function count()
     {
         return $this->count;
@@ -115,6 +116,7 @@ class DumpIterator implements SeekableIterator, Countable
         $this->position = 0;
     }
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->current;
@@ -123,6 +125,7 @@ class DumpIterator implements SeekableIterator, Countable
     /**
      * @return int
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->position;
@@ -139,6 +142,7 @@ class DumpIterator implements SeekableIterator, Countable
     /**
      * @return bool
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return !feof($this->stream);
