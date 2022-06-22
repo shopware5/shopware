@@ -42,7 +42,7 @@ if (PHP_VERSION_ID < 70400) {
 
 require_once __DIR__ . '/../common/autoload.php';
 
-error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE ^ E_DEPRECATED);
+error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 ini_set('display_errors', 1);
 date_default_timezone_set('UTC');
 set_time_limit(0);
