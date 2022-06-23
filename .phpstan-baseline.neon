@@ -10781,46 +10781,6 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/ProductStreamHydrator.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:hydrateGroup\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:hydrateOption\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:hydrateSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:hydrateValues\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:sortGroups\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:sortOptions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:sortOptionsByPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\PropertyHydrator\\:\\:sortOptionsNumercialValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/PropertyHydrator.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Gateway\\\\DBAL\\\\Hydrator\\\\ShopHydrator\\:\\:hydrate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Gateway/DBAL/Hydrator/ShopHydrator.php

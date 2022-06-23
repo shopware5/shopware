@@ -34,15 +34,15 @@ class PropertyHydrator extends Hydrator
 
     private MediaHydrator $mediaHydrator;
 
-    public function __construct(
-        AttributeHydrator $attributeHydrator,
-        MediaHydrator $mediaHydrator
-    ) {
+    public function __construct(AttributeHydrator $attributeHydrator, MediaHydrator $mediaHydrator)
+    {
         $this->attributeHydrator = $attributeHydrator;
         $this->mediaHydrator = $mediaHydrator;
     }
 
     /**
+     * @param array<array<string, mixed>> $data
+     *
      * @return Set[]
      */
     public function hydrateValues(array $data)
@@ -56,18 +56,10 @@ class PropertyHydrator extends Hydrator
             $groupId = $row['__propertyGroup_id'];
             $optionId = $row['__propertyOption_id'];
 
-            if (isset($sets[$setId])) {
-                $set = $sets[$setId];
-            } else {
-                $set = $this->hydrateSet($row);
-            }
+            $set = $sets[$setId] ?? $this->hydrateSet($row);
 
             $groups = $set->getGroups();
-            if (isset($groups[$groupId])) {
-                $group = $groups[$groupId];
-            } else {
-                $group = $this->hydrateGroup($row);
-            }
+            $group = $groups[$groupId] ?? $this->hydrateGroup($row);
 
             $options = $group->getOptions();
             $options[$optionId] = $this->hydrateOption($row);
@@ -90,6 +82,8 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @return Group
      */
     public function hydrateGroup(array $data)
@@ -110,6 +104,8 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @return Option
      */
     public function hydrateOption(array $data)
@@ -135,6 +131,9 @@ class PropertyHydrator extends Hydrator
         return $option;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function hydrateSet(array $data): Set
     {
         $set = new Set();
@@ -155,22 +154,20 @@ class PropertyHydrator extends Hydrator
 
     /**
      * Sort groups by position in set
+     *
+     * @param array<array<string, mixed>> $data
      */
     private function sortGroups(array &$data): void
     {
-        usort($data, function ($a, $b) {
-            if ($a['__relations_position'] == $b['__relations_position']) {
-                return 0;
-            }
-
-            return ($a['__relations_position'] < $b['__relations_position']) ? -1 : 1;
+        usort($data, function (array $a, array $b): int {
+            return $a['__relations_position'] <=> $b['__relations_position'];
         });
     }
 
     /**
-     * @param Option[] $options
+     * @param array<Option> $options
      */
-    private function sortOptions(array &$options, int $sortMode)
+    private function sortOptions(array &$options, int $sortMode): void
     {
         if ($sortMode === Set::SORT_POSITION) {
             $this->sortOptionsByPosition($options);
@@ -179,7 +176,7 @@ class PropertyHydrator extends Hydrator
         }
 
         if ($sortMode === Set::SORT_NUMERIC) {
-            $this->sortOptionsNumercialValue($options);
+            $this->sortOptionsNumericalValue($options);
 
             return;
         }
@@ -188,42 +185,34 @@ class PropertyHydrator extends Hydrator
     }
 
     /**
-     * @param Option[] $options
+     * @param array<Option> $options
      */
-    private function sortOptionsByPosition(array &$options)
+    private function sortOptionsByPosition(array &$options): void
     {
-        usort($options, function (Option $a, Option $b) {
-            if ($a->getPosition() == $b->getPosition()) {
-                return 0;
-            }
-
-            return ($a->getPosition() < $b->getPosition()) ? -1 : 1;
+        usort($options, function (Option $a, Option $b): int {
+            return $a->getPosition() <=> $b->getPosition();
         });
     }
 
     /**
-     * @param Option[] $options
+     * @param array<Option> $options
      */
-    private function sortOptionsNumercialValue(array &$options)
+    private function sortOptionsNumericalValue(array &$options): void
     {
-        usort($options, function (Option $a, Option $b) {
+        usort($options, function (Option $a, Option $b): int {
             $aValue = (float) str_replace(',', '.', $a->getName());
             $bValue = (float) str_replace(',', '.', $b->getName());
 
-            if ($aValue == $bValue) {
-                return 0;
-            }
-
-            return ($aValue < $bValue) ? -1 : 1;
+            return $aValue <=> $bValue;
         });
     }
 
     /**
-     * @param Option[] $options
+     * @param array<Option> $options
      */
     private function sortOptionsAlphanumeric(array &$options): void
     {
-        usort($options, function (Option $a, Option $b) {
+        usort($options, function (Option $a, Option $b): int {
             return strnatcasecmp($a->getName(), $b->getName());
         });
     }
