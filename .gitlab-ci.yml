@@ -18,12 +18,12 @@ variables:
     SW_BASE_PATH: ""
     ELASTICSEARCH_HOST: elasticsearch
 
-workflow:
-    rules:
-        - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-        - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
-          when: never
-        - if: '$CI_COMMIT_BRANCH'
+# Include the default gitlab rules template for "MergeRequest-Pipelines".
+# This makes pipelines run for the default branch, tags, and all types of merge
+# request pipelines.
+# @see https://docs.gitlab.com/ee/ci/yaml/workflow.html#workflowrules-templates
+include:
+    - template: 'Workflows/MergeRequest-Pipelines.gitlab-ci.yml'
 
 .composer-cache: &composer-cache
     key:
