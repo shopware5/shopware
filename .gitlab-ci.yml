@@ -158,8 +158,9 @@ Code Coverage:
             - ${ARTIFACTS_ROOT}/*
         expire_in: 1 week
         reports:
-            junit: ${ARTIFACTS_ROOT}/phpunit.junit.xml
-            cobertura: ${ARTIFACTS_ROOT}/*.cobertura.xml
+            coverage_report:
+                coverage_format: cobertura
+                path: ${ARTIFACTS_ROOT}/*.cobertura.xml
     parallel:
         matrix:
             - TESTSUITE: ['unit', 'functional']
