@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Core;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Session_Namespace;
 use Enlight_Controller_Front;
@@ -42,7 +43,10 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;
+use Shopware\Models\Dispatch\Dispatch;
 use Shopware\Models\Payment\Payment;
+use Shopware\Models\Tax\Rule;
+use Shopware\Models\Tax\Tax;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
@@ -53,6 +57,9 @@ class AdminTest extends TestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private const DEFAULT_SHIPPING_METHOD_ID = 9;
+    private const DEFAULT_CUSTOMER_GROUP_ID = 1;
 
     private sAdmin $module;
 
@@ -203,7 +210,7 @@ class AdminTest extends TestCase
         );
         static::assertIsArray($newsletterSubscription);
         static::assertSame(0, (int) $newsletterSubscription['customer']);
-        static::assertSame(1, (int) $newsletterSubscription['groupID']);
+        static::assertSame(self::DEFAULT_CUSTOMER_GROUP_ID, (int) $newsletterSubscription['groupID']);
 
         // Test removal
         static::assertTrue($this->module->sUpdateNewsletter(false, $email));
@@ -537,7 +544,7 @@ class AdminTest extends TestCase
             'objecttype' => 'config_dispatch',
             'objectdata' => serialize(
                 [
-                    9 => [
+                    self::DEFAULT_SHIPPING_METHOD_ID => [
                         'dispatch_name' => 'Standard shipping',
                         'dispatch_description' => 'Standard shipping description',
                         'dispatch_status_link' => 'http://www.dhl.com',
@@ -563,30 +570,30 @@ class AdminTest extends TestCase
 
         $result = $this->module->sGetDispatchTranslation();
         static::assertCount(2, $result);
-        static::assertArrayHasKey(9, $result);
+        static::assertArrayHasKey(self::DEFAULT_SHIPPING_METHOD_ID, $result);
         static::assertArrayHasKey(10, $result);
-        static::assertArrayHasKey('dispatch_name', $result[9]);
-        static::assertArrayHasKey('dispatch_description', $result[9]);
-        static::assertArrayHasKey('dispatch_status_link', $result[9]);
+        static::assertArrayHasKey('dispatch_name', $result[self::DEFAULT_SHIPPING_METHOD_ID]);
+        static::assertArrayHasKey('dispatch_description', $result[self::DEFAULT_SHIPPING_METHOD_ID]);
+        static::assertArrayHasKey('dispatch_status_link', $result[self::DEFAULT_SHIPPING_METHOD_ID]);
         static::assertArrayHasKey('dispatch_name', $result[10]);
         static::assertArrayHasKey('dispatch_description', $result[10]);
         static::assertArrayHasKey('dispatch_status_link', $result[10]);
-        static::assertSame('Standard shipping', $result[9]['dispatch_name']);
-        static::assertSame('Standard shipping description', $result[9]['dispatch_description']);
-        static::assertSame('http://www.dhl.com', $result[9]['dispatch_status_link']);
+        static::assertSame('Standard shipping', $result[self::DEFAULT_SHIPPING_METHOD_ID]['dispatch_name']);
+        static::assertSame('Standard shipping description', $result[self::DEFAULT_SHIPPING_METHOD_ID]['dispatch_description']);
+        static::assertSame('http://www.dhl.com', $result[self::DEFAULT_SHIPPING_METHOD_ID]['dispatch_status_link']);
         static::assertSame('Shipping by weight', $result[10]['dispatch_name']);
         static::assertSame('Shipping by weight description', $result[10]['dispatch_description']);
         static::assertSame('url', $result[10]['dispatch_status_link']);
 
         // Test with just one shipping method
-        $result = $this->module->sGetDispatchTranslation(['id' => 9, 'randomField' => 'randomValue']);
+        $result = $this->module->sGetDispatchTranslation(['id' => self::DEFAULT_SHIPPING_METHOD_ID, 'randomField' => 'randomValue']);
         static::assertCount(5, $result);
         static::assertArrayHasKey('id', $result);
         static::assertArrayHasKey('name', $result);
         static::assertArrayHasKey('description', $result);
         static::assertArrayHasKey('status_link', $result);
         static::assertArrayHasKey('randomField', $result);
-        static::assertSame(9, $result['id']);
+        static::assertSame(self::DEFAULT_SHIPPING_METHOD_ID, $result['id']);
         static::assertSame('Standard shipping', $result['name']);
         static::assertSame('Standard shipping description', $result['description']);
         static::assertSame('http://www.dhl.com', $result['status_link']);
@@ -2295,7 +2302,7 @@ class AdminTest extends TestCase
         );
 
         // With dispatch method
-        $this->session->offsetSet('sDispatch', 9);
+        $this->session->offsetSet('sDispatch', self::DEFAULT_SHIPPING_METHOD_ID);
         $result = $this->module->sGetPremiumShippingcosts($germany);
         static::assertIsArray($result);
         static::assertArrayHasKey('brutto', $result);
@@ -2304,6 +2311,57 @@ class AdminTest extends TestCase
         static::assertArrayHasKey('factor', $result);
         static::assertArrayHasKey('surcharge', $result);
         static::assertArrayHasKey('tax', $result);
+    }
+
+    public function testsGetPremiumShippingcostsWithCountryTaxRule(): void
+    {
+        $austria = null;
+        foreach ($this->module->sGetCountryList() as $country) {
+            if ($country['countryiso'] === 'AT') {
+                $austria = $country;
+                break;
+            }
+        }
+        static::assertIsArray($austria);
+
+        $expectedTaxValue = 20.0;
+
+        $newTax = new Tax();
+        $newTax->setTax('19.0');
+        $newTax->setName('Test tax');
+        $taxRule = new Rule();
+        $taxRule->setTax((string) $expectedTaxValue);
+        $taxRule->setName('Test tax austria');
+        $taxRule->setActive(true);
+        $taxRule->setCountryId($austria['id']);
+        $taxRule->setAreaId($austria['areaId']);
+        $taxRule->setGroup($newTax);
+        $taxRule->setCustomerGroupId(self::DEFAULT_CUSTOMER_GROUP_ID);
+        $newTax->setRules(new ArrayCollection([$taxRule]));
+
+        $modelManager = $this->getContainer()->get(ModelManager::class);
+        $modelManager->persist($newTax);
+        $modelManager->flush($newTax);
+        $modelManager->refresh($newTax);
+
+        $dispatch = $modelManager->find(Dispatch::class, self::DEFAULT_SHIPPING_METHOD_ID);
+        static::assertInstanceOf(Dispatch::class, $dispatch);
+        $dispatch->setTaxCalculation($newTax->getId());
+        $modelManager->persist($dispatch);
+        $modelManager->flush($dispatch);
+
+        $this->session->offsetSet('sCountry', $austria['id']);
+        $this->session->offsetSet('sArea', $austria['areaId']);
+        $this->session->offsetSet('sDispatch', self::DEFAULT_SHIPPING_METHOD_ID);
+        $this->getContainer()->get(ContextServiceInterface::class)->initializeShopContext();
+
+        $this->generateBasketSession();
+        $this->basketModule->sAddArticle('SW10010');
+
+        $result = $this->module->sGetPremiumShippingcosts($austria);
+        static::assertIsArray($result);
+        static::assertSame($newTax->getId(), (int) $result['taxMode']);
+        static::assertSame($expectedTaxValue, $result['tax']);
     }
 
     /**

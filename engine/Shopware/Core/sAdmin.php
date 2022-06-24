@@ -3190,6 +3190,10 @@ class sAdmin implements \Enlight_Hook
             $result['tax'] = $basket['max_tax'];
         } else {
             $result['tax'] = $dispatch['tax_calculation_value'];
+            $taxRule = $this->contextService->getShopContext()->getTaxRule($dispatch['tax_calculation']);
+            if ($taxRule instanceof Tax) {
+                $result['tax'] = $taxRule->getTax();
+            }
         }
         $result['tax'] = (float) $result['tax'];
         $result['netto'] = round($result['brutto'] * 100 / (100 + $result['tax']), 2);

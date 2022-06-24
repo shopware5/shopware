@@ -173,7 +173,7 @@ class ShopContext extends Extendable implements ShopContextInterface, ProductCon
     {
         $key = 'tax_' . $taxId;
 
-        return $this->taxRules[$key];
+        return $this->taxRules[$key] ?? null;
     }
 
     /**
