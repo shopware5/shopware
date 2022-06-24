@@ -2490,13 +2490,9 @@ class BasketTest extends TestCase
         static::assertSame(1, (int) $cart[CartKey::POSITIONS][0]['quantity']);
     }
 
-    private function generateBasketSession(): string
+    private function generateBasketSession(): void
     {
-        // Create session id
-        $sessionId = Random::getAlphanumericString(32);
-        $this->session->offsetSet('sessionId', $sessionId);
-
-        return $sessionId;
+        $this->session->offsetSet('sessionId', Random::getAlphanumericString(32));
     }
 
     /**

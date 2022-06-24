@@ -34,6 +34,7 @@ use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\CartPersistServiceInterface;
@@ -3009,7 +3010,7 @@ class sAdmin implements \Enlight_Hook
             ['subject' => $this, 'dispatches' => $dispatches]
         );
 
-        return $surcharge;
+        return (float) $surcharge;
     }
 
     /**
@@ -3109,9 +3110,10 @@ class sAdmin implements \Enlight_Hook
                 $tax = (float) $basket['max_tax'];
 
                 if (!empty($dispatch['tax_calculation'])) {
-                    $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
-                    $taxRule = $context->getTaxRule($dispatch['tax_calculation']);
-                    $tax = $taxRule->getTax();
+                    $taxRule = $this->contextService->getShopContext()->getTaxRule($dispatch['tax_calculation']);
+                    if ($taxRule instanceof Tax) {
+                        $tax = $taxRule->getTax();
+                    }
                 }
 
                 return [

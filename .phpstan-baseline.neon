@@ -28476,11 +28476,6 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Cannot call method getTax\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Tax\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Method sAdmin\\:\\:calculateDispatchSurcharge\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
@@ -44079,66 +44074,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Widgets\\\\IndexTest\\:\\:testShopMenu\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Widgets/IndexTest.php
-
-		-
-			message: "#^Cannot call method format\\(\\) on DateTimeInterface\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Cannot call method getKey\\(\\) on Shopware\\\\Models\\\\Customer\\\\Group\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Cannot call method getParams\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Core\\\\AdminTest\\:\\:dataProviderDataCustomerAttributeIsNot\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Core\\\\AdminTest\\:\\:testCustomerAttributeIsNot\\(\\) has parameter \\$userData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$basket of method sAdmin\\:\\:sGetPremiumDispatchSurcharge\\(\\) expects array, array\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$basket of method sAdmin\\:\\:sGetPremiumDispatchSurcharge\\(\\) expects array, null given\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$id of method sAdmin\\:\\:sGetUserNameById\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$payment of method sAdmin\\:\\:sGetPaymentMean\\(\\) expects int\\|string, string\\|false\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$user of method sAdmin\\:\\:sManageRisks\\(\\) expects array, array\\|false given\\.$#"
-			count: 40
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Property sSystem\\:\\:\\$sSESSION_ID \\(string\\) does not accept null\\.$#"
-			count: 1
-			path: tests/Functional/Core/AdminTest.php
-
-		-
-			message: "#^Variable \\$germany might not be defined\\.$#"
-			count: 2
-			path: tests/Functional/Core/AdminTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Core\\\\BasketTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
