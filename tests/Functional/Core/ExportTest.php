@@ -155,7 +155,7 @@ class ExportTest extends TestCase
         static::assertArrayHasKey('mainnumber', $result);
     }
 
-    public function testsGetPremiumDispatchSurcharge(): void
+    public function testsGetPremiumDispatchSurchargeInactiveSurcharge(): void
     {
         $testSurcharge = new Dispatch();
         $testSurcharge->setName('Test surcharge');
@@ -193,6 +193,36 @@ class ExportTest extends TestCase
             'customergroupID' => '1',
             'multishopID' => '1',
             'sessionID' => null,
+        ];
+        $surcharge = $this->export->sGetPremiumDispatchSurcharge($cart);
+
+        static::assertSame(0.0, $surcharge);
+    }
+
+    public function testsGetPremiumDispatchSurchargeActiveSurcharge(): void
+    {
+        $this->connection->executeStatement(
+            "INSERT INTO `s_premium_dispatch` (`name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `bind_shippingfree`, `bind_laststock`)
+             VALUES ('Test', :type, '', '', 1, 0, 1, 0, 0, 0, 0);",
+            ['type' => Dispatch::TYPE_SURCHARGE]
+        );
+
+        $cart = [
+            'instock' => '1',
+            'stockmin' => '1',
+            'laststock' => '0',
+            'weight' => '0.000',
+            'count_article' => '1',
+            'shippingfree' => '0',
+            'amount' => '19.99',
+            'max_tax' => '19.00',
+            'userID' => null,
+            'has_topseller' => '0',
+            'has_comment' => '',
+            'has_esd' => '0',
+            'articleID' => '2',
+            'customergroupID' => '1',
+            'multishopID' => '1',
         ];
         $surcharge = $this->export->sGetPremiumDispatchSurcharge($cart);
 

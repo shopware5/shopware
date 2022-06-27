@@ -1716,10 +1716,10 @@ class sExport implements Enlight_Hook
         }
 
         $sql = 'SELECT id, bind_sql FROM s_premium_dispatch WHERE type=:type AND active=1 AND bind_sql IS NOT NULL';
-        $statements = $this->connection->executeQuery($sql, ['type' => Dispatch::TYPE_SURCHARGE])->fetchAllKeyValue();
+        $activeSurcharges = $this->connection->executeQuery($sql, ['type' => Dispatch::TYPE_SURCHARGE])->fetchAllKeyValue();
 
         $sql_where = '';
-        foreach ($statements as $dispatchID => $statement) {
+        foreach ($activeSurcharges as $dispatchID => $statement) {
             $sql_where .= "
             AND ( d.id!=$dispatchID OR ($statement))
             ";
@@ -1810,11 +1810,11 @@ class sExport implements Enlight_Hook
                 }
                 $sql = 'SELECT `value` , `factor`
                         FROM `s_premium_shippingcosts`
-                        WHERE `from` <= $from
+                        WHERE `from` <= :from
                         AND `dispatchID` = :dispatchId
                         ORDER BY `from` DESC
                         LIMIT 1';
-                $result = $this->connection->fetchAssociative($sql, ['dispatchId' => $dispatch['id']]);
+                $result = $this->connection->fetchAssociative($sql, ['from' => $from, 'dispatchId' => $dispatch['id']]);
                 if (!$result) {
                     continue;
                 }
