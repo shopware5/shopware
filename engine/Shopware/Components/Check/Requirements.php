@@ -161,11 +161,11 @@ class Requirements
 
         $value = \ini_get($name);
         if ($value !== '' && $value !== false) {
-            if (strtolower($value) === 'off' || (is_numeric($value) && $value == 0)) {
+            if ((int) $value === 0 || strtolower($value) === 'off') {
                 return false;
             }
 
-            if (strtolower($value) === 'on' || (is_numeric($value) && $value == 1)) {
+            if ((int) $value === 1 || strtolower($value) === 'on') {
                 return true;
             }
 

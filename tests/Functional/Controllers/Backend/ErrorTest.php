@@ -34,13 +34,17 @@ use Enlight_Plugin_Namespace_Loader;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Controllers_Backend_Error;
 
 class ErrorTest extends TestCase
 {
+    use ContainerTrait;
+
     public function testJsonRenderWillBeActivated(): void
     {
         $controller = new Shopware_Controllers_Backend_Error();
+        $controller->setContainer($this->getContainer());
         $request = new Enlight_Controller_Request_RequestHttp();
         $request->setHeader('CONTENT_TYPE', 'application/json');
         $controller->setRequest($request);
