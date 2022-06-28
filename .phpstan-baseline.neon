@@ -12896,11 +12896,6 @@ parameters:
 			path: engine/Shopware/Commands/CacheClearCommand.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/CloneCategoryTreeCommand.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/CloneCategoryTreeCommand.php
@@ -16106,11 +16101,6 @@ parameters:
 			path: engine/Shopware/Components/Check/Requirements.php
 
 		-
-			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Check/Requirements.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Check\\\\Requirements\\:\\:handleMaxCompatibleVersion\\(\\) has parameter \\$check with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Check/Requirements.php
@@ -18691,11 +18681,6 @@ parameters:
 			path: engine/Shopware/Components/Migrations/AbstractPluginMigration.php
 
 		-
-			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Migrations/Manager.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Migrations\\\\Manager\\:\\:apply\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Migrations/Manager.php
@@ -18769,16 +18754,6 @@ parameters:
 			message: "#^Property Shopware\\\\Components\\\\Model\\\\Cache\\:\\:\\$tags type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/Cache.php
-
-		-
-			message: "#^Cannot call method fetch\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/CategoryDenormalization.php
-
-		-
-			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/CategoryDenormalization.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\CategoryDenormalization\\:\\:addAssignment\\(\\) has no return type specified\\.$#"
@@ -30601,16 +30576,6 @@ parameters:
 			path: engine/Shopware/Core/sSystem.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Kernel.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Kernel.php
-
-		-
 			message: "#^Cannot call method get\\(\\) on Shopware\\\\Components\\\\DependencyInjection\\\\Container\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Kernel.php
@@ -38971,11 +38936,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/AlsoBought.php
-
-		-
 			message: "#^Method Shopware_Components_AlsoBought\\:\\:initAlsoBought\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/AlsoBought.php
@@ -38994,11 +38954,6 @@ parameters:
 			message: "#^Method Shopware_Components_AlsoBought\\:\\:refreshMultipleBoughtArticles\\(\\) has parameter \\$combinations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/AlsoBought.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/SimilarShown.php
 
 		-
 			message: "#^Method Shopware_Components_SimilarShown\\:\\:initSimilarShown\\(\\) has no return type specified\\.$#"
@@ -50684,16 +50639,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Components\\\\MemoryMock\\:\\:\\$limit has no type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/MemoryLimitTest.php
-
-		-
-			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/CategoryDenormalizationTest.php
-
-		-
-			message: "#^Cannot call method fetchColumn\\(\\) on PDOStatement\\|false\\.$#"
-			count: 2
-			path: tests/Unit/Components/Model/CategoryDenormalizationTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$statement of method PDO\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"

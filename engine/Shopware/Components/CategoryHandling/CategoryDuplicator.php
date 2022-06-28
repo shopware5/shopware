@@ -91,7 +91,7 @@ class CategoryDuplicator
         $valuePlaceholders = array_fill(0, \count($originalCategory), '?');
         $insertStmt = $this->connection->prepare(
             'INSERT INTO s_categories (`' . implode('`, `', array_keys($originalCategory)) . '`)
-            VALUES (' . implode(', ', $valuePlaceholders) . ')'
+             VALUES (' . implode(', ', $valuePlaceholders) . ')'
         );
         $insertStmt->execute(array_values($originalCategory));
         $newCategoryId = (int) $this->connection->lastInsertId();
@@ -159,14 +159,13 @@ class CategoryDuplicator
         $products = $assocProductsStmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
         if ($products) {
-            $insertStmt = $this->connection->prepare(
+            $this->connection->query(
                 'INSERT INTO s_articles_categories (categoryID, articleID)
-            VALUES (' . $newCategoryId . ', ' . implode('), (' . $newCategoryId . ', ', $products) . ')'
+                 VALUES (' . $newCategoryId . ', ' . implode('), (' . $newCategoryId . ', ', $products) . ')'
             );
-            $insertStmt->execute();
 
             foreach ($products as $productId) {
-                $this->categoryDenormalization->addAssignment($productId, $newCategoryId);
+                $this->categoryDenormalization->addAssignment((int) $productId, $newCategoryId);
             }
         }
     }

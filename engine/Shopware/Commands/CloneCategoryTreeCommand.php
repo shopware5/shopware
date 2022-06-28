@@ -234,9 +234,7 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         $copyProductAssociations,
         $newRootCategoryId = null
     ) {
-        $categoryDuplicator = $this->container->get(CategoryDuplicator::class);
-
-        $newCategoryId = $categoryDuplicator->duplicateCategory($categoryId, $newParentId, $copyProductAssociations);
+        $newCategoryId = $this->container->get(CategoryDuplicator::class)->duplicateCategory($categoryId, $newParentId, $copyProductAssociations);
         $this->progressBar->advance();
 
         $childrenStmt = $this->container->get('db')->prepare('SELECT id FROM s_categories WHERE parent = :parent');
@@ -246,7 +244,8 @@ class CloneCategoryTreeCommand extends ShopwareCommand implements CompletionAwar
         $newRootCategoryId = $newRootCategoryId ?: $newCategoryId;
 
         foreach ($children as $child) {
-            if ((int) $child !== (int) $newRootCategoryId) {
+            $child = (int) $child;
+            if ($child !== (int) $newRootCategoryId) {
                 $this->duplicateCategory($child, $newCategoryId, $copyProductAssociations, $newRootCategoryId);
             }
         }
