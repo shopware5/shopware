@@ -47,9 +47,6 @@ class ContainerAwareEventManager extends Enlight_Event_EventManager
      */
     protected $containerListeners = [];
 
-    /**
-     * @var ContainerInterface;
-     */
     private ContainerInterface $container;
 
     private array $listenerIds = [];

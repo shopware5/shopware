@@ -74,12 +74,9 @@ class PluginInitializer
         $classLoader = new ClassLoader();
         $classLoader->register(true);
 
-        $stmt = $this->connection->query('SELECT `name`, `version`, `namespace` FROM s_core_plugins WHERE `active` = 1 AND `installation_date` IS NOT NULL;');
-        if ($stmt === false) {
-            throw new RuntimeException('Could not load plugins from database');
-        }
-
-        $activePlugins = $stmt->fetchAll(PDO::FETCH_UNIQUE);
+        $activePlugins = $this->connection->query(
+            'SELECT `name`, `version`, `namespace` FROM s_core_plugins WHERE `active` = 1 AND `installation_date` IS NOT NULL;'
+        )->fetchAll(PDO::FETCH_UNIQUE);
         if (!\is_array($activePlugins)) {
             throw new RuntimeException('Could not load plugins from database');
         }

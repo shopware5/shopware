@@ -25,6 +25,8 @@ interface Enlight_Controller_Response_Response
     /**
      * Sets a cookie method
      *
+     * @see http://www.php.net/manual/de/function.setcookie.php
+     *
      * @param string $name
      * @param string $value
      * @param int    $expire
@@ -33,7 +35,7 @@ interface Enlight_Controller_Response_Response
      * @param bool   $secure
      * @param bool   $httpOnly
      *
-     * @return \Enlight_Controller_Response_Response* @see http://www.php.net/manual/de/function.setcookie.php
+     * @return \Enlight_Controller_Response_Response
      */
     public function setCookie($name, $value = null, $expire = 0, $path = null, $domain = null, $secure = false, $httpOnly = false);
 

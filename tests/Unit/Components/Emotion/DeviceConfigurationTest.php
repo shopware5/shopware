@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,14 +34,13 @@ use Shopware\Components\Emotion\DeviceConfiguration;
 
 class DeviceConfigurationTest extends TestCase
 {
-    public function testNoneExistingEmotion()
+    public function testNoneExistingEmotion(): void
     {
-        $service = new DeviceConfiguration($this->createQueryMock([]));
-        $emotions = $service->get(1);
+        $emotions = (new DeviceConfiguration($this->createQueryMock([])))->get(1);
         static::assertEmpty($emotions);
     }
 
-    public function testEmotionsWithDifferentPositions()
+    public function testEmotionsWithDifferentPositions(): void
     {
         $service = new DeviceConfiguration($this->createQueryMock([
             ['id' => 1, 'position' => 4, 'devices' => '', 'shopIds' => ''],
@@ -59,7 +60,7 @@ class DeviceConfigurationTest extends TestCase
         );
     }
 
-    public function testEmotionsWithNullPositions()
+    public function testEmotionsWithNullPositions(): void
     {
         $service = new DeviceConfiguration($this->createQueryMock([
             ['id' => 1, 'position' => null, 'devices' => '', 'shopIds' => ''],
@@ -79,7 +80,7 @@ class DeviceConfigurationTest extends TestCase
         );
     }
 
-    public function testEmotionsWithSamePosition()
+    public function testEmotionsWithSamePosition(): void
     {
         $service = new DeviceConfiguration($this->createQueryMock([
             ['id' => 1, 'position' => 3, 'devices' => '', 'shopIds' => ''],
@@ -100,53 +101,44 @@ class DeviceConfigurationTest extends TestCase
     }
 
     /**
-     * @param array[] $expectedResult
-     *
-     * @return Connection|\PHPUnit\Framework\MockObject\MockObject
+     * @param array<array<string, mixed>> $expectedResult
      */
-    private function createQueryMock($expectedResult)
+    private function createQueryMock(array $expectedResult): Connection
     {
         $statement = $this->createMock(Statement::class);
-        $statement->expects(static::any())
-            ->method('fetchAll')
+        $statement->method('fetchAllAssociative')
             ->willReturn($expectedResult);
 
         $query = $this->createMock(QueryBuilder::class);
-        $query->expects(static::any())
-            ->method('execute')
+        $query->method('execute')
             ->willReturn($statement);
 
-        $query->expects(static::any())
-            ->method('andWhere')
+        $query->method('andWhere')
             ->willReturn($query);
 
-        $query->expects(static::any())
-            ->method('innerJoin')
+        $query->method('innerJoin')
             ->willReturn($query);
 
-        $query->expects(static::any())
-            ->method('leftJoin')
+        $query->method('leftJoin')
             ->willReturn($query);
 
-        $query->expects(static::any())
-            ->method('from')
+        $query->method('select')
             ->willReturn($query);
 
-        $query->expects(static::any())
-            ->method('addOrderBy')
+        $query->method('from')
             ->willReturn($query);
 
-        $query->expects(static::any())
-            ->method('groupBy')
+        $query->method('addOrderBy')
             ->willReturn($query);
 
-        $query->expects(static::any())
-            ->method('setParameter')
+        $query->method('groupBy')
+            ->willReturn($query);
+
+        $query->method('setParameter')
             ->willReturn($query);
 
         $connection = $this->createMock(Connection::class);
-        $connection->expects(static::any())
-            ->method('createQueryBuilder')
+        $connection->method('createQueryBuilder')
             ->willReturn($query);
 
         return $connection;

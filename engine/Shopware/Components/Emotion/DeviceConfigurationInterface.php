@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,28 +31,28 @@ interface DeviceConfigurationInterface
     /**
      * @param int $categoryId
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     public function get($categoryId);
 
     /**
      * @param int $emotionId
      *
-     * @return array
+     * @return array<string, mixed>
      */
     public function getById($emotionId);
 
     /**
      * @param int $id
      *
-     * @return array|null
+     * @return array<string, mixed>|null
      */
     public function getLandingPage($id);
 
     /**
      * @param int $emotionId
      *
-     * @return array
+     * @return array<int>
      */
     public function getLandingPageShops($emotionId);
 }

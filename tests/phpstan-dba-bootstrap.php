@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,16 +24,20 @@
  * our trademarks remain entirely with us.
  */
 
-class Shopware_Controllers_Backend_Error extends Shopware_Controllers_Frontend_Error
-{
-    public function preDispatch(): void
-    {
-        parent::preDispatch();
+use Shopware\Components\DependencyInjection\Bridge\Db;
+use staabm\PHPStanDba\QueryReflection\PdoMysqlQueryReflector;
+use staabm\PHPStanDba\QueryReflection\QueryReflection;
+use staabm\PHPStanDba\QueryReflection\RuntimeConfiguration;
 
-        $contentType = $this->Request()->getHeader('Content-Type');
-        if ($contentType && str_starts_with($contentType, 'application/json')) {
-            $this->Front()->Plugins()->Json()->setRenderer();
-            $this->View()->assign('success', false);
-        }
-    }
-}
+$config = new RuntimeConfiguration();
+$config->stringifyTypes(true);
+$config->errorMode(RuntimeConfiguration::ERROR_MODE_BOOL);
+$config->stringifyTypes(true);
+
+$shopwareConfig = include __DIR__ . '/../config.php';
+$pdo = Db::createPDO($shopwareConfig['db']);
+
+QueryReflection::setupReflector(
+    new PdoMysqlQueryReflector($pdo),
+    $config
+);

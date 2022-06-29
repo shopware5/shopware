@@ -126,7 +126,7 @@ class CategoryDenormalization
 
         $result = [$parent['id']];
 
-        $parent = $this->getParentCategoryIds($parent['parent']);
+        $parent = $this->getParentCategoryIds((int) $parent['parent']);
         if ($parent) {
             $result = array_merge($result, $parent);
         }
@@ -402,7 +402,7 @@ class CategoryDenormalization
             $assignmentsStmt->execute(['categoryId' => $affectedCategoryId]);
 
             while ($assignment = $assignmentsStmt->fetch()) {
-                $count += $this->insertAssignment($assignment['articleID'], $assignment['categoryID']);
+                $count += $this->insertAssignment((int) $assignment['articleID'], (int) $assignment['categoryID']);
             }
         }
         $this->commit();
