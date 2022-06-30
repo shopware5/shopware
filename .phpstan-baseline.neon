@@ -18546,21 +18546,6 @@ parameters:
 			path: engine/Shopware/Components/Log/Handler/DoctrineDBALHandler.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Log\\\\Parser\\\\LogfileParser\\:\\:parseLogFile\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Parser/LogfileParser.php
-
-		-
-			message: "#^Parameter \\#2 \\$offset of class LimitIterator constructor expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Parser/LogfileParser.php
-
-		-
-			message: "#^Parameter \\#3 \\$limit of class LimitIterator constructor expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Log/Parser/LogfileParser.php
-
-		-
 			message: "#^Access to an undefined property object\\:\\:\\$id\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Log/Processor/ShopwareEnvironmentProcessor.php
@@ -24954,51 +24939,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:menuAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:createLogAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:deleteLogsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:downloadLogFileAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getDefaultLogFile\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getLogFile\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getLogFileListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getLogFiles\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getLogListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Log\\:\\:getLogsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Log.php
 
 		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\Logger\\:\\:createLogAction\\(\\) has no return type specified\\.$#"

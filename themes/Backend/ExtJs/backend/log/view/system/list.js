@@ -155,12 +155,11 @@ Ext.define('Shopware.apps.Log.view.system.List', {
             var record = store.findRecord('default', true);
             if (record) {
                 combo.setValue(record.get('name'));
+                combo.fireEvent('select');
             }
         }, this, {
             single: true
         });
-
-        combo.store.load();
 
         combo.on('select', function () {
             var value = combo.getValue();
@@ -174,6 +173,8 @@ Ext.define('Shopware.apps.Log.view.system.List', {
                 me.downloadButton.disable();
             }
         }, this);
+
+        combo.store.load();
 
         return combo;
     }
