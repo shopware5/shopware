@@ -101,7 +101,8 @@ check-config-variables:
 	@if [ -z "$(DB_PASSWORD)" ]; then echo "No or invalid database password supplied"; exit 1; fi
 
 clean-make-config:
-	rm .make.config.* 2> /dev/null || true
+	rm -f .make.config.*
+	rm -f .make.install.*
 
 clean:
 	rm .make.* 2> /dev/null || true
