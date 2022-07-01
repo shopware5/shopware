@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,11 +34,11 @@ class LogfileParser
 {
     /**
      * @param string   $file
-     * @param int      $offset
+     * @param int|null $offset
      * @param int|null $limit
      * @param bool     $reverse
      *
-     * @return array
+     * @return array<array{data?: string, channel?: string, level?: string, message?: string, context?: string, extra?: string, raw: string}>
      */
     public function parseLogFile($file, $offset = null, $limit = null, $reverse = false)
     {
@@ -44,6 +46,13 @@ class LogfileParser
             $lineGenerator = LineReader::readLinesBackwards($file);
         } else {
             $lineGenerator = LineReader::readLines($file);
+        }
+
+        if (!\is_int($offset)) {
+            $offset = 0;
+        }
+        if (!\is_int($limit)) {
+            $limit = -1;
         }
 
         $reader = new LimitIterator($lineGenerator, $offset, $limit);
@@ -70,11 +79,9 @@ class LogfileParser
     }
 
     /**
-     * @param string $log
-     *
-     * @return string[]
+     * @return array{data?: string, channel?: string, level?: string, message?: string, context?: string, extra?: string, raw: string}
      */
-    private function parseLine($log)
+    private function parseLine(string $log): array
     {
         $pattern = '/\[(?P<date>[^\[]*)\] (?P<channel>\w+).(?P<level>\w+): (?P<message>[^\[{]+) (?P<context>[\[\{].*[\]\}]) (?P<extra>[\[\{].*[\]\}])/';
 
@@ -87,10 +94,10 @@ class LogfileParser
         }
 
         return [
-            'date' => $data['date'],
-            'channel' => $data['channel'],
-            'level' => $data['level'],
-            'message' => $data['message'],
+            'date' => (string) $data['date'],
+            'channel' => (string) $data['channel'],
+            'level' => (string) $data['level'],
+            'message' => (string) $data['message'],
             'context' => json_decode($data['context'], true),
             'extra' => json_decode($data['extra'], true),
             'raw' => $log,

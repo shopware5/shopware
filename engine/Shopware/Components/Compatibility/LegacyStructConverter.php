@@ -55,6 +55,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Property\Group as PropertyGroup;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Option as PropertyOption;
 use Shopware\Bundle\StoreFrontBundle\Struct\Property\Set;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopPage;
+use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
 use Shopware\Bundle\StoreFrontBundle\Struct\Thumbnail;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
@@ -1182,6 +1183,11 @@ class LegacyStructConverter
         if ($product->getUpdatedAt()) {
             $updateDate = $product->getUpdatedAt()->format('Y-m-d');
         }
+        $tax = $product->getTax();
+        $taxRule = $this->contextService->getShopContext()->getTaxRule($product->getTax()->getId());
+        if ($taxRule instanceof Tax) {
+            $tax = $taxRule;
+        }
 
         $data = [
             'articleID' => $product->getId(),
@@ -1193,7 +1199,7 @@ class LegacyStructConverter
             'esd' => $product->hasEsd(),
             'articleName' => $product->getName(),
             'taxID' => $product->getTax()->getId(),
-            'tax' => $product->getTax()->getTax(),
+            'tax' => $tax->getTax(),
             'instock' => $product->getStock(),
             'isAvailable' => $product->isAvailable(),
             'hasAvailableVariant' => $product->hasAvailableVariant(),

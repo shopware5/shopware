@@ -55,7 +55,6 @@ stages:
     - Static analysis
     - PHPUnit
     - End-to-end testing
-    - Security
     - Build Image
 
 default:
@@ -180,6 +179,11 @@ PHP 7.4:
 PHP 8.1:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.1
+
+PHP 8.2:
+    allow_failure: true
+    extends: .phpunit_base
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0alpha1
 
 MySQL 8.0:
     extends: .phpunit_base

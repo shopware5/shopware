@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +25,9 @@
  */
 
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Log\Parser\LogfileParser;
 use Shopware\Models\Log\Log;
+use Symfony\Component\Finder\Finder;
 
 class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -58,7 +61,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         if ($this->Request()->getActionName() === 'downloadLogFile') {
             $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         } elseif (!\in_array($this->Request()->getActionName(), ['index', 'load'])) {
-            $this->Front()->Plugins()->Json()->setRenderer(true);
+            $this->Front()->Plugins()->Json()->setRenderer();
         }
     }
 
@@ -66,6 +69,8 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
      * This function is called, when the user opens the log-module.
      * It reads the logs from s_core_log
      * Additionally it sets a filterValue
+     *
+     * @return void
      */
     public function getLogsAction()
     {
@@ -113,6 +118,8 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * This function is called when the user wants to delete a log.
      * It only handles the deletion.
+     *
+     * @return void
      */
     public function deleteLogsAction()
     {
@@ -142,15 +149,20 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * This logging method has been moved to \Shopware\Controllers\Backend\Logger::createLogAction
      *
-     * @deprecated in Shopware 5.6, to be removed in 5.7. Use \Shopware\Controllers\Backend\Logger::createLogAction instead
+     * @deprecated in Shopware 5.6, to be removed in 5.8. Use \Shopware\Controllers\Backend\Logger::createLogAction instead
+     *
+     * @return void
      */
     public function createLogAction()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed in 5.7. Use \Shopware\Controllers\Backend\Logger::createLogAction instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed in 5.8. Use \Shopware\Controllers\Backend\Logger::createLogAction instead.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $this->forward('createLog', 'logger', 'backend');
     }
 
+    /**
+     * @return void
+     */
     public function downloadLogFileAction()
     {
         $logDir = $this->get('kernel')->getLogDir();
@@ -188,6 +200,9 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         stream_copy_to_stream($file, $out);
     }
 
+    /**
+     * @return void
+     */
     public function getLogFileListAction()
     {
         $logDir = $this->get('kernel')->getLogDir();
@@ -196,22 +211,22 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
 
         // filter against input
         $query = trim($this->Request()->getParam('query', ''));
-        foreach ($files as $k => $file) {
+        $files = array_filter(array_map(function ($file) use ($query, $defaultFile) {
             if ($query !== '' && mb_stripos($file[0], $query) === false) {
-                unset($files[$k]);
-                continue;
+                return null;
             }
-            $files[$k] = [
+
+            return [
                 'name' => $file[0],
                 'channel' => $file['channel'],
                 'environment' => $file['environment'],
                 'date' => $file['date'],
-                'default' => $file[0] === $defaultFile,
+                'default' => $file[0] === $defaultFile[0],
             ];
-        }
+        }, $files));
 
-        $start = $this->Request()->getParam('start', 0);
-        $limit = $this->Request()->getParam('limit', 100);
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 100);
 
         $count = \count($files);
         $files = \array_slice($files, $start, $limit);
@@ -223,6 +238,9 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function getLogListAction()
     {
         $logDir = $this->get('kernel')->getLogDir();
@@ -242,17 +260,16 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
         }
 
         $file = $logDir . '/' . $logFile;
-        $start = $this->Request()->getParam('start', 0);
-        $limit = $this->Request()->getParam('limit', 100);
-        $sort = $this->Request()->getParam('sort');
+        $start = (int) $this->Request()->getParam('start', 0);
+        $limit = (int) $this->Request()->getParam('limit', 100);
+        $sort = $this->Request()->getParam('sort', []);
 
         $reverse = false;
         if (!isset($sort[0]['direction']) || $sort[0]['direction'] === 'DESC') {
             $reverse = true;
         }
 
-        /** @var \Shopware\Components\Log\Parser\LogfileParser $reader */
-        $reader = $this->get('shopware.log.fileparser');
+        $reader = $this->get(LogfileParser::class);
 
         $data = $reader->parseLogFile(
             $file,
@@ -272,17 +289,14 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * Returns an array of all log files in the given directory.
      *
-     * @param string $logDir
-     *
-     * @return array
+     * @return array<array{0: string, channel: string, 1: string, environment: string, 2: string, date: string, 3: string}>
      */
-    private function getLogFiles($logDir)
+    private function getLogFiles(string $logDir): array
     {
-        $finder = new Symfony\Component\Finder\Finder();
+        $finder = new Finder();
         $finder->files()->name('*.log')->in($logDir);
 
         $matches = [];
-        /** @var \Symfony\Component\Finder\SplFileInfo $file */
         foreach ($finder as $file) {
             $name = $file->getBasename();
             if (preg_match('/^(?P<channel>[^_]+)_(?P<environment>[^-]+)\-(?P<date>[0-9-]+)\.log$/', $name, $match)) {
@@ -298,15 +312,14 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * Checks whether the specified log file exists in the log directory. If so, he returns it.
      *
-     * @param array  $files
-     * @param string $name
+     * @param array<array{0: string, channel: string, 1: string, environment: string, 2: string, date: string, 3: string}> $files
      *
      * @return false|string
      */
-    private function getLogFile($files, $name)
+    private function getLogFile(array $files, string $name)
     {
         foreach ($files as $file) {
-            if ($name == $file[0]) {
+            if ($name === $file[0]) {
                 return $name;
             }
         }
@@ -315,10 +328,12 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     }
 
     /**
-     * @return false|string
+     * @param array<array{0: string, channel: string, 1: string, environment: string, 2: string, date: string, 3: string}> $files
+     *
+     * @return array{0: string, channel?: string, 1?: string, environment?: string, 2?: string, date?: string, 3?: string}
      */
-    private function getDefaultLogFile(array $files)
+    private function getDefaultLogFile(array $files): array
     {
-        return isset($files[0]) ? $files[0] : false;
+        return $files[0] ?? [''];
     }
 }

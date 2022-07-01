@@ -375,7 +375,7 @@ return array_replace_recursive([
         // Passed to \Mpdf\Mpdf::__construct:
         'defaultConfig' => [
             'tempDir' => $this->getCacheDir() . '/mpdf/',
-            'fontDir' => $this->DocPath('engine_Library_Mpdf_ttfonts_'),
+            'fontDir' => [$this->DocPath('engine_Library_Mpdf_ttfonts_')],
             'fonttrans' => [
                 'helvetica' => 'arial',
                 'verdana' => 'arial',

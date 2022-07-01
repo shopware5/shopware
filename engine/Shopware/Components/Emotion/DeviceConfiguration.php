@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,16 +28,11 @@ namespace Shopware\Components\Emotion;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
-use PDO;
-use PDOStatement;
 use Shopware\Models\Emotion\Emotion;
 
 class DeviceConfiguration implements DeviceConfigurationInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -43,10 +40,12 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     }
 
     /**
+     * @deprecated - Unused. Will be removed without replacement in 5.8
+     *
      * @param int $categoryId
      * @param int $pageIndex
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
     public function getListingEmotions($categoryId, $pageIndex)
     {
@@ -84,21 +83,19 @@ class DeviceConfiguration implements DeviceConfigurationInterface
      */
     public function get($categoryId)
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select([
-            'emotion.id',
-            'emotion.device as devices',
-            'emotion.show_listing as showListing',
-            'emotion.fullscreen',
-            'emotion.customer_stream_ids',
-            'emotion.replacement',
-            'emotion.position',
-            'emotion.listing_visibility',
-            'GROUP_CONCAT(shops.shop_id SEPARATOR \',\') as shopIds',
-        ]);
-
-        $query->from('s_emotion', 'emotion')
+        $emotions = $this->connection->createQueryBuilder()
+            ->select([
+                'emotion.id',
+                'emotion.device as devices',
+                'emotion.show_listing as showListing',
+                'emotion.fullscreen',
+                'emotion.customer_stream_ids',
+                'emotion.replacement',
+                'emotion.position',
+                'emotion.listing_visibility',
+                'GROUP_CONCAT(shops.shop_id SEPARATOR \',\') as shopIds',
+            ])
+            ->from('s_emotion', 'emotion')
             ->leftJoin('emotion', 's_emotion_shops', 'shops', 'shops.emotion_id = emotion.id')
             ->andWhere('emotion.active = 1')
             ->andWhere('emotion.is_landingpage = 0')
@@ -108,24 +105,20 @@ class DeviceConfiguration implements DeviceConfigurationInterface
             ->addOrderBy('emotion.position', 'ASC')
             ->addOrderBy('emotion.id', 'ASC')
             ->groupBy('emotion.id')
-            ->setParameter(':categoryId', $categoryId);
-
-        $query->innerJoin(
-            'emotion',
-            's_emotion_categories',
-            'category',
-            'category.emotion_id = emotion.id
+            ->setParameter(':categoryId', $categoryId)
+            ->innerJoin(
+                'emotion',
+                's_emotion_categories',
+                'category',
+                'category.emotion_id = emotion.id
              AND category.category_id = :categoryId'
-        );
-
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
+            )
+            ->execute()
+            ->fetchAllAssociative();
 
         $emotions = array_map(function ($emotion) {
             $emotion['devicesArray'] = explode(',', $emotion['devices']);
-            $emotion['shopIds'] = array_filter(explode(',', $emotion['shopIds']));
+            $emotion['shopIds'] = array_filter(explode(',', $emotion['shopIds'] ?? ''));
 
             return $emotion;
         }, $emotions);
@@ -138,22 +131,23 @@ class DeviceConfiguration implements DeviceConfigurationInterface
      */
     public function getById($emotionId)
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select([
-            'emotion.id',
-            'emotion.device as devices',
-            'emotion.show_listing as showListing',
-        ]);
-
-        $query->from('s_emotion', 'emotion')
+        $emotion = $this->connection->createQueryBuilder()
+            ->select([
+                'emotion.id',
+                'emotion.device as devices',
+                'emotion.show_listing as showListing',
+            ])
+            ->from('s_emotion', 'emotion')
             ->where('emotion.id = :emotionId')
-            ->setParameter(':emotionId', $emotionId);
+            ->setParameter(':emotionId', $emotionId)
+            ->execute()
+            ->fetchAssociative();
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
+        if (!\is_array($emotion)) {
+            return [];
+        }
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $emotion;
     }
 
     /**
@@ -186,106 +180,87 @@ class DeviceConfiguration implements DeviceConfigurationInterface
      */
     public function getLandingPageShops($emotionId)
     {
-        $query = $this->getLandingpageShopsQuery();
-
-        $query->setParameter(':id', $emotionId);
-
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $this->getLandingPageShopsQuery()
+            ->setParameter(':id', $emotionId)
+            ->execute()
+            ->fetchFirstColumn();
     }
 
     /**
-     * @param int $id
-     *
-     * @return array|null
+     * @return array<string, mixed>|null
      */
-    private function getMasterLandingPage($id)
+    private function getMasterLandingPage(int $id): ?array
     {
-        $query = $this->getLandingPageQuery()
+        $landingPage = $this->getLandingPageQuery()
             ->andWhere('emotion.id = :id')
-            ->setParameter('id', $id);
+            ->setParameter('id', $id)
+            ->execute()
+            ->fetchAssociative();
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
+        if (!\is_array($landingPage)) {
+            return null;
+        }
 
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        return $landingPage;
     }
 
     /**
-     * @param int $parentId
-     *
-     * @return array
+     * @return array<array<string, mixed>>
      */
-    private function getChildrenLandingPages($parentId)
+    private function getChildrenLandingPages(int $parentId): array
     {
-        $query = $this->getLandingPageQuery()
+        $emotions = $this->getLandingPageQuery()
             ->andWhere('emotion.parent_id = :id')
-            ->setParameter(':id', $parentId);
-
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        $emotions = $statement->fetchAll(PDO::FETCH_ASSOC);
+            ->setParameter(':id', $parentId)
+            ->execute()
+            ->fetchAllAssociative();
 
         return $this->sortEmotionsByPositionAndId($emotions);
     }
 
-    /**
-     * @return QueryBuilder
-     */
-    private function getLandingPageQuery()
+    private function getLandingPageQuery(): QueryBuilder
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select([
-            'emotion.id',
-            'emotion.position',
-            'emotion.device as devices',
-            'emotion.name',
-            'emotion.seo_title',
-            'emotion.seo_keywords',
-            'emotion.seo_description',
-            'emotion.valid_from',
-            'emotion.valid_to',
-            'emotion.customer_stream_ids',
-            'emotion.replacement',
-            'now()',
-        ]);
-
-        $query->from('s_emotion', 'emotion')
+        return $this->connection->createQueryBuilder()
+            ->select([
+                'emotion.id',
+                'emotion.position',
+                'emotion.device as devices',
+                'emotion.name',
+                'emotion.seo_title',
+                'emotion.seo_keywords',
+                'emotion.seo_description',
+                'emotion.valid_from',
+                'emotion.valid_to',
+                'emotion.customer_stream_ids',
+                'emotion.replacement',
+                'now()',
+            ])
+            ->from('s_emotion', 'emotion')
             ->andWhere('emotion.active = 1')
             ->andWhere('emotion.is_landingpage = 1')
             ->andWhere('(emotion.valid_from IS NULL OR emotion.valid_from <= now())')
             ->andWhere('(emotion.valid_to IS NULL OR emotion.valid_to >= now())')
             ->orderBy('emotion.position', 'ASC')
-            ->addOrderBy('emotion.id', 'ASC')
-        ;
-
-        return $query;
+            ->addOrderBy('emotion.id', 'ASC');
     }
 
     /**
      * Get QueryBuilder for shops of an emotion.
-     *
-     * @return QueryBuilder
      */
-    private function getLandingPageShopsQuery()
+    private function getLandingPageShopsQuery(): QueryBuilder
     {
-        $query = $this->connection->createQueryBuilder();
-
-        $query->select(['shops.shop_id'])
+        return $this->connection->createQueryBuilder()
+            ->select(['shops.shop_id'])
             ->from('s_emotion_shops', 'shops')
             ->where('shops.emotion_id = :id');
-
-        return $query;
     }
 
     /**
-     * @return array
+     * @param array<array<string, mixed>> $emotions
+     *
+     * @return array<array<string, mixed>>
      */
-    private function sortEmotionsByPositionAndId(array $emotions)
+    private function sortEmotionsByPositionAndId(array $emotions): array
     {
         usort($emotions, function ($a, $b) {
             if ($a['position'] === $b['position']) {
@@ -299,9 +274,12 @@ class DeviceConfiguration implements DeviceConfigurationInterface
     }
 
     /**
-     * @return array
+     * @param array<array<string, mixed>>               $emotions
+     * @param array<Emotion::LISTING_VISIBILITY_ONLY_*> $visibility
+     *
+     * @return array<array<string, mixed>>
      */
-    private function getEmotionsByVisibility(array $emotions, array $visibility)
+    private function getEmotionsByVisibility(array $emotions, array $visibility): array
     {
         return array_filter($emotions, function ($emotion) use ($visibility) {
             return \in_array($emotion['listing_visibility'], $visibility);

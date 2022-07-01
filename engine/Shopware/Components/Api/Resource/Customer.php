@@ -71,7 +71,7 @@ class Customer extends Resource
      *
      * @param string $number
      *
-     * @throws ParameterMissingException*
+     * @throws ParameterMissingException
      * @throws NonUniqueIdentifierUsedException
      * @throws NotFoundException
      *

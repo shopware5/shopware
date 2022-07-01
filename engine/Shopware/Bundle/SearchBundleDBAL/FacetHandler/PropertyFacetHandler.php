@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -85,14 +87,14 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     /**
      * @deprecated - Will be private with Shopware 5.8
      *
-     * @return Set[]|null
+     * @return array<int, Set>|null
      */
     protected function getProperties(ShopContextInterface $context, Criteria $queryCriteria)
     {
         $query = $this->queryBuilderFactory->createQuery($queryCriteria, $context);
         $this->rebuildQuery($query);
 
-        $propertyData = $query->execute()->fetchAll();
+        $propertyData = $query->execute()->fetchAllAssociative();
 
         $valueIds = array_column($propertyData, 'id');
         $filterGroupIds = array_keys(array_flip(array_column($propertyData, 'filterGroupId')));
@@ -138,8 +140,8 @@ class PropertyFacetHandler implements PartialFacetHandlerInterface
     }
 
     /**
-     * @param Set[] $sets
-     * @param int[] $actives
+     * @param array<Set> $sets
+     * @param array<int> $actives
      */
     private function createCollectionResult(
         PropertyFacet $facet,

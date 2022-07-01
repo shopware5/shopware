@@ -167,36 +167,6 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
         return 'en';
     }
 
-    /**
-     * @param string $module
-     * @param string $controller
-     * @param string $file
-     *
-     * @return string
-     */
-    private function inflectPath($module, $controller, $file)
-    {
-        return sprintf(
-            '%s/%s/%s.js',
-            mb_strtolower($this->camelCaseToUnderScore($module)),
-            mb_strtolower($this->camelCaseToUnderScore($controller)),
-            mb_strtolower($this->camelCaseToUnderScore($file))
-        );
-    }
-
-    /**
-     * @param string $input
-     *
-     * @return string
-     */
-    private function camelCaseToUnderScore($input)
-    {
-        $pattern = ['#(?<=(?:\p{Lu}))(\p{Lu}\p{Ll})#', '#(?<=(?:\p{Ll}|\p{Nd}))(\p{Lu})#'];
-        $replacement = ['_\1', '_\1'];
-
-        return preg_replace($pattern, $replacement, $input);
-    }
-
     private function enableBrowserCache(): void
     {
         if ($this->container->getParameter('shopware.template.forceCompile')) {

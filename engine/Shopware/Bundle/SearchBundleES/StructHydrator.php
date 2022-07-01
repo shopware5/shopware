@@ -65,7 +65,7 @@ class StructHydrator
         $option = new PropertyOption();
         $option->setId($data['id']);
         $option->setName($data['name']);
-        $option->setPosition($data['position']);
+        $option->setPosition((int) $data['position']);
 
         if ($data['media']) {
             $option->setMedia($this->createMedia($data['media']));

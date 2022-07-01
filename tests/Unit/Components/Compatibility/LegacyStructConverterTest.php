@@ -40,10 +40,13 @@ use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\ContainerAwareEventManager;
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Tests\Functional\Traits\ShopContextTrait;
 use Shopware_Components_Config;
 
 class LegacyStructConverterTest extends TestCase
 {
+    use ShopContextTrait;
+
     public function testConvertListProductStruct(): void
     {
         $converter = $this->createConverter();
@@ -67,12 +70,15 @@ class LegacyStructConverterTest extends TestCase
             ['useShortDescriptionInListing', null, true],
         ]);
 
+        $contextService = $this->createMock(ContextServiceInterface::class);
+        $contextService->method('getShopContext')->willReturn($this->createShopContext());
+
         $eventManager = $this->createMock(ContainerAwareEventManager::class);
         $eventManager->method('filter')->willReturnArgument(1);
 
         return new LegacyStructConverter(
             $config,
-            $this->createMock(ContextServiceInterface::class),
+            $contextService,
             $eventManager,
             $this->createMock(MediaServiceInterface::class),
             $this->createMock(Connection::class),
