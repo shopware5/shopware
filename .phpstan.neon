@@ -70,10 +70,6 @@ parameters:
             message: '#Comparison operation "<" between \(array\|float\|int\) and 0 results in an error\.#'
             path: engine/Shopware/Core/sAdmin.php
 
-        - # We override the method in higher class inheritance to public method
-            message: '#Call to protected method verifyPage#'
-            path: tests/Mink/features/bootstrap/SpecialContext.php
-
         - # Every API resource class has those methods, but we cannot put that into an interface or abstract class, because the parameter amount is different
             message: '#Call to an undefined method \$this\(Shopware\\Components\\Api\\Resource\\Resource\)&Shopware\\Components\\Api\\BatchInterface::(delete|update|create)\(\)#'
             path: engine/Shopware/Components/Api/Resource/Resource.php

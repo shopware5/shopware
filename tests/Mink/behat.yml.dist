@@ -3,21 +3,60 @@ default:
         SensioLabs\Behat\PageObjectExtension:
             namespaces:
                 page:
-                    - Shopware\Tests\Mink\Page
-                    - Shopware\Tests\Mink\Page\Backend
+                    - Shopware\Tests\Mink\Page\Helper
+                    - Shopware\Tests\Mink\Page\Backend\Backend
+                    - Shopware\Tests\Mink\Page\Backend\ContentTypeManager
+                    - Shopware\Tests\Mink\Page\Backend\CustomRecipes
+                    - Shopware\Tests\Mink\Page\Frontend\Account
+                    - Shopware\Tests\Mink\Page\Frontend\Address
+                    - Shopware\Tests\Mink\Page\Frontend\Article
+                    - Shopware\Tests\Mink\Page\Frontend\Blog
+                    - Shopware\Tests\Mink\Page\Frontend\Checkout
+                    - Shopware\Tests\Mink\Page\Frontend\Detail
+                    - Shopware\Tests\Mink\Page\Frontend\Form
+                    - Shopware\Tests\Mink\Page\Frontend\Generic
+                    - Shopware\Tests\Mink\Page\Frontend\Homepage
+                    - Shopware\Tests\Mink\Page\Frontend\Listing
+                    - Shopware\Tests\Mink\Page\Frontend\Newsletter
+                    - Shopware\Tests\Mink\Page\Frontend\Note
+                    - Shopware\Tests\Mink\Page\Frontend\Sitemap
                 element:
-                    - Shopware\Tests\Mink\Element
-                    - Shopware\Tests\Mink\Element\Backend
+                    - Shopware\Tests\Mink\Page\Helper\Elements
+                    - Shopware\Tests\Mink\Page\Backend\Backend\Elements
+                    - Shopware\Tests\Mink\Page\Backend\ContentTypeManager\Elements
+                    - Shopware\Tests\Mink\Page\Backend\CustomRecipes\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Account\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Address\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Article\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Blog\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Checkout\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Detail\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Form\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Generic\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Homepage\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Listing\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Newsletter\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Note\Elements
+                    - Shopware\Tests\Mink\Page\Frontend\Sitemap\Elements
+
         Shopware\Behat\ShopwareExtension: ~
         Behat\MinkExtension:
             ## defined in buildscript
-            #base_url: 'http://localhost/shopware/'
-            default_session: 'goutte'
+            base_url: 'http://%sw.host%%sw.path%'
+            show_cmd: 'echo "Scenario failed! Saved current page to %s"'
+            show_tmp_dir: 'build/artifacts/mink'
+            show_auto: true
+            default_session: 'selenium2'
             javascript_session: 'selenium2'
-            goutte: ~
+            browser_name: chrome
             selenium2:
                 wd_host: "http://selenium:4444/wd/hub"
-            browser_name: chrome
+                capabilities:
+                    browser: chrome
+                    marionette: true
+                    extra_capabilities:
+                        chromeOptions:
+                            w3c: false
 
     gherkin:
         filters:
@@ -25,25 +64,25 @@ default:
 
     suites:
         default:
-            paths: [ "%paths.base%/features" ]
+            paths: [ "%paths.base%" ]
             template: Responsive
             contexts:
                 - Behat\MinkExtension\Context\MinkContext
-                - Shopware\Tests\Mink\FeatureContext
-                - Shopware\Tests\Mink\AccountContext
-                - Shopware\Tests\Mink\BlogContext
-                - Shopware\Tests\Mink\CheckoutContext
-                - Shopware\Tests\Mink\DetailContext
-                - Shopware\Tests\Mink\FormContext
-                - Shopware\Tests\Mink\ListingContext
-                - Shopware\Tests\Mink\NoteContext
-                - Shopware\Tests\Mink\SeoContext
-                - Shopware\Tests\Mink\ShopwareContext
-                - Shopware\Tests\Mink\SitemapContext
-                - Shopware\Tests\Mink\SpecialContext
-                - Shopware\Tests\Mink\TransformContext
-                - Shopware\Tests\Mink\SecurityContext
-                - Shopware\Tests\Mink\ExportContext
-                - Shopware\Tests\Mink\BackendContext
-                - Shopware\Tests\Mink\BackendContentTypeManagerContext
-                - Shopware\Tests\Mink\BackendCustomRecipesContext
+                - Shopware\Tests\Mink\Tests\General\Helpers\FeatureContext
+                - Shopware\Tests\Mink\Tests\Frontend\Account\bootstrap\AccountContext
+                - Shopware\Tests\Mink\Tests\Frontend\Blog\bootstrap\BlogContext
+                - Shopware\Tests\Mink\Tests\Frontend\Checkout\bootstrap\CheckoutContext
+                - Shopware\Tests\Mink\Tests\Frontend\Detail\bootstrap\DetailContext
+                - Shopware\Tests\Mink\Tests\Frontend\Detail\bootstrap\FormContext
+                - Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap\ListingContext
+                - Shopware\Tests\Mink\Tests\Frontend\Note\bootstrap\NoteContext
+                - Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap\SeoContext
+                - Shopware\Tests\Mink\Tests\Frontend\Homepage\bootstrap\ShopwareContext
+                - Shopware\Tests\Mink\Tests\Frontend\Sitemap\bootstrap\SitemapContext
+                - Shopware\Tests\Mink\Tests\General\Helpers\SpecialContext
+                - Shopware\Tests\Mink\Tests\General\Helpers\TransformContext
+                - Shopware\Tests\Mink\Tests\Frontend\Homepage\bootstrap\SecurityContext
+                - Shopware\Tests\Mink\Tests\Backend\Export\bootstrap\ExportContext
+                - Shopware\Tests\Mink\Tests\Backend\Backend\bootstrap\BackendContext
+                - Shopware\Tests\Mink\Tests\Backend\ContentTypes\bootstrap\BackendContentTypeManagerContext
+                - Shopware\Tests\Mink\Tests\Backend\ContentTypes\bootstrap\BackendCustomRecipesContext
