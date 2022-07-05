@@ -86,6 +86,9 @@ Install Required JS Files:
 PHP analyze:
     tags:
         - m5.large
+    cache:
+        - <<: *composer-cache
+          policy: pull
     stage: Static analysis
     before_script:
         - make init
