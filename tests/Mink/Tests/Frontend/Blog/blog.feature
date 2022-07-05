@@ -13,7 +13,7 @@ Feature: Blog
         And   I should see "Sonnenschutz - so gehören Sie zur Crème de la Crème 18.08.12"
         And   I should see "Ich packe meinen Koffer… 08.08.12"
 
-    @crossselling @knownFailing
+    @crossselling
     Scenario Outline: I can see some matching articles on each blog article page
         Given I click to read the blog article on position <position>
         Then  I should see "<title>"

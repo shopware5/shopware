@@ -58,10 +58,6 @@ default:
                         chromeOptions:
                             w3c: false
 
-    gherkin:
-        filters:
-            tags: ~@knownFailing
-
     suites:
         default:
             paths: [ "%paths.base%" ]
