@@ -1,28 +1,6 @@
 @listing
 Feature: Show Listing
 
-#    @filter @javascript @knownFailing
-#    Scenario: I can filter the articles by custom filters
-#        Given I am on the listing page:
-#            | parameter | value |
-#            | sCategory | 21    |
-#
-#        When  I set the filter to:
-#            | filter        | value     |
-#            | Geschmack     | mild      |
-#            | Flaschengröße | 0,5 Liter |
-#            | Alkoholgehalt | >30%      |
-#        Then  I should see 4 elements of type "ArticleBox" eventually
-#
-#        When  I set the filter to:
-#            | filter          | value   |
-#            | Trinktemperatur | Gekühlt |
-#            | Farbe           | rot     |
-#        Then  I should see 2 elements of type "ArticleBox" eventually
-#
-#        When  I reset all filters
-#        Then  I should see 10 elements of type "ArticleBox" eventually
-
     @sort @javascript
     Scenario: I can change the sort
         Given I am on the listing page:
