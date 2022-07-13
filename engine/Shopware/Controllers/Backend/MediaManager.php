@@ -708,7 +708,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
             foreach ($data['thumbnailSize'] as $size) {
                 if (!empty($size['value']) && $size['value'] !== '') {
-                    $thumbnailSizes[] = $size['value'];
+                    $thumbnailSizes[] = str_replace(' ', '', $size['value']);
                 }
             }
         }
