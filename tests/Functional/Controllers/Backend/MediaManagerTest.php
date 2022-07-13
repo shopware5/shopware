@@ -25,9 +25,12 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class MediaManagerTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
+
     /**
      * Standard set up for every test - just disable auth
      */
@@ -45,7 +48,7 @@ class MediaManagerTest extends Enlight_Components_Test_Controller_TestCase
      * checks if the new album has inherited the parents settings
      * and deletes it afterwards
      */
-    public function testAlbumInheritance()
+    public function testAlbumInheritance(): void
     {
         $params = [
             'albumID' => '',
@@ -95,5 +98,39 @@ class MediaManagerTest extends Enlight_Components_Test_Controller_TestCase
 
         $jsonBody = $this->View()->getAssign();
         static::assertTrue($jsonBody['success']);
+    }
+
+    public function testResolveAlbumDataRemoveWhiteSpaces(): void
+    {
+        $params = [
+            'albumID' => '',
+            'createThumbnails' => '',
+            'iconCls' => 'sprite-target',
+            'id' => '',
+            'leaf' => false,
+            'mediaCount' => '',
+            'position' => '',
+            'text' => 'PHPUNIT_ALBUM',
+            'thumbnailSize' => [
+                [
+                    'index' => 6,
+                    'value' => '50 x 50',
+                ],
+            ],
+        ];
+
+        $this->Request()->setMethod('POST')->setPost($params);
+        $this->dispatch('/backend/MediaManager/saveAlbum');
+
+        $jsonBody = $this->View()->getAssign();
+        static::assertTrue($jsonBody['success']);
+
+        $albumId = $jsonBody['data']['id'];
+        $db = $this->getContainer()->get('dbal_connection');
+
+        $thumbnailSize = $db->fetchOne('SELECT thumbnail_size FROM s_media_album_settings WHERE albumID = ?;', [$albumId]);
+
+        static::assertStringContainsString('50x50', $thumbnailSize);
+        static::assertStringNotContainsString('50 x 50', $thumbnailSize);
     }
 }

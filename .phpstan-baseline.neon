@@ -43311,11 +43311,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/MailTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\MediaManagerTest\\:\\:testAlbumInheritance\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/MediaManagerTest.php
-
-		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/NotificationTest.php
