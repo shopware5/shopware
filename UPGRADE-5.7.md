@@ -2,6 +2,10 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.14
+
+[View all changes from v5.7.13...v5.7.14](https://github.com/shopware/shopware/compare/v5.7.13...v5.7.14)
+
 ## 5.7.13
 
 [View all changes from v5.7.12...v5.7.13](https://github.com/shopware/shopware/compare/v5.7.12...v5.7.13)

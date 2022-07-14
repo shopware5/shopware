@@ -232,8 +232,8 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         }
 
         $antiXss = new AntiXSS();
-        $antiXss->removeEvilAttributes($allowedHtmlTags);
-        $antiXss->removeEvilHtmlTags($allowedAttributes);
+        $antiXss->removeEvilAttributes($allowedAttributes);
+        $antiXss->removeEvilHtmlTags($allowedHtmlTags);
         $value = $antiXss->xss_clean($value);
 
         return \str_replace(['&lt;', '&gt;'], ['<', '>'], $value);
