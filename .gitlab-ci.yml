@@ -183,7 +183,7 @@ PHP 8.1:
 PHP 8.2:
     allow_failure: true
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0alpha1
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0alpha2
 
 MySQL 8.0:
     extends: .phpunit_base

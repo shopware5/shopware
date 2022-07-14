@@ -263,7 +263,7 @@ class FilterTest extends TestCase
         return [
             [
                 'input' => '<li style="list-style-image: url(javascript:alert(0))">',
-                'expected' => '<li >',
+                'expected' => '<li style="list-style-image: url((0))">',
                 'additions' => [
                     false,
                     [],
