@@ -46,6 +46,7 @@ Visit the forum at <https://forum.shopware.com/>
 -   <a href="https://php.net/manual/en/book.ctype.php" target="_blank">ctype</a>
 -   <a href="https://php.net/manual/en/book.curl.php" target="_blank">curl</a>
 -   <a href="https://php.net/manual/en/book.dom.php" target="_blank">dom</a>
+-   <a href="https://php.net/manual/en/book.filter.php" target="_blank">filter</a>
 -   <a href="https://php.net/manual/en/book.hash.php" target="_blank">hash</a>
 -   <a href="https://php.net/manual/en/book.iconv.php" target="_blank">iconv</a>
 -   <a href="https://php.net/manual/en/book.image.php" target="_blank">gd</a> (with freetype and libjpeg)

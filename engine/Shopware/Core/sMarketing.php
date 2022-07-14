@@ -711,7 +711,7 @@ SQL;
                     if (strpos($getText['link'], 'http') === false && $getText['link']) {
                         $getText['link'] = 'http://' . $getText['link'];
                     }
-                    $getCampaignContainers[$campaignKey]['description'] = $getText['headline'];
+                    $getCampaignContainers[$campaignKey]['description'] = htmlspecialchars($getText['headline']);
                     $getCampaignContainers[$campaignKey]['data'] = $getText;
                     break;
             }
