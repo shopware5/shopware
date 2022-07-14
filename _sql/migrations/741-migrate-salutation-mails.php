@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 class Migrations_Migration741 extends Shopware\Components\Migrations\AbstractMigration
 {
@@ -23,12 +45,12 @@ class Migrations_Migration741 extends Shopware\Components\Migrations\AbstractMig
 
         $statement->execute([
             ':newName' => 'mr',
-            ':name' => 'AccountSalutationMr'
+            ':name' => 'AccountSalutationMr',
         ]);
 
         $statement->execute([
             ':newName' => 'ms',
-            ':name' => 'AccountSalutationMs'
+            ':name' => 'AccountSalutationMs',
         ]);
 
         $sql = <<<'EOD'
@@ -39,14 +61,11 @@ INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`,
 EOD;
         $this->addSql($sql);
 
-
         $sql = <<<'EOD'
         SET @elementId = (SELECT id FROM s_core_config_elements WHERE name = 'shopsalutations' LIMIT 1);
         INSERT INTO `s_core_config_element_translations` (`element_id`, `locale_id`, `label`, `description`) VALUES (@elementId, 2, 'Available salutations', 'Allows to configure the available shop salutations in frontend registration and account. Inserted keys are generated automatically as snippet inside the frontend/salutation namespace.');
 EOD;
         $this->addSql($sql);
-
-
 
         $sql = <<<'EOD'
         SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Frontend33' LIMIT 1);
@@ -55,7 +74,6 @@ INSERT INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`,
 (NULL, @formId, 'displayprofiletitle', 'b:0;', 'Titel Feld anzeigen', NULL, 'boolean', '0', '0', '1', NULL, NULL, NULL);
 EOD;
         $this->addSql($sql);
-
 
         $sql = <<<'EOD'
 DELETE FROM `s_core_config_mails` WHERE dirty = 0 AND `name` IN (

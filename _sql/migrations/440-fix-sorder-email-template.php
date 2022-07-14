@@ -1,6 +1,28 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-class Migrations_Migration440 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration440 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -36,6 +58,7 @@ class Migrations_Migration440 Extends Shopware\Components\Migrations\AbstractMig
 UPDATE `s_core_config_mails` SET `content` = "$content" WHERE `name` = "$name" AND dirty = 0
 SQL;
             $this->addSql($sql);
+
             return;
         }
 
@@ -61,6 +84,7 @@ SQL;
 
     /**
      * Helper method to update the translations of a mail template
+     *
      * @param string $name
      * @param string $content
      * @param string $contentHtml
@@ -108,6 +132,7 @@ SQL;
      * Helper method to prefix and suffix the mail templates with the configuration values
      *
      * @param string $content
+     *
      * @return string
      */
     private function convertTemplatePlain($content)
@@ -115,13 +140,14 @@ SQL;
         $header = '{include file=\"string:{config name=emailheaderplain}\"}';
         $footer = '{include file=\"string:{config name=emailfooterplain}\"}';
 
-        return $header."\r\n\r\n".$content."\r\n\r\n".$footer;
+        return $header . "\r\n\r\n" . $content . "\r\n\r\n" . $footer;
     }
 
     /**
      * Helper method to prefix and suffix the mail templates with the configuration values
      *
      * @param string $content
+     *
      * @return string
      */
     private function convertTemplateHtml($content)
@@ -129,6 +155,6 @@ SQL;
         $header = '{include file=\"string:{config name=emailheaderhtml}\"}';
         $footer = '{include file=\"string:{config name=emailfooterhtml}\"}';
 
-        return $header."\r\n<br/><br/>\r\n".$content."\r\n<br/><br/>\r\n".$footer;
+        return $header . "\r\n<br/><br/>\r\n" . $content . "\r\n<br/><br/>\r\n" . $footer;
     }
 }

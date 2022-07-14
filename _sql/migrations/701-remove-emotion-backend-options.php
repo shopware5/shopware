@@ -1,14 +1,37 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
+
 class Migrations_Migration701 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
         // remove old templates
-        $this->addSql("DELETE FROM `s_core_templates` WHERE version < 3;");
+        $this->addSql('DELETE FROM `s_core_templates` WHERE version < 3;');
 
         // remove unused table fields
-        $this->addSql("ALTER TABLE `s_categories` DROP COLUMN `showfiltergroups`;");
-        $this->addSql("ALTER TABLE `s_emotion` DROP COLUMN `container_width`;");
+        $this->addSql('ALTER TABLE `s_categories` DROP COLUMN `showfiltergroups`;');
+        $this->addSql('ALTER TABLE `s_emotion` DROP COLUMN `container_width`;');
 
         // remove unused emotion options
         $this->addSql("DELETE FROM `s_library_component_field` WHERE `name` IN ('article_slider_numbers', 'manufacturer_slider_numbers', 'thumbnail_size');");
@@ -28,10 +51,10 @@ class Migrations_Migration701 extends Shopware\Components\Migrations\AbstractMig
             'fuzzysearchdistance',
             'fuzzysearchpricefilter',
             'fuzzysearchresultsperpage',
-            'thumb'
+            'thumb',
         ];
 
-        $optionsToDeleteSql = "'".implode("','", $optionsToDelete)."'";
+        $optionsToDeleteSql = "'" . implode("','", $optionsToDelete) . "'";
         $sql = <<<SQL
 DELETE elements, elementValues, elementTranslations
 FROM `s_core_config_elements` as elements
@@ -44,10 +67,9 @@ SQL;
 
         $this->addSql($sql);
 
-
         // remove unused snippets
-        $snippetsToDelete = ["article_slider_numbers","article_slider_numbers_support","manufacturer_slider_numbers/label","manufacturer_slider_numbers/support","thumbnail_size","thumbnail_size_support","LoginActionClose","LoginLabelNew","LoginActionCreateAccount","LoginLabelExisting","LoginTextExisting","LoginActionNext","ListingPaging","ListingTextPrevious","ListingTextNext","AccountLabelCurrentPassword","AccountLabelNewPassword","AccountLabelRepeatPassword","OrdersHeadline","PasswordLabelMail","BookmarkTwitter","BookmarkFacebook","BookmarkDelicious","BookmarkDiggit","BlogInfoRating","SlideArticleInfoContent","IndexActionShowPositions","sCartPremiumsHeadline","CartFooterSum","CartFooterShipping","CartFooterTotal","CheckoutFooterActionAddVoucher","CheckoutFooterIdLabelInline","CheckoutFooterActionAdd","CartColumnAvailability","sCartItemFree","CartItemInfoPremium","CartItemInfoBundle","ConfirmErrorAGB","ConfirmHeadlinePersonalInformation","CheckoutFooterLabelAddVoucher","CheckoutFooterLabelAddArticle","ConfirmLabelComment","CheckoutDispatchLinkSend","CheckoutItemPrice","CheckoutItemLaststock","CheckoutPaymentHeadline","FinishHeaderItems","sBonusPriceFree","ShippingHeader","DispatchHeadNotice","CompareActionClose","CompareHeader","BundleHeader","BundleInfoPriceForAll","BundleActionAdd","BundleInfoPriceInstead","BundleInfoPercent","LiveTickerStartPrice","LiveTickerCurrentPrice","LiveTimeDays","LiveTimeHours","LiveTimeMinutes","LiveTimeSeconds","LiveTimeRemainingPieces","LiveTimeRemaining","LiveCategoryPreviousPrice","LiveCategorySavingPercent","LiveCategoryOffersEnds","LiveCategoryCurrentPrice","LiveCountdownStartPrice","LiveCountdownCurrentPrice","LiveCountdownPriceFails","LiveCountdownPriceRising","LiveCountdownMinutes","LiveCountdownRemaining","LiveCountdownRemainingPieces","DetailFrom","DetailDataHeaderBlockprices","DetailBuyValueSelect","DetailBuyLabelQuantity","DetailCommentInfoAverageRate","DetailCommentInfoRating","DetailCommentLabelRating","DetailCommentLabelText","DetailDescriptionSupplier","DetailChooseFirst","DetailFromNew","DetailSimilarHeader","FormsLinkBack","FormsTextContact","IndexMetaShortcutIcon","IndexMetaMsNavButtonColor","IndexRealizedWith","IndexRealizedShopsystem","MenuLeftHeading","IndexSearchFieldValue","ListingBoxInstantDownload","ListingBoxLinkBuy","SimilarBoxLinkDetails","SimilarBoxMore","FilterSupplierHeadline","ListingLinkAllSuppliers","ListingActionsSettingsTitle","ListingActionsSettingsTable","ListingActionsSettingsList","NewsletterDetailLinkNewWindow","NewsletterLabelSelect","sNewsletterLabelMail","NewsletterRegisterLabelSalutation","NewsletterRegisterPleaseChoose","NewsletterRegisterLabelFirstname","NewsletterRegisterLabelLastname","NewsletterRegisterBillingLabelStreet","NewsletterRegisterBillingLabelCity","NoteColumnName","NoteColumnPrice","NoteLinkBuy","NoteLinkDetails","PalpalPendingTitle","PalpalPendingInfo","PalpalPendingLinkHomepage","TagcloudHead","DetailNotifyActionSubmit","RegisterLabelCompany","RegisterBillingLabelStreet","RegisterBillingLabelCity","RegisterBillingLabelCountry","RegisterBillingLabelSelect","RegisterErrorHeadline","RegisterInfoSupplier","RegisterInfoSupplier2","RegisterIndexActionSubmit","RegisterInfoAdvantages","RegisterPersonalHeadline","RegisterLabelSalutation","RegisterLabelFirstname","RegisterLabelLastname","RegisterLabelMailConfirmation","RegisterLabelPassword","RegisterLabelPasswordRepeat","RegisterLabelPhone","RegisterLabelBirthday","RegisterShippingLabelSalutation","RegisterShippingLabelCompany","RegisterShippingLabelDepartment","RegisterShippingLabelFirstname","RegisterShippingLabelLastname","RegisterShippingLabelStreet","RegisterShippingLabelCity","RegisterShippingLabelCountry","RegisterShippingLabelSelect","CheckoutStepBasketNumber","CheckoutStepBasketText","CheckoutStepRegisterNumber","CheckoutStepRegisterText","SearchFilterCategoryHeading","SearchFuzzyHeadlineEmpty","SearchLeftHeadlineCutdown","SearchLeftHeadlineFilter","SearchLeftLinkAllFilters","SearchLeftLinkDefault","SearchLeftHeadlineSupplier","SearchLeftInfoSuppliers","SearchLeftLinkAllSuppliers","SearchLeftHeadlinePrice","SearchLeftLinkAllPrices","SearchTo","SearchWere","SearchArticlesFound","SitemapHeader","TellAFriendLabelMail","TellAFriendLabelComment","TellAFriendLabelCaptcha","DetailBoughtArticlesSlider","DetailViewedArticlesSlider"];
-        $snippetsToDeleteSql = "'".implode("','", $snippetsToDelete)."'";
+        $snippetsToDelete = ['article_slider_numbers', 'article_slider_numbers_support', 'manufacturer_slider_numbers/label', 'manufacturer_slider_numbers/support', 'thumbnail_size', 'thumbnail_size_support', 'LoginActionClose', 'LoginLabelNew', 'LoginActionCreateAccount', 'LoginLabelExisting', 'LoginTextExisting', 'LoginActionNext', 'ListingPaging', 'ListingTextPrevious', 'ListingTextNext', 'AccountLabelCurrentPassword', 'AccountLabelNewPassword', 'AccountLabelRepeatPassword', 'OrdersHeadline', 'PasswordLabelMail', 'BookmarkTwitter', 'BookmarkFacebook', 'BookmarkDelicious', 'BookmarkDiggit', 'BlogInfoRating', 'SlideArticleInfoContent', 'IndexActionShowPositions', 'sCartPremiumsHeadline', 'CartFooterSum', 'CartFooterShipping', 'CartFooterTotal', 'CheckoutFooterActionAddVoucher', 'CheckoutFooterIdLabelInline', 'CheckoutFooterActionAdd', 'CartColumnAvailability', 'sCartItemFree', 'CartItemInfoPremium', 'CartItemInfoBundle', 'ConfirmErrorAGB', 'ConfirmHeadlinePersonalInformation', 'CheckoutFooterLabelAddVoucher', 'CheckoutFooterLabelAddArticle', 'ConfirmLabelComment', 'CheckoutDispatchLinkSend', 'CheckoutItemPrice', 'CheckoutItemLaststock', 'CheckoutPaymentHeadline', 'FinishHeaderItems', 'sBonusPriceFree', 'ShippingHeader', 'DispatchHeadNotice', 'CompareActionClose', 'CompareHeader', 'BundleHeader', 'BundleInfoPriceForAll', 'BundleActionAdd', 'BundleInfoPriceInstead', 'BundleInfoPercent', 'LiveTickerStartPrice', 'LiveTickerCurrentPrice', 'LiveTimeDays', 'LiveTimeHours', 'LiveTimeMinutes', 'LiveTimeSeconds', 'LiveTimeRemainingPieces', 'LiveTimeRemaining', 'LiveCategoryPreviousPrice', 'LiveCategorySavingPercent', 'LiveCategoryOffersEnds', 'LiveCategoryCurrentPrice', 'LiveCountdownStartPrice', 'LiveCountdownCurrentPrice', 'LiveCountdownPriceFails', 'LiveCountdownPriceRising', 'LiveCountdownMinutes', 'LiveCountdownRemaining', 'LiveCountdownRemainingPieces', 'DetailFrom', 'DetailDataHeaderBlockprices', 'DetailBuyValueSelect', 'DetailBuyLabelQuantity', 'DetailCommentInfoAverageRate', 'DetailCommentInfoRating', 'DetailCommentLabelRating', 'DetailCommentLabelText', 'DetailDescriptionSupplier', 'DetailChooseFirst', 'DetailFromNew', 'DetailSimilarHeader', 'FormsLinkBack', 'FormsTextContact', 'IndexMetaShortcutIcon', 'IndexMetaMsNavButtonColor', 'IndexRealizedWith', 'IndexRealizedShopsystem', 'MenuLeftHeading', 'IndexSearchFieldValue', 'ListingBoxInstantDownload', 'ListingBoxLinkBuy', 'SimilarBoxLinkDetails', 'SimilarBoxMore', 'FilterSupplierHeadline', 'ListingLinkAllSuppliers', 'ListingActionsSettingsTitle', 'ListingActionsSettingsTable', 'ListingActionsSettingsList', 'NewsletterDetailLinkNewWindow', 'NewsletterLabelSelect', 'sNewsletterLabelMail', 'NewsletterRegisterLabelSalutation', 'NewsletterRegisterPleaseChoose', 'NewsletterRegisterLabelFirstname', 'NewsletterRegisterLabelLastname', 'NewsletterRegisterBillingLabelStreet', 'NewsletterRegisterBillingLabelCity', 'NoteColumnName', 'NoteColumnPrice', 'NoteLinkBuy', 'NoteLinkDetails', 'PalpalPendingTitle', 'PalpalPendingInfo', 'PalpalPendingLinkHomepage', 'TagcloudHead', 'DetailNotifyActionSubmit', 'RegisterLabelCompany', 'RegisterBillingLabelStreet', 'RegisterBillingLabelCity', 'RegisterBillingLabelCountry', 'RegisterBillingLabelSelect', 'RegisterErrorHeadline', 'RegisterInfoSupplier', 'RegisterInfoSupplier2', 'RegisterIndexActionSubmit', 'RegisterInfoAdvantages', 'RegisterPersonalHeadline', 'RegisterLabelSalutation', 'RegisterLabelFirstname', 'RegisterLabelLastname', 'RegisterLabelMailConfirmation', 'RegisterLabelPassword', 'RegisterLabelPasswordRepeat', 'RegisterLabelPhone', 'RegisterLabelBirthday', 'RegisterShippingLabelSalutation', 'RegisterShippingLabelCompany', 'RegisterShippingLabelDepartment', 'RegisterShippingLabelFirstname', 'RegisterShippingLabelLastname', 'RegisterShippingLabelStreet', 'RegisterShippingLabelCity', 'RegisterShippingLabelCountry', 'RegisterShippingLabelSelect', 'CheckoutStepBasketNumber', 'CheckoutStepBasketText', 'CheckoutStepRegisterNumber', 'CheckoutStepRegisterText', 'SearchFilterCategoryHeading', 'SearchFuzzyHeadlineEmpty', 'SearchLeftHeadlineCutdown', 'SearchLeftHeadlineFilter', 'SearchLeftLinkAllFilters', 'SearchLeftLinkDefault', 'SearchLeftHeadlineSupplier', 'SearchLeftInfoSuppliers', 'SearchLeftLinkAllSuppliers', 'SearchLeftHeadlinePrice', 'SearchLeftLinkAllPrices', 'SearchTo', 'SearchWere', 'SearchArticlesFound', 'SitemapHeader', 'TellAFriendLabelMail', 'TellAFriendLabelComment', 'TellAFriendLabelCaptcha', 'DetailBoughtArticlesSlider', 'DetailViewedArticlesSlider'];
+        $snippetsToDeleteSql = "'" . implode("','", $snippetsToDelete) . "'";
         $sql = <<<SQL
 DELETE snippet
 FROM `s_core_snippets` as snippet

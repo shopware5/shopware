@@ -34,6 +34,7 @@ parameters:
         - engine/Library
 
     paths:
+        - _sql/migrations
         - engine/Shopware
         - tests
         - engine/Library/Enlight

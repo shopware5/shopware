@@ -21,11 +21,12 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1227 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        if (self::MODUS_INSTALL === $modus) {
+        if ($modus === self::MODUS_INSTALL) {
             $this->addSql("SET @customergroupId = ( SELECT id FROM `s_core_customergroups` WHERE groupkey = 'EK' LIMIT 1 );");
             $this->addSql("UPDATE `s_core_customergroups` SET `minimumorder` = '0', `minimumordersurcharge` = '0' WHERE `id` = @customergroupId;");
         }

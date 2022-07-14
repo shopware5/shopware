@@ -32,7 +32,7 @@ class Migrations_Migration1703 extends AbstractMigration
             ->query('SELECT id FROM `s_core_config_elements` WHERE `name` = "ignore_trailing_slash" AND form_id = (SELECT id FROM s_core_config_forms WHERE name = "Frontend100") LIMIT 1')
             ->fetch(PDO::FETCH_COLUMN);
 
-        if (is_string($elementExists)) {
+        if (\is_string($elementExists)) {
             return;
         }
 

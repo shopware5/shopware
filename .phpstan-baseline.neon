@@ -1,6 +1,1351 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Cannot access offset 'value' on array\\{name\\: string, value\\: string\\}\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/1204-add-variant-filter.php
+
+		-
+			message: "#^Method Migrations_Migration1204\\:\\:getExistingSortingTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/1204-add-variant-filter.php
+
+		-
+			message: "#^Method Migrations_Migration1204\\:\\:importFacetTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1204-add-variant-filter.php
+
+		-
+			message: "#^Parameter \\#1 \\$translationShopId of method Migrations_Migration1204\\:\\:getExistingSortingTranslation\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: _sql/migrations/1204-add-variant-filter.php
+
+		-
+			message: "#^Parameter \\#2 \\$localeId of method Migrations_Migration1204\\:\\:getExistingSortingTranslation\\(\\) expects int, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1204-add-variant-filter.php
+
+		-
+			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1207-add-new-seo-alias-for-variants.php
+
+		-
+			message: "#^Variable \\$shopValue in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: _sql/migrations/1207-add-new-seo-alias-for-variants.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strtolower expects string, int\\|string\\|false\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1226-add-blog-comment-mailtemplate.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strtolower expects string, int\\|string\\|false\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1229-accountless-optin-switch.php
+
+		-
+			message: "#^Method Migrations_Migration1407\\:\\:addConfigElementTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1407-add-english-translations.php
+
+		-
+			message: "#^Method Migrations_Migration1407\\:\\:alterHolidays\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1407-add-english-translations.php
+
+		-
+			message: "#^Method Migrations_Migration1407\\:\\:correctTypoInHolidays\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1407-add-english-translations.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strtolower expects string, int\\|string\\|false\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1426-add-blog-comment-mailtemplate.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function strtolower expects string, int\\|string\\|false\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1429-accountless-optin-switch.php
+
+		-
+			message: "#^Method Migrations_Migration1436\\:\\:createEnglishDocumentMailTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1436-document-type-mail-templates.php
+
+		-
+			message: "#^Method Migrations_Migration1436\\:\\:createGermanDocumentMailTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1436-document-type-mail-templates.php
+
+		-
+			message: "#^Method Migrations_Migration1436\\:\\:updateTypeOfDefaultDocumentMailTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1436-document-type-mail-templates.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/1439-change-back-document-id-to-tmp.php
+
+		-
+			message: "#^Method Migrations_Migration1439\\:\\:isMySql8\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1439-change-back-document-id-to-tmp.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/1440-change-document-id-to-lowercase.php
+
+		-
+			message: "#^Property Migrations_Migration1444\\:\\:\\$mailer has no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1444-userfriendly-mail-options.php
+
+		-
+			message: "#^Property Migrations_Migration1444\\:\\:\\$mailerAuth has no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1444-userfriendly-mail-options.php
+
+		-
+			message: "#^Property Migrations_Migration1444\\:\\:\\$mailerSecure has no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1444-userfriendly-mail-options.php
+
+		-
+			message: "#^Method Migrations_Migration1450\\:\\:saveNewCountry\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1450-add-missing-countries.php
+
+		-
+			message: "#^Method Migrations_Migration1450\\:\\:saveNewCountry\\(\\) has parameter \\$newCountry with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/1450-add-missing-countries.php
+
+		-
+			message: "#^Parameter \\#3 \\$defaultLocale of method Migrations_Migration1450\\:\\:saveNewCountry\\(\\) expects string, int\\|string\\|false\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1450-add-missing-countries.php
+
+		-
+			message: "#^Method Migrations_Migration1454\\:\\:addShopIdToBlogComment\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1454-add-category-shop-association.php
+
+		-
+			message: "#^Method Migrations_Migration1454\\:\\:addShopsColumnToCategory\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1454-add-category-shop-association.php
+
+		-
+			message: "#^Method Migrations_Migration1454\\:\\:createBlogConfigForm\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1454-add-category-shop-association.php
+
+		-
+			message: "#^Method Migrations_Migration1454\\:\\:createSubshopBlogCommentElement\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1454-add-category-shop-association.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/1611-change-order-details-id-column.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_column expects array, array\\|false given\\.$#"
+			count: 1
+			path: _sql/migrations/1611-change-order-details-id-column.php
+
+		-
+			message: "#^Method Migrations_Migration1625\\:\\:getDefaultLocale\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1625-add-sort-by-articlenumber.php
+
+		-
+			message: "#^Unsafe access to private constant Migrations_Migration1625\\:\\:LANGUAGE_ENGLISH through static\\:\\:\\.$#"
+			count: 1
+			path: _sql/migrations/1625-add-sort-by-articlenumber.php
+
+		-
+			message: "#^Unsafe access to private constant Migrations_Migration1625\\:\\:LANGUAGE_GERMAN through static\\:\\:\\.$#"
+			count: 3
+			path: _sql/migrations/1625-add-sort-by-articlenumber.php
+
+		-
+			message: "#^Cannot call method fetch\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/1626-add password_change_date.php
+
+		-
+			message: "#^Cannot call method fetch\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/1631-add-shop-id-column-to-blogs.php
+
+		-
+			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1632\\:\\:addDependencyTable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1632\\:\\:addPrivilegeRequirements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1632\\:\\:addPrivilegeRequirements\\(\\) has parameter \\$privilegeMapping with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1632\\:\\:addPrivilegeRequirements\\(\\) has parameter \\$requirementMatrix with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1632\\:\\:getPrivilegeMapping\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1632\\:\\:getRequirementMatrix\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1632-add-acl-privilege-requirements.php
+
+		-
+			message: "#^Method Migrations_Migration1649\\:\\:getConfigValue\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/1649-add-cookie-consent-manager-site.php
+
+		-
+			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, int\\<min, \\-1\\>\\|int\\<1, max\\>\\|string given\\.$#"
+			count: 1
+			path: _sql/migrations/1649-add-cookie-consent-manager-site.php
+
+		-
+			message: "#^Parameter \\#1 \\$entry of method Migrations_Migration1701\\:\\:addCacheEntry\\(\\) expects string, int\\|string\\|false\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1701-add-http-cache-events-and-routes-for-forms.php
+
+		-
+			message: "#^Parameter \\#1 \\$botConfiguration of method Migrations_Migration1716\\:\\:getFilteredBotList\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/1716-fixing-bot-detection-huawei.php
+
+		-
+			message: "#^Method Migrations_Migration218\\:\\:deletePluginByName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/218-remove-old-debug-plugins.php
+
+		-
+			message: "#^Method Migrations_Migration218\\:\\:deletePluginByName\\(\\) has parameter \\$name with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/218-remove-old-debug-plugins.php
+
+		-
+			message: "#^Method Migrations_Migration221\\:\\:deletePluginByName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/221-remove-log-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration221\\:\\:deletePluginByName\\(\\) has parameter \\$name with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/221-remove-log-plugin.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/367-mobile-statistics.php
+
+		-
+			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/370-optimize-performance.php
+
+		-
+			message: "#^Variable \\$shopValue in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: _sql/migrations/370-optimize-performance.php
+
+		-
+			message: "#^Method Migrations_Migration372\\:\\:addAcl\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/372-setup-multi-edit.php
+
+		-
+			message: "#^Method Migrations_Migration372\\:\\:addSampleData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/372-setup-multi-edit.php
+
+		-
+			message: "#^Method Migrations_Migration372\\:\\:createTables\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/372-setup-multi-edit.php
+
+		-
+			message: "#^Cannot call method fetch\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/386-import-multiedit-plugin-tables.php
+
+		-
+			message: "#^Method Migrations_Migration408\\:\\:cleanUp\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/408-variant-price-surcharge-refactor.php
+
+		-
+			message: "#^Method Migrations_Migration408\\:\\:createNewTable\\(\\) should return string but return statement is missing\\.$#"
+			count: 1
+			path: _sql/migrations/408-variant-price-surcharge-refactor.php
+
+		-
+			message: "#^Method Migrations_Migration408\\:\\:migrateData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/408-variant-price-surcharge-refactor.php
+
+		-
+			message: "#^Method Migrations_Migration408\\:\\:prepareOldData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/408-variant-price-surcharge-refactor.php
+
+		-
+			message: "#^Method Migrations_Migration410\\:\\:addVideoElementFields\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/410-add-emotion-fields.php
+
+		-
+			message: "#^Method Migrations_Migration414\\:\\:addProductBoxLayoutColumn\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/414-add-product-box-layout.php
+
+		-
+			message: "#^Method Migrations_Migration414\\:\\:addSearchProductBoxLayoutSwitch\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/414-add-product-box-layout.php
+
+		-
+			message: "#^Method Migrations_Migration416\\:\\:removeCapabilityDummy\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/416-remove-dummy-plugins.php
+
+		-
+			message: "#^Method Migrations_Migration416\\:\\:removeDummyDownloadUrl\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/416-remove-dummy-plugins.php
+
+		-
+			message: "#^Method Migrations_Migration416\\:\\:removeDummyPlugins\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/416-remove-dummy-plugins.php
+
+		-
+			message: "#^Method Migrations_Migration420\\:\\:deleteListeners\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/420-remove-plugin-manager.php
+
+		-
+			message: "#^Method Migrations_Migration420\\:\\:deleteMenuItem\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/420-remove-plugin-manager.php
+
+		-
+			message: "#^Method Migrations_Migration420\\:\\:deletePlugin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/420-remove-plugin-manager.php
+
+		-
+			message: "#^Method Migrations_Migration420\\:\\:fetchPluginId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/420-remove-plugin-manager.php
+
+		-
+			message: "#^Method Migrations_Migration421\\:\\:deleteConfigElements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/421-remove-store-api-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration421\\:\\:deleteListeners\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/421-remove-store-api-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration421\\:\\:deletePlugin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/421-remove-store-api-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration421\\:\\:fetchPluginId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/421-remove-store-api-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration425\\:\\:deleteOldTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/425-remove-old-templates.php
+
+		-
+			message: "#^Method Migrations_Migration432\\:\\:up\\(\\) with return type void returns true but should not return anything\\.$#"
+			count: 1
+			path: _sql/migrations/432-html5-tags-for-snippets.php
+
+		-
+			message: "#^Method Migrations_Migration437\\:\\:getDefaultTranslationValues\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/437-add-dirty-flag-email-translations.php
+
+		-
+			message: "#^Method Migrations_Migration437\\:\\:setEmailDirtyFlag\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/437-add-dirty-flag-email-translations.php
+
+		-
+			message: "#^Method Migrations_Migration437\\:\\:setEmailTranslationDirtyFlag\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/437-add-dirty-flag-email-translations.php
+
+		-
+			message: "#^Method Migrations_Migration437\\:\\:setEmailTranslationsDirtyFlag\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/437-add-dirty-flag-email-translations.php
+
+		-
+			message: "#^Method Migrations_Migration437\\:\\:setEmailsDirtyFlag\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/437-add-dirty-flag-email-translations.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:addConfigFields\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:fixContextData\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:updateEmailTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:updateEmailTemplateTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:updateTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:updateTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:updateTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration438\\:\\:updateTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Parameter \\#1 \\$content of method Migrations_Migration438\\:\\:convertTemplateHtml\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/438-add-email-template-header-footer-fields.php
+
+		-
+			message: "#^Method Migrations_Migration440\\:\\:updateTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/440-fix-sorder-email-template.php
+
+		-
+			message: "#^Method Migrations_Migration440\\:\\:updateTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/440-fix-sorder-email-template.php
+
+		-
+			message: "#^Method Migrations_Migration440\\:\\:updateTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/440-fix-sorder-email-template.php
+
+		-
+			message: "#^Method Migrations_Migration440\\:\\:updateTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/440-fix-sorder-email-template.php
+
+		-
+			message: "#^Method Migrations_Migration443\\:\\:disableFirstRunWizard\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/443-add-wizard-configuration-value.php
+
+		-
+			message: "#^Method Migrations_Migration443\\:\\:fetchElementId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/443-add-wizard-configuration-value.php
+
+		-
+			message: "#^Method Migrations_Migration443\\:\\:fetchFormId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/443-add-wizard-configuration-value.php
+
+		-
+			message: "#^Method Migrations_Migration443\\:\\:fixCaptchaColor\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/443-add-wizard-configuration-value.php
+
+		-
+			message: "#^Method Migrations_Migration443\\:\\:insertFormElement\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/443-add-wizard-configuration-value.php
+
+		-
+			message: "#^Method Migrations_Migration443\\:\\:insertFormTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/443-add-wizard-configuration-value.php
+
+		-
+			message: "#^Method Migrations_Migration444\\:\\:addImprintToBottomGroup\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/444-add-imprint-to-bottom-shop-group.php
+
+		-
+			message: "#^Method Migrations_Migration450\\:\\:updateAlbumSettings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/450-add-high-dpi-album-settings.php
+
+		-
+			message: "#^Method Migrations_Migration450\\:\\:updateArticleAlbum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/450-add-high-dpi-album-settings.php
+
+		-
+			message: "#^Method Migrations_Migration450\\:\\:updateBannerAlbum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/450-add-high-dpi-album-settings.php
+
+		-
+			message: "#^Method Migrations_Migration450\\:\\:updateBlogAlbum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/450-add-high-dpi-album-settings.php
+
+		-
+			message: "#^Method Migrations_Migration450\\:\\:updateEmotionAlbum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/450-add-high-dpi-album-settings.php
+
+		-
+			message: "#^Method Migrations_Migration458\\:\\:deleteConfigElements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/458-remove-selfhealing-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration458\\:\\:deleteListeners\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/458-remove-selfhealing-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration458\\:\\:deletePlugin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/458-remove-selfhealing-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration458\\:\\:fetchPluginId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/458-remove-selfhealing-plugin.php
+
+		-
+			message: "#^Method Migrations_Migration461\\:\\:updateTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/461-fix-sorder-email-thumbnails.php
+
+		-
+			message: "#^Method Migrations_Migration461\\:\\:updateTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/461-fix-sorder-email-thumbnails.php
+
+		-
+			message: "#^Method Migrations_Migration461\\:\\:updateTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/461-fix-sorder-email-thumbnails.php
+
+		-
+			message: "#^Method Migrations_Migration461\\:\\:updateTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/461-fix-sorder-email-thumbnails.php
+
+		-
+			message: "#^Method Migrations_Migration474\\:\\:updateTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/474-switch-zipcode-city-emails.php
+
+		-
+			message: "#^Method Migrations_Migration474\\:\\:updateTemplate\\(\\) has parameter \\$contentHtml with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/474-switch-zipcode-city-emails.php
+
+		-
+			message: "#^Method Migrations_Migration474\\:\\:updateTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/474-switch-zipcode-city-emails.php
+
+		-
+			message: "#^Method Migrations_Migration474\\:\\:updateTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/474-switch-zipcode-city-emails.php
+
+		-
+			message: "#^Method Migrations_Migration474\\:\\:updateTranslation\\(\\) has parameter \\$contentHtml with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/474-switch-zipcode-city-emails.php
+
+		-
+			message: "#^Method Migrations_Migration474\\:\\:updateTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/474-switch-zipcode-city-emails.php
+
+		-
+			message: "#^Method Migrations_Migration475\\:\\:insertTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/475-add-missing-emails.php
+
+		-
+			message: "#^Method Migrations_Migration475\\:\\:updateEmail\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/475-add-missing-emails.php
+
+		-
+			message: "#^Method Migrations_Migration476\\:\\:addLessCompatibleFlag\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/476-add-less-compatible-flag.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\|false given\\.$#"
+			count: 1
+			path: _sql/migrations/476-add-less-compatible-flag.php
+
+		-
+			message: "#^Method Migrations_Migration477\\:\\:deleteConfigElements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/477-disable-tag-cloud-for-installation.php
+
+		-
+			message: "#^Method Migrations_Migration477\\:\\:deleteListeners\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/477-disable-tag-cloud-for-installation.php
+
+		-
+			message: "#^Method Migrations_Migration477\\:\\:fetchPluginId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/477-disable-tag-cloud-for-installation.php
+
+		-
+			message: "#^Method Migrations_Migration477\\:\\:uninstallPlugin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/477-disable-tag-cloud-for-installation.php
+
+		-
+			message: "#^Method Migrations_Migration485\\:\\:updateAlbumIcon\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/485-add-new-sprites-media-manager-albums.php
+
+		-
+			message: "#^Method Migrations_Migration485\\:\\:updateAlbumIcon\\(\\) has parameter \\$albumId with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/485-add-new-sprites-media-manager-albums.php
+
+		-
+			message: "#^Method Migrations_Migration485\\:\\:updateAlbumIcon\\(\\) has parameter \\$icon with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/485-add-new-sprites-media-manager-albums.php
+
+		-
+			message: "#^Method Migrations_Migration486\\:\\:createMobileSitemapElement\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/486-generate-mobile-sitemap.php
+
+		-
+			message: "#^Method Migrations_Migration486\\:\\:createSitemapForm\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/486-generate-mobile-sitemap.php
+
+		-
+			message: "#^Method Migrations_Migration489\\:\\:updateProductMenu\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/489-fix-backend-menu-icons.php
+
+		-
+			message: "#^Method Migrations_Migration490\\:\\:updateTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/490-fix-email-templates-images-height.php
+
+		-
+			message: "#^Method Migrations_Migration493\\:\\:removeTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/493-remove-mail-translations.php
+
+		-
+			message: "#^Method Migrations_Migration497\\:\\:updateTemplate\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/497-fix-email-payment-method-description.php
+
+		-
+			message: "#^Method Migrations_Migration503\\:\\:insertConfigElementTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/503-rename-multi-edit.php
+
+		-
+			message: "#^Method Migrations_Migration503\\:\\:insertConfigElements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/503-rename-multi-edit.php
+
+		-
+			message: "#^Method Migrations_Migration503\\:\\:insertConfigForm\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/503-rename-multi-edit.php
+
+		-
+			message: "#^Method Migrations_Migration503\\:\\:updateMultiEditName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/503-rename-multi-edit.php
+
+		-
+			message: "#^Method Migrations_Migration600\\:\\:updateDescription\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/600-add-support-max-generated-similar-products.php
+
+		-
+			message: "#^Method Migrations_Migration600\\:\\:updateTranslatedDescription\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/600-add-support-max-generated-similar-products.php
+
+		-
+			message: "#^Method Migrations_Migration603\\:\\:createEmotionComponent\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/603-add-product-streams.php
+
+		-
+			message: "#^Method Migrations_Migration604\\:\\:getSnippetName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/604-move-discount-surchage-names-into-snippets.php
+
+		-
+			message: "#^Method Migrations_Migration604\\:\\:getSnippetName\\(\\) has parameter \\$configName with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/604-move-discount-surchage-names-into-snippets.php
+
+		-
+			message: "#^Method Migrations_Migration604\\:\\:hideBasicSettings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/604-move-discount-surchage-names-into-snippets.php
+
+		-
+			message: "#^Method Migrations_Migration604\\:\\:migrateCoreSettingsToSnippets\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/604-move-discount-surchage-names-into-snippets.php
+
+		-
+			message: "#^Method Migrations_Migration605\\:\\:insertConfigElementTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/605-add-and-search-config.php
+
+		-
+			message: "#^Method Migrations_Migration605\\:\\:insertConfigElements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/605-add-and-search-config.php
+
+		-
+			message: "#^Method Migrations_Migration608\\:\\:up\\(\\) with return type void returns string but should not return anything\\.$#"
+			count: 1
+			path: _sql/migrations/608-fix-product-stream-icon.php
+
+		-
+			message: "#^Method Migrations_Migration609\\:\\:addAlbum\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/609-add-media-recycling.php
+
+		-
+			message: "#^Method Migrations_Migration609\\:\\:createCronJob\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/609-add-media-recycling.php
+
+		-
+			message: "#^Method Migrations_Migration616\\:\\:updateProductStreamEmotionField\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/616-product-stream-emotion-field.php
+
+		-
+			message: "#^Method Migrations_Migration620\\:\\:addTimedDeliveryColumn\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/620-add-delivered-in-future-column.php
+
+		-
+			message: "#^Parameter \\#2 \\$haystack of function in_array expects array, array\\|false given\\.$#"
+			count: 1
+			path: _sql/migrations/620-add-delivered-in-future-column.php
+
+		-
+			message: "#^Method Migrations_Migration625\\:\\:updateProductMenu\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/625-rename-feedback.php
+
+		-
+			message: "#^Method Migrations_Migration626\\:\\:replaceOldVarSyntax\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/626-fix-email-template-variables.php
+
+		-
+			message: "#^Method Migrations_Migration626\\:\\:replaceOldVarSyntax\\(\\) has parameter \\$content with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/626-fix-email-template-variables.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateCmsSupport\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateCmsSupportFields\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateCoreConfigElements\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateCoreConfigForms\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateCoreMenu\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateEmailTemplateHtml\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateFormLabels\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration636\\:\\:updateTemplateHtml\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/636-streamline-german-email-wording.php
+
+		-
+			message: "#^Method Migrations_Migration703\\:\\:addComponentFields\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/703-activate-html-code-widget-by-default.php
+
+		-
+			message: "#^Method Migrations_Migration703\\:\\:addComponentToLibrary\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/703-activate-html-code-widget-by-default.php
+
+		-
+			message: "#^Method Migrations_Migration703\\:\\:fetchComponentId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/703-activate-html-code-widget-by-default.php
+
+		-
+			message: "#^Method Migrations_Migration703\\:\\:renameHtmlElement\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/703-activate-html-code-widget-by-default.php
+
+		-
+			message: "#^Method Migrations_Migration705\\:\\:emptyCustomTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/705-rename-category-template-column.php
+
+		-
+			message: "#^Method Migrations_Migration705\\:\\:updateCustomTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/705-rename-category-template-column.php
+
+		-
+			message: "#^Method Migrations_Migration705\\:\\:updateSnippets\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/705-rename-category-template-column.php
+
+		-
+			message: "#^Method Migrations_Migration708\\:\\:convertAttribute\\(\\) has parameter \\$attribute with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/708-attribute-administration.php
+
+		-
+			message: "#^Method Migrations_Migration708\\:\\:convertAttribute\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/708-attribute-administration.php
+
+		-
+			message: "#^Method Migrations_Migration709\\:\\:changeConfusingVatLabel\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/709-add-user-addresses.php
+
+		-
+			message: "#^Method Migrations_Migration709\\:\\:createAddressTable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/709-add-user-addresses.php
+
+		-
+			message: "#^Method Migrations_Migration709\\:\\:createDefaultShippingBillingRelations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/709-add-user-addresses.php
+
+		-
+			message: "#^Method Migrations_Migration709\\:\\:removeCompanySalutation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/709-add-user-addresses.php
+
+		-
+			message: "#^Method Migrations_Migration711\\:\\:createMigrationFields\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/711-create-address-migrate-table.php
+
+		-
+			message: "#^Method Migrations_Migration719\\:\\:applyAttributeSchema\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/719-create-address-attribute-tables.php
+
+		-
+			message: "#^Method Migrations_Migration719\\:\\:createAddressAttributeTable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/719-create-address-attribute-tables.php
+
+		-
+			message: "#^Call to function array_key_exists\\(\\) with 'swag_mode' and array\\{id\\: numeric\\-string, emotionID\\: numeric\\-string\\|null\\} will always evaluate to false\\.$#"
+			count: 1
+			path: _sql/migrations/747-ekw-mode-migration.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 1
+			path: _sql/migrations/747-ekw-mode-migration.php
+
+		-
+			message: "#^Method Migrations_Migration775\\:\\:createUniqueIndex\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/775-add-asset-version-config-element.php
+
+		-
+			message: "#^Cannot call method rowCount\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/776-fix-alter-ignore-migrations.php
+
+		-
+			message: "#^Method Migrations_Migration779\\:\\:fixCustomerBlacklists\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/779-fixing-bot-detection-ios.php
+
+		-
+			message: "#^Method Migrations_Migration779\\:\\:fixStandardBlacklist\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/779-fixing-bot-detection-ios.php
+
+		-
+			message: "#^Parameter \\#1 \\$botConfiguration of method Migrations_Migration779\\:\\:getFilteredBotList\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/779-fixing-bot-detection-ios.php
+
+		-
+			message: "#^Method Migrations_Migration785\\:\\:addConnectMenu\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/785-add-connect-default-menu.php
+
+		-
+			message: "#^Method Migrations_Migration785\\:\\:updateHelpMenuPosition\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/785-add-connect-default-menu.php
+
+		-
+			message: "#^Method Migrations_Migration792\\:\\:deletePluginFormEntry\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/792-add-send-registration-email-confirmation-config.php
+
+		-
+			message: "#^Offset 'id' does not exist on array\\{id\\: numeric\\-string, locale_id\\: numeric\\-string\\|null\\}\\|null\\.$#"
+			count: 1
+			path: _sql/migrations/795-remove-salutation-snippets.php
+
+		-
+			message: "#^Offset 'locale_id' does not exist on array\\{id\\: numeric\\-string, locale_id\\: numeric\\-string\\|null\\}\\|null\\.$#"
+			count: 1
+			path: _sql/migrations/795-remove-salutation-snippets.php
+
+		-
+			message: "#^Parameter \\#1 \\$string of method PDO\\:\\:quote\\(\\) expects string, int\\<min, \\-1\\>\\|int\\<1, max\\>\\|string given\\.$#"
+			count: 1
+			path: _sql/migrations/796-add-uniqueid-config-element.php
+
+		-
+			message: "#^Offset 'id' does not exist on array\\{id\\: numeric\\-string, locale_id\\: numeric\\-string\\|null\\}\\|null\\.$#"
+			count: 5
+			path: _sql/migrations/797-remove-salutation-snippets.php
+
+		-
+			message: "#^Offset 'locale_id' does not exist on array\\{id\\: numeric\\-string, locale_id\\: numeric\\-string\\|null\\}\\|null\\.$#"
+			count: 3
+			path: _sql/migrations/797-remove-salutation-snippets.php
+
+		-
+			message: "#^Method Migrations_Migration799\\:\\:prepare\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/799-attribute-translation-fix-1-of-10.php
+
+		-
+			message: "#^Method Migrations_Migration813\\:\\:migrateBackendSession\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/813-session-expiry.php
+
+		-
+			message: "#^Method Migrations_Migration813\\:\\:migrateFrontendSession\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/813-session-expiry.php
+
+		-
+			message: "#^Method Migrations_Migration900\\:\\:cleanupLastArticlesTable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/900-add-last-articles-config-elements.php
+
+		-
+			message: "#^Method Migrations_Migration900\\:\\:removeLastArticlesPlugin\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/900-add-last-articles-config-elements.php
+
+		-
+			message: "#^Method Migrations_Migration900\\:\\:renameConfigElementKeys\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/900-add-last-articles-config-elements.php
+
+		-
+			message: "#^Method Migrations_Migration902\\:\\:removeAclPermissions\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/902-remove-import-export-legacy-module.php
+
+		-
+			message: "#^Method Migrations_Migration902\\:\\:removeMenuEntry\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/902-remove-import-export-legacy-module.php
+
+		-
+			message: "#^Method Migrations_Migration903\\:\\:addNewMenuEntry\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/903-add-menu-import-export-advanced.php
+
+		-
+			message: "#^Method Migrations_Migration903\\:\\:fetchContentMenuId\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/903-add-menu-import-export-advanced.php
+
+		-
+			message: "#^Method Migrations_Migration904\\:\\:createAdditionalCaptchaOptions\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/904-add-captcha-selection.php
+
+		-
+			message: "#^Method Migrations_Migration904\\:\\:createAdditionalCaptchaOptionsTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/904-add-captcha-selection.php
+
+		-
+			message: "#^Method Migrations_Migration904\\:\\:moveExistingCaptchaOptions\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/904-add-captcha-selection.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:addCategorySortings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:addDefaultSortings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:addSearchConfiguration\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:addSortingModule\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:addSortingsToProductStreams\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:getExistingSortingTranslations\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:importProductStreamSortings\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:importSortingTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration917\\:\\:moveCategoryDefaultSorting\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Parameter \\#1 \\$sorting of method Migrations_Migration917\\:\\:getIdOfStreamSorting\\(\\) expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Parameter \\#1 \\$str of function md5 expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Parameter \\#1 \\$translationShopId of method Migrations_Migration917\\:\\:getExistingSortingTranslations\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Parameter \\#2 \\$localeId of method Migrations_Migration917\\:\\:getExistingSortingTranslations\\(\\) expects int, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/917-add-sorting-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:addCategoryConfig\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:addModule\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:addNewCategoryFilterParam\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:createSearchFacets\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:getExistingSortingTranslations\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:importDefaultFacets\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration918\\:\\:importFacetTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Parameter \\#1 \\$translationShopId of method Migrations_Migration918\\:\\:getExistingSortingTranslations\\(\\) expects int, string given\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Parameter \\#2 \\$localeId of method Migrations_Migration918\\:\\:getExistingSortingTranslations\\(\\) expects int, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Variable \\$shopValue in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: _sql/migrations/918-add-facet-module.php
+
+		-
+			message: "#^Method Migrations_Migration919\\:\\:addVariantSelectionProductElement\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/919-change-article-emotion-elements.php
+
+		-
+			message: "#^Method Migrations_Migration919\\:\\:addVariantSelectionProductSlider\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/919-change-article-emotion-elements.php
+
+		-
+			message: "#^Method Migrations_Migration919\\:\\:changeSelectedProductsOfProductSlider\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/919-change-article-emotion-elements.php
+
+		-
+			message: "#^Method Migrations_Migration919\\:\\:convertSelectedProductsOfProductSlider\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/919-change-article-emotion-elements.php
+
+		-
+			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|null given\\.$#"
+			count: 1
+			path: _sql/migrations/919-change-article-emotion-elements.php
+
+		-
+			message: "#^Method Migrations_Migration926\\:\\:createPresetsTable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/926-add-emotion-presets.php
+
+		-
+			message: "#^Method Migrations_Migration926\\:\\:createPresetsTranslationTable\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/926-add-emotion-presets.php
+
+		-
+			message: "#^Method Migrations_Migration939\\:\\:getExistingSortingTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/939-add-translations-for-facets.php
+
+		-
+			message: "#^Method Migrations_Migration939\\:\\:getExistingSortingTranslations\\(\\) has parameter \\$shopId with no type specified\\.$#"
+			count: 1
+			path: _sql/migrations/939-add-translations-for-facets.php
+
+		-
+			message: "#^Method Migrations_Migration939\\:\\:updateCustomerFacetAndSorting\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/939-add-translations-for-facets.php
+
+		-
+			message: "#^Method Migrations_Migration939\\:\\:updateTranslation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/939-add-translations-for-facets.php
+
+		-
+			message: "#^Method Migrations_Migration940\\:\\:updateMenuEntry\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/940-fix-import-export-menu-entry.php
+
+		-
+			message: "#^Method Migrations_Migration944\\:\\:replaceTranslations\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/944-update-german-translations.php
+
+		-
+			message: "#^Method Migrations_Migration961\\:\\:fixEmailDirtyFlag\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/961-update-email-templates.php
+
+		-
+			message: "#^Method Migrations_Migration961\\:\\:updateEmailFooterHtml\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/961-update-email-templates.php
+
+		-
+			message: "#^Method Migrations_Migration961\\:\\:updateEmailFooterPlain\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/961-update-email-templates.php
+
+		-
+			message: "#^Method Migrations_Migration961\\:\\:updateEmailTemplates\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: _sql/migrations/961-update-email-templates.php
+
+		-
+			message: "#^Cannot call method fetch\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Cannot call method fetchAll\\(\\) on PDOStatement\\|false\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Method AttributeTranslationMigrationHelper\\:\\:filter\\(\\) has parameter \\$columns with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Method AttributeTranslationMigrationHelper\\:\\:filter\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Method AttributeTranslationMigrationHelper\\:\\:filter\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Method AttributeTranslationMigrationHelper\\:\\:getUpdatedTranslations\\(\\) has parameter \\$rows with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Method AttributeTranslationMigrationHelper\\:\\:underscoreToCamelCase\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Parameter \\#1 \\$array of function array_column expects array, array\\|false given\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Variable \\$rows in empty\\(\\) always exists and is not falsy\\.$#"
+			count: 1
+			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+		-
+			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: _sql/migrations/common/MigrationHelper.php
+
+		-
+			message: "#^Method SitemapConfigMigrationHelper\\:\\:migrateCustomUrls\\(\\) has parameter \\$customUrls with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/common/SitemapConfigMigrationHelper.php
+
+		-
+			message: "#^Method SitemapConfigMigrationHelper\\:\\:migrateExcludedUrls\\(\\) has parameter \\$excludedUrls with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: _sql/migrations/common/SitemapConfigMigrationHelper.php
+
+		-
 			message: "#^Parameter \\#1 \\$newInstance of function Shopware expects Shopware\\|null, Enlight_Application\\|null given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Application.php
@@ -18639,26 +19984,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\ManualSorting\\\\ProductLoaderInterface\\:\\:load\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ManualSorting/ProductLoaderInterface.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Migrations\\\\AbstractMigration\\:\\:getSql\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Migrations/AbstractMigration.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Migrations\\\\AbstractMigration\\:\\:up\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Migrations/AbstractMigration.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function basename expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Migrations/AbstractMigration.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\Migrations\\\\AbstractMigration\\:\\:\\$sql type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Migrations/AbstractMigration.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Migrations\\\\AbstractPluginMigration\\:\\:down\\(\\) has no return type specified\\.$#"
@@ -38341,6 +39666,11 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
 
 		-
+			message: "#^Call to function array_key_exists\\(\\) with 'SwagSecurity' and array\\{ErrorHandler\\: string, Router\\: string, System\\: string, ViewportForward\\: string, Shop\\: string, PostFilter\\: string, ControllerBase\\: string, RouterRewrite\\: string, \\.\\.\\.\\} will always evaluate to false\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
+
+		-
 			message: "#^Cannot access property \\$version on ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Struct\\\\Version\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
@@ -38397,11 +39727,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:unpackAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Call to function array_key_exists\\(\\) with 'SwagSecurity' and array\\{ErrorHandler\\: string, Router\\: string, System\\: string, ViewportForward\\: string, Shop\\: string, PostFilter\\: string, ControllerBase\\: string, RouterRewrite\\: string, \\.\\.\\.\\} will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
 

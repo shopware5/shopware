@@ -37,7 +37,7 @@ class Migrations_Migration1608 extends Shopware\Components\Migrations\AbstractMi
                     [
                         'snippet' => 'voucher_mode_not_show',
                         'en_GB' => 'No',
-                        'de_DE' => 'Nein'
+                        'de_DE' => 'Nein',
                     ],
                 ],
                 [
@@ -45,18 +45,18 @@ class Migrations_Migration1608 extends Shopware\Components\Migrations\AbstractMi
                     [
                         'snippet' => 'voucher_mode_show_folded',
                         'en_GB' => 'Collapsed',
-                        'de_DE' => 'Eingeklappt'
-                    ]
+                        'de_DE' => 'Eingeklappt',
+                    ],
                 ],
                 [
                     2,
                     [
                         'snippet' => 'voucher_mode_show_expanded',
                         'en_GB' => 'Expanded',
-                        'de_DE' => 'Ausgeklappt'
-                    ]
-                ]
-            ]
+                        'de_DE' => 'Ausgeklappt',
+                    ],
+                ],
+            ],
         ];
 
         $sql = <<<'EOD'

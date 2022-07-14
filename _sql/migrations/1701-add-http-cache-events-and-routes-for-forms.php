@@ -60,6 +60,7 @@ EOD;
         $value = explode("\n", $value);
         $value[] = 'frontend/forms 14400';
         $value = implode("\n", $value);
+
         return serialize($value);
     }
 }

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1712 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -30,11 +31,9 @@ ALTER TABLE `s_articles_prices` ADD `regulation_price` DOUBLE AFTER `pseudoprice
 SQL;
         $this->addSql($sql);
 
-
         $sql = <<<SQL
 ALTER TABLE `s_article_configurator_template_prices` ADD `regulation_price` DOUBLE AFTER `pseudoprice`;
 SQL;
         $this->addSql($sql);
-
     }
 }

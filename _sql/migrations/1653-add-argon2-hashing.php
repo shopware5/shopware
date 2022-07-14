@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,16 +27,16 @@
 use Shopware\Components\Migrations\AbstractMigration;
 
 // see rfc for argon2 in PHP -> https://wiki.php.net/rfc/argon2_password_hash
-if (!defined('PASSWORD_ARGON2_DEFAULT_MEMORY_COST')) {
-    define('PASSWORD_ARGON2_DEFAULT_MEMORY_COST', 1 << 20); // 1MiB
+if (!\defined('PASSWORD_ARGON2_DEFAULT_MEMORY_COST')) {
+    \define('PASSWORD_ARGON2_DEFAULT_MEMORY_COST', 1 << 20); // 1MiB
 }
 
-if (!defined('PASSWORD_ARGON2_DEFAULT_TIME_COST')) {
-    define('PASSWORD_ARGON2_DEFAULT_TIME_COST', 2);
+if (!\defined('PASSWORD_ARGON2_DEFAULT_TIME_COST')) {
+    \define('PASSWORD_ARGON2_DEFAULT_TIME_COST', 2);
 }
 
-if (!defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
-    define('PASSWORD_ARGON2_DEFAULT_THREADS', 2);
+if (!\defined('PASSWORD_ARGON2_DEFAULT_THREADS')) {
+    \define('PASSWORD_ARGON2_DEFAULT_THREADS', 2);
 }
 
 class Migrations_Migration1653 extends AbstractMigration

@@ -28,6 +28,7 @@ class Migrations_Migration910 extends AbstractMigration
 {
     /**
      * @param string $modus
+     *
      * @return void
      */
     public function up($modus)

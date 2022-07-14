@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1204 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -66,7 +67,7 @@ SQL;
                 } else {
                     $unserialized = unserialize($customFacetTranslations['objectdata']);
 
-                    if (array_key_exists($facetId, $unserialized)) {
+                    if (\array_key_exists($facetId, $unserialized)) {
                         continue;
                     }
 

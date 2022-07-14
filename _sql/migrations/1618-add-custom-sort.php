@@ -43,7 +43,6 @@ class Migrations_Migration1618 extends Shopware\Components\Migrations\AbstractMi
         ];
         $statement->execute($data);
 
-
         $this->addSql('CREATE TABLE `s_categories_manual_sorting` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `category_id` INT(11) NOT NULL,

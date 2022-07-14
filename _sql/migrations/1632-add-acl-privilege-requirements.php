@@ -58,7 +58,7 @@ SQL;
         $mapping = [];
 
         foreach ($resources as $key => $privileges) {
-            if (!array_key_exists($key, $mapping)) {
+            if (!\array_key_exists($key, $mapping)) {
                 $mapping[$key] = [];
             }
             foreach ($privileges as $privilege) {
@@ -73,14 +73,14 @@ SQL;
     {
         $matrix = [
             'analytics_read' => [
-                'overview_read'
+                'overview_read',
             ],
             'article_read' => [
                 'category_read',
                 'mediamanager_read',
                 'emotion_read',
                 'mediamanager_upload',
-                'articlelist_read'
+                'articlelist_read',
             ],
             'article_delete' => [
                 'article_read',
@@ -90,7 +90,7 @@ SQL;
                 'mediamanager_upload',
             ],
             'articlelist_read' => [
-                'article_read'
+                'article_read',
             ],
             'articlelist_createFilters' => [
                 'articlelist_read',
@@ -109,7 +109,7 @@ SQL;
             'articlelist_doMultiEdit' => [
                 'articlelist_read',
                 'article_save',
-                'articlelist_doBackup'
+                'articlelist_doBackup',
             ],
             'articlelist_doBackup' => [
                 'articlelist_read',
@@ -117,7 +117,7 @@ SQL;
                 'articlelist_editSingleArticle',
             ],
             'attributes_update' => [
-                'attributes_read'
+                'attributes_read',
             ],
             'banner_create' => [
                 'category_read',
@@ -130,20 +130,20 @@ SQL;
                 'mediamanager_read',
                 'mediamanager_create',
                 'mediamanager_upload',
-                'banner_read'
+                'banner_read',
             ],
             'banner_update' => [
-                'banner_read'
+                'banner_read',
             ],
             'banner_delete' => [
-                'banner_read'
+                'banner_read',
             ],
             'blog_read' => [
                 'mediamanager_read',
                 'category_read',
             ],
             'blog_delete' => [
-                'blog_read'
+                'blog_read',
             ],
             'blog_update' => [
                 'blog_read',
@@ -154,64 +154,64 @@ SQL;
                 'mediamanager_read',
                 'mediamanager_upload',
                 'mediamanager_update',
-                'mediamanager_create'
+                'mediamanager_create',
             ],
             'category_read' => [
                 'article_read',
-                'mediamanager_read'
+                'mediamanager_read',
             ],
             'category_update' => [
                 'category_read',
                 'mediamanager_update',
             ],
             'category_delete' => [
-                'category_read'
+                'category_read',
             ],
             'config_update' => [
-                'config_read'
+                'config_read',
             ],
             'config_delete' => [
-                'config_read'
+                'config_read',
             ],
             'contenttypemanager_edit' => [
-                'contenttypemanager_read'
+                'contenttypemanager_read',
             ],
             'contenttypemanager_delete' => [
-                'contenttypemanager_read'
+                'contenttypemanager_read',
             ],
             'customer_read' => [
                 'mediamanager_read',
                 'emotion_read',
                 'customerstream_read',
-                'customerstream_charts'
+                'customerstream_charts',
             ],
             'customer_update' => [
-                'customer_read'
+                'customer_read',
             ],
             'customer_delete' => [
-                'customer_read'
+                'customer_read',
             ],
             'customer_detail' => [
-                'customer_read'
+                'customer_read',
             ],
             'customerstream_read' => [
-                'customer_read'
+                'customer_read',
             ],
             'customerstream_save' => [
-                'customerstream_read'
+                'customerstream_read',
             ],
             'customerstream_delete' => [
-                'customerstream_read'
+                'customerstream_read',
             ],
             'customerstream_charts' => [
-                'customerstream_read'
+                'customerstream_read',
             ],
             'emotion_read' => [
                 'article_read',
                 'blog_read',
                 'category_read',
                 'mediamanager_read',
-                'supplier_read'
+                'supplier_read',
             ],
             'emotion_create' => [
                 'emotion_read',
@@ -226,124 +226,124 @@ SQL;
                 'emotion_read',
             ],
             'form_createupdate' => [
-                'form_read'
+                'form_read',
             ],
             'form_delete' => [
-                'form_read'
+                'form_read',
             ],
             'log_delete' => [
-                'log_read'
+                'log_read',
             ],
             'log_system' => [
-                'log_read'
+                'log_read',
             ],
             'mail_update' => [
-                'mail_read'
+                'mail_read',
             ],
             'mail_delete' => [
-                'mail_read'
+                'mail_read',
             ],
             'mediamanager_delete' => [
-                'mediamanager_read'
+                'mediamanager_read',
             ],
             'mediamanager_upload' => [
-                'mediamanager_read'
+                'mediamanager_read',
             ],
             'mediamanager_update' => [
-                'mediamanager_read'
+                'mediamanager_read',
             ],
             'newslettermanager_delete' => [
-                'newslettermanager_read'
+                'newslettermanager_read',
             ],
             'newslettermanager_read' => [
                 'customer_read',
                 'mediamanager_read',
-                'category_read'
+                'category_read',
             ],
             'newslettermanager_write' => [
-                'newslettermanager_read'
+                'newslettermanager_read',
             ],
             'notification_read' => [
-                'customer_read'
+                'customer_read',
             ],
             'order_read' => [
                 'customer_read',
             ],
             'order_update' => [
-                'order_read'
+                'order_read',
             ],
             'order_delete' => [
-                'order_read'
+                'order_read',
             ],
             'partner_create' => [
-                'customer_read'
+                'customer_read',
             ],
             'partner_read' => [
-                'customer_read'
+                'customer_read',
             ],
             'partner_update' => [
-                'partner_read'
+                'partner_read',
             ],
             'partner_delete' => [
-                'partner_read'
+                'partner_read',
             ],
             'payment_create' => [
-                'payment_read'
+                'payment_read',
             ],
             'payment_update' => [
-                'payment_read'
+                'payment_read',
             ],
             'payment_delete' => [
-                'payment_read'
+                'payment_read',
             ],
             'performance_update' => [
-                'performance_read'
+                'performance_read',
             ],
             'performance_clear' => [
-                'performance_read'
+                'performance_read',
             ],
             'pluginmanager_upload' => [
-                'pluginmanager_read'
+                'pluginmanager_read',
             ],
             'pluginmanager_download' => [
-                'pluginmanager_read'
+                'pluginmanager_read',
             ],
             'pluginmanager_install' => [
-                'pluginmanager_read'
+                'pluginmanager_read',
             ],
             'pluginmanager_update' => [
-                'pluginmanager_read'
+                'pluginmanager_read',
             ],
             'pluginmanager_notification' => [
-                'pluginmanager_read'
+                'pluginmanager_read',
             ],
             'premium_update' => [
                 'premium_read',
             ],
             'premium_delete' => [
-                'premium_read'
+                'premium_read',
             ],
             'productfeed_create' => [
-                'article_read'
+                'article_read',
             ],
             'productfeed_read' => [
-                'article_read'
+                'article_read',
             ],
             'productfeed_update' => [
-                'productfeed_read'
+                'productfeed_read',
             ],
             'productfeed_delete' => [
-                'productfeed_read'
+                'productfeed_read',
             ],
             'productfeed_generate' => [
-                'productfeed_read'
+                'productfeed_read',
             ],
             'productfeed_sqli' => [
-                'productfeed_read'
+                'productfeed_read',
             ],
             'riskmanagement_read' => [
                 'premium_read',
-                'config_read'
+                'config_read',
             ],
             'riskmanagement_save' => [
                 'riskmanagement_read',
@@ -366,34 +366,34 @@ SQL;
                 'shipping_read',
             ],
             'site_createGroup' => [
-                'mediamanager_read'
+                'mediamanager_read',
             ],
             'site_read' => [
-                'mediamanager_read'
+                'mediamanager_read',
             ],
             'site_createSite' => [
-                'site_read'
+                'site_read',
             ],
             'site_updateSite' => [
-                'site_read'
+                'site_read',
             ],
             'site_deleteSite' => [
-                'site_read'
+                'site_read',
             ],
             'site_deleteGroup' => [
-                'site_read'
+                'site_read',
             ],
             'snippet_update' => [
-                'snippet_read'
+                'snippet_read',
             ],
             'snippet_delete' => [
-                'snippet_read'
+                'snippet_read',
             ],
             'supplier_update' => [
-                'supplier_read'
+                'supplier_read',
             ],
             'supplier_delete' => [
-                'supplier_read'
+                'supplier_read',
             ],
             'swagupdate_update' => [
                 'swagupdate_read',
@@ -407,28 +407,28 @@ SQL;
                 'swagupdate_notification',
             ],
             'theme_preview' => [
-                'theme_read'
+                'theme_read',
             ],
             'theme_changeTheme' => [
-                'theme_read'
+                'theme_read',
             ],
             'theme_createTheme' => [
-                'theme_read'
+                'theme_read',
             ],
             'theme_uploadTheme' => [
-                'theme_read'
+                'theme_read',
             ],
             'theme_configureTheme' => [
-                'theme_read'
+                'theme_read',
             ],
             'theme_configureSystem' => [
-                'theme_read'
+                'theme_read',
             ],
             'usermanager_update' => [
-                'usermanager_read'
+                'usermanager_read',
             ],
             'usermanager_delete' => [
-                'usermanager_read'
+                'usermanager_read',
             ],
             'vote_read' => [
                 'article_read',
@@ -449,31 +449,31 @@ SQL;
                 'supplier_read',
                 'article_read',
                 'customerstream_read',
-                'customer_read'
+                'customer_read',
             ],
             'voucher_read' => [
                 'config_read',
                 'supplier_read',
                 'article_read',
                 'customerstream_read',
-                'customer_read'
+                'customer_read',
             ],
             'voucher_update' => [
-                'voucher_read'
+                'voucher_read',
             ],
             'voucher_delete' => [
-                'voucher_read'
+                'voucher_read',
             ],
             'voucher_export' => [
-                'voucher_read'
+                'voucher_read',
             ],
             'voucher_generate' => [
-                'voucher_read'
+                'voucher_read',
             ],
             'widgets_swag-upload-widget' => [
                 'mediamanager_upload',
-                'widgets_read'
-            ]
+                'widgets_read',
+            ],
         ];
 
         return $matrix;

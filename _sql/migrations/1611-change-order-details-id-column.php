@@ -28,7 +28,7 @@ class Migrations_Migration1611 extends Shopware\Components\Migrations\AbstractMi
     {
         $columns = $this->connection->query('DESCRIBE `s_order_documents`')->fetchAll(\PDO::FETCH_ASSOC);
 
-        if (in_array('id', array_column($columns, 'Field'), true)) {
+        if (\in_array('id', array_column($columns, 'Field'), true)) {
             return;
         }
 

@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1714 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -68,4 +69,3 @@ EOD;
         $this->addSql($sql);
     }
 }
-

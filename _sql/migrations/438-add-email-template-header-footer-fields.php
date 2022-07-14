@@ -1,6 +1,28 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-class Migrations_Migration438 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration438 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -81,6 +103,7 @@ SQL;
 
     /**
      * Helper method to update the translations of a mail template
+     *
      * @param string $name
      * @param string $content
      * @param string $contentHtml
@@ -170,6 +193,7 @@ SQL;
      * Helper method to prefix and suffix the mail templates with the configuration values
      *
      * @param string $content
+     *
      * @return string
      */
     private function convertTemplatePlain($content)
@@ -177,13 +201,14 @@ SQL;
         $header = '{include file=\"string:{config name=emailheaderplain}\"}';
         $footer = '{include file=\"string:{config name=emailfooterplain}\"}';
 
-        return $header."\r\n\r\n".$content."\r\n\r\n".$footer;
+        return $header . "\r\n\r\n" . $content . "\r\n\r\n" . $footer;
     }
 
     /**
      * Helper method to prefix and suffix the mail templates with the configuration values
      *
      * @param string $content
+     *
      * @return string
      */
     private function convertTemplateHtml($content)
@@ -191,9 +216,8 @@ SQL;
         $header = '{include file=\"string:{config name=emailheaderhtml}\"}';
         $footer = '{include file=\"string:{config name=emailfooterhtml}\"}';
 
-        return $header."\r\n<br/><br/>\r\n".$content."\r\n<br/><br/>\r\n".$footer;
+        return $header . "\r\n<br/><br/>\r\n" . $content . "\r\n<br/><br/>\r\n" . $footer;
     }
-
 
     /**
      * Update all mail templates
@@ -438,7 +462,7 @@ SQL;
 
         $this->updateTranslation(
             'sBIRTHDAY',
-            "Hello {if \$sUser.salutation eq \"mr\"}Mr{elseif \$sUser.billing_salutation eq \"ms\"}Mrs{/if} {\$sUser.firstname} {\$sUser.lastname}, we wish you a happy birthday."
+            'Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.firstname} {$sUser.lastname}, we wish you a happy birthday.'
         );
         $this->updateTranslation(
             'sARTICLESTOCK',
@@ -472,14 +496,14 @@ SQL;
 
         $this->updateTranslation(
             'sARTICLECOMMENT',
-            "",
+            '',
             "<p>Hello {if \$sUser.salutation eq \"mr\"}Mr{elseif \$sUser.billing_salutation eq \"ms\"}Mrs{/if} {\$sUser.billing_firstname} {\$sUser.billing_lastname},\n</p>\nYou have recently purchased articles from {config name=shopName}. We would be pleased if you could evaluate these items. Doing so, you can help us improve our services, and you have the opportunity to tell other customers your opinion.\nBy the way: You do not necessarily have to comment on the articles you have bought. You can select the ones you like best. We would welcome any feedback that you have.\nHere you can find the links to the evaluations of your purchased articles.\n<p>\n</p>\n<table>\n {foreach from=\$sArticles item=sArticle key=key}\n{if !\$sArticle.modus}\n <tr>\n  <td>{\$sArticle.articleordernumber}</td>\n  <td>{\$sArticle.name}</td>\n  <td>\n  <a href=\"{\$sArticle.link}\">link</a>\n  </td>\n </tr>\n{/if}\n {/foreach}\n</table>"
         );
 
         $this->updateTranslation(
             'sORDERSEPAAUTHORIZATION',
-            "Hello {\$paymentInstance.firstName} {\$paymentInstance.lastName}, attached you will find the direct debit mandate form for your order {\$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.",
-            "<div>Hello {\$paymentInstance.firstName} {\$paymentInstance.lastName},<br><br>attached you will find the direct debit mandate form for your order {\$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.</div>"
+            'Hello {$paymentInstance.firstName} {$paymentInstance.lastName}, attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.',
+            '<div>Hello {$paymentInstance.firstName} {$paymentInstance.lastName},<br><br>attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.</div>'
         );
     }
 }

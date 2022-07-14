@@ -277,9 +277,7 @@ class Migrations_Migration1450 extends Shopware\Components\Migrations\AbstractMi
     }
 
     /**
-     * @param PDOStatement $statement
-     * @param array        $newCountry
-     * @param string       $defaultLocale
+     * @param string $defaultLocale
      */
     private function saveNewCountry(PDOStatement $statement, array $newCountry, $defaultLocale)
     {
