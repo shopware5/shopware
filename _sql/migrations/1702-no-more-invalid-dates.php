@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1702 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -42,7 +43,7 @@ class Migrations_Migration1702 extends Shopware\Components\Migrations\AbstractMi
         $sql[] = 'ALTER TABLE `s_user` CHANGE `firstlogin` `firstlogin` DATE  NULL  DEFAULT NULL;';
         $sql[] = 'ALTER TABLE `s_user` CHANGE `lastlogin` `lastlogin` DATETIME  NULL  DEFAULT NULL;';
 
-        foreach($sql as $query) {
+        foreach ($sql as $query) {
             $this->addSql($query);
         }
     }

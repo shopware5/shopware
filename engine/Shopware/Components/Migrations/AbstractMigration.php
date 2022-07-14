@@ -38,7 +38,7 @@ abstract class AbstractMigration
     protected $connection;
 
     /**
-     * @var array
+     * @var array<string>
      */
     protected $sql = [];
 
@@ -71,7 +71,7 @@ abstract class AbstractMigration
         $regexPattern = '/[\d]*-(.+)\.php$/i';
 
         $rc = new ReflectionClass(\get_class($this));
-        $fileName = basename($rc->getFileName());
+        $fileName = basename((string) $rc->getFileName());
 
         preg_match($regexPattern, $fileName, $result);
 
@@ -90,6 +90,8 @@ abstract class AbstractMigration
 
     /**
      * @param string $modus
+     *
+     * @return void
      */
     abstract public function up($modus);
 
@@ -106,6 +108,9 @@ abstract class AbstractMigration
         return $this;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getSql(): array
     {
         return $this->sql;

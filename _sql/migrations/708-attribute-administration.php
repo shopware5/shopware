@@ -1,4 +1,26 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
 use Shopware\Components\Migrations\AbstractMigration;
 
@@ -7,22 +29,22 @@ class Migrations_Migration708 extends AbstractMigration
     public function up($modus)
     {
         if ($modus == AbstractMigration::MODUS_INSTALL) {
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr1` `attr1` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr2` `attr2` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr3` `attr3` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr4` `attr4` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr5` `attr5` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr6` `attr6` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr7` `attr7` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr8` `attr8` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr11` `attr11` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr12` `attr12` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr13` `attr13` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr14` `attr14` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr15` `attr15` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr16` `attr16` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr19` `attr19` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
-            $this->addSql("ALTER TABLE `s_articles_attributes` CHANGE `attr20` `attr20` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;");
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr1` `attr1` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr2` `attr2` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr3` `attr3` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr4` `attr4` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr5` `attr5` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr6` `attr6` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr7` `attr7` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr8` `attr8` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr11` `attr11` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr12` `attr12` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr13` `attr13` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr14` `attr14` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr15` `attr15` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr16` `attr16` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr19` `attr19` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
+            $this->addSql('ALTER TABLE `s_articles_attributes` CHANGE `attr20` `attr20` VARCHAR(500) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL;');
         }
 
         $sql = <<<'SQL'
@@ -65,7 +87,6 @@ CREATE TABLE `s_filter_values_attributes` (
 SQL;
         $this->addSql($sql);
 
-
         $sql = <<<'SQL'
 CREATE TABLE `s_filter_options_attributes` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -99,11 +120,11 @@ SQL;
         $this->addSql("UPDATE s_core_snippets SET `value` = 'Remove image' WHERE `name` = 'image/list/remove_button' AND localeID = 2 AND dirty = 0;");
 
         $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Attribute' LIMIT 1);");
-        $this->addSql("DELETE FROM s_core_config_form_translations WHERE form_id = @formId;");
-        $this->addSql("DELETE FROM s_core_config_elements WHERE form_id = @formId;");
-        $this->addSql("DELETE FROM s_core_config_forms WHERE id = @formId;");
+        $this->addSql('DELETE FROM s_core_config_form_translations WHERE form_id = @formId;');
+        $this->addSql('DELETE FROM s_core_config_elements WHERE form_id = @formId;');
+        $this->addSql('DELETE FROM s_core_config_forms WHERE id = @formId;');
 
-        $statement = $this->connection->query("SELECT * FROM s_core_engine_elements");
+        $statement = $this->connection->query('SELECT * FROM s_core_engine_elements');
         $attributes = $statement->fetchAll(PDO::FETCH_ASSOC);
         foreach ($attributes as $attribute) {
             $attribute = $this->convertAttribute($attribute);
@@ -112,25 +133,24 @@ SQL;
               INSERT INTO s_attribute_configuration (`table_name`, `column_name`, `column_type`, `position`, `translatable`, `display_in_backend`, `custom`, `help_text`, `support_text`, `label`, `entity`, `plugin_id`)
               VALUES (
                 's_articles_attributes',
-                 ".$this->connection->quote($attribute['name']).",
-                 ".$this->connection->quote($attribute['type']).",
-                 ".$this->connection->quote($attribute['position']).",
-                 ".$this->connection->quote($attribute['translatable']).",
+                 " . $this->connection->quote($attribute['name']) . ',
+                 ' . $this->connection->quote($attribute['type']) . ',
+                 ' . $this->connection->quote($attribute['position']) . ',
+                 ' . $this->connection->quote($attribute['translatable']) . ',
                  1,
                  0,
-                 ".$this->connection->quote($attribute['help']).",
+                 ' . $this->connection->quote($attribute['help']) . ",
                  '',
-                 ".$this->connection->quote($attribute['label']).",
-                 ".$this->connection->quote($attribute['entity']).",
+                 " . $this->connection->quote($attribute['label']) . ',
+                 ' . $this->connection->quote($attribute['entity']) . ',
                  NULL
               );
-            ";
+            ';
             $this->addSql($sql);
         }
     }
 
     /**
-     * @param array $attribute
      * @return array
      */
     private function convertAttribute(array $attribute)
@@ -160,6 +180,7 @@ SQL;
                 $attribute['type'] = 'string';
                 break;
         }
+
         return $attribute;
     }
 }

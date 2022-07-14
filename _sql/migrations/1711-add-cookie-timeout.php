@@ -21,11 +21,11 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1711 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-
         // Add configuration
         $sql = "SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'Privacy' LIMIT 1);";
         $this->addSql($sql);

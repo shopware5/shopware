@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1430 extends Shopware\Components\Migrations\AbstractMigration
 {
     /**

@@ -24,15 +24,9 @@
 
 class MigrationHelper
 {
-    /**
-     * @var \PDO
-     */
-    private $connection;
+    private PDO $connection;
 
-    /**
-     * @param \PDO $connection
-     */
-    public function __construct(\PDO $connection)
+    public function __construct(PDO $connection)
     {
         $this->connection = $connection;
     }
@@ -40,18 +34,18 @@ class MigrationHelper
     /**
      * @param string $table
      *
-     * @return array[]
+     * @return array<array{name: string, type: string}>
      */
     public function getList($table)
     {
         $identifiers = ['id', 'billingID', 'shippingID'];
 
-        $columns = $this->connection->query(sprintf('DESCRIBE `%s`', $table))->fetchAll(\PDO::FETCH_ASSOC);
+        $columns = $this->connection->query(sprintf('DESCRIBE `%s`', $table))->fetchAll(PDO::FETCH_ASSOC);
 
         $definition = [];
 
         foreach ($columns as $column) {
-            if (in_array($column['Field'], $identifiers)) {
+            if (\in_array($column['Field'], $identifiers)) {
                 continue;
             }
             $definition[] = ['name' => $column['Field'], 'type' => $column['Type']];
@@ -64,6 +58,8 @@ class MigrationHelper
      * @param string $table
      * @param string $name
      * @param string $type
+     *
+     * @return void
      */
     public function update($table, $name, $type)
     {
@@ -79,6 +75,8 @@ class MigrationHelper
     /**
      * @param string $table
      * @param string $keyColumn
+     *
+     * @return void
      */
     public function migrateAttributes($table, $keyColumn)
     {
@@ -113,39 +111,25 @@ SQL;
         $this->connection->exec($sql);
     }
 
-    /**
-     * @param string $table
-     * @param string $name
-     * @param string $type
-     */
-    private function createColumn($table, $name, $type)
+    private function createColumn(string $table, string $name, string $type): void
     {
         $sql = sprintf('ALTER TABLE `%s` ADD `%s` %s NULL DEFAULT NULL', $table, $name, $type);
         $this->connection->exec($sql);
     }
 
-    /**
-     * @param string $table
-     * @param string $name
-     * @param string $type
-     */
-    private function changeColumn($table, $name, $type)
+    private function changeColumn(string $table, string $name, string $type): void
     {
         $sql = sprintf('ALTER TABLE `%s` CHANGE `%s` `%s` %s NULL DEFAULT NULL;', $table, $name, $name, $type);
         $this->connection->exec($sql);
     }
 
     /**
-     * @param string $table
-     * @param string $name
-     *
-     * @return null|array
+     * @return array{name: string, type: string}|null
      */
-    private function get($table, $name)
+    private function get(string $table, string $name): ?array
     {
-        $columns = $this->getList($table);
-        foreach ($columns as $column) {
-            if ($name == $column['name']) {
+        foreach ($this->getList($table) as $column) {
+            if ($name === $column['name']) {
                 return $column;
             }
         }

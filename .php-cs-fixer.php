@@ -15,6 +15,7 @@ use PhpCsFixerCustomFixers\Fixer\NoSuperfluousConcatenationFixer;
 use PhpCsFixerCustomFixers\Fixers;
 
 $finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__ . '/_sql/migrations')
     ->in(__DIR__ . '/engine/Shopware')
     ->in(__DIR__ . '/tests')
     ->in(__DIR__ . '/recovery')

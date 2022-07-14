@@ -1,6 +1,28 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-class Migrations_Migration437 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration437 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -216,13 +238,14 @@ class Migrations_Migration437 Extends Shopware\Components\Migrations\AbstractMig
     {
         $defaultData = $this->getDefaultTranslationValues();
 
-        foreach($defaultData as $translationDefault) {
+        foreach ($defaultData as $translationDefault) {
             $this->setEmailTranslationDirtyFlag($translationDefault['name'], $translationDefault['objectdata']);
         }
     }
 
     /**
      * Helper method to set the dirty flag of email templates
+     *
      * @param string $name
      * @param string $content
      * @param string $contentHtml
@@ -237,6 +260,7 @@ SQL;
 
     /**
      * Helper method to set the dirty flag of email template translations
+     *
      * @param string $name
      * @param string $objectData
      */
@@ -279,8 +303,8 @@ SQL;
      */
     private function getDefaultTranslationValues()
     {
-        return array(
-            array('name' => 'sACCEPTNOTIFICATION','objectdata' => 'a:2:{s:7:"subject";s:39:"Please confirm your e-mail notification";s:7:"content";s:240:"Hello, 
+        return [
+            ['name' => 'sACCEPTNOTIFICATION', 'objectdata' => 'a:2:{s:7:"subject";s:39:"Please confirm your e-mail notification";s:7:"content";s:240:"Hello, 
 
 Thank you for signing up for the automatical e-Mail notification for the article {$sArticleName}. 
 Please confirm the notification by clicking the following link:
@@ -289,16 +313,16 @@ Please confirm the notification by clicking the following link:
 
 Best regards
 
-Your Team of {config name=shopName}";}'),
-            array('name' => 'sARTICLEAVAILABLE','objectdata' => 'a:2:{s:7:"subject";s:31:"Your article is available again";s:7:"content";s:148:"Hello, 
+Your Team of {config name=shopName}";}'],
+            ['name' => 'sARTICLEAVAILABLE', 'objectdata' => 'a:2:{s:7:"subject";s:31:"Your article is available again";s:7:"content";s:148:"Hello, 
 
 Your article with the order number {$sOrdernumber} is available again. 
 
 {$sArticleLink} 
 
 Best regards
-Your Team of {config name=shopName}";}'),
-            array('name' => 'sARTICLECOMMENT','objectdata' => 'a:2:{s:7:"subject";s:16:"Evaluate article";s:7:"content";s:948:"<p>Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Your Team of {config name=shopName}";}'],
+            ['name' => 'sARTICLECOMMENT', 'objectdata' => 'a:2:{s:7:"subject";s:16:"Evaluate article";s:7:"content";s:948:"<p>Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
 </p>
 You have recently purchased articles from {config name=shopName}. We would be pleased if you could evaluate these items. Doing so, you can help us improve our services, and you have the opportunity to tell other customers your opinion. 
 By the way: You do not necessarily have to comment on the articles you have bought. You can select the ones you like best. We would welcome any feedback that you have. 
@@ -322,33 +346,33 @@ Here you can find the links to the evaluations of your purchased articles.
 <p>
 Best regards,<br />
 Your team of {config name=shopName}
-</p>";}'),
-            array('name' => 'sARTICLESTOCK','objectdata' => 'a:2:{s:7:"subject";s:83:"Stock level of {$sData.count} article{if $sData.count>1}s{/if} under minimum stock ";s:7:"content";s:260:"Hello,
+</p>";}'],
+            ['name' => 'sARTICLESTOCK', 'objectdata' => 'a:2:{s:7:"subject";s:83:"Stock level of {$sData.count} article{if $sData.count>1}s{/if} under minimum stock ";s:7:"content";s:260:"Hello,
 The following articles have undershot the minimum stock:
 Order number Name of article Stock/Minimum stock 
 {foreach from=$sJob.articles item=sArticle key=key}
 {$sArticle.ordernumber} {$sArticle.name} {$sArticle.instock}/{$sArticle.stockmin} 
 {/foreach}
-";}'),
-            array('name' => 'sBIRTHDAY','objectdata' => 'a:2:{s:7:"subject";s:40:"Happy Birthday from {$sConfig.sSHOPNAME}";s:7:"content";s:174:"Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.firstname} {$sUser.lastname},
+";}'],
+            ['name' => 'sBIRTHDAY', 'objectdata' => 'a:2:{s:7:"subject";s:40:"Happy Birthday from {$sConfig.sSHOPNAME}";s:7:"content";s:174:"Hello {if $sUser.salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.firstname} {$sUser.lastname},
 
 Best regards
-Your team of {$sConfig.sSHOPNAME}";}'),
-            array('name' => 'sCANCELEDQUESTION','objectdata' => 'a:2:{s:7:"subject";s:69:"Your aborted order process - Send us your feedback and get a voucher!";s:7:"content";s:378:"Dear customer,
+Your team of {$sConfig.sSHOPNAME}";}'],
+            ['name' => 'sCANCELEDQUESTION', 'objectdata' => 'a:2:{s:7:"subject";s:69:"Your aborted order process - Send us your feedback and get a voucher!";s:7:"content";s:378:"Dear customer,
  
 You have recently aborted an order process on Demoshop.de - we are always working to make shopping with our shop as pleasant as possible. Therefore we would like to know why your order has failed.
  
 Please tell us the reason why you have aborted your order. We will reward your additional effort by sending you a 5,00 €-voucher. 
  
-Thank you for your feedback";}'),
-            array('name' => 'sCANCELEDVOUCHER','objectdata' => 'a:2:{s:7:"subject";s:50:"Your aborted order process - Voucher code enclosed";s:7:"content";s:351:"Dear customer,
+Thank you for your feedback";}'],
+            ['name' => 'sCANCELEDVOUCHER', 'objectdata' => 'a:2:{s:7:"subject";s:50:"Your aborted order process - Voucher code enclosed";s:7:"content";s:351:"Dear customer,
  
 You have recently aborted an order process on Demoshop.de - today, we would like to give you a 5,00 Euro-voucher - and therefore make it easier for you to decide for an order with Demoshop.de.
  
 Your voucher is valid for two months and can be redeemed by entering the code "{$sVouchercode}".
 
-We would be pleased to accept your order!";}'),
-            array('name' => 'sCUSTOMERGROUPHACCEPTED','objectdata' => 'a:2:{s:7:"subject";s:39:"Your merchant account has been unlocked";s:7:"content";s:186:"Hello,
+We would be pleased to accept your order!";}'],
+            ['name' => 'sCUSTOMERGROUPHACCEPTED', 'objectdata' => 'a:2:{s:7:"subject";s:39:"Your merchant account has been unlocked";s:7:"content";s:186:"Hello,
 
 Your merchant account {config name=shopName} has been unlocked.
   
@@ -356,8 +380,8 @@ From now on, we will charge you the net purchase price.
   
 Best regards
   
-Your team of {config name=shopName}";}'),
-            array('name' => 'sCUSTOMERGROUPHREJECTED','objectdata' => 'a:2:{s:7:"subject";s:41:"Your trader account has not been accepted";s:7:"content";s:307:"Dear customer,
+Your team of {config name=shopName}";}'],
+            ['name' => 'sCUSTOMERGROUPHREJECTED', 'objectdata' => 'a:2:{s:7:"subject";s:41:"Your trader account has not been accepted";s:7:"content";s:307:"Dear customer,
 
 Thank you for your interest in our trade prices. Unfortunately, we do not have a trading license yet so that we cannot accept you as a trader. 
 
@@ -365,21 +389,21 @@ In case of further questions please do not hesitate to contact us via telephone,
 
 Best regards
 
-Your Team of {config name=shopName}";}'),
-            array('name' => 'sNEWSLETTERCONFIRMATION','objectdata' => 'a:2:{s:7:"subject";s:42:"Thank you for your newsletter subscription";s:7:"content";s:78:"Hello,
+Your Team of {config name=shopName}";}'],
+            ['name' => 'sNEWSLETTERCONFIRMATION', 'objectdata' => 'a:2:{s:7:"subject";s:42:"Thank you for your newsletter subscription";s:7:"content";s:78:"Hello,
 
 Thank you for your newsletter subscription at {config name=shopName}
 
-";}'),
-            array('name' => 'sNOSERIALS','objectdata' => 'a:2:{s:7:"subject";s:53:"Attention - no free serial numbers for {sArticleName}";s:7:"content";s:269:"Hello,
+";}'],
+            ['name' => 'sNOSERIALS', 'objectdata' => 'a:2:{s:7:"subject";s:53:"Attention - no free serial numbers for {sArticleName}";s:7:"content";s:269:"Hello,
 
 There is no additional free serial numbers available for the article {sArticleName}. Please provide new serial numbers immediately or deactivate the article. Please assign a serial number to the customer {sMail} manually.
 
 Best regards,
 
 {config name=shopName}
-";}'),
-            array('name' => 'sOPTINNEWSLETTER','objectdata' => 'a:2:{s:7:"subject";s:43:"Please confirm your newsletter subscription";s:7:"content";s:208:"Hello, 
+";}'],
+            ['name' => 'sOPTINNEWSLETTER', 'objectdata' => 'a:2:{s:7:"subject";s:43:"Please confirm your newsletter subscription";s:7:"content";s:208:"Hello, 
 
 Thank you for signing up for our regularly published newsletter. 
 
@@ -387,15 +411,15 @@ Please confirm your subscription by clicking the following link: {$sConfirmLink}
 
 Best regards
 
-Your Team of {config name=shopName}";}'),
-            array('name' => 'sOPTINVOTE','objectdata' => 'a:2:{s:7:"subject";s:38:"Please confirm your article evaluation";s:7:"content";s:164:"Hello, 
+Your Team of {config name=shopName}";}'],
+            ['name' => 'sOPTINVOTE', 'objectdata' => 'a:2:{s:7:"subject";s:38:"Please confirm your article evaluation";s:7:"content";s:164:"Hello, 
 
 Thank you for evaluating the article{$sArticle.articleName}. 
 
 Please confirm the evaluation by clicking the following link: {$sConfirmLink} 
 
-Best regards";}'),
-            array('name' => 'sORDER','objectdata' => 'a:3:{s:7:"subject";s:28:"Your order with the demoshop";s:7:"content";s:1739:"Hello {$billingaddress.firstname} {$billingaddress.lastname},
+Best regards";}'],
+            ['name' => 'sORDER', 'objectdata' => 'a:3:{s:7:"subject";s:28:"Your order with the demoshop";s:7:"content";s:1739:"Hello {$billingaddress.firstname} {$billingaddress.lastname},
  
 Thank you for your order at {config name=shopName} (Number: {$sOrderNumber}) on {$sOrderDay} at {$sOrderTime}.
 Information on your order:
@@ -545,18 +569,18 @@ Thank you for your order with {config name=shopName} (Nummer: {$sOrderNumber}) o
 
     Your Team of {config name=shopName}<br/>
 </p>
-</div>";}'),
-            array('name' => 'sORDERSEPAAUTHORIZATION','objectdata' => 'a:3:{s:7:"subject";s:25:"SEPA direct debit mandate";s:7:"content";s:275:"Hello {$paymentInstance.firstName} {$paymentInstance.lastName},Attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email. Best regards. The {config name=shopName} team.";s:11:"contentHtml";s:311:"<div>Hello {$paymentInstance.firstName} {$paymentInstance.lastName},<br><br>Attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.<br/><br/>Best regards,<br/><br/>The {config name=shopName} team</div>";}'),
-            array('name' => 'sORDERSTATEMAIL1','objectdata' => 'a:4:{s:8:"fromMail";s:16:"{$sConfig.sMAIL}";s:8:"fromName";s:20:"{$sConfig.sSHOPNAME}";s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:334:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+</div>";}'],
+            ['name' => 'sORDERSEPAAUTHORIZATION', 'objectdata' => 'a:3:{s:7:"subject";s:25:"SEPA direct debit mandate";s:7:"content";s:275:"Hello {$paymentInstance.firstName} {$paymentInstance.lastName},Attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email. Best regards. The {config name=shopName} team.";s:11:"contentHtml";s:311:"<div>Hello {$paymentInstance.firstName} {$paymentInstance.lastName},<br><br>Attached you will find the direct debit mandate form for your order {$paymentInstance.orderNumber}. Please return the completely filled out document by fax or email.<br/><br/>Best regards,<br/><br/>The {config name=shopName} team</div>";}'],
+            ['name' => 'sORDERSTATEMAIL1', 'objectdata' => 'a:4:{s:8:"fromMail";s:16:"{$sConfig.sMAIL}";s:8:"fromName";s:20:"{$sConfig.sSHOPNAME}";s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:334:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
 
-The status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d-%m-%Y"} has changed. The new status is as follows: {$sOrder.status_description}.";}'),
-            array('name' => 'sORDERSTATEMAIL11','objectdata' => 'a:2:{s:7:"subject";s:22:"Order shipped in parts";s:7:"content";s:334:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+The status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d-%m-%Y"} has changed. The new status is as follows: {$sOrder.status_description}.";}'],
+            ['name' => 'sORDERSTATEMAIL11', 'objectdata' => 'a:2:{s:7:"subject";s:22:"Order shipped in parts";s:7:"content";s:334:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
 
-The status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d-%m-%Y"} has changed. The new status is as follows: {$sOrder.status_description}.";}'),
-            array('name' => 'sORDERSTATEMAIL2','objectdata' => 'a:2:{s:7:"subject";s:36:"Your order at {config name=shopName}";s:7:"content";s:332:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+The status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d-%m-%Y"} has changed. The new status is as follows: {$sOrder.status_description}.";}'],
+            ['name' => 'sORDERSTATEMAIL2', 'objectdata' => 'a:2:{s:7:"subject";s:36:"Your order at {config name=shopName}";s:7:"content";s:332:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
 
-The status of your order with order number{$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d-%m-%Y"} has changed. The new status is as follows {$sOrder.status_description}.";}'),
-            array('name' => 'sORDERSTATEMAIL3','objectdata' => 'a:2:{s:7:"subject";s:13:"Status change";s:7:"content";s:923:"Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"} Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+The status of your order with order number{$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d-%m-%Y"} has changed. The new status is as follows {$sOrder.status_description}.";}'],
+            ['name' => 'sORDERSTATEMAIL3', 'objectdata' => 'a:2:{s:7:"subject";s:13:"Status change";s:7:"content";s:923:"Dear {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"} Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
  
 The status of your order {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d.%m.%Y"} 
 has changed. The new status is as follows: "{$sOrder.status_description}".
@@ -575,8 +599,8 @@ Total amount incl. VAT: {$sOrder.invoice_amount|string_format:"%.2f"} {$sConfig.
 Best regards,
 Your team of {config name=shopName}
 
-";}'),
-            array('name' => 'sORDERSTATEMAIL4','objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:551:"Hello {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+";}'],
+            ['name' => 'sORDERSTATEMAIL4', 'objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:551:"Hello {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
  
 The order status of your order {$sOrder.ordernumber} has changed!
 The order now has the following status: {$sOrder.status_description}.
@@ -584,16 +608,16 @@ The order now has the following status: {$sOrder.status_description}.
 You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
  
 Best regards,
-Your team of {config name=shopName}";}'),
-            array('name' => 'sORDERSTATEMAIL5','objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:389:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} 
+Your team of {config name=shopName}";}'],
+            ['name' => 'sORDERSTATEMAIL5', 'objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:389:"Dear{if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} 
 {$sUser.billing_firstname} {$sUser.billing_lastname},
  
 The status of your order with order number {$sOrder.ordernumber} of {$sOrder.ordertime|date_format:" %d.%m.%Y"} 
 has changed. The new status is as follows: {$sOrder.status_description}.
  
 Best regards,
-Your team of {config name=shopName}";}'),
-            array('name' => 'sORDERSTATEMAIL6','objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:552:"Hello {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Your team of {config name=shopName}";}'],
+            ['name' => 'sORDERSTATEMAIL6', 'objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:552:"Hello {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
  
 The order status of your order {$sOrder.ordernumber} has changed!
 Your order now has the following status: {$sOrder.status_description}.
@@ -601,8 +625,8 @@ Your order now has the following status: {$sOrder.status_description}.
 You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
  
 Best regards,
-Your team of {config name=shopName}";}'),
-            array('name' => 'sORDERSTATEMAIL8','objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:553:"Hello {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
+Your team of {config name=shopName}";}'],
+            ['name' => 'sORDERSTATEMAIL8', 'objectdata' => 'a:2:{s:7:"subject";s:38:"Your order with {config name=shopName}";s:7:"content";s:553:"Hello {if $sUser.billing_salutation eq "mr"}Mr{elseif $sUser.billing_salutation eq "ms"}Mrs{/if} {$sUser.billing_firstname} {$sUser.billing_lastname},
  
 The status of your order {$sOrder.ordernumber} has changed!
 The current status of your order is as follows: {$sOrder.status_description}.
@@ -610,8 +634,8 @@ The current status of your order is as follows: {$sOrder.status_description}.
 You can check the current status of your order on our website under "My account" - "My orders" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.
  
 Best regards,
-Your team of {config name=shopName}";}'),
-            array('name' => 'sPASSWORD','objectdata' => 'a:2:{s:7:"subject";s:46:"Forgot password - Your access data for {sShop}";s:7:"content";s:127:"Hello,
+Your team of {config name=shopName}";}'],
+            ['name' => 'sPASSWORD', 'objectdata' => 'a:2:{s:7:"subject";s:46:"Forgot password - Your access data for {sShop}";s:7:"content";s:127:"Hello,
 
 Your access data for {sShopURL} is as follows:
 User: {sMail}
@@ -619,8 +643,8 @@ Password: {sPassword}
 
 Best regards
 
-{config name=address}";}'),
-            array('name' => 'sREGISTERCONFIRMATION','objectdata' => 'a:3:{s:7:"subject";s:37:"Your registration has been successful";s:7:"content";s:291:"Hello {salutation} {firstname} {lastname},
+{config name=address}";}'],
+            ['name' => 'sREGISTERCONFIRMATION', 'objectdata' => 'a:3:{s:7:"subject";s:37:"Your registration has been successful";s:7:"content";s:291:"Hello {salutation} {firstname} {lastname},
  
 Thank you for your registration with our Shop.
  
@@ -643,8 +667,8 @@ You can have your password sent to you by email anytime. <br/><br/>
 Best regards<br/><br/>
  
 Your team of {config name=shopName}
-</div>";}'),
-            array('name' => 'sTELLAFRIEND','objectdata' => 'a:2:{s:7:"subject";s:33:"{sName} recommends you {sArticle}";s:7:"content";s:189:"Hello,
+</div>";}'],
+            ['name' => 'sTELLAFRIEND', 'objectdata' => 'a:2:{s:7:"subject";s:33:"{sName} recommends you {sArticle}";s:7:"content";s:189:"Hello,
 
 {sName} has found an interesting product for you on {sShop} that you should have a look at:
 
@@ -655,8 +679,8 @@ Your team of {config name=shopName}
 
 Best regards and see you next time
 
-Your contact details";}'),
-            array('name' => 'sVOUCHER','objectdata' => 'a:2:{s:7:"subject";s:12:"Your voucher";s:7:"content";s:268:"Hello {customer},
+Your contact details";}'],
+            ['name' => 'sVOUCHER', 'objectdata' => 'a:2:{s:7:"subject";s:12:"Your voucher";s:7:"content";s:268:"Hello {customer},
 
 {user} has followed your recommendation and just ordered at {config name=shopName}.
 This is why we give you a X € voucher, which you can redeem with your next order.
@@ -664,7 +688,7 @@ This is why we give you a X € voucher, which you can redeem with your next ord
 Your voucher code is as follows: XXX
 			
 Best regards,
-{config name=shopName}";}')
-        );
+{config name=shopName}";}'],
+        ];
     }
 }

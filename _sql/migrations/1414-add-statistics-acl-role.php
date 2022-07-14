@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1414 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)

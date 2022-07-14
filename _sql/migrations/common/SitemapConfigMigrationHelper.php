@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 /**
  * Shopware 5
@@ -23,19 +25,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\SitemapBundle\Provider\BlogUrlProvider;
-use Shopware\Bundle\SitemapBundle\Provider\CategoryUrlProvider;
-use Shopware\Bundle\SitemapBundle\Provider\LandingPageUrlProvider;
-use Shopware\Bundle\SitemapBundle\Provider\ManufacturerUrlProvider;
-use Shopware\Bundle\SitemapBundle\Provider\ProductUrlProvider;
-use Shopware\Bundle\SitemapBundle\Provider\StaticUrlProvider;
-use Shopware\Models\Article\Article;
-use Shopware\Models\Article\Supplier;
-use Shopware\Models\Blog\Blog;
-use Shopware\Models\Category\Category;
-use Shopware\Models\Emotion\Emotion;
-use Shopware\Models\Site\Site;
-
 class SitemapConfigMigrationHelper
 {
     /**
@@ -50,7 +39,7 @@ class SitemapConfigMigrationHelper
 
     public function migrate(): void
     {
-        $customConfigurationPath = dirname(__DIR__, 3) . '/config.php';
+        $customConfigurationPath = __DIR__ . '/../../../config.php';
 
         if (!file_exists($customConfigurationPath)) {
             return;

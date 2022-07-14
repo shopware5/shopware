@@ -113,6 +113,7 @@ Ext.define('Shopware.apps.Customer.view.main.CustomerList', {
     },
 
     mailRenderer: function(value) {
+        value = Ext.util.Format.htmlEncode(value);
         return Ext.String.format('<a href="mailto:[0]" data-qtip="[0]">[0]</a>', value);
     },
 

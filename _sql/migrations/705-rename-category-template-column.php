@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration705 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -63,7 +64,7 @@ class Migrations_Migration705 extends Shopware\Components\Migrations\AbstractMig
 
                 list($file, $name) = explode(':', $template);
 
-                if (in_array($file, $templateBlacklist) || empty($name)) {
+                if (\in_array($file, $templateBlacklist) || empty($name)) {
                     continue;
                 }
 

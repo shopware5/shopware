@@ -129,7 +129,7 @@ class Article extends LazyFetchModelEntity
     public function setContainer($container)
     {
         $this->container = $container;
-        $container->setType('ctArticles');
+        $container->setType(Container::TYPE_PRODUCTS);
     }
 
     /**

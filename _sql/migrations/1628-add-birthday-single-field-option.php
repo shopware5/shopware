@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1628 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -32,7 +33,7 @@ WHERE `form_id` = (
 )');
 
         $this->addSql('SET @parentId = (SELECT id FROM `s_core_config_forms` WHERE name = \'Frontend33\' LIMIT 1)');
-        
+
         $this->addSql('INSERT INTO `s_core_config_elements` (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
 VALUES (@parentId, \'birthdaySingleField\', \'b:0;\', \'Geburtstag als Datumsfeld anzeigen\', \'Wenn aktiv, wird das Geburtsdatum als einzelnes Datumsfeld dargestellt, statt drei einzelnen Feldern.\', \'boolean\', 1, 0, 0);
 ');

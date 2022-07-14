@@ -37,26 +37,26 @@ class Migrations_Migration1462 extends Shopware\Components\Migrations\AbstractMi
                     [
                         'snippet' => 'i_am_select_field_show',
                         'en_GB' => 'Yes',
-                        'de_DE' => 'Ja'
-                    ]
+                        'de_DE' => 'Ja',
+                    ],
                 ],
                 [
                     1,
                     [
                         'snippet' => 'i_am_select_field_not_show_b2c',
                         'en_GB' => 'No. Customers register as B2C customers.',
-                        'de_DE' => 'Nein. Kunden melden sich als B2C Kunden an.'
-                    ]
+                        'de_DE' => 'Nein. Kunden melden sich als B2C Kunden an.',
+                    ],
                 ],
                 [
                     2,
                     [
                         'snippet' => 'i_am_select_field_not_show_b2b',
                         'en_GB' => 'No. Customers register as B2B customers.',
-                        'de_DE' => 'Nein. Kunden melden sich als B2B Kunden an.'
-                    ]
-                ]
-            ]
+                        'de_DE' => 'Nein. Kunden melden sich als B2B Kunden an.',
+                    ],
+                ],
+            ],
         ];
 
         $sql = <<<'SQL'

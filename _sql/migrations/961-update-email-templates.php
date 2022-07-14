@@ -76,7 +76,7 @@ EOD;
 
     private function updateEmailTemplates()
     {
-        //German
+        // German
         $sql = <<<'EOD'
         UPDATE `s_core_config_mails` SET `frommail` = '{config name=mail}',`fromname` = '{config name=shopName}',`subject` = 'Ihre Anmeldung bei {config name=shopName}',`content` = '{include file="string:{config name=emailheaderplain}"}
         
@@ -1321,7 +1321,7 @@ vielen Dank für Ihre Bestellung bei {config name=shopName}. Im Anhang finden Si
 WHERE `s_core_config_mails`.`name` = 'sORDERDOCUMENTS' AND `dirty` = 0 AND `content` LIKE '%Im Anhang finden Sie Dokumente zu Ihrer Bestellung als PDF%';
 EOD;
 
-        //English
+        // English
         $sql .= <<<'EOD'
 UPDATE `s_core_config_mails` SET `subject` = 'Your registration by {config name=shopName}', `content`='{include file="string:{config name=emailheaderplain}"}
 

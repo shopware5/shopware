@@ -26,6 +26,7 @@ namespace Shopware\Models\Newsletter\ContainerType;
 
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Newsletter\Container;
 
 /**
  * Shopware text model represents a link container type.
@@ -39,7 +40,7 @@ class Link extends ModelEntity
      * OWNING SIDE
      * Owning side of relation between container type 'article' and parent container
      *
-     * @var \Shopware\Models\Newsletter\Container|null
+     * @var Container|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Newsletter\Container", inversedBy="links")
      * @ORM\JoinColumn(name="parentID", referencedColumnName="id")
@@ -165,16 +166,16 @@ class Link extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Container $container
+     * @param Container $container
      */
     public function setContainer($container)
     {
         $this->container = $container;
-        $container->setType('ctLinks');
+        $container->setType(Container::TYPE_LINKS);
     }
 
     /**
-     * @return \Shopware\Models\Newsletter\Container|null
+     * @return Container|null
      */
     public function getContainer()
     {

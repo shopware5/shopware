@@ -40,6 +40,13 @@ use Shopware\Models\Newsletter\ContainerType\Text;
  */
 class Container extends ModelEntity
 {
+    public const TYPE_TEXT = 'ctText';
+    public const TYPE_PRODUCTS = 'ctArticles';
+    public const TYPE_BANNER = 'ctBanner';
+    public const TYPE_LINKS = 'ctLinks';
+    public const TYPE_VOUCHER = 'ctVoucher';
+    public const TYPE_SUGGEST = 'ctSuggest';
+
     /**
      * INVERSE SIDE
      *
@@ -127,7 +134,7 @@ class Container extends ModelEntity
     /**
      * Type of the container (sText, sBanner etc)
      *
-     * @var string
+     * @var self::TYPE_*
      *
      * @ORM\Column(name="type", type="string", length=255, nullable=false)
      */
@@ -190,7 +197,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @param string $type
+     * @param self::TYPE_* $type
      */
     public function setType($type)
     {
@@ -198,7 +205,7 @@ class Container extends ModelEntity
     }
 
     /**
-     * @return string
+     * @return self::TYPE_*
      */
     public function getType()
     {
@@ -245,7 +252,7 @@ class Container extends ModelEntity
     public function setText($text)
     {
         $return = $this->setOneToOne($text, Text::class, 'text', 'container');
-        $this->setType('ctText');
+        $this->setType(self::TYPE_TEXT);
 
         return $return;
     }
@@ -266,7 +273,7 @@ class Container extends ModelEntity
     public function setArticles($articles)
     {
         $return = $this->setOneToMany($articles, Article::class, 'articles', 'container');
-        $this->setType('ctArticles');
+        $this->setType(self::TYPE_PRODUCTS);
 
         return $return;
     }
@@ -287,7 +294,7 @@ class Container extends ModelEntity
     public function setBanner($banner)
     {
         $return = $this->setOneToOne($banner, Banner::class, 'banner', 'container');
-        $this->setType('ctBanner');
+        $this->setType(self::TYPE_BANNER);
 
         return $return;
     }
@@ -308,7 +315,7 @@ class Container extends ModelEntity
     public function setLinks($links)
     {
         $return = $this->setOneToMany($links, Link::class, 'links', 'container');
-        $this->setType('ctLinks');
+        $this->setType(self::TYPE_LINKS);
 
         return $return;
     }

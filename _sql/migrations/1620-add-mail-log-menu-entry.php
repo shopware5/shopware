@@ -43,7 +43,6 @@ WHERE `id` = @templateId;
 SQL;
         $this->addSql($sql);
 
-
         $sql = <<<'SQL'
 INSERT IGNORE INTO `s_core_menu` (`parent`, `name`, `onclick`, `class`, `position`, `active`, `pluginID`, `controller`, `shortcut`, `action`)
 VALUES (@templateId, 'E-Mail-Log', NULL, 'sprite-inbox-document', 1, 1, NULL, 'MailLog', NULL, 'Index');

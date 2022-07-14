@@ -22,7 +22,7 @@
             <iframe class="external--content content--youtube"
                     width="100%"
                     height="100%"
-                    src="https://www.youtube-nocookie.com/embed/{$Data.video_id}{if $params}{$params}{/if}"
+                    src="https://www.youtube-nocookie.com/embed/{$Data.video_id|escape}{if $params}{$params}{/if}"
                     frameborder="0"
                     allowfullscreen>
             </iframe>

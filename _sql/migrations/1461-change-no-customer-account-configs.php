@@ -37,26 +37,26 @@ class Migrations_Migration1461 extends Shopware\Components\Migrations\AbstractMi
                     [
                         'snippet' => 'deactivate_no_customer_account_true',
                         'en_GB' => 'Yes',
-                        'de_DE' => 'Ja'
-                    ]
+                        'de_DE' => 'Ja',
+                    ],
                 ],
                 [
                     1,
                     [
                         'snippet' => 'deactivate_no_customer_account_preselected',
                         'en_GB' => 'No: Option is preselected',
-                        'de_DE' => 'Nein: Option ist vorausgewählt'
-                    ]
+                        'de_DE' => 'Nein: Option ist vorausgewählt',
+                    ],
                 ],
                 [
                     2,
                     [
                         'snippet' => 'deactivate_no_customer_account_unselected',
                         'en_GB' => 'No: Option is not preselected',
-                        'de_DE' => 'Nein: Option ist nicht vorausgewählt.'
-                    ]
-                ]
-            ]
+                        'de_DE' => 'Nein: Option ist nicht vorausgewählt.',
+                    ],
+                ],
+            ],
         ];
 
         $sql = <<<'SQL'

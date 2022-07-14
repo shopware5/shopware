@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1634 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -33,7 +34,6 @@ class Migrations_Migration1634 extends Shopware\Components\Migrations\AbstractMi
         SET @elementId = (SELECT id FROM `s_core_config_elements` WHERE `name` = 'shippingSurchargeNumber' LIMIT 1);
         INSERT INTO s_core_config_element_translations (element_id, locale_id, label, description) VALUES (@elementId, 2, 'Order number for surcharge dispatch rule', null);
 SQL;
-
 
         $this->addSql($sql);
     }

@@ -1,6 +1,28 @@
 <?php
+/**
+ * Shopware 5
+ * Copyright (c) shopware AG
+ *
+ * According to our dual licensing model, this program can be used either
+ * under the terms of the GNU Affero General Public License, version 3,
+ * or under a proprietary license.
+ *
+ * The texts of the GNU Affero General Public License with an additional
+ * permission and of our proprietary license can be found at and
+ * in the LICENSE file you have received along with this program.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Affero General Public License for more details.
+ *
+ * "Shopware" is a registered trademark of shopware AG.
+ * The licensing of the program under the AGPLv3 does not imply a
+ * trademark license. Therefore any rights, title and interest in
+ * our trademarks remain entirely with us.
+ */
 
-class Migrations_Migration475 Extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration475 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
@@ -24,7 +46,6 @@ SQL;
         $this->addSql($sql);
     }
 
-
     private function insertTranslation()
     {
         $content = "Hello {if \$sUser.billing_salutation eq \"mr\"}Mr{elseif \$sUser.billing_salutation eq \"ms\"}Mrs{/if} {\$sUser.billing_firstname} {\$sUser.billing_lastname},\n\nThe order status of your order {\$sOrder.ordernumber} has changed!\nYour order now has the following status: {\$sOrder.status_description}.\n\nYou can check the current status of your order on our website under \"My account\" - \"My orders\" anytime. But in case you have purchased without a registration or a customer account, you do not have this option.\n\nBest regards,\nYour team of {config name=shopName}";
@@ -33,7 +54,7 @@ SQL;
 
         $data = [
             'content' => $content,
-            'subject' => 'Your order with {config name=shopName}'
+            'subject' => 'Your order with {config name=shopName}',
         ];
 
         $data = serialize($data);
@@ -52,6 +73,7 @@ SQL;
      * Helper method to prefix and suffix the mail templates with the configuration values
      *
      * @param string $content
+     *
      * @return string
      */
     private function convertTemplatePlain($content)
@@ -59,6 +81,6 @@ SQL;
         $header = '{include file=\"string:{config name=emailheaderplain}\"}';
         $footer = '{include file=\"string:{config name=emailfooterplain}\"}';
 
-        return $header."\r\n\r\n".$content."\r\n\r\n".$footer;
+        return $header . "\r\n\r\n" . $content . "\r\n\r\n" . $footer;
     }
 }

@@ -171,7 +171,7 @@ class Banner extends ModelEntity
     public function setContainer($container)
     {
         $this->container = $container;
-        $container->setType('ctBanner');
+        $container->setType(Container::TYPE_BANNER);
     }
 
     /**

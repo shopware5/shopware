@@ -21,6 +21,7 @@
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
  */
+
 class Migrations_Migration1214 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
@@ -45,7 +46,7 @@ WHERE name = 'emailheaderhtml'
 AND form_id = @formId;
 SQL;
 
-        $sql = sprintf($sql, 's:' . strlen(stripslashes($value)) . ':"' . $value . '";');
+        $sql = sprintf($sql, 's:' . \strlen(stripslashes($value)) . ':"' . $value . '";');
 
         $this->addSql($sql);
     }

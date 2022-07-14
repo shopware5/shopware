@@ -27,7 +27,7 @@ use Shopware\Components\Migrations\AbstractMigration;
 class Migrations_Migration916 extends AbstractMigration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function up($modus)
     {
