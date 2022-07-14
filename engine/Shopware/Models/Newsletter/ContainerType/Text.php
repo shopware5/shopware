@@ -123,10 +123,10 @@ class Text extends ModelEntity
     }
 
     /**
-     * @param Container $container
-     * @param string    $type
+     * @param Container         $container
+     * @param Container::TYPE_* $type
      */
-    public function setContainer($container, $type = 'ctText')
+    public function setContainer($container, $type = Container::TYPE_TEXT)
     {
         $this->container = $container;
         $container->setType($type);

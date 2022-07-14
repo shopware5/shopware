@@ -29,6 +29,7 @@ use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Routing\RouterInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Validator\EmailValidator;
+use Shopware\Models\Newsletter\Container;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
 use Symfony\Component\HttpFoundation\Response;
@@ -508,15 +509,18 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $details = Shopware()->Modules()->Marketing()->sMailCampaignsGetDetail((int) $id);
+        if (!\is_array($details)) {
+            return [];
+        }
 
         foreach ($details['containers'] as $key => $container) {
-            if ($container['type'] === 'ctVoucher') {
+            if ($container['type'] === Container::TYPE_VOUCHER) {
                 if (!empty($container['value'])) {
                     $details['voucher'] = $container['value'];
                 }
-                $details['containers'][$key]['type'] = 'ctText';
+                $details['containers'][$key]['type'] = Container::TYPE_TEXT;
             }
-            if ($container['type'] === 'ctSuggest') {
+            if ($container['type'] === Container::TYPE_SUGGEST) {
                 $details['suggest'] = true;
             }
         }
@@ -551,7 +555,7 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $sql = 'SELECT value FROM s_campaigns_containers WHERE type=? AND promotionID=?';
-        $voucherID = Shopware()->Db()->fetchOne($sql, ['ctVoucher', $id]);
+        $voucherID = Shopware()->Db()->fetchOne($sql, [Container::TYPE_VOUCHER, $id]);
         if (empty($voucherID)) {
             return false;
         }

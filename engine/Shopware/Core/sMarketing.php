@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Models\Banner\Banner;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Newsletter\Container;
 use Shopware\Models\Tracking\Banner as TrackingBanner;
 
 /**
@@ -631,6 +632,11 @@ SQL;
         return $similarProducts;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return array<string, mixed>|false
+     */
     public function sMailCampaignsGetDetail($id)
     {
         $sql = "
@@ -662,7 +668,7 @@ SQL;
 
         foreach ($getCampaignContainers as $campaignKey => $campaignValue) {
             switch ($campaignValue['type']) {
-                case 'ctBanner':
+                case Container::TYPE_BANNER:
                     // Query Banner
                     $getBanner = $this->db->fetchRow("
                         SELECT image, link, linkTarget, description FROM s_campaigns_banner
@@ -680,7 +686,7 @@ SQL;
                     $getCampaignContainers[$campaignKey]['description'] = $getBanner['description'];
                     $getCampaignContainers[$campaignKey]['data'] = $getBanner;
                     break;
-                case 'ctLinks':
+                case Container::TYPE_LINKS:
                     // Query links
                     $getLinks = $this->db->fetchAll("
                         SELECT description, link, target FROM s_campaigns_links
@@ -689,7 +695,7 @@ SQL;
                         ");
                     $getCampaignContainers[$campaignKey]['data'] = $getLinks;
                     break;
-                case 'ctArticles':
+                case Container::TYPE_PRODUCTS:
                     $sql = "
                         SELECT articleordernumber, type FROM s_campaigns_articles
                         WHERE parentID={$campaignValue['id']}
@@ -699,8 +705,8 @@ SQL;
                     $getProducts = $this->db->fetchAll($sql);
                     $getCampaignContainers[$campaignKey]['data'] = $this->sGetMailCampaignsProducts($getProducts);
                     break;
-                case 'ctText':
-                case 'ctVoucher':
+                case Container::TYPE_TEXT:
+                case Container::TYPE_VOUCHER:
                     $getText = $this->db->fetchRow("
                             SELECT headline, html,image,alignment,link FROM s_campaigns_html
                             WHERE parentID={$campaignValue['id']}
@@ -711,7 +717,7 @@ SQL;
                     if (strpos($getText['link'], 'http') === false && $getText['link']) {
                         $getText['link'] = 'http://' . $getText['link'];
                     }
-                    $getCampaignContainers[$campaignKey]['description'] = htmlspecialchars($getText['headline']);
+                    $getCampaignContainers[$campaignKey]['description'] = htmlspecialchars($getText['headline'], ENT_COMPAT);
                     $getCampaignContainers[$campaignKey]['data'] = $getText;
                     break;
             }

@@ -31346,16 +31346,6 @@ parameters:
 			path: engine/Shopware/Core/sMarketing.php
 
 		-
-			message: "#^Method sMarketing\\:\\:sMailCampaignsGetDetail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
-			message: "#^Method sMarketing\\:\\:sMailCampaignsGetDetail\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sMarketing.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Core/sMarketing.php
