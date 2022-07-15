@@ -393,6 +393,10 @@ class Enlight_Components_Mail extends Zend_Mail
             ]
         );
 
+        if (!$this->getMessageId()) {
+            $this->setMessageId();
+        }
+
         return parent::send($transport);
     }
 }

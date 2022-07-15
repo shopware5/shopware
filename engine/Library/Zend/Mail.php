@@ -1049,7 +1049,7 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Returns the Message-ID of the message
      *
-     * @return string
+     * @return string|null
      */
     public function getMessageId()
     {
@@ -1136,7 +1136,7 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Return mail headers
      *
-     * @return void
+     * @return array
      */
     public function getHeaders()
     {

@@ -28,19 +28,21 @@ namespace Shopware\Tests\Functional\Regressions;
 
 use Enlight_Components_Mail;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class Ticket5217Test extends TestCase
 {
+    use ContainerTrait;
+
     /**
      * Test case method
      */
     public function testMailTransport(): void
     {
-        $mailTransport = Shopware()->Container()->get('mailtransport');
+        $mailTransport = $this->getContainer()->get('mailtransport');
 
         $mail = new Enlight_Components_Mail();
-
-        $mail->setBodyText('Test Hallo');
+        $mail->setBodyText('Test Hello');
         $mail->addTo('test@example.com');
 
         $mail = $mail->send($mailTransport);
