@@ -70,7 +70,7 @@ class LogEntryBuilder implements LogEntryBuilderInterface
     {
         $logEntry = new Log();
 
-        $logEntry->setSubject((string) iconv_mime_decode($mail->getSubject()));
+        $logEntry->setSubject((string) iconv_mime_decode((string) $mail->getSubject()));
         $logEntry->setSender($mail->getFrom());
         $logEntry->setSentAt(new DateTime((string) $mail->getDate()));
         $logEntry->setContentText($mail->getPlainBodyText());

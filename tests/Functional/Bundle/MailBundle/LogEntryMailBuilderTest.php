@@ -53,7 +53,8 @@ class LogEntryMailBuilderTest extends TestCase
         $this->entryBuilder = new LogEntryBuilder($this->getContainer()->get(ModelManager::class));
         $this->mailBuilder = new LogEntryMailBuilder(
             $this->getContainer()->get('shopware.filesystem.private'),
-            $this->getContainer()->get(MediaServiceInterface::class)
+            $this->getContainer()->get(MediaServiceInterface::class),
+            $this->getContainer()->get('mail')
         );
     }
 

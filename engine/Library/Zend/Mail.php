@@ -36,6 +36,7 @@
  * @see Zend_Mime_Part
  */
 
+use Shopware\Components\Random;
 
 /**
  * Class for sending an email.
@@ -119,7 +120,7 @@ class Zend_Mail extends Zend_Mime_Message
 
     /**
      * Subject: header
-     * @var string
+     * @var string|null
      */
     protected $_subject = null;
 
@@ -167,6 +168,7 @@ class Zend_Mail extends Zend_Mime_Message
      */
     public $hasAttachments = false;
 
+    private ?string $messageIdHostName;
 
     /**
      * Sets the default mail transport for all following uses of
@@ -201,17 +203,12 @@ class Zend_Mail extends Zend_Mime_Message
         self::$_defaultTransport = null;
     }
 
-    /**
-     * Public constructor
-     *
-     * @param  string $charset
-     * @return void
-     */
-    public function __construct($charset = null)
+    public function __construct(?string $charset = null, ?string $messageIdHostName = null)
     {
-        if ($charset != null) {
+        if ($charset !== null) {
             $this->_charset = $charset;
         }
+        $this->messageIdHostName = $messageIdHostName;
     }
 
     /**
@@ -926,7 +923,7 @@ class Zend_Mail extends Zend_Mime_Message
     /**
      * Returns the encoded subject of the message
      *
-     * @return string
+     * @return string|null
      */
     public function getSubject()
     {
@@ -1087,7 +1084,7 @@ class Zend_Mail extends Zend_Mime_Message
             $user = getmypid();
         }
 
-        $rand = Shopware\Components\Random::getInteger(0, PHP_INT_MAX);
+        $rand = Random::getInteger(0, PHP_INT_MAX);
 
         if ($this->_recipients !== array()) {
             $recipient = array_rand($this->_recipients);
@@ -1095,9 +1092,11 @@ class Zend_Mail extends Zend_Mime_Message
             $recipient = 'unknown';
         }
 
-        if (isset($_SERVER["SERVER_NAME"])) {
-            $hostName = $_SERVER["SERVER_NAME"];
-        } else {
+        $hostName = $this->messageIdHostName;
+        if (!$hostName) {
+            $hostName = (string) ($_SERVER['SERVER_NAME'] ?? '');
+        }
+        if (!$hostName) {
             $hostName = php_uname('n');
         }
 

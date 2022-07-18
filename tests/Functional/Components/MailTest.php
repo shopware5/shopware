@@ -36,7 +36,7 @@ class MailTest extends TestCase
     {
         $mailTransport = $this->getContainer()->get('mailtransport');
 
-        $mail = new Enlight_Components_Mail();
+        $mail = new Enlight_Components_Mail(null, 'test.com');
         $mail->setBodyText('Test Hello');
         $mail->addTo('test@example.com');
 
@@ -46,7 +46,7 @@ class MailTest extends TestCase
         static::assertArrayHasKey('Message-Id', $headers);
         $messageId = $headers['Message-Id'][0];
         static::assertIsString($messageId);
-        static::assertStringContainsString('@', $messageId);
+        static::assertStringContainsString('@test.com', $messageId);
         static::assertStringStartsWith('<', $messageId);
         static::assertStringEndsWith('>', $messageId);
     }
