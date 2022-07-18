@@ -41,12 +41,12 @@ class Mail
 
         if (isset($options['charset'])) {
             $defaultCharSet = $options['charset'];
-        } elseif (!empty($config->CharSet)) {
-            $defaultCharSet = $config->CharSet;
+        } elseif (!empty($config->get('CharSet'))) {
+            $defaultCharSet = $config->get('CharSet');
         } else {
             $defaultCharSet = null;
         }
 
-        return new Enlight_Components_Mail($defaultCharSet);
+        return new Enlight_Components_Mail($defaultCharSet, $config->get('mailer_hostname') ?: null);
     }
 }

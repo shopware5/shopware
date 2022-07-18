@@ -41,6 +41,7 @@
                  class="Shopware\Bundle\MailBundle\Service\LogEntryMailBuilder">
             <argument type="service" id="shopware.filesystem.private" />
             <argument type="service" id="Shopware\Bundle\MediaBundle\MediaServiceInterface" />
+            <argument type="service" id="mail"/>
         </service>
 
         <service id="Shopware\Bundle\MailBundle\Service\LogServiceInterface"

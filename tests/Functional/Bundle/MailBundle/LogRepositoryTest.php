@@ -134,6 +134,7 @@ class LogRepositoryTest extends TestCase
         $firstMail = $this->createSimpleMail();
         $secondMail = new Enlight_Components_Mail('UTF-8');
 
+        static::assertIsString($firstMail->getSubject());
         $secondMail->setSubject($firstMail->getSubject());
         $secondMail->setFrom(ucfirst($firstMail->getFrom()));
         $secondMail->setBodyText($firstMail->getBodyText()->getRawContent());

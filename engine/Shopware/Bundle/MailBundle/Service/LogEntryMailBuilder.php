@@ -29,26 +29,22 @@ use League\Flysystem\FilesystemInterface;
 use RuntimeException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Models\Mail\Log;
-use Shopware\Models\Order\Document\Document;
 
 class LogEntryMailBuilder implements LogEntryMailBuilderInterface
 {
     public const INVALID_SENDER_REPLACEMENT_ADDRESS = 'invalid@example.com';
 
-    /**
-     * @var FilesystemInterface
-     */
-    private $filesystem;
+    private FilesystemInterface $filesystem;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    public function __construct(FilesystemInterface $filesystem, MediaServiceInterface $mediaService)
+    private Enlight_Components_Mail $mail;
+
+    public function __construct(FilesystemInterface $filesystem, MediaServiceInterface $mediaService, Enlight_Components_Mail $mail)
     {
         $this->filesystem = $filesystem;
         $this->mediaService = $mediaService;
+        $this->mail = $mail;
     }
 
     /**
@@ -56,7 +52,7 @@ class LogEntryMailBuilder implements LogEntryMailBuilderInterface
      */
     public function build(Log $entry): Enlight_Components_Mail
     {
-        $mail = new Enlight_Components_Mail('UTF-8');
+        $mail = clone $this->mail;
 
         try {
             $mail->setFrom($entry->getSender());
@@ -104,7 +100,6 @@ class LogEntryMailBuilder implements LogEntryMailBuilderInterface
             return;
         }
 
-        /** @var Document $document */
         foreach ($logEntry->getDocuments() as $document) {
             $filePath = sprintf('documents/%s.pdf', $document->getHash());
             $fileName = sprintf('%s.pdf', $document->getType()->getName());
