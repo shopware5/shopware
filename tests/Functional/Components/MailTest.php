@@ -22,28 +22,32 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Components;
+namespace Shopware\Tests\Functional\Components;
 
 use Enlight_Components_Mail;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class MailTest extends TestCase
 {
-    public function testValidFromAddress(): void
+    use ContainerTrait;
+
+    public function testMessageId(): void
     {
+        $mailTransport = $this->getContainer()->get('mailtransport');
+
         $mail = new Enlight_Components_Mail();
-        $mail->setFrom('foo@example.com', 'Sender\'s name');
+        $mail->setBodyText('Test Hello');
+        $mail->addTo('test@example.com');
 
-        static::assertSame('foo@example.com', $mail->getFrom());
-    }
+        $mail->send($mailTransport);
 
-    public function testCodeInjectionInFromHeader(): void
-    {
-        $mail = new Enlight_Components_Mail();
-
-        $this->expectException(RuntimeException::class);
-
-        $mail->setFrom('"AAA\" code injection"@domain', 'Sender\'s name');
+        $headers = $mail->getHeaders();
+        static::assertArrayHasKey('Message-Id', $headers);
+        $messageId = $headers['Message-Id'][0];
+        static::assertIsString($messageId);
+        static::assertStringContainsString('@', $messageId);
+        static::assertStringStartsWith('<', $messageId);
+        static::assertStringEndsWith('>', $messageId);
     }
 }

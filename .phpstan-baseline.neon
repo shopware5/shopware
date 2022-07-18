@@ -51966,16 +51966,6 @@ parameters:
 			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\MailTest\\:\\:testCodeInjectionInFromHeader\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/MailTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\MailTest\\:\\:testValidFromAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/MailTest.php
-
-		-
 			message: "#^Function Shopware\\\\Components\\\\ini_get\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/MemoryLimitTest.php
