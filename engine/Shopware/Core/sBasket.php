@@ -728,16 +728,19 @@ class sBasket implements \Enlight_Hook
         $voucherCode = strtolower(trim(stripslashes($voucherCode)));
 
         // Load the voucher details
+        $date = $date = new DateTime();
+        $date = $date->format('Y-m-d');
+
         $voucherDetails = $this->db->fetchRow(
             'SELECT *
               FROM s_emarketing_vouchers
               WHERE modus != 1
-              AND LOWER(vouchercode) = ?
+              AND LOWER(vouchercode) = :vouchercode
               AND (
-                (valid_to >= CURDATE() AND valid_from <= CURDATE())
-                OR valid_to IS NULL
+                (valid_to >= :date OR valid_to IS NULL)
+                AND (valid_from <= :date OR valid_from IS NULL)
               )',
-            [$voucherCode]
+            ['vouchercode' => $voucherCode, 'date' => $date]
         ) ?: [];
 
         $individualCode = false;
@@ -772,13 +775,11 @@ class sBasket implements \Enlight_Hook
                     'SELECT description, numberofunits, customergroup, value, restrictarticles,
                     minimumcharge, shippingfree, bindtosupplier, taxconfig, valid_from,
                     valid_to, ordercode, modus, percental, strict, subshopID, customer_stream_ids
-                    FROM s_emarketing_vouchers WHERE modus = 1 AND id = ? AND (
-                      (valid_to >= CURDATE()
-                          AND valid_from <= CURDATE()
-                      )
-                      OR valid_to is NULL
+                    FROM s_emarketing_vouchers
+                    WHERE modus = 1 AND id = :voucherId AND (
+                        (valid_to >= :date OR valid_to IS NULL) AND (valid_from <= :date OR valid_from IS NULL)
                 ) LIMIT 1',
-                    [(int) $voucherCodeDetails['voucherID']]
+                    ['voucherId' => (int) $voucherCodeDetails['voucherID'], 'date' => $date]
                 ) ?: [];
                 unset($voucherCodeDetails['voucherID']);
                 $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
