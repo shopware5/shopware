@@ -68,8 +68,7 @@ class ContentTypeComponentHandlerTest extends Enlight_Components_Test_TestCase
     {
         $contentTypeComponentHandler = $this->getContainer()->get(ContentTypeComponentHandler::class);
 
-        $resolvedDataCollection = new ResolvedDataCollection();
-        $resolvedDataCollection->setBatchResult(new BatchProductSearchResult([]));
+        $resolvedDataCollection = $this->createDataCollection();
         $elementConfig = new ElementConfig();
         $elementConfig->set(ContentTypeComponentHandler::CONTENT_TYPE_KEY, 'testcontent');
         $elementConfig->set(ContentTypeComponentHandler::MODE_KEY, ContentTypeComponentHandler::MODE_SELECTED);
@@ -82,5 +81,26 @@ class ContentTypeComponentHandlerTest extends Enlight_Components_Test_TestCase
         $contentTypeComponentHandler->handle($resolvedDataCollection, $element, $shopContext);
 
         static::assertCount(6, $element->getData()->get(ContentTypeComponentHandler::ITEMS_KEY));
+    }
+
+    public function testHandleDoesNotFailIfElementHasNoContentTypeDefined(): void
+    {
+        $contentTypeComponentHandler = $this->getContainer()->get(ContentTypeComponentHandler::class);
+        $resolvedDataCollection = $this->createDataCollection();
+
+        $elementConfig = new ElementConfig();
+        $element = new Element();
+        $element->setConfig($elementConfig);
+        $shopContext = $this->createShopContext();
+
+        $contentTypeComponentHandler->handle($resolvedDataCollection, $element, $shopContext);
+    }
+
+    private function createDataCollection(): ResolvedDataCollection
+    {
+        $resolvedDataCollection = new ResolvedDataCollection();
+        $resolvedDataCollection->setBatchResult(new BatchProductSearchResult([]));
+
+        return $resolvedDataCollection;
     }
 }
