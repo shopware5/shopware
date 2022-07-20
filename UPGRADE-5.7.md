@@ -10,6 +10,14 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Updated `doctrine/annotations` to version 1.13.3
 * Updated `league/flysystem-aws-s3-v3` to version 1.0.30
+* Updated `symfony/console` to version 4.4.43
+* Updated `symfony/dependency-injection` to version 4.4.43
+* Updated `symfony/expression-language` to version 4.4.43
+* Updated `symfony/form` to version 4.4.43
+* Updated `symfony/http-foundation` to version 4.4.43
+* Updated `symfony/http-kernel` to version 4.4.43
+* Updated `symfony/serializer` to version 5.4.10
+* Updated `symfony/validator` to version 4.4.43
 
 ## 5.7.14
 
