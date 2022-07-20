@@ -2,6 +2,15 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.15
+
+[View all changes from v5.7.14...v5.7.15](https://github.com/shopware/shopware/compare/v5.7.14...v5.7.15)
+
+### Changes
+
+* Updated `doctrine/annotations` to version 1.13.3
+* Updated `league/flysystem-aws-s3-v3` to version 1.0.30
+
 ## 5.7.14
 
 [View all changes from v5.7.13...v5.7.14](https://github.com/shopware/shopware/compare/v5.7.13...v5.7.14)
