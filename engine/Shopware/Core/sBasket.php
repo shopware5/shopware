@@ -2727,7 +2727,7 @@ class sBasket implements \Enlight_Hook
                     $getProducts[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 
                     if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
-                        $discount += ($getProducts[$key]['amountWithTax'] / 100 * ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount']));
+                        $discount += ($getProducts[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
                     }
                 } elseif ($getProducts[$key]['modus'] == CartPositionsMode::PAYMENT_SURCHARGE_OR_DISCOUNT
                                  || $getProducts[$key]['modus'] == CartPositionsMode::SWAG_BUNDLE_DISCOUNT

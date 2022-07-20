@@ -46,9 +46,9 @@ class CustomerGroupHydrator extends Hydrator
 
         $customerGroup->setName($data['__customerGroup_description']);
 
-        $customerGroup->setDisplayGrossPrices((bool) ($data['__customerGroup_tax']));
+        $customerGroup->setDisplayGrossPrices((bool) $data['__customerGroup_tax']);
 
-        $customerGroup->setInsertedGrossPrices((bool) ($data['__customerGroup_taxinput']));
+        $customerGroup->setInsertedGrossPrices((bool) $data['__customerGroup_taxinput']);
 
         $customerGroup->setKey($data['__customerGroup_groupkey']);
 
@@ -58,7 +58,7 @@ class CustomerGroupHydrator extends Hydrator
 
         $customerGroup->setSurcharge((float) $data['__customerGroup_minimumordersurcharge']);
 
-        $customerGroup->setUseDiscount((bool) ($data['__customerGroup_mode']));
+        $customerGroup->setUseDiscount((bool) $data['__customerGroup_mode']);
 
         if (!empty($data['__customerGroupAttribute_id'])) {
             $this->attributeHydrator->addAttribute($customerGroup, $data, 'customerGroupAttribute');

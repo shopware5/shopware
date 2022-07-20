@@ -1525,7 +1525,7 @@ class sExport implements Enlight_Hook
             ]);
         } catch (Exception $e) {
             echo $e->getMessage();
-            exit();
+            exit;
         }
 
         if (empty($basket)) {

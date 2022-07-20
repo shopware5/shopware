@@ -139,7 +139,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
             'Shopware_AdvancedMenu_Tree_%s_%s_%s',
             $context->getShop()->getId(),
             $category,
-            ($this->Config()->get('includeCustomergroup') ? $context->getCurrentCustomerGroup()->getId() : 'x')
+            $this->Config()->get('includeCustomergroup') ? $context->getCurrentCustomerGroup()->getId() : 'x'
         );
 
         $cacheKey = $this->get('events')->filter('Shopware_Plugins_AdvancedMenu_CacheKey', $cacheKey, [

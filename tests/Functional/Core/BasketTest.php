@@ -1755,11 +1755,11 @@ class BasketTest extends TestCase
         static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $result);
         static::assertSame(14.95, $result[CartKey::AMOUNT_NUMERIC]);
         static::assertArrayHasKey(CartKey::AMOUNT_NET_NUMERIC, $result);
-        static::assertSame(12.56, ($result[CartKey::AMOUNT_NET_NUMERIC]));
+        static::assertSame(12.56, $result[CartKey::AMOUNT_NET_NUMERIC]);
         static::assertArrayHasKey(CartKey::AMOUNT_WITH_TAX, $result);
-        static::assertSame('0', ($result[CartKey::AMOUNT_WITH_TAX]));
+        static::assertSame('0', $result[CartKey::AMOUNT_WITH_TAX]);
         static::assertArrayHasKey(CartKey::AMOUNT_WITH_TAX_NUMERIC, $result);
-        static::assertSame(0.0, ($result[CartKey::AMOUNT_WITH_TAX_NUMERIC]));
+        static::assertSame(0.0, $result[CartKey::AMOUNT_WITH_TAX_NUMERIC]);
         static::assertArrayHasKey(CartKey::QUANTITY, $result);
         static::assertSame(1, $result[CartKey::QUANTITY]);
     }

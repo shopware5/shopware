@@ -29,13 +29,13 @@ class Migrations_Migration924 extends Shopware\Components\Migrations\AbstractMig
         $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'HttpCache')");
 
         $this->addSql(
-"INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_control', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheControl', @pluginId, '0');"
+            "INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
+             VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_control', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheControl', @pluginId, '0');"
         );
 
         $this->addSql(
-"INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_id_collector', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheIdCollector', @pluginId, '0');"
+            "INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
+             VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_id_collector', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheIdCollector', @pluginId, '0');"
         );
     }
 }

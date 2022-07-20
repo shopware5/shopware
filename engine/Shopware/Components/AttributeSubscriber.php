@@ -92,7 +92,7 @@ class AttributeSubscriber implements SubscriberInterface
 
                 setcookie(self::redirectCookieString, '1', time() + 5);
                 $response->sendResponse();
-                exit();
+                exit;
             }
             exit(sprintf("Failed to create the attribute models, please check the permissions of the '%s' directory", $generator->getPath()));
         }

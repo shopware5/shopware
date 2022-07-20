@@ -1577,19 +1577,19 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
                     $resolved[] = ['property' => 'customer.email', 'direction' => $direction];
                     break;
 
-                // Custom sort field for customer name
+                    // Custom sort field for customer name
                 case $sort['property'] === 'customerName':
                     $resolved[] = ['property' => 'billing.lastName', 'direction' => $direction];
                     $resolved[] = ['property' => 'billing.firstName', 'direction' => $direction];
                     $resolved[] = ['property' => 'billing.company', 'direction' => $direction];
                     break;
 
-                // Contains no sql prefix? add orders as default prefix
+                    // Contains no sql prefix? add orders as default prefix
                 case !str_contains($sort['property'], '.'):
                     $resolved[] = ['property' => 'orders.' . $sort['property'], 'direction' => $direction];
                     break;
 
-                // Already prefixed with an alias?
+                    // Already prefixed with an alias?
                 default:
                     $resolved[] = $sort;
             }

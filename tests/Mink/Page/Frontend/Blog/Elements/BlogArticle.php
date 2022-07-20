@@ -166,7 +166,7 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
             case 1:
                 return current($title);
 
-            // if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
+                // if blog article name is too long, it will be cut. So it's different from the other and has to be checked separately
             case 2:
                 $check = [$title];
                 $result = Helper::checkArray($check);

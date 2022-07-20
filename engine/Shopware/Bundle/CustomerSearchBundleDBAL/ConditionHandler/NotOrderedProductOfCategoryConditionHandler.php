@@ -52,7 +52,7 @@ class NotOrderedProductOfCategoryConditionHandler implements ConditionHandlerInt
                 (
                     SELECT customernumber
                     FROM s_customer_search_index
-                    WHERE ' . (implode(' OR ', $likes)) . '
+                    WHERE ' . implode(' OR ', $likes) . '
                 )'
         );
         foreach ($condition->getCategoryIds() as $i => $id) {
