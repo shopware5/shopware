@@ -103,11 +103,11 @@
     },
     "require-dev": {
         "bamarni/composer-bin-plugin": "1.8.0",
-        "behat/behat": "^3.10.0",
+        "behat/behat": "3.11.0",
         "behat/gherkin": "4.9.0",
         "behat/mink": "1.10.0",
         "behat/mink-selenium2-driver": "1.6.0",
-        "friends-of-behat/mink-extension": "2.6.1",
+        "friends-of-behat/mink-extension": "2.7.1",
         "php-parallel-lint/php-var-dump-check": "^0.5",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "1.1.0",
@@ -116,7 +116,7 @@
         "phpstan/phpstan-phpunit": "1.1.1",
         "phpstan/phpstan-symfony": "1.2.8",
         "phpunit/phpunit": "^9.4",
-        "sensiolabs/behat-page-object-extension": "2.3.4",
+        "sensiolabs/behat-page-object-extension": "2.3.5",
         "staabm/phpstan-dba": "0.2.42",
         "symfony/browser-kit": "~4.4.27",
         "symfony/dom-crawler": "~4.4.30"
