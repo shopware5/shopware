@@ -18,6 +18,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/http-kernel` to version 4.4.43
 * Updated `symfony/serializer` to version 5.4.10
 * Updated `symfony/validator` to version 4.4.43
+* Updated several indirect dependencies
 
 ## 5.7.14
 
