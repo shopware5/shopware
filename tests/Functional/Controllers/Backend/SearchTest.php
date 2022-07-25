@@ -32,10 +32,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
 
-    /**
-     * @var Helper
-     */
-    private $helper;
+    private Helper $helper;
 
     /**
      * Standard set up for every test - just disable auth
@@ -54,7 +51,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @group elasticSearch
      */
-    public function testSearchForVariants()
+    public function testSearchForVariants(): void
     {
         $this->helper->refreshBackendSearchIndex();
 
@@ -64,5 +61,6 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         $jsonBody = $this->View()->getAssign();
 
         static::assertEquals(2, $jsonBody['searchResult']['articles']['SW10002.1']['kind']);
+        $this->reset();
     }
 }

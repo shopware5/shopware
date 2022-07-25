@@ -2454,7 +2454,7 @@ class sArticles implements Enlight_Hook
 
             $product['description_long'] = $this->sOptimizeText($product['description_long']);
 
-            $products[$product['ordernumber']] = $product;
+            $products[(string) $product['ordernumber']] = $product;
         }
 
         $products = $this->listingLinkRewriteService->rewriteLinks($criteria, $products, $context);

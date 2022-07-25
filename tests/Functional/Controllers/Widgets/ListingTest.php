@@ -28,10 +28,7 @@ namespace Shopware\Tests\Functional\Controllers\Widgets;
 
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Controller_Response_ResponseTestCase;
-use Enlight_Template_Manager;
-use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Controllers_Widgets_Listing as ListingController;
@@ -65,8 +62,6 @@ class ListingTest extends TestCase
 
         $controller->listingCountAction();
 
-        $controller->View()->addTemplateDir(__DIR__ . '/../../../../themes/Frontend/Bare', 'test');
-
         $html = $controller->View()->fetch('widgets/listing/listing_count.tpl');
 
         preg_match('/<div id="facets">(.*?)<\/div>/s', $html, $match);
@@ -84,6 +79,28 @@ class ListingTest extends TestCase
         static::fail('Test facet not found');
     }
 
+    public function testListingCountActionHasProducts(): void
+    {
+        $controller = $this->getController();
+        $controller->Request()->setParam('sCategory', '14');
+        $controller->Request()->setParam('loadProducts', '1');
+
+        $controller->listingCountAction();
+
+        $viewAssigns = $controller->View()->getAssign();
+        static::assertTrue($viewAssigns['listing']);
+        static::assertTrue($viewAssigns['pagination']);
+        $response = $controller->Response();
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
+        static::assertSame('12', $response->getHeader('Shopware-Listing-Total'));
+
+        $html = $controller->View()->fetch('widgets/listing/listing_count.tpl');
+        static::assertStringContainsString('<div id="result">', $html);
+        static::assertStringContainsString('<div id="listing">', $html);
+        static::assertStringContainsString('<div id="pagination">', $html);
+        static::assertStringContainsString('<div class="product--box box--basic"', $html);
+    }
+
     private function getController(): ListingController
     {
         $controller = new ListingController();
@@ -94,15 +111,15 @@ class ListingTest extends TestCase
         $front = $this->getContainer()->get('front');
         $front->setRequest($request);
         $front->setResponse($response);
+        $front->Plugins()->load('ViewRenderer');
 
         $container = $this->getContainer();
-        static::assertInstanceOf(Container::class, $container);
 
         $controller->setContainer($container);
         $controller->setFront($front);
         $controller->setRequest($request);
         $controller->setResponse($response);
-        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+        $controller->initController($controller->Request(), $controller->Response());
 
         return $controller;
     }

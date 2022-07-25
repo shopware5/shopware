@@ -29446,76 +29446,6 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Emotion.php
 
 		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:convertProductsResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:getCategoryAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:getCategoryById\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:getCategoryChildrenIds\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:getCustomPageAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:listingCountAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:loadThemeConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:productsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:setSearchResultResponse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:streamAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:tagCloudAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Listing\\:\\:topSellerAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Parameter \\#1 \\$template of method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:buildConfig\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
-			message: "#^Parameter \\#1 \\$template of method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:getSmartyDirectories\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Listing.php
-
-		-
 			message: "#^Method Shopware_Controllers_Widgets_Recommendation\\:\\:boughtAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Recommendation.php
@@ -44789,11 +44719,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\RiskManagementTest\\:\\:testGetPayments\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/RiskManagementTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SearchTest\\:\\:testSearchForVariants\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/SearchTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"

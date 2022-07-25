@@ -18,6 +18,7 @@
  */
 
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -191,6 +192,9 @@ abstract class Enlight_Components_Test_Controller_TestCase extends Enlight_Compo
                 continue;
             }
             $container->get('events')->addSubscriber($plugin);
+        }
+        if ($container->initialized('shop')) {
+            $container->get(ShopRegistrationServiceInterface::class)->resetTemplate($container->get('shop'));
         }
     }
 
