@@ -38,6 +38,8 @@ use Zend_Db_Table_Abstract;
 class Db
 {
     /**
+     * @param array<string, mixed> $dbConfig
+     *
      * @return PDO
      */
     public static function createPDO(array $dbConfig)
@@ -61,6 +63,7 @@ class Db
 
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+            $conn->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, true);
 
             // Reset sql_mode "STRICT_TRANS_TABLES" that will be default in MySQL 5.6
             $conn->exec('SET @@session.sql_mode = ""');
@@ -101,9 +104,8 @@ class Db
     }
 
     /**
-     * @param PDO $pdo
-     *
-     * @throws \Doctrine\DBAL\DBALException
+     * @param array<string, mixed> $options
+     * @param PDO                  $pdo
      *
      * @return Connection
      */
@@ -124,6 +126,8 @@ class Db
     }
 
     /**
+     * @param array<string, mixed> $options
+     *
      * @return Enlight_Components_Db_Adapter_Pdo_Mysql
      */
     public static function createEnlightDbAdapter(Connection $connection, array $options)
@@ -137,6 +141,9 @@ class Db
         return $db;
     }
 
+    /**
+     * @param array<string, mixed> $dbConfig
+     */
     private static function buildConnectionString(array $dbConfig): string
     {
         if (!isset($dbConfig['host']) || empty($dbConfig['host'])) {

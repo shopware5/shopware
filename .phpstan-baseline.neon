@@ -17946,26 +17946,6 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Config.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Db\\:\\:buildConnectionString\\(\\) has parameter \\$dbConfig with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Db.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Db\\:\\:createDbalConnection\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Db.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Db\\:\\:createEnlightDbAdapter\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Db.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Db\\:\\:createPDO\\(\\) has parameter \\$dbConfig with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Db.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Front\\:\\:factory\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Front.php
