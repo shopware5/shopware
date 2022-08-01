@@ -56,7 +56,7 @@
         "google/cloud-storage": "1.27.1",
         "guzzlehttp/guzzle": "~7.4.5",
         "guzzlehttp/psr7": "2.4.0",
-        "laminas/laminas-code": "4.5.1",
+        "laminas/laminas-code": "4.6.0",
         "laminas/laminas-escaper": "2.10.0",
         "league/flysystem": "~1.1.4",
         "league/flysystem-aws-s3-v3": "1.0.30",
