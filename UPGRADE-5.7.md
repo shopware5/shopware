@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Changes
 
 * Updated `doctrine/annotations` to version 1.13.3
+* Updated `doctrine/event-manager` to version 1.1.2
 * Updated `league/flysystem-aws-s3-v3` to version 1.0.30
 * Updated `monolog/monolog` to version 2.8.0
 * Updated `symfony/console` to version 4.4.43
