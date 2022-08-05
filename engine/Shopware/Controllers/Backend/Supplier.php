@@ -104,7 +104,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         unset($supplier);
 
         $this->View()->assign([
-            'success' => !empty($suppliers),
+            'success' => true,
             'data' => $suppliers,
             'total' => $total,
         ]);

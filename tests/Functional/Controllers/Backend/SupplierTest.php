@@ -25,6 +25,7 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Exception;
 
 class SupplierTest extends Enlight_Components_Test_Controller_TestCase
 {
@@ -131,5 +132,30 @@ class SupplierTest extends Enlight_Components_Test_Controller_TestCase
         $this->Request()->setMethod('POST')->setPost(['id' => $lastSupplier['id']]);
         $this->dispatch('backend/supplier/deleteSupplier');
         static::assertTrue($this->View()->success);
+    }
+
+    /**
+     * Test if getSuppliers will also assign true when no suppliers have been found
+     *
+     * @throws Exception
+     */
+    public function testGetZeroSuppliers(): void
+    {
+        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->Request()->setMethod('GET');
+        $filter = json_encode([
+                    'property' => 'name',
+                    'value' => 'thismanufacturerdoesnotexist',
+                    'operator' => null,
+                    'expression' => null,
+                ]);
+        $query_params = urlencode(sprintf('[%s]', $filter));
+        $this->dispatch('backend/supplier/getSuppliers?filter=' . $query_params);
+        static::assertTrue($this->View()->getAssign('success'));
+
+        $jsonBody = $this->View()->getAssign();
+        static::assertArrayHasKey('total', $jsonBody);
+        static::assertArrayHasKey('data', $jsonBody);
+        static::assertArrayHasKey('success', $jsonBody);
     }
 }
