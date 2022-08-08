@@ -44,7 +44,7 @@
                 {/block}
 
                 {* Captcha *}
-                {block name='frontend_account_index_form_captcha'}
+                {block name='frontend_detail_index_notification_captcha'}
                     <div class="is--align-center notification--captcha">
                         {$captchaName = {config name="notificationCaptchaConfig"}}
                         {$captchaHasError = $NotifyCaptchaError}

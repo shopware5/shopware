@@ -11,7 +11,7 @@
             {/block}
 
             {* Compare modal error message *}
-            {block name="product_compare_error_title"}
+            {block name="product_compare_error_message"}
                 <div class="modal--error">
                     {s name="CompareInfoMaxReached" namespace="frontend/compare/added" assign="snippetCompareInfoMaxReached"}{/s}
                     {include file="frontend/_includes/messages.tpl" type="info" content=$snippetCompareInfoMaxReached}

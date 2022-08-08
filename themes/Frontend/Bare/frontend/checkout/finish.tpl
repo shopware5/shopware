@@ -178,7 +178,7 @@
                                     <div class="panel has--border block information--panel billing--panel finish--billing">
 
                                         {* Headline *}
-                                        {block name='frontend_checkout_confirm_information_addresses_billing_panel_title'}
+                                        {block name='frontend_checkout_finish_information_addresses_billing_panel_title'}
                                             <div class="panel--title is--underline">
                                                 {s name="ConfirmHeaderBilling" namespace="frontend/checkout/confirm"}{/s}
                                             </div>
