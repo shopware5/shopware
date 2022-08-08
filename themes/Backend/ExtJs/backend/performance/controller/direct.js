@@ -30,7 +30,7 @@
 
 //{namespace name="backend/performance/main"}
 
-//{block name="backend/performance/controller/main"}
+//{block name="backend/performance/controller/direct"}
 Ext.define('Shopware.apps.Performance.controller.Direct', {
 
     extend: 'Enlight.app.Controller',

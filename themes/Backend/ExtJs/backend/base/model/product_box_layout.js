@@ -51,7 +51,7 @@ Ext.define('Shopware.apps.Base.model.ProductBoxLayout', {
      * @array
      */
     fields: [
-        //{block name="backend/base/model/product_box_layout"}{/block}
+        //{block name="backend/base/model/product_box_layout/fields"}{/block}
         { name: 'key', type: 'string' },
         { name: 'label', type: 'string' },
         { name: 'description', type: 'string' },

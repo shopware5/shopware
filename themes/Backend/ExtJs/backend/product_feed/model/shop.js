@@ -34,7 +34,7 @@
  * Shopware\Models\Shop\Shop doctrine model, with some additional data for the additional information panel.
  * We can't use the base store because we need all shops and the children
  */
-//{block name="backend/product_feed/model/main"}
+//{block name="backend/product_feed/model/shop"}
 Ext.define('Shopware.apps.ProductFeed.model.Shop', {
     /**
      * Extends the standard Ext Model

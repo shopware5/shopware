@@ -28,7 +28,7 @@
  */
 
 // {namespace name="backend/customer/view/main"}
-// {block name="backend/customer/view/customer_stream/conditions/registered_in_shop_condition"}
+// {block name="backend/customer/view/customer_stream/conditions/not_registered_in_shop_condition"}
 Ext.define('Shopware.apps.Customer.view.customer_stream.conditions.NotRegisteredInShopCondition', {
 
     getLabel: function() {

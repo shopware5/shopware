@@ -33,7 +33,7 @@
  * The detail_batch model ist responsible to load all other stores needed for the detail page.
  *
  */
-//{block name="backend/order/model/batch"}
+//{block name="backend/order/model/detail_batch"}
 Ext.define('Shopware.apps.Order.model.DetailBatch', {
 
     /**

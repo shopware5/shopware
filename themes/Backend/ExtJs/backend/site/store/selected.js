@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 
-//{block name="backend/site/store/groups"}
+//{block name="backend/site/store/selected"}
 Ext.define('Shopware.apps.Site.store.Selected', {
     extend: 'Ext.data.Store',
     model: 'Shopware.apps.Site.model.Selected',

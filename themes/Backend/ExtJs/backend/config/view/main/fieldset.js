@@ -21,13 +21,9 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
-
 //{namespace name="backend/config/view/main"}
 
-//{block name="backend/config/view/main/form"}
+//{block name="backend/config/view/main/fields_set"}
 Ext.define('Shopware.apps.Config.view.main.Fieldset', {
     extend: 'Ext.panel.Panel',
     alias: 'widget.config-fieldset',
@@ -42,9 +38,6 @@ Ext.define('Shopware.apps.Config.view.main.Fieldset', {
         hideEmptyLabel: false
     },
 
-    /**
-     *
-     */
     initComponent: function () {
         var me = this;
 
