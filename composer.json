@@ -147,7 +147,6 @@
     "autoload-dev": {
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
-            "Shopware\\Tests\\Mink\\": "tests/Mink/features/bootstrap",
             "Shopware\\Tests\\": "tests/"
         }
     },
