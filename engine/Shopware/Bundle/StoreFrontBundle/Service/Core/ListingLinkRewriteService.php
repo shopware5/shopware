@@ -45,6 +45,12 @@ class ListingLinkRewriteService implements ListingLinkRewriteServiceInterface
         $this->router = $router;
     }
 
+    /**
+     * @param array<string, mixed> $articles
+     * @param int|null             $categoryId
+     *
+     * @return array<string, mixed>
+     */
     public function rewriteLinks(
         Criteria $criteria,
         array $articles,

@@ -2,6 +2,32 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.15
+
+[View all changes from v5.7.14...v5.7.15](https://github.com/shopware/shopware/compare/v5.7.14...v5.7.15)
+
+### Changes
+
+* Updated `doctrine/annotations` to version 1.13.3
+* Updated `doctrine/event-manager` to version 1.1.2
+* Updated `google/cloud-storage` to version 1.28.0
+* Updated `laminas/laminas-code` to version 4.6.0
+* Updated `league/flysystem-aws-s3-v3` to version 1.0.30
+* Updated `monolog/monolog` to version 2.8.0
+* Updated `symfony/config` to version 4.4.44
+* Updated `symfony/console` to version 4.4.44
+* Updated `symfony/dependency-injection` to version 4.4.44
+* Updated `symfony/expression-language` to version 4.4.44
+* Updated `symfony/finder` to version 4.4.44
+* Updated `symfony/form` to version 4.4.44
+* Updated `symfony/http-foundation` to version 4.4.44
+* Updated `symfony/http-kernel` to version 4.4.44
+* Updated `symfony/options-resolver` to version 4.4.44
+* Updated `symfony/process` to version 4.4.44
+* Updated `symfony/serializer` to version 5.4.11
+* Updated `symfony/validator` to version 4.4.44
+* Updated several indirect dependencies
+
 ## 5.7.14
 
 [View all changes from v5.7.13...v5.7.14](https://github.com/shopware/shopware/compare/v5.7.13...v5.7.14)

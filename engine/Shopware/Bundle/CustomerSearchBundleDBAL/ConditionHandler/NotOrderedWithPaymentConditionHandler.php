@@ -52,7 +52,7 @@ class NotOrderedWithPaymentConditionHandler implements ConditionHandlerInterface
                 (
                     SELECT customernumber
                     FROM s_customer_search_index
-                    WHERE ' . (implode(' OR ', $likes)) . '
+                    WHERE ' . implode(' OR ', $likes) . '
                 )'
         );
         foreach ($condition->getPaymentIds() as $i => $number) {

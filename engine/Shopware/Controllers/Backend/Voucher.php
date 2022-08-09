@@ -25,9 +25,11 @@
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Models\Tax\Tax;
 use Shopware\Models\Voucher\Code;
+use Shopware\Models\Voucher\Repository;
 use Shopware\Models\Voucher\Voucher;
 
 class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
@@ -35,12 +37,12 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * Entity Manager
      *
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     protected $manager;
 
     /**
-     * @var \Shopware\Models\Voucher\Repository
+     * @var Repository
      */
     protected $voucherRepository;
 
@@ -70,7 +72,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
             // First delete the voucher codes because this could be to huge for doctrine
             $this->deleteAllVoucherCodesById($voucher['id']);
 
-            /** @var \Shopware\Models\Voucher\Voucher $model */
+            /** @var Voucher $model */
             $model = $this->getVoucherRepository()->find($voucher['id']);
             $this->getManager()->remove($model);
         }
@@ -193,7 +195,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
         do {
             // generate voucher codes till the numberOfUnits is reached
-            $this->generateVoucherCodes($voucherId, ($numberOfUnits - $createdVoucherCodes), $codePattern);
+            $this->generateVoucherCodes($voucherId, $numberOfUnits - $createdVoucherCodes, $codePattern);
 
             $query = $this->getVoucherRepository()->getVoucherCodeCountQuery($voucherId);
             $result = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
@@ -210,7 +212,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     {
         $codeId = (int) $this->Request()->getParam('id');
         /** @var Code|null $code */
-        $code = $this->get(\Shopware\Components\Model\ModelManager::class)->getRepository(Code::class)->find($codeId);
+        $code = $this->get(ModelManager::class)->getRepository(Code::class)->find($codeId);
 
         if (!$code) {
             $this->View()->assign(['success' => false]);
@@ -222,8 +224,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $code->setCode($this->Request()->getParam('code'));
         $code->setCustomerId($this->Request()->getParam('customerId'));
 
-        $this->get(\Shopware\Components\Model\ModelManager::class)->persist($code);
-        $this->get(\Shopware\Components\Model\ModelManager::class)->flush($code);
+        $this->get(ModelManager::class)->persist($code);
+        $this->get(ModelManager::class)->flush($code);
 
         $this->View()->assign(['success' => true]);
     }
@@ -263,15 +265,15 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $voucherID = (int) $this->Request()->voucherID;
 
         $query = $this->getVoucherRepository()->getVoucherDetailQuery($voucherID);
-        $model = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT);
-        $voucher = $query->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $model = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        $voucher = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        if ($model->getValidFrom() instanceof \DateTime) {
+        if ($model->getValidFrom() instanceof DateTime) {
             $voucher['validFrom'] = $model->getValidFrom()->format('d.m.Y');
         } else {
             $voucher['validFrom'] = null;
         }
-        if ($model->getValidTo() instanceof \DateTime) {
+        if ($model->getValidTo() instanceof DateTime) {
             $voucher['validTo'] = $model->getValidTo()->format('d.m.Y');
         } else {
             $voucher['validTo'] = null;
@@ -333,7 +335,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $this->getManager()->flush();
         $data = $this->getVoucherRepository()
             ->getVoucherDetailQuery($voucher->getId())
-            ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -448,7 +450,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * Helper function to get access to the voucher repository.
      *
-     * @return \Shopware\Models\Voucher\Repository
+     * @return Repository
      */
     private function getVoucherRepository()
     {

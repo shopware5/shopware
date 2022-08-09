@@ -272,9 +272,9 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
             if (!$validator->isValid($user['email'])) {
                 echo "Skipped invalid email\n";
             // SW-4526
-                // Don't `continue` with next iteration without setting user's lastmailing
-                // else the mailing.status will never be set to 2
-                // and sending the mail will block
+            // Don't `continue` with next iteration without setting user's lastmailing
+            // else the mailing.status will never be set to 2
+            // and sending the mail will block
             } else {
                 try {
                     $mail->send();

@@ -51,8 +51,6 @@ class MenuSynchronizerTest extends TestCase
             'localeID' => 2,
             'name' => 'SomeController',
             'value' => 'EN Label',
-            'created' => date('Y-m-d H:i:s', time()),
-            'updated' => date('Y-m-d H:i:s', time()),
             'dirty' => 0,
         ]);
     }
@@ -77,8 +75,6 @@ class MenuSynchronizerTest extends TestCase
                 'localeID' => 2,
                 'name' => 'SomeController/index',
                 'value' => 'EN Label',
-                'created' => date('Y-m-d H:i:s', time()),
-                'updated' => date('Y-m-d H:i:s', time()),
                 'dirty' => 0,
             ]
         );
@@ -104,8 +100,6 @@ class MenuSynchronizerTest extends TestCase
                 'localeID' => 2,
                 'name' => 'SomeController/FooBar',
                 'value' => 'EN Label',
-                'created' => date('Y-m-d H:i:s', time()),
-                'updated' => date('Y-m-d H:i:s', time()),
                 'dirty' => 0,
             ]
         );
@@ -118,7 +112,9 @@ class MenuSynchronizerTest extends TestCase
             ->willReturn($this->createMock(QueryBuilder::class));
         $connection->expects(static::once())
             ->method('insert')
-            ->with('s_core_snippets', $expectedQueryParameters);
+            ->with('s_core_snippets', static::callback(function ($value) use ($expectedQueryParameters) {
+                return !array_diff($expectedQueryParameters, $value);
+            }));
 
         $modelManagerMock = $this->createMock(ModelManager::class);
         $modelManagerMock->method('getConnection')

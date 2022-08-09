@@ -83,13 +83,13 @@ class OrmBacklogSubscriber implements EventSubscriber
             case $entity instanceof Article:
                 return new Backlog(Article::class, $entity->getId());
 
-            // Variant changes
+                // Variant changes
             case $entity instanceof Price:
                 return new Backlog(Article::class, $entity->getDetail()->getArticleId());
             case $entity instanceof Variant:
                 return new Backlog(Article::class, $entity->getArticleId());
 
-            // Order changes
+                // Order changes
             case $entity instanceof Order:
                 return new Backlog(Order::class, $entity->getId());
             case $entity instanceof Detail:
@@ -99,7 +99,7 @@ class OrmBacklogSubscriber implements EventSubscriber
             case $entity instanceof Shipping:
                 return new Backlog(Order::class, $entity->getOrder()->getId());
 
-            // Customer changes
+                // Customer changes
             case $entity instanceof Customer:
                 return new Backlog(Customer::class, $entity->getId());
             case $entity instanceof Address:

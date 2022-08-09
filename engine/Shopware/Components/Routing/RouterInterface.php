@@ -34,9 +34,9 @@ namespace Shopware\Components\Routing;
 interface RouterInterface
 {
     /**
-     * @param array<int, array<string, mixed>>|array<int, string> $list
+     * @param array<int, array<string, mixed>>|array<array-key, string> $list
      *
-     * @return array<int, string>
+     * @return array<array-key, string>
      */
     public function generateList(array $list, Context $context = null);
 

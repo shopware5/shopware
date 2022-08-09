@@ -163,7 +163,7 @@ class CleanupController
     public function deleteOutdatedFolders()
     {
         echo $this->cleanupService->cleanup();
-        exit();
+        exit;
     }
 
     private function cleanupMedia()

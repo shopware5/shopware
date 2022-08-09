@@ -198,7 +198,7 @@ class ShopwareContext extends SubContext
                     $mask = '%s&sNotificationConfirmation=%s&sNotify=1&action=notifyConfirm';
                     break;
 
-                // Artikel-Bewertungen
+                    // Artikel-Bewertungen
                 default:
                     $mask = '%s&sConfirmation=%s';
                     break;

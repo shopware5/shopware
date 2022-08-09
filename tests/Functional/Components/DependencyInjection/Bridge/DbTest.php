@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,20 +24,30 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration924 extends Shopware\Components\Migrations\AbstractMigration
+namespace Shopware\Tests\Functional\Components\DependencyInjection\Bridge;
+
+use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+
+class DbTest extends TestCase
 {
-    public function up($modus)
+    use ContainerTrait;
+
+    public function testIntsAreReturnedAsStringsFromTheDB(): void
     {
-        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'HttpCache')");
+        $database = $this->getContainer()->get('db');
 
-        $this->addSql(
-            "INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-             VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_control', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheControl', @pluginId, '0');"
-        );
+        $result = $database->fetchOne('Select 1');
 
-        $this->addSql(
-            "INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-             VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_id_collector', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheIdCollector', @pluginId, '0');"
-        );
+        static::assertIsString($result);
+    }
+
+    public function testIntsAreReturnedAsStringsFromTheConnectionTest(): void
+    {
+        $database = $this->getContainer()->get('dbal_connection');
+
+        $result = $database->fetchOne('Select 1');
+
+        static::assertIsString($result);
     }
 }

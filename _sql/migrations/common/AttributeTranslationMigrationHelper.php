@@ -51,14 +51,14 @@ class AttributeTranslationMigrationHelper
         $columns = $this->getColumns();
 
         $statement = $this->connection->prepare(
-<<<EOL
-          SELECT * 
-          FROM s_core_translations
-          WHERE objecttype IN ("article", "variantMain", "variant")
-          AND id > :lastId
-          AND id <= :maxId
-          ORDER BY id ASC
-          LIMIT 250
+            <<<EOL
+SELECT *
+FROM s_core_translations
+WHERE objecttype IN ("article", "variantMain", "variant")
+AND id > :lastId
+AND id <= :maxId
+ORDER BY id ASC
+LIMIT 250
 EOL
         );
 

@@ -1389,6 +1389,67 @@ class BasketTest extends TestCase
         $this->deleteDummyCustomer($customer);
     }
 
+    /**
+     * @dataProvider provideVoucherDates
+     */
+    public function testsAddVoucherDateCheck(?string $from, ?string $to, bool $hasValidDate): void
+    {
+        $voucherData = [
+            'vouchercode' => 'testTwo',
+            'description' => 'testTwo description',
+            'numberofunits' => 1,
+            'numorder' => 1,
+            'modus' => 0,
+            'percental' => 1,
+            'restrictarticles' => '',
+            'strict' => 0,
+            'taxconfig' => 'auto',
+            'minimumcharge' => 10,
+            'value' => 50,
+            'ordercode' => uniqid('ordercode', true),
+            'valid_from' => $from,
+            'valid_to' => $to,
+        ];
+
+        $this->connection->insert(
+            's_emarketing_vouchers',
+            $voucherData
+        );
+
+        $this->generateBasketSession();
+        $product = $this->getRandomProduct();
+        $this->module->sAddArticle($product['ordernumber']);
+
+        if ($hasValidDate) {
+            static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+            static::assertIsArray($this->module->sGetVoucher());
+        } else {
+            static::assertIsArray($this->module->sAddVoucher($voucherData['vouchercode']));
+            static::assertFalse($this->module->sGetVoucher());
+        }
+    }
+
+    /**
+     * @return array<array{0: string|null, 1: string|null, 2: bool}>
+     */
+    public function provideVoucherDates(): array
+    {
+        $datePast = '2020-04-01';
+        $dateFuture = '2099-04-01';
+
+        return [
+            'null null' => [null, null, true],
+            'null past' => [null, $datePast, false],
+            'null future' => [null, $dateFuture, true],
+            'past null' => [$datePast, null, true],
+            'past past' => [$datePast, $datePast, false],
+            'past future' => [$datePast, $dateFuture, true],
+            'future null' => [$dateFuture, null, false],
+            'future past' => [$dateFuture, $datePast, false],
+            'future future' => [$dateFuture, $dateFuture, false],
+        ];
+    }
+
     public function testsGetBasketIds(): void
     {
         $randomProductOne = $this->getRandomProduct();
@@ -1755,11 +1816,11 @@ class BasketTest extends TestCase
         static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $result);
         static::assertSame(14.95, $result[CartKey::AMOUNT_NUMERIC]);
         static::assertArrayHasKey(CartKey::AMOUNT_NET_NUMERIC, $result);
-        static::assertSame(12.56, ($result[CartKey::AMOUNT_NET_NUMERIC]));
+        static::assertSame(12.56, $result[CartKey::AMOUNT_NET_NUMERIC]);
         static::assertArrayHasKey(CartKey::AMOUNT_WITH_TAX, $result);
-        static::assertSame('0', ($result[CartKey::AMOUNT_WITH_TAX]));
+        static::assertSame('0', $result[CartKey::AMOUNT_WITH_TAX]);
         static::assertArrayHasKey(CartKey::AMOUNT_WITH_TAX_NUMERIC, $result);
-        static::assertSame(0.0, ($result[CartKey::AMOUNT_WITH_TAX_NUMERIC]));
+        static::assertSame(0.0, $result[CartKey::AMOUNT_WITH_TAX_NUMERIC]);
         static::assertArrayHasKey(CartKey::QUANTITY, $result);
         static::assertSame(1, $result[CartKey::QUANTITY]);
     }

@@ -55,7 +55,7 @@ class HasNoAddressWithCountryConditionHandler implements ConditionHandlerInterfa
             AND addresses.user_id NOT IN (
                 SELECT user_id
                 FROM s_user_addresses
-                WHERE (' . (implode(' OR ', $ors)) . ')
+                WHERE (' . implode(' OR ', $ors) . ')
             )'
         );
         $query->addGroupBy('customer.id');

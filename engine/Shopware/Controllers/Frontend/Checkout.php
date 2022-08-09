@@ -1709,7 +1709,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->assign('sAmountNet', $basket[CartKey::AMOUNT_NET_NUMERIC]);
         $view->assign('sDispatches', $this->getDispatches());
         $accountMode = (int) $this->View()->getAssign('sUserData')['additional']['user']['accountmode'];
-        $view->assign('sDispatchNoOrder', ($accountMode === 0 && $this->getDispatchNoOrder()));
+        $view->assign('sDispatchNoOrder', $accountMode === 0 && $this->getDispatchNoOrder());
         $view->assign('showShippingCalculation', (bool) $this->Request()->getParam('openShippingCalculations'));
         $view->assign('sMinimumSurcharge', $this->getMinimumCharge());
     }

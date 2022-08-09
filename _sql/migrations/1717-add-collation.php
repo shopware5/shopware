@@ -22,20 +22,13 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration924 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration1717 extends Shopware\Components\Migrations\AbstractMigration
 {
     public function up($modus)
     {
-        $this->addSql("SET @pluginId = (SELECT id FROM s_core_plugins WHERE name = 'HttpCache')");
-
-        $this->addSql(
-            "INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-             VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_control', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheControl', @pluginId, '0');"
-        );
-
-        $this->addSql(
-            "INSERT INTO `s_core_subscribes` (`subscribe`, `type`, `listener`, `pluginID`, `position`)
-             VALUES('Enlight_Bootstrap_InitResource_http_cache.cache_id_collector', '0', 'Shopware_Plugins_Core_HttpCache_Bootstrap::initCacheIdCollector', @pluginId, '0');"
+        $this->addSql(<<<'SQL'
+            ALTER TABLE `s_core_config_mails_attachments` CONVERT TO CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+SQL
         );
     }
 }

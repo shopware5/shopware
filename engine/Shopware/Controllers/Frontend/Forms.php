@@ -230,7 +230,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                                     $text .= sprintf(
                                         "\n%s x %s (%s) - %s %s",
                                         $basketRow['quantity'],
-                                            $basketRow['articlename'],
+                                        $basketRow['articlename'],
                                         $basketRow['ordernumber'],
                                         $basketRow['price'],
                                         Shopware()->System()->sCurrency['currency']
@@ -297,7 +297,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         if ($element['typ'] === 'text2') {
             $output .= str_replace(';', '/', (string) $element['label']);
         } else {
-            $output .= (string) ($element['label']);
+            $output .= (string) $element['label'];
         }
         if ((bool) $element['required'] === true) {
             $output .= '*';

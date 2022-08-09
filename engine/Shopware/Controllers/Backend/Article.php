@@ -4430,7 +4430,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $cursor = 'detail';
                 $paths[0] = 'configuratorOptions';
                 break;
-            // all other commands will rout to the product
+                // all other commands will rout to the product
             default:
                 $cursor = 'article';
         }

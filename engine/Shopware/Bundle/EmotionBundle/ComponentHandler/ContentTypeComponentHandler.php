@@ -65,8 +65,13 @@ class ContentTypeComponentHandler implements ComponentHandlerInterface
 
     public function handle(ResolvedDataCollection $collection, Element $element, ShopContextInterface $context): void
     {
-        /** @var RepositoryInterface $repository */
-        $repository = $this->container->get('shopware.bundle.content_type.' . $element->getConfig()->get(self::CONTENT_TYPE_KEY));
+        $repository = $this->container->get(
+            'shopware.bundle.content_type.' . $element->getConfig()->get(self::CONTENT_TYPE_KEY),
+            ContainerInterface::NULL_ON_INVALID_REFERENCE
+        );
+        if (!$repository instanceof RepositoryInterface) {
+            return;
+        }
 
         $mode = (int) $element->getConfig()->get(self::MODE_KEY);
 

@@ -102,8 +102,9 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @throws Enlight_Exception
      * @throws Enlight_Event_Exception
      */
-    public function initController(Enlight_Controller_Request_RequestHttp $request,
-                                Enlight_Controller_Response_ResponseHttp $response
+    public function initController(
+        Enlight_Controller_Request_RequestHttp $request,
+        Enlight_Controller_Response_ResponseHttp $response
     ) {
         $this->setRequest($request)->setResponse($response);
 

@@ -252,8 +252,8 @@ class CountryTest extends TestCase
 
         static::assertArrayHasKey('data', $countryData);
         static::assertArrayHasKey('total', $countryData);
-        static::assertCount((2 + \count(self::$existingCountryIds)), $countryData['data']);
-        static::assertEquals($countryData['total'], (2 + \count(self::$existingCountryIds)));
+        static::assertCount(2 + \count(self::$existingCountryIds), $countryData['data']);
+        static::assertEquals($countryData['total'], 2 + \count(self::$existingCountryIds));
 
         return $country;
     }

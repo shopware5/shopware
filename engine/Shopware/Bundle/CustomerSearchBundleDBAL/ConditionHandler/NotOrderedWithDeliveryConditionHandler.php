@@ -52,7 +52,7 @@ class NotOrderedWithDeliveryConditionHandler implements ConditionHandlerInterfac
                 (
                     SELECT customernumber
                     FROM s_customer_search_index
-                    WHERE ' . (implode(' OR ', $likes)) . '
+                    WHERE ' . implode(' OR ', $likes) . '
                 )'
         );
         foreach ($condition->getDispatchIds() as $i => $number) {

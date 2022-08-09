@@ -148,7 +148,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             self::TEST_ARGS
         );
-        static::assertEquals((self::TEST_NAME_ARG . '_mod'), $returnValue);
+        static::assertEquals(self::TEST_NAME_ARG . '_mod', $returnValue);
         static::assertEquals(1, $hookCallCounter);
         static::assertEquals(1, $proxy->originalMethodCallCounter);
     }
@@ -180,7 +180,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::PROTECTED_TEST_METHOD_NAME,
             self::TEST_ARGS
         );
-        static::assertEquals((self::TEST_NAME_ARG . '_mod'), $returnValue);
+        static::assertEquals(self::TEST_NAME_ARG . '_mod', $returnValue);
         static::assertEquals(1, $hookCallCounter);
         static::assertEquals(1, $proxy->originalProtectedMethodCallCounter);
     }
@@ -247,7 +247,7 @@ class HookManagerTest extends TestCase
             HookManagerTestTarget::TEST_METHOD_NAME,
             self::TEST_ARGS
         );
-        static::assertEquals((self::TEST_NAME_ARG . '_mod'), $returnValue);
+        static::assertEquals(self::TEST_NAME_ARG . '_mod', $returnValue);
         static::assertEquals(1, $hookCallCounter);
         static::assertEquals(1, $proxy->originalMethodCallCounter);
     }
@@ -609,9 +609,9 @@ class HookManagerTest extends TestCase
             function (Enlight_Hook_HookArgs $args) use (&$hookCallCounter) {
                 ++$hookCallCounter;
                 // The limit should only be reduced after this hook is called
-                static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $hookCallCounter + 1), $args->limit);
+                static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG - $hookCallCounter + 1, $args->limit);
                 // The original method should have been called less often than this hook
-                static::assertEquals(($hookCallCounter - 1), $args->getSubject()->originalRecursiveMethodCallCounter);
+                static::assertEquals($hookCallCounter - 1, $args->getSubject()->originalRecursiveMethodCallCounter);
                 // The return value should not be set in any hook call, because it is recursively resovled
                 static::assertNull($args->getReturn());
 
@@ -630,8 +630,8 @@ class HookManagerTest extends TestCase
             self::RECURSIVE_TEST_ARGS
         );
         static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG, $returnValue);
-        static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG + 1), $hookCallCounter);
-        static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG + 1), $proxy->originalRecursiveMethodCallCounter);
+        static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG + 1, $hookCallCounter);
+        static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG + 1, $proxy->originalRecursiveMethodCallCounter);
     }
 
     /**
@@ -655,11 +655,11 @@ class HookManagerTest extends TestCase
             ) {
                 ++$firstHookCallCounter;
                 // The limit should only be reduced after this hook is called
-                static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $firstHookCallCounter + 1), $args->limit);
+                static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG - $firstHookCallCounter + 1, $args->limit);
                 // The original method and the other hooks should have been called less often than this hook
-                static::assertEquals(($firstHookCallCounter - 1), $args->getSubject()->originalRecursiveMethodCallCounter);
-                static::assertEquals(($firstHookCallCounter - 1), $secondHookCallCounter);
-                static::assertEquals(($firstHookCallCounter - 1), $thirdHookCallCounter);
+                static::assertEquals($firstHookCallCounter - 1, $args->getSubject()->originalRecursiveMethodCallCounter);
+                static::assertEquals($firstHookCallCounter - 1, $secondHookCallCounter);
+                static::assertEquals($firstHookCallCounter - 1, $thirdHookCallCounter);
                 // The return value should not be set in any hook call, because it is recursively resovled
                 static::assertNull($args->getReturn());
 
@@ -685,10 +685,10 @@ class HookManagerTest extends TestCase
             ) {
                 ++$secondHookCallCounter;
                 // The limit should only be reduced after this hook is called
-                static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $secondHookCallCounter + 1), $args->limit);
+                static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG - $secondHookCallCounter + 1, $args->limit);
                 // The original method and the third hook should have been called less often than this hook
-                static::assertEquals(($secondHookCallCounter - 1), $args->getSubject()->originalRecursiveMethodCallCounter);
-                static::assertEquals(($secondHookCallCounter - 1), $thirdHookCallCounter);
+                static::assertEquals($secondHookCallCounter - 1, $args->getSubject()->originalRecursiveMethodCallCounter);
+                static::assertEquals($secondHookCallCounter - 1, $thirdHookCallCounter);
                 // The first hook should have been called as many times as this hook
                 static::assertEquals($secondHookCallCounter, $firstHookCallCounter);
                 // The return value should not be set in any hook call, because it is recursively resovled
@@ -715,9 +715,9 @@ class HookManagerTest extends TestCase
             ) {
                 ++$thirdHookCallCounter;
                 // The limit should only be reduced after this hook is called
-                static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG - $thirdHookCallCounter + 1), $args->limit);
+                static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG - $thirdHookCallCounter + 1, $args->limit);
                 // The original method should have been called less often than this hook
-                static::assertEquals(($thirdHookCallCounter - 1), $args->getSubject()->originalRecursiveMethodCallCounter);
+                static::assertEquals($thirdHookCallCounter - 1, $args->getSubject()->originalRecursiveMethodCallCounter);
                 // The other hooks should have been called as many times as this hook
                 static::assertEquals($thirdHookCallCounter, $firstHookCallCounter);
                 static::assertEquals($thirdHookCallCounter, $secondHookCallCounter);
@@ -739,10 +739,10 @@ class HookManagerTest extends TestCase
             self::RECURSIVE_TEST_ARGS
         );
         static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG, $returnValue);
-        static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG + 1), $firstHookCallCounter);
-        static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG + 1), $secondHookCallCounter);
-        static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG + 1), $thirdHookCallCounter);
-        static::assertEquals((self::RECURSIVE_TEST_LIMIT_ARG + 1), $proxy->originalRecursiveMethodCallCounter);
+        static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG + 1, $firstHookCallCounter);
+        static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG + 1, $secondHookCallCounter);
+        static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG + 1, $thirdHookCallCounter);
+        static::assertEquals(self::RECURSIVE_TEST_LIMIT_ARG + 1, $proxy->originalRecursiveMethodCallCounter);
     }
 
     /**
@@ -808,12 +808,12 @@ class HookManagerTest extends TestCase
         //      1 initial call
         //    + 3 recursive calls triggered when calling 'executeParent()' for the first time in the initial hook call
         //    + 3 recursive calls triggered when calling 'executeParent()' a second time in the initial hook call
-        static::assertEquals((1 + 2 * (self::RECURSIVE_TEST_LIMIT_ARG + 1)), $firstHookCallCounter);
+        static::assertEquals(1 + 2 * (self::RECURSIVE_TEST_LIMIT_ARG + 1), $firstHookCallCounter);
         // Since every call of the first hook calls 'executeParent()' twice, all methods following in the execution
         // chain should be called twice as often as the first hook. Hence, with a limit of 2, the second hook and the
         // original method should have been called 14 times each.
-        static::assertEquals((2 * $firstHookCallCounter), $secondHookCallCounter);
-        static::assertEquals((2 * $firstHookCallCounter), $proxy->originalRecursiveMethodCallCounter);
+        static::assertEquals(2 * $firstHookCallCounter, $secondHookCallCounter);
+        static::assertEquals(2 * $firstHookCallCounter, $proxy->originalRecursiveMethodCallCounter);
     }
 
     /**

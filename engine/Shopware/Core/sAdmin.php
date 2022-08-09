@@ -753,14 +753,14 @@ class sAdmin implements \Enlight_Hook
     public function sLogin($ignoreAccountMode = false)
     {
         if (
-        $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_Login_Start',
-            [
-                'subject' => $this,
-                'ignoreAccountMode' => $ignoreAccountMode,
-                'post' => $this->front->Request()->getPost(),
-            ]
-        )
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_Login_Start',
+                [
+                    'subject' => $this,
+                    'ignoreAccountMode' => $ignoreAccountMode,
+                    'post' => $this->front->Request()->getPost(),
+                ]
+            )
         ) {
             return false;
         }
@@ -882,10 +882,10 @@ class sAdmin implements \Enlight_Hook
     public function sCheckUser()
     {
         if (
-        $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_CheckUser_Start',
-            ['subject' => $this]
-        )
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_CheckUser_Start',
+                ['subject' => $this]
+            )
         ) {
             return false;
         }
@@ -1145,10 +1145,10 @@ class sAdmin implements \Enlight_Hook
     public function sSaveRegisterSendConfirmation($email)
     {
         if (
-        $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
-            ['subject' => $this, 'email' => $email]
-        )
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
+                ['subject' => $this, 'email' => $email]
+            )
         ) {
             return false;
         }
@@ -1492,10 +1492,10 @@ class sAdmin implements \Enlight_Hook
     public function sGetUserData()
     {
         if (
-        $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_GetUserData_Start',
-            ['subject' => $this]
-        )
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_GetUserData_Start',
+                ['subject' => $this]
+            )
         ) {
             return false;
         }
@@ -1631,16 +1631,16 @@ class sAdmin implements \Enlight_Hook
     public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
         if (
-        $event = $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
-            [
-                'rule' => $rule,
-                'user' => $user,
-                'basket' => $basket,
-                'value' => $value,
-                'paymentID' => $paymentID,
-            ]
-        )
+            $event = $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
+                [
+                    'rule' => $rule,
+                    'user' => $user,
+                    'basket' => $basket,
+                    'value' => $value,
+                    'paymentID' => $paymentID,
+                ]
+            )
         ) {
             return $event->getReturn();
         }
@@ -2198,15 +2198,15 @@ class sAdmin implements \Enlight_Hook
         // Compare street and zipcode.
         // Return true if any of them doesn't match.
         return (
-                strtolower(
-                    trim($user['shippingaddress']['street'])
-                ) != strtolower(
-                    trim($user['billingaddress']['street'])
-                )
-            ) || (
-                trim($user['shippingaddress']['zipcode'])
-                != trim($user['billingaddress']['zipcode'])
-            );
+            strtolower(
+                trim($user['shippingaddress']['street'])
+            ) !== strtolower(
+                trim($user['billingaddress']['street'])
+            )
+        ) || (
+            trim($user['shippingaddress']['zipcode'])
+            !== trim($user['billingaddress']['zipcode'])
+        );
     }
 
     /**
@@ -3380,10 +3380,10 @@ class sAdmin implements \Enlight_Hook
         $oldSessionId = $this->session->getId();
 
         if (
-        $this->eventManager->notifyUntil(
-            'Shopware_Modules_Admin_regenerateSessionId_Start',
-            ['subject' => $this, 'sessionId' => $oldSessionId]
-        )
+            $this->eventManager->notifyUntil(
+                'Shopware_Modules_Admin_regenerateSessionId_Start',
+                ['subject' => $this, 'sessionId' => $oldSessionId]
+            )
         ) {
             return;
         }

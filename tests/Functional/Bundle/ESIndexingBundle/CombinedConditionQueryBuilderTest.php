@@ -45,11 +45,12 @@ class CombinedConditionQueryBuilderTest extends TestCase
         $shopContext = $this->createShopContext();
         $testCondition = new CategoryCondition([1]);
 
-        $query = $combinedConditionQueryBuilder->build([
-            $testCondition,
-        ],
-        new Criteria(),
-        $shopContext
+        $query = $combinedConditionQueryBuilder->build(
+            [
+                $testCondition,
+            ],
+            new Criteria(),
+            $shopContext
         );
 
         static::assertSame([

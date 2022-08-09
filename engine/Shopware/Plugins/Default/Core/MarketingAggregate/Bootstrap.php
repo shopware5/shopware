@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Models\Article\Article;
+
 class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
@@ -167,7 +169,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function afterSimilarShownArticlesReset(Enlight_Event_EventArgs $arguments)
     {
-        if (!($this->isSimilarShownActivated())) {
+        if (!$this->isSimilarShownActivated()) {
             return $arguments->getReturn();
         }
 
@@ -195,7 +197,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function beforeSetLastArticle(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->get('Bot') || !($this->isSimilarShownActivated())) {
+        if (Shopware()->Session()->get('Bot') || !$this->isSimilarShownActivated()) {
             return $arguments->getReturn();
         }
 
@@ -250,7 +252,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB || !($this->isSimilarShownActivated())) {
+        if ($strategy !== self::AGGREGATE_STRATEGY_CRON_JOB || !$this->isSimilarShownActivated()) {
             return true;
         }
 
@@ -364,7 +366,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
      */
     public function incrementTopSeller(Enlight_Event_EventArgs $arguments)
     {
-        if (Shopware()->Session()->get('Bot') || !($this->isTopSellerActivated())) {
+        if (Shopware()->Session()->get('Bot') || !$this->isTopSellerActivated()) {
             return $arguments->getReturn();
         }
 
@@ -423,7 +425,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             self::AGGREGATE_STRATEGY_LIVE
         );
 
-        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE || !($this->isTopSellerActivated())) {
+        if ($strategy !== self::AGGREGATE_STRATEGY_LIVE || !$this->isTopSellerActivated()) {
             return $arguments->getReturn();
         }
 
@@ -441,12 +443,11 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
             return;
         }
 
-        /** @var \Shopware\Models\Article\Article $product */
         $product = $arguments->getEntity();
-        if (!($product instanceof \Shopware\Models\Article\Article)) {
+        if (!$product instanceof Article) {
             return;
         }
-        if (!($product->getId()) > 0) {
+        if (!($product->getId() > 0)) {
             return;
         }
 

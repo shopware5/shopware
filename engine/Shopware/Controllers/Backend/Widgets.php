@@ -451,7 +451,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             );
 
             if ($order['currencyFactor'] != 0) {
-                $amount = round(($order['invoice_amount'] / $order['currencyFactor']), 2);
+                $amount = round($order['invoice_amount'] / $order['currencyFactor'], 2);
             } else {
                 $amount = 0;
             }

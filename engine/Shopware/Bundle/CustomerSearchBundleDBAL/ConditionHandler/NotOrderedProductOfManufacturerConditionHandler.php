@@ -52,7 +52,7 @@ class NotOrderedProductOfManufacturerConditionHandler implements ConditionHandle
                 (
                     SELECT customernumber
                     FROM s_customer_search_index
-                    WHERE ' . (implode(' OR ', $likes)) . '
+                    WHERE ' . implode(' OR ', $likes) . '
                 )'
         );
         foreach ($condition->getManufacturerIds() as $i => $id) {

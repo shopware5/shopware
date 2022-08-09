@@ -896,7 +896,7 @@ class OrderTest extends TestCase
             [':key' => $user['customergroup']]
         );
 
-        $taxFree = (bool) ($countryShipping['taxfree']);
+        $taxFree = (bool) $countryShipping['taxfree'];
         if ($countryShipping['taxfree_ustid'] && $countryShipping['id'] == $country['id'] && $billing['ustid']) {
             $taxFree = true;
         }
