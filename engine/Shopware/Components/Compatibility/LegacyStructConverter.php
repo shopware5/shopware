@@ -596,7 +596,7 @@ class LegacyStructConverter
     }
 
     /**
-     * @return array
+     * @return array{valFrom: int, valTo: int|null, from: int, to: int|null, price: float, pseudoprice: float, referenceprice: float|null, regulationPrice: float|null}
      */
     public function convertPriceStruct(Price $price)
     {
@@ -608,6 +608,7 @@ class LegacyStructConverter
             'price' => $price->getCalculatedPrice(),
             'pseudoprice' => $price->getCalculatedPseudoPrice(),
             'referenceprice' => $price->getCalculatedReferencePrice(),
+            'regulationPrice' => $price->getCalculatedRegulationPrice(),
         ];
 
         return $this->eventManager->filter('Legacy_Struct_Converter_Convert_Price', $data, [

@@ -17566,11 +17566,6 @@ parameters:
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertPriceStruct\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:convertProductPriceStruct\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
