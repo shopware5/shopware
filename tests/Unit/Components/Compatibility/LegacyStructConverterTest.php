@@ -63,6 +63,18 @@ class LegacyStructConverterTest extends TestCase
         static::assertNull($convertedProduct['description']);
     }
 
+    public function testConvertPriceStructCreatesRegulationPrice(): void
+    {
+        $converter = $this->createConverter();
+
+        $price = new Price(new PriceRule());
+        $price->setCalculatedRegulationPrice(400.0);
+
+        $data = $converter->convertPriceStruct($price);
+
+        static::assertEquals(400.0, $data['regulationPrice']);
+    }
+
     private function createConverter(): LegacyStructConverter
     {
         $config = $this->createMock(Shopware_Components_Config::class);

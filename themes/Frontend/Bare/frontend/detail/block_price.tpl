@@ -60,6 +60,22 @@
                                                 {block name="frontend_detail_data_block_prices_table_body_cell_price"}
                                                     <td class="block-prices--cell">
                                                         {$blockPrice.price|currency} {s name="Star" namespace="frontend/listing/box_article"}{/s}
+
+                                                        {$hasRegulationPrice = ($blockPrice.regulationPrice > 0 )}
+                                                        {if $hasRegulationPrice}
+                                                            {block name='frontend_detail_data_block_prices_table_body_cell_regulation_price_block'}
+                                                                <div class="content--regulation">
+                                                                    {block name='frontend_detail_data_block_prices_table_body_cell_regulation_price_before'}
+                                                                        {s name="priceRegulationLabel" namespace="frontend/detail/data"}{/s}
+                                                                    {/block}
+                                                                    <span>{$blockPrice.regulationPrice|currency}{s name="Star" namespace="frontend/listing/box_article"}{/s}</span>
+
+                                                                    {block name='frontend_detail_data_block_prices_table_body_cell_regulation_price_after'}
+                                                                        {s name="priceRegulationInfo" namespace="frontend/detail/data"}{/s}
+                                                                    {/block}
+                                                                </div>
+                                                            {/block}
+                                                        {/if}
                                                     </td>
                                                 {/block}
                                                 {if $hasReferencePrice}
