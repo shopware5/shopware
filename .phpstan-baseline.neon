@@ -8636,26 +8636,6 @@ parameters:
 			path: engine/Shopware/Bundle/EsBackendBundle/EsAwareRepository.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\EsBackendIndexer\\:\\:cleanupIndices\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/EsBackendIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\EsBackendIndexer\\:\\:index\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/EsBackendIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\EsBackendIndexer\\:\\:indexEntities\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/EsBackendIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\EsBackendIndexer\\:\\:indexEntities\\(\\) has parameter \\$ids with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/EsBackendIndexer.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\IndexFactory\\:\\:__construct\\(\\) has parameter \\$indexConfig with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/IndexFactory.php

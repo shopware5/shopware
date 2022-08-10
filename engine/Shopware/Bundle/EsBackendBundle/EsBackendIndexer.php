@@ -71,6 +71,9 @@ class EsBackendIndexer
         $this->indexFactory = $indexFactory;
     }
 
+    /**
+     * @return void
+     */
     public function index(ProgressHelperInterface $helper)
     {
         foreach ($this->repositories as $repository) {
@@ -84,7 +87,10 @@ class EsBackendIndexer
     }
 
     /**
-     * @param string $index
+     * @param string     $index
+     * @param array<int> $ids
+     *
+     * @return void
      */
     public function indexEntities($index, EsAwareRepository $repository, array $ids)
     {
@@ -94,9 +100,19 @@ class EsBackendIndexer
         $remove = array_diff($ids, $remove);
 
         $booleanFields = [];
+        $dateFields = [];
+        $dateTimeFields = [];
         foreach ($repository->getMapping()['properties'] as $key => $mapping) {
             if ($mapping['type'] === 'boolean') {
                 $booleanFields[] = $key;
+            }
+
+            if ($mapping['type'] === 'date' && $mapping['format'] === 'yyyy-MM-dd') {
+                $dateFields[] = $key;
+            }
+
+            if ($mapping['type'] === 'date' && \in_array($mapping['format'], ['yyyy-MM-dd HH:mm:ss', 'yyyy-MM-dd HH:mm:ss||yyyy-MM-dd'])) {
+                $dateTimeFields[] = $key;
             }
         }
 
@@ -104,8 +120,12 @@ class EsBackendIndexer
         foreach ($data as $row) {
             $documents[] = ['index' => ['_id' => $row['id']]];
             foreach ($row as $key => &$value) {
-                if ($value instanceof DateTime) {
+                if ($value instanceof DateTime && \in_array($key, $dateTimeFields, true)) {
                     $value = $value->format('Y-m-d H:i:s');
+                }
+
+                if ($value instanceof DateTime && \in_array($key, $dateFields, true)) {
+                    $value = $value->format('Y-m-d');
                 }
 
                 if (\in_array($key, $booleanFields, true)) {
@@ -136,6 +156,8 @@ class EsBackendIndexer
 
     /**
      * Removes unused indices
+     *
+     * @return void
      */
     public function cleanupIndices()
     {
