@@ -30196,16 +30196,6 @@ parameters:
 			path: engine/Shopware/Core/sArticles.php
 
 		-
-			message: "#^Cannot call method getCover\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Core/sArticles.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Media\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -30213,16 +30203,6 @@ parameters:
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
 			count: 1
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Core/sArticles.php
-
-		-
-			message: "#^Cannot call method getNumber\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ListProduct\\|null\\.$#"
-			count: 2
 			path: engine/Shopware/Core/sArticles.php
 
 		-

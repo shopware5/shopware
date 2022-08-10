@@ -2164,13 +2164,12 @@ class sArticles implements Enlight_Hook
 
             $navigation = [];
 
-            if ($previousProduct) {
-                $previousProduct = $this->listProductService->get($previousProduct->getNumber(), $context);
-                $navigation['previousProduct']['orderNumber'] = $previousProduct->getNumber();
-                $navigation['previousProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $previousProduct->getId() . '&sCategory=' . $categoryId;
-                $navigation['previousProduct']['name'] = $previousProduct->getName();
+            if ($previousProduct && $previousListProduct = $this->listProductService->get($previousProduct->getNumber(), $context)) {
+                $navigation['previousProduct']['orderNumber'] = $previousListProduct->getNumber();
+                $navigation['previousProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $previousListProduct->getId() . '&sCategory=' . $categoryId;
+                $navigation['previousProduct']['name'] = $previousListProduct->getName();
 
-                $previousCover = $previousProduct->getCover();
+                $previousCover = $previousListProduct->getCover();
                 if ($previousCover) {
                     $navigation['previousProduct']['image'] = $this->legacyStructConverter->convertMediaStruct(
                         $previousCover
@@ -2178,14 +2177,12 @@ class sArticles implements Enlight_Hook
                 }
             }
 
-            if ($nextProduct) {
-                $nextProduct = $this->listProductService->get($nextProduct->getNumber(), $context);
+            if ($nextProduct && $nextListProduct = $this->listProductService->get($nextProduct->getNumber(), $context)) {
+                $navigation['nextProduct']['orderNumber'] = $nextListProduct->getNumber();
+                $navigation['nextProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $nextListProduct->getId() . '&sCategory=' . $categoryId;
+                $navigation['nextProduct']['name'] = $nextListProduct->getName();
 
-                $navigation['nextProduct']['orderNumber'] = $nextProduct->getNumber();
-                $navigation['nextProduct']['link'] = $this->config->get('sBASEFILE') . '?sViewport=detail&sDetails=' . $nextProduct->getId() . '&sCategory=' . $categoryId;
-                $navigation['nextProduct']['name'] = $nextProduct->getName();
-
-                $nextCover = $nextProduct->getCover();
+                $nextCover = $nextListProduct->getCover();
                 if ($nextCover) {
                     $navigation['nextProduct']['image'] = $this->legacyStructConverter->convertMediaStruct(
                         $nextCover
