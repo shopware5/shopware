@@ -370,8 +370,16 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
             updateButton = editor.editor.floatingButtons.items.items[0];
 
         updateButton.setDisabled(false);
-        columns[1].setValue(record.get('number'));
-        columns[2].setValue(record.get('name'));
+
+        columns.forEach(function(column){
+            if (column.name === 'articleNumber'){
+                column.setValue(record.get('number'));
+            } else if (column.name === 'articleName'){
+                column.setValue(record.get('name'));
+            } else if (column.name === 'price'){
+                column.setValue(record.get('price'));
+            }
+        });
 
         // Update articleId for row
         editor.context.record.set('articleId', record.get('articleId'));
