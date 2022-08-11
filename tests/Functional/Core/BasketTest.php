@@ -285,8 +285,8 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add two products to the basket
-        $randomProductOne = $this->getRandomProduct();
-        $randomProductTwo = $this->getRandomProduct(null, $randomProductOne['supplierID']);
+        $randomProductOne = $this->getProductWithLowestVariantId();
+        $randomProductTwo = $this->getProductWithLowestVariantId(null, $randomProductOne['supplierID']);
 
         $this->connection->insert(
             's_order_basket',
@@ -712,7 +712,7 @@ class BasketTest extends TestCase
         $this->getContainer()->set('currency', $currencyDe);
 
         // Add one product to the basket with enough value to use discount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -833,7 +833,7 @@ class BasketTest extends TestCase
         static::assertContains('Der Mindestumsatz für diesen Gutschein beträgt 10,00&nbsp;&euro;', $result['sErrorMessages']);
 
         // Add one product to the basket with enough value to use discount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -920,7 +920,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add one product to the basket with enough value to use discount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -1017,7 +1017,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add one product to the basket with enough value to use discount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -1103,7 +1103,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add one product to the basket with enough value to use discount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -1258,7 +1258,7 @@ class BasketTest extends TestCase
         );
 
         // Fetch a random product
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
 
         // Generate session id
         $this->generateBasketSession();
@@ -1307,8 +1307,8 @@ class BasketTest extends TestCase
     {
         $this->session->clear();
 
-        $randomProductOne = $this->getRandomProduct();
-        $randomProductTwo = $this->getRandomProduct(null, $randomProductOne['supplierID']);
+        $randomProductOne = $this->getProductWithLowestVariantId();
+        $randomProductTwo = $this->getProductWithLowestVariantId(null, $randomProductOne['supplierID']);
 
         $voucherData = [
             'vouchercode' => 'testOne',
@@ -1417,7 +1417,7 @@ class BasketTest extends TestCase
         );
 
         $this->generateBasketSession();
-        $product = $this->getRandomProduct();
+        $product = $this->getProductWithLowestVariantId();
         $this->module->sAddArticle($product['ordernumber']);
 
         if ($hasValidDate) {
@@ -1452,10 +1452,10 @@ class BasketTest extends TestCase
 
     public function testsGetBasketIds(): void
     {
-        $randomProductOne = $this->getRandomProduct();
+        $randomProductOne = $this->getProductWithLowestVariantId();
         $randomProducts = [
             $randomProductOne,
-            $this->getRandomProduct($randomProductOne['id']),
+            $this->getProductWithLowestVariantId($randomProductOne['id']),
         ];
 
         $this->generateBasketSession();
@@ -1543,7 +1543,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add one product to the basket with enough value to use discount
-        $randomArticle = $this->getRandomProduct();
+        $randomArticle = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -1597,7 +1597,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add one product to the basket with value lower that minimumordersurcharge
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -1682,7 +1682,7 @@ class BasketTest extends TestCase
         );
 
         // Add one product to the basket with low amount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -1738,7 +1738,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Add one product to the basket with low amount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -2043,7 +2043,7 @@ class BasketTest extends TestCase
         $_COOKIE['sUniqueID'] = Random::getAlphanumericString(32);
 
         // Add one product to the basket with low amount
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
 
         static::assertEquals(0, $this->connection->fetchOne(
             'SELECT COUNT(DISTINCT id) FROM s_order_notes WHERE sUniqueID = ? AND ordernumber = ?',
@@ -2073,7 +2073,7 @@ class BasketTest extends TestCase
         $this->session->clear();
         $_COOKIE['sUniqueID'] = Random::getAlphanumericString(32);
 
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         // Test with no id in cookie
         static::assertEquals([], $this->module->sGetNotes());
         static::assertTrue($this->module->sAddNote(
@@ -2089,7 +2089,7 @@ class BasketTest extends TestCase
     public function testsCountNotes(): void
     {
         $_COOKIE['sUniqueID'] = Random::getAlphanumericString(32);
-        $randomProductOne = $this->getRandomProduct();
+        $randomProductOne = $this->getProductWithLowestVariantId();
         static::assertTrue($this->module->sAddNote(
             $randomProductOne['articleID'],
             $randomProductOne['name'],
@@ -2098,7 +2098,7 @@ class BasketTest extends TestCase
         static::assertEquals(1, $this->module->sCountNotes());
 
         // Add another product to the basket
-        $randomProductTwo = $this->getRandomProduct($randomProductOne['id']);
+        $randomProductTwo = $this->getProductWithLowestVariantId($randomProductOne['id']);
 
         static::assertTrue($this->module->sAddNote(
             $randomProductTwo['articleID'],
@@ -2112,10 +2112,10 @@ class BasketTest extends TestCase
     public function testsDeleteNote(): void
     {
         $_COOKIE['sUniqueID'] = Random::getAlphanumericString(32);
-        $randomProductOne = $this->getRandomProduct();
+        $randomProductOne = $this->getProductWithLowestVariantId();
         $randomProducts = [
             $randomProductOne,
-            $this->getRandomProduct($randomProductOne['id']),
+            $this->getProductWithLowestVariantId($randomProductOne['id']),
         ];
 
         static::assertTrue($this->module->sAddNote(
@@ -2179,7 +2179,7 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Get random product
-        $randomProduct = $this->getRandomProduct();
+        $randomProduct = $this->getProductWithLowestVariantId();
         $this->connection->insert(
             's_order_basket',
             [
@@ -2654,7 +2654,7 @@ class BasketTest extends TestCase
     /**
      * @return array{id: int, articleID: int, name: string, ordernumber: string, supplierID: int}
      */
-    private function getRandomProduct(?int $excludeProductId = null, ?int $excludeManufacturerId = null): array
+    private function getProductWithLowestVariantId(?int $excludeProductId = null, ?int $excludeManufacturerId = null): array
     {
         $query = $this->connection->createQueryBuilder()
             ->select('variant.id, variant.articleID, product.name, variant.ordernumber, product.supplierID')
@@ -2665,6 +2665,7 @@ class BasketTest extends TestCase
             ->andWhere('ordernumber IS NOT NULL')
             ->andWhere('product.supplierID IS NOT NULL')
             ->andWhere('product.name IS NOT NULL')
+            ->orderBy('variant.id')
             ->setMaxResults(1);
 
         if ($excludeProductId !== null) {

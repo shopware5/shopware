@@ -91,6 +91,7 @@ jobs:
         php-version: '7.4'
         tools: composer, prestissimo
         coverage: none
+        ini-values: default_charset="UTF-8"
 
     - name: Start MySQL
       run: ./.github/setup-db.sh mysql:5.7

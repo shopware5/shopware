@@ -126,8 +126,6 @@ class LogRepositoryTest extends TestCase
      * upper case/lower case, do not lead to problems when they're persisted.
      *
      * This is a regression test for SW-24564.
-     *
-     * @doesNotPerformAssertions
      */
     public function testUniqueConstraintIsCaseSensitive(): void
     {
