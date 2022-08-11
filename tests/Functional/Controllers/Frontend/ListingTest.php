@@ -136,7 +136,11 @@ class ListingTest extends ControllerTestCase
         $this->modelManager->persist($category);
         $this->modelManager->flush($category);
 
-        $product = $this->modelManager->getRepository(Product::class)->findOneBy(['active' => true]);
+        $product = $this->modelManager->getRepository(Product::class)->findOneBy([
+            'active' => true,
+            'name' => 'Emmelkamp Holunder Likör 18%',
+        ]);
+
         static::assertInstanceOf(Product::class, $product);
 
         $productCategories = $product->getCategories();
@@ -155,6 +159,7 @@ class ListingTest extends ControllerTestCase
         $firstSpace = strpos($product->getName(), ' ');
         static::assertIsInt($firstSpace);
         $firstPartOfProductName = strtolower(substr($product->getName(), 0, $firstSpace));
+
         static::assertStringContainsString($firstPartOfProductName, $this->Response()->getHeader('location'));
     }
 
