@@ -198,6 +198,12 @@ MariaDB 10.1:
         -   name: mariadb:10.1
             alias: mysql
 
+MariaDB 10.4:
+    extends: .phpunit_base
+    services:
+        -   name: mariadb:10.4
+            alias: mysql
+
 MariaDB 10.5:
     extends: .phpunit_base
     services:
