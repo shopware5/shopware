@@ -27,11 +27,11 @@ declare(strict_types=1);
 namespace Shopware\Tests\Unit\Components\Model;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Parameter;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Model\QueryOperatorValidator;
 
@@ -42,7 +42,7 @@ class QueryBuilderTest extends TestCase
     protected function setUp(): void
     {
         // Create a stub for the SomeClass class.
-        $emMock = $this->createMock(EntityManager::class);
+        $emMock = $this->createMock(ModelManager::class);
 
         $queryBuilder = new QueryBuilder($emMock, new QueryOperatorValidator(['foo', 'bar']));
 

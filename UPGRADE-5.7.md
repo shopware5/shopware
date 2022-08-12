@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Additions
 
 * Added new block `backend/mail_log/model/filter/fields` in `themes/Backend/ExtJs/backend/mail_log/model/filter.js` to be able to extend the model fields
+* Added missing dependency `doctrine/inflector`, which was an indirect dependency before
 
 ### Changes
 
@@ -62,6 +63,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Updated `doctrine/annotations` to version 1.13.3
 * Updated `doctrine/event-manager` to version 1.1.2
+* Updated `doctrine/orm` to version 2.13.1
+* Updated `doctrine/persistence` to version 2.5.4
 * Updated `google/cloud-storage` to version 1.28.0
 * Updated `laminas/laminas-code` to version 4.6.0
 * Updated `league/flysystem-aws-s3-v3` to version 1.0.30

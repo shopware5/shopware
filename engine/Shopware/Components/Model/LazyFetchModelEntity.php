@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\Model;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Persistence\Proxy;
 use Exception;
@@ -36,11 +36,11 @@ use Exception;
 abstract class LazyFetchModelEntity extends ModelEntity
 {
     /**
-     * @var EntityManager|null
+     * @var EntityManagerInterface|null
      */
     private static $em;
 
-    public static function setEntityManager(EntityManager $em)
+    public static function setEntityManager(EntityManagerInterface $em)
     {
         self::$em = $em;
     }
@@ -58,15 +58,15 @@ abstract class LazyFetchModelEntity extends ModelEntity
     /**
      * @template TModel of object
      *
-     * @param TModel|null   $object
-     * @param array         $condition
-     * @param EntityManager $em
+     * @param TModel|null            $object
+     * @param array                  $condition
+     * @param EntityManagerInterface $em
      *
      * @throws Exception
      *
      * @return TModel|null
      */
-    public function fetchLazy($object, $condition, EntityManager $em = null)
+    public function fetchLazy($object, $condition, EntityManagerInterface $em = null)
     {
         if (!$object instanceof Proxy || $object->__isInitialized() || !$this->getId() || !method_exists($object, 'getId')) {
             return $object;
