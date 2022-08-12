@@ -75,6 +75,10 @@ parameters:
             message: '#Call to an undefined method \$this\(Shopware\\Components\\Api\\Resource\\Resource\)&Shopware\\Components\\Api\\BatchInterface::(delete|update|create)\(\)#'
             path: engine/Shopware/Components/Api/Resource/Resource.php
 
+        - # Currently the ModelManager extends the EntityManager class, but this is not supported in the future anymore. Changing this, would cause breaks, so it should be done in Shopware 5.8
+            message: '#Class Shopware\\Components\\Model\\ModelManager extends @final class Doctrine\\ORM\\EntityManager#'
+            path: engine/Shopware/Components/Model/ModelManager.php
+
         - # Overwrite of parent methods to have a proper type declaration of the entity manager
             message: '#Method .*::getEntityManager\(\) should return Shopware\\Components\\Model\\ModelManager but returns Doctrine\\ORM\\EntityManagerInterface#'
             paths:

@@ -145,6 +145,9 @@ class DqlHelper
 
     protected $entityToPrefix = [];
 
+    /**
+     * @var array<class-string<ModelEntity>>
+     */
     protected $prefixToEntity = [];
 
     protected $columns = [];
@@ -242,6 +245,8 @@ class DqlHelper
      * e.g. article => \Shopware\Models\Article\Article
      *
      * @param string $prefix
+     *
+     * @return class-string<ModelEntity>
      */
     public function getEntityForPrefix($prefix)
     {

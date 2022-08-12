@@ -26,9 +26,9 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Models;
 
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Models\Article\Configurator\Template\Price as ConfiguratorPrice;
 use Shopware\Models\Article\Notification;
@@ -42,10 +42,7 @@ use Shopware\Models\Premium\Premium;
 
 class LazyLoadingTest extends TestCase
 {
-    /**
-     * @var EntityManager
-     */
-    private $em;
+    private ModelManager $em;
 
     public static function tearDownAfterClass(): void
     {

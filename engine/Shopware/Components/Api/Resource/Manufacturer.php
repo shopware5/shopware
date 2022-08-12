@@ -24,8 +24,13 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Shopware\Components\Api\Exception as ApiException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Models\Article\Supplier as ManufacturerModel;
+use Shopware\Models\Article\SupplierRepository;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media as MediaModel;
 
@@ -35,36 +40,35 @@ use Shopware\Models\Media\Media as MediaModel;
 class Manufacturer extends Resource
 {
     /**
-     * @return \Shopware\Models\Article\SupplierRepository
+     * @return SupplierRepository
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Article\Supplier::class);
+        return $this->getManager()->getRepository(ManufacturerModel::class);
     }
 
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return array|\Shopware\Models\Article\Supplier
+     * @return array|ManufacturerModel
      */
     public function getOne($id)
     {
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $query = $this->getRepository()->getDetailQuery($id);
 
-        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
+            throw new NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         return $manufacturer;
@@ -95,15 +99,15 @@ class Manufacturer extends Resource
     }
 
     /**
-     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws ValidationException
      *
-     * @return \Shopware\Models\Article\Supplier
+     * @return ManufacturerModel
      */
     public function create(array $params)
     {
         $this->checkPrivilege('create');
 
-        $manufacturer = new \Shopware\Models\Article\Supplier();
+        $manufacturer = new ManufacturerModel();
 
         $params = $this->prepareManufacturerData($params);
         $params = $this->prepareMediaData($params, $manufacturer);
@@ -111,14 +115,14 @@ class Manufacturer extends Resource
         $manufacturer->fromArray($params);
 
         if (isset($params['id'])) {
-            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor(\Shopware\Models\Article\Supplier::class);
-            $metaData->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
+            $metaData = $this->getManager()->getMetadataFactory()->getMetadataFor(ManufacturerModel::class);
+            $metaData->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
             $manufacturer->setPrimaryIdentifier($params['id']);
         }
 
         $violations = $this->getManager()->validate($manufacturer);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->getManager()->persist($manufacturer);
@@ -130,25 +134,24 @@ class Manufacturer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws ValidationException
      *
-     * @return \Shopware\Models\Article\Supplier
+     * @return ManufacturerModel
      */
     public function update($id, array $params)
     {
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
+            throw new NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         $params = $this->prepareManufacturerData($params);
@@ -157,7 +160,7 @@ class Manufacturer extends Resource
 
         $violations = $this->getManager()->validate($manufacturer);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->flush();
@@ -168,24 +171,23 @@ class Manufacturer extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Article\Supplier
+     * @return ManufacturerModel
      */
     public function delete($id)
     {
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Article\Supplier|null $manufacturer */
         $manufacturer = $this->getRepository()->findOneBy(['id' => $id]);
 
         if (!$manufacturer) {
-            throw new ApiException\NotFoundException(sprintf('Manufacturer by id %d not found', $id));
+            throw new NotFoundException(sprintf('Manufacturer by id %d not found', $id));
         }
 
         $this->getManager()->remove($manufacturer);
@@ -231,14 +233,10 @@ class Manufacturer extends Resource
         $media = null;
 
         if (isset($data['image']['link'])) {
-            /** @var Media $resource */
-            $resource = $this->getContainer()->get(\Shopware\Components\Api\Resource\Media::class);
+            $resource = $this->getContainer()->get(Media::class);
             $media = $resource->internalCreateMediaByFileLink($data['image']['link'], Album::ALBUM_SUPPLIER);
         } elseif (!empty($data['image']['mediaId'])) {
-            $media = $this->getManager()->find(
-                \Shopware\Models\Media\Media::class,
-                (int) $data['image']['mediaId']
-            );
+            $media = $this->getManager()->find(MediaModel::class, (int) $data['image']['mediaId']);
 
             if (!($media instanceof MediaModel)) {
                 throw new ApiException\CustomValidationException(sprintf('Media by mediaId %s not found', $data['image']['mediaId']));

@@ -20356,11 +20356,6 @@ parameters:
 			path: engine/Shopware/Components/Model/ModelManager.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\ModelManager\\:\\:serializeEntity\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelManager.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\ModelManager\\:\\:toArray\\(\\) has parameter \\$entity with no value type specified in iterable type Traversable\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ModelManager.php
@@ -20527,16 +20522,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\:\\:save\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product.php
-
-		-
-			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\)$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product.php
-
-		-
-			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\ORM\\\\EntityManager\\:\\:getRepository\\(\\)$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product.php
 
@@ -20766,11 +20751,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getEntityForPrefix\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:getIdForForeignEntity\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
@@ -20852,11 +20832,6 @@ parameters:
 
 		-
 			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$foreignEntityIDs type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\DqlHelper\\:\\:\\$prefixToEntity has no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/DqlHelper.php
 
@@ -23703,16 +23678,6 @@ parameters:
 		-
 			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:getModelFields\\(\\) should return array\\<string, array\\{alias\\: string, type\\: string\\|null\\}\\> but returns array\\<string, string\\>\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Application\\:\\:resolveExtJsData\\(\\) should return array\\<string, mixed\\> but returns array\\<int\\|string, mixed\\>\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Application.php
-
-		-
-			message: "#^Unable to resolve the template type T in call to method Doctrine\\\\ORM\\\\EntityManager\\:\\:find\\(\\)$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Application.php
 
 		-

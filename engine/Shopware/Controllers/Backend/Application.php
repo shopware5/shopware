@@ -864,7 +864,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                 continue;
             }
 
-            if ($mapping['type'] === ClassMetadataInfo::MANY_TO_ONE) {
+            if ($mapping['type'] === ClassMetadataInfo::MANY_TO_ONE && \array_key_exists('joinColumns', $mapping)) {
                 /**
                  * @ORM\ManyToOne associations.
                  *
