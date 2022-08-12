@@ -27,7 +27,7 @@
  * @author shopware AG
  */
 //{namespace name="backend/product_stream/main"}
-//{block name="backend/product_stream/view/condition_list/condition/attribute_date"}
+//{block name="backend/product_stream/view/condition_list/condition/attribute_date_time"}
 Ext.define('Shopware.apps.ProductStream.view.condition_list.field.AttributeDateTime', {
     extend: 'Shopware.apps.ProductStream.view.condition_list.field.Attribute',
 

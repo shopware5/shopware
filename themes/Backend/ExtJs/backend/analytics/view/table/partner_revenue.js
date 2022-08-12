@@ -30,7 +30,7 @@
  *
  */
 //{namespace name="backend/analytics/view/main"}
-//{block name="backend/analytics/view/table/referrer_revenue"}
+//{block name="backend/analytics/view/table/partner_revenue"}
 Ext.define('Shopware.apps.Analytics.view.table.PartnerRevenue', {
     extend: 'Shopware.apps.Analytics.view.main.Table',
     alias: 'widget.analytics-table-partner_revenue',

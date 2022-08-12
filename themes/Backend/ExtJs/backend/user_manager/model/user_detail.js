@@ -29,14 +29,12 @@
 
 /**
  * Shopware User-Manager - User details model
- *
- * todo@all: Documentation
  */
-//{block name="backend/user_manager/model/detail"}
+//{block name="backend/user_manager/model/user_detail"}
 Ext.define('Shopware.apps.UserManager.model.UserDetail', {
     extend: 'Ext.data.Model',
     fields: [
-        //{block name="backend/user_manager/model/detail/fields"}{/block}
+        //{block name="backend/user_manager/model/user_detail/fields"}{/block}
         'id',
         'username',
         'localeId',

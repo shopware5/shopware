@@ -171,7 +171,7 @@
         <div class="panel--td column--actions">
             <form action="{url action='deleteArticle' sDelete=$sBasketItem.id sTargetAction=$sTargetAction}"
                   method="post">
-                {block name='frontend_checkout_cart_item_delete_article_form_submit'}   
+                {block name='frontend_checkout_cart_item_delete_article_form_submit'}
                     {s name="CartItemLinkDelete" assign="snippetCartItemLinkDelete"}{/s}
                     <button type="submit" class="btn is--small column--actions-link"
                             title="{$snippetCartItemLinkDelete|escape}">

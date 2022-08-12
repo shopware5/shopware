@@ -29,8 +29,6 @@
 
 /**
  * Shopware Store - Shipping
- *
- * todo@all: Documentation
  */
 //{block name="backend/shipping/store/country"}
 Ext.define('Shopware.apps.Shipping.store.Country', {

@@ -122,7 +122,7 @@
                                 <div class="captcha--placeholder" data-autoLoad="true"{if $sErrorFlag.sCaptcha} data-hasError="true"{/if} data-src="{url module=widgets controller=Captcha action=refreshCaptcha}"></div>
                             {/block}
 
-                            {block name='frontend_blog_comments_input_captcha_placeholder'}
+                            {block name='frontend_blog_comments_input_captcha_notice'}
                                 <strong class="captcha--notice">{s name="BlogLabelCaptcha"}{/s}</strong>
                             {/block}
 

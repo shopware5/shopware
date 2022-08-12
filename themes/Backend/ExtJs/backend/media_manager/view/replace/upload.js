@@ -23,7 +23,7 @@
  */
 
 //{namespace name="backend/media_manager/view/replace"}
-//{block name="backend/media_manager/view/replace/row"}
+//{block name="backend/media_manager/view/replace/upload"}
 Ext.define('Shopware.apps.MediaManager.view.replace.Upload', {
     extend: 'Ext.container.Container',
     uploadUrl: '{url action=singleReplace controller=MediaManager}',

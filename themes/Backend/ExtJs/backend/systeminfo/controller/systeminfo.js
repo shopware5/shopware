@@ -35,7 +35,7 @@
  * Systeminfo Controller of the systeminfo module.
  * It handles all actions made in the module.
  */
-// {block name="backend/systeminfo/controller/main"}
+// {block name="backend/systeminfo/controller/systeminfo"}
 Ext.define('Shopware.apps.Systeminfo.controller.Systeminfo', {
 
     /**

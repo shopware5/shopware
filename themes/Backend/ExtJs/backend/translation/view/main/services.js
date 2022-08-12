@@ -31,10 +31,8 @@
 
 /**
  * Shopware UI - Translation Manager Services Window
- *
- * todo@all: Documentation
  */
-//{block name="backend/translation/view/main/window"}
+//{block name="backend/translation/view/main/services"}
 Ext.define('Shopware.apps.Translation.view.main.Services', {
     /** @lends Ext.window.Window# */
 

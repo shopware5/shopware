@@ -66,7 +66,7 @@
                 {if $sArticle.regulationPrice}
 
                     {* Discount price content *}
-                    {block name='frontend_detail_data_pseudo_price_discount_content'}
+                    {block name='frontend_detail_data_regulation_price_content'}
                         <div class="content--regulation">
                             {block name='frontend_detail_data_regulation_price_before'}
                                 {s name="priceRegulationLabel"}{/s}

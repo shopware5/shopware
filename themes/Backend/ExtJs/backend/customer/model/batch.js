@@ -35,7 +35,7 @@
  * The customer model of the customer module represent a data row of the s_user or the
  * Shopware\Models\Customer\Customer doctrine model, with some additional data for the additional information panel.
  */
-// {block name="backend/customer/model/customer"}
+// {block name="backend/customer/model/batch"}
 Ext.define('Shopware.apps.Customer.model.Batch', {
 
     /**
@@ -48,7 +48,7 @@ Ext.define('Shopware.apps.Customer.model.Batch', {
      * @array
      */
     fields: [
-        // {block name="backend/customer/model/customer/fields"}{/block}
+        // {block name="backend/customer/model/batch/fields"}{/block}
         { name: 'id', type: 'int' }
     ],
 

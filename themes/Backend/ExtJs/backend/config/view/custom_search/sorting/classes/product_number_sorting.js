@@ -23,7 +23,7 @@
 
 //{namespace name="backend/custom_search/translation"}
 
-//{block name="backend/config/view/custom_search/sorting/classes/product_name_sorting"}
+//{block name="backend/config/view/custom_search/sorting/classes/product_number_sorting"}
 
 Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductNumberSorting', {
     extend: 'Shopware.apps.Config.view.custom_search.sorting.classes.SortingInterface',
@@ -33,7 +33,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductNumbe
     },
 
     supports: function(sortingClass) {
-        return (sortingClass == 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductNumberSorting');
+        return (sortingClass === 'Shopware\\Bundle\\SearchBundle\\Sorting\\ProductNumberSorting');
     },
 
     load: function(sortingClass, parameters, callback) {
@@ -70,7 +70,7 @@ Ext.define('Shopware.apps.Config.view.custom_search.sorting.classes.ProductNumbe
     _createRecord: function(parameters) {
         var label = '{s name="product_number_sorting_asc"}{/s}';
 
-        if (parameters.direction == 'DESC') {
+        if (parameters.direction === 'DESC') {
             label = '{s name="product_number_sorting_desc"}{/s}';
         }
 

@@ -21,7 +21,7 @@
                 {else}
 
                     {* Error message *}
-                    {block name='frontend_newsletter_listing_error_message'}
+                    {block name='frontend_newsletter_detail_error_message'}
                         {s name="NewsletterDetailInfoEmpty" assign="snippetNewsletterDetailInfoEmpty"}{/s}
                         {include file="frontend/_includes/messages.tpl" type="warning" content=$snippetNewsletterDetailInfoEmpty}
                     {/block}

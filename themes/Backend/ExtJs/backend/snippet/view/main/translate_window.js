@@ -23,10 +23,7 @@
 
 //{namespace name="backend/snippet/view/main"}
 
-/**
- * todo@all: Documentation
- */
-//{block name="backend/snippet/view/main/edit_form"}
+//{block name="backend/snippet/view/main/translate_window"}
 Ext.define('Shopware.apps.Snippet.view.main.TranslateWindow', {
     extend: 'Enlight.app.Window',
     alias: 'widget.snippet-main-translateWindow',
