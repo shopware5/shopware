@@ -40,6 +40,15 @@ class Zend_Db_Adapter_Exception extends Zend_Db_Exception
         if ($e && (0 === $code)) {
             $code = $e->getCode();
         }
+
+        /**
+         * As $e might be an instance of \PDOException $e::getCode() could be
+         * a string or it could be passed as string
+         */
+        if (!is_int($code)) {
+            $code = 0;
+        }
+
         parent::__construct($message, $code, $e);
     }
 
@@ -52,5 +61,4 @@ class Zend_Db_Adapter_Exception extends Zend_Db_Exception
     {
         return $this->getPrevious();
     }
-
 }
