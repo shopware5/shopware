@@ -80,7 +80,7 @@ class Theme extends BaseTheme
      */
     protected $javascript = [
         // Third party plugins / libraries
-        'src/js/vendors/modernizr/modernizr-custom.js',
+        'vendors/js/modernizr/modernizr-custom.js',
         'vendors/js/jquery/jquery.min.js',
         'src/js/jquery.symbol-polyfill.js',
         'vendors/js/picturefill/picturefill.min.js',
