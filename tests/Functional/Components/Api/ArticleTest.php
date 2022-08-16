@@ -2599,6 +2599,8 @@ class ArticleTest extends TestCase
 
         static::assertEquals(400, $price['price']);
         static::assertEquals($net, $price['net']);
+        static::assertEquals(450, $price['pseudoPrice']);
+        static::assertEquals(400, $price['regulationPrice']);
     }
 
     public function testAssignCategoriesByPathShouldBeSuccessful(): void
@@ -3383,6 +3385,8 @@ class ArticleTest extends TestCase
                         'from' => 1,
                         'to' => '-',
                         'price' => 400,
+                        'pseudoPrice' => 450,
+                        'regulationPrice' => 400,
                     ],
                 ],
             ],

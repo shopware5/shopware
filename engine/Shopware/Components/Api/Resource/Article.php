@@ -248,7 +248,11 @@ class Article extends Resource implements BatchInterface
         foreach ($prices as &$price) {
             $price['net'] = $price['price'];
             if ($price['customerGroup'] && $price['customerGroup']['taxInput']) {
-                $price['price'] *= (($taxRate + 100) / 100);
+                $taxMultiplier = ($taxRate + 100) / 100;
+
+                $price['price'] *= $taxMultiplier;
+                $price['pseudoPrice'] *= $taxMultiplier;
+                $price['regulationPrice'] *= $taxMultiplier;
             }
         }
 
