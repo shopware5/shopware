@@ -73,7 +73,7 @@ Install Required PHP Files:
 
 Install Required JS Files:
     tags:
-        - t3.nano
+        - t3.medium
     image: node:alpine
     stage: Prepare Files
     before_script:
