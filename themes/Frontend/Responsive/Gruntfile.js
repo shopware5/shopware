@@ -8,6 +8,29 @@ module.exports = function (grunt) {
         clean: {
             vendors: [ vendorDir ]
         },
+        modernizr: {
+            dist: {
+                crawl: false,
+                customTests: [],
+                dest: vendorDir + "/js/modernizr/modernizr-custom.js",
+                tests: [
+                    "history",
+                    "cssanimations",
+                    "localstorage",
+                    "sessionstorage"
+                ],
+                options: [
+                    "domPrefixes",
+                    "hasEvent",
+                    "mq",
+                    "testAllProps",
+                    "testProp",
+                    "testStyles",
+                    "setClasses"
+                ],
+                uglify: true
+            },
+        },
         copy: {
             'jquery.event.move': {
                 files: [{
@@ -122,7 +145,7 @@ module.exports = function (grunt) {
                     dest: vendorDir + '/fonts/open-sans-fontface',
                     flatten: true
                 }]
-            }
+            },
         }
     });
 
@@ -170,4 +193,5 @@ module.exports = function (grunt) {
     grunt.registerTask('default', [ 'clean', 'createVendorDir', 'copy', 'createFontHtaccess' ]);
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks("grunt-modernizr");
 };

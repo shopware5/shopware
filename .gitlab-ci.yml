@@ -100,7 +100,7 @@ PHP analyze:
 
 JavaScript checks:
     tags:
-        - t3.nano
+        - t3.medium
     cache:
         - <<: *npm-cache
           policy: pull

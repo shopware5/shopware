@@ -195,7 +195,7 @@
 	}
 
 	function isIgnoreTag(e) {
-		return !!ignoreTags[e.target.tagName.toLowerCase()];
+	    return !!e.target.tagName && !!ignoreTags[e.target.tagName.toLowerCase()];
 	}
 
 	function isPrimaryButton(e) {
