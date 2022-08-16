@@ -22,16 +22,76 @@
  * our trademarks remain entirely with us.
  */
 
-class sRewriteTest extends PHPUnit\Framework\TestCase
+use DateTimeImmutable;
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_TestCase;
+use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\RouterInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+
+class sRewriteTest extends Enlight_Components_Test_TestCase
 {
+    use ContainerTrait;
+
+    private const ATTRIBUTE_NAME = 'sw_foo';
+
+    private const ATTRIBUTE_VALUE = 'loremipsum';
+
+    private const NEW_ROUTER_PRODUCT_TEMPLATE = '{sCategoryPath articleID=$sArticle.id}/{$sArticle.id}/{$sArticle.name}/{if $sArticle.' . self::ATTRIBUTE_NAME . '}{$sArticle.' . self::ATTRIBUTE_NAME . '}{/if}';
+
+    private const DEFAULT_PRODUCT_URL = 'Sommerwelten/Beachwear/178/Strandtuch-Ibiza';
+
+    private const PRODUCT_DETAILS_ID = 407;
+
+    private const PRODUCT_ID = 178;
+
     /**
      * @var sRewriteTable
      */
     private $rewriteTable;
 
+    private ModelManager $entityManager;
+
+    private Shopware_Components_Config $config;
+
+    private DataPersisterInterface $dataPersister;
+
+    private DataLoaderInterface $dataLoader;
+
+    private RouterInterface $router;
+
+    private CrudServiceInterface $attributesService;
+
+    private DateTimeImmutable $date;
+
+    private Shop $shop;
+
+    private Connection $connection;
+
     public function setUp(): void
     {
+        parent::setUp();
+
         $this->rewriteTable = Shopware()->Modules()->RewriteTable();
+        $this->attributesService = $this->getContainer()->get(CrudServiceInterface::class);
+        $this->entityManager = $this->getContainer()->get(ModelManager::class);
+        $this->config = $this->getContainer()->get('config');
+        $this->dataPersister = $this->getContainer()->get(DataPersisterInterface::class);
+        $this->dataLoader = $this->getContainer()->get(DataLoaderInterface::class);
+        $this->router = $this->getContainer()->get(RouterInterface::class);
+        $this->date = new DateTimeImmutable();
+        $this->connection = $this->getContainer()->get(Connection::class);
+
+        $shop = $this->entityManager->find(Shop::class, 1);
+        static::assertInstanceOf(Shop::class, $shop);
+        $this->shop = $shop;
     }
 
     /**
@@ -80,5 +140,80 @@ class sRewriteTest extends PHPUnit\Framework\TestCase
             ['Één jaar', 'Een-jaar'],
             ['tiếng việt rất khó', 'tieng-viet-rat-kho'],
         ];
+    }
+
+    public function testCustomAttributesInSeoProductUrl(): void
+    {
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($this->shop);
+
+        $this->createCustomProductAttribute();
+
+        $this->connection->beginTransaction();
+        $this->connection->executeStatement('UPDATE s_articles SET changetime = "' . $this->date->modify('-1 days')->format('Y:m:d H:i:s') . '" WHERE id = ' . self::PRODUCT_ID . ';');
+
+        $this->enterDataToNewAttribute();
+
+        $this->setCustomProductSeoUrl();
+        static::assertSame(self::NEW_ROUTER_PRODUCT_TEMPLATE, $this->config->get('routerarticletemplate'));
+
+        $this->rebuildSeoIndex();
+
+        $url = $this->checkProductUrl();
+        static::assertStringEndsWith(self::ATTRIBUTE_VALUE, $url);
+
+        $this->connection->rollBack();
+        $this->entityManager->clear();
+
+        $this->removeCustomProductAttribute();
+        static::assertNull($this->attributesService->get('s_articles_attributes', self::ATTRIBUTE_NAME));
+
+        $url = $this->checkProductUrl();
+        static::assertStringContainsString(strtolower(self::DEFAULT_PRODUCT_URL), strtolower($url));
+        static::assertStringEndsNotWith(self::ATTRIBUTE_VALUE, $url);
+    }
+
+    private function createCustomProductAttribute(): void
+    {
+        $this->attributesService->update(
+            's_articles_attributes',
+            self::ATTRIBUTE_NAME,
+            'string'
+        );
+
+        $this->entityManager->generateAttributeModels(['s_articles_attributes']);
+
+        $column = $this->attributesService->get('s_articles_attributes', self::ATTRIBUTE_NAME);
+        static::assertInstanceOf(ConfigurationStruct::class, $column);
+    }
+
+    private function enterDataToNewAttribute(): void
+    {
+        $this->dataPersister->persist([self::ATTRIBUTE_NAME => self::ATTRIBUTE_VALUE], 's_articles_attributes', self::PRODUCT_DETAILS_ID);
+        $result = $this->dataLoader->load('s_articles_attributes', self::PRODUCT_DETAILS_ID);
+        static::assertSame(self::ATTRIBUTE_VALUE, $result[self::ATTRIBUTE_NAME]);
+    }
+
+    private function setCustomProductSeoUrl(): void
+    {
+        $this->setConfig('routerarticletemplate', self::NEW_ROUTER_PRODUCT_TEMPLATE);
+    }
+
+    private function rebuildSeoIndex(): void
+    {
+        $this->rewriteTable->baseSetup();
+        $this->rewriteTable->sCreateRewriteTableArticles($this->date->modify('-2 days')->format('Y:m:d H:i:s'));
+    }
+
+    private function checkProductUrl(): string
+    {
+        $context = Context::createFromShop($this->shop, $this->config);
+        static::assertInstanceOf(Context::class, $context);
+
+        return $this->router->assemble(['controller' => 'detail', 'action' => 'index', 'sArticle' => self::PRODUCT_ID], $context);
+    }
+
+    private function removeCustomProductAttribute(): void
+    {
+        $this->attributesService->delete('s_articles_attributes', self::ATTRIBUTE_NAME);
     }
 }
