@@ -155,8 +155,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function restoreAction()
     {
         $resource = $this->Request()->getParam('resource');
-        $id = $this->Request()->getParam('id');
-        $offset = $this->Request()->getParam('offset');
+        $id = (int)$this->Request()->getParam('id');
+        $offset = (int)$this->Request()->getParam('offset');
 
         /** @var ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
