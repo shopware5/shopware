@@ -236,7 +236,7 @@ class Backup
         $path = $backup->getPath();
         $dir = \dirname($path);
 
-        if ($offset == 0) {
+        if ($offset === 0) {
             $zip = new ZipArchive();
             $zip->open($path);
             $success = $zip->extractTo($dir);
