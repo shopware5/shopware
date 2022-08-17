@@ -428,7 +428,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         $filter = null;
         if ($id) {
-            $filter = $this->getMultiEditRepository()->find((int) $id);
+            $filter = $this->getMultiEditRepository()->find((int)$id);
         }
         if (!$filter instanceof Filter) {
             $filter = new Filter();
@@ -512,7 +512,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     public function deleteProductAction()
     {
-        $id = (int) $this->Request()->getParam('Detail_id');
+        $id = (int)$this->Request()->getParam('Detail_id');
 
         /** @var Detail $variant */
         $variant = $this->getDetailRepository()->find($id);
@@ -547,7 +547,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     private function normalizeFilter($filter)
     {
-        return strtolower((string) preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
+        return strtolower((string)preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
     }
 
     /**
@@ -723,7 +723,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $criteria->sortings = $request->getParam('sort', []);
         $criteria->conditions = $request->getParam('filters', []);
 
-        $categoryId = (int) $request->getParam('categoryId');
+        $categoryId = (int)$request->getParam('categoryId');
         if ($categoryId > 0) {
             $criteria->conditions[] = ['property' => 'categoryIds', 'value' => $categoryId, 'expression' => 'IN'];
         }
