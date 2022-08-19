@@ -62,6 +62,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 | themes/Frontend/Bare/frontend/plugins/notification/index.tpl                                              | frontend_account_index_form_captcha                                           | frontend_detail_index_notification_captcha                                        |
 
 * Updated `doctrine/annotations` to version 1.13.3
+* Updated `doctrine/collections` to version 1.7.0
 * Updated `doctrine/event-manager` to version 1.1.2
 * Updated `doctrine/orm` to version 2.13.1
 * Updated `doctrine/persistence` to version 2.5.4
