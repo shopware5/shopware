@@ -70,6 +70,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `laminas/laminas-code` to version 4.6.0
 * Updated `league/flysystem-aws-s3-v3` to version 1.0.30
 * Updated `monolog/monolog` to version 2.8.0
+* Updated `cocur/slugify` to version 4.2.0
 * Updated `symfony/config` to version 4.4.44
 * Updated `symfony/console` to version 4.4.44
 * Updated `symfony/dependency-injection` to version 4.4.44
