@@ -45,7 +45,7 @@
         "doctrine/annotations": "1.13.3",
         "doctrine/cache": "1.13.0",
         "doctrine/collections": "1.7.0",
-        "doctrine/common": "3.3.0",
+        "doctrine/common": "3.3.1",
         "doctrine/dbal": "2.13.8",
         "doctrine/event-manager": "1.1.2",
         "doctrine/inflector": "2.0.4",

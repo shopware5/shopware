@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "275409e88fff4f563338111fc24f3fcb",
+    "content-hash": "f820b9873d8683b92314addb4afc8898",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -694,16 +694,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "3.3.0",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "c824e95d4c83b7102d8bc60595445a6f7d540f96"
+                "reference": "6a76bd25b1030d35d6ba2bf2f69ca858a41fc580"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/c824e95d4c83b7102d8bc60595445a6f7d540f96",
-                "reference": "c824e95d4c83b7102d8bc60595445a6f7d540f96",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/6a76bd25b1030d35d6ba2bf2f69ca858a41fc580",
+                "reference": "6a76bd25b1030d35d6ba2bf2f69ca858a41fc580",
                 "shasum": ""
             },
             "require": {
@@ -712,6 +712,7 @@
             },
             "require-dev": {
                 "doctrine/coding-standard": "^9.0",
+                "doctrine/collections": "^1",
                 "phpstan/phpstan": "^1.4.1",
                 "phpstan/phpstan-phpunit": "^1",
                 "phpunit/phpunit": "^7.5.20 || ^8.5 || ^9.0",
@@ -764,7 +765,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/common/issues",
-                "source": "https://github.com/doctrine/common/tree/3.3.0"
+                "source": "https://github.com/doctrine/common/tree/3.3.1"
             },
             "funding": [
                 {
@@ -780,7 +781,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-02-05T18:28:51+00:00"
+            "time": "2022-08-20T10:48:54+00:00"
         },
         {
             "name": "doctrine/dbal",
