@@ -57,7 +57,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testIsAvailable()
+    public function testIsAvailable(): void
     {
         static::assertInstanceOf(Argon2id::class, $this->hasher);
     }
@@ -65,7 +65,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testGetNameShouldReturnName()
+    public function testGetNameShouldReturnName(): void
     {
         static::assertEquals('Argon2id', $this->hasher->getName());
     }
@@ -73,7 +73,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testGenerateShouldReturnString()
+    public function testGenerateShouldReturnString(): void
     {
         static::assertIsString($this->hasher->encodePassword('foobar'));
     }
@@ -81,7 +81,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testGenerateShouldReturnDifferentHashesForSamePlaintextString()
+    public function testGenerateShouldReturnDifferentHashesForSamePlaintextString(): void
     {
         static::assertNotEquals($this->hasher->encodePassword('foobar'), $this->hasher->encodePassword('foobar'));
     }
@@ -89,7 +89,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testVerifyShouldReturnTrueForMatchingHash()
+    public function testVerifyShouldReturnTrueForMatchingHash(): void
     {
         $hash = $this->hasher->encodePassword('foobar');
 
@@ -99,7 +99,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testVerifyShouldReturnFalseForNotMatchingHash()
+    public function testVerifyShouldReturnFalseForNotMatchingHash(): void
     {
         $hash = $this->hasher->encodePassword('foobar');
 
@@ -109,7 +109,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testRehash()
+    public function testRehash(): void
     {
         $hash = $this->hasher->encodePassword('foobar');
 
@@ -119,7 +119,7 @@ class Argon2idTest extends TestCase
     /**
      * Test case
      */
-    public function testRehash2()
+    public function testRehash2(): void
     {
         $hash = $this->hasher->encodePassword('foobar');
         $this->hasher = new Argon2id([

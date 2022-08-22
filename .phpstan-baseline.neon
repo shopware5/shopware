@@ -21066,11 +21066,6 @@ parameters:
 			path: engine/Shopware/Components/Password/Encoder/Argon2i.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Password\\\\Encoder\\\\Argon2i\\:\\:encodePassword\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Password/Encoder/Argon2i.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Password\\\\Encoder\\\\Argon2i\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Password/Encoder/Argon2i.php
@@ -21081,22 +21076,12 @@ parameters:
 			path: engine/Shopware/Components/Password/Encoder/Argon2id.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Password\\\\Encoder\\\\Argon2id\\:\\:encodePassword\\(\\) should return string but returns string\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Password/Encoder/Argon2id.php
-
-		-
 			message: "#^Property Shopware\\\\Components\\\\Password\\\\Encoder\\\\Argon2id\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Password/Encoder/Argon2id.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Password\\\\Encoder\\\\Bcrypt\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Password/Encoder/Bcrypt.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Password\\\\Encoder\\\\Bcrypt\\:\\:encodePassword\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Password/Encoder/Bcrypt.php
 
@@ -21122,16 +21107,6 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method Shopware\\\\Components\\\\Password\\\\Encoder\\\\PasswordEncoderInterface\\:\\:isCompatible\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Password/Manager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Password\\\\Manager\\:\\:addEncoder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Password/Manager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Password\\\\Manager\\:\\:getCompatibleEncoders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Password/Manager.php
 
@@ -25431,132 +25406,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:createDocumentElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:createDocumentElements\\(\\) has parameter \\$model with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:createSalutationSnippets\\(\\) has parameter \\$elementData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:deleteTableValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:deleteValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getFormAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getNavigationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getSnippetsForLocales\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getSnippetsForLocales\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getTableListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getTranslation\\(\\) has parameter \\$tryLocales with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getTranslation\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:getValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:prepareValue\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:prepareValue\\(\\) has parameter \\$elementData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:prepareValue\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveElement\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveElement\\(\\) has parameter \\$elementData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveFormAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveTableValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveTaxRules\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveValuesAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateStore\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateStore\\(\\) has parameter \\$fallbackLocales with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateStore\\(\\) has parameter \\$store with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -25572,21 +25427,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateValues\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateValues\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:validateData\\(\\) has parameter \\$elementData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:validateData\\(\\) has parameter \\$value with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -33731,11 +33571,6 @@ parameters:
 			path: engine/Shopware/Models/Config/Form.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Config\\\\Form\\:\\:setElement\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Config/Form.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Config\\\\Form\\:\\:setParent\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Config/Form.php
@@ -40109,26 +39944,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_TopSeller\\:\\:initTopSellerAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Controllers/TopSeller.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PasswordEncoder_Bootstrap\\:\\:getArgon2Options\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PasswordEncoder/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PasswordEncoder_Bootstrap\\:\\:getBcryptOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PasswordEncoder/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PasswordEncoder_Bootstrap\\:\\:getSha256Options\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PasswordEncoder/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PasswordEncoder_Bootstrap\\:\\:onAddEncoder\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PasswordEncoder/Bootstrap.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getRequest\\(\\)\\.$#"
@@ -52009,191 +51824,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelRepositoryTest\\:\\:testPassingIndexByParameter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Model/ModelRepositoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testGenerateShouldReturnDifferentHashesForSamePlaintextString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testGenerateShouldReturnString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testGetNameShouldReturnName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testIsAvailable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testRehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testRehash2\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testVerifyShouldReturnFalseForNotMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2iTest\\:\\:testVerifyShouldReturnTrueForMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2iTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testGenerateShouldReturnDifferentHashesForSamePlaintextString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testGenerateShouldReturnString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testGetNameShouldReturnName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testIsAvailable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testRehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testRehash2\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testVerifyShouldReturnFalseForNotMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Argon2idTest\\:\\:testVerifyShouldReturnTrueForMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Argon2idTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testGenerateShouldReturnDifferentHashesForSamePlaintextString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testGenerateShouldReturnString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testGetNameShouldReturnName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testIsAvailable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testRehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testRehash2\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testVerifyShouldReturnFalseForNotMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\BcryptTest\\:\\:testVerifyShouldReturnTrueForMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/BcryptTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\PreHashedTest\\:\\:testEncodePasswordShouldNotModifyInput\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/PreHashedTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\PreHashedTest\\:\\:testGetNameShouldReturnName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/PreHashedTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\PreHashedTest\\:\\:testRehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/PreHashedTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\PreHashedTest\\:\\:testValidatePasswordForDifferentHashes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/PreHashedTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\PreHashedTest\\:\\:testValidatePasswordForSameHashes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/PreHashedTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testGenerateShouldReturnDifferentHashesForSamePlaintextString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testGenerateShouldReturnString\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testGetNameShouldReturnName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testIsAvailable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testRehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testRehash2\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testVerifyShouldReturnFalseForNotMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Password\\\\Encoder\\\\Sha256Test\\:\\:testVerifyShouldReturnTrueForMatchingHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Password/Encoder/Sha256Test.php
 
 		-
 			message: "#^Service \"filled_plugin\\.internal\\.resource_subscriber\" is not registered in the container\\.$#"

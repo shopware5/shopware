@@ -70,6 +70,10 @@ Ext.define('Shopware.apps.Config.controller.Main', {
         { ref: 'form', selector: 'config-main-form' }
     ],
 
+    messages: {
+        configCouldNotBeSavedMassage: '{s name="form/message/config_could_not_be_saved"}{/s}',
+    },
+
     /**
      * The main window instance
      * @object
@@ -195,6 +199,12 @@ Ext.define('Shopware.apps.Config.controller.Main', {
             form = basicForm.getRecord(),
             values = basicForm.getFieldValues(),
             fieldName, fieldValue, valueStore;
+
+        if (!basicForm.isValid()) {
+            var messageTitle = '{s name="form/message/save_form_title"}Save form{/s}';
+            Shopware.Notification.createGrowlMessage(messageTitle, this.messages.configCouldNotBeSavedMassage);
+            return;
+        }
 
         form.getElements().each(function(element) {
             valueStore = element.getValues();
