@@ -59,12 +59,12 @@ stages:
 
 default:
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
+    tags:
+        - t3.medium
 
 # Stage: Prepare Files
 
 Install Required PHP Files:
-    tags:
-        - t3.nano
     stage: Prepare Files
     script:
         - make .make.install.composer-dependencies
@@ -72,8 +72,6 @@ Install Required PHP Files:
         <<: *composer-cache
 
 Install Required JS Files:
-    tags:
-        - t3.medium
     image: node:alpine
     stage: Prepare Files
     before_script:
@@ -99,8 +97,6 @@ PHP analyze:
             alias: mysql
 
 JavaScript checks:
-    tags:
-        - t3.medium
     cache:
         - <<: *npm-cache
           policy: pull
@@ -113,8 +109,6 @@ JavaScript checks:
         - make test-jest
 
 .phpunit_base:
-    tags:
-        - t3.medium
     cache:
         - <<: *composer-cache
           policy: pull
@@ -135,8 +129,6 @@ JavaScript checks:
             junit: ${ARTIFACTS_ROOT}/test-log.xml
 
 .phpunit_es_base:
-    tags:
-        - t3.medium
     extends: .phpunit_base
     script:
         - make init
