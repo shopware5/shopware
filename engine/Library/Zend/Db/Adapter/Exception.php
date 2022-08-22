@@ -37,9 +37,18 @@ class Zend_Db_Adapter_Exception extends Zend_Db_Exception
 
     public function __construct($message = '', $code = 0, Exception $e = null)
     {
-        if ($e && (0 === $code)) {
+        if ($e && ($code === 0)) {
             $code = $e->getCode();
         }
+
+        if (!is_int($code)) {
+            if (is_numeric($code)) {
+                $code = (int) $code;
+            } else {
+                $code = 0;
+            }
+        }
+
         parent::__construct($message, $code, $e);
     }
 
@@ -52,5 +61,4 @@ class Zend_Db_Adapter_Exception extends Zend_Db_Exception
     {
         return $this->getPrevious();
     }
-
 }
