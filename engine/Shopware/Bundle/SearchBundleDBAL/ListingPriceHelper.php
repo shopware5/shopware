@@ -96,6 +96,7 @@ class ListingPriceHelper
         $priceTable->select($this->getDefaultPriceColumns());
         $priceTable->from('s_articles_prices', 'defaultPrice');
         $priceTable->where('defaultPrice.pricegroup = :fallbackCustomerGroup');
+        $priceTable->andWhere('defaultPrice.from = 1');
 
         if (!$this->hasDifferentCustomerGroups($context)) {
             return $priceTable;
@@ -107,7 +108,8 @@ class ListingPriceHelper
             's_articles_prices',
             'customerPrice',
             'customerPrice.articledetailsID = defaultPrice.articledetailsID
-            AND customerPrice.pricegroup = :currentCustomerGroup'
+            AND customerPrice.pricegroup = :currentCustomerGroup
+            AND customerPrice.from = 1'
         );
 
         return $priceTable;
