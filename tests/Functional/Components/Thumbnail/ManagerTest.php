@@ -209,7 +209,9 @@ class ManagerTest extends TestCase
 
         $sourcePath = __DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'sw_icon.png';
         $imagePath = 'media/unknown/sw_icon.png';
-        $mediaService->write($imagePath, file_get_contents($sourcePath));
+        $content = file_get_contents($sourcePath);
+        static::assertIsString($content);
+        $mediaService->write($imagePath, $content);
 
         $file = new File($sourcePath);
 

@@ -44031,16 +44031,6 @@ parameters:
 			path: tests/Functional/Components/Theme/Themes/TestResponsive/Theme.php
 
 		-
-			message: "#^Parameter \\#1 \\$file of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setFile\\(\\) expects Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile, Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\File given\\.$#"
-			count: 2
-			path: tests/Functional/Components/Thumbnail/ManagerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Thumbnail/ManagerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ApplicationTest\\:\\:formatSearchValueTestDataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/ApplicationTest.php

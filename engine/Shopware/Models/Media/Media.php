@@ -230,7 +230,7 @@ class Media extends ModelEntity
     /**
      * Internal container for the uploaded file.
      *
-     * @var UploadedFile
+     * @var File
      */
     private $file;
 
@@ -567,8 +567,6 @@ class Media extends ModelEntity
     /**
      * Setter method for the file property. If the file is set, the file information will be extracted
      * and set into the internal properties.
-     *
-     * @param UploadedFile $file
      *
      * @return Media
      */
