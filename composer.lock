@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f820b9873d8683b92314addb4afc8898",
+    "content-hash": "c16de07dae2188ae3f3f6d9cd509063a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -694,16 +694,16 @@
         },
         {
             "name": "doctrine/common",
-            "version": "3.3.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/common.git",
-                "reference": "6a76bd25b1030d35d6ba2bf2f69ca858a41fc580"
+                "reference": "e09556bbdf95b8420e649162b19ae9da2d1a80f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/common/zipball/6a76bd25b1030d35d6ba2bf2f69ca858a41fc580",
-                "reference": "6a76bd25b1030d35d6ba2bf2f69ca858a41fc580",
+                "url": "https://api.github.com/repos/doctrine/common/zipball/e09556bbdf95b8420e649162b19ae9da2d1a80f3",
+                "reference": "e09556bbdf95b8420e649162b19ae9da2d1a80f3",
                 "shasum": ""
             },
             "require": {
@@ -723,7 +723,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Common\\": "lib/Doctrine/Common"
+                    "Doctrine\\Common\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -765,7 +765,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/common/issues",
-                "source": "https://github.com/doctrine/common/tree/3.3.1"
+                "source": "https://github.com/doctrine/common/tree/3.4.0"
             },
             "funding": [
                 {
@@ -781,7 +781,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-08-20T10:48:54+00:00"
+            "time": "2022-08-23T19:46:56+00:00"
         },
         {
             "name": "doctrine/dbal",
