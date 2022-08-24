@@ -96,7 +96,7 @@ class ContainerTest extends TestCase
         );
     }
 
-    public function testEventsAreEmitedDuringServiceInitialisation(): void
+    public function testEventsAreEmittedDuringServiceInitialisation(): void
     {
         $service = $this->prophesize(Enlight_Event_EventManager::class);
 
