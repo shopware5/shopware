@@ -9346,26 +9346,6 @@ parameters:
 			path: engine/Shopware/Bundle/OrderBundle/Service/StockService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\OrderRecalculationSubscriber\\:\\:postPersist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\OrderRecalculationSubscriber\\:\\:preRemove\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\OrderRecalculationSubscriber\\:\\:preUpdate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
-
-		-
-			message: "#^Parameter \\#1 \\$order of method Shopware\\\\Bundle\\\\OrderBundle\\\\Service\\\\CalculationServiceInterface\\:\\:recalculateOrderTotals\\(\\) expects Shopware\\\\Models\\\\Order\\\\Order, Shopware\\\\Models\\\\Order\\\\Order\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/OrderBundle/Subscriber/OrderRecalculationSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\OrderBundle\\\\Subscriber\\\\ProductStockSubscriber\\:\\:postPersist\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/OrderBundle/Subscriber/ProductStockSubscriber.php

@@ -37,9 +37,8 @@ class OrderRecalculationSubscriber implements SubscriberInterface
      */
     protected $calculationService;
 
-    public function __construct(
-        CalculationServiceInterface $calculationService
-    ) {
+    public function __construct(CalculationServiceInterface $calculationService)
+    {
         $this->calculationService = $calculationService;
     }
 
@@ -57,20 +56,19 @@ class OrderRecalculationSubscriber implements SubscriberInterface
 
     /**
      * If a product position get updated, the order totals must be recalculated
+     *
+     * @return void
      */
     public function preUpdate(Enlight_Event_EventArgs $arguments)
     {
-        /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');
-        $entityManager = $arguments->get('entityManager');
-
         // returns a change set for the model, which contains all changed properties with the old and new value.
-        $changeSet = $entityManager->getUnitOfWork()->getEntityChangeSet($orderDetail);
+        $changeSet = $arguments->get('entityManager')->getUnitOfWork()->getEntityChangeSet($orderDetail);
 
-        $productChange = $changeSet['articleNumber'][0] !== $changeSet['articleNumber'][1];
-        $quantityChange = $changeSet['quantity'][0] !== $changeSet['quantity'][1];
-        $priceChanged = $changeSet['price'][0] !== $changeSet['price'][1];
-        $taxChanged = $changeSet['taxRate'][0] !== $changeSet['taxRate'][1];
+        $productChange = \array_key_exists('articleNumber', $changeSet) && $changeSet['articleNumber'][0] !== $changeSet['articleNumber'][1];
+        $quantityChange = \array_key_exists('quantity', $changeSet) && $changeSet['quantity'][0] !== $changeSet['quantity'][1];
+        $priceChanged = \array_key_exists('price', $changeSet) && $changeSet['price'][0] !== $changeSet['price'][1];
+        $taxChanged = \array_key_exists('taxRate', $changeSet) && $changeSet['taxRate'][0] !== $changeSet['taxRate'][1];
 
         // If anything in the order position has been changed, we must recalculate the totals of the order
         if ($quantityChange || $productChange || $priceChanged || $taxChanged) {
@@ -80,28 +78,40 @@ class OrderRecalculationSubscriber implements SubscriberInterface
 
     /**
      * If a product position got added to the order, the order totals must be recalculated
+     *
+     * @return void
      */
     public function postPersist(Enlight_Event_EventArgs $arguments)
     {
-        /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');
+        if (!$orderDetail instanceof Detail) {
+            return;
+        }
 
-        /** @var Order $order */
         $order = $orderDetail->getOrder();
+        if (!$order instanceof Order) {
+            return;
+        }
 
         $this->calculationService->recalculateOrderTotals($order);
     }
 
     /**
      * If a product position get removed from the order, the order totals must be recalculated
+     *
+     * @return void
      */
     public function preRemove(Enlight_Event_EventArgs $arguments)
     {
-        /** @var Detail $orderDetail */
         $orderDetail = $arguments->get('entity');
+        if (!$orderDetail instanceof Detail) {
+            return;
+        }
 
-        /** @var Order $order */
         $order = $orderDetail->getOrder();
+        if (!$order instanceof Order) {
+            return;
+        }
 
         $this->calculationService->recalculateOrderTotals($order);
     }
