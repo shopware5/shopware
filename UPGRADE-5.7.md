@@ -76,17 +76,17 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `monolog/monolog` to version 2.8.0
 * Updated `phpunit/phpunit` to version 9.5.23
 * Updated `symfony/config` to version 4.4.44
-* Updated `symfony/console` to version 4.4.44
+* Updated `symfony/console` to version 4.4.45
 * Updated `symfony/dependency-injection` to version 4.4.44
 * Updated `symfony/expression-language` to version 4.4.44
 * Updated `symfony/finder` to version 4.4.44
-* Updated `symfony/form` to version 4.4.44
-* Updated `symfony/http-foundation` to version 4.4.44
-* Updated `symfony/http-kernel` to version 4.4.44
+* Updated `symfony/form` to version 4.4.45
+* Updated `symfony/http-foundation` to version 4.4.45
+* Updated `symfony/http-kernel` to version 4.4.45
 * Updated `symfony/options-resolver` to version 4.4.44
 * Updated `symfony/process` to version 4.4.44
-* Updated `symfony/serializer` to version 5.4.11
-* Updated `symfony/validator` to version 4.4.44
+* Updated `symfony/serializer` to version 5.4.12
+* Updated `symfony/validator` to version 4.4.45
 * Updated several indirect dependencies
 
 ## 5.7.14
