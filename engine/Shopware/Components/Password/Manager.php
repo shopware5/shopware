@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Password;
 
+use DomainException;
 use Exception;
 use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
 use Shopware_Components_Config;
@@ -33,6 +34,10 @@ use Shopware_Components_Config;
  */
 class Manager
 {
+    private const DEFAULT_ENCODER = 'bcrypt';
+    private const FALLBACK_ENCODER = 'sha256';
+    private const AUTO_ENCODING = 'auto';
+
     /**
      * @var array<string, PasswordEncoderInterface>
      */
@@ -50,6 +55,8 @@ class Manager
 
     /**
      * @throws Exception
+     *
+     * @return void
      */
     public function addEncoder(PasswordEncoderInterface $encoder)
     {
@@ -74,7 +81,7 @@ class Manager
         $name = strtolower(trim($name));
 
         if (!isset($this->encoder[$name])) {
-            throw new Exception(sprintf('Encoder by name %s not found', $name));
+            throw new DomainException(sprintf('Encoder by name %s not found', $name));
         }
 
         $encoder = $this->encoder[$name];
@@ -87,7 +94,7 @@ class Manager
     }
 
     /**
-     * @return array
+     * @return array<PasswordEncoderInterface>
      */
     public function getCompatibleEncoders()
     {
@@ -105,12 +112,12 @@ class Manager
     {
         $encoderName = strtolower($this->config->defaultPasswordEncoder);
 
-        if (empty($encoderName) || $encoderName === 'auto') {
-            $bryptEncoder = $this->encoder['bcrypt'];
+        if (empty($encoderName) || $encoderName === self::AUTO_ENCODING) {
+            $bryptEncoder = $this->encoder[self::DEFAULT_ENCODER];
             if ($bryptEncoder->isCompatible()) {
-                $encoderName = 'bcrypt';
+                $encoderName = self::DEFAULT_ENCODER;
             } else {
-                $encoderName = 'sha256';
+                $encoderName = self::FALLBACK_ENCODER;
             }
         }
 
@@ -126,6 +133,14 @@ class Manager
      */
     public function isPasswordValid($password, $hash, $encoderName)
     {
+        if (!\is_string($password) || empty($password)) {
+            return false;
+        }
+
+        if (!\is_string($hash) || empty($hash)) {
+            return false;
+        }
+
         $encoder = $this->getEncoderByName($encoderName);
 
         if ($encoder->isPasswordValid($password, $hash)) {
@@ -143,9 +158,19 @@ class Manager
      */
     public function encodePassword($password, $encoderName)
     {
+        if (!\is_string($password) || empty($password)) {
+            throw new DomainException('This Password can not be encoded');
+        }
+
         $encoder = $this->getEncoderByName($encoderName);
 
-        return $encoder->encodePassword($password);
+        $encodedPassword = $encoder->encodePassword($password);
+
+        if (!\is_string($encodedPassword)) {
+            throw new DomainException(sprintf('The password could not be encoded by %s.', $encoderName));
+        }
+
+        return $encodedPassword;
     }
 
     /**
@@ -157,6 +182,14 @@ class Manager
      */
     public function reencodePassword($password, $hash, $encoderName)
     {
+        if (!\is_string($password) || empty($password)) {
+            throw new DomainException('Password can not be reencoded');
+        }
+
+        if (!\is_string($hash) || empty($hash)) {
+            throw new DomainException('The hash is not valid');
+        }
+
         $encoder = $this->getEncoderByName($encoderName);
 
         $truncated = $password !== strip_tags($password);
@@ -164,6 +197,12 @@ class Manager
             return $hash;
         }
 
-        return $encoder->encodePassword($password);
+        $encodedPassword = $encoder->encodePassword($password);
+
+        if (!\is_string($encodedPassword)) {
+            throw new DomainException('The reencoding of the password was not successfull.');
+        }
+
+        return $encodedPassword;
     }
 }

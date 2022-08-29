@@ -234,9 +234,9 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param string $type
-     * @param string $name
-     * @param array  $options
+     * @param string               $type
+     * @param string               $name
+     * @param array<string, mixed> $options
      *
      * @return Form
      */

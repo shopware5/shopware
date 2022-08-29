@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Password\Encoder;
 
+use DomainException;
+
 class Argon2i implements PasswordEncoderInterface
 {
     /**
@@ -36,9 +38,23 @@ class Argon2i implements PasswordEncoderInterface
      */
     public function __construct($options = null)
     {
-        if ($options !== null) {
-            $this->options = $options;
+        if ($options === null) {
+            return;
         }
+
+        if (!isset($options['memory_cost']) || $options['memory_cost'] < 256) {
+            $options['memory_cost'] = PASSWORD_ARGON2_DEFAULT_MEMORY_COST;
+        }
+
+        if (!isset($options['time_cost']) || ($options['time_cost'] < 1 || $options['time_cost'] > 30)) {
+            $options['time_cost'] = PASSWORD_ARGON2_DEFAULT_TIME_COST;
+        }
+
+        if (!isset($options['threads']) || ($options['threads'] < 1 || $options['threads'] > 32)) {
+            $options['threads'] = PASSWORD_ARGON2_DEFAULT_THREADS;
+        }
+
+        $this->options = $options;
     }
 
     /**
@@ -75,7 +91,13 @@ class Argon2i implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        return password_hash($password, PASSWORD_ARGON2I, $this->options);
+        $hash = password_hash($password, PASSWORD_ARGON2I, $this->options);
+
+        if (!\is_string($hash)) {
+            throw new DomainException(sprintf('Password could not be encoded by the encoder %s.', PASSWORD_ARGON2I));
+        }
+
+        return $hash;
     }
 
     /**

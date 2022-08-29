@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Password\Encoder;
 
+use DomainException;
 use Shopware\Components\Random;
 
 /**
@@ -31,6 +32,8 @@ use Shopware\Components\Random;
  */
 class Sha256 implements PasswordEncoderInterface
 {
+    private const DELIMITER = ':';
+
     /**
      * @var array
      */
@@ -44,9 +47,15 @@ class Sha256 implements PasswordEncoderInterface
      */
     public function __construct($options = null)
     {
-        if ($options !== null) {
-            $this->options = $options;
+        if ($options === null) {
+            return;
         }
+
+        if (!isset($options['iterations']) || ($options['iterations'] > 1000000 || $options['iterations'] < 1)) {
+            $options['iterations'] = 100000;
+        }
+
+        $this->options = $options;
     }
 
     /**
@@ -65,7 +74,11 @@ class Sha256 implements PasswordEncoderInterface
      */
     public function isPasswordValid($password, $hash)
     {
-        list($iterations, $salt) = explode(':', $hash);
+        if (!str_contains($hash, self::DELIMITER)) {
+            throw new DomainException(sprintf('Invalid hash provided for the encoder %s.', $this->getName()));
+        }
+
+        list($iterations, $salt) = explode(self::DELIMITER, $hash);
 
         $verifyHash = $this->generateInternal($password, $salt, (int) $iterations);
 
@@ -128,6 +141,10 @@ class Sha256 implements PasswordEncoderInterface
         $hash = '';
         for ($i = 0; $i <= $iterations; ++$i) {
             $hash = hash('sha256', $hash . $password . $salt);
+        }
+
+        if (!\is_string($hash)) {
+            throw new DomainException(sprintf('The password could not be hashed by %s.', $this->getName()));
         }
 
         return $iterations . ':' . $salt . ':' . $hash;

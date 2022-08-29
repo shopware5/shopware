@@ -24,6 +24,8 @@
 
 namespace Shopware\Components\Password\Encoder;
 
+use DomainException;
+
 class Bcrypt implements PasswordEncoderInterface
 {
     /**
@@ -36,9 +38,15 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function __construct($options = null)
     {
-        if ($options !== null) {
-            $this->options = $options;
+        if ($options === null) {
+            return;
         }
+
+        if (!isset($options['cost']) || ($options['cost'] <= 3 || $options['cost'] >= 32)) {
+            $options['cost'] = 10;
+        }
+
+        $this->options = $options;
     }
 
     /**
@@ -75,7 +83,13 @@ class Bcrypt implements PasswordEncoderInterface
      */
     public function encodePassword($password)
     {
-        return password_hash($password, PASSWORD_BCRYPT, $this->options);
+        $hash = password_hash($password, PASSWORD_BCRYPT, $this->options);
+
+        if (!\is_string($hash)) {
+            throw new DomainException(sprintf('Password could not be encoded by the encoder %s.', PASSWORD_ARGON2I));
+        }
+
+        return $hash;
     }
 
     /**
