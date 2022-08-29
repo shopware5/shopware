@@ -69,6 +69,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/orm` to version 2.13.1
 * Updated `doctrine/persistence` to version 2.5.4
 * Updated `google/cloud-storage` to version 1.28.1
+* Updated `guzzlehttp/guzzle` to version 7.5.0
+* Updated `guzzlehttp/psr7` to version 2.4.1
 * Updated `laminas/laminas-code` to version 4.6.0
 * Updated `league/flysystem-aws-s3-v3` to version 1.0.30
 * Updated `monolog/monolog` to version 2.8.0
