@@ -107,6 +107,7 @@ class ListingPriceHelper
             's_articles_prices',
             'customerPrice',
             'customerPrice.articledetailsID = defaultPrice.articledetailsID
+            AND customerPrice.articleID = defaultPrice.articleID
             AND customerPrice.pricegroup = :currentCustomerGroup'
         );
 

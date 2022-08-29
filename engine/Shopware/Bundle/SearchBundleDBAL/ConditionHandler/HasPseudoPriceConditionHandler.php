@@ -85,11 +85,11 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
             if (empty($conditions)) {
                 $this->variantHelper->joinVariants($query);
                 $this->joinPrices($query, $context);
-                $query->andWhere('variantPrices.pseudoprice > 0');
             } else {
                 $this->listingPriceSwitcher->joinPrice($query, $this->criteria, $context);
                 $query->andWhere('listing_price.pseudoprice > 0');
             }
+
             $query->addState(self::STATE_INCLUDES_PSEUDO_PRICE_VARIANTS);
         }
     }
@@ -101,7 +101,16 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
 
     private function joinPrices(QueryBuilder $query, ShopContextInterface $context): void
     {
+        $hasDifferentCustomerGroups = $this->hasDifferentCustomerGroups($context);
+
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
+
+        if ($hasDifferentCustomerGroups) {
+            $priceTable->andWhere('IFNULL(customerPrice.`pseudoprice`, defaultPrice.`pseudoprice`) > 0');
+        } else {
+            $priceTable->andWhere('defaultPrice.pseudoprice > 0');
+        }
+
         $query->innerJoin(
             'allVariants',
             '(' . $priceTable->getSQL() . ')',
@@ -110,8 +119,13 @@ class HasPseudoPriceConditionHandler implements ConditionHandlerInterface, Crite
         );
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
-        if ($context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId()) {
+        if ($hasDifferentCustomerGroups) {
             $query->setParameter(':currentCustomerGroup', $context->getCurrentCustomerGroup()->getKey());
         }
+    }
+
+    private function hasDifferentCustomerGroups(ShopContextInterface $context): bool
+    {
+        return $context->getCurrentCustomerGroup()->getId() !== $context->getFallbackCustomerGroup()->getId();
     }
 }
