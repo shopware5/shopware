@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Bundle\SearchBundle\Condition;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Sorting\PriceSorting;
 use Shopware\Bundle\SearchBundle\SortingInterface;
@@ -330,10 +331,20 @@ class VariantConditionTest extends TestCase
 
     /**
      * Creates and return the VariantCondition of the given options of the given group.
+     *
+     * @param array<string> $options
      */
     public function createCondition(array $options, string $groupName, bool $expand = false): VariantCondition
     {
         $mapping = $this->mapOptions();
+
+        if (!isset($mapping['groups'])) {
+            throw new Exception('Group is not set');
+        }
+
+        if (!isset($mapping['options'])) {
+            throw new Exception('Options is not set');
+        }
 
         $ids = array_intersect_key(
             $mapping['options'],
@@ -393,6 +404,8 @@ class VariantConditionTest extends TestCase
 
     /**
      * Returns the mapping of group and option names to ids.
+     *
+     * @return array{options?: array<string, int>, groups?: array<string, int>}
      */
     private function mapOptions(): array
     {
@@ -409,6 +422,8 @@ class VariantConditionTest extends TestCase
 
     /**
      * Creates the structure of the configurator.
+     *
+     * @param array<string, array<string>> $expected
      *
      * @return Group[]
      */

@@ -592,7 +592,12 @@ class VariantConditionOnSaleTest extends TestCase
         $this->assertSearchResultSorting($result, ['D3', 'A1']);
     }
 
-    public function createCondition($options, $groupName, $expand = false): VariantCondition
+    /**
+     * Creates and return the VariantCondition of the given options of the given group.
+     *
+     * @param array<string> $options
+     */
+    public function createCondition(array $options, string $groupName, bool $expand = false): VariantCondition
     {
         $mapping = $this->mapOptions();
 
@@ -704,6 +709,8 @@ class VariantConditionOnSaleTest extends TestCase
 
     /**
      * Creates the structure of the configurator.
+     *
+     * @param array<string, array<string>> $expected
      *
      * @return Group[]
      */

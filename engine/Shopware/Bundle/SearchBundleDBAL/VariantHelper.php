@@ -355,6 +355,7 @@ class VariantHelper implements VariantHelperInterface
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
         $priceTable->innerJoin('defaultPrice', 's_articles_details', 'details', 'details.id = defaultPrice.articledetailsID');
         $priceTable->andWhere('(details.laststock * details.instock) >= (details.laststock * details.minpurchase)');
+        $priceTable->andWhere('details.active = 1');
 
         $query->from('s_articles', 'product');
         $query->innerJoin('product', '(' . $priceTable->getSQL() . ')', 'prices', 'product.id = prices.articleID');
@@ -416,6 +417,12 @@ class VariantHelper implements VariantHelperInterface
 
         $priceTable = $this->listingPriceHelper->getPriceTable($context);
 
+        if ($this->hasDifferentCustomerGroups($context)) {
+            $priceTable->andWhere('IFNULL(customerPrice.`from`, defaultPrice.`from`)  = 1');
+        } else {
+            $priceTable->andWhere('defaultPrice.from = 1');
+        }
+
         $query->from('s_articles', 'product');
         $query->innerJoin('product', '(' . $priceTable->getSQL() . ')', 'prices', 'product.id = prices.articleID');
         $query->innerJoin('prices', 's_articles_details', 'variant', 'variant.id = prices.articledetailsID AND variant.active = 1');
@@ -440,8 +447,6 @@ class VariantHelper implements VariantHelperInterface
             $query->addSelect($column);
             $query->addGroupBy($tableKey . '.option_id');
         }
-
-        $query->andWhere('prices.from = 1');
 
         $query->setParameter(':fallbackCustomerGroup', $context->getFallbackCustomerGroup()->getKey());
         $query->setParameter(':priceGroupCustomerGroup', $context->getCurrentCustomerGroup()->getId());

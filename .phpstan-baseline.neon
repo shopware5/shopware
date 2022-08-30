@@ -41376,26 +41376,6 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionOnSaleTest\\:\\:buildConfigurator\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionOnSaleTest\\:\\:createCondition\\(\\) has parameter \\$expand with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionOnSaleTest\\:\\:createCondition\\(\\) has parameter \\$groupName with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionOnSaleTest\\:\\:createCondition\\(\\) has parameter \\$options with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionOnSaleTest\\:\\:getProduct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
@@ -41411,22 +41391,7 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionOnSaleTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionTest\\:\\:buildConfigurator\\(\\) has parameter \\$expected with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionTest\\:\\:createCondition\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionTest\\:\\:getProduct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Condition\\\\VariantConditionTest\\:\\:mapOptions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Condition/VariantConditionTest.php
 
