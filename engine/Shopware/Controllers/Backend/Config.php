@@ -1295,7 +1295,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     return false;
                 }
 
-                if (isset($option['maxValue']) && (float) $option['maxValue'] > $value) {
+                if (isset($option['maxValue']) && (float) $option['maxValue'] < $value) {
                     return false;
                 }
         }
