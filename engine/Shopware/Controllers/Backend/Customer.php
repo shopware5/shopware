@@ -791,6 +791,9 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             $data['lastLogin'] = new DateTime('@0');
         }
 
+        unset($data['sessionId']);
+        unset($data['hashPassword']);
+
         return $data;
     }
 
