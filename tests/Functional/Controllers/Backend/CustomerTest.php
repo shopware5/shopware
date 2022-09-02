@@ -60,6 +60,23 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
+    public function testSensitiveDataIsNotSend(): void
+    {
+        $customer = $this->createDummyCustomer();
+
+        $params = [
+            'customerID' => $customer->getId(),
+        ];
+        $this->Request()->setMethod('POST')->setPost($params);
+        $this->dispatch('/backend/Customer/getDetail');
+
+        $body = $this->View()->getAssign();
+        static::assertTrue($body['success']);
+        static::assertArrayNotHasKey('hashPassword', $body['data']);
+        static::assertArrayNotHasKey('sessionId', $body['data']);
+        static::assertEquals('test@phpunit.org', $body['data']['email']);
+    }
+
     /**
      * Test saveAction controller action - change payment mean
      *
