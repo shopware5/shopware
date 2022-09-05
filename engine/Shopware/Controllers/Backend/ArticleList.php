@@ -159,8 +159,13 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function restoreAction()
     {
         $resource = $this->Request()->getParam('resource');
-        $id = is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
-        $offset = is_null($this->Request()->getParam('offset')) ? null : (int)$this->Request()->getParam('offset');
+        $id = \is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
+
+        if (!\is_int($id)) {
+            throw new \DomainException('No ID was provided');
+        }
+
+        $offset = (int) $this->Request()->getParam('offset', 0);
 
         /** @var ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
@@ -438,10 +443,10 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     public function saveFilterAction()
     {
         $data = $this->Request()->getParams();
-        $id = is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
+        $id = \is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
 
         $filter = null;
-        if (is_int($id)) {
+        if (\is_int($id)) {
             $filter = $this->getMultiEditRepository()->find($id);
         }
         if (!$filter instanceof Filter) {
@@ -530,7 +535,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      */
     public function deleteProductAction()
     {
-        $id = is_null($this->Request()->getParam('Detail_id')) ? null : (int) $this->Request()->getParam('Detail_id');
+        $id = \is_null($this->Request()->getParam('Detail_id')) ? null : (int) $this->Request()->getParam('Detail_id');
 
         /** @var Detail $variant */
         $variant = $this->getDetailRepository()->find($id);
@@ -558,13 +563,14 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     private function normalizeFilter(string $filter): string
     {
-        return strtolower((string)preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
+        return strtolower((string) preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
     }
 
     /**
      * Translate filter name and description
      *
      * @param array<string, string> $filter
+     *
      * @return array<string, string>
      */
     private function translateFilter(array $filter): array
@@ -638,8 +644,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * @param array[] $ast
-     *
-     * @return bool
      */
     private function displayVariants($ast): bool
     {
