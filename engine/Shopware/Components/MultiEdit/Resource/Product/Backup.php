@@ -229,21 +229,16 @@ class Backup
         $entityManager = $this->getDqlHelper()->getEntityManager();
         $backup = $entityManager->find(BackupModel::class, $id);
 
-        if (!$backup) {
+        if (!$backup instanceof BackupModel) {
             throw new RuntimeException(sprintf('Backup by id %d not found', $id));
         }
 
         $path = $backup->getPath();
         $dir = \dirname($path);
 
-        if ($offset === 0) {
-            $zip = new ZipArchive();
-            $zip->open($path);
-            $success = $zip->extractTo($dir);
-            if (!$success) {
-                throw new RuntimeException(sprintf('Could not extract %s to %s', $path, $dir));
-            }
-            $zip->close();
+        // Only unzip at the first time
+        if ((int) $offset === 0) {
+            $this->extractedFilesFromZip($path, $dir);
         }
 
         // Get list of data sql files
@@ -411,7 +406,7 @@ class Backup
         $fields = [];
         // Create a assoc array of tables and their fields
         foreach ($operations as $operation) {
-            list($prefix, $field) = explode('.', $operation['column']);
+            [$prefix, $field] = explode('.', $operation['column']);
             $prefix = ucfirst(strtolower($prefix));
             $prefixes[] = $prefix;
 
@@ -694,5 +689,16 @@ class Backup
         }
 
         return $files;
+    }
+
+    private function extractedFilesFromZip(string $path, string $dir): void
+    {
+        $zip = new ZipArchive();
+        $zip->open($path);
+        $success = $zip->extractTo($dir);
+        if (!$success) {
+            throw new RuntimeException(sprintf('Could not extract %s to %s', $path, $dir));
+        }
+        $zip->close();
     }
 }

@@ -85,6 +85,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Returns an array with all the columns the user is able to show / edit and their configuration
+     *
+     * @retrun void
      */
     public function columnConfigAction()
     {
@@ -102,6 +104,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Called when a single entity (=> product) is stored
+     *
+     * @retrun void
      */
     public function saveSingleEntityAction()
     {
@@ -129,11 +133,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Backup related operations
-     */
-
-    /**
      * Controller action for deleting a given plugin
+     *
+     * @retrun void
      */
     public function deleteAction()
     {
@@ -151,12 +153,19 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Controller action for restoring a given backup
+     *
+     * @retrun void
      */
     public function restoreAction()
     {
         $resource = $this->Request()->getParam('resource');
-        $id = $this->Request()->getParam('id');
-        $offset = $this->Request()->getParam('offset');
+        $id = \is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
+
+        if (!\is_int($id)) {
+            throw new \DomainException('No ID was provided');
+        }
+
+        $offset = (int) $this->Request()->getParam('offset', 0);
 
         /** @var ResourceInterface $resource */
         $resource = $this->container->get('multi_edit.' . $resource);
@@ -170,6 +179,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Returns the backups available for the current resource
+     *
+     * @retrun void
      */
     public function listAction()
     {
@@ -184,10 +195,6 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
         $this->View()->assign($result);
     }
-
-    /**
-     * Batch process related operations
-     */
 
     /**
      * Currently returns an array of a hardcoded default operation. Might be use for storing operations in the future
@@ -210,6 +217,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Returns an array of operators
+     *
+     * @retrun void
      */
     public function getOperatorsAction()
     {
@@ -239,6 +248,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Returns a list of columns the user is able to edit
+     *
+     * @retrun void
      */
     public function getEditableColumnsAction()
     {
@@ -277,6 +288,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Runs the batch process
+     *
+     * @retrun void
      */
     public function batchAction()
     {
@@ -297,11 +310,9 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * Filter related operations
-     */
-
-    /**
      * Controller action which will return the grammar of the requested resource
+     *
+     * @retrun void
      */
     public function getGrammarAction()
     {
@@ -321,6 +332,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Controller action that will return suggested values for a given resource and a given attribute
+     *
+     * @retrun void
      */
     public function getValuesAction()
     {
@@ -351,6 +364,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Controller action which filters the products
+     *
+     * @retrun void
      */
     public function filterAction()
     {
@@ -399,6 +414,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Returns a list of all available filters
+     *
+     * @retrun void
      */
     public function getFilterAction()
     {
@@ -420,15 +437,17 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Save/update a given filter. Also called when a filter is (un)favored
+     *
+     * @retrun void
      */
     public function saveFilterAction()
     {
         $data = $this->Request()->getParams();
-        $id = $this->Request()->getParam('id', null);
+        $id = \is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
 
         $filter = null;
-        if ($id) {
-            $filter = $this->getMultiEditRepository()->find((int) $id);
+        if (\is_int($id)) {
+            $filter = $this->getMultiEditRepository()->find($id);
         }
         if (!$filter instanceof Filter) {
             $filter = new Filter();
@@ -448,6 +467,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Delete a given filter
+     *
+     * @retrun void
      */
     public function deleteFilterAction()
     {
@@ -474,7 +495,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Controller action called while the batch queue is created
      *
-     * @throws RuntimeException
+     * @retrun void
      */
     public function createQueueAction()
     {
@@ -509,10 +530,12 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Event listener function of the product store of the backend module.
+     *
+     * @retrun void
      */
     public function deleteProductAction()
     {
-        $id = (int) $this->Request()->getParam('Detail_id');
+        $id = \is_null($this->Request()->getParam('Detail_id')) ? null : (int) $this->Request()->getParam('Detail_id');
 
         /** @var Detail $variant */
         $variant = $this->getDetailRepository()->find($id);
@@ -538,14 +561,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         }
     }
 
-    /**
-     * Normalize filter
-     *
-     * @param string $filter
-     *
-     * @return string
-     */
-    private function normalizeFilter($filter)
+    private function normalizeFilter(string $filter): string
     {
         return strtolower((string) preg_replace('/[^\da-z]/i', '_', strip_tags($filter)));
     }
@@ -553,9 +569,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     /**
      * Translate filter name and description
      *
-     * @param array $filter
+     * @param array<string, string> $filter
+     *
+     * @return array<string, string>
      */
-    private function translateFilter($filter)
+    private function translateFilter(array $filter): array
     {
         $name = 'filterName-' . $this->normalizeFilter($filter['name']);
         $description = 'filterDescription-' . $this->normalizeFilter($filter['description']);
@@ -569,10 +587,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * Internal helper function to get access to the product repository.
-     *
-     * @return ProductModelRepository
      */
-    private function getDetailRepository()
+    private function getDetailRepository(): ProductModelRepository
     {
         return $this->get('models')->getRepository(Detail::class);
     }
@@ -582,7 +598,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
      *
      * @return array[]
      */
-    private function addAdditionalText($result)
+    private function addAdditionalText($result): array
     {
         $products = $this->buildListProducts($result['data']);
 
@@ -602,11 +618,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * @param array[] $result
+     * @param array<string, mixed> $result
      *
      * @return ListProduct[]
      */
-    private function buildListProducts($result)
+    private function buildListProducts(array $result): array
     {
         $products = [];
         foreach ($result as $item) {
@@ -628,10 +644,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
 
     /**
      * @param array[] $ast
-     *
-     * @return bool
      */
-    private function displayVariants($ast)
+    private function displayVariants($ast): bool
     {
         foreach ($ast as $filter) {
             if (!isset($filter['token'])) {
@@ -706,10 +720,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         return ['data' => $sortedData, 'total' => $result->getCount()];
     }
 
-    /**
-     * @return SearchCriteria
-     */
-    private function createCriteria(Enlight_Controller_Request_Request $request)
+    private function createCriteria(Enlight_Controller_Request_Request $request): SearchCriteria
     {
         if ($request->getParam('showVariants', false) === 'true') {
             $criteria = new SearchCriteria(Detail::class);
@@ -723,7 +734,8 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $criteria->sortings = $request->getParam('sort', []);
         $criteria->conditions = $request->getParam('filters', []);
 
-        $categoryId = (int) $request->getParam('categoryId');
+        $categoryId = (int) $request->getParam('categoryId', 0);
+
         if ($categoryId > 0) {
             $criteria->conditions[] = ['property' => 'categoryIds', 'value' => $categoryId, 'expression' => 'IN'];
         }

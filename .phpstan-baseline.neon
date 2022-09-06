@@ -24529,12 +24529,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:batchAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:buildListProducts\\(\\) has parameter \\$result with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
 		-
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:columnConfigAction\\(\\) has no return type specified\\.$#"
 			count: 1
@@ -24617,16 +24611,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:saveSingleEntityAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:translateFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticleList.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:translateFilter\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
 

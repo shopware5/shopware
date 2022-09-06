@@ -1076,12 +1076,8 @@ class DqlHelper
      *
      * Use the filter event SwagMultiEdit_Product_DqlHelper_getColumnsForProductListing_filterColumns
      * in order to overwrite the selectable columns
-     *
-     * @param array $column
-     *
-     * @return bool
      */
-    private function showColumnInGrid($column)
+    private function showColumnInGrid(array $column): bool
     {
         $entitiesToShow = [
             'Article',
