@@ -311,6 +311,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             );
             if ($this->_preview == true || !$this->_documentHash) {
                 $mpdf = new Mpdf($mpdfConfig);
+                $mpdf->setLogger(
+                    Shopware()->Container()->get('corelogger')
+                );
                 $mpdf->WriteHTML($html);
                 $mpdf->Output();
                 exit;
@@ -318,6 +321,9 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             $tmpFile = tempnam(sys_get_temp_dir(), 'document');
             $mpdf = new Mpdf($mpdfConfig);
+            $mpdf->setLogger(
+                Shopware()->Container()->get('corelogger')
+            );
             $mpdf->WriteHTML($html);
             $mpdf->Output($tmpFile, 'F');
 
