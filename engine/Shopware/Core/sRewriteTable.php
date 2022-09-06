@@ -24,6 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\FrontendTypeTranslatorInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\RepositoryInterface;
 use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
@@ -488,12 +489,18 @@ class sRewriteTable implements Enlight_Hook
      */
     public function getSeoArticleQuery()
     {
-        return "
+        $attributesList = Shopware()->Container()->get(CrudServiceInterface::class)->getList('s_articles_attributes');
+        $attributes = [];
+        foreach ($attributesList as $attribute) {
+            if ($attribute->isIdentifier()) {
+                continue;
+            }
+            $attributes[] = 'at.' . $attribute->getColumnName();
+        }
+
+        return '
             SELECT a.*, d.ordernumber, d.suppliernumber, s.name AS supplier, a.datum AS date,
-                d.releasedate, a.changetime AS changed, ct.objectdata, ctf.objectdata AS objectdataFallback, at.attr1, at.attr2,
-                at.attr3, at.attr4, at.attr5, at.attr6, at.attr7, at.attr8, at.attr9,
-                at.attr10,at.attr11, at.attr12, at.attr13, at.attr14, at.attr15, at.attr16,
-                at.attr17, at.attr18, at.attr19, at.attr20
+                d.releasedate, a.changetime AS changed, ct.objectdata, ctf.objectdata AS objectdataFallback, ' . implode(',', $attributes) . "
             FROM s_articles a
 
             INNER JOIN s_articles_categories_ro ac
