@@ -24,6 +24,7 @@
 
 namespace Shopware\Commands;
 
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -54,18 +55,18 @@ class RefreshSearchIndexCommand extends ShopwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $clearTable = $input->getOption('clear-table');
+
         if ($clearTable) {
             $output->writeln('Deleting the search index...');
 
             /** @var \Doctrine\DBAL\Connection $connection */
             $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
-            // Changed according to https://www.doctrine-project.org/projects/doctrine-dbal/en/2.12/reference/data-retrieval-and-manipulation.html#delete
-            $connection->delete('s_search_index', ['id' => '*']);
-            $connection->delete('s_search_keywords', ['id' => '*']);
+            $connection->executeStatement('DELETE FROM s_search_index');
+            $connection->executeStatement('DELETE FROM s_search_keywords');
         }
         $output->writeln('Creating the search index. This may take a while depending on the shop size.');
 
-        $indexer = $this->container->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
+        $indexer = $this->container->get(SearchIndexer::class);
         $indexer->build();
 
         $output->writeln('The search index was created successfully.');
