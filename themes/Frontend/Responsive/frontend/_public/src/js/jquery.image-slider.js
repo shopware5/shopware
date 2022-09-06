@@ -1113,7 +1113,7 @@
 
             me.trackThumbnailControls();
 
-            $.publish('plugin/swImageSlider/onThumbnailSlideTouch', [me, event, pointerA.clientX, pointerA.clientY]);
+            $.publish('plugin/swImageSlider/onThumbnailSlideMove', [me, event, pointerA.clientX, pointerA.clientY]);
         },
 
         /**

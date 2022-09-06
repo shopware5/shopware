@@ -770,7 +770,7 @@
             var urlParams = window.location.search.substr(1),
                 categoryParams = this.setCategoryParamsFromUrlParams(urlParams);
 
-            $.publish('plugin/swListingActions/onSetCategoryParamsFromData', [this, categoryParams]);
+            $.publish('plugin/swListingActions/onSetCategoryParamsFromTopLocation', [this, categoryParams]);
 
             return categoryParams;
         },
@@ -1514,7 +1514,7 @@
         getLabelIcon: function () {
             var icon = '<span class="' + this.opts.activeFilterIconCls + '"></span>';
 
-            $.publish('plugin/swListingActions/onCreateStarLabel', [this, icon]);
+            $.publish('plugin/swListingActions/onGetLabelIcon', [this, icon]);
 
             return icon;
         },

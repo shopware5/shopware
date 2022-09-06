@@ -170,7 +170,7 @@
 
         /**
          * Gets called when the modal box is closing.
-         * Destroys the product slider when its available.
+         * Destroys the product slider when it's available.
          *
          * @public
          * @event onCloseModal

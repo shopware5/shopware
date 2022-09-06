@@ -61,6 +61,15 @@ This changelog references changes done in Shopware 5.7 patch versions.
 | themes/Frontend/Bare/frontend/newsletter/detail.tpl                                                       | frontend_newsletter_listing_error_message                                     | frontend_newsletter_detail_error_message                                          |
 | themes/Frontend/Bare/frontend/plugins/notification/index.tpl                                              | frontend_account_index_form_captcha                                           | frontend_detail_index_notification_captcha                                        |
 
+* Changed the following jQuery event names, because they were duplicated and could have caused errors
+
+| file path                                                                       | method                           | old event name                                      | new event name                                             |
+|---------------------------------------------------------------------------------|----------------------------------|-----------------------------------------------------|------------------------------------------------------------|
+| themes/Frontend/Responsive/frontend/_public/src/js/jquery.image-slider.js       | onThumbnailSlideMove             | plugin/swImageSlider/onThumbnailSlideTouch          | plugin/swImageSlider/onThumbnailSlideMove                  |
+| themes/Frontend/Responsive/frontend/_public/src/js/jquery.infinite-scrolling.js | generateButton                   | plugin/swInfiniteScrolling/onLoadMore               | plugin/swInfiniteScrolling/onGenerateButton                |
+| themes/Frontend/Responsive/frontend/_public/src/js/jquery.listing-actions.js    | setCategoryParamsFromTopLocation | plugin/swListingActions/onSetCategoryParamsFromData | plugin/swListingActions/onSetCategoryParamsFromTopLocation |
+| themes/Frontend/Responsive/frontend/_public/src/js/jquery.listing-actions.js    | getLabelIcon                     | plugin/swListingActions/onCreateStarLabel           | plugin/swListingActions/onGetLabelIcon                     |
+
 * Updated `cocur/slugify` to version 4.2.0
 * Updated `doctrine/annotations` to version 1.13.3
 * Updated `doctrine/collections` to version 1.7.2
