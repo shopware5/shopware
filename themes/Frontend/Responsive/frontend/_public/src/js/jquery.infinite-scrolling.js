@@ -366,7 +366,7 @@
                     html: snippet + ' <i class="icon--cw is--large"></i>'
                 });
 
-            $.publish('plugin/swInfiniteScrolling/onLoadMore', [me, $button, buttonType]);
+            $.publish('plugin/swInfiniteScrolling/onGenerateButton', [me, $button, buttonType]);
 
             return $button;
         },

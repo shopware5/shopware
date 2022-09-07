@@ -31,6 +31,8 @@ use Symfony\Component\Finder\Finder;
 
 class TemplateBlockTest extends TestCase
 {
+    use FileCheckerTrait;
+
     private const BLOCK_REGEX = '/{block name=["|\'](.*?)["|\']}/';
 
     public function testForDuplicateBlocksBackend(): void
@@ -40,7 +42,7 @@ class TemplateBlockTest extends TestCase
             ->name('*.js')
             ->contains(self::BLOCK_REGEX);
 
-        $this->checkFiles($files);
+        $this->checkFiles($files, self::BLOCK_REGEX, 'Backend block');
     }
 
     public function testForDuplicateBlocksFrontend(): void
@@ -257,42 +259,6 @@ class TemplateBlockTest extends TestCase
             'frontend_widgets_captcha_input_placeholder' => 2,
         ];
 
-        $this->checkFiles($files, $multipleOccurrencesAllowed);
-    }
-
-    /**
-     * @param array<string, int> $multipleOccurrencesAllowed Indexed by block name, value is amount of allowed occurrences
-     */
-    private function checkFiles(Finder $files, array $multipleOccurrencesAllowed = []): void
-    {
-        $blocks = [];
-        foreach ($files as $file) {
-            $matchCounter = preg_match_all(self::BLOCK_REGEX, $file->getContents(), $matches);
-            if ($matchCounter === false) {
-                continue;
-            }
-
-            foreach ($matches[1] as $match) {
-                if (\array_key_exists($match, $blocks)) {
-                    ++$blocks[$match];
-                } else {
-                    $blocks[$match] = 1;
-                }
-            }
-        }
-
-        foreach ($blocks as $blockName => $count) {
-            if (\array_key_exists($blockName, $multipleOccurrencesAllowed)) {
-                $expectedCount = $multipleOccurrencesAllowed[$blockName];
-            } else {
-                $expectedCount = 1;
-            }
-
-            static::assertSame(
-                $expectedCount,
-                $count,
-                sprintf('Block "%s" expected to have %s matches. Got %s matches instead', $blockName, $expectedCount, $count)
-            );
-        }
+        $this->checkFiles($files, self::BLOCK_REGEX, 'Frontend block', $multipleOccurrencesAllowed);
     }
 }
