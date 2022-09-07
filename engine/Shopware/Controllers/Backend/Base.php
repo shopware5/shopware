@@ -619,12 +619,17 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
             'supplier.name as supplierName',
             'supplier.id as supplierId',
             'details.additionalText',
+            'prices.price',
+            'taxes.tax',
         ];
 
         $builder->select($fields);
         $builder->from('s_articles_details', 'details');
         $builder->innerJoin('details', 's_articles', 'articles', 'details.articleID = articles.id');
+        $builder->innerJoin('articles', 's_core_tax', 'taxes', 'articles.taxID = taxes.id');
         $builder->innerJoin('articles', 's_articles_supplier', 'supplier', 'supplier.id = articles.supplierID');
+        $builder->innerJoin('details', 's_articles_prices', 'prices', 'details.id = prices.articledetailsID');
+        $builder->where('prices.pricegroup = "EK"');
 
         $filters = $this->Request()->getParam('filter', []);
         foreach ($filters as $filter) {
@@ -655,6 +660,10 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $total = (int) $builder->getConnection()->fetchColumn('SELECT FOUND_ROWS()');
 
         $result = $this->addAdditionalTextForVariant($result);
+
+        foreach ($result as $index => $variant) {
+            $result[$index]['price'] = round($variant['price'] / 100 * (100 + $variant['tax']), 2);
+        }
 
         $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
     }

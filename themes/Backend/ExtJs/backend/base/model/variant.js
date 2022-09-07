@@ -54,6 +54,7 @@ Ext.define('Shopware.apps.Base.model.Variant', {
         { name: 'ordernumber', type: 'string' },
         { name: 'inStock', type: 'string' },
         { name: 'active', type: 'int' },
+        { name: 'price', type: 'float' },
 
         //mapping fields for ExtJS
         { name: 'number', type: 'string', mapping: 'ordernumber' },
