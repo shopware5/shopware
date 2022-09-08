@@ -79,6 +79,7 @@ Thumbs.db
 /files/import_cron
 /files/import_export
 /files/552211cce724117c3178e3d22bec532ec/
+/files/backup/multi_edit/*
 
 # Snippet exports
 /snippetsExport/
