@@ -29,9 +29,6 @@ use Shopware\Components\Plugin\XmlReader\XmlReaderBase;
 
 class StoreXmlValueParser implements StoreValueParserInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function parse(DOMElement $element)
     {
         $storeOptions = $element->getElementsByTagName('option');

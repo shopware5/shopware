@@ -73,7 +73,7 @@ class SearchQueryBuilder
         $tokens = array_unique(explode(' ', $string));
         $tokens = array_map('trim', $tokens);
 
-        return array_filter(
+        return array_values(
             array_filter(
                 $tokens,
                 function ($token) {
@@ -95,7 +95,9 @@ class SearchQueryBuilder
         for ($i = 1; $i < 3; ++$i) {
             $combination = [];
             for ($x = 0; $x <= $i; ++$x) {
-                $combination[] = $items[$x];
+                if (\array_key_exists($x, $items)) {
+                    $combination[] = $items[$x];
+                }
             }
 
             $result[] = implode(' ', $combination);

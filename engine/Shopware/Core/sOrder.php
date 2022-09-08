@@ -294,7 +294,7 @@ class sOrder implements Enlight_Hook
         // Check if current order number is an esd variant.
         $esdProduct = $this->getVariantEsd($basketRow['ordernumber']);
 
-        if (!$esdProduct['id']) {
+        if (!$esdProduct || !$esdProduct['id']) {
             return $basketRow;
         }
 

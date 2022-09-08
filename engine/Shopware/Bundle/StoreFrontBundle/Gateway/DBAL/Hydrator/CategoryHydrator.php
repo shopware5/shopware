@@ -89,6 +89,7 @@ class CategoryHydrator extends Hydrator
             $path = rtrim($path, '|');
 
             $path = explode('|', $path);
+            $path = array_map('\intval', $path);
 
             $category->setPath(array_reverse($path));
         }

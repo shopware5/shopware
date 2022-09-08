@@ -57,6 +57,9 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $this->parseFile($dom);
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     public static function parseTranslatableNodeList(DOMNodeList $list): ?array
     {
         if ($list->length === 0) {
@@ -80,6 +83,9 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $translations;
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     public static function parseTranslatableElement(DOMNode $element, string $name): ?array
     {
         $list = self::getChildren($element, $name);
@@ -105,6 +111,9 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $translations;
     }
 
+    /**
+     * @return array<DOMElement>
+     */
     public static function getChildren(DOMNode $node, string $name): array
     {
         $children = [];

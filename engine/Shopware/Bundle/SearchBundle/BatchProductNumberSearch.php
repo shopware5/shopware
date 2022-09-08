@@ -30,23 +30,19 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class BatchProductNumberSearch
 {
-    /**
-     * @var ProductNumberSearchInterface
-     */
-    private $productNumberSearch;
+    private ProductNumberSearchInterface $productNumberSearch;
+
+    private BaseProductFactoryServiceInterface $baseProductFactoryService;
 
     /**
-     * @var BaseProductFactoryServiceInterface
+     * @var array<string, int>
      */
-    private $baseProductFactoryService;
+    private array $pointer = [];
 
-    /**
-     * @var array
-     */
-    private $pointer = [];
-
-    public function __construct(ProductNumberSearchInterface $productNumberSearch, BaseProductFactoryServiceInterface $baseProductFactoryService)
-    {
+    public function __construct(
+        ProductNumberSearchInterface $productNumberSearch,
+        BaseProductFactoryServiceInterface $baseProductFactoryService
+    ) {
         $this->productNumberSearch = $productNumberSearch;
         $this->baseProductFactoryService = $baseProductFactoryService;
     }
@@ -104,6 +100,11 @@ class BatchProductNumberSearch
         return array_merge($items, $this->getBaseProductsRange($key, $baseProducts, $missingItems));
     }
 
+    /**
+     * @param array<string, Criteria> $criteriaList
+     *
+     * @return array<string, array<string, BaseProduct>>
+     */
     private function getBaseProductsByCriteriaList(array $criteriaList, ShopContextInterface $context): array
     {
         $products = [];
@@ -128,9 +129,9 @@ class BatchProductNumberSearch
     }
 
     /**
-     * @param Criteria[] $criteriaList
+     * @param array<string, Criteria> $criteriaList
      *
-     * @return array<array{criteria: Criteria, requests: array<array{criteria: Criteria, key: int}>}>
+     * @return array<array{criteria: Criteria, requests: array<array{criteria: Criteria, key: string}>}>
      */
     private function getOptimizedCriteriaList(array $criteriaList): array
     {
@@ -140,6 +141,9 @@ class BatchProductNumberSearch
             $criteriaPosition = $this->getOptimizedCriteriaListPosition($originalCriteria, $optimizedCriteriaList);
 
             if ($criteriaPosition !== false) {
+                if (!isset($optimizedCriteriaList[$criteriaPosition]['criteria'])) {
+                    continue;
+                }
                 $existingCriteria = $optimizedCriteriaList[$criteriaPosition]['criteria'];
 
                 // search requests already exists, increase limit to select more products and satisfy all requests
@@ -164,6 +168,8 @@ class BatchProductNumberSearch
     }
 
     /**
+     * @param array<array{criteria: Criteria, requests: array<array{criteria: Criteria, key: string}>}> $criteriaList
+     *
      * @return int|false
      */
     private function getOptimizedCriteriaListPosition(Criteria $criteria, array $criteriaList)

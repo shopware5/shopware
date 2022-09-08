@@ -83,12 +83,7 @@ class Converter
 
     public function convertCategory(CategoryModel $category): Category
     {
-        $struct = new Category();
-        $struct->setId($category->getId());
-        $struct->setName($category->getName());
-        $struct->setPath($category->getPath());
-
-        return $struct;
+        return Category::createFromCategoryEntity($category);
     }
 
     /**

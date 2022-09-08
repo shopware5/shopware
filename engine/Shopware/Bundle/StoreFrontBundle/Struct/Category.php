@@ -151,6 +151,7 @@ class Category extends Extendable
             $path = rtrim($path, '|');
 
             $path = explode('|', $path);
+            $path = array_map('\intval', $path);
 
             $struct->setPath(array_reverse($path));
         }
