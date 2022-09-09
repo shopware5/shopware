@@ -29,15 +29,19 @@ namespace Shopware\Tests\Functional\Components;
 use Doctrine\ORM\EntityRepository;
 use Enlight_Components_Mail;
 use Enlight_Components_Test_TestCase;
+use Enlight_Event_EventArgs;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Attachment;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Components_StringCompiler;
 use Shopware_Components_TemplateMail;
 
 class TemplateMailTest extends Enlight_Components_Test_TestCase
 {
+    use ContainerTrait;
+
     private Shopware_Components_TemplateMail $mail;
 
     /**
@@ -48,7 +52,7 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     {
         parent::setUp();
 
-        $stringCompiler = new Shopware_Components_StringCompiler(Shopware()->Template());
+        $stringCompiler = new Shopware_Components_StringCompiler($this->getContainer()->get('template'));
 
         $repository = $this->createMock(EntityRepository::class);
         $repository->method('findOneBy')->willReturn(null);
@@ -57,7 +61,7 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         $manager->method('getRepository')->willReturn($repository);
 
         $this->mail = new Shopware_Components_TemplateMail();
-        $this->mail->setShop(Shopware()->Shop());
+        $this->mail->setShop($this->getContainer()->get('shop'));
         $this->mail->setModelManager($manager);
         $this->mail->setStringCompiler($stringCompiler);
     }
@@ -96,7 +100,7 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         $templateMock = $this->getSmartyMailMockObject();
 
         $context = [
-            'sConfig' => ['sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'],
+            'sConfig' => ['sSHOPNAME' => 'Shopware 5 Demo', 'sMAIL' => 'info@example.com'],
             'sShopURL' => 'http://demo.shopware.de',
         ];
 
@@ -104,11 +108,11 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
 
         $result = $this->mail->loadValues($mail, $templateMock);
 
-        static::assertEquals('Ihr Bestellung bei Shopware 3.5 Demo', $result->getSubject());
-        static::assertEquals('Shopware 3.5 Demo', $result->getFromName());
+        static::assertEquals('Ihr Bestellung bei Shopware 5 Demo', $result->getSubject());
+        static::assertEquals('Shopware 5 Demo', $result->getFromName());
         static::assertEquals('info@example.com', $result->getFrom());
-        static::assertEquals('Testbestellung bei Shopware 3.5 Demo', $result->getBodyText(true));
-        static::assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
+        static::assertEquals('Testbestellung bei Shopware 5 Demo', $result->getBodyText(true));
+        static::assertEquals('Testbestellung HTML bei Shopware 5 Demo', $result->getBodyHtml(true));
     }
 
     public function testCreateMailWorks(): void
@@ -116,17 +120,48 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
         $templateMock = $this->getSmartyMailMockObject();
 
         $context = [
-            'sConfig' => ['sSHOPNAME' => 'Shopware 3.5 Demo', 'sMAIL' => 'info@example.com'],
+            'sConfig' => ['sSHOPNAME' => 'Shopware 5 Demo', 'sMAIL' => 'info@example.com'],
             'sShopURL' => 'http://demo.shopware.de',
         ];
 
         $result = $this->mail->createMail($templateMock, $context);
 
-        static::assertEquals('Ihr Bestellung bei Shopware 3.5 Demo', $result->getSubject());
-        static::assertEquals('Shopware 3.5 Demo', $result->getFromName());
+        static::assertEquals('Ihr Bestellung bei Shopware 5 Demo', $result->getSubject());
+        static::assertEquals('Shopware 5 Demo', $result->getFromName());
         static::assertEquals('info@example.com', $result->getFrom());
-        static::assertEquals('Testbestellung bei Shopware 3.5 Demo', $result->getBodyText(true));
-        static::assertEquals('Testbestellung HTML bei Shopware 3.5 Demo', $result->getBodyHtml(true));
+        static::assertEquals('Testbestellung bei Shopware 5 Demo', $result->getBodyText(true));
+        static::assertEquals('Testbestellung HTML bei Shopware 5 Demo', $result->getBodyHtml(true));
+    }
+
+    public function testCreateMailEventMailContextIsConsidered(): void
+    {
+        $eventManager = $this->getContainer()->get('events');
+        $eventManager->addListener('TemplateMail_CreateMail_MailContext', function (Enlight_Event_EventArgs $args) {
+            $context = $args->getReturn();
+            $context['sConfig']['sSHOPNAME'] = 'Shopware Foo Bar Demo';
+
+            return $context;
+        });
+
+        $templateMock = $this->getSmartyMailMockObject();
+
+        $context = [
+            'sConfig' => ['sSHOPNAME' => 'Shopware 5 Demo', 'sMAIL' => 'info@example.com'],
+            'sShopURL' => 'https://shopware.local',
+        ];
+
+        $result = $this->mail->createMail($templateMock, $context);
+
+        static::assertEquals('Ihr Bestellung bei Shopware Foo Bar Demo', $result->getSubject());
+        static::assertEquals('Shopware Foo Bar Demo', $result->getFromName());
+        static::assertEquals('info@example.com', $result->getFrom());
+        static::assertEquals('Testbestellung bei Shopware Foo Bar Demo', $result->getBodyText(true));
+        static::assertEquals('Testbestellung HTML bei Shopware Foo Bar Demo', $result->getBodyHtml(true));
+
+        $listeners = $eventManager->getListeners('TemplateMail_CreateMail_MailContext');
+        foreach ($listeners as $listener) {
+            $eventManager->removeListener($listener);
+        }
     }
 
     public function testCreateMailWithInvalidTemplateNameShouldThrowException(): void
@@ -141,8 +176,8 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     public function testCreateMailWithoutShop(): void
     {
         $templateMail = new Shopware_Components_TemplateMail();
-        $templateMail->setModelManager(Shopware()->Models());
-        $templateMail->setStringCompiler(new Shopware_Components_StringCompiler(Shopware()->Template()));
+        $templateMail->setModelManager($this->getContainer()->get(ModelManager::class));
+        $templateMail->setStringCompiler(new Shopware_Components_StringCompiler($this->getContainer()->get('template')));
 
         $mail = $templateMail->createMail('sOrder');
 
@@ -155,7 +190,7 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     public function testCreateMailWithoutShopTemplate(): void
     {
         // Prepare new shop without template
-        $entityManager = Shopware()->Container()->get(ModelManager::class);
+        $entityManager = $this->getContainer()->get(ModelManager::class);
         $defaultShop = $entityManager->find(Shop::class, 1);
         $newShop = new Shop();
         $newShop->setMain($defaultShop);
@@ -180,7 +215,7 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
     public function testCreateMailWithoutMainShopTemplate(): void
     {
         // Prepare new shop and main shop without templates
-        $entityManager = Shopware()->Container()->get(ModelManager::class);
+        $entityManager = $this->getContainer()->get(ModelManager::class);
         $newMainShop = new Shop();
         $newMainShop->setName('New Main Shop');
         $entityManager->persist($newMainShop);
