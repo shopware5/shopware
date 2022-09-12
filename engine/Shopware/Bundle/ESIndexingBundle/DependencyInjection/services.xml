@@ -229,6 +229,10 @@
                  id="shopware_elastic_search.commands.backlog_sync_command">
             <argument>%shopware.es.batchsize%</argument>
             <argument type="tagged" tag="shopware_elastic_search.mapping"/>
+            <argument type="service" id="Shopware\Bundle\ESIndexingBundle\BacklogReader"/>
+            <argument type="service" id="Shopware\Bundle\ESIndexingBundle\IdentifierSelector"/>
+            <argument type="service" id="Shopware\Bundle\ESIndexingBundle\IndexFactory"/>
+            <argument type="service" id="Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface"/>
 
             <tag name="console.command" command="sw:es:backlog:sync"/>
         </service>
