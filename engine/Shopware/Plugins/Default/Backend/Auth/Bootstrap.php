@@ -149,6 +149,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Set local no auth property
      *
      * @param bool $flag
+     *
+     * @return void
      */
     public function setNoAuth($flag = true)
     {
@@ -159,6 +161,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Set local no acl property
      *
      * @param bool $flag
+     *
+     * @return void
      */
     public function setNoAcl($flag = true)
     {
@@ -188,13 +192,17 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
     /**
      * This pre-dispatch event-hook checks backend permissions
      *
+     * @param Enlight_Controller_ActionEventArgs $args
+     *
      * @throws Enlight_Controller_Exception
+     *
+     * @return void
      */
     public function onPreDispatchBackend(Enlight_Event_EventArgs $args)
     {
         $this->action = $args->getSubject();
         $this->request = $this->action->Request();
-        $this->aclResource = strtolower($this->request->getControllerName());
+        $this->aclResource = strtolower(str_replace('_', '', $this->request->getControllerName()));
 
         if ($this->aclResource === 'error' || $this->request->getModuleName() !== 'backend') {
             return;
@@ -264,6 +272,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      *
      * @throws Exception
      * @throws SmartyException
+     *
+     * @return void
      */
     public function registerAclPlugin($auth)
     {
@@ -436,6 +446,8 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * Init backend locales
      *
      * @throws Exception
+     *
+     * @return void
      */
     protected function initLocale()
     {

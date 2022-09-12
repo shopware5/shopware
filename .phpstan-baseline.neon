@@ -38855,11 +38855,6 @@ parameters:
 			path: engine/Shopware/Models/Widget/Widget.php
 
 		-
-			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
 			message: "#^Call to an undefined method Enlight_Template_Default\\:\\:setCompileId\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
@@ -38875,32 +38870,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_Auth_Bootstrap\\:\\:initLocale\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Backend_Auth_Bootstrap\\:\\:isAllowed\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_Auth_Bootstrap\\:\\:onPreDispatchBackend\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_Auth_Bootstrap\\:\\:registerAclPlugin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_Auth_Bootstrap\\:\\:setNoAcl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_Auth_Bootstrap\\:\\:setNoAuth\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
 
