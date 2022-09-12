@@ -163,7 +163,7 @@ class PluginInstaller
         $this->installResources($pluginBootstrap, $plugin);
 
         // Makes sure the version is updated in the db after a re-installation
-        if ($this->hasInfoNewerVersion($plugin->getUpdateVersion(), $plugin->getVersion())) {
+        if ($plugin->getUpdateVersion() && $this->hasInfoNewerVersion($plugin->getUpdateVersion(), $plugin->getVersion())) {
             $plugin->setVersion($plugin->getUpdateVersion());
         }
 
