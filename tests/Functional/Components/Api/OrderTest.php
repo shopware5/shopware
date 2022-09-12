@@ -28,21 +28,29 @@ use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
-use Shopware\Components\Api\Resource\Order;
+use Shopware\Components\Api\Resource\Order as OrderResource;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Models\Order\Detail;
+use Shopware\Models\Order\Order as OrderModel;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class OrderTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
     /**
-     * @var Order
+     * @var OrderResource
      */
     protected $resource;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
-    private $order;
+    private array $order;
+
+    private Connection $connection;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -51,31 +59,28 @@ class OrderTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->order = Shopware()->Db()->fetchRow('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1');
-        Shopware()->Container()->get(Connection::class)->beginTransaction();
+        $this->connection = $this->getContainer()->get(Connection::class);
+        $order = $this->connection->executeQuery('SELECT * FROM `s_order` ORDER BY id DESC LIMIT 1')->fetchAssociative();
+        static::assertIsArray($order);
+        $this->order = $order;
     }
 
-    protected function tearDown(): void
+    public function createResource(): OrderResource
     {
-        Shopware()->Container()->get(Connection::class)->rollback();
-        parent::tearDown();
-    }
-
-    public function createResource(): Order
-    {
-        return new Order();
+        return new OrderResource();
     }
 
     public function testGetOneShouldBeSuccessful(): void
     {
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
         static::assertEquals($this->order['id'], $order['id']);
     }
 
     public function testGetOneByNumberWithInvalidNumberShouldThrowNotFoundException(): void
     {
         $this->expectException(NotFoundException::class);
-        $this->resource->getOneByNumber(9999999);
+        $this->resource->getOneByNumber('SW9999999');
     }
 
     public function testGetOneByNumberWithMissinNumberShouldThrowParameterMissingException(): void
@@ -87,6 +92,7 @@ class OrderTest extends TestCase
     public function testGetOneByNumberShouldBeSuccessful(): void
     {
         $order = $this->resource->getOneByNumber($this->order['ordernumber']);
+        static::assertIsArray($order);
         static::assertEquals($this->order['ordernumber'], $order['number']);
     }
 
@@ -95,14 +101,13 @@ class OrderTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $order = $this->resource->getOne($this->order['id']);
 
-        static::assertInstanceOf(\Shopware\Models\Order\Order::class, $order);
+        static::assertInstanceOf(OrderModel::class, $order);
         static::assertEquals($this->order['id'], $order->getId());
     }
 
     public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
-
         static::assertIsArray($result);
 
         static::assertArrayHasKey('total', $result);
@@ -114,6 +119,7 @@ class OrderTest extends TestCase
         static::assertGreaterThanOrEqual(1, \count($result['data']));
 
         $firstOrder = $result['data'][0];
+        static::assertIsArray($firstOrder);
 
         $expectedKeys = [
             'id',
@@ -168,7 +174,7 @@ class OrderTest extends TestCase
         static::assertGreaterThanOrEqual(1, $result['total']);
         static::assertGreaterThanOrEqual(1, $result['data']);
 
-        static::assertInstanceOf(\Shopware\Models\Order\Order::class, $result['data'][0]);
+        static::assertInstanceOf(OrderModel::class, $result['data'][0]);
     }
 
     public function testUpdateWithInvalidIdShouldThrowNotFoundException(): void
@@ -180,7 +186,7 @@ class OrderTest extends TestCase
     public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $this->resource->update('', []);
+        $this->resource->update(0, []);
     }
 
     public function testCreateOrderFailsOnMissingShippingAddress(): void
@@ -189,6 +195,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -203,6 +210,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -217,6 +225,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -231,6 +240,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -245,6 +255,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -259,6 +270,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -273,6 +285,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -287,6 +300,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -301,6 +315,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -314,6 +329,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
         unset($order['billing']['stateId']);
@@ -328,6 +344,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
         unset($order['shipping']['stateId']);
@@ -343,6 +360,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
         $order['shipping']['stateId'] = 9999;
@@ -356,6 +374,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -370,6 +389,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -384,6 +404,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -398,6 +419,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -412,6 +434,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -426,6 +449,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -440,6 +464,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -454,6 +479,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -468,6 +494,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -482,6 +509,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -496,6 +524,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
 
@@ -509,10 +538,12 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $oldOrderNumber = (int) $order['number'];
 
         $order = $this->filterOrderId($order);
+        $order['invoiceShippingTaxRate'] = 19.0;
 
         $newOrder = $this->resource->create($order);
 
@@ -528,10 +559,11 @@ class OrderTest extends TestCase
         static::assertNotNull($newOrder->getShipping());
         static::assertEquals($order['shipping']['city'], $newOrder->getShipping()->getCity());
         static::assertCount(\count($order['details']), $newOrder->getDetails());
-        $firstOrderDetail = $newOrder->getDetails()[0];
+        $firstOrderDetail = $newOrder->getDetails()->first();
         static::assertInstanceOf(Detail::class, $firstOrderDetail);
         static::assertEquals($order['details'][0]['articleName'], $firstOrderDetail->getArticleName());
         static::assertEquals($oldOrderNumber + 1, (int) $firstOrderDetail->getNumber());
+        static::assertSame($order['invoiceShippingTaxRate'], $newOrder->getInvoiceShippingTaxRate());
     }
 
     public function testUpdateOrderPositionStatusShouldBeSuccessful(): void
@@ -539,6 +571,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         // Update the order details of that order
         $updateArray = [];
@@ -550,6 +583,8 @@ class OrderTest extends TestCase
         // Reload the order and check the result
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
+        static::assertArrayHasKey('details', $updateArray);
         foreach ($order['details'] as $detail) {
             $currentId = $detail['id'];
 
@@ -563,6 +598,7 @@ class OrderTest extends TestCase
         // Get existing order
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $order = $this->resource->getOne($this->order['id']);
+        static::assertIsArray($order);
 
         $order = $this->filterOrderId($order);
         $order['documents'] = [
@@ -592,14 +628,15 @@ class OrderTest extends TestCase
     public function testSingleOrderDetailUpdate(): void
     {
         // Get existing order with at least two order items
-        $orderId = (int) Shopware()->Db()
-            ->query('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
-            ->fetchColumn();
+        $orderId = (int) $this->connection
+            ->executeQuery('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
+            ->fetchOne();
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $order = $this->resource->getOne($orderId);
+        static::assertInstanceOf(OrderModel::class, $order);
 
-        /** @var Detail $firstDetail */
         $firstDetail = $order->getDetails()->first();
+        static::assertInstanceOf(Detail::class, $firstDetail);
         $newShipped = $firstDetail->getShipped() + 1;
         $orderCount = $order->getDetails()->count();
 
@@ -615,27 +652,27 @@ class OrderTest extends TestCase
             ],
         ]);
 
-        /** @var Detail|null $firstDetail */
         $firstDetail = $order->getDetails()->filter(static function (Detail $detail) use ($firstDetail): bool {
             return $detail->getId() === $firstDetail->getId();
         })->first();
 
         static::assertEquals($orderCount, $order->getDetails()->count());
-        static::assertNotNull($firstDetail);
+        static::assertInstanceOf(Detail::class, $firstDetail);
         static::assertEquals($newShipped, $firstDetail->getShipped());
     }
 
     public function testSingleOrderDetailUpdateToDeleteOtherItems(): void
     {
         // Get existing order with at least two order items
-        $orderId = (int) Shopware()->Db()
-            ->query('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
-            ->fetchColumn();
+        $orderId = (int) $this->connection
+            ->executeQuery('SELECT `orderID`, COUNT(1) `counter` FROM `s_order_details` GROUP BY `orderId` HAVING `counter` > 1 ORDER BY id DESC LIMIT 1')
+            ->fetchOne();
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $order = $this->resource->getOne($orderId);
+        static::assertInstanceOf(OrderModel::class, $order);
 
-        /** @var Detail $firstDetail */
         $firstDetail = $order->getDetails()->first();
+        static::assertInstanceOf(Detail::class, $firstDetail);
 
         $order = $this->resource->update($order->getId(), [
             'details' => [
@@ -643,7 +680,6 @@ class OrderTest extends TestCase
             ],
         ]);
 
-        /** @var Detail|null $firstDetail */
         $firstDetail = $order->getDetails()->filter(static function (Detail $detail) use ($firstDetail): bool {
             return $detail->getId() === $firstDetail->getId();
         })->first();
@@ -652,6 +688,11 @@ class OrderTest extends TestCase
         static::assertNotNull($firstDetail);
     }
 
+    /**
+     * @param array<string, mixed> $order
+     *
+     * @return array<string, mixed>
+     */
     private function filterOrderId(array $order): array
     {
         // Remove order Ids and order numbers
