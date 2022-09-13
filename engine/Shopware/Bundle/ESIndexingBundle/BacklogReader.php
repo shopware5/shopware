@@ -30,10 +30,7 @@ use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 
 class BacklogReader implements BacklogReaderInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -54,7 +51,7 @@ class BacklogReader implements BacklogReaderInterface
             ->execute()
             ->fetch(PDO::FETCH_COLUMN);
 
-        return unserialize($value, ['allowed_classes' => false]);
+        return (int) unserialize($value, ['allowed_classes' => false]);
     }
 
     /**
@@ -62,7 +59,7 @@ class BacklogReader implements BacklogReaderInterface
      */
     public function setLastBacklogId($lastId)
     {
-        $this->connection->executeUpdate(
+        $this->connection->executeStatement(
             "UPDATE s_core_config_elements SET value = :value WHERE name = 'lastBacklogId'",
             [':value' => serialize($lastId)]
         );
@@ -81,7 +78,7 @@ class BacklogReader implements BacklogReaderInterface
             ->setParameter(':lastId', $lastId)
             ->setMaxResults($limit);
 
-        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAllAssociative();
 
         $result = [];
         foreach ($data as $row) {

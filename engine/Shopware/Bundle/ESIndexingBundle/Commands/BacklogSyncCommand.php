@@ -24,8 +24,11 @@
 
 namespace Shopware\Bundle\ESIndexingBundle\Commands;
 
+use Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface;
+use Shopware\Bundle\ESIndexingBundle\BacklogReaderInterface;
+use Shopware\Bundle\ESIndexingBundle\IdentifierSelector;
+use Shopware\Bundle\ESIndexingBundle\IndexFactoryInterface;
 use Shopware\Bundle\ESIndexingBundle\MappingInterface;
-use Shopware\Bundle\ESIndexingBundle\Struct\Backlog;
 use Shopware\Commands\ShopwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,22 +37,36 @@ use Traversable;
 
 class BacklogSyncCommand extends ShopwareCommand
 {
-    /**
-     * @var int
-     */
-    private $batchSize;
+    private int $batchSize;
 
     /**
-     * @var MappingInterface[]
+     * @var list<MappingInterface>
      */
-    private $mappings;
+    private array $mappings;
 
-    public function __construct(int $batchSize, Traversable $mappings)
-    {
+    private BacklogReaderInterface $backlogReader;
+
+    private IdentifierSelector $identifierSelector;
+
+    private IndexFactoryInterface $indexFactory;
+
+    private BacklogProcessorInterface $backlogProcessor;
+
+    public function __construct(
+        int $batchSize,
+        Traversable $mappings,
+        BacklogReaderInterface $backlogReader,
+        IdentifierSelector $identifierSelector,
+        IndexFactoryInterface $indexFactory,
+        BacklogProcessorInterface $backlogProcessor
+    ) {
         $this->batchSize = $batchSize;
         $this->mappings = iterator_to_array($mappings, false);
-
-        parent::__construct(null);
+        $this->backlogReader = $backlogReader;
+        $this->identifierSelector = $identifierSelector;
+        $this->indexFactory = $indexFactory;
+        $this->backlogProcessor = $backlogProcessor;
+        parent::__construct();
     }
 
     /**
@@ -67,9 +84,8 @@ class BacklogSyncCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $reader = $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogReader::class);
-        $lastBackLogId = $reader->getLastBacklogId();
-        $backlogs = $reader->read($lastBackLogId, $this->batchSize);
+        $lastBackLogId = $this->backlogReader->getLastBacklogId();
+        $backlogs = $this->backlogReader->read($lastBackLogId, $this->batchSize);
 
         $output->writeln(sprintf('Current last backlog id: %d', $lastBackLogId));
 
@@ -81,18 +97,15 @@ class BacklogSyncCommand extends ShopwareCommand
             return 0;
         }
 
-        /** @var Backlog $last */
-        $last = $backlogs[\count($backlogs) - 1];
-        $reader->setLastBacklogId($last->getId());
-        $shops = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IdentifierSelector::class)->getShops();
-        foreach ($shops as $shop) {
+        foreach ($this->identifierSelector->getShops() as $shop) {
             foreach ($this->mappings as $mapping) {
-                $index = $this->container->get(\Shopware\Bundle\ESIndexingBundle\IndexFactory::class)->createShopIndex($shop, $mapping->getType());
+                $index = $this->indexFactory->createShopIndex($shop, $mapping->getType());
 
-                $this->container->get(\Shopware\Bundle\ESIndexingBundle\BacklogProcessorInterface::class)
-                    ->process($index, $backlogs);
+                $this->backlogProcessor->process($index, $backlogs);
             }
         }
+        $last = $backlogs[array_key_last($backlogs)];
+        $this->backlogReader->setLastBacklogId($last->getId());
 
         $io->success(sprintf('Synchronized %d items', \count($backlogs)));
 
