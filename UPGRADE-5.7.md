@@ -72,7 +72,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Updated `cocur/slugify` to version 4.2.0
 * Updated `doctrine/annotations` to version 1.13.3
-* Updated `doctrine/collections` to version 1.7.2
+* Updated `doctrine/collections` to version 1.7.3
 * Updated `doctrine/common` to version 3.4.0
 * Updated `doctrine/event-manager` to version 1.1.2
 * Updated `doctrine/orm` to version 2.13.1
