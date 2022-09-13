@@ -225,7 +225,7 @@ class Emotion extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="seo_description", type="string", length=255, nullable=false)
+     * @ORM\Column(name="seo_description", type="text", nullable=false)
      */
     private $seoDescription;
 

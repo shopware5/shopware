@@ -124,7 +124,7 @@ class Site extends ModelEntity
     /**
      * @var string
      *
-     * @ORM\Column(name="meta_keywords", type="string", nullable=false)
+     * @ORM\Column(name="meta_keywords", type="text", nullable=false)
      */
     private $metaKeywords;
 

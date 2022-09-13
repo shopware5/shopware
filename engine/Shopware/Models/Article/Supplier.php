@@ -75,7 +75,7 @@ class Supplier extends ModelEntity
      *
      * @var string|null
      *
-     * @ORM\Column(name="meta_keywords", type="string", nullable=true)
+     * @ORM\Column(name="meta_keywords", type="text", nullable=true)
      */
     protected $metaKeywords;
 

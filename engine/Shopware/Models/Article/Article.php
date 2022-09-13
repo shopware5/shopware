@@ -413,7 +413,7 @@ class Article extends ModelEntity
     /**
      * @var string|null
      *
-     * @ORM\Column(name="keywords", type="string", length=255, nullable=true)
+     * @ORM\Column(name="keywords", type="text", nullable=true)
      */
     private $keywords;
 

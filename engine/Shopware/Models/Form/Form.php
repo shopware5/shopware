@@ -149,7 +149,7 @@ class Form extends ModelEntity
     /**
      * @var string|null
      *
-     * @ORM\Column(name="meta_keywords", type="string", length=255, nullable=true)
+     * @ORM\Column(name="meta_keywords", type="text", nullable=true)
      */
     private $metaKeywords = '';
 
