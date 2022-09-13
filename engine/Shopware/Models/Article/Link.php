@@ -74,7 +74,6 @@ class Link extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="description", type="string", nullable=false)
      */
     private $name;
@@ -84,7 +83,6 @@ class Link extends ModelEntity
      *
      * @Assert\Url()
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="link", type="string", nullable=false)
      */
     private $link;

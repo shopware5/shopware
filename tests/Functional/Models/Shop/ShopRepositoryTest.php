@@ -186,6 +186,7 @@ class ShopRepositoryTest extends ControllerTestCase
 
     /**
      * @dataProvider getMultiShopLocationTestData
+     *
      * @ticket SW-4858
      */
     public function testMultiShopLocation(string $host, string $alias): void

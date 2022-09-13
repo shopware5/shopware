@@ -107,6 +107,7 @@ class Layout extends ModelEntity
 
     /**
      * @var ArrayCollection<Element>
+     *
      * @ORM\OneToMany(targetEntity="Element", mappedBy="container"))
      */
     protected $elements;

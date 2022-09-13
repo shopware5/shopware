@@ -54,11 +54,9 @@ class DoctrineDBALHandler extends AbstractProcessingHandler
     protected $table;
 
     /**
-     * @param string     $table
-     * @param int|string $level
-     * @phpstan-param Level|LevelName|LogLevel::* $level
-     *
-     * @param bool $bubble
+     * @param string                      $table
+     * @param Level|LevelName|LogLevel::* $level
+     * @param bool                        $bubble
      */
     public function __construct(Connection $conn, $table, array $columnMap, $level = Logger::DEBUG, $bubble = true)
     {

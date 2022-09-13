@@ -138,10 +138,8 @@ class Type implements JsonSerializable
 
     /**
      * @param Field[] $fields
-     *
-     * @return Type
      */
-    public function setFields(array $fields): self
+    public function setFields(array $fields): Type
     {
         $this->fields = $fields;
 

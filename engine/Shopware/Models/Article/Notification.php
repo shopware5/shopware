@@ -69,7 +69,6 @@ class Notification extends LazyFetchModelEntity
      * @var ProductNotificationAttribute|null
      *
      * @Assert\Valid()
-     *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\ArticleNotification", mappedBy="articleNotification", cascade={"persist"})
      */
     protected $attribute;

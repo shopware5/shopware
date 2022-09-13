@@ -125,7 +125,6 @@ class Detail extends ModelEntity
      * @var int
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="articleID", type="integer", nullable=false)
      */
     private $articleId;
@@ -141,7 +140,6 @@ class Detail extends ModelEntity
      * @var float
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="tax_rate", type="float", nullable=false)
      */
     private $taxRate;
@@ -171,7 +169,6 @@ class Detail extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="articleordernumber", type="string", length=255, nullable=false)
      */
     private $articleNumber;
@@ -180,7 +177,6 @@ class Detail extends ModelEntity
      * @var float
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="price", type="float", nullable=false)
      */
     private $price;
@@ -189,7 +185,6 @@ class Detail extends ModelEntity
      * @var int
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="quantity", type="integer", nullable=false)
      */
     private $quantity;
@@ -198,7 +193,6 @@ class Detail extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $articleName;

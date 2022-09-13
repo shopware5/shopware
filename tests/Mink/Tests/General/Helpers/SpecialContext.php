@@ -53,6 +53,7 @@ class SpecialContext extends SubContext
 
     /**
      * @Given /^I am on the (page "[^"]*")$/
+     *
      * @When /^I go to the (page "[^"]*")$/
      */
     public function iAmOnThePage(Page $page)

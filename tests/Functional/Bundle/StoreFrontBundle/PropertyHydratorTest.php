@@ -44,6 +44,7 @@ class PropertyHydratorTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array<string, string> $input
      * @param array<string, string> $group
+     *
      * @dataProvider hydrateDataProvider
      */
     public function testHydrate(array $input, array $group): void

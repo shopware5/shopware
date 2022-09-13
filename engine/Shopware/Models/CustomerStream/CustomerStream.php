@@ -59,7 +59,6 @@ class CustomerStream extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     private $name;
@@ -89,7 +88,6 @@ class CustomerStream extends ModelEntity
      * @var DateTimeInterface|null
      *
      * @Assert\DateTime()
-     *
      * @ORM\Column(name="freeze_up", type="datetime", nullable=true)
      */
     private $freezeUp;

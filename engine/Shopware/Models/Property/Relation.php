@@ -48,6 +48,7 @@ class Relation extends ModelEntity
      * The resource property is the owning side of the association between relation and group.
      *
      * @var \Shopware\Models\Property\Group|null
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Property\Group", inversedBy="relations")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id", nullable=true)
      */
@@ -64,6 +65,7 @@ class Relation extends ModelEntity
      * The resource property is the owning side of the association between relation and option.
      *
      * @var \Shopware\Models\Property\Option|null
+     *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Property\Option", inversedBy="relations")
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id", nullable=true)
      */

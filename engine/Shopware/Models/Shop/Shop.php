@@ -668,11 +668,9 @@ class Shop extends ModelEntity
     }
 
     /**
-     * @return Shop
-     *
      * @deprecated Shop::registerResources is deprecated since 5.6 and will be removed with 5.8. Use service ShopRegistrationService instead
      */
-    public function registerResources(): self
+    public function registerResources(): Shop
     {
         trigger_error('Shop::registerResources is deprecated since 5.6 and will be removed with 5.8. Use service ShopRegistrationService instead', E_USER_DEPRECATED);
 

@@ -142,6 +142,7 @@ class Rule extends ModelEntity
      * The association is joined over the tax rule stateID field and the id field of the state.
      *
      * @var State|null
+     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Country\State")
      * @ORM\JoinColumn(name="stateID", referencedColumnName="id")
      */

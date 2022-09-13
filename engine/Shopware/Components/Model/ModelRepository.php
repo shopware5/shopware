@@ -39,6 +39,7 @@ use Enlight_Hook;
  * </code>
  *
  * @template TEntityClass of ModelEntity
+ *
  * @extends EntityRepository<TEntityClass>
  */
 class ModelRepository extends EntityRepository implements Enlight_Hook

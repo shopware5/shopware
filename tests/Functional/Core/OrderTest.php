@@ -69,6 +69,7 @@ class OrderTest extends TestCase
 
     /**
      * @covers \sOrder::sendMail()
+     *
      * @ticket SW-8261
      */
     public function testSendMailPaymentData(): void
