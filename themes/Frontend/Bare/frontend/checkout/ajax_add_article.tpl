@@ -11,6 +11,11 @@
                 {include file="frontend/_includes/messages.tpl" type="info" content="{$sBasketInfo}"}
             </div>
         {/if}
+        {if $paymentBlocked}
+            <div class="modal--error">
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name="ConfirmInfoPaymentBlocked" namespace="frontend/checkout/error_messages"}{/s}"}
+            </div>
+        {/if}
     {/block}
 
     {block name='checkout_ajax_add_information'}

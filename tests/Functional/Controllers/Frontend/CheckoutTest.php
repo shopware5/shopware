@@ -29,8 +29,13 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
 use Enlight_Controller_Request_RequestHttp;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Enlight_Template_Manager;
 use Enlight_View_Default;
 use LogicException;
+use sAdmin;
+use sBasket;
 use Shopware\Bundle\CartBundle\CheckoutKey;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\Model\ModelManager;
@@ -39,23 +44,32 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware_Components_Translation;
 use Symfony\Component\HttpFoundation\Request;
 
 class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use ContainerTrait;
+    use CustomerLoginTrait;
 
     private const PRODUCT_NUMBER = 'SW10239';
     private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
     private const ENGLISH_SHOP_ID = 2;
     private const COUNTRY_SETTINGS_TRANSLATION_KEY = 'config_countries';
+    private const PAYMENT_ID_INVOICE = 4;
 
     private Connection $connection;
+
+    private sAdmin $adminModule;
+
+    private sBasket $basketModule;
 
     protected function setUp(): void
     {
         $this->connection = $this->getContainer()->get(Connection::class);
+        $this->adminModule = $this->getContainer()->get('modules')->Admin();
+        $this->basketModule = $this->getContainer()->get('modules')->Basket();
         parent::setUp();
     }
 
@@ -278,6 +292,54 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $template = $view->fetch('frontend/checkout/error_messages.tpl');
         static::assertStringContainsString('Folgende Produkte sind nicht mehr verfügbar', $template);
         static::assertStringContainsString('<li>foo</li><li>test</li>', $template);
+    }
+
+    public function testIsSetFlagPaymentBlocked(): void
+    {
+        $this->loginCustomer();
+
+        $this->getContainer()->get(Connection::class)->beginTransaction();
+        static::assertTrue($this->adminModule->sUpdatePayment(self::PAYMENT_ID_INVOICE));
+
+        $this->connection->insert(
+            's_core_rulesets',
+            [
+                'paymentID' => 4,
+                'rule1' => 'ORDERVALUEMORE',
+                'value1' => 100,
+            ]
+        );
+
+        $this->basketModule->sAddArticle('SW10067');
+        static::assertGreaterThanOrEqual(100, $this->basketModule->sGetAmount()['totalAmount']);
+
+        $basket = $this->getContainer()->get('modules')->Basket()->sGetBasketData();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setControllerName('checkout');
+        $front = $this->getContainer()->get('front');
+        $front->setRequest($request);
+        $userData = $this->getContainer()->get('modules')->Admin()->sGetUserData();
+        static::assertIsArray($userData);
+        static::assertTrue($this->getContainer()->get('modules')->Admin()->sManageRisks(self::PAYMENT_ID_INVOICE, $basket, $userData));
+
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+        $controller = $this->getContainer()->get('shopware_controllers_frontend_checkout');
+        $controller->setContainer($this->getContainer());
+        $front->setRequest($request);
+        $front->setResponse($response);
+
+        $controller->setFront($front);
+        $controller->setRequest($request);
+        $controller->setResponse($response);
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+
+        $controller->init();
+        $controller->ajaxCartAction();
+        $this->getContainer()->get(Connection::class)->rollBack();
+
+        static::assertTrue($controller->View()->getAssign('paymentBlocked'));
+
+        $this->logOutCustomer();
     }
 
     /**

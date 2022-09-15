@@ -54,6 +54,12 @@
             {/if}
         {/block}
 
+        {block name='frontend_checkout_ajax_cart_error_payment_blocked'}
+            {if $paymentBlocked}
+                {include file="frontend/_includes/messages.tpl" type="error" content="{s name="ConfirmInfoPaymentBlocked" namespace="frontend/checkout/error_messages"}{/s}"}
+            {/if}
+        {/block}
+
         {block name='frontend_checkout_ajax_cart_item_container'}
             <div class="item--container">
                 {block name='frontend_checkout_ajax_cart_item_container_inner'}
