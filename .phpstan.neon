@@ -67,9 +67,6 @@ parameters:
         -
             message: '#Comparison operation ">=" between int<1, max> and 1 is always true#'
             path: 'engine/Shopware/Core/sArticles.php'
-        -
-            message: '#Comparison operation "<" between \(array\|float\|int\) and 0 results in an error\.#'
-            path: engine/Shopware/Core/sAdmin.php
 
         - # Every API resource class has those methods, but we cannot put that into an interface or abstract class, because the parameter amount is different
             message: '#Call to an undefined method \$this\(Shopware\\Components\\Api\\Resource\\Resource\)&Shopware\\Components\\Api\\BatchInterface::(delete|update|create)\(\)#'

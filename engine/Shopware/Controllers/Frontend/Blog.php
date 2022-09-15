@@ -378,8 +378,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     public function ratingAction()
     {
         $blogArticleId = (int) $this->Request()->getParam('blogArticle');
-        /** @var bool|array $sErrorFlag */
-        $sErrorFlag = null;
+        $sErrorFlag = [];
 
         if (!empty($blogArticleId)) {
             $blogArticleQuery = $this->getRepository()->getDetailQuery($blogArticleId, $this->get('shop')->getId());
@@ -407,7 +406,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
             }
 
             // Validation only occurs when entering data, but not on failed Double-Opt-In
-            if (!$sErrorFlag['invalidHash']) {
+            if (!($sErrorFlag['invalidHash'] ?? false)) {
                 if (empty($this->Request()->name)) {
                     $sErrorFlag['name'] = true;
                 }

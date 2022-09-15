@@ -504,7 +504,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
         if (!empty($params['bindTimeFrom'])) {
             $bindTimeFrom = new Zend_Date();
-            $bindTimeFrom->set($params['bindTimeFrom'], Zend_Date::TIME_SHORT);
+            $bindTimeFrom->set((string) $params['bindTimeFrom'], Zend_Date::TIME_SHORT);
             $bindTimeFrom = (int) $bindTimeFrom->get(Zend_Date::MINUTE) * 60 + (int) $bindTimeFrom->get(Zend_Date::HOUR) * 60 * 60;
             $params['bindTimeFrom'] = $bindTimeFrom;
         } else {
@@ -513,7 +513,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
 
         if (!empty($params['bindTimeTo'])) {
             $bindTimeTo = new Zend_Date();
-            $bindTimeTo->set($params['bindTimeTo'], Zend_Date::TIME_SHORT);
+            $bindTimeTo->set((string) $params['bindTimeTo'], Zend_Date::TIME_SHORT);
             $bindTimeTo = (int) $bindTimeTo->get(Zend_Date::MINUTE) * 60 + (int) $bindTimeTo->get(Zend_Date::HOUR) * 60 * 60;
             $params['bindTimeTo'] = $bindTimeTo;
         } else {

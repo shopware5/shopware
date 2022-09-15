@@ -35,6 +35,7 @@ class SmartyTaxModifierTest extends TestCase
 {
     /**
      * @param string|int|float $tax
+     *
      * @dataProvider taxProvider
      */
     public function testTaxModifierWithValid($tax, string $expected, string $locale): void
@@ -47,6 +48,7 @@ class SmartyTaxModifierTest extends TestCase
 
     /**
      * @param string|bool|null $tax
+     *
      * @dataProvider taxProviderInvalid
      */
     public function testTaxModifierWithInvalid($tax, string $locale): void

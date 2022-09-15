@@ -381,6 +381,7 @@ class Enlight_Components_Mail extends Zend_Mail
      * @param Zend_Mail_Transport_Abstract $transport
      *
      * @return Zend_Mail Provides fluent interface
+     *
      * @events  Enlight_Components_Mail_Send
      */
     public function send($transport = null)

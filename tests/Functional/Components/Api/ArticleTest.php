@@ -3074,7 +3074,9 @@ class ArticleTest extends TestCase
 
     /**
      * @group pcovAdapterBrokenTest
+     *
      * @runInSeparateProcess
+     *
      * @preserveGlobalState disabled
      */
     public function testInvalidProductInBatch(): void

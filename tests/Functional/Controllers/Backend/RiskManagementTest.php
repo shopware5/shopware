@@ -103,6 +103,7 @@ class RiskManagementTest extends Enlight_Components_Test_Controller_TestCase
      * The testCreatePremiumArticle method is called before.
      *
      * @param string $lastId The id of the last created article
+     *
      * @depends testCreateRule
      */
     public function testEditRule($lastId)

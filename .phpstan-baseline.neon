@@ -10436,61 +10436,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/UpdateResultStruct.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearch\\:\\:getBaseProductsByCriteriaList\\(\\) has parameter \\$criteriaList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearch.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearch\\:\\:getBaseProductsByCriteriaList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearch.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearch\\:\\:getOptimizedCriteriaListPosition\\(\\) has parameter \\$criteriaList with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearch.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearch\\:\\:\\$pointer type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearch.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:getCriteriaList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:getProductNumbers\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:setCriteria\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:setProductNumbers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:setProductNumbers\\(\\) has parameter \\$numbers with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:\\$criteriaList type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchRequest\\:\\:\\$productNumberList type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchRequest.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchResult\\:\\:__construct\\(\\) has parameter \\$storage with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/BatchProductNumberSearchResult.php
@@ -10769,16 +10714,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\FacetResult\\\\BooleanFacetResult\\:\\:setTemplate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/FacetResult/BooleanFacetResult.php
-
-		-
-			message: "#^Comparison operation \"\\=\\=\" between array and int\\|null results in an error\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/FacetResult/CategoryTreeFacetResultBuilder.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\FacetResult\\\\CategoryTreeFacetResultBuilder\\:\\:getCategoriesOfParent\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/FacetResult/CategoryTreeFacetResultBuilder.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\FacetResult\\\\FacetResultGroup\\:\\:setFacetResults\\(\\) has no return type specified\\.$#"
@@ -17511,11 +17446,6 @@ parameters:
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
 
 		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
-
-		-
 			message: "#^Parameter \\#1 \\$date of method Shopware\\\\Components\\\\Compatibility\\\\LegacyStructConverter\\:\\:dateToString\\(\\) expects DateTimeInterface\\|string, DateTimeInterface\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Compatibility/LegacyStructConverter.php
@@ -17901,7 +17831,7 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
 
 		-
-			message: "#^Offset 'save_handler' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-empty\\-string, \\.\\.\\.\\} in isset\\(\\) always exists and is not nullable\\.$#"
+			message: "#^Offset 'save_handler' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-falsy\\-string, \\.\\.\\.\\} in isset\\(\\) always exists and is not nullable\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
@@ -17911,12 +17841,12 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
 		-
-			message: "#^Offset 'save_path' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-empty\\-string, \\.\\.\\.\\} in isset\\(\\) does not exist\\.$#"
+			message: "#^Offset 'save_path' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-falsy\\-string, \\.\\.\\.\\} in isset\\(\\) does not exist\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
 		-
-			message: "#^Offset 'unitTestEnabled' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-empty\\-string, \\.\\.\\.\\} in empty\\(\\) does not exist\\.$#"
+			message: "#^Offset 'unitTestEnabled' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool, name\\: non\\-falsy\\-string, \\.\\.\\.\\} in empty\\(\\) does not exist\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
@@ -21546,6 +21476,11 @@ parameters:
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlCronjobReader.php
 
 		-
+			message: "#^Cannot access an offset on array\\<int\\|string, array\\|string\\|null\\>\\|bool\\|int\\|string\\.$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlMenuReader\\:\\:parseEntry\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
@@ -21596,11 +21531,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:getChildren\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseFile\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
@@ -21626,17 +21556,7 @@ parameters:
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseTranslatableElement\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseTranslatableNodeList\\(\\) has parameter \\$list with generic class DOMNodeList but does not specify its types\\: TNode$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlReaderBase\\:\\:parseTranslatableNodeList\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlReaderBase.php
 
@@ -24444,6 +24364,7 @@ parameters:
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:batchAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticleList.php
+
 		-
 			message: "#^Method Shopware_Controllers_Backend_ArticleList\\:\\:columnConfigAction\\(\\) has no return type specified\\.$#"
 			count: 1
@@ -27305,11 +27226,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Theme.php
 
 		-
-			message: "#^Cannot access offset 'path' on non\\-empty\\-array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Shop\\\\Template\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Theme.php
-
-		-
 			message: "#^Cannot access offset 'screen' on array\\<string, mixed\\>\\|Shopware\\\\Models\\\\Shop\\\\Template\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Theme.php
@@ -27905,11 +27821,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Blog.php
 
 		-
-			message: "#^Cannot access offset 'invalidHash' on array\\|bool\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Blog.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Blog\\:\\:addLinksToFilter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Blog.php
@@ -28006,11 +27917,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Blog\\:\\:translateBlogArticles\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Blog.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$sErrorFlag has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Blog.php
 
@@ -30911,16 +30817,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'attributes' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sOrder.php
-
-		-
-			message: "#^Cannot access offset 'id' on array\\|false\\.$#"
-			count: 4
-			path: engine/Shopware/Core/sOrder.php
-
-		-
-			message: "#^Cannot access offset 'serials' on array\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sOrder.php
 
@@ -40055,27 +39951,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
 
 		-
-			message: "#^Offset 'sSepaBankName' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Offset 'sSepaBic' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Offset 'sSepaIban' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
 			message: "#^Offset 'sSepaUseBillingData' does not exist on array\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
-
-		-
-			message: "#^Parameter \\#2 \\$callback of function preg_replace_callback expects callable\\(array\\<int\\|string, string\\>\\)\\: string, Closure\\(mixed\\)\\: int given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Components/SepaPaymentMethod.php
 
@@ -41551,11 +41427,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$host of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Shop\\:\\:setHost\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/Converter.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Category\\:\\:setPath\\(\\) expects array, string given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/Converter.php
 

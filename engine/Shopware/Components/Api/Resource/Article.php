@@ -1336,7 +1336,7 @@ class Article extends Resource implements BatchInterface
 
         $categories = $article->getCategories();
 
-        $categoryIds = $categories->map(function ($category) {
+        $categoryIds = $categories->map(function (Category $category) {
             return $category->getId();
         });
 

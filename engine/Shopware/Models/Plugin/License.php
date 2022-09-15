@@ -80,6 +80,7 @@ class License extends ModelEntity
 
     /**
      * @var string
+     *
      * @ORM\Column(name="notation", type="string", nullable=false)
      */
     private $notation;

@@ -114,6 +114,7 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
      * Function to test updating a payment
      *
      * @param array $data Contains the data of the created payment
+     *
      * @depends testCreatePayments
      */
     public function testUpdatePayments($data)
@@ -134,6 +135,7 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
      * Function to test deleting a payment
      *
      * @param array $data Contains the data of the created payment
+     *
      * @depends testCreatePayments
      */
     public function testDeletePayment($data)

@@ -339,6 +339,7 @@ class Emotion extends ModelEntity
      * only_listing => only displayed in category listing page
      *
      * @var string
+     *
      * @ORM\Column(name="listing_visibility", type="string", nullable=false)
      */
     private $listingVisibility = self::LISTING_VISIBILITY_ONLY_START;

@@ -39,6 +39,7 @@ class Shopware_Controllers_Backend_Banner extends Shopware_Controllers_Backend_E
      * Test repository injection variable
      *
      * @var BannerRepository
+     *
      * @scope private
      */
     public static $testRepository;

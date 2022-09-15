@@ -1059,6 +1059,7 @@ class AdminTest extends TestCase
 
     /**
      * @depends testsGetDownloads
+     *
      * @ticket SW-5653
      *
      * @param array<string, mixed> $demoData
@@ -2366,6 +2367,7 @@ class AdminTest extends TestCase
 
     /**
      * @param array<string, array<string, mixed>> $userData
+     *
      * @dataProvider dataProviderDataCustomerAttributeIsNot
      */
     public function testCustomerAttributeIsNot(array $userData, string $attribute, bool $expectation): void

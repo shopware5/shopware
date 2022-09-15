@@ -60,10 +60,7 @@ class XmlMenuReader extends XmlReaderBase
     {
         $menuEntry = [];
 
-        $menuEntry['isRootMenu'] = self::validateBooleanAttribute(
-            $entry->getAttribute('isRootMenu'),
-            false
-        );
+        $menuEntry['isRootMenu'] = self::validateBooleanAttribute($entry->getAttribute('isRootMenu'));
 
         $label = self::parseTranslatableElement($entry, 'label');
 
@@ -71,14 +68,15 @@ class XmlMenuReader extends XmlReaderBase
             $menuEntry['label'] = $label;
         }
 
-        $simpleFields = ['name', 'controller', 'action', 'class', 'onclick'];
-        foreach ($simpleFields as $simpleField) {
-            if (($fieldValue = self::getElementChildValueByName($entry, $simpleField)) !== null) {
+        foreach (['name', 'controller', 'action', 'class', 'onclick'] as $simpleField) {
+            $fieldValue = self::getElementChildValueByName($entry, $simpleField);
+            if ($fieldValue !== null) {
                 $menuEntry[$simpleField] = $fieldValue;
             }
         }
 
-        if (($parent = $entry->getElementsByTagName('parent')->item(0)) !== null) {
+        $parent = $entry->getElementsByTagName('parent')->item(0);
+        if ($parent !== null) {
             $identifiedBy = self::validateTextAttribute(
                 $parent->getAttribute('identifiedBy'),
                 'controller'
@@ -89,17 +87,21 @@ class XmlMenuReader extends XmlReaderBase
             ];
         }
 
-        if ($active = self::getElementChildValueByName($entry, 'active')) {
+        $active = self::getElementChildValueByName($entry, 'active');
+        if ($active !== null) {
             $menuEntry['active'] = (bool) XmlUtils::phpize($active);
         }
 
-        if ($position = self::getElementChildValueByName($entry, 'position')) {
+        $position = self::getElementChildValueByName($entry, 'position');
+        if ($position !== null) {
             $menuEntry['position'] = (int) $position;
         }
 
-        if (($children = $entry->getElementsByTagName('children')) !== null && $children->length) {
+        $children = $entry->getElementsByTagName('children');
+        if ($children !== null && $children->length) {
             $children = $children->item(0);
-            foreach (XmlReaderBase::getChildren($children, 'entry') as $child) {
+            $menuEntry['children'] = [];
+            foreach (self::getChildren($children, 'entry') as $child) {
                 $menuEntry['children'][] = $this->parseEntry($child);
             }
         }

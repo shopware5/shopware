@@ -152,7 +152,6 @@ class Detail extends ModelEntity
      *
      * @Assert\NotBlank()
      * @ShopwareAssert\OrderNumber
-     *
      * @ORM\Column(name="ordernumber", type="string", nullable=false, unique=true)
      */
     private $number = '';

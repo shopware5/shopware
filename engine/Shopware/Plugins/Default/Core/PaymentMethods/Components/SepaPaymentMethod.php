@@ -217,8 +217,8 @@ class SepaPaymentMethod extends GenericPaymentMethod
             . (string) (\ord($teststring[1]) - 55)
             . substr($teststring, 2, 2);
 
-        $teststring = (string) preg_replace_callback('/[A-Za-z]/', function ($letter) {
-            return (int) (\ord(strtolower($letter[0])) - 87);
+        $teststring = (string) preg_replace_callback('/[A-Za-z]/', function ($letter): string {
+            return (string) (\ord(strtolower($letter[0])) - 87);
         }, $teststring);
 
         $rest = 0;

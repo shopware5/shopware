@@ -37,6 +37,7 @@ class DetailContext extends SubContext
 {
     /**
      * @Given /^I am on the detail page for article (?P<articleId>\d+)$/
+     *
      * @When /^I go to the detail page for article (?P<articleId>\d+)$/
      */
     public function iAmOnTheDetailPageForArticle($articleId): void
@@ -46,6 +47,7 @@ class DetailContext extends SubContext
 
     /**
      * @Given /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     *
      * @When /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
      */
     public function iAmOnTheDetailPageForVariantOfArticle($number, $articleId): void

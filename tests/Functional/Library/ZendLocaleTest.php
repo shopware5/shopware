@@ -65,6 +65,7 @@ class ZendLocaleTest extends TestCase
 
     /**
      * @param string $localName
+     *
      * @dataProvider getLocales
      */
     public function testLocalCreation($localName)

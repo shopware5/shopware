@@ -71,6 +71,7 @@ class RouterTest extends TestCase
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
+     *
      * @dataProvider routeGetProvider
      *
      * @param string|false $expectedId
@@ -109,6 +110,7 @@ class RouterTest extends TestCase
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
+     *
      * @dataProvider routePostProvider
      *
      * @param string|false $expectedId
@@ -146,6 +148,7 @@ class RouterTest extends TestCase
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
+     *
      * @dataProvider routePutProvider
      *
      * @param string|false $expectedId
@@ -185,6 +188,7 @@ class RouterTest extends TestCase
 
     /**
      * @covers \ShopwarePlugins\RestApi\Components\Router::assembleRoute
+     *
      * @dataProvider routeDeleteProvider
      *
      * @param string|false $expectedId

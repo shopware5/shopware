@@ -88,6 +88,7 @@ class Configuration extends ModelEntity
 
     /**
      * @var bool
+     *
      * @ORM\Column(name="readonly", type="boolean", nullable=false)
      */
     private $readonly = false;

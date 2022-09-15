@@ -36,6 +36,7 @@ class Value extends ModelEntity
 {
     /**
      * @var Element
+     *
      * @ORM\ManyToOne(
      *     targetEntity="Shopware\Models\Shop\TemplateConfig\Element",
      *     inversedBy="values"
@@ -46,6 +47,7 @@ class Value extends ModelEntity
 
     /**
      * @var Shop
+     *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="shop_id", referencedColumnName="id", nullable=false)
      */
@@ -62,18 +64,21 @@ class Value extends ModelEntity
 
     /**
      * @var int
+     *
      * @ORM\Column(name="element_id", type="integer", nullable=false)
      */
     private $elementId;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="shop_id", type="integer", nullable=false)
      */
     private $shopId;
 
     /**
      * @var array
+     *
      * @ORM\Column(name="value", type="array", nullable=false)
      */
     private $value;

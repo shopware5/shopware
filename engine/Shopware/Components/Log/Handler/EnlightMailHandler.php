@@ -43,11 +43,9 @@ class EnlightMailHandler extends MailHandler
     protected $mailer;
 
     /**
-     * @param Enlight_Components_Mail $mailer The mailer to use
-     * @param int|string              $level  The minimum logging level at which this handler will be triggered
-     * @phpstan-param Level|LevelName|LogLevel::* $level
-     *
-     * @param bool $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param Enlight_Components_Mail     $mailer The mailer to use
+     * @param Level|LevelName|LogLevel::* $level  The minimum logging level at which this handler will be triggered
+     * @param bool                        $bubble Whether the messages that are handled can bubble up the stack or not
      */
     public function __construct(Enlight_Components_Mail $mailer, $level = Logger::ERROR, $bubble = true)
     {

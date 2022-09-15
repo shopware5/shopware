@@ -802,14 +802,12 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      *      => array('billing' => array( 0 => array('id' => ...) ))
      *      => The function removes the first level of the array to have to model data directly in the association property.
      *      => array('billing' => array('id' => ...))
-     *
      * @ORM\ManyToOne() associations
      *      => @ORM\ManyToOne() requires the related doctrine model in the association key property.
      *      => But Ext JS sends only the foreign key property.
      *      => 'article' => array('id' => 1, ... , 'shopId' => 1, 'shop' => null)
      *      => This function resolves the foreign key, removes the foreign key property from the data array and sets the founded doctrine model into the association property.
      *      => 'article' => array('id' => 1, ... , 'shop' => $this->getManager()->find(Model, $data['shopId']);
-     *
      * @ORM\ManyToMany() associations
      *      => @ORM\ManyToMany() requires like the @ORM\ManyToOne() associations the resolved doctrine models in the association property.
      *      => But Ext JS sends only an array of foreign keys.

@@ -36,6 +36,7 @@ class PluginStruct implements JsonSerializable
      * @var int
      *
      * @unique
+     *
      * @optional
      */
     private $id;
@@ -44,6 +45,7 @@ class PluginStruct implements JsonSerializable
      * @var string
      *
      * @unique
+     *
      * @required
      */
     private $technicalName;

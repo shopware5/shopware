@@ -768,8 +768,6 @@ class Media extends ModelEntity
             if (!is_numeric($data['width'])) {
                 continue;
             }
-            // If no height configured, set 0
-            $data['height'] = isset($data['height']) ? $data['height'] : 0;
 
             // Create thumbnail with the configured size
             $this->createThumbnail((int) $data['width'], (int) $data['height']);

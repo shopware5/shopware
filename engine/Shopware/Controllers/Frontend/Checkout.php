@@ -46,6 +46,7 @@ use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
  * @phpstan-type CheckoutBasketArray array{content?: array<string, mixed>, Amount?: string, AmountNet?: string, Quantity?: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax?: string, AmountWithTaxNumeric?: float, sCurrencyId: int, sCurrencyName: string, sCurrencyFactor: float, sShippingcosts: float, sShippingcostsTax: float|null, sShippingcostsTaxProportional?: array<\Shopware\Components\Cart\Struct\Price>, sShippingcostsNet: float, sShippingcostsWithTax: float, sShippingcostsDifference: float|null, sTaxRates: array<string, float>, sAmount: float, sAmountTax: float, sAmountWithTax?: float}
+ *
  * @phpstan-import-type ShippingCostArray from \sAdmin
  */
 class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action implements CSRFGetProtectionAware
@@ -1123,6 +1124,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      * @param bool $mergeProportional
      *
      * @return array<string, mixed>
+     *
      * @phpstan-return CheckoutBasketArray
      */
     public function getBasket($mergeProportional = true)

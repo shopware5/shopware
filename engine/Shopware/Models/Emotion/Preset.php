@@ -68,7 +68,6 @@ class Preset extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -115,7 +114,6 @@ class Preset extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="preset_data", type="text", nullable=false)
      */
     private $presetData;

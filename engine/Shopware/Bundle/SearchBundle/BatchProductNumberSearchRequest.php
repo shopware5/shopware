@@ -27,17 +27,20 @@ namespace Shopware\Bundle\SearchBundle;
 class BatchProductNumberSearchRequest
 {
     /**
-     * @var array
+     * @var array<string, Criteria>
      */
-    private $criteriaList = [];
+    private array $criteriaList = [];
 
     /**
-     * @var array
+     * @var array<string, array<string>>
      */
-    private $productNumberList = [];
+    private array $productNumberList = [];
 
     /**
-     * @param string $key
+     * @param string        $key
+     * @param array<string> $numbers
+     *
+     * @return void
      */
     public function setProductNumbers($key, array $numbers = [])
     {
@@ -46,6 +49,8 @@ class BatchProductNumberSearchRequest
 
     /**
      * @param string $key
+     *
+     * @return void
      */
     public function setCriteria($key, Criteria $criteria)
     {
@@ -53,7 +58,7 @@ class BatchProductNumberSearchRequest
     }
 
     /**
-     * @return array
+     * @return array<string, Criteria>
      */
     public function getCriteriaList()
     {
@@ -61,7 +66,7 @@ class BatchProductNumberSearchRequest
     }
 
     /**
-     * @return array
+     * @return array<string, array<string>>
      */
     public function getProductNumbers()
     {

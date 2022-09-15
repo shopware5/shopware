@@ -109,7 +109,6 @@ class Order extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Dispatch\Dispatch")
      * @ORM\JoinColumn(name="dispatchID", referencedColumnName="id", nullable=false)
-     *
      * @Assert\NotBlank()
      */
     protected $dispatch;
@@ -122,7 +121,6 @@ class Order extends ModelEntity
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Shop\Shop")
      * @ORM\JoinColumn(name="subshopID", referencedColumnName="id", nullable=false)
-     *
      * @Assert\NotBlank()
      */
     protected $shop;
@@ -148,7 +146,6 @@ class Order extends ModelEntity
      * @var Status
      *
      * @Assert\NotBlank()
-     *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="cleared", referencedColumnName="id", nullable=false)
      */
@@ -310,7 +307,6 @@ class Order extends ModelEntity
      * @var float
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="invoice_amount", type="float", nullable=false)
      */
     private $invoiceAmount;
@@ -319,7 +315,6 @@ class Order extends ModelEntity
      * @var float
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="invoice_amount_net", type="float", nullable=false)
      */
     private $invoiceAmountNet;
@@ -328,7 +323,6 @@ class Order extends ModelEntity
      * @var float
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="invoice_shipping", type="float", nullable=false)
      */
     private $invoiceShipping;
@@ -337,7 +331,6 @@ class Order extends ModelEntity
      * @var float
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="invoice_shipping_net", type="float", nullable=false)
      */
     private $invoiceShippingNet;
@@ -397,7 +390,6 @@ class Order extends ModelEntity
      * @var int
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="taxfree", type="integer", nullable=false)
      */
     private $taxFree;
@@ -434,7 +426,6 @@ class Order extends ModelEntity
      * @var string
      *
      * @Assert\NotBlank()
-     *
      * @ORM\Column(name="language", type="string", length=10, nullable=false)
      */
     private $languageIso;

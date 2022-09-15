@@ -30,6 +30,7 @@ use Shopware\Components\ContainerAwareEventManager;
 
 /**
  * @deprecated - Will be removed with shopware 5.8 without replacement
+ *
  * @phpstan-import-type ListingArray from \sArticles
  */
 class LegacyEventManager

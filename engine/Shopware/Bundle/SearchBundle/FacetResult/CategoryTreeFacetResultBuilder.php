@@ -91,29 +91,23 @@ class CategoryTreeFacetResultBuilder
     }
 
     /**
-     * @param Category[] $categories
-     * @param int|null   $parentId
+     * @param array<Category> $categories
      *
-     * @return array
+     * @return array<Category>
      */
-    private function getCategoriesOfParent(array $categories, $parentId)
+    private function getCategoriesOfParent(array $categories, int $parentId): array
     {
         $result = [];
 
         foreach ($categories as $category) {
-            if (!$category->getPath() && $parentId !== null) {
-                continue;
-            }
-
-            if ($category->getPath() == $parentId) {
-                $result[] = $category;
+            if (!$category->getPath()) {
                 continue;
             }
 
             $parents = $category->getPath();
-            $lastParent = $parents[\count($parents) - 1];
+            $lastParent = $parents[array_key_last($parents)];
 
-            if ($lastParent == $parentId) {
+            if ($lastParent === $parentId) {
                 $result[] = $category;
             }
         }
