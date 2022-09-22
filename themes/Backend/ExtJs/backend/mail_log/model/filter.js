@@ -5,7 +5,7 @@ Ext.define('Shopware.apps.MailLog.model.Filter', {
     extend: 'Ext.data.Model',
 
     fields: [
-        //{block name="backend/mail_log/model/filter/fields"}
+        //{block name="backend/mail_log/model/filter/fields"}{/block}
         { name: 'label', type: 'string' },
         { name: 'name', type: 'string' },
     ],
