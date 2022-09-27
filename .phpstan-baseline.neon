@@ -25901,57 +25901,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ManualSorting.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$albumFilter\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$filter\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Cannot call method getThumbnailSize\\(\\) on Shopware\\\\Models\\\\Media\\\\Settings\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:createThumbnailsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:createThumbnailsForMovedMedia\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:downloadAction\\(\\) has no return type specified\\.$#"
-			count: 1
+			count: 2
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:filterAlbums\\(\\) has parameter \\$albums with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:filterAlbums\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getAlbumMediaAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getAlbumNodeProperties\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getAlbumsAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
@@ -25961,27 +25916,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getMediaDetailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getMediaThumbnailPaths\\(\\) has parameter \\$media with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getMediaThumbnailPaths\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:getMediaUrlsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:parseExceptionForResponse\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
@@ -25996,26 +25931,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:removeAlbum\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:removeAlbum\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:removeAlbumAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:removeMediaAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:resolveAlbumData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
@@ -26026,62 +25941,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:saveAlbumAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:saveMedia\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:saveMedia\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:saveMediaAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:singleReplaceAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:toTree\\(\\) has parameter \\$data with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:toTree\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:toTree\\(\\) has parameter \\$data with no value type specified in iterable type array\\|Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:toTree\\(\\) has parameter \\$parent with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:toTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_MediaManager\\:\\:uploadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
-			message: "#^Offset 'mediaCount' does not exist on array\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
