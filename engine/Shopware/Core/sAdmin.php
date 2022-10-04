@@ -2415,7 +2415,7 @@ class sAdmin implements \Enlight_Hook
                 $this->connection->executeQuery($sql, [
                     $email,
                     $groupID,
-                    $this->front->Request()->getPost('salutation'),
+                    $this->front->Request()->getPost('salutation', 'not_defined'),
                     $this->front->Request()->getPost('title'),
                     $this->front->Request()->getPost('firstname'),
                     $this->front->Request()->getPost('lastname'),
@@ -2430,7 +2430,7 @@ class sAdmin implements \Enlight_Hook
                     's_campaigns_maildata',
                     [
                         'groupID' => $groupID,
-                        'salutation' => $this->front->Request()->getPost('salutation'),
+                        'salutation' => $this->front->Request()->getPost('salutation', 'not_defined'),
                         'title' => $this->front->Request()->getPost('title'),
                         'firstname' => $this->front->Request()->getPost('firstname'),
                         'lastname' => $this->front->Request()->getPost('lastname'),

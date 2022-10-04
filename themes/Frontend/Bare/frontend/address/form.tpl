@@ -83,22 +83,24 @@
             {block name="frontend_address_form_fieldset_address"}
                 {* Salutation *}
                 {block name='frontend_address_form_input_salutation'}
-                    <div class="address--salutation field--select select-field">
+                    {if {config name="shopSalutationRequired"}}
+                        <div class="address--salutation field--select select-field">
 
-                        {getSalutations variable="salutations"}
+                            {getSalutations variable="salutations"}
 
-                        <select name="{$inputPrefix}[salutation]"
-                                id="salutation"
-                                required="required"
-                                aria-required="true"
-                                class="is--required{if $error_flags.salutation} has--error{/if}">
-                            <option value="" disabled="disabled"{if $formData.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation' namespace="frontend/register/personal_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+                            <select name="{$inputPrefix}[salutation]"
+                                    id="salutation"
+                                    required="required"
+                                    aria-required="true"
+                                    class="is--required{if $error_flags.salutation} has--error{/if}">
+                                <option value="" disabled="disabled"{if $formData.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation' namespace="frontend/register/personal_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 
-                            {foreach $salutations as $key => $label}
-                                <option value="{$key}"{if $formData.salutation eq $key} selected="selected"{/if}>{$label}</option>
-                            {/foreach}
-                        </select>
-                    </div>
+                                {foreach $salutations as $key => $label}
+                                    <option value="{$key}"{if $formData.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    {/if}
                 {/block}
 
                 {* Title *}

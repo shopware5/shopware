@@ -89,9 +89,11 @@ class AddressFormType extends AbstractType
             $event->setData($data);
         });
 
-        $builder->add('salutation', SalutationType::class, [
-            'constraints' => [new NotBlank(['message' => null])],
-        ]);
+        if ($this->config->get('shopSalutationRequired')) {
+            $builder->add('salutation', SalutationType::class, [
+                'constraints' => [new NotBlank(['message' => null])],
+            ]);
+        }
 
         $builder->add('firstname', TextType::class, [
             'constraints' => [new NotBlank(['message' => null])],

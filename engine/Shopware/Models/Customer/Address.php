@@ -103,7 +103,7 @@ class Address extends ModelEntity
      *
      * @ORM\Column(name="salutation", type="string", length=30, nullable=false)
      */
-    protected $salutation = '';
+    protected $salutation = 'not_defined';
 
     /**
      * Contains the first name of the address

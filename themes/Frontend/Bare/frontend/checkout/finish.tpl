@@ -144,7 +144,9 @@
                                                             <br />
                                                         {/if}
 
-                                                        <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                        {if {config name="shopSalutationRequired"} && {$sAddresses.billing.salutation !== 'not_defined'}}
+                                                            <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                        {/if}
                                                         {if {config name="displayprofiletitle"}}
                                                             <span class="address--title">{$sAddresses.billing.title|escapeHtml}</span><br/>
                                                         {/if}
@@ -192,7 +194,10 @@
                                                     <br />
                                                 {/if}
 
-                                                <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                {if {config name="shopSalutationRequired"} && {$sAddresses.billing.salutation !== 'not_defined'}}
+                                                    <span class="address--salutation">{$sAddresses.billing.salutation|salutation}</span>
+                                                {/if}
+
                                                 {if {config name="displayprofiletitle"}}
                                                     <span class="address--title">{$sAddresses.billing.title|escapeHtml}</span><br/>
                                                 {/if}
@@ -234,7 +239,11 @@
                                                     <br />
                                                 {/if}
 
-                                                <span class="address--salutation">{$sAddresses.shipping.salutation|salutation}</span>
+
+                                                {if {config name="shopSalutationRequired"} && {$sAddresses.shipping.salutation !== 'not_defined'}}
+                                                    <span class="address--salutation">{$sAddresses.shipping.salutation|salutation}</span>
+                                                {/if}
+
                                                 {if {config name="displayprofiletitle"}}
                                                     <span class="address--title">{$sAddresses.shipping.title|escapeHtml}</span><br/>
                                                 {/if}

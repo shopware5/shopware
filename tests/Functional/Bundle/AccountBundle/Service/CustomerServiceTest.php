@@ -27,15 +27,18 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AccountBundle\Service\CustomerServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class CustomerServiceTest extends Enlight_Components_Test_TestCase
+class CustomerServiceTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var CustomerServiceInterface
      */
@@ -62,8 +65,6 @@ class CustomerServiceTest extends Enlight_Components_Test_TestCase
         self::$modelManager = Shopware()->Container()->get(ModelManager::class);
         self::$connection = Shopware()->Container()->get(Connection::class);
         self::$contextService = Shopware()->Container()->get(ContextServiceInterface::class);
-
-        self::$modelManager->clear();
     }
 
     /**
@@ -71,12 +72,7 @@ class CustomerServiceTest extends Enlight_Components_Test_TestCase
      */
     public static function tearDownAfterClass(): void
     {
-        parent::tearDownAfterClass();
-
-        self::$modelManager->flush();
         self::$modelManager->clear();
-
-        Shopware()->Container()->reset('router');
     }
 
     public function testUpdateEmail(): void
@@ -90,10 +86,6 @@ class CustomerServiceTest extends Enlight_Components_Test_TestCase
         self::$customerService->update($customer);
 
         static::assertEquals($newMail, $customer->getEmail());
-
-        // Reset back to default demo mail
-        $customer->setEmail('mustermann@b2b.de');
-        self::$customerService->update($customer);
     }
 
     public function testUpdateExistingEmail(): void

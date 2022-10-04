@@ -451,7 +451,7 @@ class Customer extends LazyFetchModelEntity
      * @Assert\NotBlank()
      * @ORM\Column(name="salutation", type="text", nullable=true)
      */
-    private $salutation;
+    private $salutation = 'not_defined';
 
     /**
      * @var string|null

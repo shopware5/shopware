@@ -108,19 +108,21 @@
                                 {if {config name="NewsletterExtendedFields"}}
                                     <div class="newsletter--additional-form">
 
-                                        {getSalutations variable="salutations"}
+                                        {if {config name="shopSalutationRequired"}}
+                                            {getSalutations variable="salutations"}
 
-                                        {* Salutation *}
-                                        {block name="frontend_newsletter_form_input_salutation"}
-                                            <div class="newsletter--salutation select-field">
-                                                <select name="salutation" class="field--select">
-                                                    <option value=""{if $smarty.post.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterPlaceholderSalutation'}{/s}</option>
-                                                    {foreach $salutations as $key => $label}
-                                                        <option value="{$key}"{if $smarty.post.salutation eq $key} selected="selected"{/if}>{$label}</option>
-                                                    {/foreach}
-                                                </select>
-                                            </div>
-                                        {/block}
+                                            {* Salutation *}
+                                            {block name="frontend_newsletter_form_input_salutation"}
+                                                <div class="newsletter--salutation select-field">
+                                                    <select name="salutation" class="field--select">
+                                                        <option value=""{if $smarty.post.salutation eq ""} selected="selected"{/if}>{s name='NewsletterRegisterPlaceholderSalutation'}{/s}</option>
+                                                        {foreach $salutations as $key => $label}
+                                                            <option value="{$key}"{if $smarty.post.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                                                        {/foreach}
+                                                    </select>
+                                                </div>
+                                            {/block}
+                                        {/if}
 
                                         {* Firstname *}
                                         {block name="frontend_newsletter_form_input_firstname"}

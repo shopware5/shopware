@@ -26,24 +26,13 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
-use Enlight_Components_Test_TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AccountBundle\Service\CustomerUnlockServiceInterface;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class CustomerUnlockServiceTest extends Enlight_Components_Test_TestCase
+class CustomerUnlockServiceTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-
-        Shopware()->Db()->beginTransaction();
-    }
-
-    public function tearDown(): void
-    {
-        parent::tearDown();
-
-        Shopware()->Db()->rollBack();
-    }
+    use DatabaseTransactionBehaviour;
 
     public function testUnlockCustomer(): void
     {

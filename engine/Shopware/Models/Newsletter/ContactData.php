@@ -59,7 +59,7 @@ class ContactData extends ModelEntity
      *
      * @ORM\Column(name="salutation", type="string", nullable=true)
      */
-    protected $salutation;
+    protected $salutation = 'not_defined';
 
     /**
      * @var string|null

@@ -59,7 +59,9 @@ class AddressValidator implements AddressValidatorInterface
         $additional = $address->getAdditional();
         $customerType = !empty($additional['customer_type']) ? $additional['customer_type'] : null;
 
-        $this->validateField('salutation', $address->getSalutation(), [new NotBlank()]);
+        if ($this->config->get('shopSalutationRequired')) {
+            $this->validateField('salutation', $address->getSalutation(), [new NotBlank()]);
+        }
         $this->validateField('firstname', $address->getFirstname(), [new NotBlank()]);
         $this->validateField('lastname', $address->getLastname(), [new NotBlank()]);
         $this->validateField('street', $address->getStreet(), [new NotBlank()]);
