@@ -3,7 +3,7 @@
               xsi:noNamespaceSchemaLocation="../../../engine/Shopware/Bundle/ContentTypeBundle/Resources/contenttypes.xsd">
     <types>
         <type>
-            <typeName>b2b Companies</typeName>
+            <typeName>b2bCompanies</typeName>
             <name>B2B Purchase Groups</name>
             <fieldSets>
                 <fieldSet>
