@@ -101,6 +101,12 @@ class XmlReaderTest extends TestCase
         $this->reader->read(__DIR__ . '/fixtures/valid_with_invalid_typeName.xml');
     }
 
+    public function testReadInvalidTypeNameWithNumberFile(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->reader->read(__DIR__ . '/fixtures/valid_with_invalid_space_in_typeName.xml');
+    }
+
     public function testReadingInvalidFrontendConfiguration(): void
     {
         $this->expectException(InvalidArgumentException::class);
