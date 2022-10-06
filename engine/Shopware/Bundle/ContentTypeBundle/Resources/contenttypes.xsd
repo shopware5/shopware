@@ -21,7 +21,7 @@
             <xsd:element name="typeName">
                 <xsd:simpleType>
                     <xsd:restriction base="xsd:string">
-                        <xsd:pattern value="[A-z]+"/>
+                        <xsd:pattern value="[A-z][A-z0-9]*"/>
                     </xsd:restriction>
                 </xsd:simpleType>
             </xsd:element>
