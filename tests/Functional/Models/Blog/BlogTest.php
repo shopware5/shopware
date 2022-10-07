@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Models\Article;
+namespace Shopware\Tests\Functional\Models\Blog;
 
 use Enlight_Components_Test_TestCase;
 use Shopware\Components\Model\ModelManager;

@@ -22,7 +22,7 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Plugins\Backend\Auth;
+namespace Shopware\Tests\Unit\Plugin\Backend\Auth;
 
 use Enlight_Controller_Action;
 use Enlight_Controller_ActionEventArgs;
