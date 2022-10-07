@@ -141,9 +141,6 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
             $categoryInfo = null;
         }
 
-        // SW-3493 sArticle->getArticleById and sBasket->sGetGetBasket differ in camelcase
-        $product['sReleaseDate'] = $product['sReleasedate'];
-
         $this->View()->assign('sBreadcrumb', $breadcrumb);
         $this->View()->assign('sCategoryInfo', $categoryInfo);
         $this->View()->assign('sArticle', $product);
