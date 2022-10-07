@@ -101,9 +101,9 @@ class XmlReaderTest extends TestCase
         $this->reader->read(__DIR__ . '/fixtures/valid_with_invalid_typeName.xml');
     }
 
-    public function testReadInvalidTypeNameWithNumberFile(): void
+    public function testReadValidTypeNameWithNumber(): void
     {
-        $this->assertIsArray($this->reader->read(__DIR__ . '/fixtures/valid_with_number_in_typeName.xml'));
+        static::assertIsArray($this->reader->read(__DIR__ . '/fixtures/valid_with_number_in_typeName.xml'));
     }
 
     public function testReadingInvalidFrontendConfiguration(): void
