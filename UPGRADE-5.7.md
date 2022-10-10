@@ -2,9 +2,9 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
-## 5.7.15
+## 5.7.16
 
-[View all changes from v5.7.14...v5.7.15](https://github.com/shopware/shopware/compare/v5.7.14...v5.7.15)
+[View all changes from v5.7.15...v5.7.16](https://github.com/shopware/shopware/compare/v5.7.15...v5.7.16)
 
 ### Additions
 
@@ -97,6 +97,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/serializer` to version 5.4.12
 * Updated `symfony/validator` to version 4.4.45
 * Updated several indirect dependencies
+
+## 5.7.15
+
+[View all changes from v5.7.14...v5.7.15](https://github.com/shopware/shopware/compare/v5.7.14...v5.7.15)
 
 ## 5.7.14
 
