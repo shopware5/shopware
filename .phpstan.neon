@@ -182,3 +182,8 @@ parameters:
             paths:
                  - engine/Shopware/Models/Dispatch/Dispatch.php
                  - engine/Shopware/Models/Newsletter/Container.php
+
+        - # PHPStan DBA extension complains about temporary database table, which is only active during the time the migrations run
+            message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
+            count: 1
+            path: _sql/migrations/common/AttributeTranslationMigrationHelper.php

@@ -1321,11 +1321,6 @@ parameters:
 			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
 
 		-
-			message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
-			count: 1
-			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
-
-		-
 			message: "#^Variable \\$rows in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
@@ -20122,6 +20117,11 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\ModelEntity\\:\\:setOneToOne\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Components/Model/ModelEntity.php
+
+		-
+			message: "#^Negated boolean expression is always true\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ModelEntity.php
 
