@@ -89,7 +89,7 @@ abstract class AbstractMigration
     }
 
     /**
-     * @param string $modus
+     * @param self::MODUS_* $modus
      *
      * @return void
      */

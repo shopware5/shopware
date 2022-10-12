@@ -22,7 +22,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration389 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration389 extends AbstractMigration
 {
     public function up($modus)
     {
@@ -37,8 +39,7 @@ class Migrations_Migration389 extends Shopware\Components\Migrations\AbstractMig
         foreach ($forms as $formId) {
             try {
                 $statement = $this->connection->query("SELECT count(DISTINCT id) FROM s_cms_support_fields WHERE position = 0 AND supportID = $formId;");
-                $fieldCountArray = $statement->fetch(PDO::FETCH_NUM);
-                $fieldCount = array_shift($fieldCountArray);
+                $fieldCount = (int) $statement->fetchColumn();
             } catch (Exception $e) {
                 continue;
             }

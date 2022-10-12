@@ -1231,26 +1231,6 @@ parameters:
 			path: _sql/migrations/926-add-emotion-presets.php
 
 		-
-			message: "#^Method Migrations_Migration939\\:\\:getExistingSortingTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/939-add-translations-for-facets.php
-
-		-
-			message: "#^Method Migrations_Migration939\\:\\:getExistingSortingTranslations\\(\\) has parameter \\$shopId with no type specified\\.$#"
-			count: 1
-			path: _sql/migrations/939-add-translations-for-facets.php
-
-		-
-			message: "#^Method Migrations_Migration939\\:\\:updateCustomerFacetAndSorting\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/939-add-translations-for-facets.php
-
-		-
-			message: "#^Method Migrations_Migration939\\:\\:updateTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/939-add-translations-for-facets.php
-
-		-
 			message: "#^Method Migrations_Migration940\\:\\:updateMenuEntry\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: _sql/migrations/940-fix-import-export-menu-entry.php
@@ -30493,6 +30473,19 @@ parameters:
 		-
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 2
+			path: engine/Shopware/Core/sExport.php
+
+		-
+			message: """
+				#^Query error\\: SQLSTATE\\[42000\\]\\: Syntax error or access violation\\: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL/MariaDB server version for the right syntax to use near '\\) b
+				
+				            
+				
+				            LEFT JOIN \\(
+				                SELECT dc\\.dispatchID
+				' at line 4 \\(42000\\)\\.$#
+			"""
+			count: 1
 			path: engine/Shopware/Core/sExport.php
 
 		-

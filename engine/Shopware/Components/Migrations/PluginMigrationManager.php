@@ -38,15 +38,9 @@ use Shopware\Components\Plugin;
 
 class PluginMigrationManager extends Manager
 {
-    /**
-     * @var Plugin
-     */
-    private $plugin;
+    private Plugin $plugin;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(PDO $connection, Plugin $plugin, LoggerInterface $logger)
     {
@@ -85,6 +79,9 @@ ENGINE=InnoDB
         return (int) $stmt->fetchColumn();
     }
 
+    /**
+     * @param AbstractPluginMigration::MODUS_* $modus
+     */
     public function apply(AbstractMigration $migration, $modus = AbstractMigration::MODUS_INSTALL, bool $keepUserData = false): void
     {
         if ($modus === AbstractPluginMigration::MODUS_UNINSTALL) {
@@ -128,6 +125,9 @@ ENGINE=InnoDB
         return $migrations;
     }
 
+    /**
+     * @param AbstractPluginMigration::MODUS_* $modus
+     */
     public function run($modus = AbstractMigration::MODUS_INSTALL, bool $keepUserData = false): void
     {
         if ($modus !== AbstractPluginMigration::MODUS_UNINSTALL) {

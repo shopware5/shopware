@@ -35,12 +35,12 @@ class Migrations_Migration939 extends AbstractMigration
         $this->updateCustomerFacetAndSorting();
     }
 
-    private function updateTranslation()
+    private function updateTranslation(): void
     {
         $shops = $this->connection->query('SELECT id FROM s_core_shops')->fetchAll(PDO::FETCH_ASSOC);
 
         foreach ($shops as $shop) {
-            $translation = $this->getExistingSortingTranslations($shop['id']);
+            $translation = $this->getExistingSortingTranslations((int) $shop['id']);
 
             if (!empty($translation)) {
                 $id = $translation['id'];
@@ -70,7 +70,7 @@ SQL;
         }
     }
 
-    private function updateCustomerFacetAndSorting()
+    private function updateCustomerFacetAndSorting(): void
     {
         $sql = <<<SQL
 UPDATE `s_search_custom_sorting` SET label = 'Lowest price' WHERE id = 3 and label = 'Cheapest price';
@@ -95,17 +95,25 @@ SQL;
         $this->addSql($sql);
     }
 
-    private function getExistingSortingTranslations($shopId)
+    /**
+     * @return array{id: numeric-string, 0: numeric-string, objectdata: string, 1: string}|null
+     */
+    private function getExistingSortingTranslations(int $shopId): ?array
     {
         $sql = <<<SQL
 SELECT s_core_translations.id, s_core_translations.objectdata
 FROM
     s_core_translations
 WHERE
-    s_core_translations.objecttype = 'custom_facet' AND s_core_translations.objectlanguage =  $shopId;
+    s_core_translations.objecttype = 'custom_facet' AND s_core_translations.objectlanguage = $shopId;
 SQL;
 
-        $translation = $this->connection->query($sql)->fetch();
+        $statement = $this->connection->query($sql);
+        if (!$statement instanceof PDOStatement) {
+            return null;
+        }
+
+        $translation = $statement->fetch();
         if (!$translation) {
             return null;
         }

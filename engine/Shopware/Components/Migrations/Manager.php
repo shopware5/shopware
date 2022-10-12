@@ -204,7 +204,7 @@ class Manager
     /**
      * Applies given $migration to database
      *
-     * @param string $modus
+     * @param AbstractMigration::MODUS_* $modus
      *
      * @throws Exception
      */
@@ -230,7 +230,7 @@ class Manager
     /**
      * Composite Method to apply all migrations
      *
-     * @param string $modus
+     * @param AbstractMigration::MODUS_* $modus
      */
     public function run($modus = AbstractMigration::MODUS_INSTALL)
     {
