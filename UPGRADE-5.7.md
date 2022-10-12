@@ -13,6 +13,13 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/orm` to version 2.13.3
 * Updated `laminas/laminas-code` to version 4.7.0
 * Updated `laminas/laminas-escaper` to version 2.12.0
+* Updated `symfony/console` to version 4.4.47
+* Updated `symfony/expression-language` to version 4.4.47
+* Updated `symfony/form` to version 4.4.46
+* Updated `symfony/http-foundation` to version 4.4.47
+* Updated `symfony/http-kernel` to version 4.4.47
+* Updated `symfony/serializer` to version 5.4.14
+* Updated `symfony/validator` to version 4.4.47
 
 ## 5.7.16
 
