@@ -52,7 +52,7 @@ class sCore implements \Enlight_Hook
         $url = [];
         $allowedCategoryVariables = ['sCategory', 'sPage'];
 
-        $tempGET = $this->front->Request() ? $this->front->Request()->getParams() : null;
+        $tempGET = $this->front->Request() ? $this->front->Request()->getParams() : [];
 
         // If viewport is available, this will be the first variable
         if (!empty($tempGET['sViewport'])) {

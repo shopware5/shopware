@@ -293,7 +293,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         if (!empty($id)) {
             $builder->where('media.id = :id');
             $builder->setParameter('id', $id);
-        } elseif (!empty($path)) {
+        } else {
             $builder->where('media.path = :path');
             $builder->setParameter('path', $path);
         }

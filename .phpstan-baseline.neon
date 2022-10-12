@@ -16076,16 +16076,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
-			message: "#^Parameter \\#2 \\$baseFilename of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:load\\(\\) expects string\\|null, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
-			message: "#^Parameter \\#2 \\$filename of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Media\\:\\:prepareFilePath\\(\\) expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\PaymentMethods\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/PaymentMethods.php
@@ -21461,11 +21451,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlCronjobReader.php
 
 		-
-			message: "#^Cannot access an offset on array\\<int\\|string, array\\|string\\|null\\>\\|bool\\|int\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlReader\\\\XmlMenuReader\\:\\:parseEntry\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlMenuReader.php
@@ -23141,11 +23126,6 @@ parameters:
 			path: engine/Shopware/Components/Theme/Util.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:createMediaThumbnail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Manager.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:createMediaThumbnail\\(\\) has parameter \\$thumbnailSizes with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Thumbnail/Manager.php
@@ -23161,33 +23141,13 @@ parameters:
 			path: engine/Shopware/Components/Thumbnail/Manager.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:getMediaThumbnails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Manager.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:getThumbnailSizesFromMedia\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Thumbnail/Manager.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:removeMediaThumbnails\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:uniformThumbnailSizes\\(\\) should return array\\<array\\{width\\: int, height\\: int\\}\\> but returns array\\<array\\<int\\|string\\>\\|int\\|string\\>\\.$#"
 			count: 1
-			path: engine/Shopware/Components/Thumbnail/Manager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:stringSizeToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Manager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Thumbnail\\\\Manager\\:\\:uniformThumbnailSizes\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Thumbnail/Manager.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, bool\\|string given\\.$#"
-			count: 2
 			path: engine/Shopware/Components/Thumbnail/Manager.php
 
 		-
@@ -25951,11 +25911,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^Parameter \\#2 \\$fileName of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:removeAlbumThumbnails\\(\\) expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
@@ -27777,11 +27732,6 @@ parameters:
 
 		-
 			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Frontend/Checkout.php
-
-		-
-			message: "#^Cannot access offset 'sErrorMessages' on array\\|bool\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Checkout.php
 
@@ -28721,11 +28671,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
 
 		-
-			message: "#^Cannot access offset 'articleName' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:indexAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
@@ -28841,13 +28786,8 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Recommendation.php
 
 		-
-			message: "#^Cannot access offset 'additional' on array\\|bool\\.$#"
-			count: 2
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Cannot access offset 'additional' on array\\|false\\.$#"
-			count: 6
+			count: 4
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
@@ -30459,11 +30399,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$fallback of method Shopware_Components_Translation\\:\\:readWithFallback\\(\\) expects int, int\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Core/sCms.php
-
-		-
-			message: "#^Argument of an invalid type array\\|null supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCore.php
 
 		-
 			message: "#^Method sCore\\:\\:__construct\\(\\) has parameter \\$front with no type specified\\.$#"
@@ -34816,11 +34751,6 @@ parameters:
 			path: engine/Shopware/Models/Mail/Attachment.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Mail\\\\File\\:\\:getFileName\\(\\) should return string but returns bool\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Mail/File.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Mail\\\\Log\\:\\:getDocuments\\(\\) return type with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Shopware/Models/Mail/Log.php
@@ -35151,18 +35081,8 @@ parameters:
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$fileName of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:removeDefaultThumbnails\\(\\) expects string, bool\\|string given\\.$#"
-			count: 2
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
 			message: "#^Parameter \\#2 \\$contents of method Shopware\\\\Bundle\\\\MediaBundle\\\\MediaService\\:\\:write\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
-			message: "#^Parameter \\#2 \\$fileName of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:removeAlbumThumbnails\\(\\) expects string, bool\\|string given\\.$#"
-			count: 2
 			path: engine/Shopware/Models/Media/Media.php
 
 		-
@@ -35172,11 +35092,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$subject of function preg_replace expects array\\|string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Media/Media.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, bool\\|string given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Media/Media.php
 
@@ -38021,11 +37936,6 @@ parameters:
 			path: engine/Shopware/Models/Snippet/SnippetRepository.php
 
 		-
-			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Tax/Repository.php
-
-		-
 			message: "#^Cannot access offset 'tax' on array\\<string, mixed\\>\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Tax/Repository.php
@@ -40076,11 +39986,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
 		-
-			message: "#^Cannot access offset 'hash' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onNotifyAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
@@ -41996,11 +41901,6 @@ parameters:
 			path: tests/Functional/Components/Api/CategoryTest.php
 
 		-
-			message: "#^Cannot access offset 'translations' on array\\|Shopware\\\\Models\\\\Category\\\\Category\\.$#"
-			count: 3
-			path: tests/Functional/Components/Api/CategoryTest.php
-
-		-
 			message: "#^Cannot call method getAttribute1\\(\\) on Shopware\\\\Models\\\\Attribute\\\\Category\\|null\\.$#"
 			count: 2
 			path: tests/Functional/Components/Api/CategoryTest.php
@@ -42489,11 +42389,6 @@ parameters:
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
 			count: 1
 			path: tests/Functional/Components/Cart/CartMigrationTest.php
-
-		-
-			message: "#^Cannot access offset 'id' on array\\<string, mixed\\>\\|false\\.$#"
-			count: 2
-			path: tests/Functional/Components/Cart/CartPersistServiceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\CartRaceConditionTest\\:\\:testPriceChangesInConfirmWithPriceModifications\\(\\) has no return type specified\\.$#"

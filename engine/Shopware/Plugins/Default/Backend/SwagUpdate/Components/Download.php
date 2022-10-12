@@ -25,6 +25,7 @@
 namespace ShopwarePlugins\SwagUpdate\Components;
 
 use Exception;
+use RuntimeException;
 use SplFileObject;
 
 class Download
@@ -91,6 +92,10 @@ class Download
      */
     public function downloadFile($sourceUri, $destinationUri, $totalSize, $hash)
     {
+        if (!\is_string($sourceUri) || $sourceUri === '') {
+            throw new RuntimeException('Invalid sourceUri given');
+        }
+
         if (($destination = fopen($destinationUri, 'a+')) === false) {
             throw new Exception(sprintf('Destination "%s" is invalid.', $destinationUri));
         }

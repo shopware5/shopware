@@ -1578,7 +1578,7 @@ class sBasket implements \Enlight_Hook
     {
         $notes = $this->getNoteProducts();
         if (empty($notes)) {
-            return $notes;
+            return [];
         }
 
         $numbers = array_column($notes, 'ordernumber');
