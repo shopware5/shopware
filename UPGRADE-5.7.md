@@ -12,6 +12,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/common` to version 3.4.3
 * Updated `doctrine/orm` to version 2.13.3
 * Updated `laminas/laminas-code` to version 4.7.0
+* Updated `laminas/laminas-escaper` to version 2.12.0
 
 ## 5.7.16
 
