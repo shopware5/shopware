@@ -2,6 +2,14 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.17
+
+[View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)
+
+### Changes
+
+* Updated `laminas/laminas-code` to version 4.7.0
+
 ## 5.7.16
 
 [View all changes from v5.7.15...v5.7.16](https://github.com/shopware/shopware/compare/v5.7.15...v5.7.16)
