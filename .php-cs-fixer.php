@@ -92,7 +92,6 @@ return (new Config())
         SingleSpaceAfterStatementFixer::name() => true,
         SingleSpaceBeforeStatementFixer::name() => true,
         PhpdocParamTypeFixer::name() => true,
-        NoSuperfluousConcatenationFixer::name() => true,
         NoUselessStrlenFixer::name() => true,
         NoUselessParenthesisFixer::name() => true,
         PhpUnitDedicatedAssertFixer::name() => true,

@@ -1971,11 +1971,6 @@ parameters:
 			path: engine/Library/Enlight/Config/Writer/Ini.php
 
 		-
-			message: "#^PHPDoc tag @param has invalid value \\(Enlight_Config_BaseConfig\\)\\: Unexpected token \"\\\\n     \\*\", expected variable at offset 220$#"
-			count: 1
-			path: engine/Library/Enlight/Config/Writer/Ini.php
-
-		-
 			message: "#^Method Enlight_Config_Writer_Writer\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Config/Writer/Writer.php
@@ -39976,21 +39971,6 @@ parameters:
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
 			count: 3
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onNotifyAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onRunCronJob\\(\\) has no return type specified\\.$#"
-			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
 		-
