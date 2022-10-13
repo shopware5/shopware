@@ -42,6 +42,7 @@ use Shopware\Components\Random;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Customer;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Helper\Utils;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
@@ -1971,7 +1972,7 @@ class BasketTest extends TestCase
             // Assert that a valid basket was returned
             static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
             // Assert that the total is approximately 0.00
-            static::assertEquals(0, $basketData[CartKey::AMOUNT_NUMERIC], 'total is approxmately 0.00');
+            static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], Utils::FORMER_PHPUNIT_FLOAT_EPSILON, 'total is approxmately 0.00');
             static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], 0.0001, 'total is approxmately 0.00');
         } finally {
             // Delete test resources

@@ -49,6 +49,7 @@ use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Property\Value;
+use Shopware\Tests\Functional\Helper\Utils;
 
 class ArticleTest extends TestCase
 {
@@ -2463,9 +2464,10 @@ class ArticleTest extends TestCase
 
         $data = $this->resource->getOne($product->getId());
 
-        static::assertEquals(
+        static::assertEqualsWithDelta(
             400 / (((float) $product->getTax()->getTax() + 100) / 100),
-            $data['mainDetail']['prices'][0]['price']
+            $data['mainDetail']['prices'][0]['price'],
+            Utils::FORMER_PHPUNIT_FLOAT_EPSILON
         );
     }
 
@@ -2597,10 +2599,10 @@ class ArticleTest extends TestCase
 
         $price = $data['mainDetail']['prices'][0];
 
-        static::assertEquals(400, $price['price']);
-        static::assertEquals($net, $price['net']);
-        static::assertEquals(450, $price['pseudoPrice']);
-        static::assertEquals(400, $price['regulationPrice']);
+        static::assertEqualsWithDelta(400, $price['price'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
+        static::assertEqualsWithDelta($net, $price['net'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
+        static::assertEqualsWithDelta(450, $price['pseudoPrice'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
+        static::assertEqualsWithDelta(400, $price['regulationPrice'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
     }
 
     public function testAssignCategoriesByPathShouldBeSuccessful(): void

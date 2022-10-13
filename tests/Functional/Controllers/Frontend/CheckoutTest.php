@@ -43,6 +43,7 @@ use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Helper\Utils;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware_Components_Translation;
@@ -416,8 +417,8 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $messageNet = 'InvoiceAmountNet' . ($net ? ' (net shop)' : '') . ': ' . $previousInvoiceAmountNet . ' from sBasket, ' . $order->getInvoiceAmountNet() . ' from getInvoiceAmountNet';
 
         // Test that sBasket calculation matches calculateInvoiceAmount
-        static::assertEquals($order->getInvoiceAmount(), $previousInvoiceAmount, $message);
-        static::assertEquals($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, $messageNet);
+        static::assertEqualsWithDelta($order->getInvoiceAmount(), $previousInvoiceAmount, Utils::FORMER_PHPUNIT_FLOAT_EPSILON, $message);
+        static::assertEqualsWithDelta($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, Utils::FORMER_PHPUNIT_FLOAT_EPSILON, $messageNet);
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
     }

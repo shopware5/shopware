@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Modules\Articles;
 
 use Enlight_Components_Test_Plugin_TestCase;
+use Shopware\Tests\Functional\Helper\Utils;
 
 /**
  * tests the base price calculation
@@ -35,8 +36,6 @@ use Enlight_Components_Test_Plugin_TestCase;
  */
 class BasePriceCalculationTest extends Enlight_Components_Test_Plugin_TestCase
 {
-    private const FORMER_PHPUNIT_FLOAT_EPSILON = 0.0000000001;
-
     /**
      * Set up test case, fix demo data where needed
      */
@@ -91,7 +90,7 @@ class BasePriceCalculationTest extends Enlight_Components_Test_Plugin_TestCase
                 $data['purchaseUnit'],
                 $data['referenceUnit']
             );
-            static::assertEqualsWithDelta($expectedData[$key], $referencePrice, self::FORMER_PHPUNIT_FLOAT_EPSILON);
+            static::assertEqualsWithDelta($expectedData[$key], $referencePrice, Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
         }
     }
 
