@@ -47,7 +47,7 @@
         "doctrine/collections": "1.8.0",
         "doctrine/common": "3.4.3",
         "doctrine/dbal": "2.13.8",
-        "doctrine/event-manager": "1.1.2",
+        "doctrine/event-manager": "1.2.0",
         "doctrine/inflector": "2.0.4",
         "doctrine/orm": "2.13.3",
         "doctrine/persistence": "2.5.4",

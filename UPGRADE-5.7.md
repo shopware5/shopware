@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Updated `doctrine/collections` to version 1.8.0
 * Updated `doctrine/common` to version 3.4.3
+* Updated `doctrine/event-manager` to version 1.2.0
 * Updated `doctrine/orm` to version 2.13.3
 * Updated `elasticsearch/elasticsearch` to version 7.17.1
 * Updated `laminas/laminas-code` to version 4.7.0
