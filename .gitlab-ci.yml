@@ -61,6 +61,7 @@ default:
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:7.4
     tags:
         - t3.medium
+    interruptible: true
 
 # Stage: Prepare Files
 
