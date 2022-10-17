@@ -108,7 +108,7 @@
         "behat/gherkin": "4.9.0",
         "behat/mink": "1.10.0",
         "behat/mink-selenium2-driver": "1.6.0",
-        "friends-of-behat/mink-extension": "2.7.1",
+        "friends-of-behat/mink-extension": "2.7.2",
         "php-parallel-lint/php-var-dump-check": "^0.5",
         "phpspec/prophecy-phpunit": "^2.0",
         "phpstan/extension-installer": "1.1.0",
