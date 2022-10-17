@@ -50,7 +50,7 @@
         "doctrine/event-manager": "1.2.0",
         "doctrine/inflector": "2.0.4",
         "doctrine/orm": "2.13.3",
-        "doctrine/persistence": "2.5.4",
+        "doctrine/persistence": "2.5.5",
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",
         "friendsofphp/proxy-manager-lts": "1.0.12",
