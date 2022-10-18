@@ -53,7 +53,7 @@
         "doctrine/persistence": "2.5.5",
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",
-        "friendsofphp/proxy-manager-lts": "1.0.12",
+        "friendsofphp/proxy-manager-lts": "1.0.13",
         "google/cloud-storage": "1.28.1",
         "guzzlehttp/guzzle": "~7.5.0",
         "guzzlehttp/psr7": "2.4.1",
