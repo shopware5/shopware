@@ -79,7 +79,7 @@
 
         <service id="template_factory" class="Shopware\Components\DependencyInjection\Bridge\Template"/>
         <service id="Template" alias="template">
-            <deprecated>The "%alias_id%" service is deprecated. Use "template" instead</deprecated>
+            <deprecated>The "%service_id%" service is deprecated. Use "%alias_id%" instead</deprecated>
         </service>
         <service id="template" class="Enlight_Template_Manager">
             <factory service="template_factory" method="factory"/>
@@ -178,7 +178,7 @@
         </service>
 
         <service id="Loader" alias="loader">
-            <deprecated>The "%alias_id%" service is deprecated. Use "loader" instead</deprecated>
+            <deprecated>The "%service_id%" service is deprecated. Use "%alias_id%" instead</deprecated>
         </service>
         <service id="loader" class="Enlight_Loader"/>
         <service id="shopware.loader" alias="loader"/>
@@ -644,7 +644,7 @@
         <service id="shopware.plugin_xml_plugin_reader" class="Shopware\Components\Plugin\XmlReader\XmlPluginReader"/>
 
         <service id="shopware.plugin_xml_plugin_info_reader" alias="shopware.plugin_xml_plugin_reader">
-            <deprecated>The "%alias_id%" service id is deprecated since 5.6.0, use "shopware.plugin_xml_plugin_reader" instead.</deprecated>
+            <deprecated>The "%service_id%" service id is deprecated since 5.6.0, use "%alias_id%" instead.</deprecated>
         </service>
 
         <service id="shopware.plugin_requirement_validator" class="Shopware\Components\Plugin\RequirementValidator">

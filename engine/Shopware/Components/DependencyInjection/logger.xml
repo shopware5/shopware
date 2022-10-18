@@ -76,7 +76,7 @@
         </service>
 
         <service id="debuglogger" alias="corelogger">
-            <deprecated>The "%alias_id%" service id is deprecated since 5.7.0, use "corelogger" instead. Will be removed with 5.8.0</deprecated>
+            <deprecated>The "%service_id%" service id is deprecated since 5.7.0, use "%alias_id%" instead.</deprecated>
         </service>
 
         <service id="shopware.log.fileparser" class="Shopware\Components\Log\Parser\LogfileParser"/>
