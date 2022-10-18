@@ -15,7 +15,7 @@
         </service>
 
         <service id="shopware_elastic_search.client.logger" alias="shopware_elastic_search.client">
-            <deprecated>The "%alias_id%" service is deprecated. Use "%service_id%" instead</deprecated>
+            <deprecated>The "%service_id%" service is deprecated. Use "%alias_id%" instead</deprecated>
         </service>
 
         <service id="shopware_elastic_search.shop_indexer_factory"
