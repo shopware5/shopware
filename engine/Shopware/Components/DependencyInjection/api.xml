@@ -102,16 +102,16 @@
 
         <!-- Necessary because of implementation in \Shopware\Components\Api\Manager::getResource() -->
         <service id="shopware.api.customerstream" alias="shopware.api.customer_stream">
-            <deprecated>%alias_id% is deprecated, use shopware.api.customer_stream instead</deprecated>
+            <deprecated>%service_id% is deprecated, use %alias_id% instead</deprecated>
         </service>
         <service id="shopware.api.customergroup" alias="shopware.api.customer_group">
-            <deprecated>%alias_id% is deprecated, use shopware.api.customer_group instead</deprecated>
+            <deprecated>%service_id% is deprecated, use %alias_id% instead</deprecated>
         </service>
         <service id="shopware.api.propertygroup" alias="shopware.api.property_group">
-            <deprecated>%alias_id% is deprecated, use shopware.api.property_group instead</deprecated>
+            <deprecated>%service_id% is deprecated, use %alias_id% instead</deprecated>
         </service>
         <service id="shopware.api.emotionpreset" alias="shopware.api.emotion_preset">
-            <deprecated>%alias_id% is deprecated, use shopware.api.emotion_preset instead</deprecated>
+            <deprecated>%service_id% is deprecated, use %alias_id% instead</deprecated>
         </service>
     </services>
 </container>
