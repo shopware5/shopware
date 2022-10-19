@@ -23306,22 +23306,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
 			count: 4
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
 			message: "#^Cannot call method getNumber\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method getOptions\\(\\) on Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 

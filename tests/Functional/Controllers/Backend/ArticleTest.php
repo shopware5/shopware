@@ -24,7 +24,6 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Template_Manager;
@@ -32,7 +31,15 @@ use Enlight_View_Default;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use ReflectionMethod;
+use sBasket;
+use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Set as StoreFrontConfiguratorSet;
+use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Configurator\Set;
 use Shopware\Models\Article\Detail;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
@@ -43,6 +50,8 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private const PRODUCT_WITH_VARIANTS_ID = 180;
 
     /**
      * @var ReflectionMethod
@@ -58,6 +67,12 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
      * @var MockObject|Shopware_Controllers_Backend_Article
      */
     private $controller;
+
+    private ModelManager $modelManager;
+
+    private sBasket $basketModule;
+
+    private ConfiguratorServiceInterface $configuratorService;
 
     /**
      * Standard set up for every test - just disable auth
@@ -79,6 +94,10 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->interpretNumberSyntaxMethod = $class->getMethod('interpretNumberSyntax');
         $this->interpretNumberSyntaxMethod->setAccessible(true);
+
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
+        $this->basketModule = $this->getContainer()->get('modules')->Basket();
+        $this->configuratorService = $this->getContainer()->get(ConfiguratorServiceInterface::class);
     }
 
     public function tearDown(): void
@@ -196,9 +215,138 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
         $data = $view->getAssign('data');
         $firstArticle = array_pop($data);
 
-        $regulationPrice = $this->getContainer()->get(Connection::class)->fetchOne('SELECT regulation_price FROM s_articles_prices WHERE articleID = ' . $firstArticle['id']);
+        $regulationPrice = $this->modelManager->getConnection()->fetchOne('SELECT regulation_price FROM s_articles_prices WHERE articleID = ' . $firstArticle['id']);
 
         // (119 / 119) * 100
         static::assertEquals(100, (float) $regulationPrice);
+    }
+
+    public function testProductNameAfterTurningVariantItemBackToDefaultProduct(): void
+    {
+        $product = $this->modelManager->getRepository(Article::class)->find(self::PRODUCT_WITH_VARIANTS_ID);
+        static::assertInstanceOf(Article::class, $product);
+        $productName = $product->getName();
+
+        $variant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $variant);
+        $ordernumber = (string) $variant->getNumber();
+        static::assertInstanceOf(Set::class, $product->getConfiguratorSet());
+
+        $configOptions = $variant->getConfiguratorOptions();
+        static::assertGreaterThan(0, $configOptions->count());
+        $options = [];
+        foreach ($configOptions as $option) {
+            $options[] = $option->getName();
+        }
+
+        $productNameInBasket = $this->addToBasket($ordernumber);
+        static::assertSame($productName . ' ' . implode(' /', $options), $productNameInBasket);
+
+        $this->deleteVariants();
+        $this->turnToDefaultProduct();
+
+        $this->modelManager->clear();
+        $product = $this->modelManager->getRepository(Article::class)->find(self::PRODUCT_WITH_VARIANTS_ID);
+        static::assertInstanceOf(Article::class, $product);
+        $variant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $variant);
+
+        static::assertNull($product->getConfiguratorSet());
+        static::assertCount(0, $variant->getConfiguratorOptions());
+        static::assertSame('', $variant->getAdditionalText());
+
+        $productNameInBasket = $this->addToBasket($ordernumber);
+        static::assertSame($productName, $productNameInBasket);
+    }
+
+    public function testVariantOptionsNotShownOnProductDetailPageAfterDeletingThese(): void
+    {
+        $product = $this->modelManager->getRepository(Article::class)->find(self::PRODUCT_WITH_VARIANTS_ID);
+        static::assertInstanceOf(Article::class, $product);
+        $variant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $variant);
+        $ordernumber = $variant->getNumber();
+        static::assertIsString($ordernumber);
+
+        $this->deleteVariants();
+
+        $context = $this->getContainer()->get(ContextServiceInterface::class)->getShopContext();
+        $product = Shopware()->Container()->get(ListProductServiceInterface::class)->get($ordernumber, $context);
+        static::assertInstanceOf(ListProduct::class, $product);
+        $configurator = $this->configuratorService->getProductConfigurator(
+            $product,
+            $context,
+            []
+        );
+        static::assertInstanceOf(StoreFrontConfiguratorSet::class, $configurator);
+        foreach ($configurator->getGroups() as $group) {
+            static::assertCount(1, $group->getOptions());
+        }
+    }
+
+    private function addToBasket(string $ordernumber): string
+    {
+        $this->basketModule->sAddArticle($ordernumber);
+        $sql = 'SELECT articlename FROM s_order_basket WHERE sessionID = :sessionId;';
+        $productName = $this->modelManager->getConnection()->executeQuery($sql, ['sessionId' => $this->getContainer()->get('session')->getId()])->fetchOne();
+        $this->basketModule->sDeleteBasket();
+        static::assertSame(0, $this->basketModule->sCountBasket());
+
+        return $productName;
+    }
+
+    private function deleteVariants(): void
+    {
+        $sql = '
+        SELECT
+            ad.id,
+            acor.option_id
+        FROM
+            s_articles_details AS ad,
+            s_article_configurator_option_relations AS acor
+        WHERE
+            ad.articleID = :id AND acor.article_id = ad.id';
+
+        $variantDatas = $this->modelManager->getConnection()->executeQuery($sql, ['id' => self::PRODUCT_WITH_VARIANTS_ID])->fetchAllAssociative();
+        static::assertGreaterThan(1, \count($variantDatas), 'This product has no variants.');
+
+        $params = [
+            'details' => [],
+        ];
+
+        for ($i = 0, $size = \count($variantDatas); $i < $size; ++$i) {
+            $params['details'][$i] = ['id' => (int) $variantDatas[$i]['id']];
+            $params['details'][$i]['configuratorOptions'][] = ['id' => (int) $variantDatas[$i]['option_id']];
+        }
+
+        $view = new Enlight_View_Default(new Enlight_Template_Manager());
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($params);
+        $this->controller->setView($view);
+        $this->controller->setRequest($request);
+        $this->controller->setContainer($this->getContainer());
+        $this->controller->deleteDetailAction();
+
+        static::assertTrue($view->getAssign('success'));
+
+        $variants = $this->modelManager->getConnection()->executeQuery($sql, ['id' => self::PRODUCT_WITH_VARIANTS_ID])->fetchAllAssociative();
+        static::assertCount(1, $variants);
+    }
+
+    private function turnToDefaultProduct(): void
+    {
+        $productDataParams = require __DIR__ . '/_assets/productData.php';
+
+        $view = new Enlight_View_Default(new Enlight_Template_Manager());
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($productDataParams);
+        $this->controller->setView($view);
+        $this->controller->setRequest($request);
+        $this->controller->setContainer($this->getContainer());
+        $this->controller->saveAction();
+
+        $response = $view->getAssign();
+        static::assertTrue($response['success']);
+        static::assertSame('', $response['data'][0]['mainDetail']['additionalText']);
     }
 }

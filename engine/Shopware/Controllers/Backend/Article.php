@@ -1325,6 +1325,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $detailData = $this->setDetailDataReferences($detailData, $product);
 
         $configuratorSet = $product->getConfiguratorSet();
+        if (!$configuratorSet instanceof Set) {
+            throw new Exception(sprintf('Should not happen. The product with the given ID "%s" must be a variant product at this point.', $productId));
+        }
         $dependencies = $this->getRepository()->getConfiguratorDependenciesQuery($configuratorSet->getId())->getArrayResult();
         $priceVariations = $this->getRepository()->getConfiguratorPriceVariationsQuery($configuratorSet->getId())->getArrayResult();
 
@@ -1503,6 +1506,16 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             }
             if ($model->getId() !== $product->getMainDetail()->getId()) {
                 $this->get('models')->remove($model);
+
+                $configuratorSet = $product->getConfiguratorSet();
+                if (!$configuratorSet instanceof Set) {
+                    continue;
+                }
+                $setId = $configuratorSet->getId();
+                foreach ($detail['configuratorOptions'] as $option) {
+                    $sql = 'DELETE FROM s_article_configurator_set_option_relations WHERE set_id = :setId AND option_id = :optionId;';
+                    $this->container->get(Connection::class)->executeQuery($sql, ['setId' => $setId, 'optionId' => $option['id']]);
+                }
             }
         }
         $this->get('models')->flush();
@@ -3023,8 +3036,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             ->getQuery()
             ->execute();
 
-        $sql = 'DELETE FROM s_article_configurator_option_relations WHERE article_id IN (?)';
-        Shopware()->Db()->query($sql, [implode(',', $detailIds)]);
+        $this->get(Connection::class)->createQueryBuilder()
+            ->delete('s_article_configurator_option_relations')
+            ->where('article_id IN (:detailIds)')
+            ->setParameter('detailIds', $detailIds, Connection::PARAM_INT_ARRAY)
+            ->execute();
 
         $builder = $this->get('models')->createQueryBuilder();
         $builder->delete(Price::class, 'prices')
@@ -3362,6 +3378,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function deleteVariantsForAllDeactivatedOptions($article, $selectedOptions)
     {
         $configuratorSet = $article->getConfiguratorSet();
+        if (!$configuratorSet instanceof Set) {
+            return;
+        }
         $oldOptions = $configuratorSet->getOptions();
         $ids = [];
         foreach ($oldOptions as $oldOption) {
@@ -3761,17 +3780,18 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareConfiguratorAssociatedData($data, $article)
     {
+        $modelManger = $this->get('models');
         if (!empty($data['configuratorSetId'])) {
-            $data['configuratorSet'] = $this->get('models')->find(Set::class, $data['configuratorSetId']);
+            $data['configuratorSet'] = $modelManger->find(Set::class, $data['configuratorSetId']);
         } elseif ($data['isConfigurator']) {
             $set = new Set();
             $set->setName('Set-' . $data['mainDetail']['number']);
             $set->setPublic(false);
             $data['configuratorSet'] = $set;
         } else {
-            // If the product has an configurator set, we have to remove this set if it isn't used for other products
+            // If the product has a configurator set, we have to remove this set if it isn't used for other products
             if ($article->getConfiguratorSet() && $article->getConfiguratorSet()->getId()) {
-                $builder = $this->get('models')->createQueryBuilder();
+                $builder = $modelManger->createQueryBuilder();
                 $products = $builder->select(['articles'])
                     ->from(Product::class, 'articles')
                     ->where('articles.configuratorSetId = ?1')
@@ -3780,8 +3800,17 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                     ->getArrayResult();
 
                 if (\count($products) <= 1) {
-                    $set = $this->get('models')->find(Set::class, $article->getConfiguratorSet()->getId());
-                    $this->get('models')->remove($set);
+                    $set = $modelManger->find(Set::class, $article->getConfiguratorSet()->getId());
+                    $modelManger->remove($set);
+                }
+
+                $variant = $article->getMainDetail();
+                if ($variant instanceof ProductVariant && $variant->getConfiguratorOptions()->count() > 0) {
+                    $modelManger->getConnection()->delete('s_article_configurator_option_relations', [
+                        'article_id' => $variant->getId(),
+                    ]);
+
+                    $data['mainDetail']['additionalText'] = '';
                 }
             }
             $data['configuratorSet'] = null;
