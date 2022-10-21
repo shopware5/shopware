@@ -41,8 +41,7 @@ class RefreshSearchIndexTest extends TestCase
     public function testExecuteClearTables(): void
     {
         $connection = $this->getContainer()->get(Connection::class);
-        $firstResultForIndex = $connection->fetchOne('SELECT COUNT(*) FROM s_search_index');
-        $firstResultForKeywords = $connection->fetchOne('SELECT COUNT(*) FROM s_search_keywords');
+        $firstResultForKeywords = $connection->fetchOne('SELECT MAX(id) FROM s_search_keywords');
 
         $command = $this->getContainer()->get(RefreshSearchIndexCommand::class);
         $commandTester = new CommandTester($command);
@@ -54,12 +53,8 @@ class RefreshSearchIndexTest extends TestCase
 
         $connection = $this->getContainer()->get(Connection::class);
 
-        static::assertNotEquals($firstResultForIndex,
-            $connection->fetchOne('SELECT COUNT(*) FROM s_search_index')
-        );
-
         static::assertNotEquals($firstResultForKeywords,
-            $connection->fetchOne('SELECT COUNT(*) FROM s_search_keywords')
+            $connection->fetchOne('SELECT MAX(id) FROM s_search_keywords')
         );
     }
 }

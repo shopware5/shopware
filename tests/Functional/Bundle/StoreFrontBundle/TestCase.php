@@ -45,11 +45,13 @@ use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroupModel;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
 
 abstract class TestCase extends Enlight_Components_Test_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     protected Helper $helper;
 
@@ -64,7 +66,8 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
 
     protected function tearDown(): void
     {
-        $this->helper->cleanUp();
+        $entityManager = $this->getContainer()->get('models');
+        $entityManager->clear();
         parent::tearDown();
     }
 

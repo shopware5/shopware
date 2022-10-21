@@ -26,6 +26,7 @@ namespace Shopware\Models\Article\Configurator;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Article;
 
@@ -246,7 +247,7 @@ class Set extends ModelEntity
     }
 
     /**
-     * @param int $type
+     * @param ConfiguratorService::CONFIGURATOR_* $type
      */
     public function setType($type)
     {

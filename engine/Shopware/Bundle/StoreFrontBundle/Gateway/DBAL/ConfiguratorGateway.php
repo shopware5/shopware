@@ -169,6 +169,42 @@ class ConfiguratorGateway implements ConfiguratorGatewayInterface
         return $data;
     }
 
+    public function getAvailableConfigurations(BaseProduct $product): array
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select([
+            "GROUP_CONCAT(DISTINCT relations.option_id, '' SEPARATOR '|') as combinations",
+        ]);
+
+        $query->from('s_articles_details', 'variant')
+            ->innerJoin(
+                'variant',
+                's_articles',
+                'product',
+                'product.id = variant.articleID AND product.id = :productId AND (
+                    (variant.laststock * variant.instock) >= (variant.laststock * variant.minpurchase)
+                )'
+            )
+            ->leftJoin('variant', 's_article_configurator_option_relations', 'relations', 'variant.id = relations.article_id')
+            ->where('variant.active = 1')
+            ->groupBy('variant.id')
+            ->setParameter(':productId', $product->getId());
+
+        $data = $query->execute()->fetchAll(PDO::FETCH_COLUMN);
+
+        $result = [];
+        foreach ($data as $row) {
+            $rowIds = explode('|', $row);
+
+            foreach ($rowIds as $optionId) {
+                $result[(int) $optionId][] = $rowIds;
+            }
+        }
+
+        return $result;
+    }
+
     private function getQuery(): QueryBuilder
     {
         $query = $this->connection->createQueryBuilder();

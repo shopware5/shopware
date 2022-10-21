@@ -49,10 +49,10 @@ class ConfiguratorServiceTest extends TestCase
     {
         $configuratorSet = $this->createConfiguratorSet();
         $combinations = [
-            self::OPTION_ID_1 => [0 => ''],
-            self::OPTION_ID_2 => [0 => ''],
-            self::OPTION_ID_3 => [0 => ''],
-            self::OPTION_ID_4 => [0 => ''],
+            self::OPTION_ID_1 => [[self::OPTION_ID_1]],
+            self::OPTION_ID_2 => [[self::OPTION_ID_2]],
+            self::OPTION_ID_3 => [[self::OPTION_ID_3]],
+            self::OPTION_ID_4 => [[self::OPTION_ID_4]],
         ];
         $configuratorService = $this->createConfiguratorService($configuratorSet, $combinations);
 
@@ -72,14 +72,14 @@ class ConfiguratorServiceTest extends TestCase
     }
 
     /**
-     * @param array<int, array<string>> $combinations
+     * @param array<int, array<int, array<int, int>>> $combinations
      */
     private function createConfiguratorService(Set $configuratorSet, array $combinations): ConfiguratorService
     {
         $productConfigurationGateway = $this->createMock(ProductConfigurationGatewayInterface::class);
         $configuratorGateway = $this->createMock(ConfiguratorGatewayInterface::class);
         $configuratorGateway->method('get')->willReturn($configuratorSet);
-        $configuratorGateway->method('getProductCombinations')->willReturn($combinations);
+        $configuratorGateway->method('getAvailableConfigurations')->willReturn($combinations);
 
         return new ConfiguratorService(
             $productConfigurationGateway,
