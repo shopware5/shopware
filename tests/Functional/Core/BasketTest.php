@@ -1614,12 +1614,11 @@ class BasketTest extends TestCase
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = 10;
 
         // Check that we have no surcharge
-        static::assertEmpty(
-            $this->connection->fetchAssociative(
-                'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
-                [$this->session->get('sessionId')]
-            )
+        $surchargeRowBefore = $this->connection->fetchAssociative(
+            'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
+            [$this->session->get('sessionId')]
         );
+        static::assertEmpty($surchargeRowBefore);
 
         // Add surcharge, expect success (null)
         static::assertNull(

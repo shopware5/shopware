@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,32 +28,31 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Controller_TestCase;
+use Doctrine\DBAL\Exception;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Category\Repository;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
-class CategoryTest extends Enlight_Components_Test_Controller_TestCase
+class CategoryTest extends ControllerTestCase
 {
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    use ContainerTrait;
+
+    private Repository $repository;
 
     /**
-     * @var array
+     * @var array{parentId: int, name: string, active: bool}
      */
-    private $dummyData = [
+    private array $dummyData = [
          'parentId' => 1,
          'name' => 'unitTestCategory',
-         'active' => 1,
+         'active' => true,
     ];
 
-    private $updateMetaDescription = 'testMetaDescription';
+    private string $updateMetaDescription = 'testMetaDescription';
 
-    /**
-     * @var \Shopware\Components\Model\ModelManager
-     */
-    private $manager;
+    private ModelManager $manager;
 
     /**
      * Standard set up for every test - just disable auth
@@ -60,12 +61,12 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
 
-        $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(Category::class);
+        $this->manager = $this->getContainer()->get('models');
+        $this->repository = $this->manager->getRepository(Category::class);
 
         // Disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl();
     }
 
     public function testGetList(): void
@@ -82,11 +83,11 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
         $params['node'] = 1;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getList');
-        static::assertTrue($this->View()->success);
-        $returnData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returnData = $this->View()->getAssign('data');
 
         static::assertNotEmpty($returnData);
-        static::assertGreaterThan(0, $this->View()->total);
+        static::assertGreaterThan(0, $this->View()->getAssign('total'));
         $foundDummy = [];
         foreach ($returnData as $dummyData) {
             if ($dummyData['name'] === $dummy->getName()) {
@@ -111,22 +112,22 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
         // Test new category
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/createDetail');
-        static::assertTrue($this->View()->success);
-        static::assertEquals($this->dummyData['name'], $this->View()->data['name']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertEquals($this->dummyData['name'], $this->View()->getAssign('data')['name']);
 
         // Test update category
-        $params['id'] = $this->View()->data['id'];
+        $params['id'] = $this->View()->getAssign('data')['id'];
         $params['metaDescription'] = $this->updateMetaDescription;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/updateDetail');
-        static::assertTrue($this->View()->success);
-        static::assertEquals($this->updateMetaDescription, $this->View()->data['metaDescription']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertEquals($this->updateMetaDescription, $this->View()->getAssign('data')['metaDescription']);
 
-        return $this->View()->data['id'];
+        return $this->View()->getAssign('data')['id'];
     }
 
     /**
-     * @throws \Doctrine\DBAL\Exception
+     * @throws Exception
      */
     public function testSaveDetailFullParam(): void
     {
@@ -136,12 +137,10 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
         ]);
         $this->dispatch('backend/Category/updateDetail');
 
-        $connection = Shopware()->Container()->get(Connection::class);
-
-        $result = $connection->executeQuery(
+        $result = $this->getContainer()->get(Connection::class)->executeQuery(
             "SELECT facet_ids FROM s_categories WHERE description = 'Genusswelten'"
         );
-        $result = $result->fetchAll();
+        $result = $result->fetchAllAssociative();
 
         static::assertSame('|12|5|2|4|10|11|3|6|7|8|9|', $result[0]['facet_ids']);
     }
@@ -149,17 +148,15 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @depends testSaveDetail
      *
-     * @param string $id
-     *
-     * @return string the id to for the testGetDetail Method
+     * @return int the id to for the testGetDetail Method
      */
-    public function testGetDetail($id): string
+    public function testGetDetail(int $id): int
     {
         $params['node'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getDetail');
-        static::assertTrue($this->View()->success);
-        $returningData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returningData = $this->View()->getAssign('data');
         $dummyData = $this->dummyData;
 
         static::assertEquals($dummyData['parentId'], $returningData['parentId']);
@@ -175,13 +172,13 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testGetDetail
      */
-    public function testGetIdPath($id): void
+    public function testGetIdPath(int $id): void
     {
         $params['categoryIds'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/getIdPath');
-        static::assertTrue($this->View()->success);
-        $categoryPath = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $categoryPath = $this->View()->getAssign('data');
         static::assertNotEmpty($categoryPath);
         static::assertCount(2, explode('/', $categoryPath[0]));
     }
@@ -191,37 +188,35 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testGetDetail
      */
-    public function testMoveTreeItem($id): void
+    public function testMoveTreeItem(int $id): void
     {
         // Test move to another position
         $params['id'] = $id;
         $params['position'] = 2;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/moveTreeItem');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $params['id'] = $id;
         $params['position'] = 2;
         $params['parentId'] = 3;
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/moveTreeItem');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $movedCategoryModel = $this->repository->find($id);
         static::assertNotNull($movedCategoryModel);
         $parentModel = $movedCategoryModel->getParent();
         static::assertNotNull($parentModel);
 
-        // parentCategory should be Deutsch Id = 3
+        // parentCategory should be "Deutsch" ID = 3
         static::assertEquals(3, $parentModel->getId());
     }
 
     /**
      * @depends testGetDetail
-     *
-     * @param string $id
      */
-    public function testDelete($id): void
+    public function testDelete(int $id): void
     {
         $params['id'] = $id;
         $categoryModel = $this->repository->find($id);
@@ -231,7 +226,7 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/delete');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         $categoryModel = $this->repository->find($id);
         static::assertNull($categoryModel);
     }
@@ -247,11 +242,11 @@ class CategoryTest extends Enlight_Components_Test_Controller_TestCase
         // Test new category
         $this->Request()->setParams($params);
         $this->dispatch('backend/Category/createDetail');
-        static::assertFalse($this->View()->success);
-        static::assertNotEmpty($this->View()->message);
+        static::assertFalse($this->View()->getAssign('success'));
+        static::assertNotEmpty($this->View()->getAssign('message'));
 
-        $snippet = Shopware()->Container()->get('snippets')->getNamespace('backend/category/main');
-        static::assertEquals($snippet->get('saveDetailInvalidCategoryId', 'Invalid categoryId'), $this->View()->message);
+        $snippet = $this->getContainer()->get('snippets')->getNamespace('backend/category/main');
+        static::assertEquals($snippet->get('saveDetailInvalidCategoryId', 'Invalid categoryId'), $this->View()->getAssign('message'));
     }
 
     /**

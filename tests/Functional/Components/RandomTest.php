@@ -33,11 +33,12 @@ class RandomTest extends Enlight_Components_Test_TestCase
 {
     public function testGeneratePassword(): void
     {
-        $sets = [];
-        $sets[] = 'abcdefghjkmnpqrstuvwxyz';
-        $sets[] = 'ABCDEFGHJKMNPQRSTUVWXYZ';
-        $sets[] = '23456789';
-        $sets[] = '!@#$%&*?';
+        $sets = [
+            'lowerCase' => 'abcdefghjkmnpqrstuvwxyz',
+            'upperCase' => 'ABCDEFGHJKMNPQRSTUVWXYZ',
+            'numbers' => '123456789',
+            'specialChars' => '!@#$%&*?',
+        ];
 
         $chars = implode('', $sets);
 
@@ -56,7 +57,9 @@ class RandomTest extends Enlight_Components_Test_TestCase
             }
         }
 
-        static::assertEmpty($sets);
+        foreach ($sets as $kind => $set) {
+            static::fail(sprintf('Password does not contain following set: %s', $kind));
+        }
     }
 
     public function testGetBoolean(): void
