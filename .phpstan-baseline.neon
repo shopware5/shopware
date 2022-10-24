@@ -2441,11 +2441,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
 
 		-
-			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_ViewRenderer_Bootstrap\\:\\:onPostDispatch\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
@@ -2462,11 +2457,6 @@ parameters:
 
 		-
 			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
-
-		-
-			message: "#^PHPDoc tag @return has invalid value \\(\\)\\: Unexpected token \"\\\\n     \", expected type at offset 278$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
 
@@ -25206,11 +25196,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:prepareValue\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:saveTaxRules\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
@@ -25222,11 +25207,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateStoreUsingSnippets\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Config.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Config\\:\\:translateValues\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -40251,22 +40231,12 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onNotifyConfirmAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onPostDispatch\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
 		-
 			message: "#^Method Shopware_Plugins_Frontend_Notification_Bootstrap\\:\\:onRunCronJob\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
-
-		-
-			message: "#^PHPDoc tag @return has invalid value \\(\\)\\: Unexpected token \"\\\\n     \", expected type at offset 147$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/Notification/Bootstrap.php
 
@@ -43609,76 +43579,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigGetFormTest\\:\\:\\$temporaryLocales type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/ConfigGetFormTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListConfigPagination\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListSearch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListSearchWithPagination\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkTableListConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:testCronJobPaginationConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:testCronJobSearchConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:testIfPDFDocumentsListIncludesTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:testPersistDocumentTypeKey\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:testSearchFieldConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:testSearchFieldSearchConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, array\\|string\\|null given\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$tableListName of method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListConfigPagination\\(\\) expects Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\strin, string given\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$totalCount of method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListSearch\\(\\) expects int, string\\|false\\|null given\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
-
-		-
-			message: "#^Parameter \\$tableListName of method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\ConfigTest\\:\\:checkGetTableListConfigPagination\\(\\) has invalid type Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\strin\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/ConfigTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"

@@ -1020,9 +1020,10 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param string|int $localeId
+     * @param string|int           $localeId
+     * @param array<string, mixed> $values
      *
-     * @return array<mixed>
+     * @return array<string, mixed>
      */
     private function translateValues($localeId, array $values): array
     {
@@ -1405,12 +1406,18 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
     }
 
     /**
-     * @param array<string, mixed> $elementData
+     * @param array<string, mixed>      $elementData
+     * @param array<string>|string|null $value
+     *
+     * @return array<string>|string|null
      */
-    private function prepareValue(array $elementData, $value): string
+    private function prepareValue(array $elementData, $value)
     {
         switch ($elementData['name']) {
             case 'shopsalutations':
+                if (!\is_string($value)) {
+                    throw new InvalidArgumentException('Value for config option "shopsalutations" needs to be a string');
+                }
                 $values = explode(',', $value);
                 $value = implode(',', array_map('trim', $values));
                 break;

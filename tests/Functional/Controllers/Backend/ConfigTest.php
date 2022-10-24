@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,32 +26,42 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-use Enlight_Components_Test_Controller_TestCase;
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Generator;
 use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware\Tests\TestReflectionHelper;
+use Shopware_Controllers_Backend_Config;
 
-class ConfigTest extends Enlight_Components_Test_Controller_TestCase
+class ConfigTest extends ControllerTestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
     /**
      * Tests the cron job config pagination
      */
-    public function testCronJobPaginationConfig()
+    public function testCronJobPaginationConfig(): void
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
         $this->checkTableListConfig('cronJob');
 
         $this->reset();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
         $this->checkGetTableListConfigPagination('cronJob');
     }
 
     /**
      * Tests the cron job search
      */
-    public function testCronJobSearchConfig()
+    public function testCronJobSearchConfig(): void
     {
-        $sql = 'SELECT count(*) FROM  s_crontab';
-        $totalCronJobCount = Shopware()->Db()->fetchOne($sql);
+        $sql = 'SELECT count(*) FROM s_crontab';
+        $totalCronJobCount = (int) $this->getContainer()->get(Connection::class)->fetchOne($sql);
 
         // Test the search
         $this->checkGetTableListSearch('a', $totalCronJobCount, 'cronJob');
@@ -63,26 +75,26 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Tests the searchField config pagination
      */
-    public function testSearchFieldConfig()
+    public function testSearchFieldConfig(): void
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
         $this->checkTableListConfig('searchField');
 
         $this->reset();
 
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
         $this->checkGetTableListConfigPagination('searchField');
     }
 
     /**
      * Tests the cron job search
      */
-    public function testSearchFieldSearchConfig()
+    public function testSearchFieldSearchConfig(): void
     {
         $sql = 'SELECT count(*)
                 FROM s_search_fields f
                 LEFT JOIN s_search_tables t on f.tableID = t.id';
-        $totalCronJobCount = Shopware()->Db()->fetchOne($sql);
+        $totalCronJobCount = (int) $this->getContainer()->get(Connection::class)->fetchOne($sql);
 
         $this->checkGetTableListSearch('b', $totalCronJobCount, 'searchField');
 
@@ -94,9 +106,9 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Tests the existence of the document type key
      */
-    public function testPersistDocumentTypeKey()
+    public function testPersistDocumentTypeKey(): void
     {
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
 
         $newTestDocumentType = [
             'id' => 0,
@@ -114,20 +126,22 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->Request()->setPost($newTestDocumentType);
         $response = $this->dispatch('backend/Config/saveValues?_repositoryClass=document');
+        $body = $response->getBody();
+        static::assertIsString($body);
 
-        static::assertTrue(json_decode($response->getBody(), true)['success']);
+        static::assertTrue(json_decode($body, true)['success']);
 
-        Shopware()->Db()->query('DELETE FROM `s_core_documents` WHERE `key`="first_test_document";');
+        $this->getContainer()->get(Connection::class)->executeQuery('DELETE FROM `s_core_documents` WHERE `key`="first_test_document";');
     }
 
     /**
      * Tests whether the list of pdf documents includes its translations
      */
-    public function testIfPDFDocumentsListIncludesTranslation()
+    public function testIfPDFDocumentsListIncludesTranslation(): void
     {
         // Set up
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth(false);
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth(false);
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl();
 
         // Login
         $this->Request()->setMethod('POST');
@@ -151,8 +165,10 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
         $this->Request()->setMethod('GET');
         $getString = http_build_query($getParams);
         $response = $this->dispatch('backend/Config/getList?' . $getString);
+        $body = $response->getBody();
+        static::assertIsString($body);
 
-        $responseJSON = json_decode($response->getBody(), true);
+        $responseJSON = json_decode($body, true);
         static::assertTrue($responseJSON['success']);
 
         foreach ($responseJSON['data'] as $documentType) {
@@ -160,19 +176,21 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         $this->reset();
-        Shopware()->Container()->reset('translation');
+        $this->getContainer()->reset('translation');
 
         // Check for English translations
-        $user = Shopware()->Container()->get('auth')->getIdentity();
-        $user->locale = Shopware()->Models()->getRepository(
+        $user = $this->getContainer()->get('auth')->getIdentity();
+        $user->locale = $this->getContainer()->get('models')->getRepository(
             Locale::class
         )->find(2);
 
         $this->Request()->setMethod('GET');
         $getString = http_build_query($getParams);
         $response = $this->dispatch('backend/Config/getList?' . $getString);
+        $body = $response->getBody();
+        static::assertIsString($body);
 
-        $responseJSON = json_decode($response->getBody(), true);
+        $responseJSON = json_decode($body, true);
         static::assertTrue($responseJSON['success']);
 
         foreach ($responseJSON['data'] as $documentType) {
@@ -194,11 +212,111 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Tests the config tableList
+     * @param array<string, mixed> $elementData
      *
-     * @param string $tableListName
+     * @dataProvider getSaveElementData
      */
-    private function checkTableListConfig($tableListName)
+    public function testSaveElement(array $elementData): void
+    {
+        $saveElementMethod = TestReflectionHelper::getMethod(Shopware_Controllers_Backend_Config::class, 'saveElement');
+        $configController = new Shopware_Controllers_Backend_Config();
+        $configController->setContainer($this->getContainer());
+
+        $eventCalled = false;
+        $this->getContainer()->get('events')->addListener(
+            'Shopware_Controllers_Backend_Config_After_Save_Config_Element',
+            function () use (&$eventCalled) {
+                $eventCalled = true;
+            }
+        );
+        $shop = $this->createMock(Shop::class);
+        $saveElementMethod->invokeArgs($configController, [$elementData, $shop]);
+
+        static::assertTrue($eventCalled);
+    }
+
+    public function getSaveElementData(): Generator
+    {
+        $sql = 'SELECT id FROM s_core_config_elements';
+        $elementId = (int) $this->getContainer()->get(Connection::class)->fetchOne($sql);
+
+        yield 'Save button' => [
+            [
+                'id' => $elementId,
+                'name' => 'basicSettingsGroup',
+                'value' => null,
+                'label' => 'Grundeinstellungen',
+                'description' => null,
+                'type' => 'button',
+                'required' => false,
+                'scope' => 1,
+                'options' => [],
+                'values' => [
+                    [
+                        'id' => null,
+                        'shopId' => 1,
+                        'value' => null,
+                    ],
+                    [
+                        'id' => null,
+                        'shopId' => 2,
+                        'value' => null,
+                    ],
+                ],
+            ],
+        ];
+        yield 'Save multi select' => [
+            [
+                'id' => $elementId,
+                'name' => 'multiselect',
+                'value' => 'one',
+                'label' => 'multiselect',
+                'description' => null,
+                'type' => 'select',
+                'required' => false,
+                'scope' => 1,
+                'options' => [
+                    'multiSelect' => true,
+                    'store' => [
+                        [
+                            'one',
+                            'One',
+                        ],
+                        [
+                            'two',
+                            'Two',
+                        ],
+                        [
+                            'three',
+                            'Three',
+                        ],
+                    ],
+                    'queryMode' => 'remote',
+                ],
+                'values' => [
+                    [
+                        'id' => null,
+                        'shopId' => 1,
+                        'value' => [
+                            'one',
+                        ],
+                    ],
+                    [
+                        'id' => null,
+                        'shopId' => 2,
+                        'value' => [
+                                'one',
+                            ],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Tests the config tableList
+     */
+    private function checkTableListConfig(string $tableListName): void
     {
         // Should return more than 2 items
         $this->Request()->setMethod('GET');
@@ -210,10 +328,8 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Tests the config table list with pagination
-     *
-     * @param strin $tableListName
      */
-    private function checkGetTableListConfigPagination($tableListName)
+    private function checkGetTableListConfigPagination(string $tableListName): void
     {
         $this->Request()->setMethod('GET');
         $this->dispatch('backend/Config/getTableList/_repositoryClass/' . $tableListName . '?page=1&start=0&limit=2');
@@ -225,12 +341,8 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Checks the search of the table list config
-     *
-     * @param string $searchTerm
-     * @param int    $totalCount
-     * @param string $tableListName
      */
-    private function checkGetTableListSearch($searchTerm, $totalCount, $tableListName)
+    private function checkGetTableListSearch(string $searchTerm, int $totalCount, string $tableListName): void
     {
         $queryParams = [
             'page' => '1',
@@ -247,7 +359,7 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
         ];
         $query = http_build_query($queryParams);
         $url = 'backend/Config/getTableList/_repositoryClass/' . $tableListName . '?';
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
         static::assertGreaterThan(0, \count($returnData));
@@ -257,11 +369,8 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Checks the search and the pagination of the table list config
-     *
-     * @param string $searchTerm
-     * @param string $tableListName
      */
-    private function checkGetTableListSearchWithPagination($searchTerm, $tableListName)
+    private function checkGetTableListSearchWithPagination(string $searchTerm, string $tableListName): void
     {
         $queryParams = [
             'page' => '1',
@@ -279,7 +388,7 @@ class ConfigTest extends Enlight_Components_Test_Controller_TestCase
 
         $query = http_build_query($queryParams);
         $url = 'backend/Config/getTableList/_repositoryClass/' . $tableListName . '?';
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
         $this->dispatch($url . $query);
         $returnData = $this->View()->getAssign('data');
         static::assertCount(2, $returnData);
