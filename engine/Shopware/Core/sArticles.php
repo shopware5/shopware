@@ -2667,16 +2667,19 @@ class sArticles implements Enlight_Hook
             $selection = $this->frontController->Request()->getParam('group');
         }
 
+        $formattedSelection = [];
         foreach ($selection as $groupId => $optionId) {
             $groupId = (int) $groupId;
             $optionId = (int) $optionId;
 
             if ($groupId <= 0 || $optionId <= 0) {
-                unset($selection[$groupId]);
+                continue;
             }
+
+            $formattedSelection[$groupId] = $optionId;
         }
 
-        return $selection;
+        return $formattedSelection;
     }
 
     /**

@@ -48,7 +48,7 @@ class ConfiguratorServiceTest extends TestCase
         $configurationGateway->method('getAvailableConfigurations')->willReturn([
             11 => [[
                 11, 22, 33, 35,
-                   ]],
+           ]],
             22 => [[
                 22, 11, 12, 33, 35,
             ]],
@@ -112,7 +112,7 @@ class ConfiguratorServiceTest extends TestCase
                 33, 22, 11, 12,
             ]],
             12 => [[
-                13, 22, 33,
+                12, 22, 33,
             ]],
             35 => [[
                 35, 11, 22,
@@ -259,6 +259,46 @@ class ConfiguratorServiceTest extends TestCase
 
         static::assertFalse($configuratorGroupOptionsThree[1]->getActive());
         static::assertTrue($configuratorGroupOptionsThree[2]->getActive());
+        static::assertFalse($configuratorGroupOptionsThree[2]->isSelected());
+    }
+
+    public function testNoConfigurationsAreAvailable(): void
+    {
+        $setMock = $this->createMocks();
+
+        $productConfigurationGateway = $this->getMockForAbstractClass(ProductConfigurationGatewayInterface::class);
+        $configurationGateway = $this->getMockForAbstractClass(ConfiguratorGatewayInterface::class);
+        $configurationGateway->method('get')->willReturn($setMock);
+        $configurationGateway->method('getAvailableConfigurations')->willReturn([]);
+
+        $shopContext = $this->getMockForAbstractClass(ShopContextInterface::class);
+        $configuratorService = new ConfiguratorService($productConfigurationGateway, $configurationGateway);
+
+        $baseProduct = new BaseProduct(1, 1, 'sw100');
+
+        $configurator = $configuratorService->getProductConfigurator($baseProduct, $shopContext, [1 => 11, 2 => 22]);
+
+        $configuratorGroups = $configurator->getGroups();
+        $configuratorGroupOptionsOne = $configuratorGroups[0]->getOptions();
+        static::assertTrue($configuratorGroupOptionsOne[0]->isSelected());
+        static::assertFalse($configuratorGroupOptionsOne[0]->getActive());
+
+        static::assertFalse($configuratorGroupOptionsOne[1]->isSelected());
+        static::assertFalse($configuratorGroupOptionsOne[1]->getActive());
+        static::assertFalse($configuratorGroupOptionsOne[2]->getActive());
+
+        $configuratorGroupOptionsTwo = $configuratorGroups[1]->getOptions();
+        static::assertTrue($configuratorGroupOptionsTwo[0]->isSelected());
+        static::assertFalse($configuratorGroupOptionsTwo[0]->getActive());
+        static::assertFalse($configuratorGroupOptionsTwo[1]->getActive());
+        static::assertFalse($configuratorGroupOptionsTwo[2]->getActive());
+
+        $configuratorGroupOptionsThree = $configuratorGroups[2]->getOptions();
+        static::assertFalse($configuratorGroupOptionsThree[0]->isSelected());
+        static::assertFalse($configuratorGroupOptionsThree[0]->getActive());
+
+        static::assertFalse($configuratorGroupOptionsThree[1]->getActive());
+        static::assertFalse($configuratorGroupOptionsThree[2]->getActive());
         static::assertFalse($configuratorGroupOptionsThree[2]->isSelected());
     }
 

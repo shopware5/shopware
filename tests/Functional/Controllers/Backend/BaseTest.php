@@ -26,11 +26,13 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Plugins_Backend_Auth_Bootstrap as AuthPlugin;
 
 class BaseTest extends Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     private AuthPlugin $authPlugin;
 

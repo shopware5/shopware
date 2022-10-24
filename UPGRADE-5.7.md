@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)
 
+### Deprecations
+
+* Deprecated `\Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::getProductCombinations`, it will be removed in the next minor version v5.8.
+
 ### Changes
 
 * Updated `doctrine/collections` to version 1.8.0

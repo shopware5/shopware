@@ -64,13 +64,6 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
         parent::setUp();
     }
 
-    protected function tearDown(): void
-    {
-        $entityManager = $this->getContainer()->get('models');
-        $entityManager->clear();
-        parent::tearDown();
-    }
-
     /**
      * @param array<string, array> $products
      *

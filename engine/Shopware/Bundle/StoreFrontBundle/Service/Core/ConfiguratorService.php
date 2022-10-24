@@ -97,7 +97,7 @@ class ConfiguratorService implements ConfiguratorServiceInterface
 
             foreach ($group->getOptions() as $option) {
                 $option->setSelected(
-                    \in_array($option->getId(), $selection)
+                    \in_array($option->getId(), $selection, true)
                 );
 
                 $isOptionValid = $this->isOptionValid($group, $option->getId(), $selection, $availableProductOptions);
@@ -119,8 +119,8 @@ class ConfiguratorService implements ConfiguratorServiceInterface
     }
 
     /**
-     * @param array<int, int>                            $selection
-     * @param array<int, array<int, array<int, string>>> $availableProductOptions
+     * @param array<int, int>                         $selection
+     * @param array<int, array<int, array<int, int>>> $availableProductOptions
      */
     private function isOptionValid(Group $group, int $id, array $selection, array $availableProductOptions): bool
     {
@@ -132,11 +132,15 @@ class ConfiguratorService implements ConfiguratorServiceInterface
             return false;
         }
 
-        $searchValue = array_replace($selection, [$group->getId() => (string) $id]);
+        if (!isset($availableProductOptions[$id])) {
+            return false;
+        }
+
+        $searchValue = array_replace($selection, [$group->getId() => $id]);
 
         foreach ($availableProductOptions[$id] as $combinations) {
             foreach ($searchValue as $searched) {
-                if (!\in_array($searched, $combinations)) {
+                if (!\in_array($searched, $combinations, true)) {
                     continue 2;
                 }
             }

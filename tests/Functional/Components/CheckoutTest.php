@@ -33,10 +33,12 @@ use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
@@ -51,12 +53,6 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
         $this->apiHelper = new Helper($this->getContainer());
-    }
-
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-        $this->apiHelper->cleanUp();
     }
 
     public function reset()

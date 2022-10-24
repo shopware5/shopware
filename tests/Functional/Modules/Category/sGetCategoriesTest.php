@@ -24,15 +24,18 @@
 
 namespace Shopware\Tests\Functional\Modules\Category;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_TestCase;
 use sCategories;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class sGetCategoriesTest extends Enlight_Components_Test_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     /**
      * @var Helper
@@ -47,8 +50,9 @@ class sGetCategoriesTest extends Enlight_Components_Test_TestCase
     protected function setUp(): void
     {
         $this->helper = new Helper($this->getContainer());
+        $connection = $this->getContainer()->get(Connection::class);
 
-        Shopware()->Db()->query(
+        $connection->executeQuery(
             "DELETE FROM s_categories WHERE description LIKE 'Foo%' AND parent = 3"
         );
 
@@ -57,12 +61,6 @@ class sGetCategoriesTest extends Enlight_Components_Test_TestCase
         $this->module->customerGroupId = 1;
 
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
     }
 
     public function testWithMainId()

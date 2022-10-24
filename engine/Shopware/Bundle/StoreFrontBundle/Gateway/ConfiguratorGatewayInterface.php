@@ -63,7 +63,7 @@ interface ConfiguratorGatewayInterface
     public function getConfiguratorMedia(BaseProduct $product, ShopContextInterface $context);
 
     /**
-     * @deprecated tag: v5.7.9
+     * @deprecated Will be removed with 5.8
      *
      * Returns all possible configurator combinations for the provided product.
      * The returned array contains as array key the id of the configurator option.
@@ -90,8 +90,6 @@ interface ConfiguratorGatewayInterface
     public function getProductCombinations(BaseProduct $product);
 
     /**
-     * @deprecated tag: v5.7.9
-     *
      * Returns only available possible configurator combinations for the provided product.
      * The returned array contains as array key the id of the configurator option.
      * The array value contains an array with all possible configurator option configurations
@@ -102,7 +100,7 @@ interface ConfiguratorGatewayInterface
      *     'red'   => array(array('S', ...), array('L', ...)
      * )
      *
-     * @return array<int, array<int, array<int, string>>> Indexed by the option id
+     * @return array<int, array<int, array<int, int>>> Indexed by the option id
      */
     public function getAvailableConfigurations(BaseProduct $product): array;
 }

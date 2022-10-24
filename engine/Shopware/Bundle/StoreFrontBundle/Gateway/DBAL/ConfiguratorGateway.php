@@ -195,10 +195,10 @@ class ConfiguratorGateway implements ConfiguratorGatewayInterface
 
         $result = [];
         foreach ($data as $row) {
-            $rowIds = explode('|', $row);
+            $rowIds = array_map('\intval', explode('|', $row));
 
             foreach ($rowIds as $optionId) {
-                $result[(int) $optionId][] = $rowIds;
+                $result[$optionId][] = $rowIds;
             }
         }
 

@@ -51,7 +51,7 @@ class ConfiguratorGatewayTest extends TestCase
 
         $configuration = $configuratorGateway->getProductCombinations($baseProduct);
 
-        static::assertEquals([
+        static::assertEqualsCanonicalizing([
             10 => [20, 30, 40],
             20 => [10, 11, 30, 40],
             30 => [10, 11, 20, 40],
@@ -72,7 +72,7 @@ class ConfiguratorGatewayTest extends TestCase
 
         $configuration = $configuratorGateway->getAvailableConfigurations($baseProduct);
 
-        static::assertEquals([
+        static::assertEqualsCanonicalizing([
             10 => [[10, 20, 30, 40]],
             20 => [[10, 20, 30, 40], [11, 20, 30, 40]],
             30 => [[10, 20, 30, 40], [11, 20, 30, 40]],
