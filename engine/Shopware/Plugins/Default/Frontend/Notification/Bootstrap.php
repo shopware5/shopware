@@ -245,7 +245,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      *
      * @static
      *
-     * @return
+     * @return void
      */
     public function onNotifyConfirmAction(Enlight_Event_EventArgs $args)
     {
@@ -334,7 +334,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
             }
         }
 
-        return $action->forward('index');
+        $action->forward('index');
     }
 
     /**

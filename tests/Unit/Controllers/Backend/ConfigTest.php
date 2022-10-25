@@ -42,26 +42,26 @@ class ConfigTest extends TestCase
      */
     public function testValidateConfigData(array $elementData, $value, bool $expectedResult): void
     {
-        $validateData = TestReflectionHelper::getMethod(Shopware_Controllers_Backend_Config::class, 'validateData');
+        $validateDataMethod = TestReflectionHelper::getMethod(Shopware_Controllers_Backend_Config::class, 'validateData');
 
-        $config = new Shopware_Controllers_Backend_Config();
+        $configController = new Shopware_Controllers_Backend_Config();
 
-        static::assertEquals($expectedResult, $validateData->invokeArgs($config, [$elementData, $value]));
+        static::assertSame($expectedResult, $validateDataMethod->invokeArgs($configController, [$elementData, $value]));
     }
 
     public function getValidationData(): Generator
     {
         yield 'Invalid min value' => [
-          [
-           'name' => 'foo',
-           'type' => 'number',
-           'options' => [
-               'minValue' => 2,
-               'maxValue' => 10,
-           ],
-          ],
-          1,
-          false,
+            [
+                'name' => 'foo',
+                'type' => 'number',
+                'options' => [
+                    'minValue' => 2,
+                    'maxValue' => 10,
+                ],
+            ],
+            1,
+            false,
         ];
         yield 'Invalid max value' => [
             [

@@ -103,7 +103,7 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
      * The Enlight_Controller_Front and the Enlight_Template_Manager are set from the
      * passed Enlight_Event_EventArgs into the internal properties front and engine.
      *
-     * @return
+     * @return void
      */
     public function onDispatchLoopStartup(Enlight_Event_EventArgs $args)
     {
