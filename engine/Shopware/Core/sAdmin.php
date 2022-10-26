@@ -3433,7 +3433,7 @@ class sAdmin implements \Enlight_Hook
         // Temporarily overwrite billing address
         if (
             !$this->session->offsetGet('checkoutBillingAddressId')
-            || Shopware()->Front()->Request()->getControllerName() !== 'checkout'
+            || \strtolower(Shopware()->Front()->Request()->getControllerName()) !== 'checkout'
         ) {
             return $userData;
         }
@@ -3465,8 +3465,8 @@ class sAdmin implements \Enlight_Hook
     {
         // Temporarily overwrite shipping address
         if (
-            !$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()
-                ->getControllerName() !== 'checkout'
+            !$this->session->offsetGet('checkoutShippingAddressId')
+            || \strtolower(Shopware()->Front()->Request()->getControllerName()) !== 'checkout'
         ) {
             return $userData;
         }

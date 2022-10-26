@@ -51,6 +51,7 @@ use Shopware\Models\Tax\Rule;
 use Shopware\Models\Tax\Tax;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware\Tests\TestReflectionHelper;
 use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
@@ -1207,7 +1208,8 @@ class AdminTest extends TestCase
         $this->session->clear();
 
         static::assertSame(
-            ['additional' => [
+            [
+                'additional' => [
                     'country' => [],
                     'countryShipping' => [],
                     'stateShipping' => ['id' => 0],
@@ -1219,7 +1221,8 @@ class AdminTest extends TestCase
         $this->session->offsetSet('sCountry', 20);
 
         static::assertEquals(
-            ['additional' => [
+            [
+                'additional' => [
                     'country' => [
                         'id' => '20',
                         'countryname' => 'Namibia',
@@ -1949,7 +1952,7 @@ class AdminTest extends TestCase
             [
                 'code' => 4,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
+                    ->get('NewsletterFailureNotFound', 'This mail address could not be found'),
             ],
             $result
         );
@@ -1960,7 +1963,7 @@ class AdminTest extends TestCase
             [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureMail', 'Enter eMail address'),
+                    ->get('NewsletterFailureMail', 'Enter eMail address'),
             ],
             $result
         );
@@ -1971,7 +1974,7 @@ class AdminTest extends TestCase
             [
                 'code' => 6,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureMail', 'Enter eMail address'),
+                    ->get('NewsletterFailureMail', 'Enter eMail address'),
             ],
             $result
         );
@@ -1982,7 +1985,7 @@ class AdminTest extends TestCase
             [
                 'code' => 1,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
+                    ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
             ],
             $result
         );
@@ -2001,7 +2004,7 @@ class AdminTest extends TestCase
             [
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
+                    ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
                 'isNewRegistration' => true,
             ],
             $result
@@ -2037,7 +2040,7 @@ class AdminTest extends TestCase
             [
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
+                    ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
                 'isNewRegistration' => false,
             ],
             $result
@@ -2050,7 +2053,7 @@ class AdminTest extends TestCase
             [
                 'code' => 3,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
+                    ->get('NewsletterSuccess', 'Thank you! We have entered your address.'),
                 'isNewRegistration' => false,
             ],
             $result
@@ -2092,7 +2095,7 @@ class AdminTest extends TestCase
             [
                 'code' => 5,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
-                        ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
+                    ->get('NewsletterMailDeleted', 'Your mail address was deleted'),
             ],
             $result
         );
@@ -2194,7 +2197,7 @@ class AdminTest extends TestCase
                 'pluginID' => null,
                 'source' => null,
                 'country_surcharge' => [
-                    ],
+                ],
             ],
             $result
         );
@@ -2479,6 +2482,59 @@ class AdminTest extends TestCase
             'attr1|1',
             true,
         ];
+    }
+
+    public function testOverwriteBillingAddressShouldAcceptUpperCaseCheckoutControllerName(): void
+    {
+        $reflectionMethod = TestReflectionHelper::getMethod(sAdmin::class, 'overwriteBillingAddress');
+
+        $request = $this->front->Request();
+        static::assertInstanceOf(Enlight_Controller_Request_Request::class, $request);
+
+        $requestControllerNameResetValue = $request->getControllerName();
+        $checkoutBillingAddressIdSessionResetValue = $this->session->offsetGet('checkoutBillingAddressId');
+        $sUserIdSessionResetValue = $this->session->offsetGet('sUserId');
+
+        $this->session->offsetSet('checkoutBillingAddressId', 3);
+        $this->session->offsetSet('sUserId', 1);
+        $request->setControllerName('Checkout');
+
+        $userData = ['billingaddress' => []];
+
+        $result = $reflectionMethod->invoke($this->module, $userData);
+
+        static::assertSame(3, $result['billingaddress']['id']);
+
+        $this->session->offsetSet('checkoutBillingAddressId', $checkoutBillingAddressIdSessionResetValue);
+        $this->session->offsetSet('sUserId', $sUserIdSessionResetValue);
+        $request->setControllerName($requestControllerNameResetValue);
+    }
+
+    public function testOverwriteShippingAddressShouldAcceptUpperCaseCheckoutControllerName(): void
+    {
+        $reflectionMethod = TestReflectionHelper::getMethod(sAdmin::class, 'overwriteShippingAddress');
+        $reflectionMethod->setAccessible(true);
+
+        $request = $this->front->Request();
+        static::assertInstanceOf(Enlight_Controller_Request_Request::class, $request);
+
+        $requestControllerNameResetValue = $request->getControllerName();
+        $checkoutBillingAddressIdSessionResetValue = $this->session->offsetGet('checkoutBillingAddressId');
+        $sUserIdSessionResetValue = $this->session->offsetGet('sUserId');
+
+        $this->session->offsetSet('checkoutShippingAddressId', 3);
+        $this->session->offsetSet('sUserId', 1);
+        $request->setControllerName('Checkout');
+
+        $userData = ['shippingaddress' => []];
+
+        $result = $reflectionMethod->invoke($this->module, $userData);
+
+        static::assertSame(3, $result['shippingaddress']['id']);
+
+        $this->session->offsetSet('checkoutBillingAddressId', $checkoutBillingAddressIdSessionResetValue);
+        $this->session->offsetSet('sUserId', $sUserIdSessionResetValue);
+        $request->setControllerName($requestControllerNameResetValue);
     }
 
     private function generateBasketSession(): void
