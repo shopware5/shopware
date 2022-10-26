@@ -56,7 +56,7 @@
         "friendsofphp/proxy-manager-lts": "1.0.13",
         "google/cloud-storage": "1.28.1",
         "guzzlehttp/guzzle": "~7.5.0",
-        "guzzlehttp/psr7": "2.4.1",
+        "guzzlehttp/psr7": "2.4.2",
         "laminas/laminas-code": "4.7.0",
         "laminas/laminas-escaper": "2.12.0",
         "league/flysystem": "~1.1.4",
