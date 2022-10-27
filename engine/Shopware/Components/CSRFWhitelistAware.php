@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,7 +31,7 @@ interface CSRFWhitelistAware
     /**
      * Returns a list with actions which should not be validated for CSRF protection
      *
-     * @return string[]
+     * @return list<string>
      */
     public function getWhitelistedCSRFActions();
 }

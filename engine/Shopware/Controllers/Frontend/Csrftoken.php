@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,25 +25,28 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFTokenValidator;
+use Shopware\Components\Random;
+
 class Shopware_Controllers_Frontend_Csrftoken extends Enlight_Controller_Action
 {
-    private const CSRF_TOKEN_HEADER = 'x-csrf-token';
-
     /**
      * Loads auth and script renderer resource
      */
     public function preDispatch()
     {
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
     }
 
     /**
      * Generates a token and fills the cookie and session
+     *
+     * @return void
      */
     public function indexAction()
     {
-        $token = \Shopware\Components\Random::getAlphanumericString(30);
+        $token = Random::getAlphanumericString(30);
 
-        $this->Response()->headers->set(self::CSRF_TOKEN_HEADER, $token);
+        $this->Response()->headers->set(CSRFTokenValidator::CSRF_TOKEN_RESPONSE_HEADER, $token);
     }
 }

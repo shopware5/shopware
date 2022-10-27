@@ -174,9 +174,12 @@ PHP 8.1:
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.1
 
 PHP 8.2:
-    allow_failure: true
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0alpha2
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0RC4
+    script:
+        - composer config platform.php 8.1.99
+        - composer update --lock
+        - make test-phpunit
 
 MySQL 8.0:
     extends: .phpunit_base

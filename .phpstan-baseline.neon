@@ -24821,11 +24821,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Blog.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CSRFToken\\:\\:generateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CSRFToken.php
-
-		-
 			message: "#^Call to an undefined method Zend_Cache_Backend\\:\\:getCapabilities\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Cache.php
@@ -28089,11 +28084,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Frontend_Compare\\:\\:overlayAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Compare.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Csrftoken\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Csrftoken.php
 
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sArticle\\.$#"

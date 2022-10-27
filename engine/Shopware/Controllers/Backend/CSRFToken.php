@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +25,9 @@
  * our trademarks remain entirely with us.
  */
 
+use Shopware\Components\CSRFTokenValidator;
 use Shopware\Components\CSRFWhitelistAware;
+use Shopware\Components\Random;
 
 class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
@@ -32,7 +37,7 @@ class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backen
     public function init()
     {
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        $this->Front()->Plugins()->ViewRenderer()->setNoRender(true);
+        $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         parent::init();
     }
 
@@ -48,17 +53,20 @@ class Shopware_Controllers_Backend_CSRFToken extends Shopware_Controllers_Backen
 
     /**
      * Generates a token and fills the cookie and session
+     *
+     * @return void
      */
     public function generateAction()
     {
         /** @var Enlight_Components_Session_Namespace $session */
-        $session = Shopware()->BackendSession();
+        $session = $this->container->get('backendsession');
 
-        if (!$token = $session->offsetGet('X-CSRF-Token')) {
-            $token = \Shopware\Components\Random::getAlphanumericString(30);
-            $session->offsetSet('X-CSRF-Token', $token);
+        $token = $session->get(CSRFTokenValidator::CSRF_TOKEN_HEADER);
+        if (!\is_string($token)) {
+            $token = Random::getAlphanumericString(30);
+            $session->set(CSRFTokenValidator::CSRF_TOKEN_HEADER, $token);
         }
 
-        $this->Response()->headers->set('x-csrf-token', $token);
+        $this->Response()->headers->set(CSRFTokenValidator::CSRF_TOKEN_RESPONSE_HEADER, $token);
     }
 }
