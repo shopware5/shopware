@@ -200,17 +200,9 @@ class Application extends BaseApplication
      */
     protected function registerTaggedServiceIds()
     {
-        $ids = (array) $this->kernel->getContainer()->getParameter('console.command.ids');
-        $lazyServices = array_keys($ids);
-
         if ($this->kernel->getContainer()->hasParameter('console.command.ids')) {
-            /** @var array<string, string> $commandIds */
-            $commandIds = $this->kernel->getContainer()->getParameter('console.command.ids');
-
-            foreach ($commandIds as $id) {
-                if (!\in_array($id, $lazyServices)) {
-                    $this->add($this->kernel->getContainer()->get($id));
-                }
+            foreach ($this->kernel->getContainer()->getParameter('console.command.ids') as $id) {
+                $this->add($this->kernel->getContainer()->get($id));
             }
         }
     }
