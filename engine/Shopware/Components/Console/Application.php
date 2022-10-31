@@ -28,9 +28,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper;
 use Doctrine\ORM\Tools\Console\ConsoleRunner as DoctrineConsoleRunner;
 use Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper;
-use Enlight_Event_EventManager;
 use Exception;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Kernel;
 use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Console\Command\Command;
@@ -43,20 +43,11 @@ class Application extends BaseApplication
 {
     private const IMPORTANT_COMMANDS = ['sw:migration:migrate', 'sw:cache:clear'];
 
-    /**
-     * @var \Shopware\Kernel
-     */
-    private $kernel;
+    private Kernel $kernel;
 
-    /**
-     * @var bool
-     */
-    private $commandsRegistered = false;
+    private bool $commandsRegistered = false;
 
-    /**
-     * @var bool
-     */
-    private $skipDatabase = false;
+    private bool $skipDatabase = false;
 
     public function __construct(Kernel $kernel)
     {
@@ -71,7 +62,7 @@ class Application extends BaseApplication
     /**
      * Gets the Kernel associated with this Console.
      *
-     * @return \Shopware\Kernel
+     * @return Kernel
      */
     public function getKernel()
     {
@@ -115,7 +106,6 @@ class Application extends BaseApplication
      */
     protected function doRunCommand(Command $command, InputInterface $input, OutputInterface $output)
     {
-        /** @var Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
 
         $event = $eventManager->notifyUntil('Shopware_Command_Before_Run', [
@@ -148,7 +138,7 @@ class Application extends BaseApplication
             // Wrap database related logic in a try-catch
             // so that non-db commands can still execute
             try {
-                $em = $this->kernel->getContainer()->get(\Shopware\Components\Model\ModelManager::class);
+                $em = $this->kernel->getContainer()->get(ModelManager::class);
 
                 // Setup doctrine commands
                 $helperSet = $this->getHelperSet();
@@ -175,13 +165,11 @@ class Application extends BaseApplication
     {
         $this->kernel->getContainer()->load('plugins');
 
-        /** @var Enlight_Event_EventManager $eventManager */
         $eventManager = $this->kernel->getContainer()->get('events');
 
         $collection = new ArrayCollection();
         $collection = $eventManager->collect('Shopware_Console_Add_Command', $collection, ['subject' => $this]);
 
-        /** @var Command $command */
         foreach ($collection as $command) {
             if ($command instanceof Command) {
                 $this->add($command);
