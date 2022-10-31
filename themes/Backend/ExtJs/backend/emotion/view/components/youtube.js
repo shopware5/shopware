@@ -46,7 +46,9 @@ Ext.define('Shopware.apps.Emotion.view.components.Youtube', {
         video_loop: {
             fieldLabel: '{s name="video_loop"}Loop video{/s}',
             helpText: '{s name="video_loop_help"}{/s}'
-        }
+        },
+        loadVideoOnConfirmation: '{s name="load_video_on_confirmation"}{/s}',
+        previewImage: '{s name="preview_image"}{/s}'
     },
 
     initComponent: function() {

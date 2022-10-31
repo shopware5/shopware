@@ -364,6 +364,8 @@
              */
             wrapperSelector: '.emotion--wrapper',
 
+            youtubeElSelector: '.emotion--youtube--gdpr',
+
             /**
              * flag to prevent `is--no-sidebar` for fullscreen emotions with listing below
              * @type {boolean}
@@ -390,6 +392,8 @@
 
             me.$bannerElements = me.$elements.find(me.opts.bannerElSelector);
             me.$videoElements = me.$elements.find(me.opts.videoElSelector);
+            me.$youtubeVideos = me.$elements.find(me.opts.youtubeElSelector);
+
             me.$productSliderElements = me.$elements.find('*[data-product-slider="true"]');
 
             me.remSpacing = ~~me.opts.cellSpacing / 16;
@@ -465,6 +469,10 @@
 
             $.each(me.$videoElements, function(index, item) {
                 $(item).swEmotionVideo();
+            });
+
+            $.each(me.$youtubeVideos, function(index, item) {
+                $(item).swYoutubeVideo();
             });
 
             StateManager.updatePlugin('*[data-product-slider="true"]', 'swProductSlider');
@@ -862,6 +870,36 @@
             var me = this;
 
             me._destroy();
+        }
+    });
+
+    $.plugin('swYoutubeVideo', {
+        defaults: {
+            loadYoutubeVideoCls: '.gdpr--view--button',
+
+            videoUrl: null
+        },
+
+        init: function () {
+            var me = this;
+            me.applyDataAttributes();
+            me.loadYoutubeVideoButton = me.$el.find(me.opts.loadYoutubeVideoCls);
+
+            me._on(me.loadYoutubeVideoButton, 'click', $.proxy(me.onLoadYoutubeButton, me));
+        },
+
+        onLoadYoutubeButton: function (event) {
+            var me = this;
+            event.preventDefault();
+
+            var videoElement = document.createElement('iframe');
+            videoElement.setAttribute('src', me.opts.videoUrl);
+            videoElement.setAttribute('width', '100%');
+            videoElement.setAttribute('height', '100%');
+            videoElement.setAttribute('frameborder', '0%');
+            videoElement.setAttribute('allowfullscreen', '');
+
+            me.$el.replaceWith(videoElement);
         }
     });
 
