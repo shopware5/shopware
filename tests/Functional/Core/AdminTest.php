@@ -33,6 +33,8 @@ use Enlight_Components_Session_Namespace;
 use Enlight_Controller_Front;
 use Enlight_Controller_Request_Request;
 use Enlight_Controller_Request_RequestHttp;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
 use Generator;
 use PHPUnit\Framework\TestCase;
 use sAdmin;
@@ -52,6 +54,8 @@ use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
 use Shopware_Components_Snippet_Manager;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 
 class AdminTest extends TestCase
 {
@@ -80,7 +84,8 @@ class AdminTest extends TestCase
         parent::setUp();
 
         $this->getContainer()->get(ModelManager::class)->clear();
-        $this->getContainer()->get('front')->setRequest(new Enlight_Controller_Request_RequestHttp());
+        $this->getContainer()->get('front')->setRequest(new Enlight_Controller_Request_RequestTestCase());
+        $this->getContainer()->get('front')->setResponse(new Enlight_Controller_Response_ResponseTestCase());
 
         $this->module = $this->getContainer()->get('modules')->Admin();
         $this->config = $this->getContainer()->get('config');
@@ -2365,6 +2370,46 @@ class AdminTest extends TestCase
         static::assertSame($expectedTaxValue, $result['tax']);
     }
 
+    public function testCsrfTokenAreUpdatedLogout(): void
+    {
+        static::assertCount(0, $this->getResponse()->headers->getCookies());
+
+        $customer = $this->createDummyCustomer();
+
+        // Test successful login
+        $this->getRequest()->setPost([
+            'email' => $customer->getEmail(),
+            'password' => 'fooobar',
+        ]);
+        $this->module->sLogin();
+
+        $csrfCookies = array_filter($this->getResponse()->headers->getCookies(), function ($cookie) {
+            if ($cookie->getName() === '__csrf_token-1') {
+                return $cookie;
+            }
+        });
+        $cookie = array_pop($csrfCookies);
+        static::assertInstanceOf(Cookie::class, $cookie);
+        $token = $cookie->getValue();
+        static::assertIsString($token);
+
+        $this->getContainer()->get('front')->setResponse(new Enlight_Controller_Response_ResponseTestCase());
+
+        $this->module->logout();
+
+        $csrfCookies = array_filter($this->getResponse()->headers->getCookies(), function ($cookie) {
+            if ($cookie->getName() === '__csrf_token-1') {
+                return $cookie;
+            }
+        });
+        $cookie = array_pop($csrfCookies);
+        static::assertInstanceOf(Cookie::class, $cookie);
+        $newToken = $cookie->getValue();
+        static::assertIsString($newToken);
+
+        static::assertNotEquals($token, $newToken);
+    }
+
     /**
      * @param array<string, array<string, mixed>> $userData
      *
@@ -2544,8 +2589,16 @@ class AdminTest extends TestCase
     private function getRequest(): Enlight_Controller_Request_Request
     {
         $request = $this->front->Request();
-        static::assertNotNull($request);
+        static::assertInstanceOf(Enlight_Controller_Request_Request::class, $request);
 
         return $request;
+    }
+
+    private function getResponse(): Response
+    {
+        $response = $this->front->Response();
+        static::assertInstanceOf(Response::class, $response);
+
+        return $response;
     }
 }
