@@ -170,18 +170,21 @@ class CSRFTokenValidator implements SubscriberInterface
 
     public function clearExistingCookie(): void
     {
+        $front = $this->container->get('front');
+
         $shop = $this->contextService->getShopContext()->getShop();
         $name = $this->getCsrfName();
 
-        $front = $this->container->get('front');
         $response = $front->Response();
-        $response->headers->clearCookie(
+        $response->headers->setCookie(new Cookie(
             $name,
+            Random::getAlphanumericString(30),
+            0,
             sprintf('%s/', $shop->getPath() ?: ''),
             '',
             $shop->getSecure(),
             false
-        );
+        ));
     }
 
     /**
