@@ -31,8 +31,8 @@ class Migrations_Migration1720 extends Shopware\Components\Migrations\AbstractMi
         $sql = <<<'EOD'
 INSERT IGNORE INTO `s_library_component_field` (`id`, `componentID`, `name`, `x_type`, `value_type`, `field_label`, `support_text`, `help_title`, `help_text`, `store`, `display_field`, `value_field`, `default_value`, `allow_blank`, `translatable`, `position`)
 VALUES
-(null, @componentId, 'load_video_on_confirmation', 'checkbox', '', 'Video erst nach Bestätigung durch den User laden', '', '', '', '', '', '', 0, 0, 0, @maxNumberPosition),
-(null, @componentId, 'preview_image', 'mediaselectionfield', '', 'Vorschau-Bild', '', '', '', '', '', '', 0, 0, 0, @maxNumberPosition+1)
+(null, @componentId, 'load_video_on_confirmation', 'checkbox', '', 'Video erst nach Bestätigung durch den Kunden laden', '', '', '', '', '', '', 0, 0, 0, @maxNumberPosition),
+(null, @componentId, 'preview_image', 'mediaselectionfield', '', 'Vorschaubild', '', '', '', '', '', '', 0, 0, 0, @maxNumberPosition+1)
 ;
 EOD;
         $this->addSql($sql);
