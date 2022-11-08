@@ -83,10 +83,10 @@ class RegexCheck implements CheckInterface
         $files = array_keys($results);
 
         return [
-                'type' => self::CHECK_TYPE,
-                'errorLevel' => $requirement['level'],
-                'message' => sprintf($message, implode('<br>', $files)),
-            ];
+            'type' => self::CHECK_TYPE,
+            'errorLevel' => $requirement['level'],
+            'message' => sprintf($message, implode('<br>', $files)),
+        ];
     }
 
     /**
@@ -119,7 +119,7 @@ class RegexCheck implements CheckInterface
             }
 
             $realPath = $splFileInfo->getRealPath();
-            if (strpos($realPath, 'SwagUpdateCheck') !== false) {
+            if (str_contains($realPath, 'SwagUpdateCheck')) {
                 continue;
             }
 
@@ -144,7 +144,7 @@ class RegexCheck implements CheckInterface
     {
         $content = file_get_contents($file);
         if (preg_match_all($regex, $content, $matches)) {
-            return $matches;
+            return true;
         }
 
         return false;

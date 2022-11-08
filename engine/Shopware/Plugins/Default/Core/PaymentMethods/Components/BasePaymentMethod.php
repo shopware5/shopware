@@ -70,7 +70,7 @@ abstract class BasePaymentMethod
      * @param int $userId    The User/Customer Id associated with the current payment
      * @param int $paymentId The Payment Method Id associated with the current payment
      *
-     * @return true|null
+     * @return true
      */
     abstract public function createPaymentInstance($orderId, $userId, $paymentId);
 }

@@ -59,7 +59,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     /**
      * The section column in the database table.
      *
-     * @var string|array<string, string>|null
+     * @var string|array<array-key, string>|null
      */
     protected $_sectionColumn = 'section';
 
@@ -226,7 +226,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $insertData[$this->_createdColumn] = new Zend_Date();
         }
 
-        if ($section !== null) {
+        if (\is_array($section)) {
             if (\is_array($this->_sectionColumn)) {
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
                     if (isset($section[$key])) {
@@ -317,7 +317,7 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $where[] = $db->quoteInto($this->_namespaceColumn . '=?', $name);
         }
 
-        if ($section !== null) {
+        if (\is_array($section)) {
             if (\is_array($this->_sectionColumn)) {
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
                     if (isset($section[$key])) {
@@ -359,15 +359,15 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $select->where($this->_namespaceColumn . '=?', $name);
         }
 
-        if ($section !== null && $this->_sectionColumn !== null) {
+        if (!empty($section) && $this->_sectionColumn !== null) {
             if (\is_array($this->_sectionColumn)) {
-                $section = explode(':', $section);
+                $sectionArray = explode(':', $section);
                 foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (!empty($section[$key])) {
-                        $select->where($sectionColumn . '=?', $section[$key]);
+                    if (!empty($sectionArray[$key])) {
+                        $select->where($sectionColumn . '=?', $sectionArray[$key]);
                     }
                 }
-            } elseif ($this->_sectionColumn !== null) {
+            } else {
                 $select->where($this->_sectionColumn . '=?', $section);
             }
         }

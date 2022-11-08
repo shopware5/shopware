@@ -129,7 +129,7 @@ class StaticProvider implements UrlProviderInterface
     /**
      * @param array<string, mixed> $custom
      *
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     private function createRequestParameters(array $custom): array
     {

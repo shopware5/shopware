@@ -143,7 +143,7 @@ class RewriteMatcher implements MatcherInterface
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<array-key, mixed>
      */
     private function getQueryFormOrgPath(string $orgPath): array
     {

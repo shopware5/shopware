@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,7 +24,9 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration1720 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1721 extends AbstractMigration
 {
     public function up($modus)
     {

@@ -31,6 +31,7 @@ use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountOrder;
+use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountPayment;
 use Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressBox;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
@@ -286,7 +287,7 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function checkPaymentMethod($paymentMethod)
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountPayment $element */
+        /** @var AccountPayment $element */
         $element = $this->getElement('AccountPayment');
 
         $properties = [
@@ -384,20 +385,12 @@ class Account extends Page implements HelperSelectorInterface
         Helper::pressNamedButton($this, 'sendButton');
     }
 
-    /**
-     * @param string $name
-     */
-    public function chooseAddress(AddressBox $addresses, $name)
+    public function chooseAddress(AddressBox $addresses, string $name): void
     {
         $this->searchAddress($addresses, $name);
     }
 
-    /**
-     * @param string $salutation
-     * @param string $firstname
-     * @param string $lastname
-     */
-    public function changeProfile($salutation, $firstname, $lastname)
+    public function changeProfile(string $salutation, string $firstname, string $lastname): void
     {
         $data = [
             [
@@ -491,15 +484,13 @@ class Account extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param string $name
-     *
      * @throws Exception
      */
-    protected function searchAddress(AddressBox $addresses, $name)
+    protected function searchAddress(AddressBox $addresses, string $name): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressBox $address */
+        /** @var AddressBox $address */
         foreach ($addresses as $address) {
-            if (strpos($address->getProperty('title'), $name) === false) {
+            if (!str_contains($address->getProperty('title'), $name)) {
                 continue;
             }
 
@@ -510,7 +501,7 @@ class Account extends Page implements HelperSelectorInterface
 
         $messages = ['The address "' . $name . '" is not available. Available are:'];
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressBox $address */
+        /** @var AddressBox $address */
         foreach ($addresses as $address) {
             $messages[] = $address->getProperty('title');
         }

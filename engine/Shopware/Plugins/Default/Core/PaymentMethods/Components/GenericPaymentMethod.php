@@ -26,6 +26,7 @@ namespace ShopwarePlugin\PaymentMethods\Components;
 
 use DateTime;
 use Enlight_Controller_Request_Request;
+use Shopware\Models\Customer\Customer;
 
 /**
  * Used for all payment methods that require no specific logic
@@ -70,7 +71,7 @@ class GenericPaymentMethod extends BasePaymentMethod
             ->getQuery()
             ->getSingleScalarResult();
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+        $addressData = Shopware()->Models()->getRepository(Customer::class)
             ->find($userId)->getDefaultBillingAddress();
 
         $date = new DateTime();

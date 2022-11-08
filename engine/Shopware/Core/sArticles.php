@@ -1559,7 +1559,7 @@ class sArticles implements Enlight_Hook
      * @param bool   $returnAll   Return only name or additional data, too
      * @param bool   $translate   Disables the translation of the product if set to false
      *
-     * @return string|array|false
+     * @return ($returnAll is true ? array : string)|false
      */
     public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {

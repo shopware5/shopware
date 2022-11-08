@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,7 +33,10 @@ use Enlight_Exception;
 use Exception;
 use Mpdf\Mpdf;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\PaymentData;
+use Shopware\Models\Order\Order;
+use Shopware\Models\Payment\Payment;
 use Zend_Mime;
 
 /**
@@ -66,7 +71,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
         }
 
-        if ($paymentData['sSepaIban'] && !$this->validateIBAN($paymentData['sSepaIban'])) {
+        if ($paymentData['sSepaIban'] && !$this->validateIBAN((string) $paymentData['sSepaIban'])) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')->get('ErrorIBAN', 'Invalid IBAN');
             $sErrorFlag['sSepaIban'] = true;
         }
@@ -88,13 +93,13 @@ class SepaPaymentMethod extends GenericPaymentMethod
     {
         $lastPayment = $this->getCurrentPaymentDataAsArray($userId);
 
-        $paymentMean = Shopware()->Models()->getRepository(\Shopware\Models\Payment\Payment::class)->
+        $paymentMean = Shopware()->Models()->getRepository(Payment::class)->
         getAllPaymentsQuery(['name' => 'Sepa'])->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $data = [
             'use_billing_data' => ($request->getParam('sSepaUseBillingData') === 'true' ? 1 : 0),
             'bankname' => $request->getParam('sSepaBankName'),
-            'iban' => preg_replace('/\s+|\./', '', $request->getParam('sSepaIban')),
+            'iban' => preg_replace('/\s+|\./', '', (string) $request->getParam('sSepaIban')),
             'bic' => $request->getParam('sSepaBic'),
         ];
 
@@ -153,17 +158,21 @@ class SepaPaymentMethod extends GenericPaymentMethod
      */
     public function createPaymentInstance($orderId, $userId, $paymentId)
     {
+        $userId = (int) $userId;
         $order = Shopware()->Models()->createQueryBuilder()
             ->select(['orders.invoiceAmount', 'orders.number'])
-            ->from('Shopware\Models\Order\Order', 'orders')
+            ->from(Order::class, 'orders')
             ->where('orders.id = ?1')
             ->setParameter(1, $orderId)
             ->getQuery()
             ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
-        $addressData = Shopware()->Models()->getRepository('Shopware\Models\Customer\Customer')
+        $addressData = Shopware()->Models()->getRepository(Customer::class)
             ->find($userId)->getDefaultBillingAddress();
         $paymentData = $this->getCurrentPaymentDataAsArray($userId);
+        if (!\is_array($paymentData)) {
+            $paymentData = [];
+        }
 
         $date = new DateTime();
         $data = [
@@ -200,13 +209,16 @@ class SepaPaymentMethod extends GenericPaymentMethod
         return true;
     }
 
-    private function validateIBAN($value)
+    private function validateIBAN(string $value): bool
     {
-        if ($value === null || $value === '') {
+        if ($value === '') {
             return false;
         }
 
         $teststring = preg_replace('/\s+|\./', '', $value);
+        if (!\is_string($teststring)) {
+            return false;
+        }
 
         if (\strlen($teststring) < 4) {
             return false;
@@ -235,7 +247,10 @@ class SepaPaymentMethod extends GenericPaymentMethod
         return true;
     }
 
-    private function sendSepaEmail($orderNumber, $userId, $data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    private function sendSepaEmail(string $orderNumber, int $userId, array $data): void
     {
         $mail = Shopware()->TemplateMail()->createMail('sORDERSEPAAUTHORIZATION', [
             'paymentInstance' => [
@@ -247,7 +262,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
 
         $customerEmail = Shopware()->Models()->createQueryBuilder()
             ->select('customer.email')
-            ->from('Shopware\Models\Customer\Customer', 'customer')
+            ->from(Customer::class, 'customer')
             ->where('customer.id = ?1')
             ->setParameter(1, $userId)
             ->getQuery()

@@ -179,18 +179,16 @@ SQL;
 
     /**
      * Parses the csv content of an export into an associative array.
-     *
-     * @param string $content
-     * @param string $delimiter
-     *
-     * @return array
      */
-    private function parseCsv($content, $delimiter)
+    private function parseCsv(string $content, string $delimiter): array
     {
         $rows = str_getcsv(html_entity_decode($content), "\n");
 
         $header = null;
         foreach ($rows as &$row) {
+            if (!\is_string($row)) {
+                continue;
+            }
             $row = str_getcsv($row, $delimiter);
 
             if (!$header) {

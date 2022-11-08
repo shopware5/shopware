@@ -355,11 +355,9 @@ class Helper
     /**
      * Returns the css selector of the element
      *
-     * @param string $key
-     *
      * @return string|bool
      */
-    public static function getRequiredSelector(HelperSelectorInterface $parent, $key)
+    public static function getRequiredSelector(HelperSelectorInterface $parent, string $key)
     {
         $selectors = self::getRequiredSelectors($parent, [$key], false);
 
@@ -370,13 +368,12 @@ class Helper
      * Throws a generic or pending exception, shows the backtrace to the first context class call
      *
      * @param array|string $messages
-     * @param int          $type
      *
      * @throws Exception|PendingException
      *
      * @return never-return
      */
-    public static function throwException($messages = [], $type = self::EXCEPTION_GENERIC)
+    public static function throwException($messages = [], int $type = self::EXCEPTION_GENERIC)
     {
         if (!\is_array($messages)) {
             $messages = [$messages];

@@ -73,10 +73,14 @@ class DefaultPreFilter implements PreFilterInterface
             $params['module'] = 'frontend';
         }
         $params = array_merge($globalParams, $params);
+        $newParams = [];
+        foreach ($params as $key => $param) {
+            $newParams[(string) $key] = $param;
+        }
         if ($context) {
-            $context->setParams($params);
+            $context->setParams($newParams);
         }
 
-        return $params;
+        return $newParams;
     }
 }
