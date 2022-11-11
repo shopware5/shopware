@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,13 +24,18 @@
  * our trademarks remain entirely with us.
  */
 
-class Migrations_Migration797 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration797 extends AbstractMigration
 {
     public function up($modus)
     {
         $statement = $this->connection->query('SELECT id, locale_id FROM s_core_shops WHERE `default` = 1 LIMIT 1');
         $shop = $statement->fetchAll(PDO::FETCH_ASSOC);
         $shop = array_shift($shop);
+        if (!\is_array($shop)) {
+            return;
+        }
 
         $exists = $this->connection->query("SELECT id FROM s_core_snippets WHERE namespace = 'frontend/salutation' AND localeID = " . (int) $shop['locale_id'] . ' AND shopID = ' . (int) $shop['id'])->fetch(PDO::FETCH_COLUMN);
         if (!$exists) {

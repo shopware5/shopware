@@ -29,6 +29,7 @@ namespace Shopware\Tests\Mink\Tests\Frontend\Account\bootstrap;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\WebAssert;
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Address\Address;
 use Shopware\Tests\Mink\Page\Frontend\Address\AddressDelete;
@@ -215,7 +216,7 @@ class AccountContext extends SubContext
     /**
      * @Given /^I change my profile with "([^"]*)" "([^"]*)" "([^"]*)"$/
      */
-    public function iChangeMyProfileWith($salutation, $firstname, $lastname)
+    public function iChangeMyProfileWith(string $salutation, string $firstname, string $lastname): void
     {
         $this->getPage('Account')->changeProfile($salutation, $firstname, $lastname);
     }
@@ -223,9 +224,12 @@ class AccountContext extends SubContext
     /**
      * @Given /^I should be welcomed with "([^"]*)"$/
      */
-    public function iShouldBeWelcomedWith($welcome)
+    public function iShouldBeWelcomedWith(string $welcome): void
     {
         $welcome = preg_replace("/\s\s+/", ' ', $welcome);
+        if (!\is_string($welcome)) {
+            throw new RuntimeException('Invalid welcome text');
+        }
 
         $assert = new WebAssert($this->getSession());
         $assert->pageTextContains($welcome);

@@ -27,7 +27,6 @@ namespace Shopware\Tests\Mink\Page\Frontend\Article\Elements;
 use Behat\Mink\Element\NodeElement;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\SliderElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: ArticleSlider
@@ -39,7 +38,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class ArticleSlider extends SliderElement implements HelperSelectorInterface
+class ArticleSlider extends SliderElement
 {
     /**
      * @var array
@@ -110,14 +109,17 @@ class ArticleSlider extends SliderElement implements HelperSelectorInterface
 
     /**
      * Returns the price
-     *
-     * @return float
      */
-    public function getPriceProperty(NodeElement $slide)
+    public function getPriceProperty(NodeElement $slide): float
     {
         $selector = Helper::getRequiredSelector($this, 'slidePrice');
         preg_match('(\d+,\d{2})', $slide->find('css', $selector)->getHtml(), $price);
 
-        return Helper::floatValue(current($price));
+        $currentPrice = current($price);
+        if ($currentPrice === false) {
+            return 0.0;
+        }
+
+        return Helper::floatValue($currentPrice);
     }
 }

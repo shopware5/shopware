@@ -81,9 +81,9 @@ class Repository extends ModelRepository
             'area.id as areaId',
         ]);
         $builder->from(Country::class, 'countries')
-        ->leftJoin('countries.area', 'area');
+            ->leftJoin('countries.area', 'area');
 
-        if ($filter[0]['property'] === 'areaId') {
+        if (\is_array($filter) && $filter[0]['property'] === 'areaId') {
             $builder->where('area.id = :areaId');
             $builder->setParameter('areaId', $filter[0]['value']);
         } elseif ($filter !== null) {

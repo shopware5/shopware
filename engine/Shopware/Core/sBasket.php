@@ -1617,22 +1617,21 @@ class sBasket implements \Enlight_Hook
     {
         $responseCookies = $this->front->Response()->getCookies();
 
-        if (!empty($responseCookies['sUniqueID-/']['value']) && $responseCookies['sUniqueID-/']['value']) {
+        if (!empty($responseCookies['sUniqueID-/']['value'])) {
             $uniqueId = $responseCookies['sUniqueID-/']['value'];
         } else {
             $uniqueId = $this->front->Request()->getCookie('sUniqueID');
         }
 
-        $count = (int) $this->db->fetchOne('
-            SELECT COUNT(*) FROM s_order_notes n, s_articles a
-            WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
-            AND a.id = n.articleID AND a.active = 1
-        ', [
-            empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
-            $this->session->get('sUserId', 0),
-        ]);
-
-        return $count;
+        return (int) $this->db->fetchOne(
+            'SELECT COUNT(*) FROM s_order_notes n, s_articles a
+             WHERE (sUniqueID = ? OR (userID != 0 AND userID = ?))
+                AND a.id = n.articleID AND a.active = 1',
+            [
+                empty($uniqueId) ? $this->session->get('sessionId') : $uniqueId,
+                $this->session->get('sUserId', 0),
+            ]
+        );
     }
 
     /**

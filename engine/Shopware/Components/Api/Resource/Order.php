@@ -151,7 +151,7 @@ class Order extends Resource
      *
      * @throws PrivilegeException
      *
-     * @return array{data: list<array<string, mixed>|OrderModel>, total: int}
+     * @return array{data: array<array<string, mixed>|OrderModel>, total: int}
      */
     public function getList($offset = 0, $limit = 25, array $criteria = [], array $orderBy = [])
     {

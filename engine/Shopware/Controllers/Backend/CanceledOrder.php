@@ -373,9 +373,18 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             ];
         }
 
+        if (!\is_array($code)) {
+            $this->View()->assign([
+                'success' => false,
+                'message' => $this->translateMessage('errorMessage/noVoucherCodes', 'No more free codes available.'),
+            ]);
+
+            return;
+        }
+
         // Find the shop matching the order
         $orderModel = $this->get('models')->find(Order::class, $orderId);
-        if (!$orderModel instanceof Shopware\Models\Order\Order) {
+        if (!$orderModel instanceof Order) {
             $shop = $this->get('models')->getRepository(Shop::class)->getActiveDefault();
         } else {
             $shop = $orderModel->getLanguageSubShop();

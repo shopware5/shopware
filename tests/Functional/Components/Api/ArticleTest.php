@@ -1244,9 +1244,10 @@ class ArticleTest extends TestCase
                 ],
             ]
         );
-        $article = $this->resource->getOne(2);
+        $product = $this->resource->getOne(2);
+        static::assertIsArray($product);
 
-        $image = array_pop($article['images']);
+        $image = array_pop($product['images']);
         static::assertEquals(25, $image['mediaId']);
     }
 
@@ -1885,11 +1886,12 @@ class ArticleTest extends TestCase
         $this->resource->setResultMode(
             Resource::HYDRATE_ARRAY
         );
-        $article = $this->resource->getOne($articleId);
+        $product = $this->resource->getOne($articleId);
+        static::assertIsArray($product);
 
         $updateImages = [];
         $newId = null;
-        foreach ($article['images'] as $image) {
+        foreach ($product['images'] as $image) {
             if ($image['main'] !== 1) {
                 $updateImages['images'][] = [
                     'id' => $image['id'],
@@ -1899,12 +1901,12 @@ class ArticleTest extends TestCase
                 break;
             }
         }
-        $article = $this->resource->update($articleId, $updateImages);
+        $product = $this->resource->update($articleId, $updateImages);
 
-        static::assertCount(4, $article->getImages());
+        static::assertCount(4, $product->getImages());
 
         $hasMain = false;
-        foreach ($article->getImages() as $image) {
+        foreach ($product->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
                 static::assertEquals($image->getId(), $newId);
@@ -1912,7 +1914,7 @@ class ArticleTest extends TestCase
         }
         static::assertTrue($hasMain);
 
-        return $article->getId();
+        return $product->getId();
     }
 
     /**
@@ -1925,12 +1927,13 @@ class ArticleTest extends TestCase
         $this->resource->setResultMode(
             Resource::HYDRATE_ARRAY
         );
-        $article = $this->resource->getOne($articleId);
+        $product = $this->resource->getOne($articleId);
+        static::assertIsArray($product);
 
         $updateImages = [];
         $lastMainId = null;
 
-        foreach ($article['images'] as $image) {
+        foreach ($product['images'] as $image) {
             $newImageData = [
                 'id' => $image['id'],
                 'main' => $image['main'],
@@ -1944,6 +1947,7 @@ class ArticleTest extends TestCase
             $updateImages['images'][] = $newImageData;
         }
 
+        static::assertArrayHasKey('images', $updateImages);
         $newMainId = null;
         foreach ($updateImages['images'] as &$image) {
             if ($image['id'] !== $lastMainId) {
@@ -1953,11 +1957,11 @@ class ArticleTest extends TestCase
             }
         }
         unset($image);
-        $article = $this->resource->update($articleId, $updateImages);
-        static::assertCount(4, $article->getImages());
+        $product = $this->resource->update($articleId, $updateImages);
+        static::assertCount(4, $product->getImages());
 
         $hasMain = false;
-        foreach ($article->getImages() as $image) {
+        foreach ($product->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
                 static::assertEquals($newMainId, $image->getId());
@@ -2032,12 +2036,12 @@ class ArticleTest extends TestCase
         $this->resource->setResultMode(
             Resource::HYDRATE_ARRAY
         );
-        $article = $this->resource->getOne($model->getId());
+        $product = $this->resource->getOne($model->getId());
+        static::assertIsArray($product);
 
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
-        static::assertCount(\count($data['images']), $article['images']);
-        foreach ($article['images'] as $image) {
+        foreach ($product['images'] as $image) {
             $key = 'media/image/' . $image['path'] . '.' . $image['extension'];
             static::assertTrue($mediaService->has($key));
 

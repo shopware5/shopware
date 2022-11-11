@@ -3180,7 +3180,7 @@ class sAdmin implements \Enlight_Hook
             $result['surcharge'] = $payment['surcharge'];
             $result['brutto'] += $result['surcharge'];
         }
-        if ($result['brutto'] < 0) {
+        if (!is_numeric($result['brutto']) || $result['brutto'] < 0) {
             return self::NO_SHIPPING_COSTS;
         }
 

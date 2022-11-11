@@ -96,8 +96,8 @@ class sCore implements \Enlight_Hook
     /**
      * Tries to rewrite the provided link using SEO friendly urls
      *
-     * @param string $link  the link to rewrite
-     * @param string $title title of the link or related element
+     * @param string|null $link  the link to rewrite
+     * @param string|null $title title of the link or related element
      *
      * @return mixed|string Complete url, rewritten if possible
      */
@@ -112,6 +112,11 @@ class sCore implements \Enlight_Hook
         }
         $queryArray['module'] = 'frontend';
 
-        return $this->front->Router()->assemble($queryArray);
+        $newQueryArray = [];
+        foreach ($queryArray as $key => $queryItem) {
+            $newQueryArray[(string) $key] = $queryItem;
+        }
+
+        return $this->front->Router()->assemble($newQueryArray);
     }
 }

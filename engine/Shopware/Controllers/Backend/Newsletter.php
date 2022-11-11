@@ -107,6 +107,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         }
 
         $mailing = $this->initMailing($mailingID);
+        if (!\is_array($mailing)) {
+            return;
+        }
+
         $template = $this->initTemplate($mailing);
 
         if (!empty($mailaddressID)) {
@@ -221,6 +225,10 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
         } else {
             $mailing = $this->initMailing($mailingID);
             $emails = [$this->Request()->getParam('testmail')];
+        }
+
+        if (!\is_array($mailing)) {
+            return;
         }
 
         $template = $this->initTemplate($mailing);
@@ -384,8 +392,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function initMailing($mailingID = null)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $mailing = $this->getMailing($mailingID);
         if (empty($mailing)) {
             return null;
@@ -427,8 +433,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function initTemplate($mailing)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $template = clone Shopware()->Template();
         $shop = Shopware()->Shop();
         $inheritance = Shopware()->Container()->get('theme_inheritance');
@@ -478,8 +482,6 @@ class Shopware_Controllers_Backend_Newsletter extends Enlight_Controller_Action 
      */
     public function getMailing($id = null)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if (!empty($id)) {
             $where = Shopware()->Db()->quoteInto('cm.id=?', $id);
         } else {
