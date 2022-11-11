@@ -225,9 +225,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @phpstan-param Resource::HYDRATE_* $resultMode
-     *
-     * @param int $resultMode
+     * @param self::HYDRATE_* $resultMode
      *
      * @return void
      */
@@ -237,9 +235,7 @@ abstract class Resource implements ContainerAwareInterface
     }
 
     /**
-     * @phpstan-return Resource::HYDRATE_*
-     *
-     * @return int
+     * @return self::HYDRATE_*
      */
     public function getResultMode()
     {

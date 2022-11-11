@@ -397,7 +397,7 @@ class Article extends Resource implements BatchInterface
 
         $product = $builder->getQuery()->getOneOrNullResult(self::HYDRATE_OBJECT);
 
-        if (!$product) {
+        if (!$product instanceof ProductModel) {
             throw new NotFoundException(sprintf('Product by id "%d" not found', $id));
         }
 

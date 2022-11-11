@@ -27,7 +27,6 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Doctrine\Common\Collections\Criteria;
-use Exception;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -38,17 +37,22 @@ use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
-use Shopware\Models\Article\Configurator\Option;
-use Shopware\Models\Article\Detail;
+use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
+use Shopware\Models\Article\Configurator\Set;
+use Shopware\Models\Article\Detail as ProductVariant;
 use Shopware\Models\Article\Download;
 use Shopware\Models\Article\Price;
+use Shopware\Models\Article\Supplier;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Attribute\Article as ProductAttribute;
-use Shopware\Models\Attribute\ArticleImage;
+use Shopware\Models\Attribute\ArticleImage as ProductImage;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Media\Media;
+use Shopware\Models\Property\Option as PropertyOption;
 use Shopware\Models\Property\Value;
+use Shopware\Models\Shop\Shop;
+use Shopware\Models\Tax\Tax;
 use Shopware\Tests\Functional\Helper\Utils;
 
 class ArticleTest extends TestCase
@@ -85,12 +89,12 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid((string) rand()),
+                        'name' => 'neueOption' . uniqid((string) mt_rand()),
                     ],
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -124,7 +128,7 @@ class ArticleTest extends TestCase
                         ],
                     ],
                     [
-                        'name' => 'Gräße',
+                        'name' => 'Größe',
                         'options' => [
                             ['name' => 'L'],
                             ['name' => 'XL'],
@@ -134,7 +138,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -203,6 +207,8 @@ class ArticleTest extends TestCase
 
         static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
 
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
+        static::assertInstanceOf(ProductAttribute::class, $product->getMainDetail()->getAttribute());
         // Check attributes of main variant
         static::assertSame(
             $product->getMainDetail()->getAttribute()->getAttr1(),
@@ -232,6 +238,7 @@ class ArticleTest extends TestCase
             static::assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
+        static::assertInstanceOf(Tax::class, $product->getTax());
         static::assertSame($testData['taxId'], $product->getTax()->getId());
 
         static::assertCount(2, $product->getCategories());
@@ -267,7 +274,7 @@ class ArticleTest extends TestCase
                 ['id' => 10],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 // create new unit
                 'unit' => [
                     'name' => 'newunit',
@@ -284,25 +291,28 @@ class ArticleTest extends TestCase
 
         $product = $this->resource->create($testData);
         // change number for second product
-        $testData['mainDetail']['number'] = 'swTEST' . uniqid((string) rand());
+        $testData['mainDetail']['number'] = 'swTEST' . uniqid((string) mt_rand());
         $secondProduct = $this->resource->create($testData);
 
         static::assertInstanceOf(ProductModel::class, $product);
         static::assertGreaterThan(0, $product->getId());
 
-        static::assertSame($product->getName(), $testData['name']);
-        static::assertSame($product->getDescription(), $testData['description']);
-        static::assertSame($product->getMetaTitle(), $testData['metaTitle']);
+        static::assertSame($testData['name'], $product->getName());
+        static::assertSame($testData['description'], $product->getDescription());
+        static::assertNull($product->getMetaTitle());
 
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
         foreach ($product->getMainDetail()->getPrices() as $price) {
             static::assertGreaterThan(0, $price->getFrom());
         }
 
         static::assertInstanceOf(Unit::class, $product->getMainDetail()->getUnit());
         static::assertGreaterThan(0, $product->getMainDetail()->getUnit()->getId());
-        static::assertSame($product->getMainDetail()->getUnit()->getName(), $testData['mainDetail']['unit']['name']);
-        static::assertSame($product->getMainDetail()->getUnit()->getUnit(), $testData['mainDetail']['unit']['unit']);
+        static::assertSame($testData['mainDetail']['unit']['name'], $product->getMainDetail()->getUnit()->getName());
+        static::assertSame($testData['mainDetail']['unit']['unit'], $product->getMainDetail()->getUnit()->getUnit());
 
+        static::assertInstanceOf(ProductVariant::class, $secondProduct->getMainDetail());
+        static::assertInstanceOf(Unit::class, $secondProduct->getMainDetail()->getUnit());
         static::assertSame($product->getMainDetail()->getUnit()->getId(), $secondProduct->getMainDetail()->getUnit()->getId());
 
         return $product->getId();
@@ -323,7 +333,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => [
-                'number' => 'swAttr1' . uniqid((string) rand(), true),
+                'number' => 'swAttr1' . uniqid((string) mt_rand(), true),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -333,7 +343,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swAttr2' . uniqid((string) rand(), true),
+                    'number' => 'swAttr2' . uniqid((string) mt_rand(), true),
                     'inStock' => 15,
                     'unitId' => 1,
                     'prices' => [
@@ -349,10 +359,11 @@ class ArticleTest extends TestCase
 
         // Load actual database model
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
-        $data = $this->resource->getOne($product->getId());
+        $readProduct = $this->resource->getOne($product->getId());
+        static::assertInstanceOf(ProductModel::class, $readProduct);
 
-        static::assertSame(2, $data->getDetails()->count());
-        foreach ($data->getDetails() as $variant) {
+        static::assertCount(2, $readProduct->getDetails());
+        foreach ($readProduct->getDetails() as $variant) {
             static::assertNotNull($variant->getAttribute());
             static::assertNull($variant->getAttribute()->getAttr1());
         }
@@ -361,7 +372,7 @@ class ArticleTest extends TestCase
     /**
      * Test that creating a product with images generates thumbnails
      *
-     * @return int Product Id
+     * @return int Product ID
      */
     public function testCreateWithImageShouldCreateThumbnails(): int
     {
@@ -380,7 +391,7 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid((string) rand()),
+                        'name' => 'neueOption' . uniqid((string) mt_rand()),
                     ],
                 ],
             ],
@@ -393,7 +404,7 @@ class ArticleTest extends TestCase
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -427,7 +438,7 @@ class ArticleTest extends TestCase
                         ],
                     ],
                     [
-                        'name' => 'Gräße',
+                        'name' => 'Größe',
                         'options' => [
                             ['name' => 'L'],
                             ['name' => 'XL'],
@@ -437,7 +448,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -494,11 +505,13 @@ class ArticleTest extends TestCase
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($product->getImages() as $image) {
+            static::assertInstanceOf(Media::class, $image->getMedia());
             static::assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
                 static::assertTrue($mediaService->has($thumbnail));
             }
         }
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
         foreach ($product->getMainDetail()->getPrices() as $price) {
             static::assertGreaterThan(0, $price->getFrom());
         }
@@ -517,6 +530,7 @@ class ArticleTest extends TestCase
     public function testFlipProductMainVariantShouldBeSuccessful(int $id): void
     {
         $originalProduct = $this->resource->getOne($id);
+        static::assertIsArray($originalProduct);
         $mainVariantNumber = (string) $originalProduct['mainDetailId'];
 
         $testData = [
@@ -575,6 +589,7 @@ class ArticleTest extends TestCase
 
         $product = $this->resource->update($id, $testData);
 
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
         static::assertSame($mainVariantNumber, $product->getMainDetail()->getNumber());
     }
 
@@ -601,6 +616,7 @@ class ArticleTest extends TestCase
 
         static::assertCount(4, $product->getImages());
         foreach ($product->getImages() as $image) {
+            static::assertInstanceOf(Media::class, $image->getMedia());
             static::assertCount(4, $image->getMedia()->getThumbnails());
             foreach ($image->getMedia()->getThumbnails() as $thumbnail) {
                 static::assertTrue($mediaService->has($thumbnail));
@@ -631,7 +647,7 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid((string) rand()),
+                        'name' => 'neueOption' . uniqid((string) mt_rand()),
                     ],
                 ],
             ],
@@ -641,7 +657,7 @@ class ArticleTest extends TestCase
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -676,7 +692,7 @@ class ArticleTest extends TestCase
                         ],
                     ],
                     [
-                        'name' => 'Gräße',
+                        'name' => 'Größe',
                         'options' => [
                             ['name' => 'L'],
                             ['name' => 'XL'],
@@ -686,7 +702,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -750,6 +766,7 @@ class ArticleTest extends TestCase
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($product->getImages() as $image) {
+            static::assertInstanceOf(Media::class, $image->getMedia());
             $thumbnails = $image->getMedia()->getThumbnails();
             static::assertCount(4, $thumbnails);
             $thumbnails = array_values($thumbnails);
@@ -796,12 +813,12 @@ class ArticleTest extends TestCase
                 [
                     'value' => 'testWert',
                     'option' => [
-                        'name' => 'neueOption' . uniqid((string) rand()),
+                        'name' => 'neueOption' . uniqid((string) mt_rand()),
                     ],
                 ],
             ],
             'mainDetail' => [
-                'number' => 'swConfigSetMainTest' . uniqid((string) rand()),
+                'number' => 'swConfigSetMainTest' . uniqid((string) mt_rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'attribute' => [
@@ -851,7 +868,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid((string) rand()),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid((string) mt_rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -894,7 +911,7 @@ class ArticleTest extends TestCase
                     ],
                 ],
                 [
-                    'number' => 'swConfigSetMainTest.variant.' . uniqid((string) rand()),
+                    'number' => 'swConfigSetMainTest.variant.' . uniqid((string) mt_rand()),
                     'inStock' => 18,
                     // create another new unit
                     'unit' => [
@@ -955,6 +972,8 @@ class ArticleTest extends TestCase
         static::assertSame($product->getMetaTitle(), $testData['metaTitle']);
 
         static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
+        static::assertInstanceOf(ProductAttribute::class, $product->getMainDetail()->getAttribute());
         static::assertSame(
             $product->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
@@ -970,6 +989,7 @@ class ArticleTest extends TestCase
             static::assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
+        static::assertInstanceOf(Tax::class, $product->getTax());
         static::assertSame($testData['taxId'], $product->getTax()->getId());
 
         static::assertCount(2, $product->getCategories());
@@ -992,29 +1012,33 @@ class ArticleTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneByNumberShouldBeSuccessful($id): void
+    public function testGetOneByNumberShouldBeSuccessful(int $id): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $product = $this->resource->getOne($id);
+        static::assertInstanceOf(ProductModel::class, $product);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
         $number = $product->getMainDetail()->getNumber();
-
+        static::assertIsString($number);
         $product = $this->resource->getOneByNumber($number);
+        static::assertInstanceOf(ProductModel::class, $product);
         static::assertSame($id, $product->getId());
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeSuccessful($id): void
+    public function testGetOneShouldBeSuccessful(int $id): void
     {
         $product = $this->resource->getOne($id);
+        static::assertIsArray($product);
         static::assertGreaterThan(0, $product['id']);
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetOneShouldBeAbleToReturnObject($id): void
+    public function testGetOneShouldBeAbleToReturnObject(int $id): void
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $product = $this->resource->getOne($id);
@@ -1077,11 +1101,14 @@ class ArticleTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateByNumberShouldBeSuccessful($id): ?string
+    public function testUpdateByNumberShouldBeSuccessful(int $id): ?string
     {
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $product = $this->resource->getOne($id);
+        static::assertInstanceOf(ProductModel::class, $product);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
         $number = $product->getMainDetail()->getNumber();
+        static::assertIsString($number);
 
         $testData = [
             'description' => 'Update description',
@@ -1108,6 +1135,7 @@ class ArticleTest extends TestCase
         static::assertSame($product->getDescription(), $testData['description']);
         static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
 
+        static::assertInstanceOf(Supplier::class, $product->getSupplier());
         static::assertSame($testData['supplierId'], $product->getSupplier()->getId());
 
         $propertyValues = $product->getPropertyValues()->getValues();
@@ -1128,7 +1156,7 @@ class ArticleTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateShouldBeSuccessful($id): int
+    public function testUpdateShouldBeSuccessful(int $id): int
     {
         $testData = [
             'description' => 'Update description',
@@ -1154,7 +1182,7 @@ class ArticleTest extends TestCase
         static::assertSame($id, $product->getId());
         static::assertSame($product->getDescription(), $testData['description']);
         static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
-
+        static::assertInstanceOf(Supplier::class, $product->getSupplier());
         static::assertSame($testData['supplierId'], $product->getSupplier()->getId());
 
         $propertyValues = $product->getPropertyValues()->getValues();
@@ -1175,7 +1203,7 @@ class ArticleTest extends TestCase
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testUpdateWithInvalidDataShouldThrowValidationException($id): void
+    public function testUpdateWithInvalidDataShouldThrowValidationException(int $id): void
     {
         $this->expectException(ValidationException::class);
         // required field name is blank
@@ -1197,13 +1225,13 @@ class ArticleTest extends TestCase
     public function testUpdateWithMissingIdShouldThrowParameterMissingException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $this->resource->update('', []);
+        $this->resource->update(0, []);
     }
 
     /**
      * @depends testUpdateShouldBeSuccessful
      */
-    public function testDeleteShouldBeSuccessful($id): void
+    public function testDeleteShouldBeSuccessful(int $id): void
     {
         $product = $this->resource->delete($id);
 
@@ -1220,7 +1248,7 @@ class ArticleTest extends TestCase
     public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $this->resource->delete('');
+        $this->resource->delete(0);
     }
 
     /**
@@ -1250,14 +1278,6 @@ class ArticleTest extends TestCase
 
     public function testUpdateToVariantProduct(): void
     {
-        try {
-            $id = $this->resource->getIdFromNumber('turn');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
-
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1364,24 +1384,11 @@ class ArticleTest extends TestCase
             }
         }
 
-        try {
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
+        $this->resource->delete($updated->getId());
     }
 
     public function testUpdateToConfiguratorSetPosition(): void
     {
-        try {
-            $id = $this->resource->getIdFromNumber('turn');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
-
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1504,24 +1511,11 @@ class ArticleTest extends TestCase
             }
         }
 
-        try {
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
+        $this->resource->delete($updated->getId());
     }
 
     public function testUpdateToConfiguratorSetType(): void
     {
-        try {
-            $id = $this->resource->getIdFromNumber('turn');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
-
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1613,26 +1607,14 @@ class ArticleTest extends TestCase
             ],
         ];
         $updated = $this->resource->update($product->getId(), $updateProduct);
+        static::assertInstanceOf(Set::class, $updated->getConfiguratorSet());
         static::assertSame(2, $updated->getConfiguratorSet()->getType(), "ConfiguratorSet.Type doesn't match");
 
-        try {
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
+        $this->resource->delete($updated->getId());
     }
 
     public function testUpdateToConfiguratorSetPositionsShouldBeGenerated(): void
     {
-        try {
-            $id = $this->resource->getIdFromNumber('turn');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
-
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1650,21 +1632,18 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $options = $this->resource->update($product->getId(), $updateProduct)->getConfiguratorSet()->getOptions();
+        $updated = $this->resource->update($product->getId(), $updateProduct);
+        static::assertInstanceOf(Set::class, $updated->getConfiguratorSet());
+        $options = $updated->getConfiguratorSet()->getOptions();
 
-        static::assertInstanceOf(Option::class, $options[0]);
+        static::assertInstanceOf(ConfiguratorOption::class, $options[0]);
         static::assertSame(0, $options[0]->getPosition());
-        static::assertInstanceOf(Option::class, $options[1]);
+        static::assertInstanceOf(ConfiguratorOption::class, $options[1]);
         static::assertSame(1, $options[1]->getPosition());
-        static::assertInstanceOf(Option::class, $options[2]);
+        static::assertInstanceOf(ConfiguratorOption::class, $options[2]);
         static::assertSame(2, $options[2]->getPosition());
 
-        try {
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
+        $this->resource->delete($updated->getId());
     }
 
     /**
@@ -1672,14 +1651,6 @@ class ArticleTest extends TestCase
      */
     public function testUpdateToConfiguratorSetPositionsShouldOverwritePositions(): void
     {
-        try {
-            $id = $this->resource->getIdFromNumber('turn');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
-
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1697,21 +1668,19 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $options = $this->resource->update($product->getId(), $updateProduct)->getConfiguratorSet()->getOptions();
 
-        static::assertInstanceOf(Option::class, $options[0]);
+        $updated = $this->resource->update($product->getId(), $updateProduct);
+        static::assertInstanceOf(Set::class, $updated->getConfiguratorSet());
+        $options = $updated->getConfiguratorSet()->getOptions();
+
+        static::assertInstanceOf(ConfiguratorOption::class, $options[0]);
         static::assertSame(5, $options[0]->getPosition());
-        static::assertInstanceOf(Option::class, $options[1]);
+        static::assertInstanceOf(ConfiguratorOption::class, $options[1]);
         static::assertSame(6, $options[1]->getPosition());
-        static::assertInstanceOf(Option::class, $options[2]);
+        static::assertInstanceOf(ConfiguratorOption::class, $options[2]);
         static::assertSame(11, $options[2]->getPosition());
 
-        try {
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
+        $this->resource->delete($updated->getId());
     }
 
     /**
@@ -1720,14 +1689,6 @@ class ArticleTest extends TestCase
      */
     public function testUpdateToConfiguratorSetPositionsShouldRemainUntouched(): void
     {
-        try {
-            $id = $this->resource->getIdFromNumber('turn');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
-
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1744,26 +1705,24 @@ class ArticleTest extends TestCase
                 ],
             ],
         ];
-        $options = $this->resource->update($product->getId(), $updateProduct)->getConfiguratorSet()->getOptions();
 
-        static::assertInstanceOf(Option::class, $options[0]);
+        $updated = $this->resource->update($product->getId(), $updateProduct);
+        static::assertInstanceOf(Set::class, $updated->getConfiguratorSet());
+        $options = $updated->getConfiguratorSet()->getOptions();
+
+        static::assertInstanceOf(ConfiguratorOption::class, $options[0]);
         static::assertSame(5, $options[0]->getPosition());
-        static::assertInstanceOf(Option::class, $options[1]);
+        static::assertInstanceOf(ConfiguratorOption::class, $options[1]);
         static::assertSame(11, $options[1]->getPosition());
 
-        try {
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
+        $this->resource->delete($updated->getId());
     }
 
     public function testCreateUseConfiguratorId(): string
     {
         $configurator = $this->getSimpleConfiguratorSet(2);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
-        $variantNumber = 'swVariant' . uniqid((string) rand());
+        $variantNumber = 'swVariant' . uniqid((string) mt_rand());
 
         $testData = [
             'name' => 'Testartikel',
@@ -1773,7 +1732,7 @@ class ArticleTest extends TestCase
             'taxId' => 1,
             'supplierId' => 1,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -1798,6 +1757,7 @@ class ArticleTest extends TestCase
 
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $data = $this->resource->getOne($product->getId());
+        static::assertIsArray($data);
 
         static::assertCount(2, $data['details'][0]['configuratorOptions']);
 
@@ -1807,12 +1767,12 @@ class ArticleTest extends TestCase
     /**
      * @depends testCreateUseConfiguratorId
      */
-    public function testUpdateUseConfiguratorIds($variantNumber): void
+    public function testUpdateUseConfiguratorIds(string $variantNumber): void
     {
         $configurator = $this->getSimpleConfiguratorSet(2);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
 
-        $id = Shopware()->Db()->fetchOne(
+        $id = (int) Shopware()->Db()->fetchOne(
             'SELECT articleID FROM s_articles_details WHERE ordernumber = ?',
             [$variantNumber]
         );
@@ -1829,6 +1789,7 @@ class ArticleTest extends TestCase
         $this->resource->update($id, $data);
 
         $data = $this->resource->getOne($id);
+        static::assertIsArray($data);
         static::assertCount(2, $data['details'][0]['configuratorOptions']);
     }
 
@@ -1839,14 +1800,14 @@ class ArticleTest extends TestCase
         );
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(
-            [
+        $builder->select([
                 'media.id as mediaId',
                 '2 as main',
-            ]
-        )->from(Media::class, 'media')->addOrderBy('media.id', 'ASC')->setFirstResult(
-            5
-        )->setMaxResults(4);
+            ])
+            ->from(Media::class, 'media')
+            ->addOrderBy('media.id', 'ASC')
+            ->setFirstResult(5)
+            ->setMaxResults(4);
 
         /**
          * Get random images.
@@ -1867,6 +1828,7 @@ class ArticleTest extends TestCase
         foreach ($product->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $mainFlagExists = true;
+                static::assertInstanceOf(Media::class, $image->getMedia());
                 static::assertSame($expectedMainId, $image->getMedia()->getId());
             }
         }
@@ -1936,7 +1898,7 @@ class ArticleTest extends TestCase
                 'main' => $image['main'],
             ];
 
-            if ($image['main'] == 1) {
+            if ((int) $image['main'] === 1) {
                 $lastMainId = $image['id'];
                 $newImageData['main'] = 2;
             }
@@ -1999,6 +1961,7 @@ class ArticleTest extends TestCase
 
         $product = $this->resource->create($data);
         $newData = $this->resource->getOne($product->getId());
+        static::assertIsArray($newData);
 
         $savedTranslation = $newData['translations'][2];
         $definedTranslation = $definedTranslation[0];
@@ -2030,9 +1993,7 @@ class ArticleTest extends TestCase
         ];
 
         $model = $this->resource->create($data);
-        $this->resource->setResultMode(
-            Resource::HYDRATE_ARRAY
-        );
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $product = $this->resource->getOne($model->getId());
         static::assertIsArray($product);
 
@@ -2043,8 +2004,11 @@ class ArticleTest extends TestCase
             static::assertTrue($mediaService->has($key));
 
             $imageContent = $mediaService->read($key);
+            static::assertIsString($imageContent);
 
-            $mimeType = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $imageContent);
+            $fileInfo = finfo_open(FILEINFO_MIME_TYPE);
+            static::assertNotFalse($fileInfo);
+            $mimeType = finfo_buffer($fileInfo, $imageContent);
             static::assertSame('image/png', $mimeType);
         }
     }
@@ -2139,7 +2103,7 @@ class ArticleTest extends TestCase
         unset($image);
         $data['images'] = $images;
         foreach ($this->resource->create($data)->getImages() as $image) {
-            static::assertInstanceOf(ArticleImage::class, $image->getAttribute());
+            static::assertInstanceOf(ProductImage::class, $image->getAttribute());
             static::assertSame('attr1', $image->getAttribute()->getAttribute1());
             static::assertNull($image->getAttribute()->getAttribute2());
             static::assertNull($image->getAttribute()->getAttribute3());
@@ -2149,12 +2113,15 @@ class ArticleTest extends TestCase
     public function testCreateWithDuplicateProperties(): void
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['values', 'option'])->from(Value::class, 'values')->innerJoin(
-            'values.option',
-            'option'
-        )->setFirstResult(0)->setMaxResults(20);
+        $builder->select(['values', 'option'])
+            ->from(Value::class, 'values')
+            ->innerJoin('values.option', 'option')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
         $properties = [];
+        $valueIds = [];
+        $optionIds = [];
         foreach ($databaseValues as $value) {
             $valueIds[] = $value['id'];
             $optionIds[] = $value['option']['id'];
@@ -2173,6 +2140,7 @@ class ArticleTest extends TestCase
             Resource::HYDRATE_ARRAY
         );
         $product = $this->resource->getOne($product->getId());
+        static::assertIsArray($product);
         foreach ($product['propertyValues'] as $value) {
             static::assertContains($value['id'], $valueIds);
             static::assertContains($value['optionId'], $optionIds);
@@ -2183,7 +2151,7 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
 
-        $optionName = 'newOption' . uniqid((string) rand());
+        $optionName = 'newOption' . uniqid((string) mt_rand());
         $properties = [
             [
                 'option' => ['name' => $optionName],
@@ -2198,16 +2166,18 @@ class ArticleTest extends TestCase
         $data['propertyValues'] = $properties;
         $data['filterGroupId'] = 1;
         $product = $this->resource->create($data);
-        $this->resource->setResultMode(
-            Resource::HYDRATE_ARRAY
-        );
+        $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
         $productId = $product->getId();
         $product = $this->resource->getOne($productId);
+        static::assertIsArray($product);
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['option'])->from(\Shopware\Models\Property\Option::class, 'option')->where(
-            'option.name = :optionName'
-        )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
+        $builder->select(['option'])
+            ->from(PropertyOption::class, 'option')
+            ->where('option.name = :optionName')
+            ->setParameter('optionName', $optionName)
+            ->setFirstResult(0)
+            ->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
         static::assertSame($product['propertyValues'][0]['optionId'], $product['propertyValues'][1]['optionId']);
@@ -2224,7 +2194,7 @@ class ArticleTest extends TestCase
         Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         // delete test values in s_filter_options
-        $builder->delete(\Shopware\Models\Property\Option::class, 'option')->andWhere(
+        $builder->delete(PropertyOption::class, 'option')->andWhere(
             'option.name = :optionName'
         )->setParameter('optionName', $optionName)->getQuery()->execute();
     }
@@ -2232,12 +2202,15 @@ class ArticleTest extends TestCase
     public function testUpdateWithDuplicateProperties(): void
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['values', 'option'])->from(Value::class, 'values')->innerJoin(
-            'values.option',
-            'option'
-        )->setFirstResult(0)->setMaxResults(20);
+        $builder->select(['values', 'option'])
+            ->from(Value::class, 'values')
+            ->innerJoin('values.option', 'option')
+            ->setFirstResult(0)
+            ->setMaxResults(20);
         $databaseValues = $builder->getQuery()->getArrayResult();
         $properties = [];
+        $valueIds = [];
+        $optionIds = [];
         foreach ($databaseValues as $value) {
             $valueIds[] = $value['id'];
             $optionIds[] = $value['option']['id'];
@@ -2268,6 +2241,7 @@ class ArticleTest extends TestCase
     {
         $data = $this->getSimpleTestData();
         $product = $this->resource->create($data);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
 
         $update = [
             'mainDetail' => [
@@ -2291,12 +2265,14 @@ class ArticleTest extends TestCase
         ];
 
         $product = $this->resource->update($product->getId(), $update);
+        static::assertInstanceOf(ProductModel::class, $product);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
         static::assertCount(3, $product->getMainDetail()->getPrices());
     }
 
     public function testUpdateWithMultiplePropertiesAndNewGroup(): void
     {
-        $optionName = 'newOption' . uniqid((string) rand());
+        $optionName = 'newOption' . uniqid((string) mt_rand());
         $properties = [
             [
                 'option' => ['name' => $optionName],
@@ -2324,11 +2300,15 @@ class ArticleTest extends TestCase
             Resource::HYDRATE_ARRAY
         );
         $product = $this->resource->getOne($product->getId());
+        static::assertIsArray($product);
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['option'])->from(\Shopware\Models\Property\Option::class, 'option')->where(
-            'option.name = :optionName'
-        )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
+        $builder->select(['option'])
+            ->from(PropertyOption::class, 'option')
+            ->where('option.name = :optionName')
+            ->setParameter('optionName', $optionName)
+            ->setFirstResult(0)
+            ->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
         static::assertSame($product['propertyValues'][0]['optionId'], $product['propertyValues'][1]['optionId']);
@@ -2345,7 +2325,7 @@ class ArticleTest extends TestCase
         Shopware()->Db()->query($sql, [$databaseValuesOptions[0]['id']]);
 
         // delete test values in s_filter_options
-        $builder->delete(\Shopware\Models\Property\Option::class, 'option')->andWhere(
+        $builder->delete(PropertyOption::class, 'option')->andWhere(
             'option.name = :optionName'
         )->setParameter('optionName', $optionName)->getQuery()->execute();
     }
@@ -2391,10 +2371,11 @@ class ArticleTest extends TestCase
         $this->resource->generateVariantImages($product);
 
         $product = $this->resource->getOne($product->getId());
+        static::assertInstanceOf(ProductModel::class, $product);
 
         foreach ($product->getDetails() as $variant) {
             foreach ($variant->getConfiguratorOptions() as $option) {
-                if ($option->getName() == $usedOption[0]['name']) {
+                if ($option->getName() === $usedOption[0]['name']) {
                     static::assertCount(1, $variant->getImages());
                 }
             }
@@ -2453,10 +2434,12 @@ class ArticleTest extends TestCase
         $product = $this->resource->create($data);
 
         static::assertInstanceOf(ProductModel::class, $product);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
 
         $price = $product->getMainDetail()->getPrices()->first();
         static::assertInstanceOf(Price::class, $price);
 
+        static::assertInstanceOf(Tax::class, $product->getTax());
         static::assertSame(
             400 / (((float) $product->getTax()->getTax() + 100) / 100),
             $price->getPrice(),
@@ -2464,6 +2447,7 @@ class ArticleTest extends TestCase
         );
 
         $data = $this->resource->getOne($product->getId());
+        static::assertIsArray($data);
 
         static::assertEqualsWithDelta(
             400 / (((float) $product->getTax()->getTax() + 100) / 100),
@@ -2480,6 +2464,8 @@ class ArticleTest extends TestCase
         $similar = [];
         foreach ($products as $product) {
             $model = Shopware()->Models()->find(ProductModel::class, $product['id']);
+            static::assertInstanceOf(ProductModel::class, $model);
+            static::assertInstanceOf(ProductVariant::class, $model->getMainDetail());
 
             $similar[] = ['number' => $model->getMainDetail()->getNumber()];
         }
@@ -2499,6 +2485,8 @@ class ArticleTest extends TestCase
         $similar = [];
         foreach ($products as $product) {
             $model = Shopware()->Models()->find(ProductModel::class, $product['id']);
+            static::assertInstanceOf(ProductModel::class, $model);
+            static::assertInstanceOf(ProductVariant::class, $model->getMainDetail());
 
             $similar[] = ['number' => $model->getMainDetail()->getNumber()];
         }
@@ -2566,6 +2554,7 @@ class ArticleTest extends TestCase
 
         foreach ($product->getSeoCategories() as $category) {
             static::assertContains($category->getCategory()->getId(), $ids);
+            static::assertInstanceOf(Shop::class, $category->getShop());
             static::assertContains($category->getShop()->getId(), [1, 2]);
         }
     }
@@ -2577,10 +2566,12 @@ class ArticleTest extends TestCase
         $product = $this->resource->create($data);
 
         static::assertInstanceOf(ProductModel::class, $product);
+        static::assertInstanceOf(ProductVariant::class, $product->getMainDetail());
 
         $price = $product->getMainDetail()->getPrices()->first();
         static::assertInstanceOf(Price::class, $price);
 
+        static::assertInstanceOf(Tax::class, $product->getTax());
         $net = 400 / (((float) $product->getTax()->getTax() + 100) / 100);
 
         static::assertSame(
@@ -2597,6 +2588,7 @@ class ArticleTest extends TestCase
                 'considerTaxInput' => true,
             ]
         );
+        static::assertIsArray($data);
 
         $price = $data['mainDetail']['prices'][0];
 
@@ -2608,14 +2600,6 @@ class ArticleTest extends TestCase
 
     public function testAssignCategoriesByPathShouldBeSuccessful(): void
     {
-        // Delete previous data
-        try {
-            $id = $this->resource->getIdFromNumber('hollo-1');
-            if (!empty($id)) {
-                $this->resource->delete($id);
-            }
-        } catch (Exception $e) {
-        }
         // Associate three kinds of categories with the product:
         // category by id, category by path, new category by path
         $product = $this->resource->create(
@@ -2640,17 +2624,17 @@ class ArticleTest extends TestCase
                 ],
             ]
         );
-        $ids = array_map(
-            function ($category) {
-                /* @var Category $category */
+        $ids = array_flip(array_map(
+            static function (Category $category) {
                 return $category->getId();
             },
             $product->getCategories()->toArray()
-        );
-        $ids = array_flip($ids);
+        ));
         static::assertArrayHasKey(12, $ids);
         static::assertArrayHasKey(16, $ids);
         static::assertCount(3, $ids);
+
+        $this->resource->delete($product->getId());
     }
 
     public function testBatchModeShouldBeSuccessful(): void
@@ -2711,7 +2695,7 @@ class ArticleTest extends TestCase
 
     public function testCategoryAssignment(): void
     {
-        $number = 'CategoryAssignment' . uniqid((string) rand());
+        $number = 'CategoryAssignment' . uniqid((string) mt_rand());
 
         $data = $this->getSimpleTestData();
         $data['mainDetail']['number'] = $number;
@@ -2829,7 +2813,7 @@ class ArticleTest extends TestCase
             ],
             'taxId' => 1,
             'mainDetail' => [
-                'number' => uniqid((string) rand()),
+                'number' => uniqid((string) mt_rand()),
                 'active' => true,
                 'prices' => [
                     [
@@ -2880,7 +2864,7 @@ class ArticleTest extends TestCase
             'lastStock' => true,
             'variants' => [
                 [
-                    'number' => uniqid((string) rand()) . '.1',
+                    'number' => uniqid((string) mt_rand()) . '.1',
                     'active' => true,
                     'prices' => [
                         [
@@ -2904,6 +2888,7 @@ class ArticleTest extends TestCase
         ];
 
         foreach ($this->resource->create($data)->getImages() as $image) {
+            static::assertInstanceOf(Media::class, $image->getMedia());
             $media = $image->getMedia();
 
             static::assertCount(1, $image->getMappings());
@@ -2931,7 +2916,7 @@ class ArticleTest extends TestCase
             'active' => true,
             'taxId' => 1,
             'mainDetail' => [
-                'number' => 'withoutstock' . uniqid((string) rand()),
+                'number' => 'withoutstock' . uniqid((string) mt_rand()),
                 'prices' => [
                     [
                         'customerGroupKey' => 'EK',
@@ -2942,7 +2927,8 @@ class ArticleTest extends TestCase
         ];
 
         $model = $this->resource->create($data);
-
+        static::assertInstanceOf(ProductModel::class, $model);
+        static::assertInstanceOf(ProductVariant::class, $model->getMainDetail());
         static::assertSame(0, $model->getMainDetail()->getInStock());
     }
 
@@ -2959,6 +2945,8 @@ class ArticleTest extends TestCase
          */
         foreach ([true, false, 1, 0, null] as $val) {
             $temp = $this->resource->update($id, ['mainDetail' => ['lastStock' => $val]]);
+            static::assertInstanceOf(ProductModel::class, $temp);
+            static::assertInstanceOf(ProductVariant::class, $temp->getMainDetail());
 
             static::assertSame($val, $temp->getMainDetail()->getLastStock());
         }
@@ -2970,7 +2958,7 @@ class ArticleTest extends TestCase
     {
         $entityManager = Shopware()->Models();
         $productRepository = $entityManager->getRepository(ProductModel::class);
-        $detailRepository = $entityManager->getRepository(Detail::class);
+        $detailRepository = $entityManager->getRepository(ProductVariant::class);
         $attributeRepository = $entityManager->getRepository(ProductAttribute::class);
 
         // Test preparation
@@ -2984,7 +2972,7 @@ class ArticleTest extends TestCase
             /* While the values are not relevant to the test, and attributes
              * would still be created without them, this test should still work
              * should the logic around when to create attributes change. */
-            function ($variant) {
+            static function (array $variant) {
                 $variant['attribute'] = [
                     'attr1' => 'Free form text 1',
                     'attr2' => 'Free form text 2',
@@ -3014,14 +3002,17 @@ class ArticleTest extends TestCase
             /* The identifiers of the details the removal of which we will
              * later verify. */
             $createdDetailIds = array_unique(array_map(
-                function ($createdDetail) {
+                static function (ProductVariant $createdDetail) {
                     return $createdDetail->getId();
                 },
                 $createdDetails
             ));
 
-            $createdAttributes = array_map(
-                function ($createdDetail) { return $createdDetail->getAttribute(); },
+            $createdAttributes = array_map(static function (ProductVariant $createdDetail) {
+                self::assertInstanceOf(ProductAttribute::class, $createdDetail->getAttribute());
+
+                return $createdDetail->getAttribute();
+            },
                 $createdDetails
             );
             // Verify we did not break our test setup.
@@ -3030,7 +3021,9 @@ class ArticleTest extends TestCase
             /* The identifiers of the attributes the removal of which we will
              * later verify. */
             $createdAttributeIds = array_unique(array_map(
-                function ($createdAttribute) { return $createdAttribute->getId(); },
+                static function (ProductAttribute $createdAttribute) {
+                    return $createdAttribute->getId();
+                },
                 $createdAttributes
             ));
             static::assertCount(3, $createdAttributeIds);
@@ -3072,11 +3065,9 @@ class ArticleTest extends TestCase
         );
         static::assertCount(
             0,
-            $attributeRepository->findBy([
-                'id' => $createdAttributeIds,
-            ]),
+            $attributeRepository->findBy(['id' => $createdAttributeIds]),
             sprintf(
-                'Deletion of the product\'s (id = %s) details\' (%s) attributes (%s) failed.',
+                "Deletion of the product's (id = %s) details' (%s) attributes (%s) failed.",
                 $createdProductId,
                 implode(', ', $createdDetailIds),
                 implode(', ', $createdAttributeIds)
@@ -3117,7 +3108,7 @@ class ArticleTest extends TestCase
             'descriptionLong' => 'Test descriptionLong',
             'active' => true,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 'prices' => [
                     [
                         'customerGroupKey' => 'EK',
@@ -3137,7 +3128,7 @@ class ArticleTest extends TestCase
                         ],
                     ],
                     [
-                        'name' => 'Gräße',
+                        'name' => 'Größe',
                         'options' => [
                             ['name' => 'L'],
                             ['name' => 'XL'],
@@ -3147,7 +3138,7 @@ class ArticleTest extends TestCase
             ],
             'variants' => [
                 [
-                    'number' => 'swTEST.variant.' . uniqid((string) rand()),
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand()),
                     'inStock' => 17,
                     // create a new unit
                     'unit' => [
@@ -3210,14 +3201,14 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * Combinations merge the result of dimensional arrays not perfectly
+     * Combinations merge the result of dimensional arrays not perfectly,
      * so we have to clean up the first array level.
      *
-     * @param array[] $combinations
+     * @param list<array{groupId: int, option: string}> $combinations
      *
-     * @return array[]
+     * @return list<array{groupId: int, option: string}>
      */
-    protected function cleanUpCombinations(array $combinations): array
+    private function cleanUpCombinations(array $combinations): array
     {
         foreach ($combinations as &$combination) {
             $combination[] = [
@@ -3231,34 +3222,9 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * Helper function which combines all array elements
-     * of the passed arrays.
+     * @param class-string<ModelEntity> $entity
      */
-    protected function combinations(array $arrays, int $i = 0): array
-    {
-        if (!isset($arrays[$i])) {
-            return [];
-        }
-        if ($i == \count($arrays) - 1) {
-            return $arrays[$i];
-        }
-
-        // get combinations from subsequent arrays
-        $tmp = $this->combinations($arrays, $i + 1);
-
-        $result = [];
-
-        // concat each array from tmp with each element from $arrays[$i]
-        foreach ($arrays[$i] as $v) {
-            foreach ($tmp as $t) {
-                $result[] = \is_array($t) ? array_merge([$v], $t) : [$v, $t];
-            }
-        }
-
-        return $result;
-    }
-
-    protected function internalTestReplaceMode($entity, $arrayKey, $replace = true): void
+    private function internalTestReplaceMode(string $entity, string $arrayKey, bool $replace = true): void
     {
         // Create keys for getter function and the __options parameter in the update and create
         // Example => "__options_categories"  /  "getCategories"
@@ -3283,7 +3249,7 @@ class ArticleTest extends TestCase
         ];
         $product = $this->resource->update($product->getId(), $update);
 
-        if ($replace == true) {
+        if ($replace) {
             static::assertCount(\count($updatedEntity), $product->$getter());
         } else {
             static::assertCount(\count($createdEntities) + \count($updatedEntity), $product->$getter());
@@ -3291,9 +3257,11 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @param array{name: string, groups: array<array<string, mixed>>} $configuratorSet
+     *
+     * @return list<array<string, mixed>>
      */
-    private function getOptionsForImage($configuratorSet, $optionCount = null, $property = 'id'): array
+    private function getOptionsForImage(array $configuratorSet, ?int $optionCount = null, string $property = 'id'): array
     {
         if (!\is_int($optionCount)) {
             $optionCount = rand(1, \count($configuratorSet['groups']) - 1);
@@ -3306,7 +3274,7 @@ class ArticleTest extends TestCase
             $options[] = [
                 $property => $option[$property],
             ];
-            if (\count($options) == $optionCount) {
+            if (\count($options) === $optionCount) {
                 return $options;
             }
         }
@@ -3315,34 +3283,28 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * Helper function which creates all variants for
-     * the passed groups with options.
+     * Helper function which creates all variants for the passed groups with options.
+     *
+     * @param array<array<string, mixed>> $groups
+     *
+     * @return list<array<string, mixed>>
      */
-    private function createConfiguratorVariants(
-        array $groups,
-        array $groupMapping = ['key' => 'groupId', 'value' => 'id'],
-        array $optionMapping = ['key' => 'option', 'value' => 'name']
-    ): array {
+    private function createConfiguratorVariants(array $groups): array
+    {
         $options = [];
-
-        $groupArrayKey = $groupMapping['key'];
-        $groupValuesKey = $groupMapping['value'];
-        $optionArrayKey = $optionMapping['key'];
-        $optionValuesKey = $optionMapping['value'];
 
         foreach ($groups as $group) {
             $groupOptions = [];
             foreach ($group['options'] as $option) {
                 $groupOptions[] = [
-                    $groupArrayKey => $group[$groupValuesKey],
-                    $optionArrayKey => $option[$optionValuesKey],
+                    'groupId' => (int) $group['id'],
+                    'option' => (string) $option['name'],
                 ];
             }
             $options[] = $groupOptions;
         }
 
-        $combinations = $this->combinations($options);
-        $combinations = $this->cleanUpCombinations($combinations);
+        $combinations = $this->cleanUpCombinations($options[0]);
 
         $variants = [];
         foreach ($combinations as $combination) {
@@ -3355,19 +3317,19 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
-    private function getImagesForNewProduct(int $offset = 10, int $limit = 5): array
+    private function getImagesForNewProduct(int $offset = 10): array
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(
-            [
-                'media.id as mediaId',
-                '2 as main',
-            ]
-        )->from(Media::class, 'media', 'media.id')->addOrderBy('media.id', 'ASC')->setFirstResult(
-            $offset
-        )->setMaxResults($limit);
+        $builder->select([
+            'media.id as mediaId',
+            '2 as main',
+        ])
+            ->from(Media::class, 'media', 'media.id')
+            ->addOrderBy('media.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults(5);
 
         /**
          * Get random images.
@@ -3390,7 +3352,7 @@ class ArticleTest extends TestCase
             'description' => 'Test description',
             'active' => true,
             'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) rand()),
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
                 'inStock' => 15,
                 'unitId' => 1,
                 'prices' => [
@@ -3411,9 +3373,9 @@ class ArticleTest extends TestCase
 
     /**
      * @param class-string<ModelEntity> $entity
-     * @param string[]                  $fields
+     * @param list<string>              $fields
      *
-     * @return array[]
+     * @return array<array<string, mixed>>
      */
     private function getEntityOffset(string $entity, int $offset = 0, int $limit = 10, array $fields = ['id']): array
     {
@@ -3427,32 +3389,35 @@ class ArticleTest extends TestCase
         }
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select($selectFields)->from($entity, 'alias')->setFirstResult($offset)->setMaxResults($limit);
+        $builder->select($selectFields)
+            ->from($entity, 'alias')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
 
         return $builder->getQuery()->getArrayResult();
     }
 
     /**
-     * @return array{name: string, groups: array}
+     * @return array{name: string, groups: array<array<string, mixed>>}
      */
-    private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5): array
+    private function getSimpleConfiguratorSet(int $groupLimit = 3, int $optionLimit = 5): array
     {
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['groups.id', 'groups.name'])->from(
-            ConfiguratorGroup::class,
-            'groups'
-        )->setFirstResult(0)->setMaxResults($groupLimit)->orderBy('groups.position', 'ASC');
+        $builder->select(['groups.id', 'groups.name'])
+            ->from(ConfiguratorGroup::class, 'groups')
+            ->setFirstResult(0)
+            ->setMaxResults($groupLimit)
+            ->orderBy('groups.position', 'ASC');
 
         $groups = $builder->getQuery()->getArrayResult();
 
         $builder = Shopware()->Models()->createQueryBuilder();
-        $builder->select(['options.id', 'options.name'])->from(
-            Option::class,
-            'options'
-        )->where('options.groupId = :groupId')->setFirstResult(0)->setMaxResults($optionLimit)->orderBy(
-            'options.position',
-            'ASC'
-        );
+        $builder->select(['options.id', 'options.name'])
+            ->from(ConfiguratorOption::class, 'options')
+            ->where('options.groupId = :groupId')
+            ->setFirstResult(0)
+            ->setMaxResults($optionLimit)
+            ->orderBy('options.position', 'ASC');
 
         foreach ($groups as &$group) {
             $builder->setParameter('groupId', $group['id']);
@@ -3471,7 +3436,7 @@ class ArticleTest extends TestCase
     private function getSimpleVariantData(): array
     {
         return [
-            'number' => 'swTEST' . uniqid((string) rand()),
+            'number' => 'swTEST' . uniqid((string) mt_rand()),
             'inStock' => 100,
             'unitId' => 1,
             'prices' => [
@@ -3486,9 +3451,9 @@ class ArticleTest extends TestCase
     }
 
     /**
-     * @param array{name: string, groups: array} $configuratorSet
+     * @param array{name: string, groups: array<array<string, mixed>>} $configuratorSet
      *
-     * @return array<array>
+     * @return list<array{optionId: int, groupId: int}>
      */
     private function getVariantOptionsOfSet(array $configuratorSet): array
     {
@@ -3497,8 +3462,8 @@ class ArticleTest extends TestCase
             $id = rand(0, \count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = [
-                'optionId' => $option['id'],
-                'groupId' => $group['id'],
+                'optionId' => (int) $option['id'],
+                'groupId' => (int) $group['id'],
             ];
         }
 
