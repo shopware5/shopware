@@ -197,18 +197,18 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(ProductModel::class, $product);
         static::assertGreaterThan(0, $product->getId());
 
-        static::assertEquals($product->getName(), $testData['name']);
-        static::assertEquals($product->getDescription(), $testData['description']);
-        static::assertEquals($product->getMetaTitle(), $testData['metaTitle']);
+        static::assertSame($product->getName(), $testData['name']);
+        static::assertSame($product->getDescription(), $testData['description']);
+        static::assertSame($product->getMetaTitle(), $testData['metaTitle']);
 
-        static::assertEquals($product->getDescriptionLong(), $testData['descriptionLong']);
+        static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
 
         // Check attributes of main variant
-        static::assertEquals(
+        static::assertSame(
             $product->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
         );
-        static::assertEquals(
+        static::assertSame(
             $product->getMainDetail()->getAttribute()->getAttr2(),
             $testData['mainDetail']['attribute']['attr2']
         );
@@ -217,11 +217,11 @@ class ArticleTest extends TestCase
         $variant = $product->getDetails()->matching(Criteria::create()->where(
             Criteria::expr()->eq('number', $testData['variants'][0]['number'])
         ));
-        static::assertEquals(
+        static::assertSame(
             $variant->first()->getAttribute()->getAttr3(),
             $testData['variants'][0]['attribute']['attr3']
         );
-        static::assertEquals(
+        static::assertSame(
             $variant->first()->getAttribute()->getAttr4(),
             $testData['variants'][0]['attribute']['attr4']
         );
@@ -232,7 +232,7 @@ class ArticleTest extends TestCase
             static::assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
-        static::assertEquals($testData['taxId'], $product->getTax()->getId());
+        static::assertSame($testData['taxId'], $product->getTax()->getId());
 
         static::assertCount(2, $product->getCategories());
         static::assertCount(2, $product->getRelated());
@@ -290,9 +290,9 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(ProductModel::class, $product);
         static::assertGreaterThan(0, $product->getId());
 
-        static::assertEquals($product->getName(), $testData['name']);
-        static::assertEquals($product->getDescription(), $testData['description']);
-        static::assertEquals($product->getMetaTitle(), $testData['metaTitle']);
+        static::assertSame($product->getName(), $testData['name']);
+        static::assertSame($product->getDescription(), $testData['description']);
+        static::assertSame($product->getMetaTitle(), $testData['metaTitle']);
 
         foreach ($product->getMainDetail()->getPrices() as $price) {
             static::assertGreaterThan(0, $price->getFrom());
@@ -300,10 +300,10 @@ class ArticleTest extends TestCase
 
         static::assertInstanceOf(Unit::class, $product->getMainDetail()->getUnit());
         static::assertGreaterThan(0, $product->getMainDetail()->getUnit()->getId());
-        static::assertEquals($product->getMainDetail()->getUnit()->getName(), $testData['mainDetail']['unit']['name']);
-        static::assertEquals($product->getMainDetail()->getUnit()->getUnit(), $testData['mainDetail']['unit']['unit']);
+        static::assertSame($product->getMainDetail()->getUnit()->getName(), $testData['mainDetail']['unit']['name']);
+        static::assertSame($product->getMainDetail()->getUnit()->getUnit(), $testData['mainDetail']['unit']['unit']);
 
-        static::assertEquals($product->getMainDetail()->getUnit()->getId(), $secondProduct->getMainDetail()->getUnit()->getId());
+        static::assertSame($product->getMainDetail()->getUnit()->getId(), $secondProduct->getMainDetail()->getUnit()->getId());
 
         return $product->getId();
     }
@@ -351,7 +351,7 @@ class ArticleTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $data = $this->resource->getOne($product->getId());
 
-        static::assertEquals(2, $data->getDetails()->count());
+        static::assertSame(2, $data->getDetails()->count());
         foreach ($data->getDetails() as $variant) {
             static::assertNotNull($variant->getAttribute());
             static::assertNull($variant->getAttribute()->getAttr1());
@@ -575,7 +575,7 @@ class ArticleTest extends TestCase
 
         $product = $this->resource->update($id, $testData);
 
-        static::assertEquals($mainVariantNumber, $product->getMainDetail()->getNumber());
+        static::assertSame($mainVariantNumber, $product->getMainDetail()->getNumber());
     }
 
     /**
@@ -950,16 +950,16 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(ProductModel::class, $product);
         static::assertGreaterThan(0, $product->getId());
 
-        static::assertEquals($product->getName(), $testData['name']);
-        static::assertEquals($product->getDescription(), $testData['description']);
-        static::assertEquals($product->getMetaTitle(), $testData['metaTitle']);
+        static::assertSame($product->getName(), $testData['name']);
+        static::assertSame($product->getDescription(), $testData['description']);
+        static::assertSame($product->getMetaTitle(), $testData['metaTitle']);
 
-        static::assertEquals($product->getDescriptionLong(), $testData['descriptionLong']);
-        static::assertEquals(
+        static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
+        static::assertSame(
             $product->getMainDetail()->getAttribute()->getAttr1(),
             $testData['mainDetail']['attribute']['attr1']
         );
-        static::assertEquals(
+        static::assertSame(
             $product->getMainDetail()->getAttribute()->getAttr2(),
             $testData['mainDetail']['attribute']['attr2']
         );
@@ -970,7 +970,7 @@ class ArticleTest extends TestCase
             static::assertContains($propertyValue->getValue(), ['grün', 'testWert']);
         }
 
-        static::assertEquals($testData['taxId'], $product->getTax()->getId());
+        static::assertSame($testData['taxId'], $product->getTax()->getId());
 
         static::assertCount(2, $product->getCategories());
         static::assertCount(0, $product->getRelated());
@@ -999,7 +999,7 @@ class ArticleTest extends TestCase
         $number = $product->getMainDetail()->getNumber();
 
         $product = $this->resource->getOneByNumber($number);
-        static::assertEquals($id, $product->getId());
+        static::assertSame($id, $product->getId());
     }
 
     /**
@@ -1050,8 +1050,8 @@ class ArticleTest extends TestCase
             'attribute.attr1' => 'Freitext1', // Belongs to main variant
         ]);
 
-        static::assertEquals(1, $result['total']);
-        static::assertEquals($id, $result['data'][0]['id'], (string) $id);
+        static::assertSame(1, $result['total']);
+        static::assertSame($id, $result['data'][0]['id'], (string) $id);
 
         // Filter with attribute of other (non-main) variant => no result
         $result = $this->resource->getList(0, 1, [
@@ -1059,7 +1059,7 @@ class ArticleTest extends TestCase
             'attribute.attr3' => 'Freitext3',
         ]);
 
-        static::assertEquals(0, $result['total']);
+        static::assertSame(0, $result['total']);
     }
 
     public function testCreateWithInvalidDataShouldThrowValidationException(): void
@@ -1104,11 +1104,11 @@ class ArticleTest extends TestCase
         $product = $this->resource->updateByNumber($number, $testData);
 
         static::assertInstanceOf(ProductModel::class, $product);
-        static::assertEquals($id, $product->getId());
-        static::assertEquals($product->getDescription(), $testData['description']);
-        static::assertEquals($product->getDescriptionLong(), $testData['descriptionLong']);
+        static::assertSame($id, $product->getId());
+        static::assertSame($product->getDescription(), $testData['description']);
+        static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
 
-        static::assertEquals($testData['supplierId'], $product->getSupplier()->getId());
+        static::assertSame($testData['supplierId'], $product->getSupplier()->getId());
 
         $propertyValues = $product->getPropertyValues()->getValues();
         static::assertCount(\count($propertyValues), $testData['propertyValues']);
@@ -1151,11 +1151,11 @@ class ArticleTest extends TestCase
         $product = $this->resource->update($id, $testData);
 
         static::assertInstanceOf(ProductModel::class, $product);
-        static::assertEquals($id, $product->getId());
-        static::assertEquals($product->getDescription(), $testData['description']);
-        static::assertEquals($product->getDescriptionLong(), $testData['descriptionLong']);
+        static::assertSame($id, $product->getId());
+        static::assertSame($product->getDescription(), $testData['description']);
+        static::assertSame($product->getDescriptionLong(), $testData['descriptionLong']);
 
-        static::assertEquals($testData['supplierId'], $product->getSupplier()->getId());
+        static::assertSame($testData['supplierId'], $product->getSupplier()->getId());
 
         $propertyValues = $product->getPropertyValues()->getValues();
         static::assertCount(\count($propertyValues), $testData['propertyValues']);
@@ -1245,7 +1245,7 @@ class ArticleTest extends TestCase
         static::assertIsArray($product);
 
         $image = array_pop($product['images']);
-        static::assertEquals(25, $image['mediaId']);
+        static::assertSame(25, $image['mediaId']);
     }
 
     public function testUpdateToVariantProduct(): void
@@ -1348,7 +1348,7 @@ class ArticleTest extends TestCase
             ],
         ];
         $updated = $this->resource->update($product->getId(), $updateProduct);
-        static::assertEquals('Turnschuhe', $updated->getName(), 'Product name does not match');
+        static::assertSame('Turnschuhe', $updated->getName(), 'Product name does not match');
 
         foreach ($updated->getDetails() as $variant) {
             static::assertContains(
@@ -1472,7 +1472,7 @@ class ArticleTest extends TestCase
             ],
         ];
         $updated = $this->resource->update($product->getId(), $updateProduct);
-        static::assertEquals('Turnschuhe', $updated->getName(), 'Product name does not match');
+        static::assertSame('Turnschuhe', $updated->getName(), 'Product name does not match');
 
         foreach ($updated->getDetails() as $variant) {
             static::assertContains(
@@ -1486,16 +1486,16 @@ class ArticleTest extends TestCase
 
                 switch ($option->getName()) {
                     case 'M':
-                        static::assertEquals(4, $option->getPosition());
+                        static::assertSame(4, $option->getPosition());
                         break;
                     case 'S':
-                        static::assertEquals(123, $option->getPosition());
+                        static::assertSame(123, $option->getPosition());
                         break;
                     case 'blau':
-                        static::assertEquals(11, $option->getPosition());
+                        static::assertSame(11, $option->getPosition());
                         break;
                     case 'grün':
-                        static::assertEquals(99, $option->getPosition());
+                        static::assertSame(99, $option->getPosition());
                         break;
 
                     default:
@@ -1613,7 +1613,7 @@ class ArticleTest extends TestCase
             ],
         ];
         $updated = $this->resource->update($product->getId(), $updateProduct);
-        static::assertEquals(2, $updated->getConfiguratorSet()->getType(), "ConfiguratorSet.Type doesn't match");
+        static::assertSame(2, $updated->getConfiguratorSet()->getType(), "ConfiguratorSet.Type doesn't match");
 
         try {
             if (!empty($id)) {
@@ -1867,7 +1867,7 @@ class ArticleTest extends TestCase
         foreach ($product->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $mainFlagExists = true;
-                static::assertEquals($expectedMainId, $image->getMedia()->getId());
+                static::assertSame($expectedMainId, $image->getMedia()->getId());
             }
         }
         static::assertTrue($mainFlagExists);
@@ -1906,7 +1906,7 @@ class ArticleTest extends TestCase
         foreach ($product->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
-                static::assertEquals($image->getId(), $newId);
+                static::assertSame($image->getId(), $newId);
             }
         }
         static::assertTrue($hasMain);
@@ -1961,7 +1961,7 @@ class ArticleTest extends TestCase
         foreach ($product->getImages() as $image) {
             if ($image->getMain() === 1) {
                 $hasMain = true;
-                static::assertEquals($newMainId, $image->getId());
+                static::assertSame($newMainId, $image->getId());
             }
         }
         static::assertTrue($hasMain);
@@ -2003,17 +2003,17 @@ class ArticleTest extends TestCase
         $savedTranslation = $newData['translations'][2];
         $definedTranslation = $definedTranslation[0];
 
-        static::assertEquals($definedTranslation['name'], $savedTranslation['name']);
-        static::assertEquals($definedTranslation['description'], $savedTranslation['description']);
-        static::assertEquals($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
-        static::assertEquals($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
-        static::assertEquals($definedTranslation['keywords'], $savedTranslation['keywords']);
-        static::assertEquals($definedTranslation['packUnit'], $savedTranslation['packUnit']);
-        static::assertEquals($definedTranslation['__attribute_underscore_test'], $savedTranslation['__attribute_underscore_test']);
+        static::assertSame($definedTranslation['name'], $savedTranslation['name']);
+        static::assertSame($definedTranslation['description'], $savedTranslation['description']);
+        static::assertSame($definedTranslation['descriptionLong'], $savedTranslation['descriptionLong']);
+        static::assertSame($definedTranslation['shippingTime'], $savedTranslation['shippingTime']);
+        static::assertSame($definedTranslation['keywords'], $savedTranslation['keywords']);
+        static::assertSame($definedTranslation['packUnit'], $savedTranslation['packUnit']);
+        static::assertSame($definedTranslation['__attribute_underscore_test'], $savedTranslation['__attribute_underscore_test']);
 
         for ($i = 1; $i <= 20; ++$i) {
             $attr = '__attribute_attr' . $i;
-            static::assertEquals($definedTranslation[$attr], $savedTranslation[$attr]);
+            static::assertSame($definedTranslation[$attr], $savedTranslation[$attr]);
         }
 
         $crud->delete('s_articles_attributes', 'underscore_test');
@@ -2045,7 +2045,7 @@ class ArticleTest extends TestCase
             $imageContent = $mediaService->read($key);
 
             $mimeType = finfo_buffer(finfo_open(FILEINFO_MIME_TYPE), $imageContent);
-            static::assertEquals('image/png', $mimeType);
+            static::assertSame('image/png', $mimeType);
         }
     }
 
@@ -2140,7 +2140,7 @@ class ArticleTest extends TestCase
         $data['images'] = $images;
         foreach ($this->resource->create($data)->getImages() as $image) {
             static::assertInstanceOf(ArticleImage::class, $image->getAttribute());
-            static::assertEquals('attr1', $image->getAttribute()->getAttribute1());
+            static::assertSame('attr1', $image->getAttribute()->getAttribute1());
             static::assertNull($image->getAttribute()->getAttribute2());
             static::assertNull($image->getAttribute()->getAttribute3());
         }
@@ -2210,7 +2210,7 @@ class ArticleTest extends TestCase
         )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
-        static::assertEquals($product['propertyValues'][0]['optionId'], $product['propertyValues'][1]['optionId']);
+        static::assertSame($product['propertyValues'][0]['optionId'], $product['propertyValues'][1]['optionId']);
         static::assertCount(1, $databaseValuesOptions);
 
         $this->resource->delete($productId);
@@ -2331,7 +2331,7 @@ class ArticleTest extends TestCase
         )->setParameter('optionName', $optionName)->setFirstResult(0)->setMaxResults(20);
         $databaseValuesOptions = $builder->getQuery()->getArrayResult();
 
-        static::assertEquals($product['propertyValues'][0]['optionId'], $product['propertyValues'][1]['optionId']);
+        static::assertSame($product['propertyValues'][0]['optionId'], $product['propertyValues'][1]['optionId']);
         static::assertCount(1, $databaseValuesOptions);
 
         $this->resource->delete($productId);
@@ -2457,7 +2457,7 @@ class ArticleTest extends TestCase
         $price = $product->getMainDetail()->getPrices()->first();
         static::assertInstanceOf(Price::class, $price);
 
-        static::assertEquals(
+        static::assertSame(
             400 / (((float) $product->getTax()->getTax() + 100) / 100),
             $price->getPrice(),
             'Customer group price not calculated'
@@ -2583,7 +2583,7 @@ class ArticleTest extends TestCase
 
         $net = 400 / (((float) $product->getTax()->getTax() + 100) / 100);
 
-        static::assertEquals(
+        static::assertSame(
             $net,
             $price->getPrice(),
             'Customer group price not calculated'
@@ -2681,9 +2681,9 @@ class ArticleTest extends TestCase
             ]
         );
 
-        static::assertEquals('newKeyword1', $result['existingByNumber']['data']['keywords']);
-        static::assertEquals('newKeyword2', $result['existingById']['data']['keywords']);
-        static::assertEquals('Testartikel', $result['new']['data']['name']);
+        static::assertSame('newKeyword1', $result['existingByNumber']['data']['keywords']);
+        static::assertSame('newKeyword2', $result['existingById']['data']['keywords']);
+        static::assertSame('Testartikel', $result['new']['data']['name']);
         $newData = $this->resource->getOne($result['new']['data']['id']);
         static::assertIsArray($newData);
         static::assertSame('test product', $newData['translations'][2]['name']);
@@ -2917,9 +2917,9 @@ class ArticleTest extends TestCase
             $rule = array_shift($ruleValues);
 
             if ($media->getId() === 2) {
-                static::assertEquals('NewVal1', $rule->getOption()->getName());
+                static::assertSame('NewVal1', $rule->getOption()->getName());
             } elseif ($media->getId() === 3) {
-                static::assertEquals('Newval2', $rule->getOption()->getName());
+                static::assertSame('Newval2', $rule->getOption()->getName());
             }
         }
     }
@@ -2960,7 +2960,7 @@ class ArticleTest extends TestCase
         foreach ([true, false, 1, 0, null] as $val) {
             $temp = $this->resource->update($id, ['mainDetail' => ['lastStock' => $val]]);
 
-            static::assertEquals($val, $temp->getMainDetail()->getLastStock());
+            static::assertSame($val, $temp->getMainDetail()->getLastStock());
         }
 
         $this->resource->delete($id);
@@ -3205,7 +3205,7 @@ class ArticleTest extends TestCase
 
         $currentCountOfPrices = (int) Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_articles_prices');
 
-        static::assertEquals($countOfPrices, $currentCountOfPrices);
+        static::assertSame($countOfPrices, $currentCountOfPrices);
         $this->resource->delete($product->getId());
     }
 
