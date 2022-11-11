@@ -332,12 +332,8 @@ abstract class Resource implements ContainerAwareInterface
             throw new BatchInterfaceNotImplementedException();
         }
 
-        $this->setAutoFlush(false);
-        $connection = $this->getManager()->getConnection();
-
         $results = [];
         foreach ($data as $key => $datum) {
-            $connection->beginTransaction();
             $id = $this->getIdByData($datum);
 
             try {
@@ -355,17 +351,12 @@ abstract class Resource implements ContainerAwareInterface
                     ];
                 }
 
-                $this->getManager()->flush();
-                $connection->commit();
-
                 if ($this->getResultMode() === self::HYDRATE_ARRAY) {
                     $results[$key]['data'] = Shopware()->Models()->toArray(
                         $results[$key]['data']
                     );
                 }
             } catch (Exception $e) {
-                $connection->rollBack();
-
                 if (!$this->getManager()->isOpen()) {
                     $this->resetEntityManager();
                 }

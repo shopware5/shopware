@@ -2659,6 +2659,12 @@ class ArticleTest extends TestCase
     public function testBatchModeShouldBeSuccessful(): void
     {
         $createNew = $this->getSimpleTestData();
+        $createNew['translations'] = [
+            2 => [
+                'name' => 'test product',
+                'shopId' => 2,
+            ],
+        ];
         $updateExistingByNumber = [
             'mainDetail' => [
                 'number' => 'SW10003',
@@ -2681,6 +2687,9 @@ class ArticleTest extends TestCase
         static::assertEquals('newKeyword1', $result['existingByNumber']['data']['keywords']);
         static::assertEquals('newKeyword2', $result['existingById']['data']['keywords']);
         static::assertEquals('Testartikel', $result['new']['data']['name']);
+        $newData = $this->resource->getOne($result['new']['data']['id']);
+        static::assertIsArray($newData);
+        static::assertSame('test product', $newData['translations'][2]['name']);
     }
 
     public function testBatchDeleteShouldBeSuccessful(): void
