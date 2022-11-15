@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,34 +28,37 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class DetailTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private Connection $connection;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get(Connection::class);
+        $this->connection = $this->getContainer()->get(Connection::class);
     }
 
-    public function testDefaultVariant()
+    public function testDefaultVariant(): void
     {
         // Request a variant that is not the default one
-        $this->Request()
-            ->setMethod('POST');
+        $this->Request()->setMethod('POST');
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
         $article = $this->View()->getAssign('sArticle');
 
-        static::assertEquals('SW10201.2', $article['ordernumber']);
-        static::assertEquals(444, $article['articleDetailsID']);
+        static::assertSame('SW10201.2', $article['ordernumber']);
+        static::assertSame(444, $article['articleDetailsID']);
     }
 
-    public function testNonDefaultVariant()
+    public function testNonDefaultVariant(): void
     {
         // Request a variant that is not the default one
         $this->Request()
@@ -66,31 +71,32 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
         $article = $this->View()->getAssign('sArticle');
-        static::assertEquals('SW10201.5', $article['ordernumber']);
-        static::assertEquals('447', $article['articleDetailsID']);
+        static::assertSame('SW10201.5', $article['ordernumber']);
+        static::assertSame(447, $article['articleDetailsID']);
     }
 
     /**
-     * @param string|null $gtin
-     * @param string      $value
-     *
-     * @dataProvider gtinDataprovider
+     * @dataProvider gtinDataProvider
      */
-    public function testGtins($gtin, $value)
+    public function testGtins(?string $gtin, string $value): void
     {
-        $this->connection->executeUpdate('UPDATE `s_articles_details` SET `ean`=? WHERE `ordernumber`="SW10006"', [$value]);
+        $this->connection->executeStatement("UPDATE `s_articles_details` SET `ean`=? WHERE `ordernumber`='SW10006'", [$value]);
 
-        $response = $this->dispatch('/genusswelten/edelbraende/6/cigar-special-40');
+        $body = $this->dispatch('/genusswelten/edelbraende/6/cigar-special-40')->getBody();
+        static::assertIsString($body);
 
-        if ($gtin) {
-            static::assertStringContainsString($gtin, $response->getBody());
-            static::assertStringContainsString('"' . trim($value) . '"', $response->getBody());
+        if (\is_string($gtin)) {
+            static::assertStringContainsString($gtin, $body);
+            static::assertStringContainsString(sprintf('"%s"', trim($value)), $body);
         } else {
-            static::assertStringNotContainsString(trim($value), $response->getBody());
+            static::assertStringNotContainsString(trim($value), $body);
         }
     }
 
-    public function gtinDataprovider()
+    /**
+     * @return list<array{gtin: string|null, value: string}>
+     */
+    public function gtinDataProvider(): array
     {
         return [
             ['gtin' => 'gtin8', 'value' => '12345678'],
@@ -105,14 +111,21 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
         ];
     }
 
-    public function testProductQuickView()
+    public function testProductQuickView(): void
     {
-        $dbal = Shopware()->Container()->get('dbal_connection');
-        $ordernumber_export = 't3st' . mt_rand(1000, 9999);
-        $ordernumber = 'SW10170';
-        $dbal->insert('s_addon_premiums', ['startprice' => 0, 'ordernumber' => $ordernumber, 'ordernumber_export' => $ordernumber_export, 'subshopID' => 0]);
-        $this->dispatch('/detail/productQuickView?ordernumber=' . $ordernumber_export);
+        $orderNumberExport = 't3st' . mt_rand(1000, 9999);
+        $orderNumber = 'SW10170';
+        $this->connection->insert(
+            's_addon_premiums',
+            [
+                'startprice' => 0,
+                'ordernumber' => $orderNumber,
+                'ordernumber_export' => $orderNumberExport,
+                'subshopID' => 0,
+            ]
+        );
+        $this->dispatch('/detail/productQuickView?ordernumber=' . $orderNumberExport);
         $sArticle = $this->View()->getAssign('sArticle');
-        static::assertEquals($ordernumber, $sArticle['ordernumber']);
+        static::assertSame($orderNumber, $sArticle['ordernumber']);
     }
 }

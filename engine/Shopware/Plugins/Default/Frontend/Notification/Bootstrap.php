@@ -205,7 +205,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                     $action->View()->assign('NotifyAlreadyRegistered', false);
 
                     $hash = Random::getAlphanumericString(32);
-                    $link = $action->Front()->Router()->assemble([
+                    $link = $action->Front()->ensureRouter()->assemble([
                         'sViewport' => 'detail',
                         'sArticle' => $id,
                         'sNotificationConfirmation' => $hash,
@@ -219,7 +219,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
                     $name = $modules->Articles()->sGetArticleNameByOrderNumber($notifyOrderNumber);
 
-                    $basePath = $action->Front()->Router()->assemble(['sViewport' => 'index']);
+                    $basePath = $action->Front()->ensureRouter()->assemble(['sViewport' => 'index']);
                     $modules->System()->_POST['sLanguage'] = Shopware()->Shop()->getId();
                     $modules->System()->_POST['sShopPath'] = $basePath . Shopware()->Config()->get('sBASEFILE');
 
@@ -432,7 +432,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
             $productInformation = $this->get('legacy_struct_converter')->convertListProductStruct($productInformation);
 
-            $link = Shopware()->Front()->Router()->assemble([
+            $link = Shopware()->Front()->ensureRouter()->assemble([
                 'sViewport' => 'detail',
                 'sArticle' => $product['articleID'],
                 'number' => $product['ordernumber'],

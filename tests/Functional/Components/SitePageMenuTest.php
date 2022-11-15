@@ -28,8 +28,6 @@ namespace Shopware\Tests\Functional\Components;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\Routing\Router;
-use Shopware\Components\Routing\RouterInterface;
 use Shopware\Components\SitePageMenu;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
@@ -64,7 +62,7 @@ class SitePageMenuTest extends TestCase
         static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        static::assertSame($this->getPath() . '/custom/index/sCustom/1', $page['link']);
+        static::assertStringEndsWith('/custom/index/sCustom/1', $page['link']);
     }
 
     public function testSiteWithExternalLink(): void
@@ -139,19 +137,6 @@ class SitePageMenuTest extends TestCase
         static::assertCount(1, $pages['left']);
 
         $page = array_shift($pages['left']);
-        static::assertSame($this->getPath() . '/cat/index/sCategory/300', $page['link']);
-    }
-
-    private function getPath(): string
-    {
-        /** @var Router $router */
-        $router = Shopware()->Container()->get(RouterInterface::class);
-        $path = implode('/', [
-            $router->getContext()->getHost(),
-            $router->getContext()->getBaseUrl(),
-        ]);
-        $protocol = $router->getContext()->isSecure() ? 'https' : 'http';
-
-        return rtrim($protocol . '://' . $path, '/');
+        static::assertStringEndsWith('/cat/index/sCategory/300', $page['link']);
     }
 }

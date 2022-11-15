@@ -502,7 +502,7 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
             'shopId' => $shop->getId(),
         ]);
 
-        $url = $this->Front()->Router()->assemble([
+        $url = $this->Front()->ensureRouter()->assemble([
             'action' => 'performOrderRedirect',
             'hash' => $hash,
             'fullPath' => true,

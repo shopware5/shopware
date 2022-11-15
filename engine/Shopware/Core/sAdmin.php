@@ -565,7 +565,7 @@ class sAdmin implements \Enlight_Hook
                 $hash = Random::getAlphanumericString(32);
                 $data = serialize(['newsletter' => $email, 'subscribeToNewsletter' => true]);
 
-                $link = $this->front->Router()->assemble([
+                $link = $this->front->ensureRouter()->assemble([
                     'sViewport' => 'newsletter',
                     'action' => 'index',
                     'sConfirmation' => $hash,

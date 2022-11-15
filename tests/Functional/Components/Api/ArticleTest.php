@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Api;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -54,9 +55,12 @@ use Shopware\Models\Property\Value;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
 use Shopware\Tests\Functional\Helper\Utils;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ArticleTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var ProductApiResource
      */
@@ -69,137 +73,8 @@ class ArticleTest extends TestCase
 
     public function testCreateShouldBeSuccessful(): int
     {
-        $testData = [
-            'name' => 'Testartikel',
-            'description' => 'Test description',
-            'descriptionLong' => 'Test descriptionLong',
-            'active' => true,
-            'pseudoSales' => 999,
-            'highlight' => true,
-            'keywords' => 'test, testproduct',
-            'metaTitle' => 'this is a test title with umlauts äöüß',
-            'filterGroupId' => 1,
-            'propertyValues' => [
-                [
-                    'value' => 'grün',
-                    'option' => [
-                        'name' => 'Farbe',
-                    ],
-                ],
-                [
-                    'value' => 'testWert',
-                    'option' => [
-                        'name' => 'neueOption' . uniqid((string) mt_rand()),
-                    ],
-                ],
-            ],
-            'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) mt_rand()),
-                'inStock' => 15,
-                'unitId' => 1,
-                'attribute' => [
-                    'attr1' => 'Freitext1',
-                    'attr2' => 'Freitext2',
-                ],
-                'minPurchase' => 5,
-                'purchaseSteps' => 2,
-                'prices' => [
-                    [
-                        'customerGroupKey' => 'EK',
-                        'to' => 20,
-                        'price' => 500,
-                    ],
-                    [
-                        'customerGroupKey' => 'EK',
-                        'from' => 21,
-                        'to' => '-',
-                        'price' => 400,
-                    ],
-                ],
-            ],
-            'configuratorSet' => [
-                'name' => 'MeinKonf',
-                'groups' => [
-                    [
-                        'name' => 'Farbe',
-                        'options' => [
-                            ['name' => 'Gelb'],
-                            ['name' => 'grün'],
-                        ],
-                    ],
-                    [
-                        'name' => 'Größe',
-                        'options' => [
-                            ['name' => 'L'],
-                            ['name' => 'XL'],
-                        ],
-                    ],
-                ],
-            ],
-            'variants' => [
-                [
-                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand()),
-                    'inStock' => 17,
-                    // create a new unit
-                    'unit' => [
-                        'unit' => 'xyz',
-                        'name' => 'newUnit',
-                    ],
-                    'attribute' => [
-                        'attr3' => 'Freitext3',
-                        'attr4' => 'Freitext4',
-                    ],
-                    'configuratorOptions' => [
-                        [
-                            'option' => 'Gelb',
-                            'group' => 'Farbe',
-                        ],
-                        [
-                            'option' => 'XL',
-                            'group' => 'Größe',
-                        ],
-                    ],
-                    'minPurchase' => 5,
-                    'purchaseSteps' => 2,
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'H',
-                            'to' => 20,
-                            'price' => 500,
-                        ],
-                        [
-                            'customerGroupKey' => 'H',
-                            'from' => 21,
-                            'to' => '-',
-                            'price' => 400,
-                        ],
-                    ],
-                ],
-            ],
-            'taxId' => 1,
-            'supplierId' => 2,
-            'similar' => [
-                ['id' => 5],
-                ['id' => 6],
-            ],
-            'categories' => [
-                ['id' => 15],
-                ['id' => 10],
-            ],
-            'related' => [
-                ['id' => 3, 'cross' => true],
-                ['id' => 4],
-            ],
-            'links' => [
-                ['name' => 'foobar', 'link' => 'http://example.org'],
-                ['name' => 'Video', 'link' => 'http://example.org'],
-            ],
-        ];
-
-        $product = $this->resource->create($testData);
-
-        static::assertInstanceOf(ProductModel::class, $product);
-        static::assertGreaterThan(0, $product->getId());
+        $testData = $this->getTestData();
+        $product = $this->createProduct($testData);
 
         static::assertSame($product->getName(), $testData['name']);
         static::assertSame($product->getDescription(), $testData['description']);
@@ -289,13 +164,10 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $product = $this->resource->create($testData);
+        $product = $this->createProduct($testData);
         // change number for second product
         $testData['mainDetail']['number'] = 'swTEST' . uniqid((string) mt_rand());
-        $secondProduct = $this->resource->create($testData);
-
-        static::assertInstanceOf(ProductModel::class, $product);
-        static::assertGreaterThan(0, $product->getId());
+        $secondProduct = $this->createProduct($testData);
 
         static::assertSame($testData['name'], $product->getName());
         static::assertSame($testData['description'], $product->getDescription());
@@ -496,10 +368,7 @@ class ArticleTest extends TestCase
             'supplierId' => 2,
         ];
 
-        $product = $this->resource->create($testData);
-
-        static::assertInstanceOf(ProductModel::class, $product);
-        static::assertGreaterThan(0, $product->getId());
+        $product = $this->createProduct($testData);
         static::assertCount(3, $product->getImages());
 
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
@@ -524,11 +393,9 @@ class ArticleTest extends TestCase
         return $product->getId();
     }
 
-    /**
-     * @depends testCreateWithImageShouldCreateThumbnails
-     */
-    public function testFlipProductMainVariantShouldBeSuccessful(int $id): void
+    public function testFlipProductMainVariantShouldBeSuccessful(): void
     {
+        $id = $this->testCreateWithImageShouldCreateThumbnails();
         $originalProduct = $this->resource->getOne($id);
         static::assertIsArray($originalProduct);
         $mainVariantNumber = (string) $originalProduct['mainDetailId'];
@@ -595,10 +462,8 @@ class ArticleTest extends TestCase
 
     /**
      * Test that updating a Product with images generates thumbnails
-     *
-     * @depends testCreateWithImageShouldCreateThumbnails
      */
-    public function testUpdateWithImageShouldCreateThumbnails(int $id): void
+    public function testUpdateWithImageShouldCreateThumbnails(): void
     {
         $testData = [
             'images' => [
@@ -608,6 +473,7 @@ class ArticleTest extends TestCase
             ],
         ];
 
+        $id = $this->testCreateWithImageShouldCreateThumbnails();
         $product = $this->resource->update($id, $testData);
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
@@ -750,10 +616,7 @@ class ArticleTest extends TestCase
             'supplierId' => 2,
         ];
 
-        $product = $this->resource->create($testData);
-
-        static::assertInstanceOf(ProductModel::class, $product);
-        static::assertGreaterThan(0, $product->getId());
+        $product = $this->createProduct($testData);
         static::assertCount(2, $product->getImages());
 
         $proportionalSizes = [
@@ -962,10 +825,7 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $product = $this->resource->create($testData);
-
-        static::assertInstanceOf(ProductModel::class, $product);
-        static::assertGreaterThan(0, $product->getId());
+        $product = $this->createProduct($testData);
 
         static::assertSame($product->getName(), $testData['name']);
         static::assertSame($product->getDescription(), $testData['description']);
@@ -1009,11 +869,9 @@ class ArticleTest extends TestCase
         $this->resource->delete($product->getId());
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testGetOneByNumberShouldBeSuccessful(int $id): void
+    public function testGetOneByNumberShouldBeSuccessful(): void
     {
+        $id = $this->createProduct($this->getTestData())->getId();
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $product = $this->resource->getOne($id);
         static::assertInstanceOf(ProductModel::class, $product);
@@ -1025,21 +883,17 @@ class ArticleTest extends TestCase
         static::assertSame($id, $product->getId());
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testGetOneShouldBeSuccessful(int $id): void
+    public function testGetOneShouldBeSuccessful(): void
     {
+        $id = $this->createProduct($this->getTestData())->getId();
         $product = $this->resource->getOne($id);
         static::assertIsArray($product);
         static::assertGreaterThan(0, $product['id']);
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testGetOneShouldBeAbleToReturnObject(int $id): void
+    public function testGetOneShouldBeAbleToReturnObject(): void
     {
+        $id = $this->createProduct($this->getTestData())->getId();
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $product = $this->resource->getOne($id);
 
@@ -1047,9 +901,6 @@ class ArticleTest extends TestCase
         static::assertGreaterThan(0, $product->getId());
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
     public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
@@ -1063,11 +914,10 @@ class ArticleTest extends TestCase
 
     /**
      * Tests that getList uses only the main variants attributes for filtering
-     *
-     * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldUseCorrectDetailsAttribute(int $id): void
+    public function testGetListShouldUseCorrectDetailsAttribute(): void
     {
+        $id = $this->createProduct($this->getTestData())->getId();
         // Filter with attribute of main variant => product found
         $result = $this->resource->getList(0, 1, [
             'id' => $id,
@@ -1098,11 +948,9 @@ class ArticleTest extends TestCase
         $this->resource->create($testData);
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testUpdateByNumberShouldBeSuccessful(int $id): ?string
+    public function testUpdateByNumberShouldBeSuccessful(): ?string
     {
+        $id = $this->createProduct($this->getTestData())->getId();
         $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $product = $this->resource->getOne($id);
         static::assertInstanceOf(ProductModel::class, $product);
@@ -1153,10 +1001,7 @@ class ArticleTest extends TestCase
         return $number;
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testUpdateShouldBeSuccessful(int $id): int
+    public function testUpdateShouldBeSuccessful(): int
     {
         $testData = [
             'description' => 'Update description',
@@ -1176,6 +1021,7 @@ class ArticleTest extends TestCase
             'similar' => [],
         ];
 
+        $id = $this->createProduct($this->getTestData())->getId();
         $product = $this->resource->update($id, $testData);
 
         static::assertInstanceOf(ProductModel::class, $product);
@@ -1200,10 +1046,7 @@ class ArticleTest extends TestCase
         return $id;
     }
 
-    /**
-     * @depends testCreateShouldBeSuccessful
-     */
-    public function testUpdateWithInvalidDataShouldThrowValidationException(int $id): void
+    public function testUpdateWithInvalidDataShouldThrowValidationException(): void
     {
         $this->expectException(ValidationException::class);
         // required field name is blank
@@ -1213,6 +1056,7 @@ class ArticleTest extends TestCase
             'descriptionLong' => 'Update descriptionLong',
         ];
 
+        $id = $this->createProduct($this->getTestData())->getId();
         $this->resource->update($id, $testData);
     }
 
@@ -1228,11 +1072,9 @@ class ArticleTest extends TestCase
         $this->resource->update(0, []);
     }
 
-    /**
-     * @depends testUpdateShouldBeSuccessful
-     */
-    public function testDeleteShouldBeSuccessful(int $id): void
+    public function testDeleteShouldBeSuccessful(): void
     {
+        $id = $this->createProduct($this->getTestData())->getId();
         $product = $this->resource->delete($id);
 
         static::assertInstanceOf(ProductModel::class, $product);
@@ -1646,9 +1488,6 @@ class ArticleTest extends TestCase
         $this->resource->delete($updated->getId());
     }
 
-    /**
-     * @depends testUpdateToConfiguratorSetPositionsShouldBeGenerated
-     */
     public function testUpdateToConfiguratorSetPositionsShouldOverwritePositions(): void
     {
         $product = $this->createConfiguratorSetProduct();
@@ -1683,12 +1522,9 @@ class ArticleTest extends TestCase
         $this->resource->delete($updated->getId());
     }
 
-    /**
-     * @depends testUpdateToConfiguratorSetPositionsShouldBeGenerated
-     * @depends testUpdateToConfiguratorSetPositionsShouldOverwritePositions
-     */
     public function testUpdateToConfiguratorSetPositionsShouldRemainUntouched(): void
     {
+        $this->testUpdateToConfiguratorSetPositionsShouldOverwritePositions();
         $product = $this->createConfiguratorSetProduct();
 
         $updateProduct = [
@@ -1710,10 +1546,12 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(Set::class, $updated->getConfiguratorSet());
         $options = $updated->getConfiguratorSet()->getOptions();
 
-        static::assertInstanceOf(ConfiguratorOption::class, $options[0]);
-        static::assertSame(5, $options[0]->getPosition());
-        static::assertInstanceOf(ConfiguratorOption::class, $options[1]);
-        static::assertSame(11, $options[1]->getPosition());
+        $firstOption = $options[0];
+        static::assertInstanceOf(ConfiguratorOption::class, $firstOption);
+        static::assertSame(5, $firstOption->getPosition());
+        $secondOption = $options[1];
+        static::assertInstanceOf(ConfiguratorOption::class, $secondOption);
+        static::assertSame(11, $secondOption->getPosition());
 
         $this->resource->delete($updated->getId());
     }
@@ -1764,11 +1602,9 @@ class ArticleTest extends TestCase
         return $variantNumber;
     }
 
-    /**
-     * @depends testCreateUseConfiguratorId
-     */
-    public function testUpdateUseConfiguratorIds(string $variantNumber): void
+    public function testUpdateUseConfiguratorIds(): void
     {
+        $variantNumber = $this->testCreateUseConfiguratorId();
         $configurator = $this->getSimpleConfiguratorSet(2);
         $variantOptions = $this->getVariantOptionsOfSet($configurator);
 
@@ -1837,11 +1673,9 @@ class ArticleTest extends TestCase
         return $product->getId();
     }
 
-    /**
-     * @depends testCreateWithMainImages
-     */
-    public function testUpdateWithSingleMainImage(int $productId): int
+    public function testUpdateWithSingleMainImage(): int
     {
+        $productId = $this->testCreateWithMainImages();
         $this->resource->setResultMode(
             Resource::HYDRATE_ARRAY
         );
@@ -1876,11 +1710,9 @@ class ArticleTest extends TestCase
         return $product->getId();
     }
 
-    /**
-     * @depends testUpdateWithSingleMainImage
-     */
-    public function testUpdateWithMainImage(int $productId): void
+    public function testUpdateWithMainImage(): void
     {
+        $productId = $this->testUpdateWithSingleMainImage();
         $this->resource->getManager()->clear();
 
         $this->resource->setResultMode(
@@ -1936,7 +1768,9 @@ class ArticleTest extends TestCase
     {
         $crud = Shopware()->Container()->get(CrudServiceInterface::class);
 
+        Shopware()->Container()->get(Connection::class)->rollBack();
         $crud->update('s_articles_attributes', 'underscore_test', 'string');
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
 
         $data = $this->getSimpleTestData();
 
@@ -1979,7 +1813,9 @@ class ArticleTest extends TestCase
             static::assertSame($definedTranslation[$attr], $savedTranslation[$attr]);
         }
 
+        Shopware()->Container()->get(Connection::class)->rollBack();
         $crud->delete('s_articles_attributes', 'underscore_test');
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
     }
 
     public function testBase64ImageUpload(): void
@@ -3183,10 +3019,7 @@ class ArticleTest extends TestCase
             ],
         ];
 
-        $product = $this->resource->create($testData);
-
-        static::assertInstanceOf(ProductModel::class, $product);
-        static::assertGreaterThan(0, $product->getId());
+        $product = $this->createProduct($testData);
 
         $countOfPrices = (int) Shopware()->Db()->fetchOne('SELECT COUNT(*) FROM s_articles_prices');
 
@@ -3492,5 +3325,151 @@ class ArticleTest extends TestCase
                 ],
             ]
         );
+    }
+
+    /**
+     * @param array<string, mixed> $testData
+     */
+    private function createProduct(array $testData): ProductModel
+    {
+        $product = $this->resource->create($testData);
+
+        static::assertInstanceOf(ProductModel::class, $product);
+        static::assertGreaterThan(0, $product->getId());
+
+        return $product;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getTestData(): array
+    {
+        return [
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testproduct',
+            'metaTitle' => 'this is a test title with umlauts äöüß',
+            'filterGroupId' => 1,
+            'propertyValues' => [
+                [
+                    'value' => 'grün',
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
+                    'value' => 'testWert',
+                    'option' => [
+                        'name' => 'neueOption' . uniqid((string) mt_rand()),
+                    ],
+                ],
+            ],
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid((string) mt_rand()),
+                'inStock' => 15,
+                'unitId' => 1,
+                'attribute' => [
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ],
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'to' => 20,
+                        'price' => 500,
+                    ],
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ],
+                ],
+            ],
+            'configuratorSet' => [
+                'name' => 'MeinKonf',
+                'groups' => [
+                    [
+                        'name' => 'Farbe',
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'grün'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Größe',
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
+            'variants' => [
+                [
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand()),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => [
+                        'unit' => 'xyz',
+                        'name' => 'newUnit',
+                    ],
+                    'attribute' => [
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ],
+                    'configuratorOptions' => [
+                        [
+                            'option' => 'Gelb',
+                            'group' => 'Farbe',
+                        ],
+                        [
+                            'option' => 'XL',
+                            'group' => 'Größe',
+                        ],
+                    ],
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'H',
+                            'to' => 20,
+                            'price' => 500,
+                        ],
+                        [
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ],
+                    ],
+                ],
+            ],
+            'taxId' => 1,
+            'supplierId' => 2,
+            'similar' => [
+                ['id' => 5],
+                ['id' => 6],
+            ],
+            'categories' => [
+                ['id' => 15],
+                ['id' => 10],
+            ],
+            'related' => [
+                ['id' => 3, 'cross' => true],
+                ['id' => 4],
+            ],
+            'links' => [
+                ['name' => 'foobar', 'link' => 'http://example.org'],
+                ['name' => 'Video', 'link' => 'http://example.org'],
+            ],
+        ];
     }
 }

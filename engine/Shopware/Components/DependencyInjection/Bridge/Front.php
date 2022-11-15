@@ -30,6 +30,7 @@ use Enlight_Event_EventManager;
 use Enlight_Plugin_PluginManager;
 use Exception;
 use Shopware\Components\DependencyInjection\Container;
+use Shopware\Components\Routing\RouterInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class Front
@@ -39,6 +40,8 @@ class Front
      * After the front resource is loaded, the controller path is added to the
      * front dispatcher. After the controller path is set to the dispatcher,
      * the plugin namespace of the front resource is set.
+     *
+     * @param array<string, mixed> $options
      *
      * @throws Exception
      *
@@ -55,7 +58,7 @@ class Front
 
         $front->setDispatcher($container->get('dispatcher'));
 
-        $front->setRouter($container->get(\Shopware\Components\Routing\RouterInterface::class));
+        $front->setRouter($container->get(RouterInterface::class));
 
         $front->setParams($options);
 

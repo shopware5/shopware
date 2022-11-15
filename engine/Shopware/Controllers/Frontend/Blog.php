@@ -355,7 +355,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
         // Generate breadcrumb
         $breadcrumb = $this->getCategoryBreadcrumb($blogArticleData['categoryId']);
-        $blogDetailLink = $this->Front()->Router()->assemble([
+        $blogDetailLink = $this->Front()->ensureRouter()->assemble([
             'sViewport' => 'blog', 'sCategory' => $blogArticleData['categoryId'],
             'action' => 'detail', 'blogArticle' => $blogArticleId,
         ]);
@@ -450,7 +450,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                     $this->get('models')->persist($blogCommentModel);
                     $this->get('models')->flush();
 
-                    $link = $this->Front()->Router()->assemble(['sViewport' => 'blog', 'action' => 'rating', 'blogArticle' => $blogArticleId, 'sConfirmation' => $hash]);
+                    $link = $this->Front()->ensureRouter()->assemble(['sViewport' => 'blog', 'action' => 'rating', 'blogArticle' => $blogArticleId, 'sConfirmation' => $hash]);
 
                     $context = ['sConfirmLink' => $link, 'sArticle' => ['title' => $blogArticleData['title']]];
                     $mail = Shopware()->TemplateMail()->createMail('sOPTINBLOGCOMMENT', $context);
@@ -626,19 +626,19 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
                 $userParams['sPage'] = $i;
 
                 $pages['numbers'][$i]['value'] = $i;
-                $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble($userParams);
+                $pages['numbers'][$i]['link'] = $this->Front()->ensureRouter()->assemble($userParams);
             }
             // Previous page
             if ($page !== 1) {
                 $userParams['sPage'] = $page - 1;
-                $pages['previous'] = $this->Front()->Router()->assemble($userParams);
+                $pages['previous'] = $this->Front()->ensureRouter()->assemble($userParams);
             } else {
                 $pages['previous'] = null;
             }
             // Next page
             if ($page !== $numberPages) {
                 $userParams['sPage'] = $page + 1;
-                $pages['next'] = $this->Front()->Router()->assemble($userParams);
+                $pages['next'] = $this->Front()->ensureRouter()->assemble($userParams);
             } else {
                 $pages['next'] = null;
             }

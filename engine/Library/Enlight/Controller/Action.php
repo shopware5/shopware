@@ -266,7 +266,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     public function redirect($url, array $options = [])
     {
         if (\is_array($url)) {
-            $url = $this->Front()->Router()->assemble($url);
+            $url = $this->Front()->ensureRouter()->assemble($url);
         }
         if (!preg_match('#^(https?|ftp)://#', $url)) {
             if (!str_starts_with($url, '/')) {

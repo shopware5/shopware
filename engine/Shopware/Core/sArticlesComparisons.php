@@ -212,6 +212,9 @@ class sArticlesComparisons implements Enlight_Hook
         foreach ($checkForProduct as $product) {
             if ($product['articleID']) {
                 $promotion = $this->articleModule->sGetPromotionById('fix', 0, (int) $product['articleID']);
+                if (!\is_array($promotion)) {
+                    continue;
+                }
                 $promotion['linkDetails'] = $promotion['linkVariant'];
                 $products[] = $promotion;
             }

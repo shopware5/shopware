@@ -79,7 +79,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
         foreach ($result->getProducts() as $product) {
             $productArray = $this->get(LegacyStructConverter::class)->convertListProductStruct($product);
 
-            $productArray['link'] = $this->Front()->Router()->assemble([
+            $productArray['link'] = $this->Front()->ensureRouter()->assemble([
                 'controller' => 'detail',
                 'sArticle' => $product->getId(),
                 'number' => $product->getNumber(),

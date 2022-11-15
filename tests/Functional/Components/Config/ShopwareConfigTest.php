@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,96 +24,77 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Components\Config;
+
+use Enlight_Components_Test_TestCase;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Config\Form;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Zend_Cache_Core;
 
 class ShopwareConfigTest extends Enlight_Components_Test_TestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
 
-    /**
-     * Random plugin id that should be unique
-     */
     public const PLUGIN_ID = 20095;
-    public const PLUGIN_NAME = 'Testplugin';
+    public const PLUGIN_NAME = 'TestPlugin';
 
-    /**
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     */
+    private ModelManager $modelManager;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $form = $this->initForm();
-        $form->setElement('text', 'mail', ['value' => 'other@email.org']);
-        $form->setElement('number', 'sometestkey', ['value' => 0]);
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
+        $this->createForm();
 
-        Shopware()->Models()->flush();
-
-        // force reload from database
-        Shopware()->Container()->reset('cache');
-        Shopware()->Container()->reset('config');
+        $this->getContainer()->get(Zend_Cache_Core::class)->clean();
+        $this->getContainer()->get('config')->setShop($this->getContainer()->get('shop'));
     }
 
-    /**
-     * @throws \Doctrine\DBAL\DBALException
-     */
     protected function tearDown(): void
     {
-        // force reload from database
-        Shopware()->Container()->reset('cache');
-        Shopware()->Container()->reset('config');
+        $form = $this->modelManager->getRepository(Form::class)->findOneBy(['name' => self::PLUGIN_NAME]);
+        static::assertInstanceOf(Form::class, $form);
+        $this->modelManager->remove($form);
+        $this->modelManager->flush($form);
 
         parent::tearDown();
     }
 
-    /**
-     * Test case
-     */
-    public function testCoreConfigIgnored()
+    public function testCoreConfigIgnored(): void
     {
-        static::assertNotEquals('other@email.org', Shopware()->Config()->get('mail'));
+        static::assertNotEquals('other@email.org', $this->getContainer()->get('config')->get('mail'));
     }
 
-    /**
-     * Test case
-     */
-    public function testCoreConfigNoCollision()
+    public function testCoreConfigNoCollision(): void
     {
-        static::assertEquals(0, Shopware()->Config()->get('sometestkey'));
+        static::assertSame(123, $this->getContainer()->get('config')->get('sometestkey'));
     }
 
-    /**
-     * Test case
-     */
-    public function testCoreConfigPrefixed()
+    public function testCoreConfigPrefixed(): void
     {
-        static::assertEquals('other@email.org', Shopware()->Config()->get(static::PLUGIN_NAME . '::mail'));
+        static::assertSame('other@email.org', $this->getContainer()->get('config')->get(static::PLUGIN_NAME . '::mail'));
     }
 
-    protected function initForm()
+    private function createForm(): void
     {
-        $repo = Shopware()->Models()->getRepository(Form::class);
-        $form = $repo->findOneBy(['name' => self::PLUGIN_NAME]);
+        $form = new Form();
+        $form->setPluginId(static::PLUGIN_ID);
 
-        if (!$form) {
-            $form = new Form();
-            $form->setPluginId(static::PLUGIN_ID);
+        $form->setName(self::PLUGIN_NAME);
+        $form->setLabel(self::PLUGIN_NAME);
+        $form->setDescription('');
 
-            $form->setName(self::PLUGIN_NAME);
-            $form->setLabel(self::PLUGIN_NAME);
-            $form->setDescription('');
+        $parent = $this->modelManager->getRepository(Form::class)->findOneBy(['name' => 'Other']);
 
-            /** @var Form $parent */
-            $parent = $repo->findOneBy([
-                'name' => 'Other',
-            ]);
+        $form->setParent($parent);
+        $form->setElement('text', 'mail', ['value' => 'other@email.org']);
+        $form->setElement('number', 'sometestkey', ['value' => 123]);
 
-            $form->setParent($parent);
-            Shopware()->Models()->persist($form);
-        }
-
-        return $form;
+        $this->modelManager->persist($form);
+        $this->modelManager->flush($form);
     }
 }

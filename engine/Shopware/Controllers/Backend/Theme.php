@@ -112,7 +112,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
                 'sessionValue' => $session->get('sessionId'),
             ]);
 
-            $url = $this->Front()->Router()->assemble([
+            $url = $this->Front()->ensureRouter()->assemble([
                 'module' => 'frontend',
                 'controller' => 'index',
                 'themeHash' => $hash,

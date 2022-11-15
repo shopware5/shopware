@@ -513,8 +513,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $hash = Random::getAlphanumericString(32);
 
         $context = [
-            'sUrlReset' => $this->Front()->Router()->assemble(['controller' => 'account', 'action' => 'resetPassword', 'hash' => $hash]),
-            'sUrl' => $this->Front()->Router()->assemble(['controller' => 'account', 'action' => 'resetPassword']),
+            'sUrlReset' => $this->Front()->ensureRouter()->assemble(['controller' => 'account', 'action' => 'resetPassword', 'hash' => $hash]),
+            'sUrl' => $this->Front()->ensureRouter()->assemble(['controller' => 'account', 'action' => 'resetPassword']),
             'sKey' => $hash,
         ];
 

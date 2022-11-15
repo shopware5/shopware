@@ -30,12 +30,15 @@ use Enlight_Controller_Response_ResponseTestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Property\Option;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @covers \Shopware_Controllers_Api_Articles
  */
 class ArticleTest extends AbstractApiTestCase
 {
+    use DatabaseTransactionBehaviour;
     use ContainerTrait;
 
     public function testRequestWithoutAuthenticationShouldReturnError(): void
@@ -78,205 +81,9 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    public function testPostArticlesShouldBeSuccessful(): int
+    public function testPostArticlesShouldBeSuccessful(): void
     {
-        $requestData = [
-            'name' => 'Testartikel',
-            'description' => 'Test description',
-            'descriptionLong' => 'Test descriptionLong',
-            'active' => true,
-            'pseudoSales' => 999,
-            'highlight' => true,
-            'keywords' => 'test, testproduct',
-
-            'filterGroupId' => 1,
-
-            'propertyValues' => [
-                [
-                    'value' => 'grün',
-                    'option' => [
-                        'name' => 'Farbe',
-                    ],
-                ],
-                [
-                    'value' => 'testWert',
-                    'option' => [
-                        'name' => 'neueOption' . uniqid((string) mt_rand(), true),
-                    ],
-                ],
-            ],
-
-            'mainDetail' => [
-                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
-                'inStock' => 15,
-                'unitId' => 1,
-
-                'attribute' => [
-                    'attr1' => 'Freitext1',
-                    'attr2' => 'Freitext2',
-                ],
-
-                'minPurchase' => 5,
-                'purchaseSteps' => 2,
-
-                'prices' => [
-                    [
-                        'customerGroupKey' => 'EK',
-                        'from' => 1,
-                        'to' => 20,
-                        'price' => 500,
-                        'regulationPrice' => 119,
-                    ],
-                    [
-                        'customerGroupKey' => 'EK',
-                        'from' => 21,
-                        'to' => '-',
-                        'price' => 400,
-                        'regulationPrice' => 119,
-                    ],
-                ],
-            ],
-
-            'configuratorSet' => [
-                'name' => 'MyConfigurator',
-                'groups' => [
-                    [
-                        'name' => 'Farbe',
-                        'options' => [
-                            ['name' => 'Gelb'],
-                            ['name' => 'Grün'],
-                        ],
-                    ],
-                    [
-                        'name' => 'Größe',
-                        'options' => [
-                            ['name' => 'L'],
-                            ['name' => 'XL'],
-                        ],
-                    ],
-                ],
-            ],
-
-            'images' => [
-                ['link' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9bpSJVh3YQcchQnSyI36NWoQgVQq3QqoPJpV/QpCFJcXEUXAsOfixWHVycdXVwFQTBDxA3NydFFynxf0mhRYwHx/14d+9x9w7w18tMNTtGAVWzjFQiLmSyq0LwFQGE0YtJTEvM1OdEMQnP8XUPH1/vYjzL+9yfo0fJmQzwCcSzTDcs4g3iqU1L57xPHGFFSSE+Jx4x6ILEj1yXXX7jXHDYzzMjRjo1TxwhFgptLLcxKxoq8QRxVFE1yvdnXFY4b3FWy1XWvCd/YSinrSxzneYgEljEEkQIkFFFCWVYiNGqkWIiRftxD/+A4xfJJZOrBEaOBVSgQnL84H/wu1szPz7mJoXiQOeLbX8MAcFdoFGz7e9j226cAIFn4Epr+St1YOaT9FpLix4BfdvAxXVLk/eAyx2g/0mXDMmRAjT9+TzwfkbflAXCt0D3mttbcx+nD0CaukreAAeHwHCBstc93t3V3tu/Z5r9/QDUInLOjro6CQAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+UDEw42F48Am4gAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAADElEQVQI12NgmPsfAAI9AZ115ELHAAAAAElFTkSuQmCC'],
-                ['link' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAABhGlDQ1BJQ0MgcHJvZmlsZQAAKJF9kT1Iw0AcxV9bpSJVh3YQcchQnSyI36NWoQgVQq3QqoPJpV/QpCFJcXEUXAsOfixWHVycdXVwFQTBDxA3NydFFynxf0mhRYwHx/14d+9x9w7w18tMNTtGAVWzjFQiLmSyq0LwFQGE0YtJTEvM1OdEMQnP8XUPH1/vYjzL+9yfo0fJmQzwCcSzTDcs4g3iqU1L57xPHGFFSSE+Jx4x6ILEj1yXXX7jXHDYzzMjRjo1TxwhFgptLLcxKxoq8QRxVFE1yvdnXFY4b3FWy1XWvCd/YSinrSxzneYgEljEEkQIkFFFCWVYiNGqkWIiRftxD/+A4xfJJZOrBEaOBVSgQnL84H/wu1szPz7mJoXiQOeLbX8MAcFdoFGz7e9j226cAIFn4Epr+St1YOaT9FpLix4BfdvAxXVLk/eAyx2g/0mXDMmRAjT9+TzwfkbflAXCt0D3mttbcx+nD0CaukreAAeHwHCBstc93t3V3tu/Z5r9/QDUInLOjro6CQAAAAlwSFlzAAAuIwAALiMBeKU/dgAAAAd0SU1FB+UDEw42F48Am4gAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAADElEQVQI12NgmPsfAAI9AZ115ELHAAAAAElFTkSuQmCC'],
-            ],
-
-            'variants' => [
-                [
-                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand(), true),
-                    'inStock' => 17,
-                    // create a new unit
-                    'unit' => [
-                        'unit' => 'xyz',
-                        'name' => 'newUnit',
-                    ],
-
-                    'attribute' => [
-                        'attr3' => 'Freitext3',
-                        'attr4' => 'Freitext4',
-                    ],
-
-                    'configuratorOptions' => [
-                        [
-                            'option' => 'Gelb',
-                            'group' => 'Farbe',
-                        ],
-                        [
-                            'option' => 'XL',
-                            'group' => 'Größe',
-                        ],
-                    ],
-
-                    'minPurchase' => 5,
-                    'purchaseSteps' => 2,
-
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'H',
-                            'from' => 1,
-                            'to' => 20,
-                            'price' => 500,
-                        ],
-                        [
-                            'customerGroupKey' => 'H',
-                            'from' => 21,
-                            'to' => '-',
-                            'price' => 400,
-                        ],
-                    ],
-                ],
-                [
-                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand(), true),
-                    'inStock' => 17,
-                    // create a new unit
-                    'unit' => [
-                        'unit' => 'xyz',
-                        'name' => 'newUnit',
-                    ],
-
-                    'attribute' => [
-                        'attr3' => 'Freitext3',
-                        'attr4' => 'Freitext4',
-                    ],
-
-                    'configuratorOptions' => [
-                        [
-                            'option' => 'Grün',
-                            'group' => 'Farbe',
-                        ],
-                        [
-                            'option' => 'XL',
-                            'group' => 'Größe',
-                        ],
-                    ],
-
-                    'minPurchase' => 5,
-                    'purchaseSteps' => 2,
-
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'H',
-                            'from' => 1,
-                            'to' => 20,
-                            'price' => 500,
-                        ],
-                        [
-                            'customerGroupKey' => 'H',
-                            'from' => 21,
-                            'to' => '-',
-                            'price' => 400,
-                        ],
-                    ],
-                ],
-            ],
-
-            'taxId' => 1,
-            'supplierId' => 2,
-
-            'similar' => [
-                ['id' => 5],
-                ['id' => 6],
-            ],
-
-            'categories' => [
-                ['id' => 15],
-                ['id' => 10],
-            ],
-
-            'related' => [
-                ['id' => 3, 'cross' => true],
-                ['id' => 4],
-            ],
-
-            'links' => [
-                ['name' => 'foobar', 'link' => 'http://example.org'],
-                ['name' => 'Video', 'link' => 'http://example.org'],
-            ],
-        ];
-
-        $this->authenticatedApiRequest('POST', '/api/articles/', [], $requestData);
-        $response = $this->client->getResponse();
+        $response = $this->createTestProduct();
 
         static::assertEquals('application/json', $response->headers->get('Content-Type'));
         static::assertNull($response->headers->get('Set-Cookie'));
@@ -289,15 +96,6 @@ class ArticleTest extends AbstractApiTestCase
 
         static::assertArrayHasKey('success', $result);
         static::assertTrue($result['success']);
-
-        $location = $response->headers->get('location');
-        static::assertIsString($location);
-        $locationPars = explode('/', $location);
-        $identifier = (int) array_pop($locationPars);
-
-        static::assertGreaterThan(0, $identifier);
-
-        return $identifier;
     }
 
     public function testPostArticlesWithInvalidDataShouldReturnError(): void
@@ -322,11 +120,10 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testGetArticlesWithIdShouldBeSuccessful(int $id): void
+    public function testGetArticlesWithIdShouldBeSuccessful(): void
     {
+        $id = $this->getProductIdFromResponse($this->createTestProduct());
+
         $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
@@ -352,11 +149,10 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals('Testartikel', $data['name']);
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testPutArticlesWithInvalidDataShouldReturnError(int $id): void
+    public function testPutArticlesWithInvalidDataShouldReturnError(): void
     {
+        $id = $this->getProductIdFromResponse($this->createTestProduct());
+
         // required field name is blank
         $testData = [
             'name' => ' ',
@@ -381,11 +177,10 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testPutArticlesShouldBeSuccessful(int $id): void
+    public function testPutArticlesShouldBeSuccessful(): void
     {
+        $id = $this->getProductIdFromResponse($this->createTestProduct());
+
         $testData = [
             'name' => 'Update',
             'description' => 'Update description',
@@ -458,11 +253,10 @@ class ArticleTest extends AbstractApiTestCase
         static::assertCount(0, $article['similar'] ?? []);
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testChangeVariantArticleMainVariantShouldBeSuccessful(int $id): void
+    public function testChangeVariantArticleMainVariantShouldBeSuccessful(): void
     {
+        $id = $this->getProductIdFromResponse($this->createTestProduct());
+
         $this->authenticatedApiRequest('GET', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
@@ -474,9 +268,7 @@ class ArticleTest extends AbstractApiTestCase
         static::assertIsString($result);
         $result = json_decode($result, true);
 
-        $variantNumbers = array_map(static function ($item) {
-            return $item['number'];
-        }, $result['data']['details']);
+        $variantNumbers = array_column($result['data']['details'], 'number');
 
         $oldMain = $result['data']['mainDetail']['number'];
 
@@ -524,11 +316,10 @@ class ArticleTest extends AbstractApiTestCase
         }
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testReplaceArticleImagesWithUrlAndMediaId(int $productId): void
+    public function testReplaceArticleImagesWithUrlAndMediaId(): void
     {
+        $productId = $this->getProductIdFromResponse($this->createTestProduct());
+
         $requestData = [
             '__options_images' => [
                 'replace' => 1,
@@ -565,11 +356,10 @@ class ArticleTest extends AbstractApiTestCase
         static::assertEquals($productId, $data['id']);
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testReplaceArticleImagesWithInvalidPayload(int $productId): void
+    public function testReplaceArticleImagesWithInvalidPayload(): void
     {
+        $productId = $this->getProductIdFromResponse($this->createTestProduct());
+
         $requestData = [
             '__options_images' => [
                 'replace' => 1,
@@ -597,11 +387,10 @@ class ArticleTest extends AbstractApiTestCase
         static::assertArrayHasKey('message', $result);
     }
 
-    /**
-     * @depends testPostArticlesShouldBeSuccessful
-     */
-    public function testDeleteArticlesShouldBeSuccessful(int $id): int
+    public function testDeleteArticlesShouldBeSuccessful(): int
     {
+        $id = $this->getProductIdFromResponse($this->createTestProduct());
+
         $this->authenticatedApiRequest('DELETE', '/api/articles/' . $id);
         $response = $this->client->getResponse();
 
@@ -830,5 +619,219 @@ class ArticleTest extends AbstractApiTestCase
         $option = $this->getContainer()->get(ModelManager::class)->getRepository(Option::class)->find($optionIdAlcoholAmount);
         static::assertInstanceOf(Option::class, $option);
         static::assertTrue($option->isFilterable());
+    }
+
+    private function createTestProduct(): Response
+    {
+        $requestData = [
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testproduct',
+
+            'filterGroupId' => 1,
+
+            'propertyValues' => [
+                [
+                    'value' => 'grün',
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
+                    'value' => 'testWert',
+                    'option' => [
+                        'name' => 'neueOption' . uniqid((string) mt_rand(), true),
+                    ],
+                ],
+            ],
+
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
+                'inStock' => 15,
+                'unitId' => 1,
+
+                'attribute' => [
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ],
+
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
+
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                        'regulationPrice' => 119,
+                    ],
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                        'regulationPrice' => 119,
+                    ],
+                ],
+            ],
+
+            'configuratorSet' => [
+                'name' => 'MyConfigurator',
+                'groups' => [
+                    [
+                        'name' => 'Farbe',
+                        'options' => [
+                            ['name' => 'Gelb'],
+                            ['name' => 'Grün'],
+                        ],
+                    ],
+                    [
+                        'name' => 'Größe',
+                        'options' => [
+                            ['name' => 'L'],
+                            ['name' => 'XL'],
+                        ],
+                    ],
+                ],
+            ],
+
+            'images' => [
+                ['link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'],
+                ['link' => 'file://' . __DIR__ . '/fixtures/test-bild.jpg'],
+            ],
+
+            'variants' => [
+                [
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand(), true),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => [
+                        'unit' => 'xyz',
+                        'name' => 'newUnit',
+                    ],
+
+                    'attribute' => [
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ],
+
+                    'configuratorOptions' => [
+                        [
+                            'option' => 'Gelb',
+                            'group' => 'Farbe',
+                        ],
+                        [
+                            'option' => 'XL',
+                            'group' => 'Größe',
+                        ],
+                    ],
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ],
+                        [
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ],
+                    ],
+                ],
+                [
+                    'number' => 'swTEST.variant.' . uniqid((string) mt_rand(), true),
+                    'inStock' => 17,
+                    // create a new unit
+                    'unit' => [
+                        'unit' => 'xyz',
+                        'name' => 'newUnit',
+                    ],
+
+                    'attribute' => [
+                        'attr3' => 'Freitext3',
+                        'attr4' => 'Freitext4',
+                    ],
+
+                    'configuratorOptions' => [
+                        [
+                            'option' => 'Grün',
+                            'group' => 'Farbe',
+                        ],
+                        [
+                            'option' => 'XL',
+                            'group' => 'Größe',
+                        ],
+                    ],
+
+                    'minPurchase' => 5,
+                    'purchaseSteps' => 2,
+
+                    'prices' => [
+                        [
+                            'customerGroupKey' => 'H',
+                            'from' => 1,
+                            'to' => 20,
+                            'price' => 500,
+                        ],
+                        [
+                            'customerGroupKey' => 'H',
+                            'from' => 21,
+                            'to' => '-',
+                            'price' => 400,
+                        ],
+                    ],
+                ],
+            ],
+
+            'taxId' => 1,
+            'supplierId' => 2,
+
+            'similar' => [
+                ['id' => 5],
+                ['id' => 6],
+            ],
+
+            'categories' => [
+                ['id' => 15],
+                ['id' => 10],
+            ],
+
+            'related' => [
+                ['id' => 3, 'cross' => true],
+                ['id' => 4],
+            ],
+
+            'links' => [
+                ['name' => 'foobar', 'link' => 'http://example.org'],
+                ['name' => 'Video', 'link' => 'http://example.org'],
+            ],
+        ];
+
+        $this->authenticatedApiRequest('POST', '/api/articles/', [], $requestData);
+
+        return $this->client->getResponse();
+    }
+
+    private function getProductIdFromResponse(Response $response): int
+    {
+        $location = $response->headers->get('location');
+        static::assertIsString($location);
+        $locationPars = explode('/', $location);
+        $identifier = (int) array_pop($locationPars);
+
+        static::assertGreaterThan(0, $identifier);
+
+        return $identifier;
     }
 }

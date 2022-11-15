@@ -84,7 +84,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
                     $hash = \Shopware\Components\Random::getAlphanumericString(32);
                     $data = serialize(Shopware()->System()->_POST->toArray());
 
-                    $link = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'index', 'sConfirmation' => $hash]);
+                    $link = $this->Front()->ensureRouter()->assemble(['sViewport' => 'newsletter', 'action' => 'index', 'sConfirmation' => $hash]);
 
                     $this->sendMail(Shopware()->System()->_POST['newsletter'], 'sOPTINNEWSLETTER', $link);
 
@@ -143,7 +143,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         $content = [];
         while ($row = $result->fetch()) {
-            $row['link'] = $this->Front()->Router()->assemble(['action' => 'detail', 'sID' => $row['id'], 'p' => $page]);
+            $row['link'] = $this->Front()->ensureRouter()->assemble(['action' => 'detail', 'sID' => $row['id'], 'p' => $page]);
             $content[] = $row;
         }
 
@@ -155,7 +155,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
                 $pages['numbers'][$i]['markup'] = false;
             }
             $pages['numbers'][$i]['value'] = $i;
-            $pages['numbers'][$i]['link'] = $this->Front()->Router()->assemble(['sViewport' => 'newsletter', 'action' => 'listing', 'p' => $i]);
+            $pages['numbers'][$i]['link'] = $this->Front()->ensureRouter()->assemble(['sViewport' => 'newsletter', 'action' => 'listing', 'p' => $i]);
         }
 
         $this->View()->assign('sPage', $page);
@@ -190,11 +190,11 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             $license = '';
             $content['hash'] = [$content['id'], $license];
             $content['hash'] = md5(implode('|', $content['hash']));
-            $content['link'] = $this->Front()->Router()->assemble(['module' => 'backend', 'controller' => 'newsletter', 'id' => $content['id'], 'hash' => $content['hash'], 'fullPath' => true]);
+            $content['link'] = $this->Front()->ensureRouter()->assemble(['module' => 'backend', 'controller' => 'newsletter', 'id' => $content['id'], 'hash' => $content['hash'], 'fullPath' => true]);
         }
 
         $this->View()->assign('sContentItem', $content);
-        $this->View()->assign('sBackLink', $this->Front()->Router()->assemble(['action' => 'listing']) . '?p=' . (int) $this->Request()->getParam('p', 1));
+        $this->View()->assign('sBackLink', $this->Front()->ensureRouter()->assemble(['action' => 'listing']) . '?p=' . (int) $this->Request()->getParam('p', 1));
     }
 
     /**

@@ -1257,14 +1257,15 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getSimilarShown($articleID)
     {
-        Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
+        $productIdsInCart = $this->basket->sGetBasketIds();
+        Shopware()->Modules()->Marketing()->sBlacklist = $productIdsInCart ?? [];
 
-        $similarId = Shopware()->Modules()->Marketing()->sGetSimilaryShownArticles($articleID);
+        $similarProducts = Shopware()->Modules()->Marketing()->sGetSimilaryShownArticles($articleID);
 
         $similars = [];
-        if (!empty($similarId)) {
-            foreach ($similarId as $similarID) {
-                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $similarID['id']);
+        if (!empty($similarProducts)) {
+            foreach ($similarProducts as $similarProduct) {
+                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $similarProduct['id']);
                 if (!empty($temp)) {
                     $similars[] = $temp;
                 }
@@ -1286,13 +1287,14 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function getBoughtToo($articleID)
     {
-        Shopware()->Modules()->Marketing()->sBlacklist = $this->basket->sGetBasketIds();
+        $productIdsInCart = $this->basket->sGetBasketIds();
+        Shopware()->Modules()->Marketing()->sBlacklist = $productIdsInCart ?? [];
 
-        $alsoBoughtId = Shopware()->Modules()->Marketing()->sGetAlsoBoughtArticles($articleID);
+        $alsoBoughtProducts = Shopware()->Modules()->Marketing()->sGetAlsoBoughtArticles($articleID);
         $alsoBoughts = [];
-        if (!empty($alsoBoughtId)) {
-            foreach ($alsoBoughtId as $alsoBoughtItem) {
-                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $alsoBoughtItem['id']);
+        if (!empty($alsoBoughtProducts)) {
+            foreach ($alsoBoughtProducts as $alsoBoughtProduct) {
+                $temp = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $alsoBoughtProduct['id']);
                 if (!empty($temp)) {
                     $alsoBoughts[] = $temp;
                 }

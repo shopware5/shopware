@@ -278,7 +278,7 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
 
             $urls[] = [
                 'name' => $shop->getName(),
-                'url' => $this->Front()->Router()->assemble([
+                'url' => $this->Front()->ensureRouter()->assemble([
                     'controller' => $type->getControllerName(),
                     'module' => 'frontend',
                     'action' => 'index',
