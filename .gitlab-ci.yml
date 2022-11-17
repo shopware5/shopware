@@ -175,7 +175,7 @@ PHP 8.1:
 
 PHP 8.2:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0RC4
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0RC6
     script:
         - composer config platform.php 8.1.99
         - composer update --lock
