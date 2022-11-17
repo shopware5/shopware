@@ -1559,7 +1559,7 @@ class sArticles implements Enlight_Hook
      * @param bool   $returnAll   Return only name or additional data, too
      * @param bool   $translate   Disables the translation of the product if set to false
      *
-     * @return string|array|false
+     * @return ($returnAll is true ? array : string)|false
      */
     public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {
@@ -2667,16 +2667,19 @@ class sArticles implements Enlight_Hook
             $selection = $this->frontController->Request()->getParam('group');
         }
 
+        $formattedSelection = [];
         foreach ($selection as $groupId => $optionId) {
             $groupId = (int) $groupId;
             $optionId = (int) $optionId;
 
             if ($groupId <= 0 || $optionId <= 0) {
-                unset($selection[$groupId]);
+                continue;
             }
+
+            $formattedSelection[$groupId] = $optionId;
         }
 
-        return $selection;
+        return $formattedSelection;
     }
 
     /**

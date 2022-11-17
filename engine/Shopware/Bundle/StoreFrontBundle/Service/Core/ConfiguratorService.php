@@ -78,7 +78,7 @@ class ConfiguratorService implements ConfiguratorServiceInterface
         array $selection
     ) {
         $configurator = $this->configuratorGateway->get($product, $context);
-        $combinations = $this->configuratorGateway->getProductCombinations($product);
+        $availableProductOptions = $this->configuratorGateway->getAvailableConfigurations($product);
 
         $media = [];
         if (((int) $configurator->getType()) === self::CONFIGURATOR_TYPE_PICTURE) {
@@ -97,18 +97,14 @@ class ConfiguratorService implements ConfiguratorServiceInterface
 
             foreach ($group->getOptions() as $option) {
                 $option->setSelected(
-                    \in_array($option->getId(), $selection)
+                    \in_array($option->getId(), $selection, true)
                 );
 
-                $isValid = $this->isCombinationValid(
-                    $group,
-                    $combinations[$option->getId()],
-                    $selection
-                );
+                $isOptionValid = $this->isOptionValid($group, $option->getId(), $selection, $availableProductOptions);
 
                 $option->setActive(
-                    $isValid
-                    || ($onlyOneGroup && isset($combinations[$option->getId()]))
+                    $isOptionValid
+                    || ($onlyOneGroup && isset($availableProductOptions[$option->getId()]))
                 );
 
                 if (isset($media[$option->getId()])) {
@@ -123,24 +119,35 @@ class ConfiguratorService implements ConfiguratorServiceInterface
     }
 
     /**
-     * Checks if the passed combination is compatible with the provided customer configurator
-     * selection.
-     *
-     * @param array<string>|null $combinations
-     * @param array<int, int>    $selection
+     * @param array<int, int>                         $selection
+     * @param array<int, array<int, array<int, int>>> $availableProductOptions
      */
-    private function isCombinationValid(Group $group, ?array $combinations, array $selection): bool
+    private function isOptionValid(Group $group, int $id, array $selection, array $availableProductOptions): bool
     {
-        if (empty($combinations)) {
+        if (empty($selection)) {
+            return true;
+        }
+
+        if (empty($availableProductOptions)) {
             return false;
         }
 
-        foreach ($selection as $selectedGroup => $selectedOption) {
-            if (!\in_array($selectedOption, $combinations) && $selectedGroup !== $group->getId()) {
-                return false;
-            }
+        if (!isset($availableProductOptions[$id])) {
+            return false;
         }
 
-        return true;
+        $searchValue = array_replace($selection, [$group->getId() => $id]);
+
+        foreach ($availableProductOptions[$id] as $combinations) {
+            foreach ($searchValue as $searched) {
+                if (!\in_array($searched, $combinations, true)) {
+                    continue 2;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 }

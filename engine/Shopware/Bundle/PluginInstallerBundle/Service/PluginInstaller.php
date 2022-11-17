@@ -641,6 +641,9 @@ SQL;
         $this->connection->executeStatement($sql, [':pluginId' => $pluginId]);
     }
 
+    /**
+     * @param AbstractPluginMigration::MODUS_* $mode
+     */
     private function applyMigrations(PluginComponent $plugin, string $mode, bool $keepUserData = false): void
     {
         $manager = new PluginMigrationManager($this->pdo, $plugin, $this->logger);

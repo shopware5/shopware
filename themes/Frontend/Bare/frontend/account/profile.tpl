@@ -41,21 +41,23 @@
 
                                 {* Salutation *}
                                 {block name='frontend_account_profile_profile_input_salutation'}
-                                    {getSalutations variable="salutations"}
+                                    {if {config name="shopSalutationRequired"}}
+                                        {getSalutations variable="salutations"}
 
-                                    <div class="profile--salutation field--select select-field">
-                                        <select name="profile[salutation]"
-                                                required="required"
-                                                aria-required="true"
-                                                class="is--required{if $errorFlags.salutation} has--error{/if}">
+                                        <div class="profile--salutation field--select select-field">
+                                            <select name="profile[salutation]"
+                                                    required="required"
+                                                    aria-required="true"
+                                                    class="is--required{if $errorFlags.salutation} has--error{/if}">
 
-                                            <option value="" disabled="disabled"{if $form_data.profile.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation' namespace="frontend/register/personal_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+                                                <option value="" disabled="disabled"{if $form_data.profile.salutation eq ""} selected="selected"{/if}>{s name='RegisterPlaceholderSalutation' namespace="frontend/register/personal_fieldset"}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
 
-                                            {foreach $salutations as $key => $label}
-                                                <option value="{$key}"{if $form_data.profile.salutation eq $key} selected="selected"{/if}>{$label}</option>
-                                            {/foreach}
-                                        </select>
-                                    </div>
+                                                {foreach $salutations as $key => $label}
+                                                    <option value="{$key}"{if $form_data.profile.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                                                {/foreach}
+                                            </select>
+                                        </div>
+                                    {/if}
                                 {/block}
 
                                 {* Title *}

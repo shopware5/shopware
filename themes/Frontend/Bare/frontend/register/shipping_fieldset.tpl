@@ -8,19 +8,22 @@
 
         {block name='frontend_register_shipping_fieldset_body'}
             <div class="panel--body is--wide">
-                {* Salutation *}
-                {getSalutations variable="salutations"}
 
-                {block name='frontend_register_shipping_fieldset_input_salutation'}
-                    <div class="register--salutation field--select select-field">
-                        <select name="register[shipping][salutation]" id="salutation2" class="normal is--required{if isset($error_flags.salutation)} has--error{/if}">
-                            <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterShippingPlaceholderSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
-                            {foreach $salutations as $key => $label}
-                                <option value="{$key}"{if $form_data.salutation eq $key} selected="selected"{/if}>{$label}</option>
-                            {/foreach}
-                        </select>
-                    </div>
-                {/block}
+                {if {config name="shopSalutationRequired"}}
+                    {* Salutation *}
+                    {getSalutations variable="salutations"}
+
+                    {block name='frontend_register_shipping_fieldset_input_salutation'}
+                        <div class="register--salutation field--select select-field">
+                            <select name="register[shipping][salutation]" id="salutation2" class="normal is--required{if isset($error_flags.salutation)} has--error{/if}">
+                                <option value="" disabled="disabled"{if $form_data.salutation eq ""} selected="selected"{/if}>{s name='RegisterShippingPlaceholderSalutation'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}</option>
+                                {foreach $salutations as $key => $label}
+                                    <option value="{$key}"{if $form_data.salutation eq $key} selected="selected"{/if}>{$label}</option>
+                                {/foreach}
+                            </select>
+                        </div>
+                    {/block}
+                {/if}
 
                 {* Company *}
                 {block name="frontend_register_shipping_fieldset_input_company"}

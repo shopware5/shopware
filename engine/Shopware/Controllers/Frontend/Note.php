@@ -38,6 +38,9 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         Shopware()->Session()->set('sNotesQuantity', Shopware()->Modules()->Basket()->sCountNotes());
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         $view = $this->View();
@@ -46,6 +49,9 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $view->assign('sOneTimeAccount', Shopware()->Session()->offsetGet('sOneTimeAccount'));
     }
 
+    /**
+     * @return void
+     */
     public function deleteAction()
     {
         if (!empty($this->Request()->sDelete)) {
@@ -55,9 +61,12 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->redirect(['action' => 'index']);
     }
 
+    /**
+     * @return void
+     */
     public function addAction()
     {
-        $orderNumber = $this->Request()->getParam('ordernumber');
+        $orderNumber = (string) $this->Request()->getParam('ordernumber');
 
         if ($this->addNote($orderNumber)) {
             $this->View()->assign('sArticleName', Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber));
@@ -66,6 +75,9 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $this->redirect(['action' => 'index']);
     }
 
+    /**
+     * @return void
+     */
     public function ajaxAddAction()
     {
         $this->Request()->setHeader('Content-Type', 'application/json');
@@ -73,13 +85,13 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
 
         $this->Response()->setContent(json_encode(
             [
-                'success' => $this->addNote($this->Request()->getParam('ordernumber')),
+                'success' => $this->addNote((string) $this->Request()->getParam('ordernumber')),
                 'notesCount' => (int) Shopware()->Modules()->Basket()->sCountNotes(),
             ]
         ));
     }
 
-    private function addNote($orderNumber)
+    private function addNote(string $orderNumber): bool
     {
         if (empty($orderNumber)) {
             return false;
@@ -88,7 +100,7 @@ class Shopware_Controllers_Frontend_Note extends Enlight_Controller_Action
         $productId = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($orderNumber);
         $productName = Shopware()->Modules()->Articles()->sGetArticleNameByOrderNumber($orderNumber);
 
-        if (empty($productId)) {
+        if (empty($productId) || empty($productName)) {
             return false;
         }
 

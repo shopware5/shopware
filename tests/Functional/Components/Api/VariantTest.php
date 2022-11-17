@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,14 +26,24 @@
 
 namespace Shopware\Tests\Functional\Components\Api;
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
-use Shopware\Components\Api\Resource\Article;
+use Shopware\Components\Api\Resource\Article as ProductResource;
 use Shopware\Components\Api\Resource\Resource;
 use Shopware\Components\Api\Resource\Variant;
+use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator\Group;
+use Shopware\Models\Article\Configurator\Option;
+use Shopware\Models\Article\Configurator\Set;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Esd;
+use Shopware\Models\Article\Unit;
+use Shopware\Models\Attribute\Article as ProductAttribute;
+use Shopware\Models\Media\Media;
+use Shopware\Models\Tax\Tax;
+use Shopware\Tests\Functional\Helper\Utils;
 
 class VariantTest extends TestCase
 {
@@ -40,10 +52,7 @@ class VariantTest extends TestCase
      */
     protected $resource;
 
-    /**
-     * @var Article
-     */
-    private $resourceArticle;
+    private ProductResource $productResource;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -55,9 +64,9 @@ class VariantTest extends TestCase
 
         Shopware()->Models()->clear();
 
-        $this->resourceArticle = new Article();
-        $this->resourceArticle->setAcl(Shopware()->Acl());
-        $this->resourceArticle->setManager(Shopware()->Models());
+        $this->productResource = new ProductResource();
+        $this->productResource->setAcl(Shopware()->Acl());
+        $this->productResource->setManager(Shopware()->Models());
     }
 
     /**
@@ -68,8 +77,8 @@ class VariantTest extends TestCase
         return new Variant();
     }
 
-    // Creates a article with variants
-    public function testCreateShouldBeSuccessful()
+    // Creates a product with variants
+    public function testCreateShouldBeSuccessful(): ProductModel
     {
         // required field name is missing
         $testData = [
@@ -79,7 +88,7 @@ class VariantTest extends TestCase
             'active' => true,
             'pseudoSales' => 999,
             'highlight' => true,
-            'keywords' => 'test, testarticle',
+            'keywords' => 'test, testproduct',
 
             'mainDetail' => [
                 'number' => 'swTEST' . uniqid((string) rand()),
@@ -121,7 +130,7 @@ class VariantTest extends TestCase
                         ],
                     ],
                     [
-                        'name' => 'Gräße',
+                        'name' => 'Größe',
                         'options' => [
                             ['name' => 'L'],
                             ['name' => 'XL'],
@@ -215,34 +224,40 @@ class VariantTest extends TestCase
             'supplierId' => 2,
         ];
 
-        $article = $this->resourceArticle->create($testData);
+        $product = $this->productResource->create($testData);
 
-        static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
-        static::assertGreaterThan(0, $article->getId());
+        static::assertInstanceOf(ProductModel::class, $product);
+        static::assertGreaterThan(0, $product->getId());
 
-        static::assertEquals($article->getName(), $testData['name']);
-        static::assertEquals($article->getDescription(), $testData['description']);
+        static::assertEquals($product->getName(), $testData['name']);
+        static::assertEquals($product->getDescription(), $testData['description']);
 
-        static::assertEquals($article->getDescriptionLong(), $testData['descriptionLong']);
-        static::assertEquals($article->getMainDetail()->getAttribute()->getAttr1(), $testData['mainDetail']['attribute']['attr1']);
-        static::assertEquals($article->getMainDetail()->getAttribute()->getAttr2(), $testData['mainDetail']['attribute']['attr2']);
+        static::assertEquals($product->getDescriptionLong(), $testData['descriptionLong']);
+        $mainVariant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $mainVariant);
+        $attribute = $mainVariant->getAttribute();
+        static::assertInstanceOf(ProductAttribute::class, $attribute);
+        static::assertEquals($attribute->getAttr1(), $testData['mainDetail']['attribute']['attr1']);
+        static::assertEquals($attribute->getAttr2(), $testData['mainDetail']['attribute']['attr2']);
 
-        static::assertEquals($testData['taxId'], $article->getTax()->getId());
+        static::assertInstanceOf(Tax::class, $product->getTax());
+        static::assertEquals($testData['taxId'], $product->getTax()->getId());
 
-        static::assertCount(2, $article->getMainDetail()->getPrices());
+        static::assertCount(2, $mainVariant->getPrices());
 
-        return $article;
+        return $product;
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testCreateWithExistingOrderNumberShouldThrowCustomValidationException(\Shopware\Models\Article\Article $article)
+    public function testCreateWithExistingOrderNumberShouldThrowCustomValidationException(ProductModel $product): void
     {
-        $this->expectException('Shopware\Components\Api\Exception\CustomValidationException');
+        $this->expectException(CustomValidationException::class);
+        static::assertInstanceOf(Detail::class, $product->getMainDetail());
         $testData = [
-            'articleId' => $article->getId(),
-            'number' => $article->getMainDetail()->getNumber(),
+            'articleId' => $product->getId(),
+            'number' => $product->getMainDetail()->getNumber(),
             'prices' => [
                 [
                     'customerGroupKey' => 'EK',
@@ -256,29 +271,28 @@ class VariantTest extends TestCase
 
     /**
      * @depends testCreateShouldBeSuccessful
-     *
-     * @return \Shopware\Models\Article\Article
      */
-    public function testGetOneShouldBeSuccessful(\Shopware\Models\Article\Article $article)
+    public function testGetOneShouldBeSuccessful(ProductModel $product): ProductModel
     {
-        $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        /** @var \Shopware\Models\Article\Detail $articleDetail */
-        foreach ($article->getDetails() as $articleDetail) {
-            $articleDetailById = $this->resource->getOne($articleDetail->getId());
-            $articleDetailByNumber = $this->resource->getOneByNumber($articleDetail->getNumber());
+        foreach ($product->getDetails() as $variant) {
+            $variantById = $this->resource->getOne($variant->getId());
+            static::assertInstanceOf(Detail::class, $variantById);
+            $variantByNumber = $this->resource->getOneByNumber($variant->getNumber());
+            static::assertInstanceOf(Detail::class, $variantByNumber);
 
-            static::assertEquals($articleDetail->getId(), $articleDetailById->getId());
-            static::assertEquals($articleDetail->getId(), $articleDetailByNumber->getId());
+            static::assertEquals($variant->getId(), $variantById->getId());
+            static::assertEquals($variant->getId(), $variantByNumber->getId());
         }
 
-        return $article;
+        return $product;
     }
 
     /**
      * @depends testCreateShouldBeSuccessful
      */
-    public function testGetListShouldBeSuccessful()
+    public function testGetListShouldBeSuccessful(): void
     {
         $result = $this->resource->getList();
 
@@ -291,30 +305,27 @@ class VariantTest extends TestCase
 
     /**
      * @depends testGetOneShouldBeSuccessful
-     *
-     * @param \Shopware\Models\Article\Article $article
      */
-    public function testDeleteShouldBeSuccessful($article): void
+    public function testDeleteShouldBeSuccessful(ProductModel $product): void
     {
-        $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
         $deleteByNumber = true;
 
-        /** @var \Shopware\Models\Article\Detail $articleDetail */
-        foreach ($article->getDetails() as $articleDetail) {
+        foreach ($product->getDetails() as $variant) {
             $deleteByNumber = !$deleteByNumber;
 
             if ($deleteByNumber) {
-                $result = $this->resource->delete($articleDetail->getId());
+                $result = $this->resource->delete($variant->getId());
             } else {
-                $result = $this->resource->deleteByNumber($articleDetail->getNumber());
+                $result = $this->resource->deleteByNumber($variant->getNumber());
             }
             static::assertInstanceOf(Detail::class, $result);
             static::assertSame(0, (int) $result->getId());
         }
 
-        // Delete the whole article at last
-        $this->resourceArticle->delete($article->getId());
+        // Delete the whole product at last
+        $this->productResource->delete($product->getId());
     }
 
     public function testDeleteWithInvalidIdShouldThrowNotFoundException(): void
@@ -326,89 +337,89 @@ class VariantTest extends TestCase
     public function testDeleteWithMissingIdShouldThrowParameterMissingException(): void
     {
         $this->expectException(ParameterMissingException::class);
-        $this->resource->delete('');
+        $this->resource->delete(0);
     }
 
-    public function testVariantCreate()
+    public function testVariantCreate(): int
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
 
-        $article = $this->resourceArticle->create($data);
-        static::assertCount(0, $article->getDetails());
+        $product = $this->productResource->create($data);
+        static::assertCount(0, $product->getDetails());
 
         $create = $this->getSimpleVariantData();
-        $create['articleId'] = $article->getId();
+        $create['articleId'] = $product->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
 
         $variant = $this->resource->create($create);
         static::assertCount(\count($create['configuratorOptions']), $variant->getConfiguratorOptions());
 
         $create = $this->getSimpleVariantData();
-        $create['articleId'] = $article->getId();
+        $create['articleId'] = $product->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $variant = $this->resource->create($create);
         static::assertCount(\count($create['configuratorOptions']), $variant->getConfiguratorOptions());
 
-        $this->resourceArticle->setResultMode(Variant::HYDRATE_ARRAY);
-        $id = $article->getId();
-        $article = $this->resourceArticle->getOne($id);
-        static::assertCount(2, $article['details']);
+        $this->productResource->setResultMode(Resource::HYDRATE_ARRAY);
+        $id = $product->getId();
+        $product = $this->productResource->getOne($id);
+        static::assertIsArray($product);
+        static::assertCount(2, $product['details']);
 
         return $id;
     }
 
     /**
      * @depends testVariantCreate
-     *
-     * @param int $articleId
      */
-    public function testVariantUpdate($articleId)
+    public function testVariantUpdate(int $productId): void
     {
-        $this->resourceArticle->setResultMode(Variant::HYDRATE_ARRAY);
-        $article = $this->resourceArticle->getOne($articleId);
+        $this->productResource->setResultMode(Resource::HYDRATE_ARRAY);
+        $product = $this->productResource->getOne($productId);
+        static::assertIsArray($product);
 
-        foreach ($article['details'] as $variantData) {
+        foreach ($product['details'] as $variantData) {
             $updateData = [
-                'articleId' => $articleId,
+                'articleId' => $productId,
                 'inStock' => 2000,
                 'number' => $variantData['number'] . '-Updated',
-                'unitId' => $this->getRandomId('s_core_units'),
-                // Make sure conf. options and groups work in a case insensitive way, just like in the DB
+                'unitId' => $this->getRandomId(),
+                // Make sure conf. options and groups work in a case-insensitive way, just like in the DB
                 'configuratorOptions' => [[
                     'group' => 'farbe',
                     'option' => 'Grün',
                 ], [
-                    'group' => 'Gräße',
+                    'group' => 'Größe',
                     'option' => 'xl',
                 ]],
             ];
             $variant = $this->resource->update($variantData['id'], $updateData);
 
+            static::assertInstanceOf(Unit::class, $variant->getUnit());
             static::assertEquals($variant->getUnit()->getId(), $updateData['unitId']);
             static::assertEquals($variant->getInStock(), $updateData['inStock']);
             static::assertEquals($variant->getNumber(), $updateData['number']);
         }
     }
 
-    public function testVariantImageAssignByMediaId()
+    public function testVariantImageAssignByMediaId(): int
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
         $data['images'] = $this->getSimpleMedia(2);
 
-        $article = $this->resourceArticle->create($data);
+        $product = $this->productResource->create($data);
 
         $create = $this->getSimpleVariantData();
-        $create['articleId'] = $article->getId();
+        $create['articleId'] = $product->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $create['images'] = $this->getSimpleMedia(1);
 
-        /** @var \Shopware\Models\Article\Detail $variant */
         $variant = $this->resource->create($create);
 
         static::assertCount(1, $variant->getImages());
@@ -418,15 +429,12 @@ class VariantTest extends TestCase
 
     /**
      * @depends testVariantImageAssignByMediaId
-     *
-     * @param int $variantId
-     *
-     * @return int
      */
-    public function testVariantImageReset($variantId)
+    public function testVariantImageReset(int $variantId): int
     {
-        $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $variant = $this->resource->getOne($variantId);
+        static::assertInstanceOf(Detail::class, $variant);
         static::assertTrue($variant->getImages()->count() > 0);
 
         $update = [
@@ -438,9 +446,7 @@ class VariantTest extends TestCase
 
         static::assertCount(0, $variant->getImages());
 
-        $article = $variant->getArticle();
-        /** @var \Shopware\Models\Article\Image $image */
-        foreach ($article->getImages() as $image) {
+        foreach ($variant->getArticle()->getImages() as $image) {
             static::assertCount(0, $image->getMappings());
         }
 
@@ -449,20 +455,20 @@ class VariantTest extends TestCase
 
     /**
      * @depends testVariantImageReset
-     *
-     * @param int $variantId
      */
-    public function testVariantAddImage($variantId)
+    public function testVariantAddImage(int $variantId): void
     {
-        $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
         $variant = $this->resource->getOne($variantId);
-        static::assertTrue($variant->getImages()->count() === 0);
+        static::assertInstanceOf(Detail::class, $variant);
+        static::assertCount(0, $variant->getImages());
 
         $update = [
             'articleId' => $variant->getArticle()->getId(),
             'images' => $this->getSimpleMedia(3),
         ];
         $variant = $this->resource->update($variantId, $update);
+        static::assertInstanceOf(Detail::class, $variant);
         static::assertCount(3, $variant->getImages());
 
         $add = [
@@ -471,13 +477,12 @@ class VariantTest extends TestCase
             'images' => $this->getSimpleMedia(5, 20),
         ];
         $variant = $this->resource->update($variantId, $add);
+        static::assertInstanceOf(Detail::class, $variant);
         static::assertCount(8, $variant->getImages());
 
-        /** @var \Shopware\Models\Article\Image $image */
         foreach ($variant->getArticle()->getImages() as $image) {
             static::assertCount(1, $image->getMappings(), 'No image mapping created!');
 
-            /** @var \Shopware\Models\Article\Image\Mapping $mapping */
             $mapping = $image->getMappings()->current();
             static::assertCount(
                 $variant->getConfiguratorOptions()->count(),
@@ -487,37 +492,34 @@ class VariantTest extends TestCase
         }
     }
 
-    /**
-     * @return int
-     */
-    public function testVariantImageCreateByLink()
+    public function testVariantImageCreateByLink(): int
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
-        $article = $this->resourceArticle->create($data);
-        $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $product = $this->productResource->create($data);
+        $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         $create = $this->getSimpleVariantData();
-        $create['articleId'] = $article->getId();
+        $create['articleId'] = $product->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
         $create['images'] = [
             ['link' => 'data:image/png;base64,' . require (__DIR__ . '/fixtures/base64image.php')],
             ['link' => 'file://' . __DIR__ . '/fixtures/variant-image.png'],
         ];
 
-        $this->resourceArticle->setResultMode(Variant::HYDRATE_OBJECT);
-        $this->resource->setResultMode(Variant::HYDRATE_OBJECT);
+        $this->productResource->setResultMode(Resource::HYDRATE_OBJECT);
+        $this->resource->setResultMode(Resource::HYDRATE_OBJECT);
 
-        /** @var \Shopware\Models\Article\Detail $variant */
         $variant = $this->resource->create($create);
-        $article = $this->resourceArticle->getOne($article->getId());
+        static::assertInstanceOf(Detail::class, $variant);
+        $product = $this->productResource->getOne($product->getId());
+        static::assertInstanceOf(ProductModel::class, $product);
 
-        static::assertCount(2, $article->getImages());
+        static::assertCount(2, $product->getImages());
 
-        /** @var \Shopware\Models\Article\Image $image */
-        foreach ($article->getImages() as $image) {
+        foreach ($product->getImages() as $image) {
             $media = null;
             while ($media === null) {
                 if ($image->getMedia()) {
@@ -529,6 +531,7 @@ class VariantTest extends TestCase
                 }
             }
 
+            static::assertInstanceOf(Media::class, $media);
             static::assertCount(4, $media->getThumbnails());
             foreach ($media->getThumbnails() as $thumbnail) {
                 static::assertTrue($mediaService->has(Shopware()->DocPath() . $thumbnail));
@@ -536,7 +539,6 @@ class VariantTest extends TestCase
 
             static::assertCount(1, $image->getMappings(), 'No image mapping created!');
 
-            /** @var \Shopware\Models\Article\Image\Mapping $mapping */
             $mapping = $image->getMappings()->current();
             static::assertCount(
                 $variant->getConfiguratorOptions()->count(),
@@ -548,40 +550,41 @@ class VariantTest extends TestCase
         return $variant->getId();
     }
 
-    public function testVariantDefaultPriceBehavior()
+    public function testVariantDefaultPriceBehavior(): void
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
 
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
 
-        $article = $this->resourceArticle->create($data);
+        $product = $this->productResource->create($data);
 
         $create = $this->getSimpleVariantData();
-        $create['articleId'] = $article->getId();
+        $create['articleId'] = $product->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
 
         $variant = $this->resource->create($create);
 
         $this->resource->setResultMode(2);
         $data = $this->resource->getOne($variant->getId());
+        static::assertIsArray($data);
 
-        static::assertEquals(400 / 1.19, $data['prices'][0]['price']);
+        static::assertEqualsWithDelta(400 / 1.19, $data['prices'][0]['price'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
     }
 
-    public function testVariantGrossPrices()
+    public function testVariantGrossPrices(): void
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
 
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
 
-        $article = $this->resourceArticle->create($data);
+        $product = $this->productResource->create($data);
 
         $create = $this->getSimpleVariantData();
-        $create['articleId'] = $article->getId();
+        $create['articleId'] = $product->getId();
         $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
 
         $variant = $this->resource->create($create);
@@ -590,25 +593,26 @@ class VariantTest extends TestCase
         $data = $this->resource->getOne($variant->getId(), [
             'considerTaxInput' => true,
         ]);
+        static::assertIsArray($data);
 
-        static::assertEquals(400, $data['prices'][0]['price']);
+        static::assertEqualsWithDelta(400, $data['prices'][0]['price'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
     }
 
-    public function testBatchModeShouldBeSuccessful()
+    public function testBatchModeShouldBeSuccessful(): void
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
         $configuratorSet = $this->getSimpleConfiguratorSet();
         $data['configuratorSet'] = $configuratorSet;
 
-        $article = $this->resourceArticle->create($data);
-        static::assertCount(0, $article->getDetails());
+        $product = $this->productResource->create($data);
+        static::assertCount(0, $product->getDetails());
 
         // Create 5 new variants
         $batchData = [];
         for ($i = 0; $i < 5; ++$i) {
             $create = $this->getSimpleVariantData();
-            $create['articleId'] = $article->getId();
+            $create['articleId'] = $product->getId();
             $create['configuratorOptions'] = $this->getVariantOptionsOfSet($configuratorSet);
             $batchData[] = $create;
         }
@@ -629,29 +633,30 @@ class VariantTest extends TestCase
         $this->resource->batch($batchData);
 
         // Check results
-        $this->resourceArticle->setResultMode(Variant::HYDRATE_ARRAY);
-        $id = $article->getId();
-        $article = $this->resourceArticle->getOne($id);
+        $this->productResource->setResultMode(Resource::HYDRATE_ARRAY);
+        $id = $product->getId();
+        $product = $this->productResource->getOne($id);
+        static::assertIsArray($product);
 
-        static::assertCount(5, $article['details']);
-        static::assertEquals(398, round($article['mainDetail']['prices'][0]['price']));
+        static::assertCount(5, $product['details']);
+        static::assertEquals(398, round($product['mainDetail']['prices'][0]['price']));
     }
 
-    public function testNewConfiguratorOptionForVariant()
+    public function testNewConfiguratorOptionForVariant(): void
     {
-        $data = $this->getSimpleArticleData();
+        $data = $this->getSimpleProductData();
         $data['mainDetail'] = $this->getSimpleVariantData();
         $configuratorSet = $this->getSimpleConfiguratorSet(1, 2);
         $data['configuratorSet'] = $configuratorSet;
 
-        $article = $this->resourceArticle->create($data);
+        $product = $this->productResource->create($data);
 
         // Create 5 new variants
         $batchData = [];
         $names = [];
         for ($i = 0; $i < 5; ++$i) {
             $create = $this->getSimpleVariantData();
-            $create['articleId'] = $article->getId();
+            $create['articleId'] = $product->getId();
 
             $options = $this->getVariantOptionsOfSet($configuratorSet);
 
@@ -672,6 +677,7 @@ class VariantTest extends TestCase
             static::assertTrue($operation['success']);
 
             $variant = $this->resource->getOne($operation['data']['id']);
+            static::assertIsArray($variant);
 
             static::assertCount(1, $variant['configuratorOptions']);
 
@@ -681,7 +687,7 @@ class VariantTest extends TestCase
         }
     }
 
-    public function testCreateConfiguratorOptionsWithPosition()
+    public function testCreateConfiguratorOptionsWithPosition(): void
     {
         // required field name is missing
         $testData = [
@@ -720,14 +726,14 @@ class VariantTest extends TestCase
             ],
         ];
 
-        $article = $this->resourceArticle->create($testData);
-        static::assertInstanceOf('\Shopware\Models\Article\Article', $article);
-        static::assertGreaterThan(0, $article->getId());
+        $product = $this->productResource->create($testData);
+        static::assertInstanceOf(ProductModel::class, $product);
+        static::assertGreaterThan(0, $product->getId());
 
-        $groups = $article->getConfiguratorSet()->getGroups();
+        static::assertInstanceOf(Set::class, $product->getConfiguratorSet());
+        $groups = $product->getConfiguratorSet()->getGroups();
         static::assertCount(2, $groups);
 
-        /** @var Group[] $groups */
         foreach ($groups as $group) {
             static::assertCount(2, $group->getOptions());
             foreach ($group->getOptions() as $option) {
@@ -749,7 +755,7 @@ class VariantTest extends TestCase
         }
     }
 
-    public function testCreateEsdVariant()
+    public function testCreateEsdVariant(): void
     {
         $params = [
             'name' => 'My awesome liquor',
@@ -778,20 +784,22 @@ class VariantTest extends TestCase
         $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
         if (!is_writable($esdDir)) {
-            static::expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
+            $this->expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
         }
 
-        $article = $this->resourceArticle->create($params);
+        $product = $this->productResource->create($params);
 
         if (!is_writable($esdDir)) {
             static::markTestIncomplete('Skipping thorough ESD-file-check, as the process is unable to read/write to the file-directory.');
         }
 
-        static::assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
-        static::assertEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
+        $mainVariant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $mainVariant);
+        static::assertInstanceOf(Esd::class, $mainVariant->getEsd());
+        static::assertEquals('shopware_logo.png', $mainVariant->getEsd()->getFile());
     }
 
-    public function testCreateEsdWithSerialsVariant()
+    public function testCreateEsdWithSerialsVariant(): void
     {
         $params = [
             'name' => 'My awesome liquor',
@@ -838,25 +846,27 @@ class VariantTest extends TestCase
         $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
         if (!is_writable($esdDir)) {
-            static::expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
+            $this->expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
         }
 
-        $article = $this->resourceArticle->create($params);
+        $product = $this->productResource->create($params);
 
         if (!is_writable($esdDir)) {
             static::markTestIncomplete('Skipping thorough ESD-file-check, as the process is unable to read/write to the file-directory.');
         }
 
-        static::assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
-        static::assertEquals(5, $article->getMainDetail()->getEsd()->getSerials()->count());
-        static::assertTrue($article->getMainDetail()->getEsd()->getHasSerials());
-        static::assertEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
+        $mainVariant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $mainVariant);
+        static::assertInstanceOf(Esd::class, $mainVariant->getEsd());
+        static::assertEquals(5, $mainVariant->getEsd()->getSerials()->count());
+        static::assertTrue($mainVariant->getEsd()->getHasSerials());
+        static::assertEquals('shopware_logo.png', $mainVariant->getEsd()->getFile());
     }
 
     /**
      * @depends testCreateEsdVariant
      */
-    public function testCreateEsdReuseVariant()
+    public function testCreateEsdReuseVariant(): void
     {
         $params = [
             'name' => 'My awesome liquor',
@@ -903,41 +913,51 @@ class VariantTest extends TestCase
         $esdDir = Shopware()->DocPath('files_' . Shopware()->Config()->get('sESDKEY'));
 
         if (!is_writable($esdDir)) {
-            static::expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
+            $this->expectExceptionMessageMatches('/Unable to save ESD-file, as the directory ".*" is not writable/');
         }
 
-        $article = $this->resourceArticle->create($params);
+        $product = $this->productResource->create($params);
 
         if (!is_writable($esdDir)) {
             static::markTestIncomplete('Skipping thorough ESD-file-check, as the process is unable to read/write to the file-directory.');
         }
 
-        static::assertInstanceOf(Esd::class, $article->getMainDetail()->getEsd());
-        static::assertEquals(5, $article->getMainDetail()->getEsd()->getSerials()->count());
-        static::assertTrue($article->getMainDetail()->getEsd()->getHasSerials());
-        static::assertNotEquals('shopware_logo.png', $article->getMainDetail()->getEsd()->getFile());
+        $mainVariant = $product->getMainDetail();
+        static::assertInstanceOf(Detail::class, $mainVariant);
+        static::assertInstanceOf(Esd::class, $mainVariant->getEsd());
+        static::assertEquals(5, $mainVariant->getEsd()->getSerials()->count());
+        static::assertTrue($mainVariant->getEsd()->getHasSerials());
+        static::assertNotEquals('shopware_logo.png', $mainVariant->getEsd()->getFile());
     }
 
-    private function getVariantOptionsOfSet($configuratorSet)
+    /**
+     * @param array<string, mixed> $configuratorSet
+     *
+     * @return array<array{optionId: int, groupId: int}>
+     */
+    private function getVariantOptionsOfSet(array $configuratorSet): array
     {
         $options = [];
         foreach ($configuratorSet['groups'] as $group) {
             $id = rand(0, \count($group['options']) - 1);
             $option = $group['options'][$id];
             $options[] = [
-                'optionId' => $option['id'],
-                'groupId' => $group['id'],
+                'optionId' => (int) $option['id'],
+                'groupId' => (int) $group['id'],
             ];
         }
 
         return $options;
     }
 
-    private function getSimpleMedia($limit = 5, $offset = 0)
+    /**
+     * @return array<string, mixed>
+     */
+    private function getSimpleMedia(int $limit = 5, int $offset = 0): array
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select('media.id  as mediaId')
-            ->from('Shopware\Models\Media\Media', 'media')
+            ->from(Media::class, 'media')
             ->where('media.albumId = -1')
             ->setFirstResult($offset)
             ->setMaxResults($limit);
@@ -945,12 +965,15 @@ class VariantTest extends TestCase
         return $builder->getQuery()->getArrayResult();
     }
 
-    private function getRandomId($table)
+    private function getRandomId(): int
     {
-        return Shopware()->Db()->fetchOne('SELECT id FROM ' . $table . ' LIMIT 1');
+        return (int) Shopware()->Db()->fetchOne('SELECT id FROM s_core_units LIMIT 1');
     }
 
-    private function getSimpleVariantData()
+    /**
+     * @return array{number: string, inStock: int, unitId: int, prices: array<array{customerGroupKey: string, from: int, to: string, price: float}>}
+     */
+    private function getSimpleVariantData(): array
     {
         return [
             'number' => 'swTEST' . uniqid((string) rand()),
@@ -967,7 +990,10 @@ class VariantTest extends TestCase
         ];
     }
 
-    private function getSimpleArticleData()
+    /**
+     * @return array{name: string, description: string, active: bool, taxId: int, supplierId: int}
+     */
+    private function getSimpleProductData(): array
     {
         return [
             'name' => 'Images - Test Artikel',
@@ -978,11 +1004,14 @@ class VariantTest extends TestCase
         ];
     }
 
-    private function getSimpleConfiguratorSet($groupLimit = 3, $optionLimit = 5)
+    /**
+     * @return array{name: string, groups: array<string, mixed>}
+     */
+    private function getSimpleConfiguratorSet(int $groupLimit = 3, int $optionLimit = 5): array
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['groups.id'])
-            ->from('Shopware\Models\Article\Configurator\Group', 'groups')
+            ->from(Group::class, 'groups')
             ->setFirstResult(0)
             ->setMaxResults($groupLimit)
             ->orderBy('groups.position', 'ASC');
@@ -991,7 +1020,7 @@ class VariantTest extends TestCase
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select(['options.id'])
-            ->from('Shopware\Models\Article\Configurator\Option', 'options')
+            ->from(Option::class, 'options')
             ->where('options.groupId = :groupId')
             ->setFirstResult(0)
             ->setMaxResults($optionLimit)

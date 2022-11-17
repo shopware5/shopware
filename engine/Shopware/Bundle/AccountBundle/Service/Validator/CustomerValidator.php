@@ -107,6 +107,6 @@ class CustomerValidator implements CustomerValidatorInterface
     {
         $salutations = explode(',', $this->config->get('shopsalutations'));
 
-        return [new NotBlank(), new Choice(['choices' => $salutations])];
+        return [new Choice(['choices' => $salutations])];
     }
 }

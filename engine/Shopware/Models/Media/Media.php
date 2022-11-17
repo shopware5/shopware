@@ -820,7 +820,7 @@ class Media extends ModelEntity
     /**
      * Returns the converted file name.
      *
-     * @return bool|string
+     * @return string
      */
     public function getFileName()
     {
@@ -828,7 +828,6 @@ class Media extends ModelEntity
             return $this->removeSpecialCharacters($this->name) . '.' . $this->extension;
         }
 
-        // Do whatever you want to generate a unique name
         return Random::getAlphanumericString(13) . '.' . $this->extension;
     }
 
@@ -1273,12 +1272,7 @@ class Media extends ModelEntity
         }
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    private function removeSpecialCharacters($name)
+    private function removeSpecialCharacters(string $name): string
     {
         $name = iconv('utf-8', 'ascii//translit', $name);
         $name = preg_replace('#[^A-Za-z0-9\-_]#', '-', $name);

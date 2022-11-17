@@ -28,6 +28,7 @@ namespace Shopware\Tests\Functional\Models\Document;
 
 use Closure;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Helper\Utils;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware\Tests\Functional\Traits\FixtureBehaviour;
 use Shopware_Components_Document;
@@ -59,7 +60,7 @@ class OrderTest extends TestCase
 
         static::assertIsArray($tax);
         static::assertArrayHasKey('20.00', $tax);
-        static::assertEquals(3.31, $tax['20.00']);
+        static::assertEqualsWithDelta(3.31, $tax['20.00'], Utils::FORMER_PHPUNIT_FLOAT_EPSILON);
     }
 
     public function testProportionalTaxCalculation(): void

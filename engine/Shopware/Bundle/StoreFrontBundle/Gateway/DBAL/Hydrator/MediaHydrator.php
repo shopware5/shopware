@@ -175,7 +175,7 @@ class MediaHydrator extends Hydrator
                 $retina = null;
             }
 
-            if (!empty($retina)) {
+            if (\is_string($retina) && $retina !== '') {
                 $retina = $this->mediaService->getUrl($retina);
             }
 

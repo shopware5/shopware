@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,14 +30,17 @@ use Enlight_Components_Test_Controller_TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\ProductFeed\ProductFeed;
 use Shopware\Models\ProductFeed\Repository;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    use ContainerTrait;
 
+    private Repository $repository;
+
+    /**
+     * @var array<string, string|null>
+     */
     private array $feedData = [
         'name' => 'UnitTest Produktsuche',
         'lastExport' => '2012-06-13 13:45:12',
@@ -77,18 +82,18 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
     {
         parent::setUp();
 
-        $this->manager = Shopware()->Models();
-        $this->repository = Shopware()->Models()->getRepository(ProductFeed::class);
+        $this->manager = $this->getContainer()->get('models');
+        $this->repository = $this->manager->getRepository(ProductFeed::class);
 
         // Disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl();
     }
 
     /**
      * test the feed list
      */
-    public function testGetFeeds()
+    public function testGetFeeds(): void
     {
         // Delete old data
         $feeds = $this->repository->findBy(['hash' => '0805bbb935327228edb5374083b81416']);
@@ -98,15 +103,14 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
         $this->manager->flush();
 
         $feed = $this->createDummy();
-        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/ProductFeed/getFeeds?page=1&start=0&limit=30');
-        static::assertTrue($this->View()->success);
-        $returnData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returnData = $this->View()->getAssign('data');
         static::assertNotEmpty($returnData);
-        static::assertGreaterThan(0, $this->View()->totalCount);
+        static::assertGreaterThan(0, $this->View()->getAssign('totalCount'));
         $foundDummyFeed = [];
         foreach ($returnData as $feedData) {
-            if ($feedData['name'] == $feed->getName()) {
+            if ($feedData['name'] === $feed->getName()) {
                 $foundDummyFeed = $feedData;
             }
         }
@@ -121,17 +125,17 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @return int The id to for the testUpdateFeed Method
      */
-    public function testAddFeed()
+    public function testAddFeed(): int
     {
         $params = $this->feedData;
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/ProductFeed/saveFeed');
-        static::assertTrue($this->View()->success);
-        static::assertNotEmpty($this->View()->data);
-        static::assertEquals($params['name'], $this->View()->data['name']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertNotEmpty($this->View()->getAssign('data'));
+        static::assertEquals($params['name'], $this->View()->getAssign('data')['name']);
 
-        return $this->View()->data['id'];
+        return $this->View()->getAssign('data')['id'];
     }
 
     /**
@@ -139,17 +143,15 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @depends testAddFeed
      *
-     * @param string $id
-     *
-     * @return string The id to for the testUpdateFeed Method
+     * @return int The id to for the testUpdateFeed Method
      */
-    public function testGetDetailFeed($id)
+    public function testGetDetailFeed(int $id): int
     {
         $params['feedId'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/ProductFeed/getDetailFeed');
-        static::assertTrue($this->View()->success);
-        $returningData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returningData = $this->View()->getAssign('data');
         $dummyFeedData = $this->feedData;
         static::assertEquals($dummyFeedData['name'], $returningData['name']);
         static::assertEquals($dummyFeedData['active'], $returningData['active']);
@@ -170,10 +172,8 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
      * test updating a feed
      *
      * @depends testGetDetailFeed
-     *
-     * @param string $id
      */
-    public function testUpdateFeed($id)
+    public function testUpdateFeed(int $id): int
     {
         $params = $this->feedData;
         $params['feedId'] = $id;
@@ -182,9 +182,9 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('backend/ProductFeed/saveFeed');
 
-        static::assertTrue($this->View()->success);
-        static::assertNotEmpty($this->View()->data);
-        static::assertEquals($params['name'], $this->View()->data['name']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertNotEmpty($this->View()->getAssign('data'));
+        static::assertEquals($params['name'], $this->View()->getAssign('data')['name']);
 
         return $id;
     }
@@ -193,45 +193,41 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
      * test delete the feed method
      *
      * @depends testUpdateFeed
-     *
-     * @param string $id
      */
-    public function testDeleteFeed($id)
+    public function testDeleteFeed(int $id): void
     {
         $params = [];
-        $params['id'] = (int) $id;
+        $params['id'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/ProductFeed/deleteFeed');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         static::assertNull($this->repository->find($params['id']));
     }
 
     /**
      * test getSuppliers action
      */
-    public function testGetSuppliersAction()
+    public function testGetSuppliersAction(): void
     {
         $this->dispatch('backend/ProductFeed/getSuppliers');
-        static::assertTrue($this->View()->success);
-        static::assertGreaterThan(0, $this->View()->total);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertGreaterThan(0, $this->View()->getAssign('total'));
     }
 
     /**
      * test getArticles action
      */
-    public function testGetArticlesAction()
+    public function testGetArticlesAction(): void
     {
         $this->dispatch('backend/ProductFeed/getArticles');
-        static::assertTrue($this->View()->success);
-        static::assertCount(20, $this->View()->data);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertCount(20, $this->View()->getAssign('data'));
     }
 
     /**
      * Creates the dummy feed
-     *
-     * @return ProductFeed
      */
-    private function getDummyFeed()
+    private function getDummyFeed(): ProductFeed
     {
         $feed = new ProductFeed();
         $feedData = $this->feedData;
@@ -242,10 +238,8 @@ class ProductFeedTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * helper method to create the dummy object
-     *
-     * @return ProductFeed
      */
-    private function createDummy()
+    private function createDummy(): ProductFeed
     {
         $feed = $this->getDummyFeed();
         $this->manager->persist($feed);

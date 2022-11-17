@@ -140,6 +140,37 @@ class Enlight_Components_Db_Adapter_Pdo_Mysql extends Zend_Db_Adapter_Pdo_Mysql
     }
 
     /**
+     * Begin a transaction.
+     * Opening a zend connection and a dbalconnection results in a fatal error, so we use the doctrine transaction levels
+     *
+     * @return void
+     */
+    protected function _beginTransaction()
+    {
+        $this->dbalConnection->beginTransaction();
+    }
+
+    /**
+     * Commit a transaction.
+     *
+     * @return void
+     */
+    protected function _commit()
+    {
+        $this->dbalConnection->commit();
+    }
+
+    /**
+     * Roll-back a transaction.
+     *
+     * @return void
+     */
+    protected function _rollBack()
+    {
+        $this->dbalConnection->rollBack();
+    }
+
+    /**
      * Creates a PDO object and connects to the database.
      *
      * @throws Zend_Db_Adapter_Exception

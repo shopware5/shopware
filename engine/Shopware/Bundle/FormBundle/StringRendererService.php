@@ -28,20 +28,14 @@ use Exception;
 
 class StringRendererService implements StringRendererServiceInterface
 {
-    /**
-     * @var string
-     */
-    private $placeholderRegEx = '/(\{\$){1}[:\'a-zA-Z0-9\.\|\$_]+(\}){1}/';
+    private string $placeholderRegEx = '/(\{\$){1}[:\'a-zA-Z0-9\.\|\$_]+(\}){1}/';
+
+    private string $functionRegEx = '/((\{\$){1})|(\})|(\|{1}(.+)\}{1})/';
 
     /**
-     * @var string
+     * @var list<string>
      */
-    private $functionRegEx = '/((\{\$){1})|(\})|(\|{1}(.+)\}{1})/';
-
-    /**
-     * @var array
-     */
-    private $whiteListTypeArray = [
+    private array $whiteListTypeArray = [
         'string',
         'integer',
         'double',
@@ -63,7 +57,7 @@ class StringRendererService implements StringRendererServiceInterface
         foreach ($placeholders as $placeholder) {
             $placeholderString = preg_replace($this->functionRegEx, '', $placeholder);
 
-            if (\strlen($placeholderString) < 1) {
+            if (!\is_string($placeholderString) || $placeholderString === '') {
                 continue;
             }
 

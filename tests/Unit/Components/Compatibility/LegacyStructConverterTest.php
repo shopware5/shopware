@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Unit\Components\Compatibility;
 
+use DateTime;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
@@ -47,7 +48,7 @@ class LegacyStructConverterTest extends TestCase
 {
     use ShopContextTrait;
 
-    public function testConvertListProductStruct(): void
+    public function testConvertListProductStructWithEmptyDescription(): void
     {
         $converter = $this->createConverter();
 
@@ -73,6 +74,26 @@ class LegacyStructConverterTest extends TestCase
         $data = $converter->convertPriceStruct($price);
 
         static::assertEquals(400.0, $data['regulationPrice']);
+    }
+
+    public function testConvertListProductStructWithReleaseDate(): void
+    {
+        $converter = $this->createConverter();
+
+        $product = new ListProduct(1, 1, 'SW1000');
+        $product->setTax(new Tax());
+        $tomorrow = new DateTime('tomorrow');
+        $product->setReleaseDate($tomorrow);
+
+        $priceRule = new PriceRule();
+        $priceRule->setCustomerGroup(new Group());
+        $product->setListingPrice(new Price($priceRule));
+
+        $convertedProduct = $converter->convertListProductStruct($product);
+
+        $tomorrowString = $tomorrow->format('Y-m-d');
+        static::assertSame($tomorrowString, $convertedProduct['sReleasedate']);
+        static::assertSame($tomorrowString, $convertedProduct['sReleaseDate']);
     }
 
     private function createConverter(): LegacyStructConverter

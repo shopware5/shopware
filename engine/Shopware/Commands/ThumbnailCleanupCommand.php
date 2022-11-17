@@ -25,6 +25,7 @@
 namespace Shopware\Commands;
 
 use League\Flysystem\FilesystemInterface;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,17 +40,17 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ThumbnailCleanupCommand extends ShopwareCommand
 {
     /**
-     * @var array
+     * @var array<string, int>
      */
-    private $baseFiles = [];
+    private array $baseFiles = [];
 
     /**
-     * @var array
+     * @var array<string, list<string>>
      */
-    private $thumbnailFiles = [];
+    private array $thumbnailFiles = [];
 
     /**
-     * {@inheritdoc}
+     * @return void
      */
     protected function configure()
     {
@@ -70,10 +71,9 @@ class ThumbnailCleanupCommand extends ShopwareCommand
         return 0;
     }
 
-    private function removeThumbnails(SymfonyStyle $io)
+    private function removeThumbnails(SymfonyStyle $io): void
     {
-        $mediaService = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
-        $filesystem = $mediaService->getFilesystem();
+        $filesystem = $this->getContainer()->get(MediaServiceInterface::class)->getFilesystem();
 
         $thumbnailFiles = $this->searchThumbnails($io, $filesystem);
 
@@ -98,12 +98,8 @@ class ThumbnailCleanupCommand extends ShopwareCommand
         $io->success(sprintf('Removed %d/%d orphaned thumbnails.', $deletedThumbnails, \count($thumbnailFiles)));
     }
 
-    /**
-     * @param string $directory
-     */
-    private function processFilesIn($directory, FilesystemInterface $filesystem, ProgressBar $progressBar)
+    private function processFilesIn(string $directory, FilesystemInterface $filesystem, ProgressBar $progressBar): void
     {
-        /** @var array $contents */
         $contents = $filesystem->listContents($directory);
 
         foreach ($contents as $item) {
@@ -112,7 +108,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
             }
 
             if ($item['type'] === 'file') {
-                if (strpos($item['basename'], '.') === 0) {
+                if (str_starts_with($item['basename'], '.')) {
                     continue;
                 }
 
@@ -122,10 +118,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
         }
     }
 
-    /**
-     * @param string $file
-     */
-    private function indexFile($file)
+    private function indexFile(string $file): void
     {
         $baseName = pathinfo($file, PATHINFO_FILENAME);
         $fileName = pathinfo($file, PATHINFO_BASENAME);
@@ -135,7 +128,7 @@ class ThumbnailCleanupCommand extends ShopwareCommand
             // strip thumbnail info to get the base filename
             $strippedName = preg_replace('/(_[0-9]+x[0-9]+(@2x)?)$/', '', $baseName);
 
-            if (\array_key_exists($strippedName, $this->baseFiles)) {
+            if (!\is_string($strippedName) || \array_key_exists($strippedName, $this->baseFiles)) {
                 return;
             }
 
@@ -152,9 +145,9 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @return array
+     * @return array<string>
      */
-    private function searchThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem)
+    private function searchThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem): array
     {
         // reset internal index
         $this->baseFiles = [];
@@ -179,9 +172,9 @@ class ThumbnailCleanupCommand extends ShopwareCommand
     }
 
     /**
-     * @return int
+     * @param array<string> $thumbnailFiles
      */
-    private function deleteThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem, array $thumbnailFiles)
+    private function deleteThumbnails(SymfonyStyle $io, FilesystemInterface $filesystem, array $thumbnailFiles): int
     {
         $deleted = 0;
         $progressBar = $io->createProgressBar(\count($thumbnailFiles));

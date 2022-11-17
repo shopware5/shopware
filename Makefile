@@ -38,6 +38,14 @@ fix-code-style: .make.install.composer-dependencies
 check-phpstan: .make.install.composer-dependencies
 	php ./vendor/bin/phpstan analyze -c .phpstan.neon
 
+generate-phpstan-baseline: .make.install.composer-dependencies
+	mv .phpstan-baseline.neon phpstan-baseline.neon
+	sed -i -r 's/- .phpstan-baseline.neon/- phpstan-baseline.neon/g' .phpstan.neon
+	php ./vendor/bin/phpstan analyze -c .phpstan.neon --generate-baseline
+	wait;
+	mv phpstan-baseline.neon .phpstan-baseline.neon
+	sed -i -r 's/- phpstan-baseline.neon/- .phpstan-baseline.neon/g' .phpstan.neon
+
 check-eslint-frontend: .make.install.npm-dependencies
 	npm run lint --prefix ./themes
 

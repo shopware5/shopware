@@ -27,7 +27,7 @@ namespace Shopware\Tests\Functional\Components;
 use DateTime;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Components_Session_Namespace;
-use Enlight_Components_Test_TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Password\Encoder\PasswordEncoderInterface;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Auth;
@@ -36,7 +36,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Zend_Auth_Storage_Session;
 
-class AuthTest extends Enlight_Components_Test_TestCase
+class AuthTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 

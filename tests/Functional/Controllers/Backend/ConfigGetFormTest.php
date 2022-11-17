@@ -26,28 +26,37 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
-use Enlight_Components_Test_Controller_TestCase;
-use Exception;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Shopware\Models\Config\Form;
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\User\Role;
+use Shopware\Models\User\User;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
+class ConfigGetFormTest extends ControllerTestCase
 {
-    public const TEST_USER_USERNAME = 'testuser';
-    public const TEST_ROLE_NAME = 'testadminrole';
-    public const TEST_FORM_NAME = 'FormUnderTest';
-    public const TEST_FORM_ELEMENT_NAME = 'formElementUnderTest';
-    public const TEST_LOCALE_LOCALE = 'test_TEST';
-    public const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS = [
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
+    private const TEST_USER_USERNAME = 'testuser';
+    private const TEST_ROLE_NAME = 'testadminrole';
+    private const TEST_FORM_NAME = 'FormUnderTest';
+    private const TEST_FORM_ELEMENT_NAME = 'formElementUnderTest';
+    private const TEST_LOCALE_LOCALE = 'test_TEST';
+    private const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS = [
         'aa_DJ' => 'aa_DJ: Language fallback that should never happen if there is an en/en_GB locale',
         'de_DE' => 'de_DE: Getestete Einstellung',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
         'en_GB' => 'en_GB: Tested Setting',
         'en' => 'en: Tested Setting (fallback)',
     ];
-    public const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK = [
+    private const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK = [
         'aa_DJ' => 'aa_DJ: Language fallback that should never happen',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
     ];
-    public const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK = [
+    private const TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK = [
         'aa_DJ' => 'aa_DJ: Language fallback that should never happen if there is an en/en_GB locale',
         'en' => 'en: Fallback locale translation',
         self::TEST_LOCALE_LOCALE => 'test_TEST: Tested Test Translation',
@@ -56,12 +65,12 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Locales that where created on the fly for the tests.
      *
-     * @var array an array of locales (e.g. ['test_TEST', 'de_DE'])
+     * @var list<string> an array of locales (e.g. ['test_TEST', 'de_DE'])
      *
      * @see self::getLocaleIdOrCreate creates locales for the tests
      * @see self::formLocaleTestCleanup removes these locales
      */
-    protected $temporaryLocales = [];
+    private array $temporaryLocales = [];
 
     public function setUp(): void
     {
@@ -76,66 +85,66 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
         parent::tearDown();
     }
 
-    public function testFormElementSettingTranslationIsUserLocaleIfMatching()
+    public function testFormElementSettingTranslationIsUserLocaleIfMatching(): void
     {
-        $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate(static::TEST_LOCALE_LOCALE));
-        $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
+        $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate(self::TEST_LOCALE_LOCALE));
+        $storeSettings = $this->getTranslatedFormElementStoreSettings(self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
         static::assertEquals(
-            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS[static::TEST_LOCALE_LOCALE],
+            self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS[self::TEST_LOCALE_LOCALE],
             $storeSettings[0][1]
         );
     }
 
-    public function testFormElementSettingTranslationIsFallbackIfNonTranslatedUserLocale()
+    public function testFormElementSettingTranslationIsFallbackIfNonTranslatedUserLocale(): void
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('fr_FR'));
-        $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
+        $storeSettings = $this->getTranslatedFormElementStoreSettings(self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
         static::assertEquals(
-            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS['en_GB'],
+            self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS['en_GB'],
             $storeSettings[0][1],
             'Should be the en_GB translation, as that is the translation of the first, hard-coded fallback locale.'
         );
     }
 
-    public function testFormElementSettingTranslationIsFallbackIfNonTranslatedUserTerritory()
+    public function testFormElementSettingTranslationIsFallbackIfNonTranslatedUserTerritory(): void
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('de_CH'));
-        $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
+        $storeSettings = $this->getTranslatedFormElementStoreSettings(self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS);
         static::assertEquals(
-            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS['en_GB'],
+            self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_FALLBACKS['en_GB'],
             $storeSettings[0][1],
             'Should be the en_GB translation, as that is the translation of the first, hard-coded fallback locale.'
             . ' Here, de_DE exists as well, but we define there is no logic to match potentially "similar" locales.'
         );
     }
 
-    public function testFormElementSettingTranslationIsFirstTranslationIfUnmatchedAndWithoutFallbacks()
+    public function testFormElementSettingTranslationIsFirstTranslationIfUnmatchedAndWithoutFallbacks(): void
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('en_GB'));
-        $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK);
+        $storeSettings = $this->getTranslatedFormElementStoreSettings(self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK);
         static::assertEquals(
-            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK['aa_DJ'],
+            self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITHOUT_FALLBACK['aa_DJ'],
             $storeSettings[0][1],
             'If no matching translation and no locale-based (en_GB, en) translation exists, should use '
             . 'the first (index-based) translation from the store settings.'
         );
     }
 
-    public function testFormElementSettingTranslationIsEnglishFallbackIfBritishEnglishDoesNotExist()
+    public function testFormElementSettingTranslationIsEnglishFallbackIfBritishEnglishDoesNotExist(): void
     {
         $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate('de_DE'));
-        $storeSettings = $this->getTranslatedFormElementStoreSettings(static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK);
+        $storeSettings = $this->getTranslatedFormElementStoreSettings(self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK);
         static::assertEquals(
-            static::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK['en'],
+            self::TEST_FORM_ELEMENT_STORE_TRANSLATIONS_WITH_EN_FALLBACK['en'],
             $storeSettings[0][1],
             'If neither a matching location, nor the preferred en_GB fallback exist, should fall back to '
             . 'en translation'
         );
     }
 
-    public function testFormElementSettingTranslationCanBeFixedString()
+    public function testFormElementSettingTranslationCanBeFixedString(): void
     {
-        $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate(static::TEST_LOCALE_LOCALE));
+        $this->createAndLoginAdminUserWithLocaleId($this->getLocaleIdOrCreate(self::TEST_LOCALE_LOCALE));
         $storeSettings = $this->getTranslatedFormElementStoreSettings('A fixed string');
         static::assertEquals(
             'A fixed string',
@@ -152,27 +161,26 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @see self::formLocaleTestCleanup removes the user
      */
-    protected function createAndLoginAdminUserWithLocaleId($localeId)
+    private function createAndLoginAdminUserWithLocaleId($localeId): void
     {
-        $entityManager = Shopware()->Models();
+        $entityManager = $this->getContainer()->get('models');
 
-        $user = new \Shopware\Models\User\User();
-        $user->setUsername(static::TEST_USER_USERNAME);
+        $user = new User();
+        $user->setUsername(self::TEST_USER_USERNAME);
         $user->setLocaleId($localeId);
         // Set lockedUntil to the past, so the user can log in.
         $user->setLockedUntil('1970-01-01 00:00:00 UTC');
 
         // Set password analogously to \Shopware\Commands\AdminCreateCommand::setPassword:
-        /** @var \Shopware\Components\Password\Manager $passworEncoderRegistry */
-        $passworEncoderRegistry = Shopware()->Container()->get('passwordencoder');
-        $defaultEncoderName = $passworEncoderRegistry->getDefaultPasswordEncoderName();
-        $encoder = $passworEncoderRegistry->getEncoderByName($defaultEncoderName);
+        $passwordEncoderRegistry = $this->getContainer()->get('passwordencoder');
+        $defaultEncoderName = $passwordEncoderRegistry->getDefaultPasswordEncoderName();
+        $encoder = $passwordEncoderRegistry->getEncoderByName($defaultEncoderName);
         $user->setPassword($encoder->encodePassword('testpassword'));
         $user->setEncoder($encoder->getName());
 
         // The user must have a role and shall be an admin.
-        $userRole = new \Shopware\Models\User\Role();
-        $userRole->setName(static::TEST_ROLE_NAME);
+        $userRole = new Role();
+        $userRole->setName(self::TEST_ROLE_NAME);
         $userRole->setDescription('test admin role description');
         $userRole->setSource('custom');
         $userRole->setAdmin(1);
@@ -188,7 +196,7 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
         // Login user.
         $this->Request()->setMethod('POST');
         $this->Request()->setPost([
-            'username' => static::TEST_USER_USERNAME,
+            'username' => self::TEST_USER_USERNAME,
             'password' => 'testpassword',
         ]);
         $loginResponse = $this->dispatch('backend/Login/login');
@@ -198,25 +206,25 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
         $this->resetResponse();
     }
 
-    protected function formLocaleTestCleanup()
+    private function formLocaleTestCleanup(): void
     {
-        $entityManager = Shopware()->Models();
+        $entityManager = $this->getContainer()->get('models');
 
         $oldEntities = array_merge(
-            $entityManager->getRepository('Shopware\Models\Shop\Locale')->findBy([
+            $entityManager->getRepository(Locale::class)->findBy([
                 'locale' => array_merge(
-                    [static::TEST_LOCALE_LOCALE],
+                    [self::TEST_LOCALE_LOCALE],
                     $this->temporaryLocales
                 ),
             ]),
-            $entityManager->getRepository('Shopware\Models\User\User')->findBy([
-                'username' => static::TEST_USER_USERNAME,
+            $entityManager->getRepository(User::class)->findBy([
+                'username' => self::TEST_USER_USERNAME,
             ]),
-            $entityManager->getRepository('Shopware\Models\User\Role')->findBy([
-                'name' => static::TEST_ROLE_NAME,
+            $entityManager->getRepository(Role::class)->findBy([
+                'name' => self::TEST_ROLE_NAME,
             ]),
-            $entityManager->getRepository('Shopware\Models\Config\Form')->findBy([
-                'name' => static::TEST_FORM_NAME,
+            $entityManager->getRepository(Form::class)->findBy([
+                'name' => self::TEST_FORM_NAME,
             ])
         );
 
@@ -228,11 +236,11 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
         $this->temporaryLocales = [];
     }
 
-    protected function getLocaleIdOrCreate($locale)
+    private function getLocaleIdOrCreate(string $locale): int
     {
-        $entityManager = Shopware()->Models();
+        $entityManager = $this->getContainer()->get('models');
 
-        $foundLocale = $entityManager->getRepository('Shopware\Models\Shop\Locale')->findOneBy([
+        $foundLocale = $entityManager->getRepository(Locale::class)->findOneBy([
             'locale' => $locale,
         ]);
 
@@ -240,7 +248,7 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
             return $foundLocale->getId();
         }
 
-        $newLocale = new \Shopware\Models\Shop\Locale();
+        $newLocale = new Locale();
         $newLocale->setLocale($locale);
         $newLocale->setLanguage('<' . $locale . ' language name as created for ' . \get_class($this) . '>');
         $newLocale->setTerritory('<' . $locale . ' territory name>');
@@ -248,7 +256,7 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
         // Flush $newLocale to database,so we can retrieve its new id afterwards.
         $entityManager->flush($newLocale);
 
-        $this->temporaryLocales[] = $newLocale;
+        $this->temporaryLocales[] = $locale;
 
         return $newLocale->getId();
     }
@@ -259,19 +267,19 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
      *
      * A user must already be logged for a locale to be selectable and to prevent a redirect to /backend/.
      *
-     * @param string|array $settingsTranslations
+     * @param string|array<string, string> $settingsTranslations
      *
-     * @return array the element's store
+     * @return array<list<string>> the element's store
      */
-    protected function getTranslatedFormElementStoreSettings($settingsTranslations)
+    private function getTranslatedFormElementStoreSettings($settingsTranslations): array
     {
-        $entityManager = Shopware()->Models();
+        $entityManager = $this->getContainer()->get('models');
 
-        $form = new \Shopware\Models\Config\Form();
-        $form->setName(static::TEST_FORM_NAME);
+        $form = new Form();
+        $form->setName(self::TEST_FORM_NAME);
         $form->setElement(
             'select',
-            static::TEST_FORM_ELEMENT_NAME,
+            self::TEST_FORM_ELEMENT_NAME,
             [
                 'label' => 'The Form Element Under Test',
                 'store' => [
@@ -299,13 +307,14 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
 
         // Disable ACLs for this request:
         $this->Request()->setMethod('GET');
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl();
         try {
             $response = $this->dispatch($requestUrl);
         } finally {
             // Re-enable ACLs:
-            Shopware()->Plugins()->Backend()->Auth()->setNoAcl(false);
+            $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl(false);
         }
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
 
         static::assertMatchesRegularExpression(',^\s*application/json\s*(;.*)?$,u', $response->getHeader('Content-Type'));
 
@@ -316,35 +325,28 @@ class ConfigGetFormTest extends Enlight_Components_Test_Controller_TestCase
 
         $responseBody = $response->getBody();
         static::assertIsString($responseBody);
-        $responseDataTransferObject = json_decode($responseBody);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new Exception('JSON parse error: ' . json_last_error_msg() . ' for request to ' . $requestUrl . ' which returned ' . $responseBody);
-        }
-        if (!\is_object($responseDataTransferObject)) {
-            throw new Exception('Response could not be parsed to an object for request to ' . $requestUrl . ' which returned ' . $responseBody);
-        }
+        $responseDataTransferObject = json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR);
 
         // Basic assertions about the response to catch non-test-related errors early:
-        static::assertTrue($responseDataTransferObject->success);
-        static::assertNotEmpty($responseDataTransferObject->data);
+        static::assertTrue($responseDataTransferObject['success']);
+        static::assertNotEmpty($responseDataTransferObject['data']);
 
-        $formData = $responseDataTransferObject->data;
-        $formDataErrorMessageSuffix = ' Form data does not match expectation: '
-            . json_encode($formData);
+        $formData = $responseDataTransferObject['data'];
+        $formDataErrorMessageSuffix = ' Form data does not match expectation: ' . json_encode($formData);
 
         static::assertNotEmpty(
-            $formData->elements,
+            $formData['elements'],
             'Form elements are missing.' . $formDataErrorMessageSuffix
         );
         static::assertNotEmpty(
-            $formData->elements[0]->options,
+            $formData['elements'][0]['options'],
             'Form element options are missing.' . $formDataErrorMessageSuffix
         );
         static::assertNotEmpty(
-            $formData->elements[0]->options->store,
+            $formData['elements'][0]['options']['store'],
             'Form element store options are missing.' . $formDataErrorMessageSuffix
         );
 
-        return $formData->elements[0]->options->store;
+        return $formData['elements'][0]['options']['store'];
     }
 }

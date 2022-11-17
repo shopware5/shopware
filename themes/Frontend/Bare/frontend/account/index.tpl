@@ -81,7 +81,10 @@
                     {block name="frontend_account_index_info_content"}
                         <div class="panel--body is--wide">
                             <p>
-                                {$sUserData.additional.user.salutation|salutation}
+
+                                {if {config name="shopSalutationRequired"} && {$sUserData.additional.user.salutation !== 'not_defined'}}
+                                    {$sUserData.additional.user.salutation|salutation}
+                                {/if}
                                 {if {config name="displayprofiletitle"}}
                                     {$sUserData.additional.user.title|escapeHtml}<br/>
                                 {/if}
@@ -157,7 +160,9 @@
                                     </p>
                                 {/if}
                                 <p>
-                                    <span class="address--salutation">{$sUserData.billingaddress.salutation|salutation|escapeHtml}</span>
+                                    {if {config name="shopSalutationRequired"} && {$sUserData.billingaddress.salutation !== 'not_defined'}}
+                                        <span class="address--salutation">{$sUserData.billingaddress.salutation|salutation|escapeHtml}</span>
+                                    {/if}
                                     {if {config name="displayprofiletitle"}}
                                         <span class="address--title">{$sUserData.billingaddress.title|escapeHtml}</span><br/>
                                     {/if}
@@ -220,7 +225,9 @@
                                             </p>
                                         {/if}
                                         <p>
-                                            <span class="address--salutation">{$sUserData.shippingaddress.salutation|salutation}</span>
+                                            {if {config name="shopSalutationRequired"} && {$sUserData.shippingaddress.salutation !== 'not_defined'}}
+                                                <span class="address--salutation">{$sUserData.shippingaddress.salutation|salutation}</span>
+                                            {/if}
                                             {if {config name="displayprofiletitle"}}
                                                 <span class="address--title">{$sUserData.shippingaddress.title|escapeHtml}</span><br/>
                                             {/if}

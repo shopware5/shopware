@@ -2,6 +2,36 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.17
+
+[View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)
+
+### Deprecations
+
+* Deprecated `\Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::getProductCombinations`, it will be removed in the next minor version v5.8.
+
+### Changes
+
+* Updated `doctrine/collections` to version 1.8.0
+* Updated `doctrine/common` to version 3.4.3
+* Updated `doctrine/event-manager` to version 1.2.0
+* Updated `doctrine/orm` to version 2.13.3
+* Updated `doctrine/persistence` to version 2.5.5
+* Updated `elasticsearch/elasticsearch` to version 7.17.1
+* Updated `friendsofphp/proxy-manager-lts` to version 1.0.13
+* Updated `guzzlehttp/psr7` to version 2.4.3
+* Updated `laminas/laminas-code` to version 4.7.0
+* Updated `laminas/laminas-escaper` to version 2.12.0
+* Updated `league/flysystem` to version 1.1.10
+* Updated `symfony/console` to version 4.4.48
+* Updated `symfony/expression-language` to version 4.4.47
+* Updated `symfony/form` to version 4.4.48
+* Updated `symfony/http-foundation` to version 4.4.48
+* Updated `symfony/http-kernel` to version 4.4.48
+* Updated `symfony/serializer` to version 5.4.15
+* Updated `symfony/validator` to version 4.4.48
+* Updated several indirect dependencies
+
 ## 5.7.16
 
 [View all changes from v5.7.15...v5.7.16](https://github.com/shopware/shopware/compare/v5.7.15...v5.7.16)

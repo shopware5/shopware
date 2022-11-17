@@ -22,7 +22,6 @@
  * our trademarks remain entirely with us.
  */
 
-use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\StoreClient;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
 use Shopware\Bundle\PluginInstallerBundle\Struct\LocaleStruct;
@@ -388,7 +387,6 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
         $password = $this->Request()->getParam('password');
         $email = $this->Request()->getParam('email');
 
-        /** @var AccountManagerService $accountManagerService */
         $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
         try {
@@ -590,16 +588,14 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
      *
      * @return LocaleStruct|null Information about the current locale
      */
-    private function getCurrentLocale()
+    private function getCurrentLocale(): ?LocaleStruct
     {
         static $locales;
 
-        if (empty($locales)) {
-            /** @var AccountManagerService $accountManagerService */
+        if (\is_array($locales) && empty($locales)) {
             $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             try {
-                /** @var LocaleStruct[] $serverLocales */
                 $serverLocales = $accountManagerService->getLocales();
             } catch (Exception $e) {
                 $this->View()->assign([
@@ -615,12 +611,9 @@ class Shopware_Controllers_Backend_FirstRunWizard extends Shopware_Controllers_B
             }
         }
 
-        $user = Shopware()->Container()->get('auth')->getIdentity();
-        /** @var \Shopware\Models\Shop\Locale $locale */
-        $locale = $user->locale;
-        $localeCode = $locale->getLocale();
+        $localeCode = Shopware()->Container()->get('auth')->getIdentity()->locale->getLocale();
 
-        return \array_key_exists($localeCode, $locales) ? $locales[$localeCode] : null;
+        return $locales[$localeCode] ?? null;
     }
 
     /**

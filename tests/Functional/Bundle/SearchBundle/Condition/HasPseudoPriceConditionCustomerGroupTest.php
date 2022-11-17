@@ -63,12 +63,6 @@ class HasPseudoPriceConditionCustomerGroupTest extends TestCase
         parent::setUp();
     }
 
-    protected function tearDown(): void
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
-
     /**
      * @dataProvider getCustomerGroupPseudoPrices
      *

@@ -37,7 +37,10 @@
                             {if $address.company}
                                 <p><span class="address--company">{$address.company|escapeHtml}</span>{if $address.department} - <span class="address--department">{$address.department|escapeHtml}</span>{/if}</p>
                             {/if}
-                            <span class="address--salutation">{$address.salutation|salutation}</span>
+
+                            {if {config name="shopSalutationRequired"} && {$address.salutation !== 'not_defined'}}
+                                <span class="address--salutation">{$address.salutation|salutation}</span>
+                            {/if}
                             {if {config name="displayprofiletitle"}}
                                 <span class="address--title">{$address.title|escapeHtml}</span><br/>
                             {/if}

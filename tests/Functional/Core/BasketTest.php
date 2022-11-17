@@ -42,6 +42,7 @@ use Shopware\Components\Random;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Customer;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
+use Shopware\Tests\Functional\Helper\Utils;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
@@ -1613,12 +1614,11 @@ class BasketTest extends TestCase
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumorder'] = 10;
 
         // Check that we have no surcharge
-        static::assertEmpty(
-            $this->connection->fetchAssociative(
-                'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
-                [$this->session->get('sessionId')]
-            )
+        $surchargeRowBefore = $this->connection->fetchAssociative(
+            'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
+            [$this->session->get('sessionId')]
         );
+        static::assertEmpty($surchargeRowBefore);
 
         // Add surcharge, expect success (null)
         static::assertNull(
@@ -1828,57 +1828,54 @@ class BasketTest extends TestCase
     public function testsGetBasketDataHasNumericCartItemAmounts(): void
     {
         $resourceHelper = new Helper($this->getContainer());
-        try {
-            $product = $resourceHelper->createProduct([
-                'name' => 'Testartikel',
-                'description' => 'Test description',
-                'active' => true,
-                'mainDetail' => [
-                    'number' => 'swTEST' . uniqid((string) mt_rand(), true),
-                    'inStock' => 15,
-                    'lastStock' => true,
-                    'unitId' => 1,
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'EK',
-                            'from' => 1,
-                            'to' => '-',
-                            'price' => 29.97,
-                        ],
-                    ],
-                ],
-                'taxId' => 4,
-                'supplierId' => 2,
-                'categories' => [
+
+        $product = $resourceHelper->createProduct([
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
+                'inStock' => 15,
+                'lastStock' => true,
+                'unitId' => 1,
+                'prices' => [
                     [
-                        'id' => 10,
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 29.97,
                     ],
                 ],
-            ]);
-            $customerGroup = $resourceHelper->createCustomerGroup();
-            $this->session['sUserId'] = $this->createDummyCustomer()->getId();
-            $this->generateBasketSession();
-            $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
+            ],
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [
+                [
+                    'id' => 10,
+                ],
+            ],
+        ]);
+        $customerGroup = $resourceHelper->createCustomerGroup();
+        $this->session['sUserId'] = $this->createDummyCustomer()->getId();
+        $this->generateBasketSession();
+        $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
 
-            // Add the product to the basket
-            static::assertInstanceOf(Detail::class, $product->getMainDetail());
-            static::assertIsString($product->getMainDetail()->getNumber());
-            $this->module->sAddArticle($product->getMainDetail()->getNumber(), 2);
-            $this->module->sRefreshBasket();
-            $basketData = $this->module->sGetBasketData();
+        // Add the product to the basket
+        static::assertInstanceOf(Detail::class, $product->getMainDetail());
+        static::assertIsString($product->getMainDetail()->getNumber());
+        $this->module->sAddArticle($product->getMainDetail()->getNumber(), 2);
+        $this->module->sRefreshBasket();
+        $basketData = $this->module->sGetBasketData();
 
-            // Assert that a valid basket was returned
-            static::assertArrayHasKey(CartKey::POSITIONS, $basketData);
-            // Assert that there is a numeric basket amount
-            static::assertArrayHasKey('amountNumeric', $basketData[CartKey::POSITIONS][0], 'amountNumeric for cart item should exist');
-            static::assertArrayHasKey('amountnetNumeric', $basketData[CartKey::POSITIONS][0], 'amountnetNumeric for cart item should exist');
-            static::assertGreaterThan(0, $basketData[CartKey::POSITIONS][0]['amountNumeric']);
-            static::assertGreaterThan(0, $basketData[CartKey::POSITIONS][0]['amountnetNumeric']);
-            static::assertEquals(29.97 * 2, $basketData[CartKey::POSITIONS][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity');
-            static::assertEqualsWithDelta(29.97 * 2, $basketData[CartKey::POSITIONS][0]['amountNumeric'], 0.001, 'amountNumeric for cart item should respect cart item quantity');
-        } finally {
-            $resourceHelper->cleanUp();
-        }
+        // Assert that a valid basket was returned
+        static::assertArrayHasKey(CartKey::POSITIONS, $basketData);
+        // Assert that there is a numeric basket amount
+        static::assertArrayHasKey('amountNumeric', $basketData[CartKey::POSITIONS][0], 'amountNumeric for cart item should exist');
+        static::assertArrayHasKey('amountnetNumeric', $basketData[CartKey::POSITIONS][0], 'amountnetNumeric for cart item should exist');
+        static::assertGreaterThan(0, $basketData[CartKey::POSITIONS][0]['amountNumeric']);
+        static::assertGreaterThan(0, $basketData[CartKey::POSITIONS][0]['amountnetNumeric']);
+        static::assertEquals(29.97 * 2, $basketData[CartKey::POSITIONS][0]['amountNumeric'], 'amountNumeric for cart item should respect cart item quantity');
+        static::assertEqualsWithDelta(29.97 * 2, $basketData[CartKey::POSITIONS][0]['amountNumeric'], 0.001, 'amountNumeric for cart item should respect cart item quantity');
     }
 
     /**
@@ -1897,89 +1894,81 @@ class BasketTest extends TestCase
     public function testsGetBasketDataNegativeCloseToZeroTotal(): void
     {
         $resourceHelper = new Helper($this->getContainer());
-        try {
-            // Setup product for the first basket position - a product that costs EUR 29.97
-            $product = $resourceHelper->createProduct([
-                'name' => 'Testartikel',
-                'description' => 'Test description',
-                'active' => true,
-                'mainDetail' => [
-                    'number' => 'swTEST' . uniqid((string) mt_rand(), true),
-                    'inStock' => 15,
-                    'lastStock' => true,
-                    'unitId' => 1,
-                    'prices' => [
-                        [
-                            'customerGroupKey' => 'EK',
-                            'from' => 1,
-                            'to' => '-',
-                            'price' => 29.97,
-                        ],
-                    ],
-                ],
-                'taxId' => 4,
-                'supplierId' => 2,
-                'categories' => [
+
+        // Setup product for the first basket position - a product that costs EUR 29.97
+        $product = $resourceHelper->createProduct([
+            'name' => 'Testartikel',
+            'description' => 'Test description',
+            'active' => true,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
+                'inStock' => 15,
+                'lastStock' => true,
+                'unitId' => 1,
+                'prices' => [
                     [
-                        'id' => 10,
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => '-',
+                        'price' => 29.97,
                     ],
                 ],
-            ]);
-            // Setup discount for the second basket position - a shipping discount of EUR -2.8
-            $dispatchDiscountId = $this->connection->fetchOne(
-                'SELECT * FROM s_premium_dispatch WHERE type = 3'
-            );
-            $this->connection->update(
-                's_premium_shippingcosts',
-                ['value' => 2.8],
-                ['dispatchID' => $dispatchDiscountId]
-            );
-            // Setup discount for the third basket position - a basket discount covering the remainder of the basket (-27.17)
-            $customerGroup = $resourceHelper->createCustomerGroup();
-            $this->connection->insert(
-                's_core_customergroups_discounts',
+            ],
+            'taxId' => 4,
+            'supplierId' => 2,
+            'categories' => [
                 [
-                    'groupID' => $customerGroup->getId(),
-                    // discount by the full remaining value of the basket - EUR 27.17 / EUR 29.97 = 90.65 %
-                    'basketdiscount' => 90.65,
-                    'basketdiscountstart' => 10,
-                ]
-            );
-            $customerGroupDiscountId = $this->connection->lastInsertId('s_core_customergroups_discounts');
-            // Setup the user and their session
-            $customer = $this->createDummyCustomer();
-            $this->connection->update(
-                's_user',
-                ['customergroup' => $customerGroup->getKey()],
-                ['id' => $customer->getId()]
-            );
-            $this->session['sUserId'] = $customer->getId();
-            $this->generateBasketSession();
-            $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
+                    'id' => 10,
+                ],
+            ],
+        ]);
+        // Setup discount for the second basket position - a shipping discount of EUR -2.8
+        $dispatchDiscountId = $this->connection->fetchOne(
+            'SELECT * FROM s_premium_dispatch WHERE type = 3'
+        );
+        $this->connection->update(
+            's_premium_shippingcosts',
+            ['value' => 2.8],
+            ['dispatchID' => $dispatchDiscountId]
+        );
+        // Setup discount for the third basket position - a basket discount covering the remainder of the basket (-27.17)
+        $customerGroup = $resourceHelper->createCustomerGroup();
+        $this->connection->insert(
+            's_core_customergroups_discounts',
+            [
+                'groupID' => $customerGroup->getId(),
+                // discount by the full remaining value of the basket - EUR 27.17 / EUR 29.97 = 90.65 %
+                'basketdiscount' => 90.65,
+                'basketdiscountstart' => 10,
+            ]
+        );
+        $customerGroupDiscountId = $this->connection->lastInsertId('s_core_customergroups_discounts');
+        // Setup the user and their session
+        $customer = $this->createDummyCustomer();
+        $this->connection->update(
+            's_user',
+            ['customergroup' => $customerGroup->getKey()],
+            ['id' => $customer->getId()]
+        );
+        $this->session['sUserId'] = $customer->getId();
+        $this->generateBasketSession();
+        $this->module->sSYSTEM->sUSERGROUPDATA['id'] = $customerGroup->getId();
 
-            // Actually add the product to the basket
-            static::assertInstanceOf(Detail::class, $product->getMainDetail());
-            static::assertIsString($product->getMainDetail()->getNumber());
-            $this->module->sAddArticle($product->getMainDetail()->getNumber());
-            // Run sBasket::sRefreshBasket() in order to add the discounts to the basket
-            $this->module->sRefreshBasket();
-            // Run sGetBasketData() to show the rounding error aborting the computation
-            $basketData = $this->module->sGetBasketData();
-            // Run sGetAmount() to show that this function is affected by the issue as well
-            $this->module->sGetAmount();
-
-            // Assert that a valid basket was returned
-            static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
-            // Assert that the total is approximately 0.00
-            static::assertEquals(0, $basketData[CartKey::AMOUNT_NUMERIC], 'total is approxmately 0.00');
-            static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], 0.0001, 'total is approxmately 0.00');
-        } finally {
-            // Delete test resources
-            if (isset($customerGroupDiscountId)) {
-                $this->connection->delete('s_core_customergroups_discounts', ['id' => $customerGroupDiscountId]);
-            }
-            $resourceHelper->cleanUp();
-        }
+        // Actually add the product to the basket
+        static::assertInstanceOf(Detail::class, $product->getMainDetail());
+        static::assertIsString($product->getMainDetail()->getNumber());
+        $this->module->sAddArticle($product->getMainDetail()->getNumber());
+        // Run sBasket::sRefreshBasket() in order to add the discounts to the basket
+        $this->module->sRefreshBasket();
+        // Run sGetBasketData() to show the rounding error aborting the computation
+        $basketData = $this->module->sGetBasketData();
+        // Run sGetAmount() to show that this function is affected by the issue as well
+        $this->module->sGetAmount();
+        // Assert that a valid basket was returned
+        static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
+        // Assert that the total is approximately 0.00
+        static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], Utils::FORMER_PHPUNIT_FLOAT_EPSILON, 'total is approxmately 0.00');
+        static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], 0.0001, 'total is approxmately 0.00');
     }
 
     public function testsGetBasketWithInvalidProduct(): void
@@ -2516,9 +2505,6 @@ class BasketTest extends TestCase
         static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
         static::assertArrayHasKey(CartKey::AMOUNT_NET_NUMERIC, $basketData);
         static::assertEquals($basketData[CartKey::AMOUNT_NUMERIC], $basketData[CartKey::AMOUNT_NET_NUMERIC]);
-
-        // Delete test resources
-        $resourceHelper->cleanUp();
     }
 
     public function testMinPurchaseMultipleTimesAdded(): void

@@ -103,7 +103,7 @@ td.head  {
                             {block name="document_index_address_base"}
                                 {if $User.$address.company}{$User.$address.company}<br />{/if}
                                 {if $User.$address.department}{$User.$address.department}<br />{/if}
-                                {$User.$address.salutation|salutation}
+                                {if {config name="shopSalutationRequired"} && $User.$address.salutation !== 'not_defined'}}{$User.$address.salutation|salutation}{/if}
                                 {if {config name="displayprofiletitle"}}
                                     {$User.$address.title}<br/>
                                 {/if}

@@ -96,6 +96,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
         if (empty($orderNumber)) {
             $user = $this->getUser();
             $basket = $this->getBasket();
+            if (!\is_array($basket)) {
+                throw new RuntimeException('Cart must not be empty at this point');
+            }
 
             $order = Shopware()->Modules()->Order();
             $order->sUserData = $user;
@@ -154,6 +157,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     {
         $user = $this->getUser();
         $basket = $this->getBasket();
+        if (!\is_array($basket)) {
+            return 0.0;
+        }
         if (!empty($user['additional']['charge_vat'])) {
             return empty($basket[CartKey::AMOUNT_WITH_TAX_NUMERIC]) ? $basket[CartKey::AMOUNT_NUMERIC] : $basket[CartKey::AMOUNT_WITH_TAX_NUMERIC];
         }
@@ -164,17 +170,20 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
     /**
      * Returns shipment amount as float
      *
-     * @return string
+     * @return float
      */
     public function getShipment()
     {
         $user = $this->getUser();
         $basket = $this->getBasket();
+        if (!\is_array($basket)) {
+            return 0.0;
+        }
         if (!empty($user['additional']['charge_vat'])) {
             return $basket[CheckoutKey::SHIPPING_COSTS_WITH_TAX];
         }
 
-        return str_replace(',', '.', $basket[CheckoutKey::SHIPPING_COSTS]);
+        return (float) str_replace(',', '.', $basket[CheckoutKey::SHIPPING_COSTS]);
     }
 
     /**

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -41,47 +43,30 @@ class CSRFTokenValidator implements SubscriberInterface
     public const CSRF_TOKEN_ARGUMENT = '__csrf_token';
 
     public const CSRF_TOKEN_HEADER = 'X-CSRF-Token';
+    public const CSRF_TOKEN_RESPONSE_HEADER = 'x-csrf-token';
 
     private const CSRF_WAS_VALIDATED = 'isValidated';
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
-    /**
-     * @var string
-     */
-    private $tokenName = self::CSRF_TOKEN_HEADER;
+    private bool $isEnabledFrontend;
 
-    /**
-     * @var bool
-     */
-    private $isEnabledFrontend;
-
-    /**
-     * @var bool
-     */
-    private $isEnabledBackend;
+    private bool $isEnabledBackend;
 
     private ContextServiceInterface $contextService;
 
     private Shopware_Components_Config $componentsConfig;
 
-    /**
-     * @param bool $isEnabledFrontend
-     * @param bool $isEnabledBackend
-     */
     public function __construct(
         ContainerInterface $container,
         ContextServiceInterface $contextService,
         Shopware_Components_Config $componentsConfig,
-        $isEnabledFrontend = true,
-        $isEnabledBackend = true
+        bool $isEnabledFrontend = true,
+        bool $isEnabledBackend = true
     ) {
         $this->container = $container;
-        $this->isEnabledFrontend = (bool) $isEnabledFrontend;
-        $this->isEnabledBackend = (bool) $isEnabledBackend;
+        $this->isEnabledFrontend = $isEnabledFrontend;
+        $this->isEnabledBackend = $isEnabledBackend;
         $this->contextService = $contextService;
         $this->componentsConfig = $componentsConfig;
     }
@@ -115,8 +100,11 @@ class CSRFTokenValidator implements SubscriberInterface
             return;
         }
 
-        $expected = $this->container->get('backendsession')->offsetGet($this->tokenName);
-        $token = $controller->Request()->getHeader($this->tokenName);
+        $expected = $this->container->get('backendsession')->offsetGet(self::CSRF_TOKEN_HEADER);
+        if (!\is_string($expected)) {
+            throw new CSRFTokenValidationException('The backend session does not contain a valid CSRF token');
+        }
+        $token = $controller->Request()->getHeader(self::CSRF_TOKEN_HEADER);
 
         if (empty($token)) {
             $token = $controller->Request()->getParam(self::CSRF_TOKEN_ARGUMENT);
@@ -170,12 +158,10 @@ class CSRFTokenValidator implements SubscriberInterface
 
     public function clearExistingCookie(): void
     {
-        $front = $this->container->get('front');
-
         $shop = $this->contextService->getShopContext()->getShop();
         $name = $this->getCsrfName();
 
-        $response = $front->Response();
+        $response = $this->container->get('front')->Response();
         $response->headers->setCookie(new Cookie(
             $name,
             Random::getAlphanumericString(30),
@@ -189,10 +175,8 @@ class CSRFTokenValidator implements SubscriberInterface
 
     /**
      * Check if the submitted CSRF token matches with the token stored in the cookie or header
-     *
-     * @return bool
      */
-    private function checkRequest(Request $request)
+    private function checkRequest(Request $request): bool
     {
         $name = $this->getCsrfName();
 
@@ -239,7 +223,7 @@ class CSRFTokenValidator implements SubscriberInterface
         $whitelistedActions = $controller->getWhitelistedCSRFActions();
         $whitelistedActions = array_map('strtolower', $whitelistedActions);
 
-        return \in_array($calledAction, $whitelistedActions);
+        return \in_array($calledAction, $whitelistedActions, true);
     }
 
     /**
@@ -257,6 +241,6 @@ class CSRFTokenValidator implements SubscriberInterface
         $protectedActions = $controller->getCSRFProtectedActions();
         $protectedActions = array_map('strtolower', $protectedActions);
 
-        return \in_array($calledAction, $protectedActions);
+        return \in_array($calledAction, $protectedActions, true);
     }
 }

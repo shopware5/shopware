@@ -289,7 +289,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * Returns an array of all log files in the given directory.
      *
-     * @return array<array{0: string, channel: string, 1: string, environment: string, 2: string, date: string, 3: string}>
+     * @return list<array<string>>
      */
     private function getLogFiles(string $logDir): array
     {
@@ -312,7 +312,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     /**
      * Checks whether the specified log file exists in the log directory. If so, he returns it.
      *
-     * @param array<array{0: string, channel: string, 1: string, environment: string, 2: string, date: string, 3: string}> $files
+     * @param list<array<string>> $files
      *
      * @return false|string
      */
@@ -328,9 +328,9 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
     }
 
     /**
-     * @param array<array{0: string, channel: string, 1: string, environment: string, 2: string, date: string, 3: string}> $files
+     * @param list<array<string>> $files
      *
-     * @return array{0: string, channel?: string, 1?: string, environment?: string, 2?: string, date?: string, 3?: string}
+     * @return array<string>
      */
     private function getDefaultLogFile(array $files): array
     {

@@ -2415,7 +2415,7 @@ class sAdmin implements \Enlight_Hook
                 $this->connection->executeQuery($sql, [
                     $email,
                     $groupID,
-                    $this->front->Request()->getPost('salutation'),
+                    $this->front->Request()->getPost('salutation', 'not_defined'),
                     $this->front->Request()->getPost('title'),
                     $this->front->Request()->getPost('firstname'),
                     $this->front->Request()->getPost('lastname'),
@@ -2430,7 +2430,7 @@ class sAdmin implements \Enlight_Hook
                     's_campaigns_maildata',
                     [
                         'groupID' => $groupID,
-                        'salutation' => $this->front->Request()->getPost('salutation'),
+                        'salutation' => $this->front->Request()->getPost('salutation', 'not_defined'),
                         'title' => $this->front->Request()->getPost('title'),
                         'firstname' => $this->front->Request()->getPost('firstname'),
                         'lastname' => $this->front->Request()->getPost('lastname'),
@@ -3180,7 +3180,7 @@ class sAdmin implements \Enlight_Hook
             $result['surcharge'] = $payment['surcharge'];
             $result['brutto'] += $result['surcharge'];
         }
-        if ($result['brutto'] < 0) {
+        if (!is_numeric($result['brutto']) || $result['brutto'] < 0) {
             return self::NO_SHIPPING_COSTS;
         }
 
@@ -3433,7 +3433,7 @@ class sAdmin implements \Enlight_Hook
         // Temporarily overwrite billing address
         if (
             !$this->session->offsetGet('checkoutBillingAddressId')
-            || Shopware()->Front()->Request()->getControllerName() !== 'checkout'
+            || \strtolower(Shopware()->Front()->Request()->getControllerName()) !== 'checkout'
         ) {
             return $userData;
         }
@@ -3465,8 +3465,8 @@ class sAdmin implements \Enlight_Hook
     {
         // Temporarily overwrite shipping address
         if (
-            !$this->session->offsetGet('checkoutShippingAddressId') || Shopware()->Front()->Request()
-                ->getControllerName() !== 'checkout'
+            !$this->session->offsetGet('checkoutShippingAddressId')
+            || \strtolower(Shopware()->Front()->Request()->getControllerName()) !== 'checkout'
         ) {
             return $userData;
         }

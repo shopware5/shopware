@@ -310,7 +310,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Create input element method
      *
-     * @param string|null $post
+     * @param array<string>|string|null $post
      *
      * @return string
      */
@@ -335,6 +335,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case 'text':
             case 'textarea':
             case 'file':
+                if (\is_array($post)) {
+                    break;
+                }
                 $post = $this->_filterInput($post);
                 if (empty($post) && !empty($element['value'])) {
                     $post = $element['value'];
@@ -346,6 +349,9 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 break;
 
             case 'text2':
+                if (!\is_array($post)) {
+                    break;
+                }
                 $post[0] = $this->_filterInput($post[0]);
                 if (empty($post[0]) && !empty($element['value'][0])) {
                     $post[0] = $element['value'][0];
@@ -525,14 +531,21 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
-     * @param string $input
+     * @param string|null $input
      *
      * @return string
      */
     protected function _filterInput($input)
     {
+        if (!\is_string($input)) {
+            return '';
+        }
+
         // Remove all control characters, unassigned, private use, formatting and surrogate code points
         $input = preg_replace('#[^\PC\s]#u', '', $input);
+        if (!\is_string($input)) {
+            return '';
+        }
 
         $temp = str_replace('"', '', $input);
         if (preg_match('#{\s*/*literal\s*}#i', $temp) > 0) {
@@ -679,7 +692,10 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 $data = [];
 
                 foreach ($translation as $key => $value) {
-                    $data[str_replace('__attribute_', '', $key)] = $value;
+                    $newKey = str_replace('__attribute_', '', $key);
+                    if (\is_string($newKey)) {
+                        $data[$newKey] = $value;
+                    }
                 }
 
                 $form->getAttribute()->fromArray($data);

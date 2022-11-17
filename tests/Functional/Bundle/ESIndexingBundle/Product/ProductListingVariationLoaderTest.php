@@ -35,14 +35,11 @@ use Shopware\Models\Article\Configurator\Group;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class ProductListingVariationLoaderTest extends TestCase
 {
-    protected function tearDown(): void
-    {
-        $this->helper->cleanUp();
-        parent::tearDown();
-    }
+    use DatabaseTransactionBehaviour;
 
     public function testAvailabilityWithOne(): void
     {
@@ -92,7 +89,7 @@ class ProductListingVariationLoaderTest extends TestCase
 
         $groups = $this->getProductGroups($productData);
         $groupIds = array_keys($groups);
-        list($firstId, $secondId) = $groupIds;
+        [$firstId, $secondId] = $groupIds;
 
         $variantFacet = new VariantFacet([$firstId, $secondId]);
 

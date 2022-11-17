@@ -643,7 +643,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
                 parse_str($query, $result);
 
                 foreach ($result as $key => $value) {
-                    $this->setQuery($key, $value);
+                    $this->setQuery((string) $key, $value);
                 }
             }
 

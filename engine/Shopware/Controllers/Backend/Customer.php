@@ -530,8 +530,10 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
 
         $data = $optinService->get(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, $hash);
 
-        if ($data === null) {
+        if (!\is_array($data)) {
             $this->redirect(['module' => 'backend', 'controller' => 'index', 'action' => 'index']);
+
+            return;
         }
 
         $optinService->delete(OptinServiceInterface::TYPE_CUSTOMER_LOGIN_FROM_BACKEND, $hash);

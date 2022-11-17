@@ -31,6 +31,8 @@ use RuntimeException;
 
 class Utils
 {
+    public const FORMER_PHPUNIT_FLOAT_EPSILON = 0.0000000001;
+
     /**
      * @return array<mixed>|callable|null
      */

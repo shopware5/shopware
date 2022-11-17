@@ -163,9 +163,7 @@ class Enlight_Config_Writer_Ini extends Enlight_Config_Writer_FileAbstract
      * Root elements that are not assigned to any section needs to be
      * on the top of config.
      *
-     * @see    http://framework.zend.com/issues/browse/ZF-6289
-     *
-     * @param  Enlight_Config_BaseConfig
+     * @see http://framework.zend.com/issues/browse/ZF-6289
      *
      * @return Enlight_Config_BaseConfig
      */

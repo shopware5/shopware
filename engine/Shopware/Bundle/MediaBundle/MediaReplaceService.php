@@ -103,7 +103,7 @@ class MediaReplaceService implements MediaReplaceServiceInterface
             $this->mediaService->write($media->getPath(), $fileContent);
         } else {
             $pathInfo = pathinfo($media->getPath());
-            $newFileName = sprintf('%s/%s.%s', $pathInfo['dirname'], $pathInfo['filename'], $newExtension);
+            $newFileName = sprintf('%s/%s.%s', $pathInfo['dirname'] ?? '', $pathInfo['filename'], $newExtension);
             $this->mediaService->delete($media->getPath());
             $this->mediaService->write($newFileName, $fileContent);
             $this->modelManager->getConnection()->update('s_articles_img', [

@@ -68,7 +68,7 @@ class OrderTest extends TestCase
     }
 
     /**
-     * @covers \sOrder::sendMail()
+     * @covers \sOrder::sendMail
      *
      * @ticket SW-8261
      */

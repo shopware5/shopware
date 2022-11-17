@@ -28,7 +28,7 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\ORMException;
-use Enlight_Components_Test_TestCase;
+use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
@@ -38,9 +38,14 @@ use Shopware\Models\Country\Country;
 use Shopware\Models\Country\State;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class RegisterServiceTest extends Enlight_Components_Test_TestCase
+class RegisterServiceTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+    use ContainerTrait;
+
     /**
      * @var RegisterServiceInterface
      */
@@ -62,11 +67,6 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
     protected static $contextService;
 
     /**
-     * @var array<class-string, int[]>
-     */
-    protected static array $_cleanup = [];
-
-    /**
      * Set up fixtures
      */
     public static function setUpBeforeClass(): void
@@ -75,8 +75,6 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
         self::$modelManager = Shopware()->Container()->get(ModelManager::class);
         self::$connection = Shopware()->Container()->get(Connection::class);
         self::$contextService = Shopware()->Container()->get(ContextServiceInterface::class);
-
-        self::$modelManager->clear();
     }
 
     /**
@@ -84,19 +82,7 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
      */
     public static function tearDownAfterClass(): void
     {
-        parent::tearDownAfterClass();
-
-        foreach (self::$_cleanup as $entityName => $ids) {
-            foreach ($ids as $id) {
-                $model = self::$modelManager->find($entityName, $id);
-                static::assertNotNull($model);
-                self::$modelManager->remove($model);
-            }
-        }
-
-        self::$modelManager->flush();
         self::$modelManager->clear();
-
         Shopware()->Container()->reset('router');
     }
 
@@ -171,9 +157,6 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
 
         self::$modelManager->refresh($customer);
 
-        self::$_cleanup[Customer::class][] = $customer->getId();
-        self::$_cleanup[Address::class][] = $billing->getId();
-
         $this->assertCustomer($demoData, $customer);
 
         // assert data sync
@@ -181,6 +164,40 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
         $this->assertAddress($billingDemoData, $customer, true);
 
         return $customer->getId();
+    }
+
+    public function testRegisterWithoutSalutation(): void
+    {
+        $demoData = $this->getCustomerDemoData();
+        $config = $this->getContainer()->get('config');
+
+        $config->offsetSet('shopSalutationRequired', false);
+        unset($demoData['salutation']);
+        $billingDemoData = $this->getBillingDemoData();
+
+        $shop = $this->getShop();
+
+        $customer = new Customer();
+        $customer->fromArray($demoData);
+
+        $billing = new Address();
+        $billing->fromArray($billingDemoData);
+
+        self::$registerService->register($shop, $customer, $billing);
+
+        static::assertGreaterThan(0, $customer->getId());
+
+        self::$modelManager->refresh($customer);
+
+        $demoData['salutation'] = 'not_defined';
+
+        $this->assertCustomer($demoData, $customer);
+
+        // assert data sync
+        $this->assertAddress($billingDemoData, $customer);
+        $this->assertAddress($billingDemoData, $customer, true);
+
+        $config->offsetSet('shopSalutationRequired', true);
     }
 
     public function testRegisterWithDifferentShipping(): void
@@ -206,10 +223,6 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
 
         self::$modelManager->refresh($customer);
 
-        self::$_cleanup[Customer::class][] = $customer->getId();
-        self::$_cleanup[Address::class][] = $billing->getId();
-        self::$_cleanup[Address::class][] = $shipping->getId();
-
         $this->assertCustomer($demoData, $customer);
 
         // assert data sync
@@ -217,11 +230,10 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
         $this->assertAddress($shippingDemoData, $customer, true);
     }
 
-    /**
-     * @depends testRegister
-     */
     public function testRegisterWithExistingEmail(): void
     {
+        $this->testRegister();
+
         $this->expectException(ValidationException::class);
         $demoData = $this->getCustomerDemoData();
 
@@ -301,8 +313,6 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
         self::$modelManager->persist($country);
         self::$modelManager->flush($country);
 
-        self::$_cleanup[Country::class][] = $country->getId();
-
         return self::$modelManager->merge($country);
     }
 
@@ -322,8 +332,6 @@ class RegisterServiceTest extends Enlight_Components_Test_TestCase
 
         self::$modelManager->persist($state);
         self::$modelManager->flush($state);
-
-        self::$_cleanup[State::class][] = $state->getId();
 
         return self::$modelManager->merge($state);
     }

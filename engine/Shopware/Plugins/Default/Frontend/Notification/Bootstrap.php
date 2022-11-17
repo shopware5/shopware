@@ -23,11 +23,19 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Captcha\NoCaptcha;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Components\Routing\Context;
+use Shopware\Components\Routing\RouterInterface;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Validator\EmailValidator;
+use Shopware\Models\Shop\Shop;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Shopware Notification Plugin
@@ -74,6 +82,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * If not available display possibility to register for status updates
      *
      * @static
+     *
+     * @return void
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -89,7 +99,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         $id = (int) $subject->Request()->getParam('sArticle');
         $view = $subject->View();
-        /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
+        /** @var SessionInterface $session */
         $session = $this->get('session');
 
         $sArticle = $view->getAssign('sArticle');
@@ -129,6 +139,8 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * @static
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function onNotifyAction(Enlight_Event_EventArgs $args)
     {
@@ -145,7 +157,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $notifyOrderNumber = $action->Request()->getParam('notifyOrdernumber');
         $connection = $this->get(Connection::class);
 
-        /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
         $session = $this->get('session');
 
         $sNotificatedArticles = $session->get('sNotificatedArticles', []);
@@ -251,14 +262,10 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
     {
         $args->setProcessed(true);
 
-        /** @var Enlight_Controller_Action $action */
+        /** @var Shopware_Controllers_Frontend_Detail $action */
         $action = $args->getSubject();
 
-        /** @var Connection $db */
         $db = $this->get(Connection::class);
-
-        /** @var \Symfony\Component\HttpFoundation\Session\SessionInterface $session */
-        $session = $this->get('session');
 
         $action->View()->assign('NotifyValid', false);
         $action->View()->assign('NotifyInvalid', false);
@@ -266,7 +273,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $sNotify = $action->Request()->getParam('sNotify');
 
         if (!empty($sNotificationConfirmation) && !empty($sNotify)) {
-            $getConfirmation = $db->fetchAssoc('
+            $getConfirmation = $db->fetchAssociative('
             SELECT * FROM s_core_optin WHERE hash = ?
             ', [$sNotificationConfirmation]);
 
@@ -300,7 +307,6 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
                 $insertId = $db->lastInsertId();
 
-                /** @var Enlight_Event_EventManager $eventManager */
                 $eventManager = $this->get('events');
 
                 $params = [
@@ -326,6 +332,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
                 $action->View()->assign('NotifyValid', true);
 
+                $session = $this->get('session');
                 $sNotificationArticleWaitingForOptInApprovement = $session->get('sNotifcationArticleWaitingForOptInApprovement', []);
                 $sNotificationArticleWaitingForOptInApprovement[$json_data['notifyOrdernumber']] = true;
                 $session->set('sNotifcationArticleWaitingForOptInApprovement', $sNotificationArticleWaitingForOptInApprovement);
@@ -341,10 +348,12 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
      * Cronjob method
      * Check all products from s_articles_notification
      * Inform customer if any status update available
+     *
+     * @return void
      */
     public function onRunCronJob(Shopware_Components_Cron_CronJob $job)
     {
-        $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
+        $modelManager = $this->get(ModelManager::class);
 
         $conn = $this->get(Connection::class);
 
@@ -388,7 +397,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 ]
             );
 
-            $product = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
+            $product = $queryBuilder->execute()->fetch(PDO::FETCH_ASSOC);
 
             if (
                 empty($product)   // No product associated with the specified order number (empty result set)
@@ -399,24 +408,23 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
                 continue;
             }
 
-            /** @var \Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface $attributeLoader */
-            $attributeLoader = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface::class);
+            $attributeLoader = $this->get(DataLoaderInterface::class);
             $notify['attribute'] = $attributeLoader->load('s_articles_notification_attributes', $notify['id']);
 
-            $shop = $modelManager->getRepository(\Shopware\Models\Shop\Shop::class)->getActiveById($notify['language']);
+            $shop = $modelManager->getRepository(Shop::class)->getActiveById($notify['language']);
 
             // Continue if shop is inactive or deleted
             if ($shop === null) {
                 continue;
             }
 
-            $this->get(\Shopware\Components\ShopRegistrationServiceInterface::class)->registerShop($shop);
+            $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-            $shopContext = Context::createFromShop($shop, $this->get(\Shopware_Components_Config::class));
-            $this->get(\Shopware\Components\Routing\RouterInterface::class)->setContext($shopContext);
-            $sContext = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($notify['language']);
+            $shopContext = Context::createFromShop($shop, $this->get(Shopware_Components_Config::class));
+            $this->get(RouterInterface::class)->setContext($shopContext);
+            $sContext = $this->get(ContextServiceInterface::class)->createShopContext($notify['language']);
 
-            $productInformation = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::class)->get($notify['ordernumber'], $sContext);
+            $productInformation = $this->get(ListProductServiceInterface::class)->get($notify['ordernumber'], $sContext);
 
             if (empty($productInformation)) {
                 continue;

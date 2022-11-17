@@ -102,6 +102,8 @@ class Shopware_Components_Config implements ArrayAccess
      * Magic getter
      *
      * @param string $name
+     *
+     * @return mixed config value
      */
     public function __get($name)
     {
@@ -175,7 +177,10 @@ class Shopware_Components_Config implements ArrayAccess
     }
 
     /**
-     * @param string $name
+     * @param string     $name
+     * @param mixed|null $default
+     *
+     * @return mixed config value
      */
     public function get($name, $default = null)
     {
