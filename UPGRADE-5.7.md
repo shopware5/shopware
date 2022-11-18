@@ -23,6 +23,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `laminas/laminas-code` to version 4.7.0
 * Updated `laminas/laminas-escaper` to version 2.12.0
 * Updated `league/flysystem` to version 1.1.10
+* Updated `setasign/fpdf` to version 1.8.5
 * Updated `symfony/console` to version 4.4.48
 * Updated `symfony/expression-language` to version 4.4.47
 * Updated `symfony/form` to version 4.4.48
