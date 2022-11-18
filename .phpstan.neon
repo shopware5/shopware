@@ -187,7 +187,3 @@ parameters:
             message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
             count: 1
             path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
-        - # PHPStan DBA extension cannot recognize this SQL correctly
-            message: "#^Query error\\: SQLSTATE\\[42000\\]\\: Syntax error or access violation\\: 1064 You have an error in your SQL syntax; check the manual that corresponds to your MySQL/MariaDB server version for the right syntax to use near '\\) b#"
-            count: 1
-            path: engine/Shopware/Core/sExport.php
