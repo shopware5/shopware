@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddcd7017a9fbbc0ef8154688709dd538",
+    "content-hash": "4dc6c430d8de6fe86a0a2ffc0ec98c9b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -3871,16 +3871,16 @@
         },
         {
             "name": "setasign/fpdf",
-            "version": "1.8.4",
+            "version": "1.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Setasign/FPDF.git",
-                "reference": "b0ddd9c5b98ced8230ef38534f6f3c17308a7974"
+                "reference": "f4104a04c9a3f95c4c26a0a0531abebcc980987a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Setasign/FPDF/zipball/b0ddd9c5b98ced8230ef38534f6f3c17308a7974",
-                "reference": "b0ddd9c5b98ced8230ef38534f6f3c17308a7974",
+                "url": "https://api.github.com/repos/Setasign/FPDF/zipball/f4104a04c9a3f95c4c26a0a0531abebcc980987a",
+                "reference": "f4104a04c9a3f95c4c26a0a0531abebcc980987a",
                 "shasum": ""
             },
             "require": {
@@ -3911,9 +3911,9 @@
                 "pdf"
             ],
             "support": {
-                "source": "https://github.com/Setasign/FPDF/tree/1.8.4"
+                "source": "https://github.com/Setasign/FPDF/tree/1.8.5"
             },
-            "time": "2021-08-30T07:50:06+00:00"
+            "time": "2022-11-18T07:02:00+00:00"
         },
         {
             "name": "setasign/fpdi",
@@ -10202,16 +10202,16 @@
         },
         {
             "name": "staabm/phpstan-dba",
-            "version": "0.2.48",
+            "version": "0.2.51",
             "source": {
                 "type": "git",
                 "url": "https://github.com/staabm/phpstan-dba.git",
-                "reference": "7ce54d8d8938b08085bb63e760deb93b97e42104"
+                "reference": "0f46ee86370633d8a69eaf5cdb5319af496df2ed"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/7ce54d8d8938b08085bb63e760deb93b97e42104",
-                "reference": "7ce54d8d8938b08085bb63e760deb93b97e42104",
+                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/0f46ee86370633d8a69eaf5cdb5319af496df2ed",
+                "reference": "0f46ee86370633d8a69eaf5cdb5319af496df2ed",
                 "shasum": ""
             },
             "require": {
@@ -10251,9 +10251,9 @@
             ],
             "support": {
                 "issues": "https://github.com/staabm/phpstan-dba/issues",
-                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.48"
+                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.51"
             },
-            "time": "2022-10-10T11:01:26+00:00"
+            "time": "2022-11-02T19:49:13+00:00"
         },
         {
             "name": "symfony/browser-kit",
