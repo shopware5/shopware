@@ -101,7 +101,9 @@
         </div>
     {/block}
     {block name='frontend_register_index_registration'}
-        <div class="register--content panel content block has--border is--rounded{if $errors.occurred} is--collapsed{/if}" id="registration" data-register="true">
+        <div class="register--content panel content block has--border is--rounded{if $errors.occurred} is--collapsed{/if}"
+             id="registration" data-register="true"
+        >
 
             {block name='frontend_register_index_dealer_register'}
                 {* Included for compatibility reasons *}
@@ -131,7 +133,10 @@
             {/block}
 
             {block name='frontend_register_index_form'}
-                <form method="post" action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}" class="panel register--form" id="register--form">
+                <form method="post"
+                      action="{url action=saveRegister sTarget=$sTarget sTargetAction=$sTargetAction}"
+                      class="panel register--form" id="register--form"
+                >
 
                     {* Invalid hash while option verification process *}
                     {block name='frontend_register_index_form_optin_invalid_hash'}
@@ -195,7 +200,15 @@
                                             {if {config name="ACTDPRCHECK"}}
                                                 {* Privacy checkbox *}
                                                 {block name="frontend_register_index_form_privacy_content_checkbox"}
-                                                    <input name="register[personal][dpacheckbox]" type="checkbox" id="dpacheckbox"{if $form_data.dpacheckbox} checked="checked"{/if} required="required" aria-required="true" value="1" class="is--required" />
+                                                    <input name="register[personal][dpacheckbox]"
+                                                           type="checkbox"
+                                                           id="dpacheckbox"
+                                                           {if $form_data.dpacheckbox} checked="checked"{/if}
+                                                           required="required"
+                                                           aria-required="true"
+                                                           value="1"
+                                                           class="is--required"
+                                                    />
                                                     <label for="dpacheckbox">
                                                         {s name="PrivacyText" namespace="frontend/index/privacy"}{/s}
                                                     </label>
@@ -215,7 +228,13 @@
                     {block name='frontend_register_index_form_submit'}
                         {* Submit button *}
                         <div class="register--action">
-                            <button type="submit" class="register--submit btn is--primary is--large is--icon-right" name="Submit" data-preloader-button="true">{s name="RegisterIndexNewActionSubmit"}{/s} <i class="icon--arrow-right"></i></button>
+                            <button type="submit"
+                                    class="register--submit btn is--primary is--large is--icon-right"
+                                    name="Submit"
+                                    data-preloader-button="true"
+                            >
+                                {s name="RegisterIndexNewActionSubmit"}{/s} <i class="icon--arrow-right"></i>
+                            </button>
                         </div>
                     {/block}
                 </form>
@@ -263,5 +282,4 @@
             {/block}
         </div>
     {/block}
-
 {/block}
