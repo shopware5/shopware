@@ -41,7 +41,7 @@
                     <form name="sLogin" method="post" action="{$url}" id="login--form">
                         {block name='frontend_register_login_form_additional_inputs'}
                             {if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escape}" />{/if}
-                            {if $showNoAccount}<input name="showNoAccount" type="hidden" value="true" />{/if}
+                            {if $showNoAccount}<input name="showNoAccount" type="hidden" value="true"/>{/if}
                         {/block}
 
                         {block name='frontend_register_login_description'}
@@ -50,20 +50,36 @@
 
                         {block name='frontend_register_login_input_email'}
                             <div class="register--login-email">
-                                <input name="email" placeholder="{s name="LoginPlaceholderMail"}{/s}" type="email" autocomplete="email" tabindex="1" value="{$sFormData.email|escape}" id="email" class="register--login-field{if $sErrorFlag.email} has--error{/if}" />
+                                <input name="email"
+                                       placeholder="{s name="LoginPlaceholderMail"}{/s}"
+                                       type="email"
+                                       autocomplete="email"
+                                       tabindex="1"
+                                       value="{$sFormData.email|escape}"
+                                       id="email"
+                                       class="register--login-field{if $sErrorFlag.email} has--error{/if}"
+                                />
                             </div>
                         {/block}
 
                         {block name='frontend_register_login_input_password'}
                             <div class="register--login-password">
-                                <input name="password" placeholder="{s name="LoginPlaceholderPassword"}{/s}" type="password" autocomplete="current-password" tabindex="2" id="passwort" class="register--login-field{if $sErrorFlag.password} has--error{/if}" />
+                                <input name="password"
+                                       placeholder="{s name="LoginPlaceholderPassword"}{/s}"
+                                       type="password"
+                                       autocomplete="current-password"
+                                       tabindex="2" id="passwort"
+                                       class="register--login-field{if $sErrorFlag.password} has--error{/if}"
+                                />
                             </div>
                         {/block}
 
                         {block name='frontend_register_login_input_lostpassword'}
                             <div class="register--login-lostpassword">
                                 {s name="LoginLinkLostPassword" assign="snippetLoginLinkLostPassword"}{/s}
-                                <a href="{url controller=account action=password}" title="{$snippetLoginLinkLostPassword|escape}">
+                                <a href="{url controller=account action=password}"
+                                   title="{$snippetLoginLinkLostPassword|escape}"
+                                >
                                     {s name="LoginLinkLostPassword"}{/s}
                                 </a>
                             </div>
@@ -71,7 +87,13 @@
 
                         {block name='frontend_register_login_input_form_submit'}
                             <div class="register--login-action">
-                                <button type="submit" class="register--login-btn btn is--primary is--large is--icon-right" name="Submit">{s name="LoginLinkLogon"}{/s} <i class="icon--arrow-right"></i></button>
+                                <button type="submit"
+                                        class="register--login-btn btn is--primary is--large is--icon-right"
+                                        name="Submit"
+                                        data-preloader-button="true"
+                                >
+                                    {s name="LoginLinkLogon"}{/s} <i class="icon--arrow-right"></i>
+                                </button>
                             </div>
                         {/block}
                     </form>
