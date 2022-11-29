@@ -279,7 +279,7 @@ Ext.define('Shopware.apps.Shipping.view.main.List', {
      */
     nameColumn: function (value, metaData, record) {
         // Show the translated name in the list
-        return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', record.get('translatedName'));
+        return Ext.String.format('{literal}<strong style="font-weight: 700">{0}</strong>{/literal}', record.get('name'));
     },
 
     /**

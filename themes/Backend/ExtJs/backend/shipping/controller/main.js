@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 me.mainWindow = me.getView('Main').create({
                     customerGroupStore: me.customerGroupStore,
                     shopStore: me.shopStore,
-                    dispatchStore: me.getStore('Dispatch').load()
+                    dispatchStore: me.getStore('DispatchList').load()
                 });
                 me.subApplication.setAppWindow(me.mainWindow);
                 me.mainWindow.show();
@@ -277,7 +277,10 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             // current dispatch id
             dispatchId: record.get('id'),
             // store for the dispatch
-            mainStore: Ext.create('Shopware.apps.Shipping.store.Dispatch').load()
+            mainStore: Ext.create('Shopware.apps.Shipping.store.Dispatch').load(
+                {
+                    params: { id: record.get('id') },
+                })
         });
     },
 
