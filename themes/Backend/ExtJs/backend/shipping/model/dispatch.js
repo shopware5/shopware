@@ -49,7 +49,7 @@ Ext.define('Shopware.apps.Shipping.model.Dispatch', {
             read: '{url controller="shipping" action="getShippingCosts"}',
             create: '{url controller="shipping" action="createDispatch"}',
             update: '{url controller="shipping" action="updateDispatch"}',
-            destroy: '{url controller="shipping" action="delete" targetField=dispatches}'
+            destroy: '{url controller="shipping" action="delete"  targetField=dispatches}'
         },
 
         reader: {

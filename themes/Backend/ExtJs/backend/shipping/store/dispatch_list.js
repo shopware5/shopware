@@ -32,7 +32,7 @@
  *
  * todo@all: Documentation
  */
-//{block name="backend/shipping/store/dispatch"}
+//{block name="backend/shipping/store/dispatch_list"}
 Ext.define('Shopware.apps.Shipping.store.DispatchList', {
     /**
      * Extend for the standard ExtJS 4
