@@ -28,13 +28,24 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
+use Enlight_View_Default;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Customer\Customer;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Controllers_Frontend_Account;
+use Symfony\Component\HttpFoundation\Request;
 
 class AccountTest extends ControllerTestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
+    use CustomerLoginTrait;
+
+    private const NEW_MAIL_ADDRESS = 'test1@example.com';
 
     private Connection $connection;
 
@@ -55,18 +66,28 @@ class AccountTest extends ControllerTestCase
         $hash = $this->getNextResetHash('test@example.com');
         $before = $this->getPasswordForEmail('test@example.com');
 
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost(
-                [
-                    'hash' => $hash,
-                    'password' => [
-                        'password' => 'shopware1',
-                        'passwordConfirmation' => 'shopware1',
-                    ],
-                ]
-            );
-        $this->dispatch('account/resetPassword');
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+
+        $front = $this->getContainer()->get('front');
+        $front->setRequest($request);
+        $front->setResponse($response);
+
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'hash' => $hash,
+                'password' => [
+                    'password' => 'shopware1',
+                    'passwordConfirmation' => 'shopware1',
+                ],
+        ]);
+
+        $controller->setFront($front);
+        $controller->setRequest($request);
+        $controller->setResponse($response);
+        $controller->init();
+        $controller->resetPasswordAction();
 
         $changed = $this->getPasswordForEmail('test@example.com');
 
@@ -78,19 +99,20 @@ class AccountTest extends ControllerTestCase
         $hash = $this->getNextResetHash('test@example.com');
         $before = $this->getPasswordForEmail('test@example.com');
 
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost(
-                [
-                    'hash' => $hash,
-                    'password' => [
-                        'password' => 'shopware1',
-                        'passwordConfirmation' => 'shopware12',
-                    ],
-                ]
-            );
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
 
-        $this->dispatch('account/resetPassword');
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'hash' => $hash,
+            'password' => [
+                'password' => 'shopware1',
+                'passwordConfirmation' => 'shopware12',
+            ],
+        ]);
+
+        $controller->setRequest($request);
+        $controller->resetPasswordAction();
 
         $after = $this->getPasswordForEmail('test@example.com');
 
@@ -103,18 +125,20 @@ class AccountTest extends ControllerTestCase
         $hash = $this->getNextResetHash('test@example.com');
         $before = $this->getPasswordForEmail('test@example.com');
 
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost(
-                [
-                    'hash' => $hash,
-                    'password' => [
-                        'password' => 'test',
-                        'passwordConfirmation' => 'test',
-                    ],
-                ]
-            );
-        $this->dispatch('account/resetPassword');
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'hash' => $hash,
+            'password' => [
+                'password' => 'test',
+                'passwordConfirmation' => 'test',
+            ],
+        ]);
+
+        $controller->setRequest($request);
+        $controller->resetPasswordAction();
 
         $after = $this->getPasswordForEmail('test@example.com');
 
@@ -129,18 +153,20 @@ class AccountTest extends ControllerTestCase
         // Make user invalid
         $this->connection->executeStatement('UPDATE `s_user` SET `salutation` = null WHERE `email` = :email', ['email' => 'test@example.com']);
 
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost(
-                [
-                    'hash' => $hash,
-                    'password' => [
-                        'password' => 'shopware12',
-                        'passwordConfirmation' => 'shopware12',
-                    ],
-                ]
-            );
-        $this->dispatch('account/resetPassword');
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'hash' => $hash,
+            'password' => [
+                'password' => 'shopware12',
+                'passwordConfirmation' => 'shopware12',
+            ],
+        ]);
+
+        $controller->setRequest($request);
+        $controller->resetPasswordAction();
 
         $changed = $this->getPasswordForEmail('test@example.com');
         static::assertSame($before, $changed);
@@ -148,8 +174,15 @@ class AccountTest extends ControllerTestCase
 
     public function testNoServerErrorOnMissingHashParameter(): void
     {
-        $this->Request()->setMethod('GET');
-        $response = $this->dispatch('account/resetPassword');
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+
+        $request->setMethod(Request::METHOD_GET);
+
+        $controller->setRequest($request);
+        $controller->setResponse($response);
+        $controller->resetPasswordAction();
 
         static::assertNotNull($response);
     }
@@ -163,32 +196,80 @@ class AccountTest extends ControllerTestCase
         $secondHash = $this->getNextResetHash('test@example.com');
         $before = $this->getPasswordForEmail('test@example.com');
 
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost(
-                [
-                    'hash' => $hash,
-                    'password' => [
-                        'password' => 'fd12179f-d454-42e4-ae90-9271f806088d',
-                        'passwordConfirmation' => 'fd12179f-d454-42e4-ae90-9271f806088d',
-                    ],
-                ]
-            );
-        $this->dispatch('account/resetPassword');
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'hash' => $hash,
+            'password' => [
+                'password' => 'fd12179f-d454-42e4-ae90-9271f806088d',
+                'passwordConfirmation' => 'fd12179f-d454-42e4-ae90-9271f806088d',
+            ],
+        ]);
+
+        $controller->setRequest($request);
+        $controller->resetPasswordAction();
 
         $changed = $this->getPasswordForEmail('test@example.com');
 
         static::assertSame($before, $changed);
     }
 
+    public function testHashIsNotValidAfterUserChangesMailAddress(): void
+    {
+        $hash = $this->getNextResetHash('test@example.com');
+
+        $this->loginCustomer();
+
+        $customer = $this->getContainer()->get(ModelManager::class)->find(Customer::class, $this->getContainer()->get('session')->get('sUserId'));
+        static::assertInstanceOf(Customer::class, $customer);
+
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'email' => [
+                'email' => 'test1@example.com',
+                'emailConfirmation' => 'test1@example.com',
+                'currentPassword' => 'shopware',
+            ],
+        ]);
+
+        $controller->setRequest($request);
+        $controller->setResponse($response);
+        $controller->init();
+        $controller->saveEmailAction();
+
+        static::assertSame(self::NEW_MAIL_ADDRESS, $customer->getEmail(), 'Newly set email was not taken over.');
+
+        $this->logOutCustomer();
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setMethod(Request::METHOD_GET)->setParam('hash', $hash);
+        $controller->setRequest($request);
+        $controller->resetPasswordAction();
+
+        $view = $controller->View()->getAssign();
+
+        static::assertTrue($view['invalidToken'], 'Password-reset-link is still valid');
+        static::assertArrayHasKey('sErrorMessages', $view);
+    }
+
     private function getNextResetHash(string $mail): string
     {
         // Request a variant that is not the default one
-        $this->Request()
-            ->setMethod('POST')
-            ->setPost('email', $mail);
+        $controller = $this->getController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
 
-        $this->dispatch('account/password');
+        $request->setMethod(Request::METHOD_POST)->setParam('email', $mail);
+        $controller->setRequest($request);
+        $controller->passwordAction();
+
+        static::assertTrue($controller->View()->getAssign('sSuccess'));
+
         $this->reset();
 
         return $this->connection->fetchOne(
@@ -196,6 +277,19 @@ class AccountTest extends ControllerTestCase
             [':types' => ['password', 'swPassword']],
             [':types' => Connection::PARAM_STR_ARRAY]
         );
+    }
+
+    private function getController(): Shopware_Controllers_Frontend_Account
+    {
+        $controller = new Shopware_Controllers_Frontend_Account(
+            $this->getContainer()->get('config'),
+            $this->getContainer()->get('shopware.captcha.validator')
+        );
+
+        $controller->setView(new Enlight_View_Default($this->getContainer()->get('template')));
+        $controller->setContainer($this->getContainer());
+
+        return $controller;
     }
 
     private function getPasswordForEmail(string $email): ?string
