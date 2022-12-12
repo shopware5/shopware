@@ -102,7 +102,8 @@ Ext.define('Shopware.apps.Shipping.model.DispatchList', {
     proxy: {
         type: 'ajax',
         api: {
-            read: '{url controller="shipping" action="getList"}'
+            read: '{url controller="shipping" action="getList"}',
+            destroy: '{url controller="shipping" action="delete" targetField=dispatches}'
         },
 
         reader: {

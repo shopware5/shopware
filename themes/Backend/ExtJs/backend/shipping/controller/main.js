@@ -119,7 +119,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
                 me.mainWindow = me.getView('Main').create({
                     customerGroupStore: me.customerGroupStore,
                     shopStore: me.shopStore,
-                    dispatchStore: me.getStore('Dispatch').load()
+                    dispatchStore: me.getStore('DispatchList').load()
                 });
                 me.subApplication.setAppWindow(me.mainWindow);
                 me.mainWindow.show();
@@ -171,7 +171,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         var me                  = this,
             grid                = me.getGrid(),
             selection           = grid.getSelectionModel().getSelection(),
-            store               = me.getStore('Dispatch'),
+            store               = me.getStore('DispatchList'),
             listOfDispatchNames = [],
             noOfElements        = selection.length;
 
@@ -236,12 +236,12 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
     onAddShipping: function() {
         var me = this,
             costsmatrix = this.getStore('Costsmatrix'),
-            // create a empty dispatch model
+            // create an empty dispatch model
             record = me.getModel('Dispatch').create(),
             // create an inital empty costs matrix entry
             emptyCostsMatrix = me.getModel('Costsmatrix').create();
 
-        // Make shure that an empty dispatch id will be send, so that a new data entry will be generated.
+        // Make sure that an empty dispatch id will be send, so that a new data entry will be generated.
         costsmatrix.getProxy().extraParams = {
             dispatchId: ''
         };
@@ -277,7 +277,10 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
             // current dispatch id
             dispatchId: record.get('id'),
             // store for the dispatch
-            mainStore: Ext.create('Shopware.apps.Shipping.store.Dispatch').load()
+            mainStore: Ext.create('Shopware.apps.Shipping.store.Dispatch').load(
+                {
+                    params: { id: record.get('id') },
+                })
         });
     },
 
@@ -320,7 +323,7 @@ Ext.define('Shopware.apps.Shipping.controller.Main', {
         var store       = view.getStore(),
             me          = this,
             costsmatrix = Ext.create('Shopware.apps.Shipping.store.Costsmatrix'),
-            record      = store.load().getAt(rowIndex);
+            record      = store.getAt(rowIndex);
 
         record.data.clone = false;
 

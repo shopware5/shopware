@@ -93,8 +93,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
             holidayComponent = me.getAdvancedForm().down('boxselect'),
             categoryComponent = me.getCategoryData();
 
-        var mainStore = me.getStore('Dispatch'),
-            advancedForm = me.getAdvancedFormData(),
+        var advancedForm = me.getAdvancedFormData(),
             attributeForm = me.getAttributeForm(),
             record = form.getRecord();
 
@@ -142,7 +141,7 @@ Ext.define('Shopware.apps.Shipping.controller.DefaultForm', {
                     attributeForm.saveAttribute(rawData.data.id);
                     me.onCostsMatrixSave(button, rawData.data.id);
                 }
-                me.getStore('Dispatch').load();
+                me.getStore('DispatchList').load();
                 Shopware.Notification.createGrowlMessage('', '{s name="growl_save_success"}The settings have been saved successfully.{/s}', '{s name="title"}{/s}');
             }
         });

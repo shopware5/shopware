@@ -86,16 +86,9 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $shippingCosts = $paginator->getIterator()->getArrayCopy();
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
 
-        // Translate dispatch methods
-        // The standard $translationComponent->translateDispatches can not be used here since the
-        // name and the description may not be overridden. Both fields are edible and if the translation is
-        // shown in the edit field, there is a high chance of a user saving the translation as name.
-        $translator = $this->get(Shopware_Components_Translation::class)->getObjectTranslator('config_dispatch');
-        $shippingCosts = array_map(static function ($dispatchMethod) use ($translator) {
-            $translatedDispatchMethod = $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'translatedName', $dispatchMethod['name']);
-
-            return $translator->translateObjectProperty($translatedDispatchMethod, 'dispatch_description', 'translatedDescription', $dispatchMethod['description']);
-        }, $shippingCosts);
+        if ($totalResult > 0) {
+            $shippingCosts = $this->translateDispatchMethods($shippingCosts);
+        }
 
         $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
     }
@@ -124,6 +117,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $totalResult = $paginator->count();
         $shippingCosts = $paginator->getIterator()->getArrayCopy();
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
+
+        if ($totalResult > 0) {
+            $shippingCosts = $this->translateDispatchMethods($shippingCosts);
+        }
 
         $this->View()->assign(['success' => true, 'data' => $shippingCosts, 'total' => $totalResult]);
     }
@@ -668,5 +665,24 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         return $inputValue;
+    }
+
+    /**
+     * @param array<array<mixed>> $shippingCosts
+     *
+     * @return array<array<mixed>> $shippingCosts
+     */
+    private function translateDispatchMethods(array $shippingCosts): array
+    {
+        // The standard $translationComponent->translateDispatches can not be used here since the
+        // name and the description may not be overridden. Both fields are edible and if the translation is
+        // shown in the edit field, there is a high chance of a user saving the translation as name.
+        $translator = $this->get(Shopware_Components_Translation::class)->getObjectTranslator('config_dispatch');
+
+        return array_map(static function ($dispatchMethod) use ($translator) {
+            $translatedDispatchMethod = $translator->translateObjectProperty($dispatchMethod, 'dispatch_name', 'translatedName', $dispatchMethod['name']);
+
+            return $translator->translateObjectProperty($translatedDispatchMethod, 'dispatch_description', 'translatedDescription', $dispatchMethod['description']);
+        }, $shippingCosts);
     }
 }
