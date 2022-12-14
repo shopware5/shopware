@@ -100,11 +100,11 @@ Some workarounds are in place because of this and place constraints on the funct
 
 Go to the root directory of your shopware system and download the test images:
 
-    wget -O test_images.zip http://releases.s3.shopware.com/test_images_since_5.1.zip
+    wget -O test_images.zip http://releases.shopware.com/test_images_since_5.1.zip
 
 For older Shopware versions < 5.1
 
-    wget -O test_images.zip http://releases.s3.shopware.com/test_images.zip
+    wget -O test_images.zip http://releases.shopware.com/test_images.zip
 
 Unzip the files inside the root directory:
 
