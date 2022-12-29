@@ -196,7 +196,7 @@ class ProductHydrator extends Hydrator
         $product->setWeight((float) $data['__variant_weight']);
         $product->setWidth((float) $data['__variant_width']);
 
-        $customerGroups = explode('|', $data['__product_blocked_customer_groups']);
+        $customerGroups = explode('|', $data['__product_blocked_customer_groups'] ?? '');
         $customerGroups = array_filter($customerGroups);
         $product->setBlockedCustomerGroupIds($customerGroups);
         $product->setHasAvailableVariant($data['__product_has_available_variants'] > 0);
