@@ -17,7 +17,7 @@ INSERT INTO `s_order_billingaddress` (`id`, `userID`, `orderID`, `company`, `dep
                                       `customernumber`, `firstname`, `lastname`, `street`, `zipcode`, `city`, `phone`,
                                       `countryID`, `stateID`, `ustid`, `additional_address_line1`,
                                       `additional_address_line2`, `title`)
-VALUES (12345, :customerId, :orderId, '', '', 'mr', '20005', 'Bruce', 'Wayne', 'Test Street 123', '11111', 'Gotham', '', 5, NULL,
+VALUES (12345, :customerId, :orderId, '', '', 'mr', '20005', 'Bruce', 'Wayne', 'Test Street 123', '11111', 'Gotham', '', :countryId, :stateId,
         NULL, NULL, NULL, NULL);
 
 INSERT INTO `s_order_shippingaddress` (`id`, `userID`, `orderID`, `company`, `department`, `salutation`, `firstname`,

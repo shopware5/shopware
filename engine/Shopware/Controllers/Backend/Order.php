@@ -69,6 +69,8 @@ use Shopware\Models\Tax\Tax;
 
 class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    private const DEFAULT_CUSTOMER_GROUP = 'EK';
+
     /**
      * @deprecated - Will be private and an instance property in Shopware 5.8
      *
@@ -2047,6 +2049,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $shop = $order->getShop();
         $areaId = null;
         $countryId = null;
+        $stateId = null;
         $billingAddress = $order->getBilling();
         if ($billingAddress instanceof Billing) {
             $countryId = $billingAddress->getCountry()->getId();
@@ -2055,14 +2058,24 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             if ($area instanceof Area) {
                 $areaId = $area->getId();
             }
+
+            $state = $billingAddress->getState();
+            if ($state instanceof State) {
+                $stateId = $state->getId();
+            }
         }
-        $shopContext = $this->get('shopware_storefront.shop_context_factory')->create(
+
+        $customer = $order->getCustomer();
+        $customerGroupKey = $customer instanceof Customer ? $customer->getGroupKey() : self::DEFAULT_CUSTOMER_GROUP;
+
+        $shopContext = $this->container->get('shopware_storefront.shop_context_factory')->create(
             $shop->getBaseUrl() ?? '',
             $shop->getId(),
             null,
-            null,
+            $customerGroupKey,
             $areaId,
-            $countryId
+            $countryId,
+            $stateId
         );
         $taxRule = $shopContext->getTaxRule($taxId);
         if ($taxRule instanceof TaxStruct) {

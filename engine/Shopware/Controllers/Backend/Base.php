@@ -74,6 +74,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_ExtJs implements CSRFWhitelistAware
 {
+    private const AS_STRING = ' as ';
+
     /**
      * Initials the script renderer and handles the json request.
      * If the internal customer repository isn't initialed the
@@ -1181,61 +1183,11 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
     }
 
     /**
-     * Add the table alias to the passed filter and sort parameters.
-     *
-     * @return array
-     */
-    private function prepareParam(array $properties, array $fields)
-    {
-        if (empty($properties)) {
-            return $properties;
-        }
-
-        foreach ($properties as $key => $property) {
-            if (\array_key_exists($property['property'], $fields)) {
-                $property['property'] = $fields[$property['property']];
-            }
-            $properties[$key] = $property;
-        }
-
-        return $properties;
-    }
-
-    /**
-     * Prepares the sort params for the variant search
-     *
-     * @return array
-     */
-    private function prepareVariantParam(array $properties, array $fields)
-    {
-        // Maps the fields to the correct table
-        foreach ($properties as $key => $property) {
-            foreach ($fields as $field) {
-                $asStr = ' as ';
-                $dotPos = strpos($field, '.');
-                $asPos = strpos($field, $asStr, 1);
-
-                if ($asPos) {
-                    $fieldName = substr($field, $asPos + \strlen($asStr));
-                } else {
-                    $fieldName = substr($field, $dotPos + 1);
-                }
-
-                if ($fieldName == $property['property']) {
-                    $properties[$key]['property'] = $field;
-                }
-            }
-        }
-
-        return $properties;
-    }
-
-    /**
      * Adds the additional text for variants
      *
      * @param array $data
      */
-    private function addAdditionalTextForVariant($data)
+    protected function addAdditionalTextForVariant($data)
     {
         $variantIds = [];
         $tmpVariant = [];
@@ -1284,6 +1236,56 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         return $data;
+    }
+
+    /**
+     * Prepares the sort params for the variant search
+     *
+     * @return array
+     */
+    private function prepareVariantParam(array $properties, array $fields)
+    {
+        // Maps the fields to the correct table
+        foreach ($properties as $key => $property) {
+            foreach ($fields as $field) {
+                $asStr = self::AS_STRING;
+                $dotPos = strpos($field, '.');
+                $asPos = strpos($field, $asStr, 1);
+
+                if ($asPos) {
+                    $fieldName = substr($field, $asPos + \strlen($asStr));
+                } else {
+                    $fieldName = substr($field, $dotPos + 1);
+                }
+
+                if ($fieldName == $property['property']) {
+                    $properties[$key]['property'] = $field;
+                }
+            }
+        }
+
+        return $properties;
+    }
+
+    /**
+     * Add the table alias to the passed filter and sort parameters.
+     *
+     * @return array
+     */
+    private function prepareParam(array $properties, array $fields)
+    {
+        if (empty($properties)) {
+            return $properties;
+        }
+
+        foreach ($properties as $key => $property) {
+            if (\array_key_exists($property['property'], $fields)) {
+                $property['property'] = $fields[$property['property']];
+            }
+            $properties[$key] = $property;
+        }
+
+        return $properties;
     }
 
     /**

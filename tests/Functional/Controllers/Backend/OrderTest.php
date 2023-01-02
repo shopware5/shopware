@@ -30,8 +30,15 @@ use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\TransactionRequiredException;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use Exception;
+use Generator;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
@@ -40,6 +47,7 @@ use Shopware\Models\Shop\Shop;
 use Shopware\Models\Tax\Tax;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Controllers_Backend_Order;
 use Shopware_Plugins_Backend_Auth_Bootstrap as AuthPlugin;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,11 +56,18 @@ class OrderTest extends ControllerTestCase
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
 
-    private const TAX_RULE_ID = 9999;
     private const ORDER_DETAIL_ID = 6789;
     private const ORDER_ID = 12345;
     private const CUSTOMER_ID = 9999;
     private const NEW_TAX_ID = 1234;
+    private const NEW_TAX = 20.50;
+    private const CUSTOMER_GROUP_ID_DEFAULT = 1;
+    private const CUSTOMER_GROUP_ID_MERCHANT = 2;
+    private const CUSTOMER_GROUP_KEY_DEFAULT = 'EK';
+    private const CUSTOMER_GROUP_KEY_MERCHANT = 'H';
+    private const GERMANY_COUNTRY_ID = 2;
+    private const NRW_STATE_ID = 3;
+    private const GERMANY_AREA_ID = 1;
 
     private Connection $connection;
 
@@ -215,15 +230,23 @@ class OrderTest extends ControllerTestCase
         static::assertSame($oldDate->getTimestamp(), $this->View()->getAssign('data')['orderTime']->getTimestamp());
     }
 
-    public function testSavePositionActionWithTaxRule(): void
+    /**
+     * @dataProvider provideTaxRuleParams
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     * @throws \Doctrine\DBAL\Exception
+     */
+    public function testSavePositionActionWithTaxRule(int $customerGroupId, string $customerGroupKey): void
     {
-        $this->prepareTestSavePositionActionWithTaxRule();
+        $this->prepareTestSavePositionActionWithTaxRule($customerGroupId, $customerGroupKey);
 
         $order = $this->modelManager->find(Order::class, self::ORDER_ID);
         static::assertInstanceOf(Order::class, $order);
 
-        $this->Request()->setMethod(Request::METHOD_POST);
-        $this->Request()->setPost([
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams([
             'id' => 0,
             'orderId' => self::ORDER_ID,
             'mode' => 0,
@@ -240,23 +263,42 @@ class OrderTest extends ControllerTestCase
             'taxDescription' => '',
             'inStock' => 0,
             'total' => 28.99,
-            'changed' => $order->getChanged()->format(DateTimeInterface::ISO8601),
+            'changed' => $order->getChanged()->format(DateTimeInterface::ATOM),
         ]);
 
-        $this->authPlugin->setNoAuth();
-        $this->dispatch('/backend/order/savePosition');
+        $controller = $this->getController();
+        $controller->setRequest($request);
+        $controller->savePositionAction();
 
         $order = $this->modelManager->find(Order::class, self::ORDER_ID);
         static::assertInstanceOf(Order::class, $order);
 
-        $expectedTaxRate = (float) $this->connection->executeQuery('SELECT tax FROM s_core_tax_rules WHERE id = :id', ['id' => self::TAX_RULE_ID])->fetchOne();
+        $results = $controller->View()->getAssign();
+        static::assertTrue($results['success'], (string) $results['message']);
 
-        $data = $this->View()->getAssign('data');
-        static::assertTrue($this->View()->getAssign('success'), (string) $this->View()->getAssign('message'));
-
-        static::assertSame($expectedTaxRate, $data['taxRate']);
+        static::assertSame(self::NEW_TAX, $results['data']['taxRate']);
     }
 
+    /**
+     * @return Generator<array{customerGroupId: int, customerGroupKey: string}>
+     */
+    public function provideTaxRuleParams(): Generator
+    {
+        yield 'EK' => [
+            'customerGroupId' => self::CUSTOMER_GROUP_ID_DEFAULT,
+            'customerGroupKey' => self::CUSTOMER_GROUP_KEY_DEFAULT,
+        ];
+        yield 'H' => [
+            'customerGroupId' => self::CUSTOMER_GROUP_ID_MERCHANT,
+            'customerGroupKey' => self::CUSTOMER_GROUP_KEY_MERCHANT,
+        ];
+    }
+
+    /**
+     * @throws ORMException
+     * @throws OptimisticLockException
+     * @throws TransactionRequiredException
+     */
     public function testSavePositionActionWithDifferentTax(): void
     {
         $this->prepareTestSavePositionActionWithDifferentTax();
@@ -264,8 +306,8 @@ class OrderTest extends ControllerTestCase
         $order = $this->modelManager->find(Order::class, self::ORDER_ID);
         static::assertInstanceOf(Order::class, $order);
 
-        $this->Request()->setMethod(Request::METHOD_POST);
-        $this->Request()->setPost([
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams([
             'id' => self::ORDER_DETAIL_ID,
             'orderId' => self::ORDER_ID,
             'mode' => 0,
@@ -282,11 +324,13 @@ class OrderTest extends ControllerTestCase
             'taxDescription' => '',
             'inStock' => 0,
             'total' => 70.58,
-            'changed' => $order->getChanged()->format(DateTimeInterface::ISO8601),
+            'changed' => $order->getChanged()->format(DateTimeInterface::ATOM),
         ]);
 
         $this->authPlugin->setNoAuth();
-        $this->dispatch('/backend/order/savePosition');
+        $controller = $this->getController();
+        $controller->setRequest($request);
+        $controller->savePositionAction();
 
         $order = $this->modelManager->find(Order::class, self::ORDER_ID);
         static::assertInstanceOf(Order::class, $order);
@@ -836,15 +880,27 @@ class OrderTest extends ControllerTestCase
         ];
     }
 
-    private function prepareTestSavePositionActionWithTaxRule(): void
+    /**
+     * @throws \Doctrine\DBAL\Exception
+     */
+    private function prepareTestSavePositionActionWithTaxRule(int $customerGroupId, string $customerGroupKey): void
     {
         $taxRuleSQL = file_get_contents(__DIR__ . '/_fixtures/order/tax_rules.sql');
         static::assertIsString($taxRuleSQL);
-        $this->connection->executeStatement($taxRuleSQL, ['taxRuleId' => self::TAX_RULE_ID]);
+        $this->connection->executeStatement($taxRuleSQL, [
+            'customerGroupId' => $customerGroupId,
+            'tax' => self::NEW_TAX,
+            'countryId' => self::GERMANY_COUNTRY_ID,
+            'stateId' => self::NRW_STATE_ID,
+            'areaId' => self::GERMANY_AREA_ID,
+        ]);
 
         $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
         static::assertIsString($customerSql);
-        $this->connection->executeStatement($customerSql, ['customerId' => self::CUSTOMER_ID]);
+        $this->connection->executeStatement($customerSql, [
+            'customerId' => self::CUSTOMER_ID,
+            'customerGroup' => $customerGroupKey,
+        ]);
 
         $orderSql = file_get_contents(__DIR__ . '/_fixtures/order/order.sql');
         static::assertIsString($orderSql);
@@ -852,6 +908,9 @@ class OrderTest extends ControllerTestCase
             'orderDetailId' => self::ORDER_DETAIL_ID,
             'orderId' => self::ORDER_ID,
             'customerId' => self::CUSTOMER_ID,
+            'countryId' => self::GERMANY_COUNTRY_ID,
+            'stateId' => self::NRW_STATE_ID,
+            'areaId' => self::GERMANY_AREA_ID,
         ]);
     }
 
@@ -859,11 +918,16 @@ class OrderTest extends ControllerTestCase
     {
         $taxRuleSQL = file_get_contents(__DIR__ . '/_fixtures/order/new_tax.sql');
         static::assertIsString($taxRuleSQL);
-        $this->connection->executeStatement($taxRuleSQL, ['taxRuleId' => self::NEW_TAX_ID]);
+        $this->connection->executeStatement($taxRuleSQL, [
+            'taxRuleId' => self::NEW_TAX_ID,
+        ]);
 
         $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
         static::assertIsString($customerSql);
-        $this->connection->executeStatement($customerSql, ['customerId' => self::CUSTOMER_ID]);
+        $this->connection->executeStatement($customerSql, [
+            'customerId' => self::CUSTOMER_ID,
+            'customerGroup' => self::CUSTOMER_GROUP_KEY_DEFAULT,
+        ]);
 
         $orderSql = file_get_contents(__DIR__ . '/_fixtures/order/order.sql');
         static::assertIsString($orderSql);
@@ -871,6 +935,18 @@ class OrderTest extends ControllerTestCase
             'orderDetailId' => self::ORDER_DETAIL_ID,
             'orderId' => self::ORDER_ID,
             'customerId' => self::CUSTOMER_ID,
+            'countryId' => self::GERMANY_COUNTRY_ID,
+            'stateId' => null,
+            'areaId' => null,
         ]);
+    }
+
+    private function getController(): Shopware_Controllers_Backend_Order
+    {
+        $controller = $this->getContainer()->get('shopware_controllers_backend_order');
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+        $controller->setContainer($this->getContainer());
+
+        return $controller;
     }
 }
