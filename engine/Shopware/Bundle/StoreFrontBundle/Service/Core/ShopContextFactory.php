@@ -31,6 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\CustomerGroupGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PriceGroupDiscountGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\ShopGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\TaxGatewayInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -118,6 +119,7 @@ class ShopContextFactory implements ShopContextFactoryInterface
             $currency = $this->currencyGateway->getList([$currencyId]);
             $currency = array_shift($currency);
         }
+
         if (!$currency) {
             $currency = $shop->getCurrency();
         }
@@ -132,6 +134,10 @@ class ShopContextFactory implements ShopContextFactoryInterface
         $country = null;
         if ($countryId !== null) {
             $country = $this->countryGateway->getCountry($countryId, $context);
+        } else {
+            if (method_exists($this->countryGateway, 'getFallbackCountry')) {
+                $country = $this->countryGateway->getFallbackCountry($context);
+            }
         }
 
         $state = null;
@@ -139,7 +145,12 @@ class ShopContextFactory implements ShopContextFactoryInterface
             $state = $this->countryGateway->getState($stateId, $context);
         }
 
+        if (!$area && $country instanceof Country && \is_int($country->getAreaId())) {
+            $area = $this->countryGateway->getArea($country->getAreaId(), $context);
+        }
+
         $taxRules = $this->taxGateway->getRules($currentCustomerGroup, $area, $country, $state);
+
         $priceGroups = $this->priceGroupDiscountGateway->getPriceGroups($currentCustomerGroup, $context);
 
         return new ShopContext(

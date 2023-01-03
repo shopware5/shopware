@@ -207,6 +207,7 @@ class ContextService implements ContextServiceInterface
     private function getStoreFrontCountryId(): ?int
     {
         $session = $this->container->get('session');
+
         if ($session->offsetGet('sCountry')) {
             return $session->offsetGet('sCountry');
         }

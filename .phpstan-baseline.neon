@@ -28371,22 +28371,7 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Method sAdmin\\:\\:calculateDispatchSurcharge\\(\\) has parameter \\$basket with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:calculateDispatchSurcharge\\(\\) has parameter \\$dispatches with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Method sAdmin\\:\\:completeUserCountryData\\(\\) has parameter \\$userData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:completeUserCountryData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -28401,37 +28386,12 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Method sAdmin\\:\\:failedLoginUser\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Method sAdmin\\:\\:getPagerStructure\\(\\) has parameter \\$additionalParams with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
 			message: "#^Method sAdmin\\:\\:getPagerStructure\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:getUserBillingData\\(\\) has parameter \\$userData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:getUserBillingData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:getUserCountryData\\(\\) has parameter \\$userData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:getUserCountryData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -28466,11 +28426,6 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Method sAdmin\\:\\:handlePaymentMeanSurcharge\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Method sAdmin\\:\\:loginUser\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
@@ -28491,17 +28446,7 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Method sAdmin\\:\\:overwriteBillingAddress\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^Method sAdmin\\:\\:overwriteShippingAddress\\(\\) has parameter \\$userData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:overwriteShippingAddress\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -28512,16 +28457,6 @@ parameters:
 
 		-
 			message: "#^Method sAdmin\\:\\:processOpenOrderDetails\\(\\) has parameter \\$orders with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:processOpenOrderDetails\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:resendConfirmationMail\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -29006,16 +28941,6 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
-			message: "#^Method sAdmin\\:\\:sendMail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:subscribeNewsletter\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
 			message: "#^PHPDoc tag @var for variable \\$getOrderDetails has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
@@ -29077,11 +29002,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#3 \\$user of method sAdmin\\:\\:sManageRisks\\(\\) expects array, array\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Parameter \\#4 \\$dispatch of method sAdmin\\:\\:handlePaymentMeanSurcharge\\(\\) expects array, array\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
