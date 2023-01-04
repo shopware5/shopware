@@ -57,8 +57,9 @@ class ConditionalLineItemService implements ConditionalLineItemServiceInterface
      */
     private $connection;
 
-    public function __construct(System $sSystem, Session $session, Config $config, BasketHelperInterface $basketHelper, Connection $connection)
-    {
+    public function __construct(
+        System $sSystem, Session $session, Config $config, BasketHelperInterface $basketHelper, Connection $connection
+    ) {
         $this->system = $sSystem;
         $this->session = $session;
         $this->config = $config;
@@ -108,6 +109,8 @@ class ConditionalLineItemService implements ConditionalLineItemServiceInterface
                     'currencyFactor' => $currencyFactor,
                 ]
             );
+
+            $this->connection->insert('s_order_basket_attributes', ['basketID' => $this->connection->lastInsertId()]);
         }
     }
 }
