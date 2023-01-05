@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\MediaBundle\Commands;
 
+use DateTime;
+use Exception;
 use League\Flysystem\FileExistsException;
 use League\Flysystem\FileNotFoundException;
 use Shopware\Bundle\MediaBundle\Exception\OptimizerNotFoundException;
@@ -93,6 +95,17 @@ class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInt
         $optimizerService = $this->getContainer()->get('shopware_media.cdn_optimizer_service');
         $mediaService = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
 
+        if ($input->getOption('modified')) {
+            $errors = date_parse($input->getOption('modified'))['errors'];
+            if ($errors) {
+                $output->writeln("<error>You have provided an invalid date string!
+Please only use a valid date string that conists of 'd-m-Y' e.g '10-05-2022'. You can also provide 'd-m-Y h:i:s' e.g '10-05-2022 10:15:00'.
+If you want to enhance the date even further you can consult the PHP documentation regarding valid formats https://www.php.net/manual/en/datetime.formats.php' </error>");
+
+                return 1;
+            }
+        }
+
         if ($this->hasRunnableOptimizer() === false) {
             $output->writeln('<error>No runnable optimizer found. Consider installing one of the following optimizers.</error>');
             $this->displayCapabilities($output, $optimizerService->getOptimizers());
@@ -145,7 +158,7 @@ This can take a very long time, depending on the number of files that need to be
 
         $progress = new ProgressBar($output, $numberOfFiles);
 
-        $this->optimizeFiles($path, $mediaService, $optimizerService, $progress, $output);
+        $this->optimizeFiles($path, $input, $mediaService, $optimizerService, $progress, $output);
 
         $progress->finish();
 
@@ -153,10 +166,11 @@ This can take a very long time, depending on the number of files that need to be
     }
 
     /**
-     * @param string $directory
+     * @throws Exception
      */
     private function optimizeFiles(
-        $directory,
+        string $directory,
+        InputInterface $input,
         MediaServiceInterface $mediaService,
         OptimizerServiceInterface $optimizerService,
         ProgressBar $progressBar,
@@ -164,14 +178,22 @@ This can take a very long time, depending on the number of files that need to be
     ) {
         /** @var array $contents */
         $contents = $mediaService->getFilesystem()->listContents($directory);
-
         foreach ($contents as $item) {
             if ($item['type'] === 'dir') {
-                $this->optimizeFiles($item['path'], $mediaService, $optimizerService, $progressBar, $output);
+                $this->optimizeFiles($item['path'], $input, $mediaService, $optimizerService, $progressBar, $output);
                 continue;
             }
 
             if ($item['type'] === 'file') {
+                if ($input->getOption('modified')) {
+                    $modifiedDateTime = new DateTime($input->getOption('modified'));
+
+                    if ($modifiedDateTime->getTimestamp() > $item['timestamp']) {
+                        $progressBar->advance();
+                        continue;
+                    }
+                }
+
                 if (strpos($item['basename'], '.') === 0) {
                     $progressBar->advance();
                     continue;
@@ -215,10 +237,7 @@ This can take a very long time, depending on the number of files that need to be
         $table->render();
     }
 
-    /**
-     * @return bool
-     */
-    private function hasRunnableOptimizer()
+    private function hasRunnableOptimizer(): bool
     {
         $optimizerService = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\OptimizerService::class);
 
