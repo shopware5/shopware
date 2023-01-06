@@ -492,6 +492,7 @@ class sBasket implements \Enlight_Hook
             );
 
             $this->db->insert('s_order_basket', $params);
+            $this->db->insert('s_order_basket_attributes', ['basketID' => $this->db->lastInsertId()]);
         }
     }
 
@@ -1205,6 +1206,7 @@ class sBasket implements \Enlight_Hook
             );
         } else {
             $this->db->insert('s_order_basket', $params);
+            $this->db->insert('s_order_basket_attributes', ['basketID' => $this->db->lastInsertId()]);
         }
 
         return null;
@@ -1333,6 +1335,7 @@ class sBasket implements \Enlight_Hook
         }
 
         $this->db->insert('s_order_basket', $params);
+        $this->db->insert('s_order_basket_attributes', ['basketID' => $this->db->lastInsertId()]);
 
         return null;
     }
