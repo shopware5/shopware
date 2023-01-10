@@ -29,6 +29,9 @@ namespace Shopware\Tests\Functional\Traits;
 use PDO;
 use Shopware\Components\Migrations\AbstractMigration;
 use Shopware\Components\Migrations\Manager;
+use Shopware\Recovery\Install\DatabaseFactory;
+use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
+use UnexpectedValueException;
 
 trait MigrationTestTrait
 {
@@ -40,5 +43,43 @@ trait MigrationTestTrait
     public function getMigration(PDO $connection, int $number): AbstractMigration
     {
         return $this->getMigrationManager($connection)->getMigrationsForVersion(0)[$number];
+    }
+
+    public function createPDOConnection(): PDO
+    {
+        $rootDirectory = $this->getRootDirectory();
+
+        require_once $rootDirectory . '/recovery/install/src/DatabaseFactory.php';
+        require_once $rootDirectory . '/recovery/install/src/Struct/Struct.php';
+        require_once $rootDirectory . '/recovery/install/src/Struct/DatabaseConnectionInformation.php';
+
+        $configPath = $rootDirectory . '/config.php';
+        if (!is_file($configPath)) {
+            throw new UnexpectedValueException(sprintf('Config file not found: %s', $configPath));
+        }
+
+        $config = require $configPath;
+
+        $connectionInfo = new DatabaseConnectionInformation();
+        $connectionInfo->username = $config['db']['username'];
+        $connectionInfo->hostname = $config['db']['host'];
+        $connectionInfo->port = $config['db']['port'];
+        $connectionInfo->databaseName = $config['db']['dbname'];
+        $connectionInfo->password = $config['db']['password'];
+
+        $databaseFactory = new DatabaseFactory();
+
+        return $databaseFactory->createPDOConnection($connectionInfo);
+    }
+
+    private function getRootDirectory(): string
+    {
+        $rootDirectory = realpath(__DIR__ . '/../../../');
+
+        if (!\is_string($rootDirectory)) {
+            throw new UnexpectedValueException(sprintf('Root directory not found: %s', $rootDirectory));
+        }
+
+        return $rootDirectory;
     }
 }
