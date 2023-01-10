@@ -29,6 +29,7 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PDO;
 use Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\CountryHydrator;
+use Shopware\Bundle\StoreFrontBundle\Struct\Country;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Struct;
 
@@ -147,6 +148,35 @@ class CountryGateway implements CountryGatewayInterface
         }
 
         return $this->sortByIds($ids, $countries);
+    }
+
+    public function getFallbackCountry(ShopContextInterface $context): ?Country
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $query->select($this->fieldHelper->getCountryFields());
+        $query->from('s_core_countries', 'country')
+            ->leftJoin('country', 's_core_countries_attributes', 'countryAttribute', 'countryAttribute.countryID = country.id')
+            ->orderBy('country.position', 'ASC');
+
+        $this->fieldHelper->addCountryTranslation($query, $context);
+
+        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($data as $row) {
+            $country = $this->countryHydrator->hydrateCountry($row);
+            if (!$country->isActive()) {
+                continue;
+            }
+
+            if (!$country->allowShipping()) {
+                continue;
+            }
+
+            return $country;
+        }
+
+        return null;
     }
 
     /**

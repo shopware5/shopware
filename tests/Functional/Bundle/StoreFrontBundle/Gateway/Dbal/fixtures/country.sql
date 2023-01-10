@@ -1,0 +1,1 @@
+INSERT INTO s_core_translations (objecttype, objectdata, objectkey, objectlanguage, dirty) VALUES ('config_countries', 'a:1:{i:2;a:2:{s:6:"active";s:1:"0";s:14:"allow_shipping";s:1:"0";}}', 1, '1', 1);
