@@ -727,7 +727,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         $sErrorFlag = null;
-        $sErrorMessages = null;
+        $sErrorMessages = [];
 
         // If fields are not set, markup these fields
         $email = strtolower($this->front->Request()->getPost('email'));
@@ -3537,16 +3537,12 @@ SQL;
      * Called when provided user data is incorrect
      * Handles account lockdown detection and brute force protection
      *
-     * @param string[]|null $sErrorMessages
+     * @param list<string> $sErrorMessages
      *
-     * @return array<string, mixed>
+     * @return list<string>
      */
-    private function failedLoginUser(string $addScopeSql, string $email, ?array $sErrorMessages = [], string $password): array
+    private function failedLoginUser(string $addScopeSql, string $email, array $sErrorMessages, string $password): array
     {
-        if ($sErrorMessages === null) {
-            $sErrorMessages = [];
-        }
-
         // Check if account is disabled or not verified yet
         $sql = 'SELECT id, doubleOptinRegister, doubleOptinEmailSentDate, doubleOptinConfirmDate, email, firstname, lastname, salutation, register_opt_in_id
                 FROM s_user
