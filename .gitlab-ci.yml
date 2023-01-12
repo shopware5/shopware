@@ -175,10 +175,9 @@ PHP 8.1:
 
 PHP 8.2:
     extends: .phpunit_base
-    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2.0RC6
+    image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2
     script:
-        - composer config platform.php 8.1.99
-        - composer update --lock
+        - composer update laminas/laminas-code
         - make test-phpunit
 
 MySQL 8.0:
