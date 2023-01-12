@@ -187,3 +187,6 @@ parameters:
             message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
             count: 1
             path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+        - # Probably needs an update of the doctrine extension of PHPStan
+            message: '#Call to an undefined method Traversable.*::(getArrayCopy|current)#'
