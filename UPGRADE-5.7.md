@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
+* Updated `behat/behat` to version 3.12.0
 * Updated `cocur/slugify` to version 4.3.0
 * Updated `doctrine/collections` to version 1.8.0
 * Updated `doctrine/common` to version 3.4.3
