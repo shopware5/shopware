@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Additions
 
 * Added version `4.8.0` to version constraint of `laminas/laminas-code` to allow installation on PHP 8.2
+* Added new polyfill `symfony/polyfill-php82` to be able to use PHP 8.2 features
 
 ### Deprecations
 
