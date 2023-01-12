@@ -30,12 +30,15 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `league/flysystem` to version 1.1.10
 * Updated `mpdf/mpdf` to version 8.1.4
 * Updated `setasign/fpdf` to version 1.8.5
-* Updated `symfony/console` to version 4.4.48
+* Updated `symfony/console` to version 4.4.49
+* Updated `symfony/dependency-injection` to version 4.4.49
 * Updated `symfony/expression-language` to version 4.4.47
 * Updated `symfony/form` to version 4.4.48
-* Updated `symfony/http-foundation` to version 4.4.48
-* Updated `symfony/http-kernel` to version 4.4.48
-* Updated `symfony/serializer` to version 5.4.15
+* Updated `symfony/http-foundation` to version 4.4.49
+* Updated `symfony/http-kernel` to version 4.4.49
+* Updated `symfony/polyfill-php80` to version 1.27.0
+* Updated `symfony/polyfill-php81` to version 1.27.0
+* Updated `symfony/serializer` to version 5.4.17
 * Updated `symfony/validator` to version 4.4.48
 * Updated several indirect dependencies
 * Updated npm dependencies in `themes/package.json`
