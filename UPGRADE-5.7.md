@@ -6,6 +6,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)
 
+### Additions
+
+* Added version `4.8.0` to version constraint of `laminas/laminas-code` to allow installation on PHP 8.2
+
 ### Deprecations
 
 * Deprecated `\Shopware\Bundle\StoreFrontBundle\Gateway\ConfiguratorGatewayInterface::getProductCombinations`, it will be removed in the next minor version v5.8.
@@ -20,7 +24,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `elasticsearch/elasticsearch` to version 7.17.1
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.13
 * Updated `guzzlehttp/psr7` to version 2.4.3
-* Updated `laminas/laminas-code` to version 4.7.0
+* Updated `laminas/laminas-code` to version 4.7.1
 * Updated `laminas/laminas-escaper` to version 2.12.0
 * Updated `league/flysystem` to version 1.1.10
 * Updated `setasign/fpdf` to version 1.8.5
