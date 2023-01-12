@@ -62,7 +62,7 @@
         "league/flysystem": "~1.1.4",
         "league/flysystem-aws-s3-v3": "1.0.30",
         "monolog/monolog": "2.8.0",
-        "mpdf/mpdf": "8.1.1",
+        "mpdf/mpdf": "8.1.4",
         "ongr/elasticsearch-dsl": "7.2.2",
         "psr/link": "1.0.0",
         "psr/log": "1.1.4",
