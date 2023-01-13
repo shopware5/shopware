@@ -28,7 +28,8 @@ module.exports = function (grunt) {
                     "testStyles",
                     "setClasses"
                 ],
-                uglify: true
+                uglify: true,
+                classPrefix: "has--",
             },
         },
         copy: {
