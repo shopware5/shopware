@@ -320,7 +320,7 @@ class AdminTest extends TestCase
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
-        static::assertEmpty($result['sErrorMessages']);
+        static::assertNull($result['sErrorMessages']);
 
         // Test wrong pre-hashed password. Need a user with md5 encoded password
         $this->connection->update(
@@ -358,7 +358,7 @@ class AdminTest extends TestCase
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
-        static::assertEmpty($result['sErrorMessages']);
+        static::assertNull($result['sErrorMessages']);
 
         $modifiedMd5User = $this->connection->fetchAssociative(
             'SELECT * FROM s_user WHERE id = ?',
@@ -439,7 +439,7 @@ class AdminTest extends TestCase
         static::assertArrayHasKey('sErrorFlag', $result);
         static::assertArrayHasKey('sErrorMessages', $result);
         static::assertNull($result['sErrorFlag']);
-        static::assertEmpty($result['sErrorMessages']);
+        static::assertNull($result['sErrorMessages']);
 
         // Test that user is correctly logged in
         static::assertTrue($this->module->sCheckUser());
