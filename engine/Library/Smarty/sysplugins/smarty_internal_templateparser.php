@@ -34,16 +34,38 @@ class TP_yyToken implements ArrayAccess
         return $this->_string;
     }
 
+    /**
+     * @param $offset
+     * @return bool
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     */
+    #[\ReturnTypeWillChange]
     function offsetExists($offset)
     {
         return isset($this->metadata[$offset]);
     }
 
+    /**
+     * @param $offset
+     * @return mixed|null
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     */
+    #[\ReturnTypeWillChange]
     function offsetGet($offset)
     {
         return $this->metadata[$offset];
     }
 
+    /**
+     * @param $offset
+     * @param $value
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     */
+    #[\ReturnTypeWillChange]
     function offsetSet($offset, $value)
     {
         if ($offset === null) {
@@ -67,6 +89,13 @@ class TP_yyToken implements ArrayAccess
         }
     }
 
+    /**
+     * @param $offset
+     * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     */
+    #[\ReturnTypeWillChange]
     function offsetUnset($offset)
     {
         unset($this->metadata[$offset]);
