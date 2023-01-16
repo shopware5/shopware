@@ -105,3 +105,8 @@ tests/phpunit-full-coverage.xml
 # scripts
 !/build/composer-post-install-cmd.sh
 !/build/composer-post-update-cmd.sh
+
+# Devenv
+.devenv*
+devenv.local.nix
+
