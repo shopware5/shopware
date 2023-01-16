@@ -1784,10 +1784,8 @@ EOT;
         return $this->db->fetchAll(
             'SELECT s_articles_esd_serials.id AS id, s_articles_esd_serials.serialnumber AS serialnumber
             FROM s_articles_esd_serials
-            LEFT JOIN s_order_esd
-              ON (s_articles_esd_serials.id = s_order_esd.serialID)
-            WHERE s_order_esd.serialID IS NULL
-            AND s_articles_esd_serials.esdID= :esdId',
+            WHERE NOT s_articles_esd_serials.id IN (SELECT serialID FROM s_order_esd)
+            AND s_articles_esd_serials.esdID= :esdId', 
             ['esdId' => $esdId]
         );
     }
