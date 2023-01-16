@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,7 +28,7 @@ namespace Shopware\Tests\Mink\Tests\Frontend\Note\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Page\Frontend\Note\Elements\NotePosition;
-use Shopware\Tests\Mink\Page\Note;
+use Shopware\Tests\Mink\Page\Frontend\Note\Note;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
@@ -36,7 +38,7 @@ class NoteContext extends SubContext
      * @When /^I remove the article from my note$/
      * @When /^I remove the article on position (?P<num>\d+) of my note$/
      */
-    public function iRemoveTheArticleOnPositionOfMyNote($position = 1)
+    public function iRemoveTheArticleOnPositionOfMyNote(int $position = 1): void
     {
         $this->pressActionButton($position, 'remove');
     }
@@ -44,7 +46,7 @@ class NoteContext extends SubContext
     /**
      * @When /^I put the article on position (?P<num>\d+) of my note in the basket$/
      */
-    public function iPutTheArticleOnPositionOfMyNoteInTheBasket($position)
+    public function iPutTheArticleOnPositionOfMyNoteInTheBasket(int $position): void
     {
         $this->clickActionLink($position, 'order');
     }
@@ -52,7 +54,7 @@ class NoteContext extends SubContext
     /**
      * @When /^I compare the article on position (?P<num>\d+) of my note$/
      */
-    public function iCompareTheArticleOnPositionOfMyNote($position)
+    public function iCompareTheArticleOnPositionOfMyNote(int $position): void
     {
         $this->pressActionButton($position, 'compare');
     }
@@ -60,7 +62,7 @@ class NoteContext extends SubContext
     /**
      * @When /^I visit the detail page of the article on position (?P<num>\d+) of my note$/
      */
-    public function iVisitTheDetailPageOfTheArticleOnPositionOfMyNote($position)
+    public function iVisitTheDetailPageOfTheArticleOnPositionOfMyNote(int $position): void
     {
         $this->clickActionLink($position, 'details');
     }
@@ -68,10 +70,9 @@ class NoteContext extends SubContext
     /**
      * @Given /^the note contains the following products:$/
      */
-    public function theNoteContainsTheFollowingProducts(TableNode $items)
+    public function theNoteContainsTheFollowingProducts(TableNode $items): void
     {
-        /** @var Note $page */
-        $page = $this->getPage('Note');
+        $page = $this->getPage(Note::class);
         $page->open();
         $page->fillNoteWithProducts($items->getHash());
         $this->theNoteShouldContainTheFollowingProducts($items);
@@ -80,33 +81,28 @@ class NoteContext extends SubContext
     /**
      * @Then /^the note should contain the following products:$/
      */
-    public function theNoteShouldContainTheFollowingProducts(TableNode $items)
+    public function theNoteShouldContainTheFollowingProducts(TableNode $items): void
     {
-        /** @var Note $page */
-        $page = $this->getPage('Note');
+        $page = $this->getPage(Note::class);
 
-        $notePositions = $this->getMultipleElement($page, 'NotePosition');
+        $notePositions = $this->getMultipleElement($page, NotePosition::class);
 
         $page->checkNoteProducts($notePositions, $items->getHash());
     }
 
-    private function clickActionLink($position, $name)
+    private function clickActionLink(int $position, string $name): void
     {
-        /** @var Note $page */
-        $page = $this->getPage('Note');
+        $page = $this->getPage(Note::class);
 
-        /** @var NotePosition $notePosition */
-        $notePosition = $this->getMultipleElement($page, 'NotePosition', $position);
+        $notePosition = $this->getMultipleElement($page, NotePosition::class, $position);
         Helper::clickNamedLink($notePosition, $name);
     }
 
-    private function pressActionButton($position, $name)
+    private function pressActionButton(int $position, string $name): void
     {
-        /** @var Note $page */
-        $page = $this->getPage('Note');
+        $page = $this->getPage(Note::class);
 
-        /** @var NotePosition $notePosition */
-        $notePosition = $this->getMultipleElement($page, 'NotePosition', $position);
+        $notePosition = $this->getMultipleElement($page, NotePosition::class, $position);
         Helper::pressNamedButton($notePosition, $name);
     }
 }

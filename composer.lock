@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da95ee0995e989fc032125dbbbdb4027",
+    "content-hash": "1c6306b8568f43abec2d7ad03672f2d8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10207,16 +10207,16 @@
         },
         {
             "name": "sensiolabs/behat-page-object-extension",
-            "version": "v2.3.5",
+            "version": "v2.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/BehatPageObjectExtension.git",
-                "reference": "676e0fa4bd0243ff68f61a7437a94adb00846525"
+                "reference": "1f06d054b61d12333a2d9a9e76473c392ef8bd65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/BehatPageObjectExtension/zipball/676e0fa4bd0243ff68f61a7437a94adb00846525",
-                "reference": "676e0fa4bd0243ff68f61a7437a94adb00846525",
+                "url": "https://api.github.com/repos/sensiolabs/BehatPageObjectExtension/zipball/1f06d054b61d12333a2d9a9e76473c392ef8bd65",
+                "reference": "1f06d054b61d12333a2d9a9e76473c392ef8bd65",
                 "shasum": ""
             },
             "require": {
@@ -10277,9 +10277,9 @@
             ],
             "support": {
                 "issues": "https://github.com/sensiolabs/BehatPageObjectExtension/issues",
-                "source": "https://github.com/sensiolabs/BehatPageObjectExtension/tree/v2.3.5"
+                "source": "https://github.com/sensiolabs/BehatPageObjectExtension/tree/v2.3.7"
             },
-            "time": "2022-07-01T20:05:27+00:00"
+            "time": "2023-01-16T12:14:34+00:00"
         },
         {
             "name": "staabm/phpstan-dba",

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,8 +27,8 @@
 namespace Shopware\Tests\Mink\Page\Helper\Elements;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\SliderElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: BannerSlider
@@ -38,17 +40,17 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class BannerSlider extends \Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\SliderElement implements HelperSelectorInterface
+class BannerSlider extends SliderElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--banner-slider'];
 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'slide' => 'div.banner-slider--item',
@@ -59,10 +61,8 @@ class BannerSlider extends \Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\
 
     /**
      * Returns the slide image
-     *
-     * @return string
      */
-    public function getImageProperty(NodeElement $slide)
+    public function getImageProperty(NodeElement $slide): string
     {
         $selector = Helper::getRequiredSelector($this, 'slideImage');
 
@@ -71,10 +71,8 @@ class BannerSlider extends \Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\
 
     /**
      * Returns the slide link
-     *
-     * @return string|null
      */
-    public function getLinkProperty(NodeElement $slide)
+    public function getLinkProperty(NodeElement $slide): ?string
     {
         $selector = Helper::getRequiredSelector($this, 'slideLink');
 
@@ -83,10 +81,8 @@ class BannerSlider extends \Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\
 
     /**
      * Returns the alt-attribute of the slide image
-     *
-     * @return string|null
      */
-    protected function getAltProperty(NodeElement $slide)
+    protected function getAltProperty(NodeElement $slide): ?string
     {
         $selector = Helper::getRequiredSelector($this, 'slideImage');
 

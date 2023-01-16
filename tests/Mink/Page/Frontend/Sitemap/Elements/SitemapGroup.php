@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -72,7 +74,6 @@ class SitemapGroup extends MultipleElement
      */
     public function getTitleLinkData(array $element)
     {
-        /** @var NodeElement $titleLink */
         $titleLink = $element[0];
 
         return [
@@ -92,7 +93,6 @@ class SitemapGroup extends MultipleElement
     {
         $result = [];
 
-        /** @var NodeElement $element */
         foreach ($elements as $element) {
             $result[] = [
                 'value' => $element->getText(),

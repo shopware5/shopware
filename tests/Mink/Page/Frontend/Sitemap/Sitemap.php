@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,12 +47,11 @@ class Sitemap extends Page
     }
 
     /**
-     * @param \Shopware\Tests\Mink\Page\Frontend\Sitemap\Elements\SitemapGroup|string $group
-     * @param string                                                                  $link
+     * @param SitemapGroup|string $group
      *
      * @throws Exception
      */
-    public function checkGroup($group, $link, array $sites)
+    public function checkGroup($group, string $link, array $sites): void
     {
         if (!($group instanceof SitemapGroup)) {
             $message = sprintf('Sitemap group "%s" was not found!', $group);

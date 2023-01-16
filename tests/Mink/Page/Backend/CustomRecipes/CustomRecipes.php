@@ -46,13 +46,7 @@ class CustomRecipes extends Page
 
     public function getCustomRecipesListWindow(): CustomRecipesListWindow
     {
-        $window = $this->getElement(CustomRecipesListWindow::class);
-
-        if ($window instanceof CustomRecipesListWindow) {
-            return $window;
-        }
-
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', CustomRecipesListWindow::class));
+        return $this->getElement(CustomRecipesListWindow::class);
     }
 
     protected function verifyPage(): void

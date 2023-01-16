@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -84,12 +86,7 @@ class CheckoutAddressBox extends \Shopware\Tests\Mink\Page\Helper\Elements\Multi
         return false;
     }
 
-    /**
-     * @param array $givenAddress
-     *
-     * @return bool
-     */
-    public function containsAdress($givenAddress)
+    public function containsAdress(array $givenAddress): bool
     {
         $testAddress = [];
 

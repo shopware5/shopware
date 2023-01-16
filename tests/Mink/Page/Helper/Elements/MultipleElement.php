@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Mink\Page\Helper\Elements;
 
+use Behat\Mink\Element\Element as MinkElement;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Session;
 use Countable;
@@ -35,15 +38,12 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 abstract class MultipleElement extends Element implements Countable, Iterator, HelperSelectorInterface
 {
-    /**
-     * @var string
-     */
-    private $xPath;
+    private string $xPath = '';
 
     /**
-     * @var NodeElement[] array
+     * @var array<NodeElement> array
      */
-    private $siblings;
+    private array $siblings;
 
     public function __construct(Session $session, Factory $factory)
     {
@@ -90,9 +90,9 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     /**
      * Have to be called after get the MultipleElement to find all its siblings
      *
-     * @return $this
+     * @return static
      */
-    public function setParent(\Behat\Mink\Element\Element $parent)
+    public function setParent(MinkElement $parent)
     {
         \assert(\is_array($this->selector));
         $selectorType = key($this->selector);
@@ -110,10 +110,8 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
 
     /**
      * Returns the XPath of the current element
-     *
-     * @return string
      */
-    public function getXpath()
+    public function getXpath(): string
     {
         return $this->xPath;
     }
@@ -121,11 +119,9 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     /**
      * Sets the instance to the element to use.
      *
-     * @param int $position
-     *
-     * @return MultipleElement $this
+     * @return static
      */
-    public function setInstance($position = 0)
+    public function setInstance(int $position = 0)
     {
         $position = ($position > 0) ? $position - 1 : $this->key();
         $this->xPath = $this->siblings[$position]->getXpath();
@@ -133,42 +129,20 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
         return $this;
     }
 
-    /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
-     * Count elements of an object
-     *
-     * @see http://php.net/manual/en/countable.count.php
-     *
-     * @return int the custom count as an integer.
-     *             </p>
-     *             <p>
-     *             The return value is cast to an integer
-     */
-    public function count()
+    public function count(): int
     {
         return \count($this->siblings);
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Return the current element
-     *
-     * @see http://php.net/manual/en/iterator.current.php
-     *
-     * @return MultipleElement can return any type
+     * @return static
      */
     public function current()
     {
         return $this;
     }
 
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Move forward to next element
-     *
-     * @see http://php.net/manual/en/iterator.next.php
-     */
-    public function next()
+    public function next(): void
     {
         next($this->siblings);
         if ($this->valid()) {
@@ -177,11 +151,6 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Return the key of the current element
-     *
-     * @see http://php.net/manual/en/iterator.key.php
-     *
      * @return mixed scalar on success, or null on failure
      */
     public function key()
@@ -189,43 +158,22 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
         return key($this->siblings);
     }
 
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Checks if current position is valid
-     *
-     * @see http://php.net/manual/en/iterator.valid.php
-     *
-     * @return bool the return value will be casted to boolean and then evaluated.
-     *              Returns true on success or false on failure
-     */
-    public function valid()
+    public function valid(): bool
     {
         return (bool) current($this->siblings);
     }
 
-    /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
-     * Rewind the Iterator to the first element
-     *
-     * @see http://php.net/manual/en/iterator.rewind.php
-     */
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->siblings);
         $this->setInstance();
     }
 
-    /**
-     * Removes the current element
-     */
-    public function remove()
+    public function remove(): void
     {
         unset($this->siblings[$this->key()]);
     }
 
-    /**
-     * Default method to get an element property
-     */
     public function getProperty(string $property): string
     {
         $element = Helper::findElements($this, [$property]);

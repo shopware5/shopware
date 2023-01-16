@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,7 +28,6 @@ namespace Shopware\Tests\Mink\Page\Frontend\Note\Elements;
 
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: NotePosition
@@ -35,17 +36,14 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class NotePosition extends CartPosition implements HelperSelectorInterface
+class NotePosition extends CartPosition
 {
-    /**
-     * @var array
-     */
     protected $selector = ['css' => 'div.note--item'];
 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'name' => 'a.note--title',
@@ -61,7 +59,7 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'remove' => ['de' => 'Löschen',       'en' => 'Delete'],
@@ -71,10 +69,8 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
 
     /**
      * Returns the product name
-     *
-     * @return string
      */
-    public function getNameProperty()
+    public function getNameProperty(): string
     {
         $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage', 'detailLink']);
 
@@ -90,10 +86,8 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
 
     /**
      * Returns the image source path
-     *
-     * @return string
      */
-    public function getImageProperty()
+    public function getImageProperty(): string
     {
         $element = Helper::findElements($this, ['thumbnailImage']);
 
@@ -102,10 +96,8 @@ class NotePosition extends CartPosition implements HelperSelectorInterface
 
     /**
      * Returns the link to the product
-     *
-     * @return string
      */
-    public function getLinkProperty()
+    public function getLinkProperty(): string
     {
         $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'detailLink']);
 

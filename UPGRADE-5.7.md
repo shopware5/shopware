@@ -31,6 +31,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `laminas/laminas-escaper` to version 2.12.0
 * Updated `league/flysystem` to version 1.1.10
 * Updated `mpdf/mpdf` to version 8.1.4
+* Updated `sensiolabs/behat-page-object-extension` to version 2.3.7
 * Updated `setasign/fpdf` to version 1.8.5
 * Updated `symfony/console` to version 4.4.49
 * Updated `symfony/dependency-injection` to version 4.4.49

@@ -48,16 +48,16 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
     @fastOrder @payment @shipping
     Scenario: I can finish my order with different payment and delivery methods
         Given I proceed to checkout as:
-            | field       | register[personal] | register[billing] |
+            | field         | register[personal] | register[billing] |
             | customer_type | private            |                   |
-            | salutation  | mr                 |                   |
-            | firstname   | Max                |                   |
-            | lastname    | Mustermann         |                   |
-            | accountmode | 1                  |                   |
-            | email       | test@example.de    |                   |
-            | street      |                    | Musterstr. 55     |
-            | zipcode     |                    | 55555             |
-            | city        |                    | Musterhausen      |
+            | salutation    | mr                 |                   |
+            | firstname     | Max                |                   |
+            | lastname      | Mustermann         |                   |
+            | accountmode   | 1                  |                   |
+            | email         | test@example.de    |                   |
+            | street        |                    | Musterstr. 55     |
+            | zipcode       |                    | 55555             |
+            | city          |                    | Musterhausen      |
         And   I change the payment method to 2:
             | field            | value          |
             | sDebitAccount    | 123456789      |
@@ -147,10 +147,10 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
         And I add the article "SW10205.2" to my basket
         And I add the article "SW10205.3" to my basket
         Then  the cart should contain the following products:
-            | number  | name                       | quantity | itemPrice | sum    |
-            | SW10181 | Reisekoffer Set      | 1        | 139,99    | 139,99 |
-            | SW10003 | Münsterländer Aperitif 16% | 1        | 14,95     | 14,95  |
-            | SW10205.2 | Artikel mit Grundpreisberechnung | 1        | 400,00     | 400,00  |
+            | number    | name                             | quantity | itemPrice | sum    |
+            | SW10181   | Reisekoffer Set                  | 1        | 139,99    | 139,99 |
+            | SW10003   | Münsterländer Aperitif 16%       | 1        | 14,95     | 14,95  |
+            | SW10205.2 | Artikel mit Grundpreisberechnung | 1        | 400,00    | 400,00 |
             | SW10205.3 | Artikel mit Grundpreisberechnung | 1        | 50,00     | 50,00  |
 
     @calculation
@@ -158,37 +158,37 @@ Feature: Checkout articles (scenario origin is cart with one product in it)
         Given I add the article "SW10206" to my basket
         Then  the cart should contain the following products:
             | number  | name                                  | quantity | itemPrice | sum    |
-            | SW10181 | Reisekoffer Set      | 1        | 139,99    | 139,99 |
+            | SW10181 | Reisekoffer Set                       | 1        | 139,99    | 139,99 |
             | SW10206 | Staffelung, Mindest- / Maximalabnahme | 3        | 200,00    | 600,00 |
 
     @calculation
     Scenario: I add an article with pseudo price to the cart and get the correct price
         Given I add the article "SW10207" to my basket
         Then  the cart should contain the following products:
-            | number  | name                                  | quantity | itemPrice | sum    |
-            | SW10181 | Reisekoffer Set      | 1        | 139,99    | 139,99 |
-            | SW10207 | Pseudopreis | 1        | 500,00    | 500,00 |
+            | number  | name            | quantity | itemPrice | sum    |
+            | SW10181 | Reisekoffer Set | 1        | 139,99    | 139,99 |
+            | SW10207 | Pseudopreis     | 1        | 500,00    | 500,00 |
 
     @calculation
     Scenario: I add an article with an additional price to the cart and get the correct price
         Given I add the article "SW10204.7" to my basket
         Then  the cart should contain the following products:
-            | number  | name                                  | quantity | itemPrice | sum    |
-            | SW10181 | Reisekoffer Set      | 1        | 139,99    | 139,99 |
+            | number    | name                                                                  | quantity | itemPrice | sum    |
+            | SW10181   | Reisekoffer Set                                                       | 1        | 139,99    | 139,99 |
             | SW10204.7 | Artikel mit Aufpreiskonfigurator mit Figuren und Ball-Set / 36 Monate | 1        | 279,65    | 279,65 |
 
-  @calculation
-  Scenario: I add an article with a new price group, add it to the cart and get the correct price
-    Given A price group named "UNITTEST" that grants "50%" discount
-    Given The article "SW10205.2" is assigned to the price group "UNITTEST"
-    Then I add the article "SW10205.2" to my basket
-    Then  the cart should contain the following products:
-      | number    | name                                                                  | quantity | itemPrice | sum    |
-      | SW10181 | Reisekoffer Set      | 1        | 139,99    | 139,99 |
-      | SW10205.2 | Artikel mit Grundpreisberechnung | 1        | 200,00     | 200,00  |
+    @calculation
+    Scenario: I add an article with a new price group, add it to the cart and get the correct price
+        Given A price group named "UNITTEST" that grants "50%" discount
+        Given The article "SW10205.2" is assigned to the price group "UNITTEST"
+        Then I add the article "SW10205.2" to my basket
+        Then  the cart should contain the following products:
+            | number    | name                             | quantity | itemPrice | sum    |
+            | SW10181   | Reisekoffer Set                  | 1        | 139,99    | 139,99 |
+            | SW10205.2 | Artikel mit Grundpreisberechnung | 1        | 200,00    | 200,00 |
 
     @calculation @repair
-        Scenario: I should repair my database changes until we've implemented the new test structure :)
+    Scenario: I should repair my database changes until we've implemented the new test structure :)
         Given the customer group exist:
             | key | taxInput |
             | EK  | 1        |

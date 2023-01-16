@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,14 +26,14 @@
 
 namespace Shopware\Tests\Mink\Page\Frontend\Account;
 
-use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Exception;
-use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountBilling;
 use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountOrder;
 use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountPayment;
+use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountShipping;
 use Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressBox;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
@@ -46,7 +48,7 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'payment' => 'div.account--payment.account--box strong',
@@ -69,26 +71,26 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
-            'loginButton' => ['de' => 'Anmelden',                 'en' => 'Login'],
-            'forgotPasswordLink' => ['de' => 'Passwort vergessen?',      'en' => 'Forgot your password?'],
-            'sendButton' => ['de' => 'Weiter',                   'en' => 'Continue'],
+            'loginButton' => ['de' => 'Anmelden', 'en' => 'Login'],
+            'forgotPasswordLink' => ['de' => 'Passwort vergessen?', 'en' => 'Forgot your password?'],
+            'sendButton' => ['de' => 'Weiter', 'en' => 'Continue'],
 
-            'myAccountLink' => ['de' => 'Übersicht',                'en' => 'Overview'],
-            'profileLink' => ['de' => 'Persönliche Daten',        'en' => 'Profile'],
-            'addressesLink' => ['de' => 'Adressen',                 'en' => 'Addresses'],
-            'myOrdersLink' => ['de' => 'Bestellungen',             'en' => 'orders'],
-            'myEsdDownloadsLink' => ['de' => 'Sofortdownloads',          'en' => 'Instant downloads'],
-            'changePaymentLink' => ['de' => 'Zahlungsarten',            'en' => 'Payment methods'],
-            'noteLink' => ['de' => 'Merkzettel',               'en' => 'Wish list'],
-            'logoutLink' => ['de' => 'Abmelden',                 'en' => 'Logout'],
+            'myAccountLink' => ['de' => 'Übersicht', 'en' => 'Overview'],
+            'profileLink' => ['de' => 'Persönliche Daten', 'en' => 'Profile'],
+            'addressesLink' => ['de' => 'Adressen', 'en' => 'Addresses'],
+            'myOrdersLink' => ['de' => 'Bestellungen', 'en' => 'orders'],
+            'myEsdDownloadsLink' => ['de' => 'Sofortdownloads', 'en' => 'Instant downloads'],
+            'changePaymentLink' => ['de' => 'Zahlungsarten', 'en' => 'Payment methods'],
+            'noteLink' => ['de' => 'Merkzettel', 'en' => 'Wish list'],
+            'logoutLink' => ['de' => 'Abmelden', 'en' => 'Logout'],
 
-            'changePaymentButton' => ['de' => 'Ändern',                   'en' => 'Change'],
-            'changeBillingButton' => ['de' => 'Adresse speichern',        'en' => 'Change address'],
-            'changeShippingButton' => ['de' => 'Adresse speichern',        'en' => 'Change address'],
-            'saveAddressButton' => ['de' => 'Adresse speichern',        'en' => 'Save address'],
+            'changePaymentButton' => ['de' => 'Ändern', 'en' => 'Change'],
+            'changeBillingButton' => ['de' => 'Adresse speichern', 'en' => 'Change address'],
+            'changeShippingButton' => ['de' => 'Adresse speichern', 'en' => 'Change address'],
+            'saveAddressButton' => ['de' => 'Adresse speichern', 'en' => 'Save address'],
             'loginAgain' => ['de' => 'Erneut Anmelden', 'en' => 'Login again'],
         ];
     }
@@ -96,13 +98,9 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      *
-     * @param string $action
-     *
      * @throws Exception
-     *
-     * @return bool
      */
-    public function verifyPage($action = '')
+    public function verifyPage(string $action = ''): bool
     {
         if ($action === 'Dashboard' || empty($action)) {
             if ($this->verifyPageDashboard()) {
@@ -132,11 +130,8 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * Logins a user
-     *
-     * @param string $email
-     * @param string $password
      */
-    public function login($email, $password)
+    public function login(string $email, string $password): void
     {
         $this->fillField('email', $email);
         $this->fillField('password', $password);
@@ -144,7 +139,7 @@ class Account extends Page implements HelperSelectorInterface
         Helper::pressNamedButton($this, 'loginButton');
     }
 
-    public function clickLoginAgain()
+    public function clickLoginAgain(): void
     {
         Helper::clickNamedLink($this, 'loginAgain');
     }
@@ -152,11 +147,9 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Check if the user was successfully logged in
      *
-     * @param string $username
-     *
      * @throws ResponseTextException
      */
-    public function verifyLogin($username)
+    public function verifyLogin(string $username): void
     {
         $assert = new WebAssert($this->getSession());
         $assert->pageTextContains(
@@ -167,22 +160,16 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * Logout a customer (important when using the Selenium driver)
-     *
-     * @return bool
      */
-    public function logout()
+    public function logout(): void
     {
         Helper::clickNamedLink($this, 'logoutLink');
     }
 
     /**
      * Changes the password of the user
-     *
-     * @param string $currentPassword
-     * @param string $password
-     * @param string $passwordConfirmation
      */
-    public function changePassword($currentPassword, $password, $passwordConfirmation = null)
+    public function changePassword(string $currentPassword, string $password, ?string $passwordConfirmation = null): void
     {
         $data = [
             [
@@ -195,7 +182,7 @@ class Account extends Page implements HelperSelectorInterface
             ],
             [
                 'field' => 'password[passwordConfirmation]',
-                'value' => ($passwordConfirmation !== null) ? $passwordConfirmation : $password,
+                'value' => $passwordConfirmation ?? $password,
             ],
         ];
 
@@ -205,12 +192,8 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * Changes the email address of the user
-     *
-     * @param string $password
-     * @param string $email
-     * @param string $emailConfirmation
      */
-    public function changeEmail($password, $email, $emailConfirmation = null)
+    public function changeEmail(string $password, string $email, ?string $emailConfirmation = null): void
     {
         $data = [
             [
@@ -223,7 +206,7 @@ class Account extends Page implements HelperSelectorInterface
             ],
             [
                 'field' => 'email[emailConfirmation]',
-                'value' => ($emailConfirmation !== null) ? $emailConfirmation : $email,
+                'value' => $emailConfirmation ?? $email,
             ],
         ];
 
@@ -271,7 +254,7 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function changePaymentMethod($data = [])
     {
-        $element = $this->getElement('AccountPayment');
+        $element = $this->getElement(AccountPayment::class);
         Helper::clickNamedLink($element, 'changeButton');
 
         Helper::fillForm($this, 'paymentForm', $data);
@@ -287,8 +270,7 @@ class Account extends Page implements HelperSelectorInterface
      */
     public function checkPaymentMethod($paymentMethod)
     {
-        /** @var AccountPayment $element */
-        $element = $this->getElement('AccountPayment');
+        $element = $this->getElement(AccountPayment::class);
 
         $properties = [
             'paymentMethod' => $paymentMethod,
@@ -309,10 +291,7 @@ class Account extends Page implements HelperSelectorInterface
         Helper::throwException($message);
     }
 
-    /**
-     * @param string $orderNumber
-     */
-    public function checkOrder(AccountOrder $order, $orderNumber, array $articles)
+    public function checkOrder(AccountOrder $order, string $orderNumber, array $articles): void
     {
         $this->getSession()->executeScript('$(\'[data-collapse-panel]\').click()');
         sleep(1);
@@ -324,11 +303,8 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * Checks the billing or shipping address
-     *
-     * @param string $type
-     * @param string $address
      */
-    public function checkAddress($type, $address)
+    public function checkAddress(string $type, string $address): void
     {
         $this->open();
 
@@ -340,12 +316,13 @@ class Account extends Page implements HelperSelectorInterface
         $type = strtolower($type);
         $type = ucfirst($type);
 
-        $addressBox = $this->getElement('Account' . $type);
+        /** @var class-string<AccountBilling|AccountShipping> $elementClass */
+        $elementClass = 'Account' . $type;
+        $addressBox = $this->getElement($elementClass);
         $addressData = Helper::getElementProperty($addressBox, 'address');
 
         $givenAddress = [];
 
-        /** @var Element $data */
         foreach ($addressData as $data) {
             $part = $data->getHtml();
             $parts = explode('<br />', $part);
@@ -488,7 +465,6 @@ class Account extends Page implements HelperSelectorInterface
      */
     protected function searchAddress(AddressBox $addresses, string $name): void
     {
-        /** @var AddressBox $address */
         foreach ($addresses as $address) {
             if (!str_contains($address->getProperty('title'), $name)) {
                 continue;
@@ -501,7 +477,6 @@ class Account extends Page implements HelperSelectorInterface
 
         $messages = ['The address "' . $name . '" is not available. Available are:'];
 
-        /** @var AddressBox $address */
         foreach ($addresses as $address) {
             $messages[] = $address->getProperty('title');
         }
@@ -511,10 +486,8 @@ class Account extends Page implements HelperSelectorInterface
 
     /**
      * Helper method checks the order number
-     *
-     * @param string $orderNumber
      */
-    private function checkOrderNumber(AccountOrder $order, $orderNumber)
+    private function checkOrderNumber(AccountOrder $order, string $orderNumber): void
     {
         $properties = [
             'number' => $orderNumber,
@@ -574,11 +547,9 @@ class Account extends Page implements HelperSelectorInterface
     /**
      * Helper method checks the ESD articles
      *
-     * @param string $date
-     *
      * @throws Exception
      */
-    private function checkEsdArticles($date, array $articles)
+    private function checkEsdArticles(string $date, array $articles)
     {
         $esd = [];
 
@@ -600,9 +571,8 @@ class Account extends Page implements HelperSelectorInterface
         $locator = Helper::getRequiredSelector($this, 'esdDownloadName');
         $downloads = [];
 
-        /** @var NodeElement $esdDownload */
         foreach ($elements['esdDownloads'] as $esdDownload) {
-            if (strpos($esdDownload->getText(), $date) !== false) {
+            if (str_contains($esdDownload->getText(), $date)) {
                 $downloads[] = $this->find('css', $locator)->getText();
             }
         }

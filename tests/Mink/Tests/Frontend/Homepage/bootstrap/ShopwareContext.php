@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,79 +26,84 @@
 
 namespace Shopware\Tests\Mink\Tests\Frontend\Homepage\bootstrap;
 
+use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Element\NodeElement;
 use RuntimeException;
-use Shopware\Tests\Mink\Element\Article;
-use Shopware\Tests\Mink\Element\CompareColumn;
+use Shopware\Tests\Mink\Page\Frontend\Article\Elements\Article;
+use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleSlider;
+use Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogArticle;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\Banner;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\CategoryTeaser;
+use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\CompareColumn;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\ManufacturerSlider;
+use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\YouTube;
+use Shopware\Tests\Mink\Page\Frontend\Homepage\Homepage;
+use Shopware\Tests\Mink\Page\Frontend\Newsletter\Newsletter;
 use Shopware\Tests\Mink\Page\Helper\Elements\BannerSlider;
-use Shopware\Tests\Mink\Page\Homepage;
-use Shopware\Tests\Mink\Page\Newsletter;
+use Shopware\Tests\Mink\Page\Helper\Elements\HeaderCart;
+use Shopware\Tests\Mink\Tests\General\Helpers\FeatureContext;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
 class ShopwareContext extends SubContext
 {
-    /**
-     * @var \Shopware\Tests\Mink\Tests\General\Helpers\FeatureContext
-     */
-    protected $featureContext;
+    protected FeatureContext $featureContext;
 
     /**
      * @BeforeScenario
      */
-    public function gatherContexts(BeforeScenarioScope $scope)
+    public function gatherContexts(BeforeScenarioScope $scope): void
     {
         $environment = $scope->getEnvironment();
+        if (!$environment instanceof InitializedContextEnvironment) {
+            Helper::throwException('Scope has unexpected environment');
+        }
 
-        $this->featureContext = $environment->getContext('Shopware\Tests\Mink\Tests\General\Helpers\FeatureContext');
+        $this->featureContext = $environment->getContext(FeatureContext::class);
     }
 
     /**
      * @When /^I search for "(?P<searchTerm>[^"]*)"$/
      */
-    public function iSearchFor($searchTerm)
+    public function iSearchFor(string $searchTerm): void
     {
-        $this->getPage('Homepage')->searchFor($searchTerm);
+        $this->getPage(Homepage::class)->searchFor($searchTerm);
     }
 
     /**
      * @When /^I received the search-results for "(?P<searchTerm>[^"]*)"$/
      */
-    public function iReceivedTheSearchResultsFor($searchTerm)
+    public function iReceivedTheSearchResultsFor(string $searchTerm): void
     {
-        $this->getPage('Homepage')->receiveSearchResultsFor($searchTerm);
+        $this->getPage(Homepage::class)->receiveSearchResultsFor($searchTerm);
     }
 
     /**
      * @Then /^I should see the no results message for keyword "([^"]*)"$/
      */
-    public function iShouldSeeTheNoResultsMessageForKeyword($keyword)
+    public function iShouldSeeTheNoResultsMessageForKeyword(): void
     {
-        $this->getPage('Homepage')->receiveNoResultsMessageForKeyword($keyword);
+        $this->getPage(Homepage::class)->receiveNoResultsMessageForKeyword();
     }
 
     /**
      * @When /^I change the currency to "(?P<currency>[^"]*)"$/
      */
-    public function iChangeTheCurrencyTo($currency)
+    public function iChangeTheCurrencyTo(string $currency): void
     {
-        $this->getPage('Homepage')->changeCurrency($currency);
+        $this->getPage(Homepage::class)->changeCurrency($currency);
     }
 
     /**
      * @Then /^the comparison should contain the following products:$/
      */
-    public function theComparisonShouldContainTheFollowingProducts(TableNode $items)
+    public function theComparisonShouldContainTheFollowingProducts(TableNode $items): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var CompareColumn $compareColumns */
-        $compareColumns = $this->getMultipleElement($page, 'CompareColumn');
+        $compareColumns = $this->getMultipleElement($page, CompareColumn::class);
 
         $page->checkComparisonProducts($compareColumns, $items->getHash());
     }
@@ -104,18 +111,21 @@ class ShopwareContext extends SubContext
     /**
      * @Then /^the cart should contain (?P<quantity>\d+) articles with a value of "(?P<amount>[^"]*)"$/
      */
-    public function theCartShouldContainArticlesWithAValueOf($quantity, $amount)
+    public function theCartShouldContainArticlesWithAValueOf(int $quantity, string $amount): void
     {
-        $this->getElement('HeaderCart')->checkCart($quantity, $amount);
+        $this->getElement(HeaderCart::class)->checkCart($quantity, $amount);
     }
 
     /**
      * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)"$/
      * @When /^I subscribe to the newsletter with "(?P<email>[^"]*)" :$/
      */
-    public function iSubscribeToTheNewsletterWith($email, TableNode $additionalData = null)
+    public function iSubscribeToTheNewsletterWith(string $email, ?TableNode $additionalData = null): void
     {
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
+        if (!\is_array($pageInfo)) {
+            Helper::throwException('Could not get page info');
+        }
         $pageName = ucfirst($pageInfo['controller']);
         $data = [
             [
@@ -125,12 +135,16 @@ class ShopwareContext extends SubContext
         ];
 
         if ($pageName === 'Index') {
-            $pageName = 'Homepage';
-        } elseif (($pageName === 'Newsletter') && $additionalData) {
-            $data = array_merge($data, $additionalData->getHash());
+            $pageName = Homepage::class;
+        } elseif ($pageName === 'Newsletter') {
+            $pageName = Newsletter::class;
+            if ($additionalData) {
+                $data = array_merge($data, $additionalData->getHash());
+            }
+        } else {
+            Helper::throwException('Wrong page for subscribing to newsletter');
         }
 
-        /** @var Homepage|Newsletter $page */
         $page = $this->getPage($pageName);
         $page->subscribeNewsletter($data);
     }
@@ -139,7 +153,7 @@ class ShopwareContext extends SubContext
      * @When /^I unsubscribe the newsletter$/
      * @When /^I unsubscribe the newsletter with "(?P<email>[^"]*)"$/
      */
-    public function iUnsubscribeTheNewsletter($email = null)
+    public function iUnsubscribeTheNewsletter(?string $email = null): void
     {
         $data = [];
 
@@ -152,14 +166,14 @@ class ShopwareContext extends SubContext
             ];
         }
 
-        $this->getPage('Newsletter')->unsubscribeNewsletter($data);
+        $this->getPage(Newsletter::class)->unsubscribeNewsletter($data);
     }
 
     /**
      * @When /^I click the link in my latest email$/
      * @When /^I click the links in my latest (\d+) emails$/
      */
-    public function iConfirmTheLinkInTheEmail($limit = 1)
+    public function iConfirmTheLinkInTheEmail(int $limit = 1): void
     {
         $sql = 'SELECT `type`, `hash` FROM `s_core_optin` ORDER BY `id` DESC LIMIT ' . $limit;
         $hashes = $this->getService('db')->fetchAll($sql);
@@ -170,7 +184,7 @@ class ShopwareContext extends SubContext
         foreach ($hashes as $optin) {
             if ($optin['type'] === 'swPassword') {
                 $mask = '%saccount/resetPassword/hash/%s';
-                $link = $this->getPage('Homepage')->getShopUrl();
+                $link = $this->getPage(Homepage::class)->getShopUrl();
 
                 $confirmationLink = sprintf($mask, $link, $optin['hash']);
                 $session->visit($confirmationLink);
@@ -214,7 +228,7 @@ class ShopwareContext extends SubContext
     /**
      * @When /^I enable the config "([^"]*)"$/
      */
-    public function iEnableTheConfig($configName)
+    public function iEnableTheConfig(string $configName): void
     {
         $this->theConfigValueOfIs($configName, true);
     }
@@ -222,7 +236,7 @@ class ShopwareContext extends SubContext
     /**
      * @When /^I disable the config "([^"]*)"$/
      */
-    public function iDisableTheConfig($configName)
+    public function iDisableTheConfig(string $configName): void
     {
         $this->theConfigValueOfIs($configName, false);
     }
@@ -230,8 +244,10 @@ class ShopwareContext extends SubContext
     /**
      * @When /^the config value of "([^"]*)" is (\d+)$/
      * @When /^the config value of "([^"]*)" is "([^"]*)"$/
+     *
+     * @param bool|int|string $value
      */
-    public function theConfigValueOfIs($configName, $value)
+    public function theConfigValueOfIs(string $configName, $value): void
     {
         $this->featureContext->changeConfigValue($configName, $value);
     }
@@ -239,7 +255,7 @@ class ShopwareContext extends SubContext
     /**
      * @When the emotion world has loaded
      */
-    public function theEmotionWorldHasLoaded()
+    public function theEmotionWorldHasLoaded(): void
     {
         $this->getSession()->wait(15000, "$($(':plugin-swEmotionLoader').get(0)).data('plugin_swEmotionLoader').isLoading == false");
     }
@@ -248,7 +264,7 @@ class ShopwareContext extends SubContext
      * @Given /^I should see a banner with image "(?P<image>[^"]*)"$/
      * @Given /^I should see a banner with image "(?P<image>[^"]*)" to "(?P<link>[^"]*)"$/
      */
-    public function iShouldSeeABanner($image, $link = null)
+    public function iShouldSeeABanner(string $image, ?string $link = null): void
     {
         $this->iShouldSeeABannerOnPositionWithImage(1, $image, $link);
     }
@@ -257,20 +273,18 @@ class ShopwareContext extends SubContext
      * @Given /^I should see a banner on position (\d+) with image "([^"]*)"$/
      * @Given /^I should see a banner on position (\d+) with image "([^"]*)" to "([^"]*)"$/
      */
-    public function iShouldSeeABannerOnPositionWithImage($position, $image, $link = null)
+    public function iShouldSeeABannerOnPositionWithImage(int $position, string $image, ?string $link = null): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var Banner $banner */
-        $banner = $this->getMultipleElement($page, 'Banner', $position);
+        $banner = $this->getMultipleElement($page, Banner::class, $position);
         $page->checkLinkedBanner($banner, $image, $link);
     }
 
     /**
      * @Given /^I should see a banner with image "(?P<image>[^"]*)" and mapping:$/
      */
-    public function iShouldSeeABannerWithMapping($image, TableNode $mapping)
+    public function iShouldSeeABannerWithMapping(string $image, TableNode $mapping): void
     {
         $this->iShouldSeeABannerOnPositionWithImageAndMapping(1, $image, $mapping);
     }
@@ -278,13 +292,11 @@ class ShopwareContext extends SubContext
     /**
      * @Given /^I should see a banner on position (\d+) with image "([^"]*)" and mapping:$/
      */
-    public function iShouldSeeABannerOnPositionWithImageAndMapping($position, $image, TableNode $mapping)
+    public function iShouldSeeABannerOnPositionWithImageAndMapping(int $position, string $image, TableNode $mapping): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var Banner $banner */
-        $banner = $this->getMultipleElement($page, 'Banner', $position);
+        $banner = $this->getMultipleElement($page, Banner::class, $position);
         $mapping = $mapping->getHash();
 
         $page->checkMappedBanner($banner, $image, $mapping);
@@ -293,13 +305,11 @@ class ShopwareContext extends SubContext
     /**
      * @Given /^the product box on position (\d+) should have the following properties:$/
      */
-    public function iShouldSeeAnArticle($position, TableNode $data)
+    public function iShouldSeeAnArticle(int $position, TableNode $data): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var Article $article */
-        $article = $this->getMultipleElement($page, 'Article', $position);
+        $article = $this->getMultipleElement($page, Article::class, $position);
 
         $page->checkArticle($article, $data->getHash());
     }
@@ -307,13 +317,11 @@ class ShopwareContext extends SubContext
     /**
      * @Given /^the category teaser on position (\d+) for "(?P<name>[^"]*)" should have the image "(?P<image>[^"]*)" and link to "(?P<link>[^"]*)"$/
      */
-    public function iShouldSeeACategoryTeaserWithImageTo($position, $name, $image, $link)
+    public function iShouldSeeACategoryTeaserWithImageTo(int $position, string $name, string $image, string $link): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var CategoryTeaser $teaser */
-        $teaser = $this->getMultipleElement($page, 'CategoryTeaser', $position);
+        $teaser = $this->getMultipleElement($page, CategoryTeaser::class, $position);
 
         $page->checkCategoryTeaser($teaser, $name, $image, $link);
     }
@@ -321,12 +329,11 @@ class ShopwareContext extends SubContext
     /**
      * @Given /^I should see some blog articles:$/
      */
-    public function iShouldSeeSomeBlogArticles(TableNode $articles)
+    public function iShouldSeeSomeBlogArticles(TableNode $articles): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        $blogArticle = $this->getMultipleElement($page, 'BlogArticle', 1);
+        $blogArticle = $this->getMultipleElement($page, BlogArticle::class, 1);
 
         $articles = $articles->getHash();
 
@@ -336,13 +343,11 @@ class ShopwareContext extends SubContext
     /**
      * @Then /^I should see a banner slider:$/
      */
-    public function iShouldSeeABannerSlider(TableNode $slides)
+    public function iShouldSeeABannerSlider(TableNode $slides): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var BannerSlider $slider */
-        $slider = $this->getMultipleElement($page, 'BannerSlider', 1);
+        $slider = $this->getMultipleElement($page, BannerSlider::class, 1);
 
         $page->checkSlider($slider, $slides->getHash());
     }
@@ -350,12 +355,11 @@ class ShopwareContext extends SubContext
     /**
      * @Given /^I should see a YouTube-Video "(?P<code>[^"]*)"$/
      */
-    public function iShouldSeeAYoutubeVideo($code)
+    public function iShouldSeeAYoutubeVideo(string $code): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        $youtube = $this->getMultipleElement($page, 'YouTube', 1);
+        $youtube = $this->getMultipleElement($page, YouTube::class, 1);
 
         $page->checkYoutubeVideo($youtube, $code);
     }
@@ -363,13 +367,11 @@ class ShopwareContext extends SubContext
     /**
      * @Then /^I should see a manufacturer slider:$/
      */
-    public function iShouldSeeAManufacturerSlider(TableNode $manufacturers)
+    public function iShouldSeeAManufacturerSlider(TableNode $manufacturers): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var ManufacturerSlider $slider */
-        $slider = $this->getMultipleElement($page, 'ManufacturerSlider', 1);
+        $slider = $this->getMultipleElement($page, ManufacturerSlider::class, 1);
 
         $page->checkManufacturerSlider($slider, $manufacturers->getHash());
     }
@@ -377,15 +379,13 @@ class ShopwareContext extends SubContext
     /**
      * @Then /^I should see an article slider:$/
      */
-    public function iShouldSeeAnArticleSlider(TableNode $articles)
+    public function iShouldSeeAnArticleSlider(TableNode $productTable): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
-        /** @var ManufacturerSlider $slider */
-        $slider = $this->getMultipleElement($page, 'ArticleSlider', 1);
+        $slider = $this->getMultipleElement($page, ArticleSlider::class, 1);
 
-        $products = Helper::floatArray($articles->getHash(), ['price']);
+        $products = Helper::floatArray($productTable->getHash(), ['price']);
 
         $page->checkSlider($slider, $products);
     }
@@ -393,7 +393,7 @@ class ShopwareContext extends SubContext
     /**
      * @Then /^I the language should be "([^"]*)"$/
      */
-    public function iTheLanguageShouldBe($language)
+    public function iTheLanguageShouldBe(string $language): void
     {
         Helper::setCurrentLanguage($language);
     }
@@ -401,7 +401,7 @@ class ShopwareContext extends SubContext
     /**
      * @When I scroll to the bottom of the page
      */
-    public function iScrollToTheBottomOfThePage()
+    public function iScrollToTheBottomOfThePage(): void
     {
         $this->getDriver()->executeScript('window.scrollTo(0, document.body.scrollHeight);');
     }
@@ -409,16 +409,19 @@ class ShopwareContext extends SubContext
     /**
      * @When /^I click "([^"]*)"$/
      */
-    public function iClick($selector)
+    public function iClick(string $selector): void
     {
         $element = $this->getSession()->getPage()->findField($selector);
+        if (!$element instanceof NodeElement) {
+            Helper::throwException(sprintf('Could not find element with selector "%s"', $selector));
+        }
         $element->click();
     }
 
     /**
      * @When /^I follow "(?P<link>(?:[^"]|\\")*)" on Account menu$/
      */
-    public function clickLinkInAccount($link)
+    public function clickLinkInAccount(string $link): void
     {
         $element = $this->getSession()->getPage()->findAll('xpath', sprintf('//*[contains(concat(" ",normalize-space(@class)," ")," account--menu ")]//li//a[contains(text(),\'%s\')]', $link));
 
@@ -432,7 +435,7 @@ class ShopwareContext extends SubContext
     /**
      * @When /^Wait until ajax requests are done$/
      */
-    public function waitForAjaxRequestsDone()
+    public function waitForAjaxRequestsDone(): void
     {
         $session = $this->getSession();
         $this->getSession()->getPage()->waitFor(2000, static function () use ($session) {

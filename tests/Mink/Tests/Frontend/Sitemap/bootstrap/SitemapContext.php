@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,7 +28,8 @@ namespace Shopware\Tests\Mink\Tests\Frontend\Sitemap\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Page\Frontend\Sitemap\Elements\SitemapGroup;
-use Shopware\Tests\Mink\Page\Sitemap;
+use Shopware\Tests\Mink\Page\Frontend\Sitemap\Sitemap;
+use Shopware\Tests\Mink\Page\Frontend\Sitemap\SitemapIndexXml;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
 class SitemapContext extends SubContext
@@ -34,33 +37,33 @@ class SitemapContext extends SubContext
     /**
      * @Given /^I am on the sitemap\.xml$/
      */
-    public function iAmOnTheSitemapXml()
+    public function iAmOnTheSitemapXml(): void
     {
-        $this->getPage('Sitemap')->open(['xml' => '.xml']);
+        $this->getPage(Sitemap::class)->open(['xml' => '.xml']);
     }
 
     /**
      * @Given /^I am on the sitemap_index\.xml$/
      */
-    public function iAmOnTheSitemapIndexXml()
+    public function iAmOnTheSitemapIndexXml(): void
     {
-        $this->getPage('SitemapIndexXml')->open();
+        $this->getPage(SitemapIndexXml::class)->open();
     }
 
     /**
      * @Then /^I should see the group "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)":$/
      */
-    public function iShouldSeeTheGroup($name, TableNode $entries = null)
+    public function iShouldSeeTheGroup(string $name, TableNode $entries = null): void
     {
-        $this->iShouldSeeTheGroupWithLink($name, null, $entries);
+        $this->iShouldSeeTheGroupWithLink($name, '', $entries);
     }
 
     /**
      * @Then /^I should see the group "([^"]*)" with link "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)" with link "([^"]*)":$/
      */
-    public function iShouldSeeTheGroupWithLink($name, $link, TableNode $entries = null)
+    public function iShouldSeeTheGroupWithLink(string $name, string $link, TableNode $entries = null): void
     {
         $links = [];
 
@@ -68,15 +71,12 @@ class SitemapContext extends SubContext
             $links = $entries->getHash();
         }
 
-        /** @var Sitemap $page */
-        $page = $this->getPage('Sitemap');
+        $page = $this->getPage(Sitemap::class);
 
-        /** @var SitemapGroup $groups */
-        $groups = $this->getMultipleElement($page, 'SitemapGroup');
+        $groups = $this->getMultipleElement($page, SitemapGroup::class);
 
         $sitemapGroup = $name;
 
-        /** @var SitemapGroup $group */
         foreach ($groups as $group) {
             if ($group->getTitle() === $name) {
                 $sitemapGroup = $group;
@@ -90,9 +90,9 @@ class SitemapContext extends SubContext
     /**
      * @Then /^I should see the sitemap files:$/
      */
-    public function thereShouldBeTheseLinksInTheXml(TableNode $links)
+    public function thereShouldBeTheseLinksInTheXml(TableNode $links): void
     {
         $links = $links->getHash();
-        $this->getPage('SitemapIndexXml')->checkXml($links);
+        $this->getPage(SitemapIndexXml::class)->checkXml($links);
     }
 }

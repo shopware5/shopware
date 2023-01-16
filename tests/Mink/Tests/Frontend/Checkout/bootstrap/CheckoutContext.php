@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,7 +27,6 @@
 namespace Shopware\Tests\Mink\Tests\Frontend\Checkout\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ResponseTextException;
 use Doctrine\DBAL\Connection;
 use Exception;
@@ -37,11 +38,14 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Detail as ProductVariant;
 use Shopware\Models\Price\Discount;
 use Shopware\Models\Price\Group;
+use Shopware\Tests\Mink\Page\Frontend\Account\Account;
+use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountOrder;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutCart;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBox;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBoxModal;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutModalAddressSelection;
 use Shopware\Tests\Mink\Page\Frontend\Detail\Detail;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
@@ -51,37 +55,36 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I add the voucher "(?P<code>[^"]*)" to my basket$/
      */
-    public function iAddTheVoucherToMyBasket($voucher)
+    public function iAddTheVoucherToMyBasket(string $voucher): void
     {
-        $this->getPage('CheckoutCart')->addVoucher($voucher);
+        $this->getPage(CheckoutCart::class)->addVoucher($voucher);
     }
 
     /**
      * @When /^I remove the voucher$/
      */
-    public function iRemoveTheVoucher()
+    public function iRemoveTheVoucher(): void
     {
-        $this->getPage('CheckoutCart')->removeVoucher();
+        $this->getPage(CheckoutCart::class)->removeVoucher();
     }
 
     /**
-     * @When /^I add the article "(?P<articleNr>[^"]*)" to my basket$/
+     * @When /^I add the article "(?P<product>[^"]*)" to my basket$/
      */
-    public function iAddTheArticleToMyBasket($article)
+    public function iAddTheArticleToMyBasket(string $product): void
     {
-        $this->getPage('CheckoutCart')->addArticle($article);
+        $this->getPage(CheckoutCart::class)->addProduct($product);
     }
 
     /**
-     * @When /^I add the article "(?P<articleNr>[^"]*)" to my basket over HTTP GET$/
+     * @When /^I add the article "(?P<productNumber>[^"]*)" to my basket over HTTP GET$/
      */
-    public function iAddTheArticleToMyBasketOverHttpGet($article)
+    public function iAddTheArticleToMyBasketOverHttpGet(string $productNumber): void
     {
         try {
-            /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutCart $page */
-            $page = $this->getPage('CheckoutCart');
+            $page = $this->getPage(CheckoutCart::class);
             $page->resetCart();
-            $page->fillCartWithProducts([['number' => $article, 'quantity' => 1]]);
+            $page->fillCartWithProducts([['number' => $productNumber, 'quantity' => 1]]);
         } catch (Exception $unexpectedPageException) {
         }
     }
@@ -89,139 +92,128 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I remove the article on position (?P<num>\d+)$/
      */
-    public function iRemoveTheArticleOnPosition($position)
+    public function iRemoveTheArticleOnPosition(int $position): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutCart $page */
-        $page = $this->getPage('CheckoutCart');
+        $page = $this->getPage(CheckoutCart::class);
 
-        /** @var CartPosition $cartPosition */
-        $cartPosition = $this->getMultipleElement($page, 'CartPosition', $position);
+        $cartPosition = $this->getMultipleElement($page, CartPosition::class, $position);
         $page->removeProduct($cartPosition);
     }
 
     /**
      * @Given /^my finished order should look like this:$/
      */
-    public function myFinishedOrderShouldLookLikeThis(TableNode $positions)
+    public function myFinishedOrderShouldLookLikeThis(TableNode $positions): void
     {
-        $orderNumber = $this->getPage('CheckoutConfirm')->getOrderNumber();
+        $orderNumber = $this->getPage(CheckoutConfirm::class)->getOrderNumber();
         $values = $positions->getHash();
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account $page */
-        $page = $this->getPage('Account');
+        $page = $this->getPage(Account::class);
 
         $page->open();
         Helper::clickNamedLink($page, 'myOrdersLink');
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountOrder $order */
-        $order = $this->getMultipleElement($page, 'AccountOrder');
+        $order = $this->getMultipleElement($page, AccountOrder::class);
         $page->checkOrder($order, $orderNumber, $values);
     }
 
     /**
      * @Given /^the aggregations should look like this:$/
      */
-    public function theAggregationsShouldLookLikeThis(TableNode $aggregations)
+    public function theAggregationsShouldLookLikeThis(TableNode $aggregations): void
     {
         $aggregations = $aggregations->getHash();
-        $this->getPage('CheckoutCart')->checkAggregation($aggregations);
+        $this->getPage(CheckoutCart::class)->checkAggregation($aggregations);
     }
 
     /**
      * @When /^I proceed to order confirmation$/
      */
-    public function iProceedToOrderConfirmation()
+    public function iProceedToOrderConfirmation(): void
     {
-        $this->getPage('CheckoutCart')->proceedToOrderConfirmation();
+        $this->getPage(CheckoutCart::class)->proceedToOrderConfirmation();
     }
 
     /**
      * @Given /^I proceed to order confirmation with email "([^"]*)" and password "([^"]*)"$/
      */
-    public function iProceedToOrderConfirmationWithEmailAndPassword($email, $password)
+    public function iProceedToOrderConfirmationWithEmailAndPassword(string $email, string $password): void
     {
-        $this->getPage('CheckoutCart')->proceedToOrderConfirmationWithLogin($email, $password);
+        $this->getPage(CheckoutCart::class)->proceedToOrderConfirmationWithLogin($email, $password);
     }
 
     /**
      * @Given /^I proceed to checkout as:$/
      */
-    public function iProceedToCheckoutAs(TableNode $table)
+    public function iProceedToCheckoutAs(TableNode $table): void
     {
-        $this->getPage('CheckoutCart')->proceedToOrderConfirmationWithRegistration($table->getHash());
+        $this->getPage(CheckoutCart::class)->proceedToOrderConfirmationWithRegistration($table->getHash());
     }
 
     /**
      * @When /^I proceed to checkout$/
      */
-    public function iProceedToCheckout()
+    public function iProceedToCheckout(): void
     {
-        $this->getPage('CheckoutConfirm')->proceedToCheckout();
+        $this->getPage(CheckoutConfirm::class)->proceedToCheckout();
     }
 
     /**
      * @When /^I change the shipping method to (?P<shippingId>\d+)$/
      */
-    public function iChangeTheShippingMethodTo($shipping)
+    public function iChangeTheShippingMethodTo(int $shippingId): void
     {
         $data = [
             [
                 'field' => 'sDispatch',
-                'value' => $shipping,
+                'value' => $shippingId,
             ],
         ];
 
-        $this->getPage('CheckoutConfirm')->changeShippingMethod($data);
+        $this->getPage(CheckoutConfirm::class)->changeShippingMethod($data);
     }
 
     /**
      * @Given /^the cart contains the following products:$/
      */
-    public function theCartContainsTheFollowingProducts(TableNode $items)
+    public function theCartContainsTheFollowingProducts(TableNode $items): void
     {
-        /** @var Detail $detailPage */
-        $detailPage = $this->getPage('Detail');
+        $detailPage = $this->getPage(Detail::class);
 
         foreach ($items->getIterator() as $row) {
             $detailPage->open(['articleId' => $row['articleId'], 'number' => $row['number']]);
-            $detailPage->addToBasket($row['quantity']);
-        }
-
-        if ($this->getDriver() instanceof Selenium2Driver) {
-//            $detailPage->toBasket();
+            $detailPage->addToBasket((int) $row['quantity']);
         }
     }
 
     /**
      * @Then /^the cart should contain the following products:$/
      */
-    public function theCartShouldContainTheFollowingProducts(TableNode $items)
+    public function theCartShouldContainTheFollowingProducts(TableNode $items): void
     {
-        /** @var CheckoutCart $page */
-        $page = $this->getPage('CheckoutCart');
+        $page = $this->getPage(CheckoutCart::class);
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition $cartPositions */
-        $cartPositions = $this->getMultipleElement($page, 'CartPosition');
+        $cartPositions = $this->getMultipleElement($page, CartPosition::class);
         $page->checkCartProducts($cartPositions, $items->getHash());
     }
 
     /**
-     * @Given /^The article "(?P<articleNr>[^"]*)" is assigned to the price group "([^"]*)"$/
+     * @Given /^The article "(?P<productNumber>[^"]*)" is assigned to the price group "([^"]*)"$/
      */
-    public function theArticleIsAssignedToThePriceGroup($articleNumber, $priceGroupName)
+    public function theArticleIsAssignedToThePriceGroup(string $productNumber, string $priceGroupName): void
     {
         $modelManager = $this->getService(ModelManager::class);
 
         $priceGroup = $modelManager->getRepository(Group::class)->findOneBy(['name' => $priceGroupName]);
-        $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $articleNumber]);
+        $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $productNumber]);
 
         if ($productVariant === null) {
-            Helper::throwException('Article with number "' . $articleNumber . '" was not found.');
+            Helper::throwException(sprintf('Product with number "%s" was not found.', $productNumber));
         }
 
-        $article = $productVariant->getArticle();
-        $article->setPriceGroupActive(true);
-        $article->setPriceGroup($priceGroup);
+        $product = $productVariant->getArticle();
+        $product->setPriceGroupActive(true);
+        $product->setPriceGroup($priceGroup);
 
         $modelManager->flush();
     }
@@ -229,9 +221,8 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^A price group named "([^"]*)" that grants "([^"]*)" discount$/
      */
-    public function aPriceGroupNamedThatGrantsDiscount($priceGroupName, $grantedDiscount)
+    public function aPriceGroupNamedThatGrantsDiscount(string $priceGroupName, string $grantedDiscount): void
     {
-        /** @var ModelManager $modelManager */
         $modelManager = $this->getService(ModelManager::class);
 
         $priceGroup = $modelManager->getRepository(Group::class)->findOneBy(['name' => $priceGroupName]);
@@ -266,7 +257,7 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^there is a category defined:$/
      */
-    public function thereIsACategoryDefined(TableNode $table)
+    public function thereIsACategoryDefined(TableNode $table): void
     {
         $categories = $table->getHash();
 
@@ -293,7 +284,7 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^the following product exist:$/
      */
-    public function theFollowingProductExist(TableNode $table)
+    public function theFollowingProductExist(TableNode $table): void
     {
         $products = $table->getHash();
 
@@ -344,7 +335,7 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^the manufacturer exist:$/
      */
-    public function theManufacturerExist(TableNode $table)
+    public function theManufacturerExist(TableNode $table): void
     {
         $manufactures = $table->getHash();
 
@@ -367,7 +358,7 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^the customer group exist:$/
      */
-    public function theCustomerGroupExist(TableNode $table)
+    public function theCustomerGroupExist(TableNode $table): void
     {
         $groups = $table->getHash();
 
@@ -390,16 +381,16 @@ class CheckoutContext extends SubContext
     }
 
     /**
-     * @Given /^The article "(?P<articleNr>[^"]*)" has no active price group$/
+     * @Given /^The article "(?P<productNumber>[^"]*)" has no active price group$/
      */
-    public function theArticleHasNoActivePriceGroup($articleNumber)
+    public function theArticleHasNoActivePriceGroup(string $productNumber): void
     {
         $modelManager = $this->getService(ModelManager::class);
 
-        $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $articleNumber]);
+        $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $productNumber]);
 
         if ($productVariant === null) {
-            Helper::throwException('Article with number "' . $articleNumber . '" was not found.');
+            Helper::throwException('Product with number "' . $productNumber . '" was not found.');
         }
 
         $product = $productVariant->getArticle();
@@ -412,15 +403,12 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I click the link "([^"]*)" in the address box with title "([^"]*)"$/
      */
-    public function iClickTheLinkInTheAddressBoxWithTitle($linkName, $title)
+    public function iClickTheLinkInTheAddressBoxWithTitle(string $linkName, string $title): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutAddressBoxes */
-        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+        $checkoutAddressBoxes = $this->getMultipleElement($page, CheckoutAddressBox::class);
 
-        /** @var CheckoutAddressBox $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle($title)) {
                 Helper::clickNamedLink($box, $linkName);
@@ -433,13 +421,11 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I click on the link "([^"]*)"$/
      */
-    public function iClickOnTheLink($linkName)
+    public function iClickOnTheLink(string $linkName): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutModalAddressSelections */
-        $checkoutModalAddressSelections = $this->getMultipleElement($page, 'CheckoutModalAddressSelection');
+        $checkoutModalAddressSelections = $this->getMultipleElement($page, CheckoutModalAddressSelection::class);
 
         Helper::assertElementCount($checkoutModalAddressSelections, 1);
 
@@ -449,10 +435,9 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I create the address:$/
      */
-    public function iCreateTheAddress(TableNode $table)
+    public function iCreateTheAddress(TableNode $table): void
     {
-        /** @var CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
         $data = $table->getHash();
 
         $page->createArbitraryAddress($data);
@@ -461,9 +446,9 @@ class CheckoutContext extends SubContext
     /**
      * @Then /^I should see appear "([^"]*)"$/
      */
-    public function iShouldSeeAppear($text)
+    public function iShouldSeeAppear(string $text): void
     {
-        $this->spin(function ($context) use ($text) {
+        $this->spin(function () use ($text) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextContains(str_replace('\\"', '"', $text));
 
@@ -481,11 +466,9 @@ class CheckoutContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param int $wait
-     *
      * @throws Exception
      */
-    public function spin($lambda, $wait = 60)
+    public function spin(callable $lambda, int $wait = 60): void
     {
         $time = time();
         $stopTime = $time + $wait;
@@ -507,7 +490,7 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I wait for "([^"]*)" seconds$/
      */
-    public function iWaitForSeconds($seconds)
+    public function iWaitForSeconds(int $seconds): void
     {
         $wait = 0;
         while ($wait < $seconds) {
@@ -519,17 +502,14 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^there should be a modal addressbox "([^"]*)"$/
      */
-    public function thereShouldBeAModalAddressbox($address)
+    public function thereShouldBeAModalAddressbox(string $address): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutAddressBoxes */
-        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBoxModal');
+        $checkoutAddressBoxes = $this->getMultipleElement($page, CheckoutAddressBoxModal::class);
 
-        /** @var CheckoutAddressBoxModal $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->containsAdress($testAddress)) {
                 return;
@@ -543,17 +523,14 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I click "([^"]*)" on modal addressbox "([^"]*)"$/
      */
-    public function iClickOnModalAddressbox($buttonName, $address)
+    public function iClickOnModalAddressbox(string $buttonName, string $address): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutAddressBoxes */
-        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBoxModal');
+        $checkoutAddressBoxes = $this->getMultipleElement($page, CheckoutAddressBoxModal::class);
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBoxModal $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->containsAdress($testAddress)) {
                 Helper::pressNamedButton($box, $buttonName);
@@ -569,17 +546,19 @@ class CheckoutContext extends SubContext
     /**
      * @Then /^I should see appear "([^"]*)" in addressbox "([^"]*)" after "([^"]*)" disappeared$/
      */
-    public function iShouldSeeAppearInAddressboxAfterDisappeared($address, $title, $titleToDisappear)
+    public function iShouldSeeAppearInAddressboxAfterDisappeared(string $address, string $title, string $titleToDisappear): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
         if (empty(trim($testAddress[0]))) {
             $testAddress = array_shift($testAddress);
         }
+        if (!\is_array($testAddress)) {
+            Helper::throwException('Invalid address given');
+        }
 
-        $this->spin(function ($context) use ($titleToDisappear) {
+        $this->spin(function () use ($titleToDisappear) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
 
@@ -591,10 +570,8 @@ class CheckoutContext extends SubContext
             return false;
         });
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutAddressBoxes */
-        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+        $checkoutAddressBoxes = $this->getMultipleElement($page, CheckoutAddressBox::class);
 
-        /** @var CheckoutAddressBox $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle($title) && $box->containsAdress($testAddress)) {
                 return;
@@ -608,10 +585,9 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I change the address:$/
      */
-    public function iChangeTheAddress(TableNode $table)
+    public function iChangeTheAddress(TableNode $table): void
     {
-        /** @var CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
         $data = $table->getHash();
 
         $page->changeModalAddress($data);
@@ -620,10 +596,9 @@ class CheckoutContext extends SubContext
     /**
      * @Given /^I set "([^"]*)" as default after "([^"]*)" disappeared$/
      */
-    public function iSetAsDefaultAfterDisappeared($address, $titleToDisappear)
+    public function iSetAsDefaultAfterDisappeared(string $address, string $titleToDisappear): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
@@ -639,10 +614,8 @@ class CheckoutContext extends SubContext
             return false;
         });
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutAddressBoxes */
-        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+        $checkoutAddressBoxes = $this->getMultipleElement($page, CheckoutAddressBox::class);
 
-        /** @var CheckoutAddressBox $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle('Zahlung und Versand') === false && $box->containsAdress($testAddress)) {
                 $box->checkField('set_as_default_billing');
@@ -658,17 +631,14 @@ class CheckoutContext extends SubContext
     /**
      * @Then /^the "([^"]*)" addressbox must contain "([^"]*)"$/
      */
-    public function theAddressboxMustContain($title, $address)
+    public function theAddressboxMustContain(string $title, string $address): bool
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
-        $page = $this->getPage('CheckoutConfirm');
+        $page = $this->getPage(CheckoutConfirm::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $checkoutAddressBoxes */
-        $checkoutAddressBoxes = $this->getMultipleElement($page, 'CheckoutAddressBox');
+        $checkoutAddressBoxes = $this->getMultipleElement($page, CheckoutAddressBox::class);
 
-        /** @var CheckoutAddressBox $box */
         foreach ($checkoutAddressBoxes as $box) {
             if ($box->hasTitle($title) && $box->containsAdress($testAddress)) {
                 return true;
@@ -682,35 +652,33 @@ class CheckoutContext extends SubContext
     /**
      * @When /^I click "([^"]*)" to add the article to the cart$/
      */
-    public function iClickToAddTheArticleToTheCart($locator)
+    public function iClickToAddTheArticleToTheCart(string $locator): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Detail\Detail $page */
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         Helper::pressNamedButton($page, $locator);
     }
 
     /**
      * @Given /^I open the cart page$/
      */
-    public function iOpenTheCartPage()
+    public function iOpenTheCartPage(): void
     {
-        $this->getPage('CheckoutCart')->open();
+        $this->getPage(CheckoutCart::class)->open();
     }
 
     /**
      * @Then /^I open the order confirmation page$/
      */
-    public function iOpenTheOrderConfirmationPage()
+    public function iOpenTheOrderConfirmationPage(): void
     {
-        $this->getPage('CheckoutConfirm')->open();
+        $this->getPage(CheckoutConfirm::class)->open();
     }
 
     /**
      * @BeforeScenario @taxation
      */
-    public function addCustomTaxation()
+    public function addCustomTaxation(): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             INSERT INTO s_core_tax_rules (areaID, countryID, stateID, groupID, customer_groupID, tax, name, active)
@@ -722,9 +690,8 @@ EOD;
     /**
      * @AfterScenario @taxation
      */
-    public function removeCustomTaxation()
+    public function removeCustomTaxation(): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             DELETE FROM s_core_tax_rules
@@ -736,9 +703,8 @@ EOD;
     /**
      * @BeforeScenario @dispatchsurcharge
      */
-    public function addCustomDispatchSurcharge()
+    public function addCustomDispatchSurcharge(): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $sql = <<<"EOD"
             INSERT INTO `s_premium_dispatch` (`id`, `name`, `type`, `description`, `comment`, `active`, `position`, `calculation`, `surcharge_calculation`, `tax_calculation`, `shippingfree`, `multishopID`, `customergroupID`, `bind_shippingfree`, `bind_time_from`, `bind_time_to`, `bind_instock`, `bind_laststock`, `bind_weekday_from`, `bind_weekday_to`, `bind_weight_from`, `bind_weight_to`, `bind_price_from`, `bind_price_to`, `bind_sql`, `status_link`, `calculation_sql`)
@@ -771,9 +737,8 @@ EOD;
     /**
      * @AfterScenario @dispatchsurcharge
      */
-    public function removeCustomDispatchSurcharge()
+    public function removeCustomDispatchSurcharge(): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             SET @dispatchId = (SELECT id FROM `s_premium_dispatch` WHERE `name` = 'Sonderaufschlag');
@@ -799,9 +764,8 @@ EOD;
     /**
      * @BeforeFeature @checkoutadressmanagement
      */
-    public static function createUserForCheckoutAddressManagementTest()
+    public static function createUserForCheckoutAddressManagementTest(): void
     {
-        /** @var Connection $dbal */
         $dbal = Shopware()->Container()->get(Connection::class);
         $sql = <<<'EOD'
 INSERT INTO `s_user`
@@ -850,9 +814,8 @@ EOD;
     /**
      * @BeforeScenario @paymentsurcharge
      */
-    public function addCustomPaymentSurcharge()
+    public function addCustomPaymentSurcharge(): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             UPDATE s_core_paymentmeans SET debit_percent = 10 WHERE id = 5;
@@ -863,9 +826,8 @@ EOD;
     /**
      * @AfterScenario @paymentsurcharge
      */
-    public function removeCustomPaymentSurcharge()
+    public function removeCustomPaymentSurcharge(): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $sql = <<<'EOD'
             UPDATE s_core_paymentmeans SET debit_percent = 0 WHERE id = 5;
@@ -875,10 +837,8 @@ EOD;
 
     /**
      * @Given I checkout using GET
-     *
-     * @param string $path
      */
-    public function iCheckoutUsingGet($path = '/checkout/finish')
+    public function iCheckoutUsingGet(string $path = '/checkout/finish'): void
     {
         $this->getSession()->executeScript(sprintf('window.location.href = \'%s\'', $path));
     }

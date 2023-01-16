@@ -10,6 +10,7 @@ services:
 
 parameters:
     level: 8
+    phpVersion: 70400
     inferPrivatePropertyTypeFromConstructor: true
     reportUnmatchedIgnoredErrors: true
     treatPhpDocTypesAsCertain: false
@@ -32,6 +33,10 @@ parameters:
         - var/cache/production____REVISION___/doctrine
         - var/cache/production____REVISION___/proxies
         - engine/Library
+
+    stubFiles:
+        - tests/PHPStan/Stub/Behat/Context.stub
+        - tests/PHPStan/Stub/Behat/InitializedContextEnvironment.stub
 
     paths:
         - _sql/migrations

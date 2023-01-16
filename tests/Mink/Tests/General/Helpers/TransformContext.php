@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,6 +32,8 @@ class TransformContext extends SubContext
 {
     /**
      * @Transform /^(\d+)$/
+     *
+     * @param string $string
      */
     public function castStringToNumber($string): int
     {
@@ -38,8 +42,10 @@ class TransformContext extends SubContext
 
     /**
      * @Transform /^page "(.*)"$/
+     *
+     * @param class-string<Page> $pageName
      */
-    public function castPageNameToPage($pageName): Page
+    public function castPageNameToPage(string $pageName): Page
     {
         return $this->getPage($pageName);
     }

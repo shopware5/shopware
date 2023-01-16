@@ -184,7 +184,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public function changeConfigValue(string $configName, $value): void
     {
-        /** @var Connection $dbal */
         $dbal = $this->getService(Connection::class);
         $configId = $dbal->fetchOne(
             'SELECT `id` FROM `s_core_config_elements` WHERE `name` = ?',
@@ -198,7 +197,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
         $this->dirtyConfigElements[] = $configId;
 
-        /** @var ConfigWriter $configWriter */
         $configWriter = $this->getService(ConfigWriter::class);
 
         $configWriter->save($configName, $value);
@@ -233,7 +231,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public function clearCache(): void
     {
-        /** @var CacheManager $cacheManager */
         $cacheManager = $this->getService(CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
@@ -280,7 +277,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public static function deactivateInfiniteScrolling(): void
     {
-        /** @var Connection $dbal */
         $dbal = Shopware()->Container()->get(Connection::class);
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
@@ -298,7 +294,6 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public static function activateInfiniteScrolling(): void
     {
-        /** @var Connection $dbal */
         $dbal = Shopware()->Container()->get(Connection::class);
 
         $sql = "SET @elementId = (SELECT id FROM `s_core_templates_config_elements` WHERE `name` = 'infiniteScrolling');
@@ -341,7 +336,6 @@ EOD;
 
         Helper::setCurrentLanguage('de');
 
-        /** @var InstallerService $pluginManager */
         $pluginManager = $this->getService(InstallerService::class);
 
         // hack to prevent behat error handler kicking in.
@@ -450,7 +444,6 @@ EOD;
 
     private static function clearTemplateCache(): void
     {
-        /** @var CacheManager $cacheManager */
         $cacheManager = Shopware()->Container()->get(CacheManager::class);
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,7 +28,6 @@ namespace Shopware\Tests\Mink\Page\Frontend\Homepage\Elements;
 
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: YouTube
@@ -35,7 +36,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * Available retrievable properties:
  * - code (string, e.g. "RVz71XsJIEA")
  */
-class YouTube extends MultipleElement implements HelperSelectorInterface
+class YouTube extends MultipleElement
 {
     /**
      * @var array

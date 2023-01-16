@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +26,6 @@
 
 namespace Shopware\Tests\Mink\Page\Frontend\Listing;
 
-use Behat\Mink\Element\NodeElement;
 use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox;
@@ -131,7 +132,6 @@ class Listing extends Page implements HelperSelectorInterface
 
         $this->spin(function () {
             $elements = Helper::findElements($this, ['filterShowResults']);
-            /** @var NodeElement $showResults */
             $showResults = $elements['filterShowResults'];
             if ($showResults->isVisible()) {
                 return true;
@@ -253,7 +253,6 @@ class Listing extends Page implements HelperSelectorInterface
             return;
         }
         $elements = Helper::findElements($this, ['filterShowResults']);
-        /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];
 
         $activeProperties[0]->click();
@@ -277,13 +276,11 @@ class Listing extends Page implements HelperSelectorInterface
     protected function setFilters(FilterGroup $filterGroups, array $properties)
     {
         $elements = Helper::findElements($this, ['filterShowResults']);
-        /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];
 
         foreach ($properties as $property) {
             $found = false;
 
-            /** @var FilterGroup $filterGroup */
             foreach ($filterGroups as $filterGroup) {
                 $filterGroupName = rtrim($filterGroup->getText(), ' +');
 
@@ -367,7 +364,6 @@ class Listing extends Page implements HelperSelectorInterface
     private function pressShowResults()
     {
         $elements = Helper::findElements($this, ['filterShowResults']);
-        /** @var NodeElement $showResults */
         $showResults = $elements['filterShowResults'];
         $this->spin(function () use ($showResults) {
             if (!$showResults->hasClass('is--loading')) {

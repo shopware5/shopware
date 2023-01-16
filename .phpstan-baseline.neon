@@ -43411,46 +43411,6 @@ parameters:
 			path: tests/Mink/Extension/ShopwareExtension/Context/KernelAwareContext.php
 
 		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:initialize\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:load\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:load\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:loadContextInitializer\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:loadKernel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:loadKernel\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\ServiceContainer\\\\ShopwareExtension\\:\\:process\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/ServiceContainer/ShopwareExtension.php
-
-		-
 			message: "#^Cannot call method click\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
 			count: 1
 			path: tests/Mink/Page/Backend/Backend/Backend.php
@@ -43479,21 +43439,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\ContentTypeManager\\\\Elements\\\\ContentTypeManagerDetailWindow\\:\\:\\$elements type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Backend/ContentTypeManager/Elements/ContentTypeManagerDetailWindow.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\ContentTypeManager\\\\Elements\\\\ContentTypeManagerFieldWindow\\:\\:\\$elements type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/ContentTypeManager/Elements/ContentTypeManagerFieldWindow.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\ContentTypeManager\\\\Elements\\\\ContentTypeManagerListWindow\\:\\:\\$elements type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/ContentTypeManager/Elements/ContentTypeManagerListWindow.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\CustomRecipes\\\\Elements\\\\CustomRecipesListWindow\\:\\:\\$elements type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/CustomRecipes/Elements/CustomRecipesListWindow.php
 
 		-
 			message: "#^Argument of an invalid type array\\|float\\|string supplied for foreach, only iterables are supported\\.$#"
@@ -43536,16 +43481,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:changeEmail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:changePassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:changePaymentMethod\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Account.php
@@ -43566,11 +43501,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:checkAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:checkEsdArticles\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Account.php
@@ -43581,17 +43511,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:checkOrder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:checkOrder\\(\\) has parameter \\$articles with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:checkOrderNumber\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
@@ -43611,32 +43531,12 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:clickLoginAgain\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:createArbitraryAddress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:createArbitraryAddress\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:login\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:logout\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Account.php
 
@@ -43649,26 +43549,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:register\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:verifyLogin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:clickNamedLink\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element given\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Account.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountBilling\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Elements/AccountBilling.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountBilling\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -43701,11 +43581,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountOrder.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountPayment\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Elements/AccountPayment.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountPayment\\:\\:getPaymentMethodProperty\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountPayment.php
@@ -43716,29 +43591,9 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountPayment.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountShipping\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Elements/AccountShipping.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountShipping\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountShipping.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\AddressDelete\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Address/AddressDelete.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\AddressEdit\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Address/AddressEdit.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressBox\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Address/Elements/AddressBox.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -43771,11 +43626,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Address/Elements/AddressManagementAddressBox.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressManagementAddressBox\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Address/Elements/AddressManagementAddressBox.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressManagementAddressBox\\:\\:hasTitle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Address/Elements/AddressManagementAddressBox.php
@@ -43799,16 +43649,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\Article\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Article/Elements/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleBox\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Article/Elements/ArticleBox.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Article/Elements/ArticleBox.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleEvaluation\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -43836,11 +43676,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Article/Elements/ArticleSlider.php
 
 		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Article/Elements/ArticleSlider.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleSlider\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Article/Elements/ArticleSlider.php
@@ -43857,16 +43692,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Blog\\:\\:checkComments\\(\\) has parameter \\$comments with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Blog.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Blog\\:\\:checkRating\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Blog.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Blog\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Blog/Blog.php
 
@@ -43911,31 +43736,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Blog/Elements/BlogArticle.php
 
 		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Blog/Elements/BlogArticle.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogArticle\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Elements/BlogArticle.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogArticleBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Elements/BlogArticleBox.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogBox\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Elements/BlogBox.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Elements/BlogBox.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogComment\\:\\:getProperties\\(\\) has parameter \\$locators with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Blog/Elements/BlogComment.php
@@ -43961,37 +43761,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
 		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:login\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:register\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:addArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:addVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:changePaymentMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:changePaymentMethod\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:changeShippingMethod\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
@@ -44001,32 +43771,12 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:checkAggregation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:checkAggregation\\(\\) has parameter \\$aggregation with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:checkCartProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:checkCartProducts\\(\\) has parameter \\$items with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:emptyCart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:fillCartWithProducts\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
@@ -44041,47 +43791,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:proceedToOrderConfirmation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:proceedToOrderConfirmationWithLogin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:proceedToOrderConfirmationWithRegistration\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:proceedToOrderConfirmationWithRegistration\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:removeProduct\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:removeVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:resetCart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutCart\\:\\:verify\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutCart.php
 
@@ -44121,17 +43831,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changeBillingAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changeBillingAddress\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changeModalAddress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
@@ -44141,17 +43841,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changePaymentMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changePaymentMethod\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changeShippingAddress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
@@ -44161,27 +43851,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changeShippingMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:changeShippingMethod\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:checkPaymentMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:checkoutUsingGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:createArbitraryAddress\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
@@ -44191,52 +43861,12 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:proceedToCheckout\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\CheckoutConfirm\\:\\:verifyPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:clickNamedLink\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:fillForm\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:pressNamedButton\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
-
-		-
 			message: "#^Parameter \\#1 \\$url of method Behat\\\\Mink\\\\Session\\:\\:visit\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CartPosition\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CartPosition.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CartPosition\\:\\:getUniqueName\\(\\) has parameter \\$names with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CartPosition.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CartPosition\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CartPosition.php
 
@@ -44262,11 +43892,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBox\\:\\:getCompanyOrNull\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBox.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBox\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBox.php
 
@@ -44311,11 +43936,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBoxModal.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBoxModal\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBoxModal.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBoxModal\\:\\:hasTitle\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBoxModal.php
@@ -44331,19 +43951,9 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBoxModal.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutBilling\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutBilling.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutBilling\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutBilling.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutModalAddressEditor\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutModalAddressEditor.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutModalAddressEditor\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -44351,29 +43961,14 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutModalAddressEditor.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutModalAddressSelection\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutModalAddressSelection.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutModalAddressSelection\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutModalAddressSelection.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutPayment\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutPayment.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutPayment\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutPayment.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutShipping\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutShipping.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutShipping\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -44391,77 +43986,12 @@ parameters:
 			path: tests/Mink/Page/Frontend/Detail/Detail.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:addToBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:canNotSelectConfiguratorOption\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:checkEvaluations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:checkEvaluations\\(\\) has parameter \\$evaluations with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Detail/Detail.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:checkRating\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:checkSelect\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:configure\\(\\) has parameter \\$configuration with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:openEvaluationSection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:submitNotification\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:toBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:toBasket\\(\\) has parameter \\$offcanvasCart with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:verifyPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Detail\\\\Detail\\:\\:writeEvaluation\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Detail/Detail.php
 
@@ -44481,49 +44011,9 @@ parameters:
 			path: tests/Mink/Page/Frontend/Detail/Detail.php
 
 		-
-			message: "#^Variable \\$option in PHPDoc tag @var does not exist\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
-			message: "#^Cannot call method focus\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Form\\\\Form\\:\\:checkCaptcha\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Form\\\\Form\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Form\\\\Form\\:\\:submitInquiryForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Form\\\\Form\\:\\:submitInquiryForm\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Form\\\\Form\\:\\:verifyPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Form/Form.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Generic\\\\GenericPage\\:\\:checkLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Generic/GenericPage.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Generic\\\\GenericPage\\:\\:checkLink\\(\\) has parameter \\$query with no value type specified in iterable type array\\.$#"
@@ -44531,17 +44021,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Generic/GenericPage.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Generic\\\\GenericPage\\:\\:checkRobots\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Generic/GenericPage.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Generic\\\\GenericPage\\:\\:checkRobots\\(\\) has parameter \\$content with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Generic/GenericPage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Generic\\\\GenericPage\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Generic/GenericPage.php
 
@@ -44621,11 +44101,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Elements/CompareColumn.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\CompareColumn\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/CompareColumn.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\CompareColumn\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/CompareColumn.php
@@ -44646,19 +44121,9 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Elements/ManufacturerSlider.php
 
 		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Homepage/Elements/ManufacturerSlider.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\ManufacturerSlider\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/ManufacturerSlider.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\SearchForm\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/SearchForm.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\SearchForm\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -44682,11 +44147,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\SliderElement\\:\\:getSlides\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/SliderElement.php
-
-		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/SliderElement.php
 
@@ -44728,11 +44188,6 @@ parameters:
 		-
 			message: "#^Cannot access offset 'value2' on array\\|false\\.$#"
 			count: 8
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Homepage\\:\\:changeCurrency\\(\\) has no return type specified\\.$#"
-			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
 
 		-
@@ -44806,26 +44261,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Homepage\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Homepage\\:\\:receiveNoResultsMessageForKeyword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Homepage\\:\\:receiveSearchResultsFor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Homepage\\:\\:searchFor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Homepage\\:\\:subscribeNewsletter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
@@ -44841,16 +44276,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
 
 		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:fillForm\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element given\\.$#"
-			count: 2
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:pressNamedButton\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element given\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
 			message: "#^Parameter \\#1 \\$properties of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogArticle\\:\\:getArticles\\(\\) expects array\\<string\\>, array\\<int, int\\|string\\> given\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
@@ -44859,11 +44284,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$properties of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\SliderElement\\:\\:getSlides\\(\\) expects array\\<string\\>, array\\<int, int\\|string\\> given\\.$#"
 			count: 2
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Listing\\\\Elements\\\\Paging\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Listing/Elements/Paging.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Listing\\\\Elements\\\\Paging\\:\\:moveDirection\\(\\) has no return type specified\\.$#"
@@ -44936,11 +44356,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Listing/Listing.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Listing\\\\Listing\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Listing/Listing.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Listing\\\\Listing\\:\\:openListing\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Listing/Listing.php
@@ -44976,11 +44391,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Listing/Listing.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Newsletter\\\\Newsletter\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Newsletter/Newsletter.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Newsletter\\\\Newsletter\\:\\:subscribeNewsletter\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Newsletter/Newsletter.php
@@ -45007,16 +44417,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Note\\\\Elements\\\\NotePosition\\:\\:getImageProperty\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Note/Elements/NotePosition.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Note\\\\Elements\\\\NotePosition\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Note/Elements/NotePosition.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Note\\\\Elements\\\\NotePosition\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Note/Elements/NotePosition.php
 
@@ -45086,11 +44486,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Sitemap/Elements/SitemapGroup.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Sitemap\\\\Sitemap\\:\\:checkGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Sitemap/Sitemap.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Sitemap\\\\Sitemap\\:\\:checkGroup\\(\\) has parameter \\$sites with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Sitemap/Sitemap.php
@@ -45156,54 +44551,14 @@ parameters:
 			path: tests/Mink/Page/Helper/Elements/BannerSlider.php
 
 		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:find\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 4
-			path: tests/Mink/Page/Helper/Elements/BannerSlider.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\BannerSlider\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/BannerSlider.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\FilterGroup\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Helper/Elements/FilterGroup.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\HeaderCart\\:\\:checkCart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/HeaderCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\HeaderCart\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/HeaderCart.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\HeaderCart\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Helper/Elements/HeaderCart.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\LanguageSwitcher\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/LanguageSwitcher.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\LanguageSwitcher\\:\\:setLanguage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/LanguageSwitcher.php
-
-		-
-			message: "#^Parameter \\#2 \\$locator of method Behat\\\\Mink\\\\Element\\\\Element\\:\\:findAll\\(\\) expects array\\|string, bool\\|string given\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/LanguageSwitcher.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\LanguageSwitcher\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/LanguageSwitcher.php
 
 		-
 			message: "#^Class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\MultipleElement implements generic interface Iterator but does not specify its types\\: TKey, TValue$#"
@@ -45216,72 +44571,7 @@ parameters:
 			path: tests/Mink/Page/Helper/Elements/MultipleElement.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\MultipleElement\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/MultipleElement.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\MultipleElement\\:\\:remove\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/MultipleElement.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Backend\\\\bootstrap\\\\BackendContext\\:\\:iAmLoggedInToTheBackendAsAnAdminUser\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Backend/bootstrap/BackendContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Backend\\\\bootstrap\\\\BackendContext\\:\\:waitForText\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Backend/bootstrap/BackendContext.php
-
-		-
-			message: "#^Cannot call method xpath\\(\\) on SimpleXMLElement\\|false\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:assertKeyExists\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:assertKeyExists\\(\\) has parameter \\$key with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:assertKeyExists\\(\\) has parameter \\$row with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:assertStringsEqual\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:createSubshop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:disableExports\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:enableExports\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:iExportTheFeedFor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:iShouldSeeFeedWithFormatInTheExport\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
 
@@ -45301,27 +44591,7 @@ parameters:
 			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:removeSubshop\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:validate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:validate\\(\\) has parameter \\$export with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$entry has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Parameter \\#3 \\$shopType of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:validate\\(\\) expects bool, string given\\.$#"
 			count: 1
 			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
 
@@ -45329,1166 +44599,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Export\\\\bootstrap\\\\ExportContext\\:\\:\\$mappings type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/Backend/Export/bootstrap/ExportContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element\\:\\:moveDirection\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element\\:\\:moveToPage\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element\\:\\:noElement\\(\\)\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkListing\\(\\)\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkView\\(\\)\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:openListing\\(\\)\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to method checkArticleBox\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Listing\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to method filter\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Listing\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iAmOnTheListingPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iAmOnTheListingPageForCategoryOnPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iAmOnTheListingPageForCategoryOnPage\\(\\) has parameter \\$categoryId with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iAmOnTheListingPageForCategoryOnPage\\(\\) has parameter \\$page with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iBrowseTimesToPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iBrowseTimesToPage\\(\\) has parameter \\$direction with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iBrowseTimesToPage\\(\\) has parameter \\$steps with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iBrowseToPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iBrowseToPage\\(\\) has parameter \\$page with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iOrderTheArticleOnPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iOrderTheArticleOnPosition\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iSetTheFilterTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldNotBeAbleToBrowseToPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldNotBeAbleToBrowseToPage\\(\\) has parameter \\$direction with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldNotBeAbleToBrowseToPage2\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldNotBeAbleToBrowseToPage2\\(\\) has parameter \\$page with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldNotSeeTheArticleInListing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldNotSeeTheArticleInListing\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldSeeTheArticleInListing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:iShouldSeeTheArticleInListing\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:theArticleOnPositionShouldHaveThisProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:theArticleOnPositionShouldHaveThisProperties\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:theArticlesShouldBeShownInAListView\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\ListingContext\\:\\:theArticlesShouldBeShownInATableView\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$articleBox contains unknown class Shopware\\\\Tests\\\\Mink\\\\Element\\\\ArticleBox\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Listing\\.$#"
-			count: 3
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$page of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMultipleElement\\(\\) expects SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Listing given\\.$#"
-			count: 3
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:clickNamedLink\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, Shopware\\\\Tests\\\\Mink\\\\Element\\\\ArticleBox given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/ListingContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkLink\\(\\)\\.$#"
-			count: 3
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkRobots\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Call to method checkLink\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\GenericPage\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldNotSeePageMeta\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldNotSeePageMeta\\(\\) has parameter \\$locator with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldNotSeePaginationMetas\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldRobotsMeta\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldRobotsMeta\\(\\) has parameter \\$metaOne with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldRobotsMeta\\(\\) has parameter \\$metaTwo with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldSeePageMeta\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldSeePageMeta\\(\\) has parameter \\$locator with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldSeePageMetaWithLinkAndPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldSeePageMetaWithLinkAndPage\\(\\) has parameter \\$locator with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldSeePageMetaWithLinkAndPage\\(\\) has parameter \\$page with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Backend\\\\Listing\\\\bootstrap\\\\SeoContext\\:\\:iShouldSeePageMetaWithLinkAndPage\\(\\) has parameter \\$path with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\GenericPage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Backend/Listing/bootstrap/SeoContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:changeEmail\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:changePassword\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:changeProfile\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkAddress\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkPaymentMethod\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:clickLoginAgain\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:login\\(\\)\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:logout\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:register\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:verifyLogin\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:endsWith\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:endsWith\\(\\) has parameter \\$haystack with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:endsWith\\(\\) has parameter \\$needle with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyBillingAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyEmailWithPasswordToWithConfirmation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyEmailWithPasswordToWithConfirmation\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyEmailWithPasswordToWithConfirmation\\(\\) has parameter \\$emailConfirmation with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyEmailWithPasswordToWithConfirmation\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyPasswordFromToWithConfirmation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyPasswordFromToWithConfirmation\\(\\) has parameter \\$currentPassword with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyPasswordFromToWithConfirmation\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyPasswordFromToWithConfirmation\\(\\) has parameter \\$passwordConfirmation with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeMyShippingAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeTheCurrentAddressTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeThePaymentMethodTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChangeThePaymentMethodTo\\(\\) has parameter \\$payment with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChooseTheAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iChooseTheAddress\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iClickOnAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iClickOnAddress\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iClickOnAddress\\(\\) has parameter \\$locator with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iClickOnLoginAgain\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iCreateANewAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iDeleteTheAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iDeleteTheAddress\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInAsWithPassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInAsWithPassword\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInAsWithPassword\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInSuccessfulAsWithPassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInSuccessfulAsWithPassword\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInSuccessfulAsWithPassword\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogInSuccessfulAsWithPassword\\(\\) has parameter \\$username with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iLogMeOut\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iMustNotSeeInBoxWithTitle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iMustNotSeeInBoxWithTitle\\(\\) has parameter \\$elementName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iMustNotSeeInBoxWithTitle\\(\\) has parameter \\$title with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iRegisterMe\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iShouldSeeOnlyWithTitle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iShouldSeeOnlyWithTitle\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:iShouldSeeOnlyWithTitle\\(\\) has parameter \\$addressTitle with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:theAddressShouldBe\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:theAddressShouldBe\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:theAddressShouldBe\\(\\) has parameter \\$type with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:theCurrentPaymentMethodShouldBe\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:theCurrentPaymentMethodShouldBe\\(\\) has parameter \\$paymentMethod with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:thereMustNotBeAnAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:thereMustNotBeAnAddress\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:thereShouldBeAnAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Account\\\\bootstrap\\\\AccountContext\\:\\:thereShouldBeAnAddress\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$addressManagementAddressBoxes has no value type specified in iterable type array\\.$#"
-			count: 6
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$addresses of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Account\\:\\:chooseAddress\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressBox, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\MultipleElement given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Account/bootstrap/AccountContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:writeComment\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iAmOnTheBlogCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iAmOnTheBlogCategory\\(\\) has parameter \\$categoryId with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iClickToReadTheBlogArticleOnPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iClickToReadTheBlogArticleOnPosition\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iOpenTheCommentForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iShouldSeeAnAverageEvaluationOfFromFollowingComments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iShouldSeeAnAverageEvaluationOfFromFollowingComments\\(\\) has parameter \\$average with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:iWriteAComment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Blog\\\\bootstrap\\\\BlogContext\\:\\:theShopOwnerActivateMyLatestComment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$blogComments of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Blog\\:\\:checkComments\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogComment, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\MultipleElement given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Blog/bootstrap/BlogContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:addArticle\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:addVoucher\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:changeShippingMethod\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkAggregation\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:getOrderNumber\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:proceedToCheckout\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:proceedToOrderConfirmation\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:proceedToOrderConfirmationWithLogin\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:proceedToOrderConfirmationWithRegistration\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:removeVoucher\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:aPriceGroupNamedThatGrantsDiscount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:aPriceGroupNamedThatGrantsDiscount\\(\\) has parameter \\$grantedDiscount with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:aPriceGroupNamedThatGrantsDiscount\\(\\) has parameter \\$priceGroupName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:addCustomDispatchSurcharge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:addCustomPaymentSurcharge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:addCustomTaxation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:createUserForCheckoutAddressManagementTest\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iAddTheArticleToMyBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iAddTheArticleToMyBasket\\(\\) has parameter \\$article with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iAddTheArticleToMyBasketOverHttpGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iAddTheArticleToMyBasketOverHttpGet\\(\\) has parameter \\$article with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iAddTheVoucherToMyBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iAddTheVoucherToMyBasket\\(\\) has parameter \\$voucher with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iChangeTheAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iChangeTheShippingMethodTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iChangeTheShippingMethodTo\\(\\) has parameter \\$shipping with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iCheckoutUsingGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickOnModalAddressbox\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickOnModalAddressbox\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickOnModalAddressbox\\(\\) has parameter \\$buttonName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickOnTheLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickOnTheLink\\(\\) has parameter \\$linkName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickTheLinkInTheAddressBoxWithTitle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickTheLinkInTheAddressBoxWithTitle\\(\\) has parameter \\$linkName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickTheLinkInTheAddressBoxWithTitle\\(\\) has parameter \\$title with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickToAddTheArticleToTheCart\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iClickToAddTheArticleToTheCart\\(\\) has parameter \\$locator with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iCreateTheAddress\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iOpenTheCartPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iOpenTheOrderConfirmationPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iProceedToCheckout\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iProceedToCheckoutAs\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iProceedToOrderConfirmation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iProceedToOrderConfirmationWithEmailAndPassword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iProceedToOrderConfirmationWithEmailAndPassword\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iProceedToOrderConfirmationWithEmailAndPassword\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iRemoveTheArticleOnPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iRemoveTheArticleOnPosition\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iRemoveTheVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iSetAsDefaultAfterDisappeared\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iSetAsDefaultAfterDisappeared\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iSetAsDefaultAfterDisappeared\\(\\) has parameter \\$titleToDisappear with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iShouldSeeAppear\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iShouldSeeAppear\\(\\) has parameter \\$text with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iShouldSeeAppearInAddressboxAfterDisappeared\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iShouldSeeAppearInAddressboxAfterDisappeared\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iShouldSeeAppearInAddressboxAfterDisappeared\\(\\) has parameter \\$title with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iShouldSeeAppearInAddressboxAfterDisappeared\\(\\) has parameter \\$titleToDisappear with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iWaitForSeconds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:iWaitForSeconds\\(\\) has parameter \\$seconds with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:myFinishedOrderShouldLookLikeThis\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:removeCustomDispatchSurcharge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:removeCustomPaymentSurcharge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:removeCustomTaxation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:spin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:spin\\(\\) has parameter \\$lambda with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theAddressboxMustContain\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theAddressboxMustContain\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theAddressboxMustContain\\(\\) has parameter \\$title with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theAggregationsShouldLookLikeThis\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theArticleHasNoActivePriceGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theArticleHasNoActivePriceGroup\\(\\) has parameter \\$articleNumber with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theArticleIsAssignedToThePriceGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theArticleIsAssignedToThePriceGroup\\(\\) has parameter \\$articleNumber with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theArticleIsAssignedToThePriceGroup\\(\\) has parameter \\$priceGroupName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theCartContainsTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theCartShouldContainTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theCustomerGroupExist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theFollowingProductExist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:theManufacturerExist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:thereIsACategoryDefined\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:thereShouldBeAModalAddressbox\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Checkout\\\\bootstrap\\\\CheckoutContext\\:\\:thereShouldBeAModalAddressbox\\(\\) has parameter \\$address with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$givenAddress of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBox\\:\\:containsAdress\\(\\) expects array, array\\<int, string\\>\\|string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Checkout/bootstrap/CheckoutContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:canNotSelectConfiguratorOption\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkSelect\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:configure\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:submitNotification\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:writeEvaluation\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iAmOnTheDetailPageForArticle\\(\\) has parameter \\$articleId with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iAmOnTheDetailPageForVariantOfArticle\\(\\) has parameter \\$articleId with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iAmOnTheDetailPageForVariantOfArticle\\(\\) has parameter \\$number with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iCanNotSelectFrom\\(\\) has parameter \\$configuratorGroup with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iCanNotSelectFrom\\(\\) has parameter \\$configuratorOption with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iCanSelectEveryOptionOfFromTo\\(\\) has parameter \\$graduation with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iCanSelectEveryOptionOfFromTo\\(\\) has parameter \\$max with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iCanSelectEveryOptionOfFromTo\\(\\) has parameter \\$min with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iCanSelectEveryOptionOfFromTo\\(\\) has parameter \\$select with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iPutTheArticleTimesIntoTheBasket\\(\\) has parameter \\$quantity with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations\\(\\) has parameter \\$average with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:iSubmitTheNotificationFormWith\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\DetailContext\\:\\:theShopOwnerActivateMyLatestEvaluation\\(\\) has parameter \\$limit with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkCaptcha\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/FormContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:submitInquiryForm\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/FormContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\FormContext\\:\\:iAmOnForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/FormContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\FormContext\\:\\:iAmOnForm\\(\\) has parameter \\$id with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/FormContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\FormContext\\:\\:iShouldSeeACaptcha\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/FormContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Detail\\\\bootstrap\\\\FormContext\\:\\:iSubmitTheInquiryFormWith\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Detail/bootstrap/FormContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\SecurityContext\\:\\:setCsrfStatus\\(\\) has no return type specified\\.$#"
@@ -46521,601 +44631,6 @@ parameters:
 			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/SecurityContext.php
 
 		-
-			message: "#^Call to an undefined method Behat\\\\Testwork\\\\Environment\\\\Environment\\:\\:getContext\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element\\:\\:checkCart\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:changeCurrency\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:getShopUrl\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:receiveNoResultsMessageForKeyword\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:receiveSearchResultsFor\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:searchFor\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:unsubscribeNewsletter\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkArticle\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkBlogArticles\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkCategoryTeaser\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkComparisonProducts\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkLinkedBanner\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkManufacturerSlider\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkMappedBanner\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkSlider\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 2
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkYoutubeVideo\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method subscribeNewsletter\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method subscribeNewsletter\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Newsletter\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Cannot call method click\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:clickLinkInAccount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:clickLinkInAccount\\(\\) has parameter \\$link with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:gatherContexts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iChangeTheCurrencyTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iChangeTheCurrencyTo\\(\\) has parameter \\$currency with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iClick\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iClick\\(\\) has parameter \\$selector with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iConfirmTheLinkInTheEmail\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iConfirmTheLinkInTheEmail\\(\\) has parameter \\$limit with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iDisableTheConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iDisableTheConfig\\(\\) has parameter \\$configName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iEnableTheConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iEnableTheConfig\\(\\) has parameter \\$configName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iReceivedTheSearchResultsFor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iReceivedTheSearchResultsFor\\(\\) has parameter \\$searchTerm with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iScrollToTheBottomOfThePage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iSearchFor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iSearchFor\\(\\) has parameter \\$searchTerm with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABanner\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABanner\\(\\) has parameter \\$image with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABanner\\(\\) has parameter \\$link with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImage\\(\\) has parameter \\$image with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImage\\(\\) has parameter \\$link with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImage\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImageAndMapping\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImageAndMapping\\(\\) has parameter \\$image with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerOnPositionWithImageAndMapping\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerSlider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerWithMapping\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeABannerWithMapping\\(\\) has parameter \\$image with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeACategoryTeaserWithImageTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeACategoryTeaserWithImageTo\\(\\) has parameter \\$image with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeACategoryTeaserWithImageTo\\(\\) has parameter \\$link with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeACategoryTeaserWithImageTo\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeACategoryTeaserWithImageTo\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeAManufacturerSlider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeAYoutubeVideo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeAYoutubeVideo\\(\\) has parameter \\$code with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeAnArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeAnArticle\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeAnArticleSlider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeSomeBlogArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeTheNoResultsMessageForKeyword\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iShouldSeeTheNoResultsMessageForKeyword\\(\\) has parameter \\$keyword with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iSubscribeToTheNewsletterWith\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iSubscribeToTheNewsletterWith\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iTheLanguageShouldBe\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iTheLanguageShouldBe\\(\\) has parameter \\$language with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iUnsubscribeTheNewsletter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:iUnsubscribeTheNewsletter\\(\\) has parameter \\$email with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theCartShouldContainArticlesWithAValueOf\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theCartShouldContainArticlesWithAValueOf\\(\\) has parameter \\$amount with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theCartShouldContainArticlesWithAValueOf\\(\\) has parameter \\$quantity with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theComparisonShouldContainTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theConfigValueOfIs\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theConfigValueOfIs\\(\\) has parameter \\$configName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theConfigValueOfIs\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:theEmotionWorldHasLoaded\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Homepage\\\\bootstrap\\\\ShopwareContext\\:\\:waitForAjaxRequestsDone\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$article contains unknown class Shopware\\\\Tests\\\\Mink\\\\Element\\\\Article\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$compareColumns contains unknown class Shopware\\\\Tests\\\\Mink\\\\Element\\\\CompareColumn\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 11
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Newsletter\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$page of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMultipleElement\\(\\) expects SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage given\\.$#"
-			count: 10
-			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/ShopwareContext.php
-
-		-
-			message: "#^Call to method checkNoteProducts\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Note\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Call to method fillNoteWithProducts\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Note\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Call to method open\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Note\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:clickActionLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:clickActionLink\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:clickActionLink\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iCompareTheArticleOnPositionOfMyNote\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iCompareTheArticleOnPositionOfMyNote\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iPutTheArticleOnPositionOfMyNoteInTheBasket\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iPutTheArticleOnPositionOfMyNoteInTheBasket\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iRemoveTheArticleOnPositionOfMyNote\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iRemoveTheArticleOnPositionOfMyNote\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iVisitTheDetailPageOfTheArticleOnPositionOfMyNote\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:iVisitTheDetailPageOfTheArticleOnPositionOfMyNote\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:pressActionButton\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:pressActionButton\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:pressActionButton\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:theNoteContainsTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Note\\\\bootstrap\\\\NoteContext\\:\\:theNoteShouldContainTheFollowingProducts\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Note\\.$#"
-			count: 4
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$page of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMultipleElement\\(\\) expects SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Note given\\.$#"
-			count: 3
-			path: tests/Mink/Tests/Frontend/Note/bootstrap/NoteContext.php
-
-		-
-			message: "#^Call to an undefined method SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\:\\:checkXml\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Call to method checkGroup\\(\\) on an unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Sitemap\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iAmOnTheSitemapIndexXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iAmOnTheSitemapXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iShouldSeeTheGroup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iShouldSeeTheGroup\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iShouldSeeTheGroupWithLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iShouldSeeTheGroupWithLink\\(\\) has parameter \\$link with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:iShouldSeeTheGroupWithLink\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\Frontend\\\\Sitemap\\\\bootstrap\\\\SitemapContext\\:\\:thereShouldBeTheseLinksInTheXml\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Sitemap\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$page of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMultipleElement\\(\\) expects SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Sitemap given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/Frontend/Sitemap/bootstrap/SitemapContext.php
-
-		-
 			message: "#^Call to method getClient\\(\\) on an unknown class Behat\\\\Mink\\\\Driver\\\\BrowserKitDriver\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/FeatureContext.php
@@ -47124,51 +44639,6 @@ parameters:
 			message: "#^Class Behat\\\\Mink\\\\Driver\\\\BrowserKitDriver not found\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/FeatureContext.php
-
-		-
-			message: "#^Call to an undefined method Behat\\\\Mink\\\\Element\\\\NodeElement\\|Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:clickLink\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Call to an undefined method Behat\\\\Mink\\\\Element\\\\NodeElement\\|Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:hasButton\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Call to an undefined method Behat\\\\Mink\\\\Element\\\\NodeElement\\|Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:hasLink\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Call to an undefined method Behat\\\\Mink\\\\Element\\\\NodeElement\\|Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:pressButton\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:find\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:findAll\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:getSession\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Dead catch \\- WebDriver\\\\Exception\\\\StaleElementReference is never thrown in the try block\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:assertElementCount\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:assertElementProperties\\(\\) has parameter \\$properties with no value type specified in iterable type array\\.$#"
@@ -47196,11 +44666,6 @@ parameters:
 			path: tests/Mink/Tests/General/Helpers/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:clickNamedLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:compareArrays\\(\\) has parameter \\$array1 with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
@@ -47222,16 +44687,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:convertTableHashToArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:fillForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:fillForm\\(\\) has parameter \\$values with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
 
@@ -47266,11 +44721,6 @@ parameters:
 			path: tests/Mink/Tests/General/Helpers/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:getElementData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:getElementProperty\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
@@ -47291,11 +44741,6 @@ parameters:
 			path: tests/Mink/Tests/General/Helpers/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:pressNamedButton\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:searchElements\\(\\) has parameter \\$needles with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
@@ -47306,234 +44751,9 @@ parameters:
 			path: tests/Mink/Tests/General/Helpers/Helper.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:setCurrentLanguage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:setCurrentLanguage\\(\\) has parameter \\$language with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:spin\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:throwException\\(\\) has parameter \\$messages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:waitForOverlay\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$parent with type SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element\\|SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\|Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface is not subtype of native type Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\.$#"
-			count: 10
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:findAllOfElements\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Element given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Parameter \\#2 \\$subject of function preg_match expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:\\$language has no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:getNamedSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/HelperSelectorInterface.php
-
-		-
-			message: "#^Call to an undefined method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface\\:\\:press\\(\\)\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Call to protected method verifyPage\\(\\) of class SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:IignoreFormValidations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:clickElementWhenClickable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:clickNamedButtonWhenClickable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:clickNamedLinkWhenClickable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iAmOnThePage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElement\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElement\\(\\) has parameter \\$elementClass with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElement\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElementOnPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElementOnPosition\\(\\) has parameter \\$elementClass with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElementOnPosition\\(\\) has parameter \\$linkName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfTheElementOnPosition\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfThePage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iFollowTheLinkOfThePage\\(\\) has parameter \\$linkName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iPressTheButtonOfTheElementOnPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iPressTheButtonOfTheElementOnPosition\\(\\) has parameter \\$elementClass with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iPressTheButtonOfTheElementOnPosition\\(\\) has parameter \\$linkName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iPressTheButtonOfTheElementOnPosition\\(\\) has parameter \\$position with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iShouldBeOnThePage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iShouldSeeElementsOfType\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iShouldSeeElementsOfType\\(\\) has parameter \\$count with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iShouldSeeElementsOfType\\(\\) has parameter \\$elementClass with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:iShouldSeeElementsOfType\\(\\) has parameter \\$mode with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:spin\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:theArticlesFromHaveTaxId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:theArticlesFromHaveTaxId\\(\\) has parameter \\$supplier with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:theArticlesFromHaveTaxId\\(\\) has parameter \\$taxId with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:theFieldShouldContain\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:theFieldShouldContain\\(\\) has parameter \\$field with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$page contains unknown class Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage\\.$#"
-			count: 3
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$element of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SpecialContext\\:\\:clickElementWhenClickable\\(\\) expects Behat\\\\Mink\\\\Element\\\\NodeElement, Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$page of method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMultipleElement\\(\\) expects SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage given\\.$#"
-			count: 2
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\MultipleElement\\:\\:setParent\\(\\) expects Behat\\\\Mink\\\\Element\\\\Element, Shopware\\\\Tests\\\\Mink\\\\Page\\\\Homepage given\\.$#"
-			count: 2
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
-
-		-
-			message: "#^Parameter \\#1 \\$parent of static method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:clickNamedLink\\(\\) expects Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\HelperSelectorInterface, SensioLabs\\\\Behat\\\\PageObjectExtension\\\\PageObject\\\\Page given\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SpecialContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMinkParameter\\(\\) has no return type specified\\.$#"
@@ -47564,16 +44784,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:\\$minkParameters type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\TransformContext\\:\\:castPageNameToPage\\(\\) has parameter \\$pageName with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/TransformContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\TransformContext\\:\\:castStringToNumber\\(\\) has parameter \\$string with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/TransformContext.php
 
 		-
 			message: "#^Access to an undefined property Enlight_Collection_ArrayCollection\\:\\:\\$key_one\\.$#"

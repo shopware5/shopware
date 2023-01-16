@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -65,7 +67,7 @@ class Form extends Page implements HelperSelectorInterface
      *
      * @throws Exception
      */
-    public function verifyPage()
+    public function verifyPage(): void
     {
         $errors = [];
 
@@ -88,13 +90,18 @@ class Form extends Page implements HelperSelectorInterface
      *
      * @throws Exception
      */
-    public function checkCaptcha()
+    public function checkCaptcha(): void
     {
         $placeholderSelector = Helper::getRequiredSelector($this, 'captchaPlaceholder');
-        /** @var NodeElement $placeholder */
         $placeholder = $this->find('css', $placeholderSelector);
+        if (!$placeholder instanceof NodeElement) {
+            Helper::throwException('Could not find captchaPlaceholder');
+        }
 
         $parentFormInput = $placeholder->find('xpath', "/ancestor::form[1]/descendant::input[@type='text']");
+        if (!$parentFormInput instanceof NodeElement) {
+            Helper::throwException('Could not find parent form input');
+        }
         $parentFormInput->focus();
 
         if (!$this->getSession()->wait(5000, "$('$placeholderSelector').children().length > 0")) {
@@ -104,7 +111,6 @@ class Form extends Page implements HelperSelectorInterface
 
         $this->getSession()->wait(5000);
 
-        /** @var NodeElement[] $elements */
         $elements = Helper::findElements($this, ['captchaPlaceholder']);
         if (empty($elements['captchaPlaceholder']->getText())) {
             $message = 'The captcha was not loaded correctly!';
@@ -115,7 +121,7 @@ class Form extends Page implements HelperSelectorInterface
     /**
      * Fills the fields of the inquiry form with $data and submits it
      */
-    public function submitInquiryForm(array $data)
+    public function submitInquiryForm(array $data): void
     {
         Helper::fillForm($this, 'inquiryForm', $data);
         Helper::pressNamedButton($this, 'submitButton');

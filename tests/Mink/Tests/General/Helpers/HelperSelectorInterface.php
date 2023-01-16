@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -39,7 +41,7 @@ interface HelperSelectorInterface
      *  'text' = 'p'
      * ]
      *
-     * @return string[]
+     * @return array<string, string>
      */
     public function getCssSelectors();
 
@@ -52,7 +54,7 @@ interface HelperSelectorInterface
      *  'reset'  = ['de' = 'Zurücksetzen', 'en' = 'Reset']
      * ]
      *
-     * @return array[]
+     * @return array<string, array<string, string>>
      */
     public function getNamedSelectors();
 }

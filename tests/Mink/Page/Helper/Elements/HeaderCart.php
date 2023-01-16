@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -64,12 +66,9 @@ class HeaderCart extends Element implements HelperSelectorInterface
     }
 
     /**
-     * @param string $quantity
-     * @param float  $amount
-     *
      * @throws Exception
      */
-    public function checkCart($quantity, $amount)
+    public function checkCart(int $quantity, string $amount): void
     {
         $element = Helper::findElements($this, ['quantity', 'amount']);
 

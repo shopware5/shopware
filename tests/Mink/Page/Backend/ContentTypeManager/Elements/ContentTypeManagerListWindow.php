@@ -36,15 +36,8 @@ class ContentTypeManagerListWindow extends Element
      */
     protected $selector = ".x-window[id^='content-type-manager-list-window']";
 
-    /**
-     * @var array<string, string|array>
-     */
-    protected $elements = [
-        'Add button' => ['xpath' => "//*[@class='x-btn-icon sprite-plus-circle-frame']/.."],
-    ];
-
     public function getAddButton(): NodeElement
     {
-        return $this->getElement('Add button')->getParent();
+        return $this->getElement(AddButton::class)->getParent();
     }
 }

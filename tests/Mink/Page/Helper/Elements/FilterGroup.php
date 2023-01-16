@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +26,6 @@
 
 namespace Shopware\Tests\Mink\Page\Helper\Elements;
 
-use Behat\Mink\Element\NodeElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
@@ -62,7 +63,6 @@ class FilterGroup extends MultipleElement
 
         $elements = Helper::findElements($this, ['properties']);
 
-        /** @var NodeElement $propertyContainer */
         $propertyContainer = $elements['properties'];
 
         if (!$propertyContainer->hasField($propertyName)) {

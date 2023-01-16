@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,6 +36,7 @@ use Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogArticle;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\Banner;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\CategoryTeaser;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\CompareColumn;
+use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\SearchForm;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\SliderElement;
 use Shopware\Tests\Mink\Page\Frontend\Homepage\Elements\YouTube;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
@@ -84,10 +87,8 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Searches the given term in the shop
-     *
-     * @param string $searchTerm
      */
-    public function searchFor($searchTerm)
+    public function searchFor(string $searchTerm): void
     {
         $data = [
             [
@@ -96,7 +97,7 @@ class Homepage extends Page implements HelperSelectorInterface
             ],
         ];
 
-        $searchForm = $this->getElement('SearchForm');
+        $searchForm = $this->getElement(SearchForm::class);
         Helper::fillForm($searchForm, 'searchForm', $data);
         Helper::pressNamedButton($searchForm, 'searchButton');
         $this->verifyResponse();
@@ -104,10 +105,8 @@ class Homepage extends Page implements HelperSelectorInterface
 
     /**
      * Search the given term using live search
-     *
-     * @param string $searchTerm
      */
-    public function receiveSearchResultsFor($searchTerm)
+    public function receiveSearchResultsFor(string $searchTerm): void
     {
         $data = [
             [
@@ -116,13 +115,13 @@ class Homepage extends Page implements HelperSelectorInterface
             ],
         ];
 
-        $searchForm = $this->getElement('SearchForm');
+        $searchForm = $this->getElement(SearchForm::class);
         Helper::fillForm($searchForm, 'searchForm', $data);
         $this->getSession()->wait(10000, "$('ul.results--list').children().length > 0");
         $this->getSession()->wait(1000);
     }
 
-    public function receiveNoResultsMessageForKeyword()
+    public function receiveNoResultsMessageForKeyword(): void
     {
         // $keyword gets ignored in responsive template
         $assert = new WebAssert($this->getSession());
@@ -132,11 +131,9 @@ class Homepage extends Page implements HelperSelectorInterface
     /**
      * Changes the currency
      *
-     * @param string $currency
-     *
      * @throws ElementNotFoundException
      */
-    public function changeCurrency($currency)
+    public function changeCurrency(string $currency): void
     {
         if (!$this->getDriver() instanceof Selenium2Driver) {
             Helper::throwException('Changing the currency in Responsive template requires Javascript!');

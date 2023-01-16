@@ -3,12 +3,12 @@ Feature: Blog
 
     Background:
         Given I am on the blog category 17
-        And   I should see 3 elements of type "BlogBox"
+        And   I should see 3 elements of type "\Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogBox"
 
     @filter
     Scenario: I can filter the blog articles by its date
         Given I follow "2012-08"
-        Then  I should see 3 elements of type "BlogBox"
+        Then  I should see 3 elements of type "\Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogBox"
         And   I should see "Der Sommer wird bunt 22.08.12"
         And   I should see "Sonnenschutz - so gehören Sie zur Crème de la Crème 18.08.12"
         And   I should see "Ich packe meinen Koffer… 08.08.12"
@@ -18,7 +18,7 @@ Feature: Blog
         Given I click to read the blog article on position <position>
         Then  I should see "<title>"
         Then  I should see "Passende Artikel"
-        And   I should see <count> elements of type "BlogArticleBox"
+        And   I should see <count> elements of type "\Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogArticleBox"
 
         Examples:
             | position | title                                               | count |

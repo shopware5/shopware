@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,16 +32,22 @@ use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Exception;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Page\Frontend\Account\Account;
+use Shopware\Tests\Mink\Page\Frontend\Detail\Detail;
+use Shopware\Tests\Mink\Page\Frontend\Form\Form;
+use Shopware\Tests\Mink\Page\Frontend\Homepage\Homepage;
+use Shopware\Tests\Mink\Page\Frontend\Listing\Listing;
+use Shopware\Tests\Mink\Page\Frontend\Newsletter\Newsletter;
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
-use Shopware\Tests\Mink\Page\Homepage;
 
 class SpecialContext extends SubContext
 {
     /**
      * @Given /^the articles from "(?P<name>[^"]*)" have tax id (?P<num>\d+)$/
      */
-    public function theArticlesFromHaveTaxId($supplier, $taxId)
+    public function theArticlesFromHaveTaxId(string $supplier, int $taxId): void
     {
         $sql = sprintf(
             'UPDATE s_articles SET taxID = %d WHERE supplierID =
@@ -56,7 +64,7 @@ class SpecialContext extends SubContext
      *
      * @When /^I go to the (page "[^"]*")$/
      */
-    public function iAmOnThePage(Page $page)
+    public function iAmOnThePage(Page $page): void
     {
         $page->open();
     }
@@ -64,15 +72,17 @@ class SpecialContext extends SubContext
     /**
      * @Given /^I ignore browser validation$/
      */
-    public function IignoreFormValidations()
+    public function IignoreFormValidations(): void
     {
         $this->getSession()->executeScript('for(var f=document.forms,i=f.length;i--;)f[i].setAttribute("novalidate",i)');
     }
 
     /**
      * @Then /^I should be on the (page "[^"]*")$/
+     *
+     * @param Account|Detail|Newsletter|Listing|Form $page
      */
-    public function iShouldBeOnThePage(Page $page)
+    public function iShouldBeOnThePage(Page $page): void
     {
         $page->verifyPage();
     }
@@ -80,11 +90,12 @@ class SpecialContext extends SubContext
     /**
      * @Then /^I should see (?P<quantity>\d+) element of type "(?P<elementClass>[^"]*)"( eventually)?$/
      * @Then /^I should see (?P<quantity>\d+) elements of type "(?P<elementClass>[^"]*)"( eventually)?$/
+     *
+     * @param class-string<MultipleElement> $elementClass
      */
-    public function iShouldSeeElementsOfType($count, $elementClass, $mode = null)
+    public function iShouldSeeElementsOfType(int $count, string $elementClass, ?string $mode = null): void
     {
-        /** @var Homepage $page */
-        $page = $this->getPage('Homepage');
+        $page = $this->getPage(Homepage::class);
 
         if ($mode === null) {
             $elements = $this->getMultipleElement($page, $elementClass);
@@ -109,8 +120,10 @@ class SpecialContext extends SubContext
 
     /**
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the (page "[^"]*")$/
+     *
+     * @param Page&HelperSelectorInterface $page
      */
-    public function iFollowTheLinkOfThePage($linkName, Page $page)
+    public function iFollowTheLinkOfThePage(string $linkName, Page $page): void
     {
         Helper::clickNamedLink($page, $linkName);
     }
@@ -118,26 +131,27 @@ class SpecialContext extends SubContext
     /**
      * @When /^I follow the link of the element "(?P<elementClass>[^"]*)"$/
      * @When /^I follow the link of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     *
+     * @param class-string<Element> $elementClass
      */
-    public function iFollowTheLinkOfTheElement($elementClass, $position = 1)
+    public function iFollowTheLinkOfTheElement(string $elementClass, int $position = 1): void
     {
-        $this->iFollowTheLinkOfTheElementOnPosition(null, $elementClass, $position);
+        $this->iFollowTheLinkOfTheElementOnPosition('', $elementClass, $position);
     }
 
     /**
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)"$/
      * @When /^I follow the link "(?P<linkName>[^"]*)" of the element "(?P<elementClass>[^"]*)" on position (?P<position>\d+)$/
+     *
+     * @param class-string<Element> $elementClass
      */
-    public function iFollowTheLinkOfTheElementOnPosition($linkName, $elementClass, $position = 1)
+    public function iFollowTheLinkOfTheElementOnPosition(string $linkName, string $elementClass, int $position = 1): void
     {
-        /** @var HelperSelectorInterface $element */
         $element = $this->getElement($elementClass);
 
         if ($element instanceof MultipleElement) {
-            /** @var Homepage $page */
-            $page = $this->getPage('Homepage');
+            $page = $this->getPage(Homepage::class);
 
-            /* @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $element */
             $element->setParent($page);
 
             $element = $element->setInstance($position);
@@ -149,13 +163,17 @@ class SpecialContext extends SubContext
             return;
         }
 
+        if (!$element instanceof HelperSelectorInterface) {
+            Helper::throwException('Element does not implement necessary interface "HelperSelectorInterface"');
+        }
+
         $this->clickNamedLinkWhenClickable($element, $linkName);
     }
 
     /**
      * @Given /^the "(?P<field>[^"]*)" field should contain:$/
      */
-    public function theFieldShouldContain($field, PyStringNode $string)
+    public function theFieldShouldContain(string $field, PyStringNode $string): void
     {
         $assert = new WebAssert($this->getSession());
         $assert->fieldValueEquals($field, $string->getRaw());
@@ -163,17 +181,16 @@ class SpecialContext extends SubContext
 
     /**
      * @When /^I press the button "([^"]*)" of the element "([^"]*)" on position (\d+)$/
+     *
+     * @param class-string<Element> $elementClass
      */
-    public function iPressTheButtonOfTheElementOnPosition($linkName, $elementClass, $position = 1)
+    public function iPressTheButtonOfTheElementOnPosition(string $linkName, string $elementClass, int $position = 1): void
     {
-        /** @var HelperSelectorInterface $element */
         $element = $this->getElement($elementClass);
 
         if ($element instanceof MultipleElement) {
-            /** @var Homepage $page */
-            $page = $this->getPage('Homepage');
+            $page = $this->getPage(Homepage::class);
 
-            /* @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $element */
             $element->setParent($page);
 
             $element = $element->setInstance($position);
@@ -185,6 +202,10 @@ class SpecialContext extends SubContext
             return;
         }
 
+        if (!$element instanceof HelperSelectorInterface) {
+            Helper::throwException('Element does not implement necessary interface "HelperSelectorInterface"');
+        }
+
         $this->clickNamedButtonWhenClickable($element, $linkName);
     }
 
@@ -193,17 +214,12 @@ class SpecialContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param callable $lambda
-     * @param int      $wait
-     *
      * @throws Exception
-     *
-     * @return bool
      */
-    protected function spin($lambda, $wait = 60)
+    protected function spin(callable $lambda, int $wait = 60): void
     {
         if (!$this->spinWithNoException($lambda, $wait)) {
-            throw new Exception("Spin function timed out after {$wait} seconds");
+            throw new Exception(sprintf('Spin function timed out after %s seconds', $wait));
         }
     }
 
@@ -212,12 +228,9 @@ class SpecialContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param callable $lambda
-     * @param int      $wait
-     *
      * @return bool
      */
-    protected function spinWithNoException($lambda, $wait = 60)
+    protected function spinWithNoException(callable $lambda, int $wait = 60)
     {
         $time = time();
         $stopTime = $time + $wait;
@@ -237,12 +250,11 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * Tries to click on a named link until the click is successfull or the timeout is reached
+     * Tries to click on a named link until the click is successful or the timeout is reached
      *
-     * @param string $linkName
-     * @param int    $timeout  Defaults to 60 seconds
+     * @param (Page|Element)&HelperSelectorInterface $element
      */
-    protected function clickNamedLinkWhenClickable(HelperSelectorInterface $element, $linkName, $timeout = 60)
+    protected function clickNamedLinkWhenClickable($element, string $linkName, int $timeout = 60): void
     {
         $this->spin(function (SpecialContext $context) use ($element, $linkName) {
             try {
@@ -260,10 +272,9 @@ class SpecialContext extends SubContext
     /**
      * Tries to click on a named button until the click is successfull or the timeout is reached
      *
-     * @param string $key
-     * @param int    $timeout Defaults to 60 seconds
+     * @param (Page|Element)&HelperSelectorInterface $element
      */
-    protected function clickNamedButtonWhenClickable(HelperSelectorInterface $element, $key, $timeout = 60)
+    protected function clickNamedButtonWhenClickable($element, string $key, int $timeout = 60): void
     {
         $this->spin(function (SpecialContext $context) use ($element, $key) {
             try {
@@ -283,7 +294,7 @@ class SpecialContext extends SubContext
      *
      * @param int $timeout Defaults to 60 seconds
      */
-    protected function clickElementWhenClickable(NodeElement $element, $timeout = 60)
+    protected function clickElementWhenClickable(NodeElement $element, int $timeout = 60): void
     {
         $this->spin(function (SpecialContext $context) use ($element) {
             try {

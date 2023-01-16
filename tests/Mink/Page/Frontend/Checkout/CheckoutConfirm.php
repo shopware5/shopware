@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,7 +31,10 @@ use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
 use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Page\Frontend\Account\Account;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutBilling;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutPayment;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutShipping;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
@@ -43,7 +48,7 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'shippingPaymentForm' => 'form.payment',
@@ -69,7 +74,7 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'gtc' => ['de' => 'AGB und Widerrufsbelehrung', 'en' => 'Terms, conditions and cancellation policy'],
@@ -82,7 +87,7 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      */
-    public function verifyPage()
+    public function verifyPage(): void
     {
         if ($this->getDriver() instanceof Selenium2Driver) {
             $this->getSession()->wait(5000, '$("#sAGB").length > 0');
@@ -102,10 +107,8 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
 
     /**
      * Returns the order number from finish page
-     *
-     * @return int
      */
-    public function getOrderNumber()
+    public function getOrderNumber(): string
     {
         $elements = Helper::findElements($this, ['orderNumber']);
 
@@ -113,13 +116,13 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
 
         preg_match("/\d+/", $orderDetails, $orderNumber);
 
-        return (int) $orderNumber[0];
+        return (string) $orderNumber[0];
     }
 
     /**
      * Proceeds the checkout
      */
-    public function proceedToCheckout()
+    public function proceedToCheckout(): void
     {
         $this->checkField('sAGB');
         Helper::pressNamedButton($this, 'confirmButton');
@@ -128,7 +131,7 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * Changes the payment method
      */
-    public function changePaymentMethod(array $data = [])
+    public function changePaymentMethod(array $data = []): void
     {
         $data[0]['field'] = 'payment';
         $this->changeShippingMethod($data);
@@ -137,12 +140,12 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * Changes the billing address
      */
-    public function changeBillingAddress(array $data = [])
+    public function changeBillingAddress(array $data = []): void
     {
-        $element = $this->getElement('CheckoutBilling');
+        $element = $this->getElement(CheckoutBilling::class);
         Helper::clickNamedLink($element, 'changeButton');
 
-        $account = $this->getPage('Account');
+        $account = $this->getPage(Account::class);
         Helper::fillForm($account, 'billingForm', $data);
         Helper::pressNamedButton($account, 'changeBillingButton');
     }
@@ -150,14 +153,14 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * Changes the shipping address
      */
-    public function changeShippingAddress(array $data = [])
+    public function changeShippingAddress(array $data = []): void
     {
-        $element = $this->getElement('CheckoutShipping');
+        $element = $this->getElement(CheckoutShipping::class);
         $url = $element->find('css', 'a[title="Adresse ändern"]')->getAttribute('href');
 
         $this->getSession()->visit($url);
 
-        $account = $this->getPage('Account');
+        $account = $this->getPage(Account::class);
         Helper::fillForm($account, 'shippingForm', $data);
         Helper::pressNamedButton($account, 'changeShippingButton');
     }
@@ -165,9 +168,9 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * Changes the shipping method
      */
-    public function changeShippingMethod(array $data = [])
+    public function changeShippingMethod(array $data = []): void
     {
-        $element = $this->getElement('CheckoutPayment');
+        $element = $this->getElement(CheckoutPayment::class);
         Helper::clickNamedLink($element, 'changeButton');
 
         Helper::fillForm($this, 'shippingPaymentForm', $data, true);
@@ -180,14 +183,11 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
     /**
      * Checks the name of the current payment method
      *
-     * @param string $paymentMethod
-     *
      * @throws Exception
      */
-    public function checkPaymentMethod($paymentMethod)
+    public function checkPaymentMethod(string $paymentMethod): void
     {
-        /** @var CheckoutPayment $element */
-        $element = $this->getElement('CheckoutPayment');
+        $element = $this->getElement(CheckoutPayment::class);
 
         $properties = [
             'paymentMethod' => $paymentMethod,
@@ -210,10 +210,8 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
 
     /**
      * Creates a new address and saves it
-     *
-     * @param array $values
      */
-    public function createArbitraryAddress($values)
+    public function createArbitraryAddress(array $values): void
     {
         Helper::fillForm($this, 'addressForm', $values);
         $button = $this->find('css', '.address--form-actions > button');
@@ -222,20 +220,15 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
 
     /**
      * Changes the values in a modal address form and saves the form
-     *
-     * @param array $values
      */
-    public function changeModalAddress($values)
+    public function changeModalAddress(array $values): void
     {
         Helper::fillForm($this, 'addressForm', $values);
         $button = $this->find('named', ['button', 'Adresse speichern']);
         $button->press();
     }
 
-    /**
-     * @param string $path
-     */
-    public function checkoutUsingGet($path)
+    public function checkoutUsingGet(string $path): void
     {
         $this->getDriver()->visit($path);
     }

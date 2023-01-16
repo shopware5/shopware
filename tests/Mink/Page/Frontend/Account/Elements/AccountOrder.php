@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Mink\Page\Frontend\Account\Elements;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
@@ -34,7 +37,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class AccountOrder extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement
+class AccountOrder extends MultipleElement
 {
     /**
      * @var array
@@ -105,7 +108,6 @@ class AccountOrder extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleEle
         $elements = Helper::findAllOfElements($this, ['positions']);
         $positions = [];
 
-        /** @var NodeElement $position */
         foreach ($elements['positions'] as $position) {
             $positions[] = $this->getOrderPositionData($position, $selectors);
         }

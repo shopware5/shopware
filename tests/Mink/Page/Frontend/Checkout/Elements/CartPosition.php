@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -42,7 +44,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class CartPosition extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.row--product'];
 
@@ -74,10 +76,8 @@ class CartPosition extends MultipleElement
 
     /**
      * Returns the product name
-     *
-     * @return string
      */
-    public function getNameProperty()
+    public function getNameProperty(): string
     {
         $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage']);
 
@@ -88,16 +88,6 @@ class CartPosition extends MultipleElement
         ];
 
         return $this->getUniqueName($names);
-    }
-
-    /**
-     * Returns the quantity
-     *
-     * @return float
-     */
-    public function getQuantityProperty()
-    {
-        return $this->getFloatProperty('quantity');
     }
 
     /**
@@ -122,10 +112,8 @@ class CartPosition extends MultipleElement
 
     /**
      * @throws Exception
-     *
-     * @return string
      */
-    protected function getUniqueName(array $names)
+    private function getUniqueName(array $names): string
     {
         $name = array_unique($names);
 
@@ -159,12 +147,8 @@ class CartPosition extends MultipleElement
 
     /**
      * Helper method to read a float property
-     *
-     * @param string $propertyName
-     *
-     * @return float
      */
-    protected function getFloatProperty($propertyName)
+    private function getFloatProperty(string $propertyName): float
     {
         $element = Helper::findElements($this, [$propertyName]);
 

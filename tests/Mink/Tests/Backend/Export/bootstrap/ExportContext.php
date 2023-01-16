@@ -32,15 +32,14 @@ use Exception;
 use InvalidArgumentException;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
+use SimpleXMLElement;
 
 class ExportContext extends SubContext
 {
     /**
      * Some config values necessary for the interpretation of the results.
-     *
-     * @var array
      */
-    protected $mappings = [
+    protected array $mappings = [
         'xml' => ['id' => 4713, 'file' => 'export.xml'],
         'csv' => ['id' => 4711, 'delimiter' => ';', 'file' => 'export.csv'],
         'txt tab' => ['id' => 4712, 'delimiter' => "\t", 'file' => 'export.txt'],
@@ -49,33 +48,27 @@ class ExportContext extends SubContext
 
     /**
      * Used for the creation of the test subshop
-     *
-     * @var string
      */
-    private $subShopDomain = 'exporttestshop.test';
+    private string $subShopDomain = 'exporttestshop.test';
 
     /**
      * Fetches the  feed from the server
      *
-     * @param string $format
-     *
      * @Given I export the feed in :format format
      */
-    public function iExportTheFeedFor($format)
+    public function iExportTheFeedFor(string $format): void
     {
         $this->getSession()->visit($this->pathTo($this->mappings[$format]));
     }
 
     /**
-     * @param string $name
-     * @param string $format
      * @param string $subshop Anything else than "subshop" will be treated as "shop"
      *
      * @throws Exception
      *
      * @Then /^I should see the feed "(?P<name>[^"]*)" with format "(?P<format>[^"]*)" in the "(?P<subshop>[^"]*)" export:$/
      */
-    public function iShouldSeeFeedWithFormatInTheExport($name, $format, $subshop, TableNode $entries)
+    public function iShouldSeeFeedWithFormatInTheExport(string $name, string $format, string $subshop, TableNode $entries): void
     {
         switch ($format) {
             case 'xml':
@@ -98,15 +91,14 @@ class ExportContext extends SubContext
      *
      * @BeforeScenario @productFeeds
      */
-    public function enableExports()
+    public function enableExports(): void
     {
-        /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $dbal = Shopware()->Container()->get(Connection::class);
         $dump = <<<'SQL'
 INSERT INTO s_export VALUES (4711,'csv','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2017-02-27 14:10:18',0,1,'2017-02-27 14:10:18','export.csv',2,NULL,1,1,'',NULL,0,0,0,0,0,'','{strip}id{#S#}title{#S#}url{#S#}image{#S#}price{#S#}versand{#S#}währung {/strip}{#L#}','{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:\"...\":true|escape|htmlentities}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{$sArticle.image|image:2}{#S#}\n{$sArticle.price|escape:\"number\"}{#S#}\nDE::DHL:{$sArticle|@shippingcost:\"prepayment\":\"de\"}{#S#}\n{$sCurrency.currency}\n{/strip}{#L#}','',0,1,1,'2000-01-01 00:00:00',0),(4712,'txt tab','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2017-02-27 14:10:18',0,2,'2017-02-27 14:10:18','export.txt',2,NULL,1,1,'',NULL,0,0,0,0,0,'','{strip}id{#S#}title{#S#}url{#S#}image{#S#}price{#S#}versand{#S#}währung{/strip}{#L#}','{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:"...":true|escape|htmlentities}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{$sArticle.image|image:2}{#S#}\n{$sArticle.price|escape:"number"}{#S#}\nDE::DHL:{$sArticle|@shippingcost:"prepayment":"de"}{#S#}\n{$sCurrency.currency}\n{/strip}{#L#}','',0,1,1,'2000-01-01 00:00:00',0),(4713,'xml','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2000-01-01 00:00:00',0,3,'0000-00-00 00:00:00','export.xml',2,NULL,1,1,'',NULL,0,0,0,0,0,'','<?xml version="1.0" encoding="UTF-8" ?>\n<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n<channel>\n    <atom:link href="http://{$sConfig.sBASEPATH}/engine/connectors/export/{$sSettings.id}/{$sSettings.hash}/{$sSettings.filename}" rel="self" type="application/rss+xml" />\n    <title>{$sConfig.sSHOPNAME}</title>\n<link>http://{$sConfig.sBASEPATH}</link>\n    <language>{$sLanguage.isocode}-{$sLanguage.isocode}</language>\n    <image>\n        <url>http://{$sConfig.sBASEPATH}/templates/0/de/media/img/default/store/logo.gif</url>\n        <title>{$sConfig.sSHOPNAME}</title>\n        <link>http://{$sConfig.sBASEPATH}</link>\n    </image>{#L#}','<item> \n    <title>{$sArticle.name|strip_tags|htmlspecialchars_decode|strip|escape}</title>\n    <id>{$sArticle.ordernumber|escape}</id>\n    <url>{$sArticle.articleID|link:$sArticle.name}</url>\n    <description>{if $sArticle.image}\n        <a href="{$sArticle.articleID|link:$sArticle.name}" style="border:0 none;">\n            <img src="{$sArticle.image|image:0}" align="right" style="padding: 0pt 0pt 12px 12px; float: right;" />\n        </a>\n{/if}\n        {$sArticle.description_long|strip_tags|regex_replace:"/[^\\wöäüÖÄÜß .?!,&:%;\\-\\"\']/i":""|trim|truncate:900:"..."|escape}\n    </description>\n    <image>{$sArticle.image|image:2}</image>\n <price>{$sArticle.price|escape:"number"}</price><category>{$sArticle.articleID|category:">"|htmlspecialchars_decode|escape}</category>\n{if $sArticle.changed}     {assign var="sArticleChanged" value=$sArticle.changed|strtotime}<pubDate>{"r"|date:$sArticleChanged}</pubDate>{"rn"}{/if}\n</item>{#L#}','</channel>\n</rss>',0,1,1,'2000-01-01 00:00:00',0),(4714,'txt pipe','2000-01-01 00:00:00',1,'4ebfa063359a73c356913df45b3fbe7f',1,0,'2017-02-27 14:10:18',0,4,'2017-02-27 14:10:18','export.txt',2,NULL,1,1,'',NULL,0,0,0,0,0,'','{strip}id{#S#}title{#S#}url{#S#}image{#S#}price{#S#}versand{#S#}währung{/strip}{#L#}','{strip}\n{$sArticle.ordernumber|escape}{#S#}\n{$sArticle.name|strip_tags|strip|truncate:80:"...":true|escape|htmlentities}{#S#}\n{$sArticle.articleID|link:$sArticle.name|escape}{#S#}\n{$sArticle.image|image:2}{#S#}\n{$sArticle.price|escape:"number"}{#S#}\nDE::DHL:{$sArticle|@shippingcost:"prepayment":"de"}{#S#}\n{$sCurrency.currency}\n{/strip}{#L#}','',0,1,1,'2000-01-01 00:00:00',0)
 SQL;
 
-        $dbal->exec($dump);
+        $dbal->executeStatement($dump);
     }
 
     /**
@@ -114,11 +106,10 @@ SQL;
      *
      * @AfterScenario @productFeeds
      */
-    public function disableExports()
+    public function disableExports(): void
     {
-        /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get('Doctrine\DBAL\Connection');
-        $dbal->exec('DELETE FROM s_export WHERE id in (4711, 4712, 4713, 4714)');
+        $dbal = Shopware()->Container()->get(Connection::class);
+        $dbal->executeStatement('DELETE FROM s_export WHERE id in (4711, 4712, 4713, 4714)');
     }
 
     /**
@@ -126,15 +117,14 @@ SQL;
      *
      * @BeforeScenario @withSubshop
      */
-    public function createSubshop()
+    public function createSubshop(): void
     {
-        /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        $dbal->exec('INSERT INTO s_core_shops
+        $dbal = Shopware()->Container()->get(Connection::class);
+        $dbal->executeStatement('INSERT INTO s_core_shops
             (id, main_id, name, title, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, fallback_id, customer_scope, `default`, active) VALUES
             ("3", NULL, "Export Testshop", "Export Testshop", "0", "' . $this->subShopDomain . '", NULL, NULL, "", "0", "23", "23", "3", "1", "1", "1", "1", "0", "0", "1");');
 
-        $dbal->exec('UPDATE s_export SET languageID=3 WHERE id in (4711, 4712, 4713, 4714)');
+        $dbal->executeStatement('UPDATE s_export SET languageID=3 WHERE id in (4711, 4712, 4713, 4714)');
     }
 
     /**
@@ -142,31 +132,26 @@ SQL;
      *
      * @AfterScenario @withSubshop
      */
-    public static function removeSubshop()
+    public static function removeSubshop(): void
     {
-        /** @var Connection $dbal */
-        $dbal = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
-        $dbal->exec('DELETE FROM s_core_shops WHERE id=3');
+        $dbal = Shopware()->Container()->get(Connection::class);
+        $dbal->executeStatement('DELETE FROM s_core_shops WHERE id=3');
     }
 
     /**
      * Builds a feed-url for a given row from the s_export table.
-     *
-     * @return string
      */
-    protected function pathTo(array $feed)
+    protected function pathTo(array $feed): string
     {
         return rtrim($this->getMinkParameter('base_url'), '/') . "/backend/export/index/{$feed['file']}?feedID={$feed['id']}&hash=4ebfa063359a73c356913df45b3fbe7f";
     }
 
-    /**
-     * @param string $content
-     *
-     * @return array
-     */
-    private function parseXml($content)
+    private function parseXml(string $content): array
     {
         $dom = simplexml_load_string($content);
+        if (!$dom instanceof SimpleXMLElement) {
+            Helper::throwException('Could not create XML element');
+        }
         $items = $dom->xpath('//item');
 
         $result = [];
@@ -203,11 +188,7 @@ SQL;
         return $rows;
     }
 
-    /**
-     * @param array $export
-     * @param bool  $shopType
-     */
-    private function validate(TableNode $entries, $export, $shopType)
+    private function validate(TableNode $entries, array $export, string $shopType): void
     {
         $baseUrl = rtrim($this->getMinkParameter('base_url'), '/');
         $basePath = trim((string) parse_url($baseUrl, PHP_URL_PATH), '/');
@@ -222,7 +203,6 @@ SQL;
                     continue;
                 }
 
-                /** @var array $entry */
                 foreach ($entry as $key => $value) {
                     $this->assertKeyExists($key, $row);
 
@@ -240,21 +220,20 @@ SQL;
         }
     }
 
-    private function assertKeyExists($key, array $row)
+    /**
+     * @param string|int $key
+     */
+    private function assertKeyExists($key, array $row): void
     {
         if (!\array_key_exists($key, $row)) {
             Helper::throwException("Field '$key' was not found in export row " . print_r($row, true));
         }
     }
 
-    /**
-     * @param string $expected
-     * @param string $actual
-     */
-    private function assertStringsEqual($expected, $actual)
+    private function assertStringsEqual(string $expected, string $actual): void
     {
         if (strcasecmp($expected, $actual) !== 0) {
-            Helper::throwException("Content '{$expected}' expected, found '{$actual}' instead.");
+            Helper::throwException(sprintf("Content '%s' expected, found '%s' instead.", $expected, $actual));
         }
     }
 }

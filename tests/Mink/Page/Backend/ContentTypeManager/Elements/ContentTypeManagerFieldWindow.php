@@ -36,14 +36,14 @@ class ContentTypeManagerFieldWindow extends SelectorScopedElement
     protected $selector = ".x-window[id^='content-type-manager-field-window']";
 
     /**
-     * @var array<string, string|array>
+     * @var array<string, array<string, string>>
      */
     protected $elements = [
-        'Save button' => ['css' => '.x-btn.primary button[role="button"]'],
+        SaveButton::class => ['css' => '.x-btn.primary button[role="button"]'],
     ];
 
     public function getSaveButton(): NodeElement
     {
-        return $this->getElement('Save button');
+        return $this->getElement(SaveButton::class);
     }
 }

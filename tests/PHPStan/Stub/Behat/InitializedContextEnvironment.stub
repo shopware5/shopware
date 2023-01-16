@@ -1,0 +1,16 @@
+<?php
+
+namespace Behat\Behat\Context\Environment;
+
+use Behat\Behat\Context\Context;
+
+final class InitializedContextEnvironment
+{
+    /**
+     * @template TContext of Context
+     * @param class-string<TContext> $class
+     *
+     * @return TContext
+     */
+    public function getContext($class) {}
+}
