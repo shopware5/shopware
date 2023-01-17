@@ -26,6 +26,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/persistence` to version 2.5.5
 * Updated `elasticsearch/elasticsearch` to version 7.17.1
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.13
+* Updated `google/cloud-storage` to version 1.30.1
 * Updated `guzzlehttp/psr7` to version 2.4.3
 * Updated `laminas/laminas-code` to version 4.7.1
 * Updated `laminas/laminas-escaper` to version 2.12.0
