@@ -2,7 +2,7 @@
     "name": "shopware/shopware",
     "description": "Shopware is the next generation of open source e-commerce software made in Germany",
     "keywords": ["shopware", "shop"],
-    "homepage": "http://www.shopware.com",
+    "homepage": "https://www.shopware.com",
     "type": "project",
     "license": [
         "AGPL-3.0",
@@ -49,7 +49,7 @@
         "doctrine/dbal": "2.13.8",
         "doctrine/event-manager": "1.2.0",
         "doctrine/inflector": "2.0.4",
-        "doctrine/orm": "2.14.0",
+        "doctrine/orm": "2.14.1",
         "doctrine/persistence": "2.5.5",
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",
