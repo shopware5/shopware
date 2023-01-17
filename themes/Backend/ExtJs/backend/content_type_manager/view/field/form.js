@@ -152,25 +152,25 @@ Ext.define('Shopware.apps.ContentTypeManager.view.field.Form', {
 
         if (value) {
             var record = combobox.store.getById(value);
+            if (record) {
+                var disableFields = [
+                    me.down('[name="showListing"]'),
+                    me.down('[name="searchAble"]')
+                ];
 
-            var disableFields = [
-                me.down('[name="showListing"]'),
-                me.down('[name="searchAble"]')
-            ];
-
-            if (record.get('hasResolver')) {
-                disableFields.forEach(function (item) {
-                    me.record.set(item.getName(), false);
-                    item.setValue(false);
-                    item.setDisabled(true);
-                });
-            } else {
-                disableFields.forEach(function (item) {
-                    item.setDisabled(false);
-                });
+                if (record.get('hasResolver')) {
+                    disableFields.forEach(function (item) {
+                        me.record.set(item.getName(), false);
+                        item.setValue(false);
+                        item.setDisabled(true);
+                    });
+                } else {
+                    disableFields.forEach(function (item) {
+                        item.setDisabled(false);
+                    });
+                }
             }
-
-        };
+        }
 
         this.handlers.forEach(function (handler) {
             if (handler.is(value)) {

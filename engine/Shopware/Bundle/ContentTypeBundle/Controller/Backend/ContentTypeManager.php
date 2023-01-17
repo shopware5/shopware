@@ -24,6 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Controller\Backend;
 
+use Shopware\Bundle\ContentTypeBundle\Field\FieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Field\ResolveableFieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeField;
 use Shopware\Bundle\ContentTypeBundle\Field\TypeGrid;
@@ -35,54 +36,34 @@ use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 use Shopware\Components\CacheManager;
 use Shopware\Components\Slug\SlugInterface;
 use Shopware\Models\Shop\Shop;
-use Shopware_Components_SeoIndex;
 use Shopware_Components_Snippet_Manager as Snippets;
 use Shopware_Controllers_Backend_ExtJs;
-use sRewriteTable;
 use Symfony\Component\HttpFoundation\Request;
 
 class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
 {
-    /**
-     * @var TypeProvider
-     */
-    private $typeProvider;
+    private TypeProvider $typeProvider;
 
     /**
-     * @var array
+     * @var array<string, class-string<FieldInterface>>
      */
-    private $fieldAlias;
+    private array $fieldAlias;
+
+    private Snippets $snippetManager;
+
+    private SlugInterface $slug;
+
+    private TypeBuilder $typeBuilder;
+
+    private CacheManager $cacheManager;
+
+    private SynchronizerServiceInterface $synchronizerService;
+
+    private ContentTypeCleanupServiceInterface $cleanupService;
 
     /**
-     * @var Snippets
+     * @param array<string, class-string<FieldInterface>> $fieldAlias
      */
-    private $snippetManager;
-
-    /**
-     * @var SlugInterface
-     */
-    private $slug;
-
-    /**
-     * @var TypeBuilder
-     */
-    private $typeBuilder;
-
-    /**
-     * @var CacheManager
-     */
-    private $cacheManager;
-
-    /**
-     * @var SynchronizerServiceInterface
-     */
-    private $synchronizerService;
-
-    /**
-     * @var ContentTypeCleanupServiceInterface
-     */
-    private $cleanupService;
-
     public function __construct(
         array $fieldAlias,
         TypeProvider $typeProvider,
@@ -116,10 +97,10 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
 
     public function fieldsAction(): void
     {
+        $query = strtolower((string) $this->Request()->getParam('query'));
         $data = [];
         $namespace = $this->snippetManager->getNamespace('backend/content_type_manager/fields');
 
-        /** @var Type $type */
         foreach ($this->typeProvider->getTypes() as $type) {
             $this->fieldAlias[$type->getInternalName() . '-field'] = TypeField::class;
             $this->fieldAlias[$type->getInternalName() . '-grid'] = TypeGrid::class;
@@ -128,24 +109,21 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         foreach ($this->fieldAlias as $id => $name) {
             $classImplements = class_implements($name);
             $hasResolver = \is_array($classImplements) && \array_key_exists(ResolveableFieldInterface::class, $classImplements);
+            $label = $namespace->get($id, $id, true);
 
             if ($name === TypeField::class || $name === TypeGrid::class) {
                 $snippetName = 'type-' . explode('-', $id)[1];
+                $label = sprintf($namespace->get($snippetName, $snippetName, true), ucfirst(explode('-', $id)[0]));
+            }
 
-                $data[] = [
-                    'id' => $id,
-                    'name' => $name,
-                    'label' => sprintf($namespace->get($snippetName, $snippetName, true), ucfirst(explode('-', $id)[0])),
-                    'hasResolver' => $hasResolver,
-                ];
-
+            if (($query !== '') && !str_contains(strtolower($name), $query) && !str_contains(strtolower($label), $query)) {
                 continue;
             }
 
             $data[] = [
                 'id' => $id,
                 'name' => $name,
-                'label' => $namespace->get($id, $id, true),
+                'label' => $label,
                 'hasResolver' => $hasResolver,
             ];
         }
@@ -167,7 +145,10 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         $this->typeProvider->addType($type->getInternalName(), $type);
         $this->clearCacheAndSync();
 
-        $this->View()->assign(['success' => true, 'data' => $this->getDetail($type->getInternalName())]);
+        $this->View()->assign([
+            'success' => true,
+            'data' => $this->getDetail($type->getInternalName()),
+        ]);
     }
 
     public function updateAction(Request $request): void
@@ -186,7 +167,10 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         $this->clearCacheAndSync();
         $this->createUrls($type);
 
-        $this->View()->assign(['success' => true, 'data' => $this->getDetail($type->getInternalName())]);
+        $this->View()->assign([
+            'success' => true,
+            'data' => $this->getDetail($type->getInternalName()),
+        ]);
     }
 
     public function deleteAction(string $id): void
@@ -221,12 +205,14 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         $this->addAclPermission('delete', 'delete', 'Insufficient permissions');
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function getDetail(string $name): array
     {
-        /** @var Type $typeObj */
         $typeObj = $this->typeProvider->getType($name);
 
-        $type = json_decode(json_encode($typeObj), true);
+        $type = json_decode(json_encode($typeObj, JSON_THROW_ON_ERROR), true);
         $type['id'] = $type['internalName'];
         $type['controllerName'] = $typeObj->getControllerName();
         $type['urls'] = $this->getUrls($typeObj);
@@ -234,6 +220,9 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         return $type;
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function convertExtJsToStruct(array $data): Type
     {
         unset($data['id'], $data['source'], $data['urls'], $data['controllerName']);
@@ -263,13 +252,10 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
     private function createUrls(Type $type): void
     {
         $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
-        /** @var Shopware_Components_SeoIndex $seoIndexer */
         $seoIndexer = $this->get('seoindex');
 
-        /** @var sRewriteTable $rewriteTable */
         $rewriteTable = $this->get('modules')->RewriteTable();
 
-        /** @var Shop $shop */
         foreach ($shops as $shop) {
             $seoIndexer->registerShop($shop->getId());
 
@@ -278,13 +264,15 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         }
     }
 
+    /**
+     * @return list<array{name: string, url: string}>
+     */
     private function getUrls(Type $type): array
     {
         $shops = $this->getModelManager()->getRepository(Shop::class)->getActiveShopsFixed();
 
         $urls = [];
 
-        /** @var Shop $shop */
         foreach ($shops as $shop) {
             $shop->registerResources();
 

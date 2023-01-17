@@ -5751,36 +5751,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentType.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:__construct\\(\\) has parameter \\$fieldAlias with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:convertExtJsToStruct\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:getDetail\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:getUrls\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Backend\\\\ContentTypeManager\\:\\:\\$fieldAlias type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Backend/ContentTypeManager.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Controller\\\\Frontend\\\\ContentType\\:\\:getBreadcrumb\\(\\) has parameter \\$item with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Controller/Frontend/ContentType.php
