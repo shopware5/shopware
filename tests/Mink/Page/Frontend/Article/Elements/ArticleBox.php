@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Mink\Page\Frontend\Article\Elements;
 
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
@@ -33,17 +36,14 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class ArticleBox extends \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition
+class ArticleBox extends CartPosition
 {
-    /**
-     * @var array
-     */
     protected $selector = ['css' => 'div.product--box.box--basic'];
 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'name' => 'div.product--info > a:product--title',
@@ -54,7 +54,7 @@ class ArticleBox extends \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\Ca
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'compare' => ['de' => 'Vergleichen',  'en' => 'Compare'],
@@ -64,10 +64,8 @@ class ArticleBox extends \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\Ca
 
     /**
      * Returns the price
-     *
-     * @return float
      */
-    public function getPriceProperty()
+    public function getPriceProperty(): float
     {
         $price = $this->getProperty('price');
 

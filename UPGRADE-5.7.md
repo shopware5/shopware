@@ -9,6 +9,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Additions
 
 * Added version `4.8.0` to version constraint of `laminas/laminas-code` to allow installation on PHP 8.2
+* Added new polyfill `symfony/polyfill-php82` to be able to use PHP 8.2 features
 
 ### Deprecations
 
@@ -16,26 +17,34 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
+* Updated `behat/behat` to version 3.12.0
 * Updated `cocur/slugify` to version 4.3.0
+* Updated `doctrine/annotations` to version 1.14.2
 * Updated `doctrine/collections` to version 1.8.0
 * Updated `doctrine/common` to version 3.4.3
 * Updated `doctrine/event-manager` to version 1.2.0
-* Updated `doctrine/orm` to version 2.13.3
-* Updated `doctrine/persistence` to version 2.5.5
+* Updated `doctrine/orm` to version 2.14.1
+* Updated `doctrine/persistence` to version 3.1.2
 * Updated `elasticsearch/elasticsearch` to version 7.17.1
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.13
+* Updated `google/cloud-storage` to version 1.30.1
 * Updated `guzzlehttp/psr7` to version 2.4.3
 * Updated `laminas/laminas-code` to version 4.7.1
 * Updated `laminas/laminas-escaper` to version 2.12.0
 * Updated `league/flysystem` to version 1.1.10
 * Updated `mpdf/mpdf` to version 8.1.4
+* Updated `phpunit/phpunit` to version 9.5.28
+* Updated `sensiolabs/behat-page-object-extension` to version 2.3.7
 * Updated `setasign/fpdf` to version 1.8.5
-* Updated `symfony/console` to version 4.4.48
+* Updated `symfony/console` to version 4.4.49
+* Updated `symfony/dependency-injection` to version 4.4.49
 * Updated `symfony/expression-language` to version 4.4.47
 * Updated `symfony/form` to version 4.4.48
-* Updated `symfony/http-foundation` to version 4.4.48
-* Updated `symfony/http-kernel` to version 4.4.48
-* Updated `symfony/serializer` to version 5.4.15
+* Updated `symfony/http-foundation` to version 4.4.49
+* Updated `symfony/http-kernel` to version 4.4.49
+* Updated `symfony/polyfill-php80` to version 1.27.0
+* Updated `symfony/polyfill-php81` to version 1.27.0
+* Updated `symfony/serializer` to version 5.4.17
 * Updated `symfony/validator` to version 4.4.48
 * Updated several indirect dependencies
 * Updated npm dependencies in `themes/package.json`

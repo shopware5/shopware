@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,8 +26,8 @@
 
 namespace Shopware\Tests\Mink\Page\Frontend\Article\Elements;
 
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: Article
@@ -40,7 +42,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * Currently not retrievable properties:
  * - image (string)
  */
-class Article extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement implements HelperSelectorInterface
+class Article extends MultipleElement
 {
     /**
      * @var array
@@ -50,7 +52,7 @@ class Article extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'name' => '.product--title',
@@ -59,10 +61,7 @@ class Article extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement 
         ];
     }
 
-    /**
-     * @return string
-     */
-    public function getNameProperty()
+    public function getNameProperty(): string
     {
         $elements = Helper::findElements($this, ['name', 'link']);
 
@@ -75,20 +74,14 @@ class Article extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement 
         return Helper::getUnique($names);
     }
 
-    /**
-     * @return string
-     */
-    public function getImageProperty()
+    public function getImageProperty(): string
     {
         $elements = Helper::findElements($this, ['image']);
 
         return $elements['image']->getAttribute('src');
     }
 
-    /**
-     * @return string
-     */
-    public function getLinkProperty()
+    public function getLinkProperty(): string
     {
         $elements = Helper::findElements($this, ['name', 'link']);
 
@@ -100,10 +93,7 @@ class Article extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement 
         return Helper::getUnique($links);
     }
 
-    /**
-     * @return float
-     */
-    public function getPriceProperty()
+    public function getPriceProperty(): float
     {
         $elements = Helper::findElements($this, ['price']);
 

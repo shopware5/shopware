@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -92,11 +94,9 @@ class Blog extends Page implements HelperSelectorInterface
     /**
      * Checks the evaluations of the current article
      *
-     * @param string $average
-     *
      * @throws Exception
      */
-    public function checkComments(BlogComment $blogComments, $average, array $comments)
+    public function checkComments(BlogComment $blogComments, string $average, array $comments)
     {
         $this->checkRating($blogComments, $average);
 
@@ -135,11 +135,9 @@ class Blog extends Page implements HelperSelectorInterface
     /**
      * Helper function to check the rating of a blog comment
      *
-     * @param string $average
-     *
      * @throws Exception
      */
-    protected function checkRating(BlogComment $blogComments, $average)
+    protected function checkRating(BlogComment $blogComments, string $average): void
     {
         $elements = Helper::findElements($this, ['articleRating', 'articleRatingCount']);
 

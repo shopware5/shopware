@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Tests\Backend\ContentTypes\bootstrap;
 
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use Shopware\Tests\Mink\Page\Backend\ContentTypeManager\ContentTypeManager;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
@@ -72,6 +73,8 @@ class BackendContentTypeManagerContext extends SubContext
 
     /**
      * @When I switch to the :name tab
+     *
+     * @param class-string<Element> $name
      */
     public function iSwitchToTheTab(string $name): void
     {

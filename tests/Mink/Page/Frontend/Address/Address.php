@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,9 +27,8 @@
 namespace Shopware\Tests\Mink\Page\Frontend\Address;
 
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
-class Address extends Account implements HelperSelectorInterface
+class Address extends Account
 {
     /**
      * @var string
@@ -37,7 +38,7 @@ class Address extends Account implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'addressForm' => 'div.account--address-form form',

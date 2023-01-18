@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,8 @@
 
 namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
 
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
+
 /**
  * Element: BlogBox
  * Location: Billing address box on account dashboard
@@ -31,17 +35,14 @@ namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class BlogBox extends \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition
+class BlogBox extends CartPosition
 {
-    /**
-     * @var array
-     */
     protected $selector = ['css' => 'div.blog--box.panel'];
 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [];
     }
@@ -49,7 +50,7 @@ class BlogBox extends \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartP
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'readMore' => ['de' => 'Mehr lesen', 'en' => 'Read more'],

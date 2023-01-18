@@ -29,6 +29,7 @@ namespace Shopware\Tests\Mink\Page\Frontend\Checkout;
 use Behat\Mink\Exception\ResponseTextException;
 use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
@@ -43,7 +44,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'aggregationAmounts' => 'ul.aggregation--list',
@@ -68,7 +69,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'checkout' => ['de' => 'Zur Kasse',   'en' => 'Checkout'],
@@ -84,11 +85,9 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * Checks the aggregation
      *
-     * @param array $aggregation
-     *
      * @throws Exception
      */
-    public function checkAggregation($aggregation)
+    public function checkAggregation(array $aggregation): void
     {
         $elements = Helper::findAllOfElements($this, ['aggregationLabels', 'aggregationValues']);
         $lang = Helper::getCurrentLanguage();
@@ -122,10 +121,8 @@ class CheckoutCart extends Page implements HelperSelectorInterface
 
     /**
      * Adds a voucher to the cart
-     *
-     * @param string $voucher
      */
-    public function addVoucher($voucher)
+    public function addVoucher(string $voucher): void
     {
         $elements = Helper::findElements($this, ['addVoucherInput', 'addVoucherSubmit']);
 
@@ -135,21 +132,19 @@ class CheckoutCart extends Page implements HelperSelectorInterface
 
     /**
      * Adds an article to the cart
-     *
-     * @param string $article
      */
-    public function addArticle($article)
+    public function addProduct(string $product): void
     {
         $elements = Helper::findElements($this, ['addArticleInput', 'addArticleSubmit']);
 
-        $elements['addArticleInput']->setValue($article);
+        $elements['addArticleInput']->setValue($product);
         $elements['addArticleSubmit']->press();
     }
 
     /**
      * Remove a product from the cart
      */
-    public function removeProduct(CartPosition $item)
+    public function removeProduct(CartPosition $item): void
     {
         Helper::pressNamedButton($item, 'remove');
     }
@@ -159,7 +154,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
      *
      * @throws ResponseTextException
      */
-    public function removeVoucher()
+    public function removeVoucher(): void
     {
         $elements = Helper::findElements($this, ['removeVoucher']);
         $elements['removeVoucher']->click();
@@ -168,9 +163,8 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * Removes all products from the cart
      */
-    public function emptyCart(CartPosition $items)
+    public function emptyCart(CartPosition $items): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition $item */
         foreach ($items as $item) {
             $this->removeProduct($item);
         }
@@ -179,7 +173,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * Fills the cart with products
      */
-    public function fillCartWithProducts(array $items)
+    public function fillCartWithProducts(array $items): void
     {
         $originalPath = $this->path;
 
@@ -195,10 +189,10 @@ class CheckoutCart extends Page implements HelperSelectorInterface
      * Checks the cart positions
      * Available properties are: number (required), name (required), quantity, itemPrice, sum
      */
-    public function checkCartProducts(CartPosition $cartPositions, array $items)
+    public function checkCartProducts(CartPosition $cartPositions, array $items): void
     {
         Helper::assertElementCount($cartPositions, \count($items));
-        $items = Helper::floatArray($items, ['quantity', 'itemPrice', 'sum']);
+        $items = Helper::floatArray($items, ['itemPrice', 'sum']);
         $result = Helper::assertElements($items, $cartPositions);
 
         if ($result !== true) {
@@ -237,49 +231,44 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * Proceeds to the confirmation page
      */
-    public function proceedToOrderConfirmation()
+    public function proceedToOrderConfirmation(): void
     {
         if ($this->verifyPage()) {
             Helper::clickNamedLink($this, 'checkout');
         }
 
-        $this->getPage('CheckoutConfirm')->verifyPage();
+        $this->getPage(CheckoutConfirm::class)->verifyPage();
     }
 
     /**
      * Proceeds to the confirmation page with login
-     *
-     * @param string $eMail
-     * @param string $password
      */
-    public function proceedToOrderConfirmationWithLogin($eMail, $password)
+    public function proceedToOrderConfirmationWithLogin(string $eMail, string $password): void
     {
         if ($this->verifyPage()) {
             Helper::clickNamedLink($this, 'checkout');
         }
 
-        $this->getPage('Account')->login($eMail, $password);
-        $this->getPage('CheckoutConfirm')->verifyPage();
+        $this->getPage(Account::class)->login($eMail, $password);
+        $this->getPage(CheckoutConfirm::class)->verifyPage();
     }
 
     /**
      * Proceeds to the confirmation page with registration
      */
-    public function proceedToOrderConfirmationWithRegistration(array $data)
+    public function proceedToOrderConfirmationWithRegistration(array $data): void
     {
         if ($this->verifyPage()) {
             Helper::clickNamedLink($this, 'checkout');
         }
 
-        $this->getPage('Account')->register($data);
+        $this->getPage(Account::class)->register($data);
     }
 
     /**
      * Changes the payment method
-     *
-     * @param array $data
      */
-    public function changePaymentMethod($data = [])
+    public function changePaymentMethod(array $data = []): void
     {
         $data[0]['field'] = 'payment';
         $this->changeShippingMethod($data);
@@ -287,10 +276,8 @@ class CheckoutCart extends Page implements HelperSelectorInterface
 
     /**
      * Changes the shipping method
-     *
-     * @param array $data
      */
-    public function changeShippingMethod($data = [])
+    public function changeShippingMethod(array $data = []): void
     {
         Helper::fillForm($this, 'shippingPaymentForm', $data, true);
 
@@ -299,7 +286,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
         Helper::pressNamedButton($this, 'changePaymentButton');
     }
 
-    public function resetCart()
+    public function resetCart(): void
     {
         $originalPath = $this->path;
 
@@ -317,23 +304,17 @@ class CheckoutCart extends Page implements HelperSelectorInterface
         $this->open();
     }
 
-    protected function verify(array $urlParameters)
+    protected function verify(array $urlParameters): void
     {
         $this->verifyResponse();
         $this->verifyPage();
     }
 
-    /**
-     * @param string $key
-     * @param string $language
-     *
-     * @return string
-     */
-    private function getLabel($key, $language)
+    private function getLabel(string $key, string $language): string
     {
         $labels = $this->getNamedSelectors();
 
-        if (strpos($key, '%') !== false) {
+        if (str_contains($key, '%')) {
             $taxRate = (int) $key;
 
             return sprintf($labels['tax'][$language], $taxRate);
@@ -348,14 +329,9 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param string $labelKey
-     * @param string $language
-     *
      * @throws Exception
-     *
-     * @return int
      */
-    private function getAggregationPosition(array $labels, $labelKey, $language)
+    private function getAggregationPosition(array $labels, string $labelKey, string $language): int
     {
         $givenLabel = $this->getLabel($labelKey, $language);
 

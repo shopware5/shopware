@@ -35,7 +35,7 @@ class GenericPage extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'canonical' => 'link[rel=canonical]',
@@ -48,7 +48,7 @@ class GenericPage extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [];
     }
@@ -58,12 +58,8 @@ class GenericPage extends Page implements HelperSelectorInterface
      * Fails validation if the matches are not exact for either argument
      * If null arguments are provided, no next page link is expected, and validation
      * will fail if one is found
-     *
-     * @param string      $locator
-     * @param string|null $path
-     * @param array       $query
      */
-    public function checkLink($locator, $path = null, $query = [])
+    public function checkLink(string $locator, ?string $path = null, array $query = []): void
     {
         $elements = Helper::findElements($this, [$locator], false);
 
@@ -101,10 +97,8 @@ class GenericPage extends Page implements HelperSelectorInterface
 
     /**
      * Checks if the robots meta exists and matches the expected content
-     *
-     * @param array $content
      */
-    public function checkRobots($content = [])
+    public function checkRobots(array $content = []): void
     {
         $elements = Helper::findElements($this, ['robots']);
         $robotsValue = $elements['robots']->getAttribute('content');

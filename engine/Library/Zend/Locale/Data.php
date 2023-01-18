@@ -720,7 +720,7 @@ class Zend_Locale_Data
         if (is_array($value)) {
             $val = implode('_', $value);
         }
-        $val = urlencode($val);
+        $val = urlencode((string) $val);
         $id = strtr('Zend_LocaleC_' . $locale . '_' . $path . '_' . $val, ['-' => '_', '%' => '_', '+' => '_']);
         if (!self::$_cacheDisabled && ($result = self::$_cache->load($id))) {
             return unserialize($result);

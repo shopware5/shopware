@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Mink\Tests\Frontend\Detail\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
+use Shopware\Tests\Mink\Page\Frontend\Form\Form;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
 class FormContext extends SubContext
@@ -32,24 +35,24 @@ class FormContext extends SubContext
     /**
      * @Given /^I am on form (\d+)$/
      */
-    public function iAmOnForm($id)
+    public function iAmOnForm(int $id): void
     {
-        $this->getPage('Form')->open(['formId' => $id]);
+        $this->getPage(Form::class)->open(['formId' => $id]);
     }
 
     /**
      * @Given /^I should see a captcha$/
      */
-    public function iShouldSeeACaptcha()
+    public function iShouldSeeACaptcha(): void
     {
-        $this->getPage('Form')->checkCaptcha();
+        $this->getPage(Form::class)->checkCaptcha();
     }
 
     /**
      * @When I submit the inquiry form with:
      */
-    public function iSubmitTheInquiryFormWith(TableNode $data)
+    public function iSubmitTheInquiryFormWith(TableNode $data): void
     {
-        $this->getPage('Form')->submitInquiryForm($data->getHash());
+        $this->getPage(Form::class)->submitInquiryForm($data->getHash());
     }
 }

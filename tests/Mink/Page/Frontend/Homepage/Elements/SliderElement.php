@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -75,7 +77,6 @@ class SliderElement extends MultipleElement
         $elements = Helper::findAllOfElements($this, ['slide']);
         $slides = [];
 
-        /** @var NodeElement $slide */
         foreach ($elements['slide'] as $slide) {
             $slideProperties = [];
 

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -39,14 +41,14 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 class LanguageSwitcher extends Element implements HelperSelectorInterface
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.top-bar--language select.language--select'];
 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'languages' => 'option',
@@ -56,7 +58,7 @@ class LanguageSwitcher extends Element implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [];
     }
@@ -64,17 +66,14 @@ class LanguageSwitcher extends Element implements HelperSelectorInterface
     /**
      * Returns the current language
      * Use this only for asserts. If you only need the current language, use Helper::getCurrentLanguage().
-     *
-     * @return string
      */
-    public function getCurrentLanguage()
+    public function getCurrentLanguage(): string
     {
         $languageKeys = [1 => 'de', 2 => 'en'];
 
-        $languages = $this->findAll('css', Helper::getRequiredSelector($this, 'languages'));
+        $selector = Helper::getRequiredSelector($this, 'languages');
 
-        /** @var Element $language */
-        foreach ($languages as $language) {
+        foreach ($this->findAll('css', $selector) as $language) {
             if ($language->getAttribute('selected')) {
                 return $languageKeys[$language->getAttribute('value')];
             }
@@ -86,11 +85,9 @@ class LanguageSwitcher extends Element implements HelperSelectorInterface
     /**
      * Changes the language
      *
-     * @param string $language
-     *
      * @throws ElementNotFoundException
      */
-    public function setLanguage($language)
+    public function setLanguage(string $language): void
     {
         $this->selectOption($language);
         Helper::setCurrentLanguage($language);

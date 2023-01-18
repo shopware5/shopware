@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,10 +30,12 @@ use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Mink;
 use Behat\Mink\Session;
 use Behat\MinkExtension\Context\MinkAwareContext;
+use RuntimeException;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Behat\ShopwareExtension\Context\KernelAwareContext;
 use Shopware\Kernel;
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SubContext extends PageObjectContext implements KernelAwareContext, MinkAwareContext
@@ -119,26 +123,29 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
     }
 
     /**
-     * @param string $id
-     *
      * @return mixed Services from the container
      */
-    protected function getService($id)
+    protected function getService(string $id)
     {
         return $this->getContainer()->get($id);
     }
 
     /**
-     * @param Page   $page        Parent page
-     * @param string $elementName Name of the element
-     * @param int    $instance    Instance of the element
+     * @template TElement of MultipleElement
      *
-     * @return \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement
+     * @param Page                   $page        Parent page
+     * @param class-string<TElement> $elementName Name of the element
+     * @param int                    $instance    Instance of the element
+     *
+     * @return TElement
      */
-    protected function getMultipleElement(Page $page, $elementName, $instance = 1)
+    protected function getMultipleElement(Page $page, string $elementName, int $instance = 1)
     {
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $element */
         $element = $this->getElement($elementName);
+        if (!$element instanceof $elementName) {
+            throw new RuntimeException(sprintf('Element expected to be a %s', $elementName));
+        }
+
         $element->setParent($page);
 
         if ($instance > 1) {

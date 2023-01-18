@@ -20,15 +20,15 @@ Feature: Search things
     Scenario: Search with many hits
         When I search for "str"
         Then I should see "Zu \"str\" wurden 13 Artikel gefunden!"
-        But  I should see 12 elements of type "ArticleBox"
+        But  I should see 12 elements of type "\Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox"
 
     @javascript @noinfinitescrolling
     Scenario: Search with special uri characters
         When I search for "101% alle"
         Then I should see "Zu \"101% alle\" wurden 74 Artikel gefunden!"
-        But  I should see 12 elements of type "ArticleBox"
+        But  I should see 12 elements of type "\Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox"
         When I browse to next page 6 times
-        Then I should see 2 elements of type "ArticleBox"
+        Then I should see 2 elements of type "\Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox"
         But  I should see "Zu \"101% alle\" wurden 74 Artikel gefunden!"
 
     Scenario: Search with no hits
@@ -54,9 +54,9 @@ Feature: Search things
     Scenario: Infinite Scrolling is active in search results
         When I search for "art"
         Then I should see "Zu \"art\" wurden 17 Artikel gefunden!"
-        And  I should see 12 elements of type "ArticleBox"
+        And  I should see 12 elements of type "\Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox"
         When I scroll to the bottom of the page
-        Then I should see 17 elements of type "ArticleBox" eventually
+        Then I should see 17 elements of type "\Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox" eventually
 
     @javascript
     Scenario Outline: Live-Search with hits

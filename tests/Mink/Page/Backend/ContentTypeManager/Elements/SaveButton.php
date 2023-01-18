@@ -24,18 +24,14 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
+namespace Shopware\Tests\Mink\Page\Backend\ContentTypeManager\Elements;
 
-use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox;
+use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 
-/**
- * Element: BlogArticleBox
- * Location: Billing address box on account dashboard
- *
- * Available retrievable properties:
- * - address (Element[], please use Account::checkAddress())
- */
-class BlogArticleBox extends ArticleBox
+class SaveButton extends Element
 {
-    protected $selector = ['css' => 'div.blog--crossselling div.product-slider--item'];
+    /**
+     * @var string
+     */
+    protected $selector = '.x-btn.primary button[role="button"]';
 }

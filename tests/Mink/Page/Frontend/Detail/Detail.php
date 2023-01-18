@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +26,6 @@
 
 namespace Shopware\Tests\Mink\Page\Frontend\Detail;
 
-use Behat\Mink\Element\NodeElement;
 use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleEvaluation;
@@ -40,7 +41,7 @@ class Detail extends Page implements HelperSelectorInterface
     protected $path = '/detail/index/sArticle/{articleId}?number={number}';
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     protected $configuratorTypes = [
         'table' => 'configurator--form',
@@ -51,7 +52,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'productRating' => 'div.product--rating-container .product--rating > meta',
@@ -66,7 +67,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'notificationFormSubmit' => ['de' => 'Eintragen', 'en' => 'Enter'],
@@ -82,7 +83,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * Verify if we're on an expected page. Throw an exception if not.
      */
-    public function verifyPage()
+    public function verifyPage(): void
     {
         $links = Helper::hasNamedLinks($this, ['commentLink', 'inquiryLink']);
         $buttons = Helper::hasNamedButtons($this, ['compareLink', 'rememberLink']);
@@ -112,10 +113,8 @@ class Detail extends Page implements HelperSelectorInterface
 
     /**
      * Puts the current article <quantity> times to basket
-     *
-     * @param int $quantity
      */
-    public function addToBasket($quantity = 1)
+    public function addToBasket(int $quantity = 1): void
     {
         $this->fillField('sQuantity', $quantity);
         $this->find('css', "button[name='In den Warenkorb']")->click();
@@ -130,7 +129,7 @@ class Detail extends Page implements HelperSelectorInterface
         $this->find('css', "a[title='Warenkorb bearbeiten']")->click();
     }
 
-    public function toBasket($offcanvasCart = false)
+    public function toBasket(bool $offcanvasCart = false): void
     {
         if ($offcanvasCart) {
             $text = 'Warenkorb anzeigen';
@@ -152,19 +151,16 @@ class Detail extends Page implements HelperSelectorInterface
 
         $this->clickLink($text);
 
-        /** @var CheckoutCart $checkoutCartPage */
-        $checkoutCartPage = $this->getPage('CheckoutCart');
+        $checkoutCartPage = $this->getPage(CheckoutCart::class);
         $checkoutCartPage->verifyPage();
     }
 
     /**
      * Checks the evaluations of the current article
      *
-     * @param string $average
-     *
      * @throws Exception
      */
-    public function checkEvaluations(ArticleEvaluation $articleEvaluations, $average, array $evaluations)
+    public function checkEvaluations(ArticleEvaluation $articleEvaluations, string $average, array $evaluations): void
     {
         $this->checkRating($articleEvaluations, $average);
 
@@ -194,7 +190,7 @@ class Detail extends Page implements HelperSelectorInterface
      *
      * @param array[] $configuration
      */
-    public function configure(array $configuration)
+    public function configure(array $configuration): void
     {
         $configuratorType = '';
 
@@ -220,12 +216,9 @@ class Detail extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param string $configuratorOption
-     * @param string $configuratorGroup
-     *
      * @throws Exception
      */
-    public function canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup)
+    public function canNotSelectConfiguratorOption(string $configuratorOption, string $configuratorGroup): void
     {
         $group = $this->findField($configuratorGroup);
 
@@ -237,7 +230,7 @@ class Detail extends Page implements HelperSelectorInterface
         $options = $group->findAll('css', 'option');
 
         foreach ($options as $option) {
-            if ($option->getText() == $configuratorOption) {
+            if ($option->getText() === $configuratorOption) {
                 $message = sprintf('Configurator option %s founded but should not', $configuratorOption);
                 Helper::throwException($message);
             }
@@ -247,7 +240,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * Writes an evaluation
      */
-    public function writeEvaluation(array $data)
+    public function writeEvaluation(array $data): void
     {
         Helper::fillForm($this, 'voteForm', $data);
         Helper::pressNamedButton($this, 'voteFormSubmit');
@@ -263,11 +256,9 @@ class Detail extends Page implements HelperSelectorInterface
      *
      * @throws Exception
      */
-    public function checkSelect($select, $min, $max, $graduation)
+    public function checkSelect(string $select, string $min, string $max, int $graduation): void
     {
         $selectBox = $this->findField($select);
-        $min = (string) $min;
-        $max = (string) $max;
 
         if (empty($selectBox)) {
             $message = sprintf('Select box "%s" was not found!', $select);
@@ -286,7 +277,6 @@ class Detail extends Page implements HelperSelectorInterface
             $errors[] = sprintf('The first option of "%s" is "%s"! (should be "%s")', $select, $optionText, $min);
         }
 
-        /** @var NodeElement $option */
         while ($option = next($options)) {
             $optionText = $option->getText();
             $value += $graduation;
@@ -312,10 +302,8 @@ class Detail extends Page implements HelperSelectorInterface
 
     /**
      * Fills the notification form and submits it
-     *
-     * @param string $email
      */
-    public function submitNotification($email)
+    public function submitNotification(string $email): void
     {
         $data = [
             [
@@ -330,7 +318,7 @@ class Detail extends Page implements HelperSelectorInterface
         $elements['notificationSubmit']->press();
     }
 
-    public function openEvaluationSection()
+    public function openEvaluationSection(): void
     {
         $evaluationTab = $this->getSession()
             ->getPage()
@@ -342,11 +330,9 @@ class Detail extends Page implements HelperSelectorInterface
     }
 
     /**
-     * @param string $average
-     *
      * @throws Exception
      */
-    protected function checkRating(ArticleEvaluation $articleEvaluations, $average)
+    protected function checkRating(ArticleEvaluation $articleEvaluations, string $average): void
     {
         $elements = Helper::findElements($this, ['productRating', 'productRatingCount']);
         $check = [

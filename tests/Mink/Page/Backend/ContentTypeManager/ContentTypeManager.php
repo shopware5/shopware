@@ -62,6 +62,9 @@ class ContentTypeManager extends Page
         $this->getDetailWindow()->getSaveButton()->press();
     }
 
+    /**
+     * @param class-string<Element> $name
+     */
     public function switchTab(string $name): void
     {
         $this->getDetailWindow()->getTab($name)->click();
@@ -69,35 +72,17 @@ class ContentTypeManager extends Page
 
     public function getListWindow(): ContentTypeManagerListWindow
     {
-        $window = $this->getElement(ContentTypeManagerListWindow::class);
-
-        if ($window instanceof ContentTypeManagerListWindow) {
-            return $window;
-        }
-
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerListWindow::class));
+        return $this->getElement(ContentTypeManagerListWindow::class);
     }
 
     public function getDetailWindow(): ContentTypeManagerDetailWindow
     {
-        $window = $this->getElement(ContentTypeManagerDetailWindow::class);
-
-        if ($window instanceof ContentTypeManagerDetailWindow) {
-            return $window;
-        }
-
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerDetailWindow::class));
+        return $this->getElement(ContentTypeManagerDetailWindow::class);
     }
 
     public function getFieldWindow(): ContentTypeManagerFieldWindow
     {
-        $window = $this->getElement(ContentTypeManagerFieldWindow::class);
-
-        if ($window instanceof ContentTypeManagerFieldWindow) {
-            return $window;
-        }
-
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerFieldWindow::class));
+        return $this->getElement(ContentTypeManagerFieldWindow::class);
     }
 
     protected function verifyPage(): void

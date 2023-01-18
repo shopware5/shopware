@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,8 +28,8 @@ namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
 
 use Behat\Mink\Element\NodeElement;
 use Exception;
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: BlogArticle
@@ -39,17 +41,17 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * - alt (string, e.g. "foo")
  * - title (string, e.g. "bar")
  */
-class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement implements HelperSelectorInterface
+class BlogArticle extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--blog'];
 
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'article' => '.blog--entry',
@@ -66,13 +68,12 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
      *
      * @return array[]
      */
-    public function getArticles(array $properties)
+    public function getArticles(array $properties): array
     {
         $elements = Helper::findAllOfElements($this, ['article']);
 
         $articles = [];
 
-        /** @var NodeElement $article */
         foreach ($elements['article'] as $article) {
             $articleProperties = [];
 
@@ -89,10 +90,8 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
 
     /**
      * Returns the title of the blog article
-     *
-     * @return string
      */
-    public function getTitleProperty(NodeElement $article)
+    public function getTitleProperty(NodeElement $article): string
     {
         $selectors = Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
 
@@ -109,10 +108,8 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
 
     /**
      * Returns the image of the blog article
-     *
-     * @return string|null
      */
-    public function getImageProperty(NodeElement $article)
+    public function getImageProperty(NodeElement $article): ?string
     {
         $selector = Helper::getRequiredSelector($this, 'articleLink');
 
@@ -121,10 +118,8 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
 
     /**
      * Returns the link to the blog article
-     *
-     * @return string
      */
-    public function getLinkProperty(NodeElement $article)
+    public function getLinkProperty(NodeElement $article): string
     {
         $selectors = Helper::getRequiredSelectors($this, ['articleTitle', 'articleLink']);
 
@@ -138,10 +133,8 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
 
     /**
      * Returns the text preview of the blog article
-     *
-     * @return string|null
      */
-    public function getTextProperty(NodeElement $article)
+    public function getTextProperty(NodeElement $article): ?string
     {
         $selector = Helper::getRequiredSelector($this, 'articleText');
 
@@ -154,10 +147,8 @@ class BlogArticle extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElem
      * @param string[] $titles
      *
      * @throws Exception
-     *
-     * @return string
      */
-    protected function getUniqueTitle(array $titles)
+    protected function getUniqueTitle(array $titles): string
     {
         $title = array_unique($titles);
 

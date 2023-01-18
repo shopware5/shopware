@@ -41,14 +41,11 @@ class Helper
     public const EXCEPTION_GENERIC = 1;
     public const EXCEPTION_PENDING = 2;
 
-    private static $language;
+    private static string $language;
 
-    /**
-     * @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement
-     */
-    private static $filterElements;
+    private static MultipleElement $filterElements;
 
-    public static function setCurrentLanguage($language)
+    public static function setCurrentLanguage(string $language): void
     {
         self::$language = $language;
     }
@@ -59,13 +56,11 @@ class Helper
      * If not, the key of the element will be returned (can be used for more detailed descriptions of faults)
      * Throws an exception if $check has an incorrect format
      *
-     * @param bool $strict
-     *
      * @throws Exception
      *
      * @return bool|int|string
      */
-    public static function checkArray(array $check, $strict = false)
+    public static function checkArray(array $check, bool $strict = false)
     {
         foreach ($check as $key => $comparison) {
             if ((!\is_array($comparison)) || (\count($comparison) != 2)) {
@@ -93,7 +88,7 @@ class Helper
                 return $key;
             }
 
-            if (strpos($haystack, $needle) === false) {
+            if (!str_contains($haystack, $needle)) {
                 return $key;
             }
         }
@@ -124,10 +119,8 @@ class Helper
 
     /**
      * Converts values with key in $keys to floats
-     *
-     * @return array
      */
-    public static function floatArray(array $values, array $keys = [])
+    public static function floatArray(array $values, array $keys = []): array
     {
         if (\is_array(current($values))) {
             foreach ($values as &$array) {
@@ -155,13 +148,11 @@ class Helper
      * If the number is equal to $count, the function will return true.
      * If the number is not equal to $count, the function will return the count of the element.
      *
-     * @param Element $parent
-     * @param string  $elementLocator
-     * @param int     $count
+     * @param Element&HelperSelectorInterface $parent
      *
      * @return bool|int
      */
-    public static function countElements($parent, $elementLocator, $count = 0)
+    public static function countElements(Element $parent, string $elementLocator, int $count = 0)
     {
         $elements = self::findAllOfElements($parent, [$elementLocator], false);
         $countElements = \count($elements[$elementLocator]);
@@ -176,12 +167,9 @@ class Helper
     /**
      * Recursive Helper function to compare two arrays over all their levels
      *
-     * @param array $array1
-     * @param array $array2
-     *
      * @return array|bool
      */
-    public static function compareArrays($array1, $array2)
+    public static function compareArrays(array $array1, array $array2)
     {
         foreach ($array1 as $key => $value) {
             if (!\array_key_exists($key, $array2)) {
@@ -222,15 +210,14 @@ class Helper
     /**
      * Finds elements by their selectors
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param array<string>                        $keys
-     * @param bool                                 $throwExceptions
+     * @param (Page|Element)&HelperSelectorInterface $parent
+     * @param array<string> $keys
      *
      * @throws Exception|PendingException
      *
-     * @return array<string, Element>
+     * @return array<string, NodeElement>
      */
-    public static function findElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
+    public static function findElements($parent, array $keys, bool $throwExceptions = true): array
     {
         $notFound = [];
         $elements = [];
@@ -242,6 +229,7 @@ class Helper
 
             if (!$element) {
                 $notFound[$key] = $locator;
+                continue;
             }
 
             $elements[$key] = $element;
@@ -265,14 +253,11 @@ class Helper
     /**
      * Finds all elements of their selectors
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param bool                                 $throwExceptions
+     * @param (Page|Element)&HelperSelectorInterface $parent
      *
      * @throws Exception|PendingException
-     *
-     * @return array
      */
-    public static function findAllOfElements(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
+    public static function findAllOfElements($parent, array $keys, bool $throwExceptions = true): array
     {
         $notFound = [];
         $elements = [];
@@ -307,16 +292,15 @@ class Helper
     /**
      * Returns the requested element css selectors
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param array<string>                        $keys
-     * @param bool                                 $throwExceptions
+     * @param (Page|Element)&HelperSelectorInterface $parent
+     * @param array<string> $keys
      *
      * @throws Exception
      * @throws PendingException
      *
      * @return array<string, string>
      */
-    public static function getRequiredSelectors(HelperSelectorInterface $parent, array $keys, $throwExceptions = true)
+    public static function getRequiredSelectors($parent, array $keys, bool $throwExceptions = true): array
     {
         $errors = [];
         $locators = [];
@@ -355,13 +339,17 @@ class Helper
     /**
      * Returns the css selector of the element
      *
-     * @return string|bool
+     * @param (Page|Element)&HelperSelectorInterface $parent
      */
-    public static function getRequiredSelector(HelperSelectorInterface $parent, string $key)
+    public static function getRequiredSelector(HelperSelectorInterface $parent, string $key): string
     {
         $selectors = self::getRequiredSelectors($parent, [$key], false);
 
-        return (isset($selectors[$key])) ? $selectors[$key] : false;
+        if (isset($selectors[$key])) {
+            return $selectors[$key];
+        }
+
+        self::throwException(sprintf('Could not find "%s" selector', $key));
     }
 
     /**
@@ -373,7 +361,7 @@ class Helper
      *
      * @return never-return
      */
-    public static function throwException($messages = [], int $type = self::EXCEPTION_GENERIC)
+    public static function throwException($messages = [], int $type = self::EXCEPTION_GENERIC): void
     {
         if (!\is_array($messages)) {
             $messages = [$messages];
@@ -421,21 +409,18 @@ EOD
     /**
      * Checks if a page or element has the requested named link
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string                               $key
-     *
-     * @return bool
+     * @param (Page|Element)&HelperSelectorInterface $parent
      */
-    public static function hasNamedLink(HelperSelectorInterface $parent, $key)
+    public static function hasNamedLink(HelperSelectorInterface $parent, string $key): bool
     {
-        return (self::hasNamedLinks($parent, [$key]) === true) ?: false;
+        return self::hasNamedLinks($parent, [$key]) === true;
     }
 
     /**
      * Searches for named links given by $keys. Returns true if all exist, otherwise an array of the not found keys.
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string[]                             $keys
+     * @param (Page|Element)&HelperSelectorInterface $parent
+     * @param string[] $keys
      *
      * @return bool|string[]
      */
@@ -462,13 +447,12 @@ EOD
     /**
      * Clicks the requested named link
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string                               $key
+     * @param (Page|Element)&HelperSelectorInterface $parent
      *
      * @throws Exception
      * @throws PendingException
      */
-    public static function clickNamedLink(HelperSelectorInterface $parent, $key)
+    public static function clickNamedLink(HelperSelectorInterface $parent, string $key): void
     {
         $locatorArray = $parent->getNamedSelectors();
 
@@ -482,21 +466,20 @@ EOD
     /**
      * Checks if a page or element has the requested named link
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string                               $key
+     * @param (Page|Element)&HelperSelectorInterface $parent
      *
      * @return bool
      */
-    public static function hasNamedButton(HelperSelectorInterface $parent, $key)
+    public static function hasNamedButton(HelperSelectorInterface $parent, string $key)
     {
-        return (self::hasNamedButtons($parent, [$key]) === true) ?: false;
+        return self::hasNamedButtons($parent, [$key]) === true;
     }
 
     /**
      * Searches for named buttons given by $keys. Returns true if all exist, otherwise an array of the not found keys.
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string[]                             $keys
+     * @param (Page|Element)&HelperSelectorInterface $parent
+     * @param string[] $keys
      *
      * @return bool|string[]
      */
@@ -523,10 +506,9 @@ EOD
     /**
      * Presses the requested named button
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string                               $key
+     * @param (Page|Element)&HelperSelectorInterface $parent
      */
-    public static function pressNamedButton(HelperSelectorInterface $parent, $key)
+    public static function pressNamedButton(HelperSelectorInterface $parent, string $key): void
     {
         $locatorArray = $parent->getNamedSelectors();
 
@@ -539,7 +521,7 @@ EOD
                 $parent->pressButton($locatorArray[$key][self::$language]);
 
                 return true;
-            } catch (StaleElementReference $e) {
+            } catch (Exception $e) {
                 // got stale element, try again (refresh happens in the $parents pressButton method)
                 return false;
             }
@@ -550,10 +532,8 @@ EOD
      * Helper method that returns the content block of a page
      *
      * @throws Exception
-     *
-     * @return NodeElement
      */
-    public static function getContentBlock(Page $parent)
+    public static function getContentBlock(Page $parent): NodeElement
     {
         $contentBlocks = [
             'emotion' => 'div#content > div.inner',
@@ -572,13 +552,12 @@ EOD
     }
 
     /**
-     * Fills a the inputs of a form
+     * Fills inputs of a form
      *
-     * @param Page|Element|HelperSelectorInterface $parent
-     * @param string                               $formKey
-     * @param array                                $values
+     * @param (Page|Element)&HelperSelectorInterface $parent
+     * @param array<array<string, string>> $values
      */
-    public static function fillForm(HelperSelectorInterface $parent, $formKey, $values, bool $waitForOverlays = false)
+    public static function fillForm(HelperSelectorInterface $parent, string $formKey, array $values, bool $waitForOverlays = false): void
     {
         foreach ($values as $value) {
             $tempFieldName = $fieldName = $value['field'];
@@ -661,10 +640,8 @@ EOD
 
     /**
      * Helper function to get the current language ('de' or 'en')
-     *
-     * @return string
      */
-    public static function getCurrentLanguage()
+    public static function getCurrentLanguage(): string
     {
         return self::$language;
     }
@@ -692,7 +669,7 @@ EOD
         if (!$body instanceof NodeElement) {
             self::throwException('body not found');
         }
-        $class = $body->getAttribute('class');
+        $class = (string) $body->getAttribute('class');
 
         foreach ($prefixes as $template => $modes) {
             $activeModes = [];
@@ -736,11 +713,11 @@ EOD
     }
 
     /**
-     * @param bool $throwExceptions
+     * @param Element&HelperSelectorInterface $element
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    public static function getElementData(HelperSelectorInterface $element, $throwExceptions = true)
+    public static function getElementData(HelperSelectorInterface $element, bool $throwExceptions = true): array
     {
         $locators = array_keys($element->getCssSelectors());
         $elements = self::findAllOfElements($element, $locators, $throwExceptions);
@@ -758,13 +735,7 @@ EOD
         return $result;
     }
 
-    /**
-     * @param string $keyKey
-     * @param string $valueKey
-     *
-     * @return array
-     */
-    public static function convertTableHashToArray(array $hash, $keyKey = 'property', $valueKey = 'value')
+    public static function convertTableHashToArray(array $hash, string $keyKey = 'property', string $valueKey = 'value'): array
     {
         $result = [];
 
@@ -781,10 +752,8 @@ EOD
      * Returns the unique value of an array, throws in exception if there are differences
      *
      * @throws Exception
-     *
-     * @return string
      */
-    public static function getUnique(array $array)
+    public static function getUnique(array $array): string
     {
         $unique = array_unique($array);
 
@@ -801,11 +770,9 @@ EOD
     }
 
     /**
-     * @param string $propertyName
-     *
      * @return string|float|array
      */
-    public static function getElementProperty(Element $element, $propertyName)
+    public static function getElementProperty(Element $element, string $propertyName)
     {
         $method = 'get' . ucfirst($propertyName) . 'Property';
 
@@ -880,10 +847,8 @@ EOD
 
     /**
      * Global method to check the count of an MultipleElement
-     *
-     * @param int $count
      */
-    public static function assertElementCount(MultipleElement $elements, $count = 0)
+    public static function assertElementCount(MultipleElement $elements, int $count = 0): void
     {
         if ($count !== \count($elements)) {
             $message = sprintf(
@@ -901,12 +866,9 @@ EOD
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param callable $lambda
-     * @param int      $wait
-     *
      * @throws Exception
      */
-    public static function spin($lambda, $wait = 60)
+    public static function spin(callable $lambda, int $wait = 60): void
     {
         $time = time();
         $stopTime = $time + $wait;
@@ -925,7 +887,7 @@ EOD
         self::throwException("Spin function timed out after {$wait} seconds");
     }
 
-    public static function waitForOverlay(DocumentElement $page)
+    public static function waitForOverlay(DocumentElement $page): void
     {
         $page->waitFor(4000, static function () use ($page) {
             $element = null;
@@ -939,12 +901,8 @@ EOD
         });
     }
 
-    /**
-     * @return bool
-     */
-    private static function filter(array $var)
+    private static function filter(array $var): bool
     {
-        /** @var \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement $element */
         foreach (self::$filterElements as $element) {
             if (self::assertElementProperties($element, $var) === true) {
                 self::$filterElements->remove();

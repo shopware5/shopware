@@ -9,10 +9,10 @@ Feature: Note
 
     Scenario: I can remove articles from my note
         When  I remove the article on position 2 of my note
-        Then  I should see 1 element of type "NotePosition"
+        Then  I should see 1 element of type "\Shopware\Tests\Mink\Page\Frontend\Note\Elements\NotePosition"
 
         When  I remove the article on position 1 of my note
-        Then  I should see 0 element of type "NotePosition"
+        Then  I should see 0 element of type "\Shopware\Tests\Mink\Page\Frontend\Note\Elements\NotePosition"
 
     @comparison
     Scenario: I can compare articles from my note
@@ -40,7 +40,7 @@ Feature: Note
         When  I press the button "remember" of the element "ArticleBox" on position 2
         And   Wait until ajax requests are done
         And   I am on the page "Note"
-        Then  I should see 2 element of type "NotePosition"
+        Then  I should see 2 element of type "\Shopware\Tests\Mink\Page\Frontend\Note\Elements\NotePosition"
 
         When  I follow "Ausweichversandkosten"
         And   I follow "Versandkosten"
@@ -50,4 +50,4 @@ Feature: Note
         When  I press the button "remember" of the element "ArticleBox" on position 4
         And   Wait until ajax requests are done
         And   I am on the page "Note"
-        Then  I should see 3 element of type "NotePosition"
+        Then  I should see 3 element of type "\Shopware\Tests\Mink\Page\Frontend\Note\Elements\NotePosition"

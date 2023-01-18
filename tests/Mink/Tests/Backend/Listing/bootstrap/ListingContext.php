@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,9 +27,10 @@
 namespace Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
-use Shopware\Tests\Mink\Element\ArticleBox;
+use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox;
+use Shopware\Tests\Mink\Page\Frontend\Listing\Elements\Paging;
+use Shopware\Tests\Mink\Page\Frontend\Listing\Listing;
 use Shopware\Tests\Mink\Page\Helper\Elements\FilterGroup;
-use Shopware\Tests\Mink\Page\Listing;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
@@ -37,18 +40,18 @@ class ListingContext extends SubContext
      * @Given /^I am on the listing page:$/
      * @Given /^I go to the listing page:$/
      */
-    public function iAmOnTheListingPage(TableNode $params)
+    public function iAmOnTheListingPage(TableNode $params): void
     {
         $params = $params->getHash();
 
-        $this->getPage('Listing')->openListing($params);
+        $this->getPage(Listing::class)->openListing($params);
     }
 
     /**
      * @Given /^I am on the listing page for category (?P<categoryId>\d+)$/
      * @Given /^I am on the listing page for category (?P<categoryId>\d+) on page (?P<page>\d+)$/
      */
-    public function iAmOnTheListingPageForCategoryOnPage($categoryId, $page = null)
+    public function iAmOnTheListingPageForCategoryOnPage(int $categoryId, ?int $page = null): void
     {
         $params = [
             [
@@ -64,14 +67,14 @@ class ListingContext extends SubContext
             ];
         }
 
-        $this->getPage('Listing')->openListing($params, false);
+        $this->getPage(Listing::class)->openListing($params, false);
     }
 
     /**
      * @When /^I set the filter to:$/
      * @When /^I reset all filters$/
      */
-    public function iSetTheFilterTo(TableNode $filter = null)
+    public function iSetTheFilterTo(TableNode $filter = null): void
     {
         $properties = [];
 
@@ -79,40 +82,36 @@ class ListingContext extends SubContext
             $properties = $filter->getHash();
         }
 
-        /** @var Listing $page */
-        $page = $this->getPage('Listing');
+        $page = $this->getPage(Listing::class);
 
-        /** @var FilterGroup $filterGroups */
-        $filterGroups = $this->getMultipleElement($page, 'FilterGroup');
+        $filterGroups = $this->getMultipleElement($page, FilterGroup::class);
         $page->filter($filterGroups, $properties);
     }
 
     /**
      * @Then /^the articles should be shown in a table-view$/
      */
-    public function theArticlesShouldBeShownInATableView()
+    public function theArticlesShouldBeShownInATableView(): void
     {
-        $this->getPage('Listing')->checkView('viewTable');
+        $this->getPage(Listing::class)->checkView('viewTable');
     }
 
     /**
      * @Then /^the articles should be shown in a list-view$/
      */
-    public function theArticlesShouldBeShownInAListView()
+    public function theArticlesShouldBeShownInAListView(): void
     {
-        $this->getPage('Listing')->checkView('viewList');
+        $this->getPage(Listing::class)->checkView('viewList');
     }
 
     /**
      * @Then /^the article on position (?P<num>\d+) should have this properties:$/
      */
-    public function theArticleOnPositionShouldHaveThisProperties($position, TableNode $properties)
+    public function theArticleOnPositionShouldHaveThisProperties(int $position, TableNode $properties): void
     {
-        /** @var Listing $page */
-        $page = $this->getPage('Listing');
+        $page = $this->getPage(Listing::class);
 
-        /** @var ArticleBox $articleBox */
-        $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
+        $articleBox = $this->getMultipleElement($page, ArticleBox::class, $position);
         $properties = Helper::convertTableHashToArray($properties->getHash());
         $page->checkArticleBox($articleBox, $properties);
     }
@@ -120,13 +119,11 @@ class ListingContext extends SubContext
     /**
      * @When /^I order the article on position (?P<position>\d+)$/
      */
-    public function iOrderTheArticleOnPosition($position)
+    public function iOrderTheArticleOnPosition(int $position): void
     {
-        /** @var Listing $page */
-        $page = $this->getPage('Listing');
+        $page = $this->getPage(Listing::class);
 
-        /** @var ArticleBox $articleBox */
-        $articleBox = $this->getMultipleElement($page, 'ArticleBox', $position);
+        $articleBox = $this->getMultipleElement($page, ArticleBox::class, $position);
         Helper::clickNamedLink($articleBox, 'order');
     }
 
@@ -134,48 +131,48 @@ class ListingContext extends SubContext
      * @When /^I browse to (previous|next) page$/
      * @When /^I browse to (previous|next) page (\d+) times$/
      */
-    public function iBrowseTimesToPage($direction, $steps = 1)
+    public function iBrowseTimesToPage(string $direction, int $steps = 1): void
     {
-        $this->getElement('Paging')->moveDirection($direction, $steps);
+        $this->getElement(Paging::class)->moveDirection($direction, $steps);
     }
 
     /**
      * @Then /^I should not be able to browse to (previous|next) page$/
      */
-    public function iShouldNotBeAbleToBrowseToPage($direction)
+    public function iShouldNotBeAbleToBrowseToPage(string $direction): void
     {
-        $this->getElement('Paging')->noElement($direction);
+        $this->getElement(Paging::class)->noElement($direction);
     }
 
     /**
      * @When /^I browse to page (\d+)$/
      */
-    public function iBrowseToPage($page)
+    public function iBrowseToPage(int $page): void
     {
-        $this->getElement('Paging')->moveToPage($page);
+        $this->getElement(Paging::class)->moveToPage($page);
     }
 
     /**
      * @Given /^I should not be able to browse to page (\d+)$/
      */
-    public function iShouldNotBeAbleToBrowseToPage2($page)
+    public function iShouldNotBeAbleToBrowseToPage2(string $page): void
     {
-        $this->getElement('Paging')->noElement($page);
+        $this->getElement(Paging::class)->noElement($page);
     }
 
     /**
      * @Then /^I should see the article "([^"]*)" in listing$/
      */
-    public function iShouldSeeTheArticleInListing($name)
+    public function iShouldSeeTheArticleInListing(string $name): void
     {
-        $this->getPage('Listing')->checkListing($name);
+        $this->getPage(Listing::class)->checkListing($name);
     }
 
     /**
      * @Given /^I should not see the article "([^"]*)" in listing$/
      */
-    public function iShouldNotSeeTheArticleInListing($name)
+    public function iShouldNotSeeTheArticleInListing(string $name): void
     {
-        $this->getPage('Listing')->checkListing($name, true);
+        $this->getPage(Listing::class)->checkListing($name, true);
     }
 }

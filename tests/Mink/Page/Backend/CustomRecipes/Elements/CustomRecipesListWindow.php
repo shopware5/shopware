@@ -28,6 +28,7 @@ namespace Shopware\Tests\Mink\Page\Backend\CustomRecipes\Elements;
 
 use Behat\Mink\Element\NodeElement;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
+use Shopware\Tests\Mink\Page\Backend\ContentTypeManager\Elements\AddButton;
 
 class CustomRecipesListWindow extends Element
 {
@@ -36,15 +37,8 @@ class CustomRecipesListWindow extends Element
      */
     protected $selector = ".x-window[id^='CustomRecipes-list-window']";
 
-    /**
-     * @var array<string, string|array>
-     */
-    protected $elements = [
-        'Add button' => ['xpath' => "//*[@class='x-btn-icon sprite-plus-circle-frame']/.."],
-    ];
-
     public function getAddButton(): NodeElement
     {
-        return $this->getElement('Add button')->getParent();
+        return $this->getElement(AddButton::class)->getParent();
     }
 }

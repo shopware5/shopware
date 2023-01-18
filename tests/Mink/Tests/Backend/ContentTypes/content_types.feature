@@ -23,6 +23,8 @@ Feature: Content Types module should work
         Then I should see a dropdown appear
 
         When I click on the button to save the field
+        And I should see "Produkt"
+        And I should see "Produktauswahl"
         And I click on the button to save the content type
         Then I should see a success message
 

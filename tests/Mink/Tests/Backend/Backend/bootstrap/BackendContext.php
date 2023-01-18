@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,14 +35,13 @@ class BackendContext extends SubContext
     /**
      * @Given /^I am logged in to the backend as an admin user$/
      */
-    public function iAmLoggedInToTheBackendAsAnAdminUser()
+    public function iAmLoggedInToTheBackendAsAnAdminUser(): void
     {
-        /** @var Backend $page */
-        $page = $this->getPage('Backend');
+        $page = $this->getPage(Backend::class);
         $page->open();
 
         // See if we already are logged in
-        if ($this->waitIfThereIsText('Marketing', 5)) {
+        if ($this->waitIfThereIsText('Marketing')) {
             return;
         }
 
@@ -56,7 +57,7 @@ class BackendContext extends SubContext
     public function iOpenTheModule(string $moduleName): void
     {
         $this->spin(function (BackendContext $context) use ($moduleName) {
-            $backendPage = $context->getPage('Backend');
+            $backendPage = $context->getPage(Backend::class);
             \assert($backendPage instanceof Backend);
             $backendPage->openModule($moduleName);
 
@@ -69,10 +70,10 @@ class BackendContext extends SubContext
      */
     public function theModuleShouldOpenAWindow(): void
     {
-        $this->getPage('Backend');
+        $this->getPage(Backend::class);
 
         $this->spin(function (BackendContext $context) {
-            $backendPage = $context->getPage('Backend');
+            $backendPage = $context->getPage(Backend::class);
             \assert($backendPage instanceof Backend);
             $backendPage->verifyModule();
 
@@ -86,7 +87,7 @@ class BackendContext extends SubContext
     public function iShouldSeeADropdownAppear(): void
     {
         $this->spin(function ($context) {
-            return $context->getPage('Backend')->find('css', '.x-boundlist-item') !== null;
+            return $context->getPage(Backend::class)->find('css', '.x-boundlist-item') !== null;
         });
     }
 
@@ -95,7 +96,7 @@ class BackendContext extends SubContext
      */
     public function iShouldSeeASuccessMessage(): void
     {
-        $this->waitIfThereIsText('Erfolgreich', 5);
+        $this->waitIfThereIsText('Erfolgreich');
     }
 
     /**
@@ -103,14 +104,9 @@ class BackendContext extends SubContext
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
      *
-     * @param callable $lambda
-     * @param int      $wait
-     *
      * @throws Exception
-     *
-     * @return bool
      */
-    public function spin($lambda, $wait = 60)
+    public function spin(callable $lambda, int $wait = 60): bool
     {
         $time = time();
         $stopTime = $time + $wait;
@@ -149,13 +145,8 @@ JS;
      * Based on Behat's own example
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @param callable $lambda
-     * @param int      $wait
-     *
-     * @return bool
      */
-    protected function spinWithNoException($lambda, $wait = 60)
+    protected function spinWithNoException(callable $lambda, int $wait = 60): bool
     {
         $time = time();
         $stopTime = $time + $wait;
@@ -176,25 +167,18 @@ JS;
 
     /**
      * Checks via a string exists
-     *
-     * @param string $text
-     *
-     * @return bool
      */
-    protected function checkIfThereIsText($text, SubContext $context)
+    protected function checkIfThereIsText(string $text, SubContext $context): bool
     {
-        $result = $context->getSession()->getPage()->findAll('xpath', "//*[contains(., '$text')]");
+        $result = $context->getSession()->getPage()->findAll('xpath', sprintf("//*[contains(., '%s')]", $text));
 
         return !empty($result);
     }
 
     /**
      * Checks via spin function if a string exists, with sleep at the beginning (default 2)
-     *
-     * @param string $text
-     * @param int    $sleep
      */
-    protected function waitForText($text, $sleep = 2)
+    protected function waitForText(string $text, int $sleep = 2): void
     {
         sleep($sleep);
         $this->spin(function (SubContext $context) use ($text) {
@@ -204,13 +188,8 @@ JS;
 
     /**
      * Checks via spin function if a string exists, with sleep at the beginning (default 2)
-     *
-     * @param string $text
-     * @param int    $wait
-     *
-     * @return bool
      */
-    protected function waitIfThereIsText($text, $wait = 5)
+    protected function waitIfThereIsText(string $text, int $wait = 5): bool
     {
         return $this->spinWithNoException(function (SubContext $context) use ($text) {
             return $this->checkIfThereIsText($text, $context);

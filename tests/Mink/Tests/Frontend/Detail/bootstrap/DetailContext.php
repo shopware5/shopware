@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -36,46 +38,43 @@ use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 class DetailContext extends SubContext
 {
     /**
-     * @Given /^I am on the detail page for article (?P<articleId>\d+)$/
+     * @Given /^I am on the detail page for article (?P<productId>\d+)$/
      *
-     * @When /^I go to the detail page for article (?P<articleId>\d+)$/
+     * @When /^I go to the detail page for article (?P<productId>\d+)$/
      */
-    public function iAmOnTheDetailPageForArticle($articleId): void
+    public function iAmOnTheDetailPageForArticle(int $productId): void
     {
-        $this->getPage('Detail')->open(['articleId' => $articleId, 'number' => null]);
+        $this->getPage(Detail::class)->open(['articleId' => $productId, 'number' => null]);
     }
 
     /**
-     * @Given /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     * @Given /^I am on the detail page for variant "(?P<number>[^"]*)" of article (?P<productId>\d+)$/
      *
-     * @When /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<articleId>\d+)$/
+     * @When /^I go to the detail page for variant "(?P<number>[^"]*)" of article (?P<productId>\d+)$/
      */
-    public function iAmOnTheDetailPageForVariantOfArticle($number, $articleId): void
+    public function iAmOnTheDetailPageForVariantOfArticle(string $number, int $productId): void
     {
-        $this->getPage('Detail')->open(['articleId' => $articleId, 'number' => $number]);
+        $this->getPage(Detail::class)->open(['articleId' => $productId, 'number' => $number]);
     }
 
     /**
      * @When /^I put the article into the basket$/
      * @When /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
      */
-    public function iPutTheArticleTimesIntoTheBasket($quantity = 1): void
+    public function iPutTheArticleTimesIntoTheBasket(int $quantity = 1): void
     {
-        /** @var Detail $page */
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         $page->addToBasket($quantity);
     }
 
     /**
      * @Given /^I should see an average customer evaluation of (?P<average>\d+) from following evaluations:$/
      */
-    public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations($average, TableNode $evaluations): void
+    public function iShouldSeeAnAverageCustomerEvaluationOfFromFollowingEvaluations(string $average, TableNode $evaluations): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Detail\Detail $page */
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
 
-        /** @var ArticleEvaluation $articleEvaluations */
-        $articleEvaluations = $this->getMultipleElement($page, 'ArticleEvaluation');
+        $articleEvaluations = $this->getMultipleElement($page, ArticleEvaluation::class);
         $evaluations = $evaluations->getHash();
 
         $page->checkEvaluations($articleEvaluations, $average, $evaluations);
@@ -88,15 +87,15 @@ class DetailContext extends SubContext
     {
         $configuration = $configuration->getHash();
 
-        $this->getPage('Detail')->configure($configuration);
+        $this->getPage(Detail::class)->configure($configuration);
     }
 
     /**
      * @Then /^I can not select "([^"]*)" from "([^"]*)"$/
      */
-    public function iCanNotSelectFrom($configuratorOption, $configuratorGroup): void
+    public function iCanNotSelectFrom(string $configuratorOption, string $configuratorGroup): void
     {
-        $this->getPage('Detail')->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
+        $this->getPage(Detail::class)->canNotSelectConfiguratorOption($configuratorOption, $configuratorGroup);
     }
 
     /**
@@ -104,14 +103,14 @@ class DetailContext extends SubContext
      */
     public function iWriteAnEvaluation(TableNode $data): void
     {
-        $this->getPage('Detail')->writeEvaluation($data->getHash());
+        $this->getPage(Detail::class)->writeEvaluation($data->getHash());
     }
 
     /**
      * @When /^the shop owner activates my latest evaluation$/
      * @When /^the shop owner activates my latest (\d+) evaluations$/
      */
-    public function theShopOwnerActivateMyLatestEvaluation($limit = 1): void
+    public function theShopOwnerActivateMyLatestEvaluation(int $limit = 1): void
     {
         $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT ' . $limit;
         $this->getService('db')->exec($sql);
@@ -120,17 +119,17 @@ class DetailContext extends SubContext
     /**
      * @Given /^I can select every (\d+)\. option of "([^"]*)" from "([^"]*)" to "([^"]*)"$/
      */
-    public function iCanSelectEveryOptionOfFromTo($graduation, $select, $min, $max): void
+    public function iCanSelectEveryOptionOfFromTo(int $graduation, string $select, string $min, string $max): void
     {
-        $this->getPage('Detail')->checkSelect($select, $min, $max, $graduation);
+        $this->getPage(Detail::class)->checkSelect($select, $min, $max, $graduation);
     }
 
     /**
      * @When /^I submit the notification form with "([^"]*)"$/
      */
-    public function iSubmitTheNotificationFormWith($email): void
+    public function iSubmitTheNotificationFormWith(string $email): void
     {
-        $this->getPage('Detail')->submitNotification($email);
+        $this->getPage(Detail::class)->submitNotification($email);
     }
 
     /**
@@ -138,8 +137,7 @@ class DetailContext extends SubContext
      */
     public function iOpenTheEvaluationForm(): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Detail\Detail $page */
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         $page->openEvaluationSection();
     }
 
@@ -148,7 +146,6 @@ class DetailContext extends SubContext
      */
     public function theNotificationPluginIsActivated(): void
     {
-        /** @var InstallerService $pluginManager */
         $pluginManager = $this->getService(InstallerService::class);
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->activatePlugin($plugin);
@@ -159,7 +156,6 @@ class DetailContext extends SubContext
      */
     public function theNotificationPluginIsDeactivated(): void
     {
-        /** @var InstallerService $pluginManager */
         $pluginManager = $this->getService(InstallerService::class);
         $plugin = $pluginManager->getPluginByName('Notification');
         $pluginManager->deactivatePlugin($plugin);
@@ -170,7 +166,7 @@ class DetailContext extends SubContext
      */
     public function iOpenTheComparisonMenu(): void
     {
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         $openMenu = $page->find('css', '.entry--compare');
 
         if (!($openMenu instanceof NodeElement)) {
@@ -186,7 +182,7 @@ class DetailContext extends SubContext
      */
     public function iCompareTheCurrentProduct(): void
     {
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         $doCompare = $page->find('css', '.action--compare');
 
         if (!($doCompare instanceof NodeElement)) {
@@ -202,7 +198,7 @@ class DetailContext extends SubContext
      */
     public function iStartTheComparison(): void
     {
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         $startComparison = $page->find('css', '.btn--compare-start');
 
         if (!($startComparison instanceof NodeElement)) {
@@ -220,7 +216,7 @@ class DetailContext extends SubContext
      */
     public function iPressButtonForProductDetails(): void
     {
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
         $goDetails = $page->find('css', '.btn--product');
 
         if (!($goDetails instanceof NodeElement)) {
@@ -235,7 +231,7 @@ class DetailContext extends SubContext
      */
     public function iShouldSeeDetailPage(): void
     {
-        $page = $this->getPage('Detail');
+        $page = $this->getPage(Detail::class);
 
         $page->waitFor(4, function () use ($page) {
             return $page->find('xpath', '//*a[text()="Artikel mit Bewertung"]') === null;

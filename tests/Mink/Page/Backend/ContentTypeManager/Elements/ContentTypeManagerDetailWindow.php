@@ -42,22 +42,27 @@ class ContentTypeManagerDetailWindow extends Element
     protected $elements = [
         'Allgemein' => ['xpath' => "//button[normalize-space()='Allgemein']"],
         'Felder' => ['xpath' => "//button[normalize-space()='Felder']"],
-        'Add field button' => ['xpath' => "//*[@class='x-btn-icon sprite-plus-circle-frame']/../../button[normalize-space()='Neues Feld erstellen']"],
-        'Save button' => '.x-btn.primary button[role="button"]',
     ];
 
     public function getAddFieldButton(): NodeElement
     {
-        return $this->getElement('Add field button');
+        return $this->getElement(AddFieldButton::class);
     }
 
-    public function getTab(string $name): NodeElement
+    /**
+     * @template TElement of Element
+     *
+     * @param class-string<TElement> $name
+     *
+     * @return TElement
+     */
+    public function getTab(string $name): Element
     {
         return $this->getElement($name);
     }
 
     public function getSaveButton(): NodeElement
     {
-        return $this->getElement('Save button');
+        return $this->getElement(SaveButton::class);
     }
 }

@@ -34,7 +34,9 @@ use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Address\Address;
 use Shopware\Tests\Mink\Page\Frontend\Address\AddressDelete;
 use Shopware\Tests\Mink\Page\Frontend\Address\AddressEdit;
+use Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressBox;
 use Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressManagementAddressBox;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutCart;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
@@ -44,60 +46,60 @@ class AccountContext extends SubContext
     /**
      * @Given /^I log in with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
      */
-    public function iLogInAsWithPassword($email, $password)
+    public function iLogInAsWithPassword(string $email, string $password): void
     {
-        $this->getPage('Account')->login($email, $password);
+        $this->getPage(Account::class)->login($email, $password);
     }
 
     /**
      * @Given /^I log in successful as "(?P<username>[^"]*)" with email "(?P<email>[^"]*)" and password "(?P<password>[^"]*)"$/
      */
-    public function iLogInSuccessfulAsWithPassword($username, $email, $password)
+    public function iLogInSuccessfulAsWithPassword(string $username, string $email, string $password): void
     {
         Shopware()->Container()->get(Connection::class)->executeQuery('DELETE FROM s_order_basket');
 
-        $this->getPage('Account')->login($email, $password);
-        $this->getPage('Account')->verifyLogin($username);
+        $this->getPage(Account::class)->login($email, $password);
+        $this->getPage(Account::class)->verifyLogin($username);
     }
 
     /**
      * @When /^I log me out$/
      */
-    public function iLogMeOut()
+    public function iLogMeOut(): void
     {
-        $this->getPage('Account')->logout();
+        $this->getPage(Account::class)->logout();
     }
 
     /**
      * @When /^I click on login again$/
      */
-    public function iClickOnLoginAgain()
+    public function iClickOnLoginAgain(): void
     {
-        $this->getPage('Account')->clickLoginAgain();
+        $this->getPage(Account::class)->clickLoginAgain();
     }
 
     /**
      * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)"$/
      * @Then /^I change my email with password "(?P<password>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
-    public function iChangeMyEmailWithPasswordToWithConfirmation($password, $email, $emailConfirmation = null)
+    public function iChangeMyEmailWithPasswordToWithConfirmation(string $password, string $email, ?string $emailConfirmation = null): void
     {
-        $this->getPage('Account')->changeEmail($password, $email, $emailConfirmation);
+        $this->getPage(Account::class)->changeEmail($password, $email, $emailConfirmation);
     }
 
     /**
      * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)"$/
      * @Then /^I change my password from "(?P<old>[^"]*)" to "(?P<new>[^"]*)" with confirmation "(?P<confirmation>[^"]*)"$/
      */
-    public function iChangeMyPasswordFromToWithConfirmation($currentPassword, $password, $passwordConfirmation = null)
+    public function iChangeMyPasswordFromToWithConfirmation(string $currentPassword, string $password, ?string $passwordConfirmation = null): void
     {
-        $this->getPage('Account')->changePassword($currentPassword, $password, $passwordConfirmation);
+        $this->getPage(Account::class)->changePassword($currentPassword, $password, $passwordConfirmation);
     }
 
     /**
      * @Given /^I change my billing address:$/
      */
-    public function iChangeMyBillingAddress(TableNode $table)
+    public function iChangeMyBillingAddress(TableNode $table): void
     {
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         if (!\is_array($pageInfo)) {
@@ -106,10 +108,15 @@ class AccountContext extends SubContext
         $pageName = ucfirst($pageInfo['controller']);
 
         if ($pageName === 'Checkout') {
-            $pageName = 'CheckoutConfirm';
+            $pageName = CheckoutConfirm::class;
+        } elseif ($pageName === 'Account') {
+            $pageName = Account::class;
+        } elseif ($pageName === 'Address') {
+            $pageName = Address::class;
+        } else {
+            Helper::throwException('Wrong page for changing the billing address');
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account|CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = $table->getHash();
 
@@ -119,7 +126,7 @@ class AccountContext extends SubContext
     /**
      * @Given /^I change my shipping address:$/
      */
-    public function iChangeMyShippingAddress(TableNode $table)
+    public function iChangeMyShippingAddress(TableNode $table): void
     {
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         if (!\is_array($pageInfo)) {
@@ -128,10 +135,15 @@ class AccountContext extends SubContext
         $pageName = ucfirst($pageInfo['controller']);
 
         if ($pageName === 'Checkout') {
-            $pageName = 'CheckoutConfirm';
+            $pageName = CheckoutConfirm::class;
+        } elseif ($pageName === 'Account') {
+            $pageName = Account::class;
+        } elseif ($pageName === 'Address') {
+            $pageName = Address::class;
+        } else {
+            Helper::throwException('Wrong page for changing the shipping address');
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account|\Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = $table->getHash();
 
@@ -141,24 +153,24 @@ class AccountContext extends SubContext
     /**
      * @Given /^the "([^"]*)" address should be "([^"]*)"$/
      */
-    public function theAddressShouldBe($type, $address)
+    public function theAddressShouldBe(string $type, string $address): void
     {
-        $this->getPage('Account')->checkAddress($type, $address);
+        $this->getPage(Account::class)->checkAddress($type, $address);
     }
 
     /**
      * @Given /^I register me:$/
      */
-    public function iRegisterMe(TableNode $table)
+    public function iRegisterMe(TableNode $table): void
     {
-        $this->getPage('Account')->register($table->getHash());
+        $this->getPage(Account::class)->register($table->getHash());
     }
 
     /**
      * @When /^I change the payment method to (?P<paymentId>\d+)$/
      * @When /^I change the payment method to (?P<paymentId>\d+):$/
      */
-    public function iChangeThePaymentMethodTo($payment, TableNode $table = null)
+    public function iChangeThePaymentMethodTo(int $paymentId, TableNode $table = null): void
     {
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller', 'action']);
         if (!\is_array($pageInfo)) {
@@ -167,15 +179,18 @@ class AccountContext extends SubContext
         $pageName = ucfirst($pageInfo['controller']);
 
         if ($pageName === 'Checkout') {
-            $pageName = ($pageInfo['action'] === 'shippingpayment') ? 'CheckoutCart' : 'CheckoutConfirm';
+            $pageName = ($pageInfo['action'] === 'shippingpayment') ? CheckoutCart::class : CheckoutConfirm::class;
+        } elseif ($pageName === 'Account') {
+            $pageName = Account::class;
+        } else {
+            Helper::throwException('Wrong page to change payment method');
         }
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account|CheckoutConfirm $page */
         $page = $this->getPage($pageName);
         $data = [
             [
                 'field' => 'register[payment]',
-                'value' => $payment,
+                'value' => $paymentId,
             ],
         ];
 
@@ -189,13 +204,13 @@ class AccountContext extends SubContext
     /**
      * @Then /^the current payment method should be "([^"]*)"$/
      */
-    public function theCurrentPaymentMethodShouldBe($paymentMethod)
+    public function theCurrentPaymentMethodShouldBe(string $paymentMethod): void
     {
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller']);
         if (!\is_array($pageInfo)) {
             Helper::throwException('Could not get page info');
         }
-        $pageName = (ucfirst($pageInfo['controller']) === 'Checkout') ? 'CheckoutConfirm' : 'Account';
+        $pageName = (ucfirst($pageInfo['controller']) === 'Checkout') ? CheckoutConfirm::class : Account::class;
 
         $this->getPage($pageName)->checkPaymentMethod($paymentMethod);
     }
@@ -203,12 +218,11 @@ class AccountContext extends SubContext
     /**
      * @When /^I choose the address "([^"]*)"$/
      */
-    public function iChooseTheAddress($name)
+    public function iChooseTheAddress(string $name): void
     {
-        /** @var Account $page */
-        $page = $this->getPage('Account');
+        $page = $this->getPage(Account::class);
 
-        $addresses = $this->getMultipleElement($page, 'AddressBox');
+        $addresses = $this->getMultipleElement($page, AddressBox::class);
 
         $page->chooseAddress($addresses, $name);
     }
@@ -218,7 +232,7 @@ class AccountContext extends SubContext
      */
     public function iChangeMyProfileWith(string $salutation, string $firstname, string $lastname): void
     {
-        $this->getPage('Account')->changeProfile($salutation, $firstname, $lastname);
+        $this->getPage(Account::class)->changeProfile($salutation, $firstname, $lastname);
     }
 
     /**
@@ -238,18 +252,15 @@ class AccountContext extends SubContext
     /**
      * @Given /^there should be an address "([^"]*)"$/
      */
-    public function thereShouldBeAnAddress($address)
+    public function thereShouldBeAnAddress(string $address): void
     {
-        /** @var Account|Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
 
         $address = str_replace('<ignore>', '', $address);
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var array $addressManagementAddressBoxes */
-        $addressManagementAddressBoxes = $this->getMultipleElement($page, 'AddressManagementAddressBox');
+        $addressManagementAddressBoxes = $this->getMultipleElement($page, AddressManagementAddressBox::class);
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressManagementAddressBox $box */
         foreach ($addressManagementAddressBoxes as $box) {
             if ($box->containsAdress($testAddress)) {
                 return;
@@ -263,10 +274,9 @@ class AccountContext extends SubContext
     /**
      * @Given /^I create a new address:$/
      */
-    public function iCreateANewAddress(TableNode $table)
+    public function iCreateANewAddress(TableNode $table): void
     {
-        /** @var Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
         $data = $table->getHash();
 
         $page->createArbitraryAddress($data);
@@ -275,23 +285,20 @@ class AccountContext extends SubContext
     /**
      * @Given /^I click "([^"]*)" on address "([^"]*)"$/
      */
-    public function iClickOnAddress($locator, $address)
+    public function iClickOnAddress(string $locator, string $address): void
     {
-        /** @var Account|Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var array $addressManagementAddressBoxes */
-        $addressManagementAddressBoxes = $this->getMultipleElement($page, 'AddressManagementAddressBox');
+        $addressManagementAddressBoxes = $this->getMultipleElement($page, AddressManagementAddressBox::class);
 
-        /** @var AddressManagementAddressBox $box */
         foreach ($addressManagementAddressBoxes as $box) {
             if ($box->containsAdress($testAddress) === false) {
                 continue;
             }
 
-            if ($this->endsWith($locator, 'Button')) {
+            if (str_ends_with($locator, 'Button')) {
                 Helper::pressNamedButton($box, $locator);
 
                 return;
@@ -309,19 +316,16 @@ class AccountContext extends SubContext
     /**
      * @Then /^I should see only "([^"]*)" with title "([^"]*)"$/
      */
-    public function iShouldSeeOnlyWithTitle($address, $addressTitle)
+    public function iShouldSeeOnlyWithTitle(string $address, string $addressTitle): void
     {
-        /** @var Account|Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var array $addressManagementAddressBoxes */
-        $addressManagementAddressBoxes = $this->getMultipleElement($page, 'AddressManagementAddressBox');
+        $addressManagementAddressBoxes = $this->getMultipleElement($page, AddressManagementAddressBox::class);
 
         $addressCount = 0;
 
-        /** @var AddressManagementAddressBox $box */
         foreach ($addressManagementAddressBoxes as $box) {
             if ($box->containsAdress($testAddress) && $box->hasTitle($addressTitle)) {
                 ++$addressCount;
@@ -337,10 +341,9 @@ class AccountContext extends SubContext
     /**
      * @Given /^I change the current address to:$/
      */
-    public function iChangeTheCurrentAddressTo(TableNode $table)
+    public function iChangeTheCurrentAddressTo(TableNode $table): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account|AddressEdit $page */
-        $page = $this->getPage('AddressEdit');
+        $page = $this->getPage(AddressEdit::class);
 
         $data = $table->getHash();
 
@@ -351,17 +354,14 @@ class AccountContext extends SubContext
     /**
      * @Given /^I delete the address "([^"]*)"$/
      */
-    public function iDeleteTheAddress($address)
+    public function iDeleteTheAddress(string $address): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account|Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var array $addressManagementAddressBoxes */
-        $addressManagementAddressBoxes = $this->getMultipleElement($page, 'AddressManagementAddressBox');
+        $addressManagementAddressBoxes = $this->getMultipleElement($page, AddressManagementAddressBox::class);
 
-        /** @var AddressManagementAddressBox $box */
         foreach ($addressManagementAddressBoxes as $box) {
             if ($box->containsAdress($testAddress) === false) {
                 continue;
@@ -369,8 +369,7 @@ class AccountContext extends SubContext
 
             Helper::clickNamedLink($box, 'deleteLink');
 
-            /** @var AddressDelete $page */
-            $page = $this->getPage('AddressDelete');
+            $page = $this->getPage(AddressDelete::class);
 
             Helper::pressNamedButton($page, 'confirmDeleteButton');
             break;
@@ -380,17 +379,14 @@ class AccountContext extends SubContext
     /**
      * @Then /^there must not be an address "([^"]*)"$/
      */
-    public function thereMustNotBeAnAddress($address)
+    public function thereMustNotBeAnAddress(string $address): void
     {
-        /** @var Account|Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        /** @var array $addressManagementAddressBoxes */
-        $addressManagementAddressBoxes = $this->getMultipleElement($page, 'AddressManagementAddressBox');
+        $addressManagementAddressBoxes = $this->getMultipleElement($page, AddressManagementAddressBox::class);
 
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Address\Elements\AddressManagementAddressBox $box */
         foreach ($addressManagementAddressBoxes as $box) {
             if ($box->containsAdress($testAddress)) {
                 $message = 'Wrong number of given addresses found! Expected 0, found at least 1.';
@@ -402,25 +398,17 @@ class AccountContext extends SubContext
     /**
      * @Then /^I must not see "([^"]*)" in box with "([^"]*)" title$/
      */
-    public function iMustNotSeeInBoxWithTitle($elementName, $title)
+    public function iMustNotSeeInBoxWithTitle(string $elementName, string $title): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Account\Account|\Shopware\Tests\Mink\Page\Frontend\Address\Address $page */
-        $page = $this->getPage('Address');
+        $page = $this->getPage(Address::class);
 
-        /** @var array $addressManagementAddressBoxes */
-        $addressManagementAddressBoxes = $this->getMultipleElement($page, 'AddressManagementAddressBox');
+        $addressManagementAddressBoxes = $this->getMultipleElement($page, AddressManagementAddressBox::class);
 
-        /** @var AddressManagementAddressBox $box */
         foreach ($addressManagementAddressBoxes as $box) {
             if ($box->hasTitle($title) && ($box->hasLink($elementName) || $box->hasButton($elementName))) {
                 $message = sprintf('Wrong number of boxes with title "%s" and delete button found! Expected 0, found at least 1.', $title);
                 Helper::throwException($message);
             }
         }
-    }
-
-    private function endsWith($haystack, $needle)
-    {
-        return preg_match('/' . $needle . '$/', $haystack);
     }
 }

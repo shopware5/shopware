@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,7 +29,7 @@ namespace Shopware\Tests\Mink\Tests\Frontend\Blog\bootstrap;
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Page\Frontend\Blog\Blog;
 use Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogBox;
-use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
+use Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogComment;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
@@ -37,36 +39,34 @@ class BlogContext extends SubContext
      * @Given /^I am on the blog category (?P<categoryId>\d+)$/
      * @Given /^I go to the blog category (?P<categoryId>\d+)$/
      */
-    public function iAmOnTheBlogCategory($categoryId)
+    public function iAmOnTheBlogCategory(int $categoryId): void
     {
-        $this->getPage('Blog')->open(['categoryId' => $categoryId]);
+        $this->getPage(Blog::class)->open(['categoryId' => $categoryId]);
     }
 
     /**
      * @Given /^I click to read the blog article on position (\d+)$/
      */
-    public function iClickToReadTheBlogArticleOnPosition($position)
+    public function iClickToReadTheBlogArticleOnPosition(int $position): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Blog\Blog $page */
-        $page = $this->getPage('Blog');
+        $page = $this->getPage(Blog::class);
 
-        /** @var BlogBox $blogBox */
-        $blogBox = $this->getMultipleElement($page, 'BlogBox', $position);
+        $blogBox = $this->getMultipleElement($page, BlogBox::class, $position);
         Helper::clickNamedLink($blogBox, 'readMore');
     }
 
     /**
      * @When /^I write a comment:$/
      */
-    public function iWriteAComment(TableNode $data)
+    public function iWriteAComment(TableNode $data): void
     {
-        $this->getPage('Blog')->writeComment($data->getHash());
+        $this->getPage(Blog::class)->writeComment($data->getHash());
     }
 
     /**
      * @When /^the shop owner activates my latest comment$/
      */
-    public function theShopOwnerActivateMyLatestComment()
+    public function theShopOwnerActivateMyLatestComment(): void
     {
         $sql = 'UPDATE `s_blog_comments` SET `active`= 1 ORDER BY id DESC LIMIT 1';
         $this->getService('db')->exec($sql);
@@ -76,13 +76,11 @@ class BlogContext extends SubContext
     /**
      * @Then /^I should see an average evaluation of (\d+) from following comments:$/
      */
-    public function iShouldSeeAnAverageEvaluationOfFromFollowingComments($average, TableNode $comments)
+    public function iShouldSeeAnAverageEvaluationOfFromFollowingComments(string $average, TableNode $comments): void
     {
-        /** @var \Shopware\Tests\Mink\Page\Frontend\Blog\Blog $page */
-        $page = $this->getPage('Blog');
+        $page = $this->getPage(Blog::class);
 
-        /** @var MultipleElement $blogComments */
-        $blogComments = $this->getMultipleElement($page, 'BlogComment');
+        $blogComments = $this->getMultipleElement($page, BlogComment::class);
 
         $page->checkComments($blogComments, $average, $comments->getHash());
     }
@@ -90,10 +88,9 @@ class BlogContext extends SubContext
     /**
      * @When /^I open the comment form$/
      */
-    public function iOpenTheCommentForm()
+    public function iOpenTheCommentForm(): void
     {
-        /** @var Blog $page */
-        $page = $this->getPage('Blog');
+        $page = $this->getPage(Blog::class);
         $page->openCommentSection();
     }
 }

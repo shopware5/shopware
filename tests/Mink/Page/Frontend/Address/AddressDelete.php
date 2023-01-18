@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,9 +27,8 @@
 namespace Shopware\Tests\Mink\Page\Frontend\Address;
 
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
-class AddressDelete extends Account implements HelperSelectorInterface
+class AddressDelete extends Account
 {
     /**
      * @var string
@@ -37,14 +38,14 @@ class AddressDelete extends Account implements HelperSelectorInterface
     /**
      * {@inheritdoc}
      */
-    public function getCssSelectors()
+    public function getCssSelectors(): array
     {
         return [
             'panelTitle' => 'h1.panel--title',
         ];
     }
 
-    public function getNamedSelectors()
+    public function getNamedSelectors(): array
     {
         return [
             'confirmDeleteButton' => ['de' => 'Bestätigen', 'en' => 'Confirm'],
