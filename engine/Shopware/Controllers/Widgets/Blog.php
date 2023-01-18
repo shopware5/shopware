@@ -35,5 +35,6 @@ class Blog extends Enlight_Controller_Action
         $this->Response()->headers->set('cache-control', 'private');
         $this->View()->assign('sFormData', $this->Request()->getParam('formData'));
         $this->View()->assign('sErrorFlag', $this->Request()->getParam('errorFlags'));
+        $this->View()->assign('sArticleId', $this->Request()->getParam('sArticleId'));
     }
 }

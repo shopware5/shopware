@@ -3,7 +3,7 @@
 
     {* Detail Comment Form *}
     {block name='frontend_blog_comments_form_action'}
-        {action module=widgets controller=blog action=form formData=$sFormData errorFlags=$sErrorFlag}
+        {action module=widgets controller=blog action=form formData=$sFormData errorFlags=$sErrorFlag sArticleId=$sArticle.id}
     {/block}
 
     {* List comments *}
