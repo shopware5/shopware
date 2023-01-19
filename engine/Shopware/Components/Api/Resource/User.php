@@ -24,12 +24,12 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Api\Exception as ApiException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
 use Shopware\Components\Auth\Validator\UserValidator;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Password\Manager;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Shop\Locale;
@@ -116,24 +116,22 @@ class User extends Resource
     {
         $this->checkPrivilege('read', 'usermanager');
 
-        /** @var QueryBuilder $builder */
         $builder = $this->getRepository()->createQueryBuilder('user')
-            ->join('user.role', 'role');
-
-        $builder->addSelect(['attribute'])
-            ->leftJoin('user.attribute', 'attribute');
-
-        $builder->addFilter($criteria)
+            ->join('user.role', 'role')
+            ->addSelect(['attribute'])
+            ->leftJoin('user.attribute', 'attribute')
+            ->addFilter($criteria)
             ->addOrderBy($orderBy)
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
+        /** @var Query<UserModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
         $paginator = $this->getManager()->createPaginator($query);
 
-        $users = $paginator->getIterator()->getArrayCopy();
+        $users = iterator_to_array($paginator);
 
         if (!$this->hasPrivilege('create', 'usermanager')
             && !$this->hasPrivilege('update', 'usermanager')) {

@@ -91,7 +91,7 @@ class PaymentMethods extends Resource
         $totalResult = $paginator->count();
 
         // returns the category data
-        $payments = $paginator->getIterator()->getArrayCopy();
+        $payments = iterator_to_array($paginator);
 
         return ['data' => $payments, 'total' => $totalResult];
     }

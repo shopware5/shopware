@@ -24,7 +24,6 @@
 
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\NoResultException;
-use Doctrine\ORM\Query;
 use Shopware\Bundle\ContentTypeBundle\Services\TypeProvider;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Article\Supplier;
@@ -179,7 +178,6 @@ class Shopware_Components_SeoIndex extends Enlight_Class
         $this->registerShop($shopId);
 
         // Get blog categories
-        /** @var Query $query */
         $query = Shopware()->Models()->getRepository(Category::class)->getBlogCategoriesByParentQuery(Shopware()->Shop()->get('parentID'));
         $blogCategories = $query->getArrayResult();
 

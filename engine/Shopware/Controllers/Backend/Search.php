@@ -71,7 +71,7 @@ class Shopware_Controllers_Backend_Search extends Shopware_Controllers_Backend_E
         }
 
         $pagination = $this->getPaginator($builder);
-        $data = $pagination->getIterator()->getArrayCopy();
+        $data = iterator_to_array($pagination);
 
         $data = $this->hydrateSearchResult($entity, $data);
 

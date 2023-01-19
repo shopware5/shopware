@@ -24,7 +24,15 @@
 
 namespace Shopware\Components\Api\Resource;
 
-use Shopware\Components\Api\Exception as ApiException;
+use Doctrine\ORM\Query;
+use Shopware\Components\Api\Exception\CustomValidationException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Models\Country\Area;
+use Shopware\Models\Country\Country as CountryModel;
+use Shopware\Models\Country\Repository;
+use Shopware\Models\Country\State;
 
 /**
  * Country API Resource
@@ -32,11 +40,11 @@ use Shopware\Components\Api\Exception as ApiException;
 class Country extends Resource
 {
     /**
-     * @return \Shopware\Models\Country\Repository
+     * @return Repository
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository(\Shopware\Models\Country\Country::class);
+        return $this->getManager()->getRepository(CountryModel::class);
     }
 
     /**
@@ -44,17 +52,17 @@ class Country extends Resource
      *
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return array|\Shopware\Models\Country\Country
+     * @return array|CountryModel
      */
     public function getOne($id)
     {
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $filters = [
@@ -65,10 +73,10 @@ class Country extends Resource
             ],
         ];
         $builder = $this->getRepository()->getCountriesWithStatesQueryBuilder($filters);
-        /** @var \Shopware\Models\Country\Country|null $country */
+        /** @var CountryModel|null $country */
         $country = $builder->getQuery()->getOneOrNullResult($this->getResultMode());
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
+            throw new NotFoundException(sprintf('Country by id %d not found', $id));
         }
 
         return $country;
@@ -95,13 +103,14 @@ class Country extends Resource
                 ->setMaxResults($limit);
 
         // Set hydration mode
+        /** @var Query<CountryModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
         // Get result
         $paginator = $this->getManager()->createPaginator($query);
         $totalResult = $paginator->count();
-        $countries = $paginator->getIterator()->getArrayCopy();
+        $countries = iterator_to_array($paginator);
 
         return [
             'data' => $countries,
@@ -112,9 +121,9 @@ class Country extends Resource
     /**
      * Creates a new Country entity using the passed params.
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws ValidationException
      *
-     * @return \Shopware\Models\Country\Country
+     * @return CountryModel
      */
     public function create(array $params)
     {
@@ -122,12 +131,12 @@ class Country extends Resource
 
         $params = $this->prepareCountryData($params);
 
-        $country = new \Shopware\Models\Country\Country();
+        $country = new CountryModel();
         $country->fromArray($params);
 
         $violations = $this->getManager()->validate($country);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->getManager()->persist($country);
@@ -141,24 +150,24 @@ class Country extends Resource
      *
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ValidationException
+     * @throws NotFoundException
+     * @throws ValidationException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Country\Country
+     * @return CountryModel
      */
     public function update($id, array $params)
     {
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Country\Country|null $country */
+        /** @var CountryModel|null $country */
         $country = $this->getRepository()->find($id);
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
+            throw new NotFoundException(sprintf('Country by id %d not found', $id));
         }
 
         $params = $this->prepareCountryData($params, $country);
@@ -166,7 +175,7 @@ class Country extends Resource
 
         $violations = $this->getManager()->validate($country);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->flush();
@@ -179,23 +188,23 @@ class Country extends Resource
      *
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Country\Country
+     * @return CountryModel
      */
     public function delete($id)
     {
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Country\Country|null $country */
+        /** @var CountryModel|null $country */
         $country = $this->getRepository()->find($id);
         if (!$country) {
-            throw new ApiException\NotFoundException(sprintf('Country by id %d not found', $id));
+            throw new NotFoundException(sprintf('Country by id %d not found', $id));
         }
 
         $this->getManager()->remove($country);
@@ -205,15 +214,15 @@ class Country extends Resource
     }
 
     /**
-     * @param \Shopware\Models\Country\Country $country
+     * @param CountryModel $country
      *
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
+     * @throws CustomValidationException
      *
      * @return array
      */
-    private function prepareCountryData(array $params, \Shopware\Models\Country\Country $country = null)
+    private function prepareCountryData(array $params, CountryModel $country = null)
     {
         $requiredParams = [
             'name',
@@ -224,11 +233,11 @@ class Country extends Resource
         foreach ($requiredParams as $param) {
             if (!$country) {
                 if (!isset($params[$param]) || empty($params[$param])) {
-                    throw new ApiException\ParameterMissingException($param);
+                    throw new ParameterMissingException($param);
                 }
             } else {
                 if (isset($params[$param]) && empty($params[$param])) {
-                    throw new ApiException\CustomValidationException(sprintf('Param "%s" may not be empty', $param));
+                    throw new CustomValidationException(sprintf('Param "%s" may not be empty', $param));
                 }
             }
         }
@@ -236,26 +245,24 @@ class Country extends Resource
         if (isset($params['area'])) {
             $areaId = (int) $params['area'];
             if ($areaId > 0) {
-                $area = $this->getManager()->find('\Shopware\Models\Country\Area', $areaId);
+                $area = $this->getManager()->find(Area::class, $areaId);
                 if ($area) {
                     $params['area'] = $area;
                 } else {
-                    throw new ApiException\NotFoundException(sprintf('Area by id %d not found', $areaId));
+                    throw new NotFoundException(sprintf('Area by id %d not found', $areaId));
                 }
             } else {
                 $params['area'] = null;
             }
         }
 
-        $params = $this->prepareCountryStatesData($params);
-
-        return $params;
+        return $this->prepareCountryStatesData($params);
     }
 
     /**
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws CustomValidationException
+     * @throws ParameterMissingException
+     * @throws NotFoundException
      *
      * @return array
      */
@@ -267,13 +274,13 @@ class Country extends Resource
 
         foreach ($params['states'] as &$state) {
             if (!isset($state['id']) || empty($state['id'])) {
-                throw new ApiException\CustomValidationException('You need to specify the id of the state you want to modify');
+                throw new CustomValidationException('You need to specify the id of the state you want to modify');
             }
 
-            /** @var \Shopware\Models\Country\State|null $stateModel */
-            $stateModel = $this->getManager()->find(\Shopware\Models\Country\State::class, $state['id']);
+            /** @var State|null $stateModel */
+            $stateModel = $this->getManager()->find(State::class, $state['id']);
             if (!$stateModel) {
-                throw new ApiException\NotFoundException(sprintf('State by id %d not found', (int) $state['id']));
+                throw new NotFoundException(sprintf('State by id %d not found', (int) $state['id']));
             }
 
             // Update state

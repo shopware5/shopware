@@ -44,7 +44,7 @@ class Repository extends ModelRepository
      * @param int|null            $limit
      * @param int|null            $offset
      *
-     * @return Query
+     * @return Query<Group>
      */
     public function getListGroupsQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -94,7 +94,7 @@ class Repository extends ModelRepository
      * @param int|null            $limit
      * @param int|null            $offset
      *
-     * @return Query
+     * @return Query<Address>
      */
     public function getListAddressesQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -155,7 +155,7 @@ class Repository extends ModelRepository
      * @param int|null            $limit
      * @param int|null            $offset
      *
-     * @return Query
+     * @return Query<Sender>
      */
     public function getListSenderQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -208,7 +208,7 @@ class Repository extends ModelRepository
      * @param int|null            $limit
      * @param int|null            $offset
      *
-     * @return Query
+     * @return Query<Newsletter>
      */
     public function getListNewslettersQuery($filter = null, $order = null, $limit = null, $offset = null)
     {

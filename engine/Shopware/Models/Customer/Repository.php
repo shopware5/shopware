@@ -25,6 +25,8 @@
 namespace Shopware\Models\Customer;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Order\Order;
@@ -45,7 +47,7 @@ class Repository extends ModelRepository
      *
      * @param int $customerId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Customer>
      */
     public function getCustomerDetailQuery($customerId)
     {
@@ -60,7 +62,7 @@ class Repository extends ModelRepository
      *
      * @param int $customerId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCustomerDetailQueryBuilder($customerId)
     {
@@ -68,7 +70,7 @@ class Repository extends ModelRepository
         $subQueryBuilder = $this->getEntityManager()->createQueryBuilder();
         $subQueryBuilder->select('SUM(canceledOrders.invoiceAmount)')
             ->from(Customer::class, 'customer2')
-            ->leftJoin('customer2.orders', 'canceledOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'canceledOrders.cleared = 16')
+            ->leftJoin('customer2.orders', 'canceledOrders', Join::WITH, 'canceledOrders.cleared = 16')
             ->where('customer2.id = :customerId');
 
         $builder = $this->getEntityManager()->createQueryBuilder();
@@ -92,8 +94,8 @@ class Repository extends ModelRepository
                 ->leftJoin('customer.shop', 'shop')
                 ->leftJoin('customer.languageSubShop', 'subShop')
                 ->leftJoin('subShop.locale', 'locale')
-                ->leftJoin('customer.paymentData', 'paymentData', \Doctrine\ORM\Query\Expr\Join::WITH, 'paymentData.paymentMean = customer.paymentId')
-                ->leftJoin('customer.orders', 'doneOrders', \Doctrine\ORM\Query\Expr\Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
+                ->leftJoin('customer.paymentData', 'paymentData', Join::WITH, 'paymentData.paymentMean = customer.paymentId')
+                ->leftJoin('customer.orders', 'doneOrders', Join::WITH, 'doneOrders.status <> -1 AND doneOrders.status <> 4')
                 ->where('customer.id = :customerId')
                 ->setParameter('customerId', $customerId);
 
@@ -106,7 +108,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * all defined customer groups. Used to create the customer group price tabs on the article detail page in the article backend module.
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Group>
      */
     public function getCustomerGroupsQuery()
     {
@@ -119,7 +121,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCustomerGroupsQueryBuilder()
     {
@@ -137,7 +139,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Order>
      */
     public function getOrdersQuery($customerId, $filter = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -158,7 +160,7 @@ class Repository extends ModelRepository
      * @param string|null $filter
      * @param array|null  $orderBy
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getOrdersQueryBuilder($customerId, $filter = null, $orderBy = null)
     {
@@ -220,7 +222,7 @@ class Repository extends ModelRepository
      * @param int|null    $customerId
      * @param int|null    $shopId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Customer>
      */
     public function getValidateEmailQuery($email = null, $customerId = null, $shopId = null)
     {
@@ -237,7 +239,7 @@ class Repository extends ModelRepository
      * @param int|null    $customerId
      * @param int|null    $shopId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getValidateEmailQueryBuilder($email = null, $customerId = null, $shopId = null)
     {
@@ -269,7 +271,7 @@ class Repository extends ModelRepository
      * @param int   $offset
      * @param int   $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Group>
      */
     public function getCustomerGroupsWithoutIdsQuery($usedIds, $offset, $limit)
     {
@@ -282,11 +284,11 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getCustomerGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int[] $usedIds
-     * @param int   $offset
-     * @param int   $limit
+     * @param int[]    $usedIds
+     * @param int      $offset
+     * @param int|null $limit
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCustomerGroupsWithoutIdsQueryBuilder($usedIds, $offset, $limit)
     {

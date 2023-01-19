@@ -49,7 +49,7 @@ class Repository extends ModelRepository
      * @param int|null                                               $offset
      * @param int|null                                               $limit
      *
-     * @return Query
+     * @return Query<Partner>
      */
     public function getListQuery($order = null, $offset = null, $limit = null)
     {
@@ -99,7 +99,7 @@ class Repository extends ModelRepository
      *
      * @param array $filter
      *
-     * @return Query
+     * @return Query<Partner>
      */
     public function getDetailQuery($filter)
     {
@@ -114,7 +114,7 @@ class Repository extends ModelRepository
      *
      * @param array $filter
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getDetailQueryBuilder($filter)
     {
@@ -137,7 +137,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface $toDate
      * @param float|int         $userCurrencyFactor
      *
-     * @return Query
+     * @return Query<Order>
      */
     public function getStatisticListQuery($order, $offset, $limit, $partnerId, $summary, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
@@ -161,7 +161,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface                                      $toDate
      * @param float|int                                              $userCurrencyFactor
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getStatisticListQueryBuilder($order, $partnerId, $summary, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
@@ -217,7 +217,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface $toDate
      * @param float|int         $userCurrencyFactor
      *
-     * @return Query
+     * @return Query<Order>
      */
     public function getStatisticChartQuery($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
@@ -235,7 +235,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface $toDate
      * @param float|int         $userCurrencyFactor
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getStatisticChartQueryBuilder($partnerId, $fromDate, $toDate, $userCurrencyFactor = 1)
     {
@@ -270,7 +270,7 @@ class Repository extends ModelRepository
      *
      * @deprecated since 5.6.3, will be removed with 5.8
      *
-     * @return Query
+     * @return Query<Customer>
      */
     public function getCustomerForMappingQuery($mappingValue)
     {
@@ -287,7 +287,7 @@ class Repository extends ModelRepository
      *
      * @deprecated since 5.6.3, will be removed with 5.8
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getCustomerForMappingQueryBuilder($mappingValue)
     {
@@ -318,7 +318,7 @@ class Repository extends ModelRepository
      * @param string $trackingCode
      * @param int    $partnerId
      *
-     * @return Query
+     * @return Query<Partner>
      */
     public function getValidateTrackingCodeQuery($trackingCode, $partnerId)
     {
@@ -334,7 +334,7 @@ class Repository extends ModelRepository
      * @param string $trackingCode
      * @param int    $partnerId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getValidateTrackingCodeQueryBuilder($trackingCode, $partnerId)
     {
@@ -352,12 +352,9 @@ class Repository extends ModelRepository
     /**
      * Helper method to get the date part of the dql query
      *
-     * @param string $alias
-     * @param bool   $monthlyAmount | whether to add the selection of a month or not
-     *
-     * @return string
+     * @param bool $monthlyAmount | whether to add the selection of a month or not
      */
-    private function getDatePartListDQL($alias, $monthlyAmount = false)
+    private function getDatePartListDQL(string $alias, bool $monthlyAmount = false): string
     {
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->from(Order::class, $alias)

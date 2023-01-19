@@ -83,7 +83,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $paginator = $this->getModelManager()->createPaginator($query);
         // Returns the total count of the query
         $totalResult = $paginator->count();
-        $shippingCosts = $paginator->getIterator()->getArrayCopy();
+        $shippingCosts = iterator_to_array($paginator);
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
 
         if ($totalResult > 0) {
@@ -115,7 +115,7 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $paginator = $this->getModelManager()->createPaginator($query);
         // Returns the total count of the query
         $totalResult = $paginator->count();
-        $shippingCosts = $paginator->getIterator()->getArrayCopy();
+        $shippingCosts = iterator_to_array($paginator);
         $shippingCosts = $this->convertShippingCostsDates($shippingCosts);
 
         if ($totalResult > 0) {

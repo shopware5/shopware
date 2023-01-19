@@ -27,6 +27,7 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 use DateTime;
 use RuntimeException;
 use Shopware\Models\Article\Detail;
+use Shopware\Models\MultiEdit\Queue as QueueModel;
 use Shopware\Models\MultiEdit\QueueArticle;
 
 /**
@@ -145,14 +146,14 @@ class Queue
 
         if (!empty($queueId)) {
             $newBackup = false;
-            /** @var \Shopware\Models\MultiEdit\Queue|null $queue */
-            $queue = $entityManager->find(\Shopware\Models\MultiEdit\Queue::class, $queueId);
+            /** @var QueueModel|null $queue */
+            $queue = $entityManager->find(QueueModel::class, $queueId);
             if (!$queue) {
                 throw new RuntimeException(sprintf('Queue with ID %s not found', $queueId));
             }
         } else {
             $newBackup = true;
-            $queue = new \Shopware\Models\MultiEdit\Queue('product');
+            $queue = new QueueModel('product');
             $queue->setFilterString($filterString);
             $queue->setOperations(json_encode($operations));
             $queue->setCreated(new DateTime());
@@ -177,8 +178,8 @@ class Queue
                 $entityManager->flush($model);
                 $entityManager->clear();
 
-                /** @var \Shopware\Models\MultiEdit\Queue $queue */
-                $queue = $entityManager->getReference(\Shopware\Models\MultiEdit\Queue::class, $queueId);
+                /** @var QueueModel $queue */
+                $queue = $entityManager->getReference(QueueModel::class, $queueId);
             }
 
             /** @var Detail $detail */

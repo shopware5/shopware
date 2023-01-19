@@ -24,8 +24,10 @@
 
 namespace Shopware\Models\Payment;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\Payment as PaymentAttribute;
 
 /**
  * Shopware Payment Model
@@ -44,7 +46,7 @@ class Repository extends ModelRepository
      * @param int|null          $offset
      * @param int|null          $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Payment>
      */
     public function getActivePaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -63,7 +65,7 @@ class Repository extends ModelRepository
      * @param array|null        $filter
      * @param string|array|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getActivePaymentsQueryBuilder($filter = null, $order = null)
     {
@@ -97,7 +99,7 @@ class Repository extends ModelRepository
      * @param int|null          $offset
      * @param int|null          $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Payment>
      */
     public function getAllPaymentsQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -116,7 +118,7 @@ class Repository extends ModelRepository
      * @param array|null        $filter
      * @param string|array|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAllPaymentsQueryBuilder($filter = null, $order = null)
     {
@@ -148,7 +150,7 @@ class Repository extends ModelRepository
      * @param int|null   $offset
      * @param int|null   $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Payment>
      */
     public function getListQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -166,7 +168,7 @@ class Repository extends ModelRepository
      * @param int|null   $offset
      * @param int|null   $limit
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -202,7 +204,7 @@ class Repository extends ModelRepository
      *
      * @param int $paymentId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<PaymentAttribute>
      */
     public function getAttributesQuery($paymentId)
     {
@@ -217,13 +219,13 @@ class Repository extends ModelRepository
      *
      * @param int $paymentId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAttributesQueryBuilder($paymentId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-            ->from(\Shopware\Models\Attribute\Payment::class, 'attribute')
+            ->from(PaymentAttribute::class, 'attribute')
             ->where('attribute.paymentId = ?1')
             ->setParameter(1, $paymentId);
 

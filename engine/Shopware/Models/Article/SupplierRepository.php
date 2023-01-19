@@ -42,7 +42,7 @@ class SupplierRepository extends ModelRepository
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getFriendlyUrlSuppliersQuery($offset = null, $limit = null)
     {
@@ -93,7 +93,7 @@ class SupplierRepository extends ModelRepository
      *
      * @param int $manufacturerId
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getDetailQuery($manufacturerId)
     {
@@ -127,7 +127,7 @@ class SupplierRepository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all manufacturers for example for the backend tree
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {

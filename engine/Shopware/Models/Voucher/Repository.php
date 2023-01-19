@@ -25,6 +25,8 @@
 namespace Shopware\Models\Voucher;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\OrderBy;
+use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -42,13 +44,13 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of voucher
      * codes for the passed voucher id.
      *
-     * @param int|null                                     $voucherId
-     * @param string|null                                  $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
-     * @param int|null                                     $offset
-     * @param int|null                                     $limit
+     * @param int|null            $voucherId
+     * @param string|null         $filter
+     * @param string|OrderBy|null $order
+     * @param int|null            $offset
+     * @param int|null            $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Code>
      */
     public function getVoucherCodeListQuery($voucherId = null, $filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -65,11 +67,11 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getVoucherCodeListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param int|null                                     $voucherId
-     * @param string|null                                  $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param int|null            $voucherId
+     * @param string|null         $filter
+     * @param string|OrderBy|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getVoucherCodeListQueryBuilder($voucherId = null, $filter = null, $order = null)
     {
@@ -83,7 +85,7 @@ class Repository extends ModelRepository
             'customer.lastname as lastName',
             'customer.number as number',
         ]);
-        $builder->from(\Shopware\Models\Voucher\Code::class, 'codes')
+        $builder->from(Code::class, 'codes')
             ->leftJoin('codes.customer', 'customer')
             ->where('codes.voucherId = ?1')
             ->setParameter(1, $voucherId);
@@ -108,7 +110,7 @@ class Repository extends ModelRepository
      *
      * @param int $voucherId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Code>
      */
     public function getVoucherCodeCountQuery($voucherId)
     {
@@ -123,13 +125,13 @@ class Repository extends ModelRepository
      *
      * @param int $voucherId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getVoucherCodeCountQueryBuilder($voucherId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([$builder->expr()->count('code.id') . 'as countCode'])
-            ->from(\Shopware\Models\Voucher\Code::class, 'code')
+            ->from(Code::class, 'code')
             ->where('code.voucherId = ?1')
             ->setParameter(1, $voucherId);
 
@@ -141,7 +143,7 @@ class Repository extends ModelRepository
      *
      * @param int $voucherId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Code>
      */
     public function getVoucherCodeDeleteByVoucherIdQuery($voucherId)
     {
@@ -156,12 +158,12 @@ class Repository extends ModelRepository
      *
      * @param int $voucherId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getVoucherCodeDeleteByVoucherIdQueryBuilder($voucherId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->delete(\Shopware\Models\Voucher\Code::class, 'code')
+        $builder->delete(Code::class, 'code')
             ->where('code.voucherId = ?1')
             ->setMaxResults(10000)
             ->setParameter(1, $voucherId);
@@ -175,7 +177,7 @@ class Repository extends ModelRepository
      *
      * @param int $voucherId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Voucher>
      */
     public function getVoucherDetailQuery($voucherId)
     {
@@ -190,13 +192,13 @@ class Repository extends ModelRepository
      *
      * @param int $voucherId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getVoucherDetailQueryBuilder($voucherId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['vouchers', 'attribute'])
-            ->from(\Shopware\Models\Voucher\Voucher::class, 'vouchers')
+            ->from(Voucher::class, 'vouchers')
             ->leftJoin('vouchers.attribute', 'attribute')
             ->where('vouchers.id = ?1')
             ->setParameter(1, $voucherId);
@@ -211,7 +213,7 @@ class Repository extends ModelRepository
      * @param string $code
      * @param int    $voucherId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Voucher>
      */
     public function getValidateVoucherCodeQuery($code, $voucherId = null)
     {
@@ -227,7 +229,7 @@ class Repository extends ModelRepository
      * @param string $code
      * @param int    $voucherId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getValidateVoucherCodeQueryBuilder($code, $voucherId = null)
     {
@@ -251,7 +253,7 @@ class Repository extends ModelRepository
      * @param string $code
      * @param int    $voucherId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Voucher>
      */
     public function getValidateOrderCodeQuery($code, $voucherId = null)
     {
@@ -267,7 +269,7 @@ class Repository extends ModelRepository
      * @param string $code
      * @param int    $voucherId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getValidateOrderCodeQueryBuilder($code, $voucherId = null)
     {

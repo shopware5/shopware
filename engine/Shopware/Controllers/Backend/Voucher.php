@@ -164,7 +164,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $paginator = $this->getManager()->createPaginator($dataQuery);
 
         $totalCount = $paginator->count();
-        $voucherCodes = $paginator->getIterator()->getArrayCopy();
+        $voucherCodes = iterator_to_array($paginator);
 
         $this->View()->assign(['success' => true, 'data' => $voucherCodes, 'totalCount' => $totalCount]);
     }
@@ -279,6 +279,9 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
         $query = $this->getVoucherRepository()->getVoucherDetailQuery($voucherID);
         $model = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        if (!$model instanceof Voucher) {
+            throw new ModelNotFoundException(Voucher::class, $voucherID);
+        }
         $voucher = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         if ($model->getValidFrom() instanceof DateTime) {

@@ -30,10 +30,7 @@ use GuzzleHttp\Exception\ClientException as GuzzleClientException;
 
 class GuzzleHttpClient implements HttpClientInterface
 {
-    /**
-     * @var ClientInterface
-     */
-    private $guzzleClient;
+    private ClientInterface $guzzleClient;
 
     public function __construct(GuzzleFactory $guzzleFactory, array $guzzleConfig = [])
     {

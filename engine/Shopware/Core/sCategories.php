@@ -465,10 +465,7 @@ class sCategories implements Enlight_Hook
             ->groupBy('parent')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+        return $query->execute()->fetchAllKeyValue();
     }
 
     /**
@@ -495,10 +492,7 @@ class sCategories implements Enlight_Hook
             ->setParameter(':parentId', $ids, Connection::PARAM_INT_ARRAY)
             ->setParameter(':shopId', '%|' . $shopId . '|%');
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        return $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+        return $query->execute()->fetchAllKeyValue();
     }
 
     /**
@@ -517,10 +511,7 @@ class sCategories implements Enlight_Hook
             ->where('category.id = :id')
             ->setParameter(':id', $id);
 
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        $path = $statement->fetch(PDO::FETCH_COLUMN);
+        $path = $query->execute()->fetchOne();
 
         $ids = [$id];
 

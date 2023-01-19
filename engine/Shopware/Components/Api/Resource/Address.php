@@ -108,7 +108,7 @@ class Address extends Resource
         $totalResult = $paginator->count();
 
         // Returns the address data
-        $addresses = $paginator->getIterator()->getArrayCopy();
+        $addresses = iterator_to_array($paginator);
 
         return ['data' => $addresses, 'total' => $totalResult];
     }

@@ -54,7 +54,7 @@ class AddressRepository extends ModelRepository
      * @param int $limit
      * @param int $offset
      *
-     * @return Query
+     * @return Query<Address>
      */
     public function getListQuery(array $criteria = [], array $orderBy = [], $limit = 25, $offset = 0)
     {
@@ -64,7 +64,7 @@ class AddressRepository extends ModelRepository
     /**
      * @param int $addressId
      *
-     * @return Query
+     * @return Query<Address>
      */
     public function getOne($addressId)
     {
@@ -97,7 +97,7 @@ class AddressRepository extends ModelRepository
      *
      * @param int $userId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getByUserQueryBuilder($userId)
     {
@@ -123,7 +123,7 @@ class AddressRepository extends ModelRepository
      *
      * @param int $addressId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getDetailQueryBuilder($addressId)
     {
@@ -153,7 +153,7 @@ class AddressRepository extends ModelRepository
      *
      * @param array<array{property: string, direction: string}> $orderBy
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getListQueryBuilder(array $filterBy = [], array $orderBy = [], $limit = null, $offset = null)
     {

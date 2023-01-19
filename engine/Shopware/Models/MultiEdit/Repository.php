@@ -24,7 +24,9 @@
 
 namespace Shopware\Models\MultiEdit;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * @extends ModelRepository<Backup|Filter|Queue|QueueArticle>
@@ -36,7 +38,7 @@ class Repository extends ModelRepository
      *
      * @param string|null $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Filter>
      */
     public function getListQuery($filter = null)
     {
@@ -51,24 +53,22 @@ class Repository extends ModelRepository
      *
      * @param string|null $filter
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder($filter)
     {
-        $builder = $this->getEntityManager()->createQueryBuilder()
+        return $this->getEntityManager()->createQueryBuilder()
             ->select('filter')
-            ->from('Shopware\Models\MultiEdit\Filter', 'filter');
-
-        return $builder;
+            ->from(Filter::class, 'filter');
     }
 
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all backup entities
      *
-     * @param int $offset
-     * @param int $limit
+     * @param int|null $offset
+     * @param int      $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Backup>
      */
     public function getBackupListQuery($offset, $limit)
     {
@@ -86,15 +86,13 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getBackupListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBackupListQueryBuilder()
     {
-        $builder = $this->getEntityManager()->createQueryBuilder()
+        return $this->getEntityManager()->createQueryBuilder()
             ->select('backup')
-            ->from('Shopware\Models\MultiEdit\Backup', 'backup')
+            ->from(Backup::class, 'backup')
             ->orderBy('backup.date', 'DESC');
-
-        return $builder;
     }
 }

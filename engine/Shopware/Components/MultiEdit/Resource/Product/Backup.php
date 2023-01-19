@@ -146,7 +146,7 @@ class Backup
         $paginator = Shopware()->Models()->createPaginator($query);
         $totalCount = $paginator->count();
 
-        $backups = $paginator->getIterator()->getArrayCopy();
+        $backups = iterator_to_array($paginator);
 
         return [
             'totalCount' => $totalCount,

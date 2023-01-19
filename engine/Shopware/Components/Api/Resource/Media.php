@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use DateTime;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query;
 use Exception;
 use InvalidArgumentException;
 use RuntimeException;
@@ -105,6 +106,7 @@ class Media extends Resource
     {
         $this->checkPrivilege('read');
 
+        /** @var Query<MediaModel|array<string, mixed>> $query */
         $query = $this->getRepository()->getMediaListQuery($criteria, $orderBy, $limit, $offset);
         $query->setHydrationMode($this->resultMode);
 
@@ -114,11 +116,13 @@ class Media extends Resource
         $totalResult = $paginator->count();
 
         // Returns the category data
-        $media = $paginator->getIterator()->getArrayCopy();
+        $media = iterator_to_array($paginator);
 
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
         array_walk($media, function (&$item) use ($mediaService) {
-            $item['path'] = $mediaService->getUrl($item['path']);
+            if (\is_array($item)) {
+                $item['path'] = $mediaService->getUrl($item['path']);
+            }
         });
 
         return ['data' => $media, 'total' => $totalResult];

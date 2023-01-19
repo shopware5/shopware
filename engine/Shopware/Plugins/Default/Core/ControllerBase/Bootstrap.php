@@ -145,14 +145,11 @@ class Shopware_Plugins_Core_ControllerBase_Bootstrap extends Shopware_Components
     public function getMenu($shopId = null, $activePageId = null)
     {
         if ($shopId === null) {
-            $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
+            $context = $this->get(ContextServiceInterface::class)->getShopContext();
             $shopId = $context->getShop()->getId();
         }
 
-        $data = Shopware()->Container()->get(SitePageMenu::class)
-            ->getTree($shopId, $activePageId);
-
-        return $data;
+        return $this->get(SitePageMenu::class)->getTree($shopId, $activePageId);
     }
 
     /**

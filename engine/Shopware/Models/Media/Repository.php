@@ -46,7 +46,7 @@ class Repository extends ModelRepository
      * @param int|null   $offset
      * @param int|null   $limit
      *
-     * @return Query
+     * @return Query<Media>
      */
     public function getMediaListQuery($filter = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -66,7 +66,7 @@ class Repository extends ModelRepository
      * @param array<string, string>|array<array{property: string, value: mixed, expression?: string}>|null $filter
      * @param string|array<array{property: string, direction: string}>|null                                $orderBy
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getMediaListQueryBuilder($filter, $orderBy)
     {
@@ -96,7 +96,7 @@ class Repository extends ModelRepository
      * @param int|null                  $limit
      * @param array|null                $validTypes
      *
-     * @return Query
+     * @return Query<Media>
      */
     public function getAlbumMediaQuery($albumId, $filter = null, $orderBy = null, $offset = null, $limit = null, $validTypes = null)
     {
@@ -118,7 +118,7 @@ class Repository extends ModelRepository
      * @param string|OrderBy|null $orderBy
      * @param array|null          $validTypes
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAlbumMediaQueryBuilder($albumId, $filter = null, $orderBy = null, $validTypes = null)
     {
@@ -154,7 +154,7 @@ class Repository extends ModelRepository
      *
      * @param int $albumId
      *
-     * @return Query
+     * @return Query<Album>
      */
     public function getAlbumWithSettingsQuery($albumId)
     {
@@ -169,7 +169,7 @@ class Repository extends ModelRepository
      *
      * @param int $albumId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAlbumWithSettingsQueryBuilder($albumId)
     {
@@ -188,7 +188,7 @@ class Repository extends ModelRepository
      *
      * @param string $path
      *
-     * @return Query
+     * @return Query<Media>
      */
     public function getMediaByPathQuery($path)
     {
@@ -203,7 +203,7 @@ class Repository extends ModelRepository
      *
      * @param string $path
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getMediaByPathQueryBuilder($path)
     {

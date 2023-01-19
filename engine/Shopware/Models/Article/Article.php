@@ -29,6 +29,7 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Article\Configurator\Set;
 use Shopware\Models\Article\Configurator\Template\Template;
 use Shopware\Models\Category\Category as ProductCategory;
 use Shopware\Models\Customer\Group as CustomerGroup;
@@ -259,7 +260,7 @@ class Article extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var Configurator\Set|null
+     * @var Set|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Configurator\Set", inversedBy="articles", cascade={"persist"})
      * @ORM\JoinColumn(name="configurator_set_id", referencedColumnName="id")
@@ -1190,7 +1191,7 @@ class Article extends ModelEntity
     }
 
     /**
-     * @return Configurator\Set|null
+     * @return Set|null
      */
     public function getConfiguratorSet()
     {
@@ -1198,13 +1199,13 @@ class Article extends ModelEntity
     }
 
     /**
-     * @param Configurator\Set|null $configuratorSet
+     * @param Set|null $configuratorSet
      *
      * @return Article
      */
     public function setConfiguratorSet($configuratorSet)
     {
-        $this->setManyToOne($configuratorSet, Configurator\Set::class, 'configuratorSet');
+        $this->setManyToOne($configuratorSet, Set::class, 'configuratorSet');
 
         return $this;
     }

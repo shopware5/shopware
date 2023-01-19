@@ -93,7 +93,7 @@ class Manufacturer extends Resource
         $totalResult = $paginator->count();
 
         // Returns the manufacturer data
-        $manufacturers = $paginator->getIterator()->getArrayCopy();
+        $manufacturers = iterator_to_array($paginator);
 
         return ['data' => $manufacturers, 'total' => $totalResult];
     }

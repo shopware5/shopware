@@ -25,6 +25,7 @@
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
 use DateTime;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelEntity;
 
 /**
@@ -90,6 +91,7 @@ class Value
             ->setFirstResult($queryConfig['offset'])
             ->setMaxResults($queryConfig['limit']);
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $builder->getQuery();
 
         $paginator = Shopware()->Models()->createPaginator($query);
@@ -97,7 +99,7 @@ class Value
         $results = [];
 
         // Iterate results, do some formatting if needed
-        foreach ($paginator->getIterator()->getArrayCopy() as $item) {
+        foreach ($paginator as $item) {
             $item = array_pop($item);
             if ($item instanceof DateTime) {
                 if ($columnType === 'date') {

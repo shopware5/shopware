@@ -25,8 +25,6 @@
 namespace Shopware\Components;
 
 use Doctrine\DBAL\Connection;
-use PDO;
-use PDOStatement;
 use Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\FieldHelper;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Routing\RouterInterface;
@@ -71,12 +69,7 @@ class SitePageMenu
      */
     public function getTree($shopId, $activeId)
     {
-        $query = $this->getQuery($shopId);
-
-        /** @var PDOStatement $statement */
-        $statement = $query->execute();
-
-        $data = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $data = $this->getQuery($shopId)->execute()->fetchAllAssociative();
 
         $menu = [];
         $links = [];

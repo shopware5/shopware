@@ -6546,11 +6546,6 @@ parameters:
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/AnalyzedCustomer.php
 
 		-
-			message: "#^Cannot access offset 'static' on non\\-empty\\-array\\|true\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CronJobSubscriber\\:\\:fetchStreams\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CronJobSubscriber.php
@@ -10871,21 +10866,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchBundleDBALSubscriber.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:build\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:cleanupIndex\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:cleanupKeywords\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:getSearchTables\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
@@ -10897,16 +10877,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:mapCategoryKeywords\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:setNextUpdateTimestamp\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchIndexer\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
 
@@ -15056,57 +15026,12 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleConfiguratorSet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleDownloads\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleImages\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleLinks\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleRelated\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleSeoCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleSimilar\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getArticleVariants\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getAttributeProperties\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getFullResult\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
@@ -15151,11 +15076,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getSingleResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:getSingleTranslation\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
@@ -15186,147 +15106,12 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareArticleAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareArticleAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareAttributeAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareAttributeAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareAvoidCustomerGroups\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareAvoidCustomerGroups\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareCategoryAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareCategoryAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareConfiguratorSet\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareConfiguratorSet\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareDownloadsAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareDownloadsAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareImageAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareImageAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareMainDetail\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareMainDetail\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:preparePropertyValuesData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:preparePropertyValuesData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareRelatedAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareRelatedAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareSeoCategoryAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareSeoCategoryAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareSimilarAssociatedData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareSimilarAssociatedData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareVariants\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:prepareVariants\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Article.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Article\\:\\:removeArticleDetails\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Article.php
 
@@ -15611,42 +15396,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/CustomerGroup.php
 
 		-
-			message: "#^Cannot access offset 'freezeUp' on non\\-empty\\-array\\|true\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Cannot access offset 'static' on non\\-empty\\-array\\|true\\.$#"
-			count: 2
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Cannot call method getConditions\\(\\) on Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Cannot call method getFreezeUp\\(\\) on Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Cannot call method isStatic\\(\\) on Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:cleanupIndexSearchIndex\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:create\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:delete\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
@@ -15662,16 +15412,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:getOne\\(\\) has parameter \\$limit with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:indexStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:insertCustomers\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
@@ -15707,16 +15447,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#1 \\$streamId of method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:getConditions\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
@@ -16031,21 +15761,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Shop.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Shop\\:\\:prepareShopData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Shop.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Shop\\:\\:prepareShopData\\(\\) has parameter \\$params with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Shop.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Shop\\:\\:prepareShopData\\(\\) has parameter \\$shop with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Shop.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Shop\\:\\:update\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Shop.php
@@ -16151,16 +15866,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:considerTaxInput\\(\\) has parameter \\$variant with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:considerTaxInput\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:create\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
@@ -16177,41 +15882,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:createImageMappingForOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\|Doctrine\\\\Common\\\\Collections\\\\Collection\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableGroup\\(\\) has parameter \\$availableGroups with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableGroup\\(\\) has parameter \\$groupData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableMediaImage\\(\\) has parameter \\$availableImages with generic interface Doctrine\\\\Common\\\\Collections\\\\Collection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableMediaImage\\(\\) has parameter \\$availableImages with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableMediaImage\\(\\) has parameter \\$availableImages with no value type specified in iterable type array\\|Doctrine\\\\Common\\\\Collections\\\\Collection\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableOption\\(\\) has parameter \\$availableOptions with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:getAvailableOption\\(\\) has parameter \\$optionData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
@@ -16272,16 +15942,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:internalUpdate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:mergePriceData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:mergePriceData\\(\\) has parameter \\$priceData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
@@ -16377,26 +16037,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:updateUnitReference\\(\\) has parameter \\$unitData with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$variant has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#1 \\$articleImage of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:createVariantImage\\(\\) expects Shopware\\\\Models\\\\Article\\\\Image, Shopware\\\\Models\\\\Article\\\\Image\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#1 \\$variant of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:considerTaxInput\\(\\) expects array, array\\|Shopware\\\\Models\\\\Article\\\\Detail given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Variant.php
-
-		-
-			message: "#^Parameter \\#2 \\$image of method Shopware\\\\Components\\\\Api\\\\Resource\\\\Variant\\:\\:createImageMappingForOptions\\(\\) expects Shopware\\\\Models\\\\Article\\\\Image, Shopware\\\\Models\\\\Article\\\\Image\\|true given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Variant.php
 
@@ -20521,11 +20161,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:getPaginatedResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
-
-		-
 			message: "#^Parameter \\#2 \\$orderBy of method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Filter\\:\\:getFilterQueryBuilder\\(\\) expects array, array\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
@@ -21669,11 +21304,6 @@ parameters:
 			message: "#^Call to an undefined method Symfony\\\\Component\\\\DependencyInjection\\\\ContainerInterface\\:\\:reset\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ShopRegistrationService.php
-
-		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: engine/Shopware/Components/SitePageMenu.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitePageMenu\\:\\:assignSeoUrls\\(\\) has parameter \\$menu with no value type specified in iterable type array\\.$#"
@@ -24051,11 +23681,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:saveMediaMappingAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:saveSerialsAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -25706,11 +25331,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
 
 		-
-			message: "#^PHPDoc tag @var for variable \\$media has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/MediaManager.php
-
-		-
 			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/MediaManager.php
@@ -26737,11 +26357,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Snippet\\:\\:updateSnippetAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Snippet.php
-
-		-
-			message: "#^Parameter \\#2 \\$encoding of method Shopware_Controllers_Backend_Snippet\\:\\:getFormatSnippetForExport\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
@@ -29726,22 +29341,12 @@ parameters:
 			path: engine/Shopware/Core/sCategories.php
 
 		-
-			message: "#^Method sCategories\\:\\:getCategoryIdsWithParent\\(\\) should return array but returns array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
 			message: "#^Method sCategories\\:\\:getCategoryPath\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCategories.php
 
 		-
 			message: "#^Method sCategories\\:\\:getChildrenCountOfCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
-			message: "#^Method sCategories\\:\\:getChildrenCountOfCategories\\(\\) should return array but returns array\\|false\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCategories.php
 
@@ -29849,11 +29454,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCore.php
-
-		-
-			message: "#^Cannot call method getThumbnailSize\\(\\) on Shopware\\\\Models\\\\Media\\\\Settings\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sExport.php
 
 		-
 			message: "#^Method sExport\\:\\:_decode_line\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -31794,11 +31394,6 @@ parameters:
 			message: "#^Property Shopware\\\\Models\\\\Banner\\\\Banner\\:\\:\\$validTo \\(DateTimeInterface\\) does not accept DateTimeInterface\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Banner/Banner.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Banner\\\\Repository\\:\\:getAllActiveBanners\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Banner/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Banner\\\\Repository\\:\\:getBannerIds\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -37371,16 +36966,6 @@ parameters:
 			path: engine/Shopware/Models/Tax/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Models\\\\Tax\\\\Repository\\:\\:getTaxQuery\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Tax/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Tax\\\\Repository\\:\\:getTaxQuery\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Tax/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Models\\\\Tax\\\\Repository\\:\\:getTaxQueryBuilder\\(\\) has parameter \\$filters with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Tax/Repository.php
@@ -42234,56 +41819,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\SupplierTest\\:\\:\\$supplierData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/SupplierTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 4
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$total\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testAcceptVote\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testAcceptVote\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testAnswerVote\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testAnswerVote\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testDeleteVote\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testDeleteVote\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoteTest\\:\\:testGetVotes\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoteTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"

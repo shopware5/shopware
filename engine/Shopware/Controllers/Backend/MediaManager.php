@@ -36,6 +36,7 @@ use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Media\Album;
 use Shopware\Models\Media\Media;
+use Shopware\Models\Media\Repository;
 use Shopware\Models\Media\Settings;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -174,7 +175,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $albumID = self::UNSORTED_ALBUM_ID;
         }
 
-        $repository = $this->get('models')->getRepository(Media::class);
+        /** @var Repository $repository */
+        $repository = $this->get(ModelManager::class)->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($albumID, $filter, $order, $offset, $limit, $validTypes);
 
         $paginator = $this->getModelManager()->createPaginator($query);
@@ -185,7 +187,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $mediaList = $query->getResult(AbstractQuery::HYDRATE_ARRAY);
         $mediaService = $this->get(MediaServiceInterface::class);
 
-        /** @var array $media */
         foreach ($mediaList as &$media) {
             $media['path'] = $mediaService->getUrl($media['path']);
             $media['virtualPath'] = $mediaService->normalize($media['path']);
@@ -1041,13 +1042,12 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
      */
     private function getAlbumNodeProperties(Album $album): array
     {
-        $repository = $this->get('models')->getRepository(Media::class);
+        /** @var Repository $repository */
+        $repository = $this->get(ModelManager::class)->getRepository(Media::class);
         $query = $repository->getAlbumMediaQuery($album->getId());
 
-        $paginator = $this->getModelManager()->createPaginator($query);
-
         // Returns the total count of the query
-        $totalResult = $paginator->count();
+        $totalResult = $this->getModelManager()->createPaginator($query)->count();
 
         $parentId = null;
 

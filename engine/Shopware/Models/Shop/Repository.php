@@ -45,7 +45,7 @@ class Repository extends ModelRepository
      * @param int|null          $offset
      * @param int|null          $limit
      *
-     * @return Query
+     * @return Query<Locale>
      */
     public function getLocalesListQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -74,7 +74,7 @@ class Repository extends ModelRepository
             'locale',
         ];
         $builder->select($fields);
-        $builder->from(\Shopware\Models\Shop\Locale::class, 'locale');
+        $builder->from(Locale::class, 'locale');
         if ($filter !== null) {
             $builder->addFilter($filter);
         }
@@ -94,7 +94,7 @@ class Repository extends ModelRepository
      * @param int|null          $limit
      * @param bool              $orderByShopPositionAsDefault Deprecated since 5.6.3, will be default starting with Shopware 5.8.
      *
-     * @return Query
+     * @return Query<Shop>
      */
     public function getBaseListQuery($filter = null, $order = null, $offset = null, $limit = null, bool $orderByShopPositionAsDefault = false)
     {
@@ -115,7 +115,7 @@ class Repository extends ModelRepository
      * @param int               $offset
      * @param int               $limit
      *
-     * @return Query
+     * @return Query<Shop>
      */
     public function getShopsWithThemes($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -186,7 +186,7 @@ class Repository extends ModelRepository
     /**
      * Returns the \Doctrine\ORM\Query to select all categories for example for the backend tree
      *
-     * @return Query
+     * @return Query<Shop>
      */
     public function getListQuery(array $filterBy, array $orderBy, $limit = null, $offset = null)
     {
@@ -256,7 +256,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * sub shops. Used for the shop combo box on the article detail page in the article backend module.
      *
-     * @return Query
+     * @return Query<Shop>
      */
     public function getMainListQuery()
     {
@@ -413,7 +413,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getQueryBuilder()
     {
@@ -450,7 +450,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getActiveQueryBuilder()
     {
@@ -634,7 +634,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     private function getActiveMainShopQueryBuilder()
     {
@@ -663,7 +663,7 @@ class Repository extends ModelRepository
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     private function getActiveSubShopQueryBuilder()
     {

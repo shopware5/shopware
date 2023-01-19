@@ -87,21 +87,23 @@ parameters:
         - # Currently not possible to determine the paginator generic type at those places
             message: '#return type with generic class Doctrine\\ORM\\Tools\\Pagination\\Paginator does not specify its types: T#'
             paths:
-                - engine/Shopware/Components/Model/ModelManager.php
                 - engine/Shopware/Controllers/Backend/Search.php
 
         # Some day this should be specified
-        - '#no value type specified in iterable type Doctrine\\DBAL\\#'
+        - '#type specified in iterable type Doctrine\\DBAL\\#'
+        - '#type specified in iterable type PDOStatement#'
+        - '#generic class PDOStatement .*does not specify its types: rowType#'
 
         # This method does not exists, but it does not throw an error. Needs to be checked
         - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
 
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
-        - '#Cannot call method fetch.*\(\) on Doctrine\\DBAL\\.*\|int#'
+        - '#Cannot call method (fetch.*|rowCount)\(\) on Doctrine\\DBAL\\.*\|int#'
 
         - # This property contains many different repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: engine/Shopware/Controllers/Backend/Config.php
+
         - # While cloning entities the ID or foreign key columns need to be set to `null` even if they do not allow that from the database definition
             message: '#Property Shopware\\Models\\Emotion\\.*::.*id|Id \(int\) does not accept null#'
             paths:
@@ -150,22 +152,27 @@ parameters:
         - # For testing it is not necessary to declare the whole basket array correctly
             message: '#Parameter \#1 \$basket of method Shopware\\Components\\BasketSignature\\BasketSignatureGenerator::generateSignature\(\) expects array.*, array.* given#'
             path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
+
         - # Parent setUp method is not called on purpose
             message: '#Missing call to parent::setUp\(\) method#'
             paths:
                 - tests/Functional/Core/sCoreTest.php
                 - tests/Functional/Controllers/Backend/OrderTest.php
                 - tests/Functional/Controllers/Backend/UserManagerTest.php
+
         - # Some class properties do not have a getter or setter, but they are needed for the Doctrine column declaration
             message: '#Property Shopware\\Models\\.*::\$.* is never written, only read#'
             path: engine/Shopware/Models
+
         - # Intended overwrite for easier testing
             message: '#PHPDoc type string of property Shopware\\Tests\\Functional\\Bundle\\BenchmarkBundle\\Controllers\\Backend\\Mocks\\ViewMock::\$template is not covariant with PHPDoc type Enlight_Template_Default\|null of overridden property Enlight_View_Default::\$template#'
             path: tests/Functional/Bundle/BenchmarkBundle/Controllers/Backend/Mocks/ViewMock.php
+
         - # Intended "endless" loop which is interrupted by an exception
             message: '#While loop condition is always true#'
             count: 1
             path: engine/Shopware/Bundle/BenchmarkBundle/Commands/SendStatisticsCommand.php
+
         - # Giving "test" as construct parameter sets up a test storage
             message: '#Parameter \#1 \$options of class Enlight_Event_Subscriber_Config constructor expects array\|null, string given#'
             path: tests/Unit/Components/Event/SubscriberConfigTest.php
@@ -175,6 +182,7 @@ parameters:
             paths:
                 - engine/Shopware/Bundle/MediaBundle/Commands/MediaOptimizeCommand.php
                 - engine/Shopware/Commands/ThemeCreateCommand.php
+
         - # For testing purposes the constructor of the price struct gets strings
             message: '#Parameter .* of class Shopware\\Components\\Cart\\Struct\\Price constructor expects float.*string given#'
             path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
@@ -192,6 +200,3 @@ parameters:
             message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
             count: 1
             path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
-
-        - # Probably needs an update of the doctrine extension of PHPStan
-            message: '#Call to an undefined method Traversable.*::(getArrayCopy|current)#'

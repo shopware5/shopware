@@ -95,7 +95,7 @@ class Repository extends ModelRepository
      * @param int|null $offset
      * @param bool     $selectOnlyActive
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getListQuery(array $filterBy, array $orderBy = [], $limit = null, $offset = null, $selectOnlyActive = true)
     {
@@ -223,7 +223,7 @@ class Repository extends ModelRepository
      *
      * @param int $categoryId
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getDetailQuery($categoryId)
     {
@@ -238,7 +238,7 @@ class Repository extends ModelRepository
      *
      * @param int $categoryId
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getDetailQueryWithoutArticles($categoryId)
     {
@@ -319,7 +319,7 @@ class Repository extends ModelRepository
      * @param int      $parentId
      * @param int|null $customerGroupId
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getActiveByParentIdQuery($parentId, $customerGroupId = null)
     {
@@ -336,7 +336,7 @@ class Repository extends ModelRepository
      * @param int      $articleId
      * @param int|null $parentId
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getActiveByArticleIdQuery($articleId, $parentId = null)
     {
@@ -362,7 +362,7 @@ class Repository extends ModelRepository
      * @param int      $id              The id of the category
      * @param int|null $customerGroupId
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getActiveByIdQuery($id, $customerGroupId = null)
     {
@@ -521,7 +521,7 @@ class Repository extends ModelRepository
      *
      * @internal param $filterBy
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getBlogCategoriesByParentQuery($parentId, $offset = null, $limit = null)
     {
@@ -578,7 +578,7 @@ class Repository extends ModelRepository
      *
      * @param array $filterBy
      *
-     * @return Query
+     * @return Query<Category>
      */
     public function getBlogCategoryTreeListQuery($filterBy)
     {

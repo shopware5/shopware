@@ -84,6 +84,7 @@ class EmotionTest extends TestCase
         $controller = new Shopware_Controllers_Backend_Emotion($mediaServiceMock, $eventManagerMock);
 
         $field = new Field();
+        $field->setValueType('');
         $initialValue = null;
 
         $processedValue = $processDataFieldValueMethod->invoke($controller, $field, $initialValue);

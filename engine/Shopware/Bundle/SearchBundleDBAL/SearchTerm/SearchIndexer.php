@@ -25,6 +25,7 @@
 namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use PDO;
 use Shopware\Components\MemoryLimit;
 use Shopware_Components_Config;
@@ -36,34 +37,19 @@ class SearchIndexer implements SearchIndexerInterface
      */
     public const INDEX_DELETE_THRESHOLD = 0.9;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var TermHelperInterface
-     */
-    private $termHelper;
+    private TermHelperInterface $termHelper;
 
-    /**
-     * @var int
-     */
-    private $batchSize;
+    private int $batchSize;
 
-    /**
-     * @param int $batchSize
-     */
     public function __construct(
         Shopware_Components_Config $config,
         Connection $connection,
         TermHelperInterface $termHelper,
-        $batchSize = 4000
+        int $batchSize = 4000
     ) {
         $this->config = $config;
         $this->connection = $connection;
@@ -73,6 +59,8 @@ class SearchIndexer implements SearchIndexerInterface
 
     /**
      * Check if search index is valid anymore and rebuild if necessary
+     *
+     * @return void
      */
     public function validate()
     {
@@ -96,7 +84,7 @@ class SearchIndexer implements SearchIndexerInterface
             AND cf.element_id = ce.id
             AND cf.shop_id = 1
         ";
-        $result = $this->connection->fetchAll($sql);
+        $result = $this->connection->fetchAllAssociative($sql);
 
         if (empty($result) || !isset($result[0])) {
             $this->build();
@@ -115,6 +103,8 @@ class SearchIndexer implements SearchIndexerInterface
 
     /**
      * Rebuilds the search index for the shopware default search query builder.
+     *
+     * @return void
      */
     public function build()
     {
@@ -124,7 +114,7 @@ class SearchIndexer implements SearchIndexerInterface
         $this->setNextUpdateTimestamp();
 
         // Truncate search index table (using DELETE to avoid committing database transactions in tests)
-        $this->connection->executeUpdate('DELETE FROM `s_search_index`');
+        $this->connection->executeStatement('DELETE FROM `s_search_index`');
 
         // Get a list of all tables and columns in this tables that should be processed by search
         /**
@@ -147,13 +137,13 @@ class SearchIndexer implements SearchIndexerInterface
                 // Build sql query to fetch values from this table
                 $sql = 'SELECT ' . $table['elementID'] . ' as id, ' . $table['fields'] . ' FROM ' . $table['table'];
 
-                // If any where condition is set, add to query
+                // If any "where" condition is set, add to query
                 if (!empty($table['where'])) {
                     $sql .= ' WHERE ' . $table['where'];
                 }
 
                 // Get all fields & values from current table
-                $getTableKeywords = $this->connection->fetchAll($sql);
+                $getTableKeywords = $this->connection->fetchAllAssociative($sql);
 
                 if ($table['table'] === 's_categories') {
                     $getTableKeywords = $this->mapCategoryKeywords($getTableKeywords);
@@ -212,14 +202,14 @@ class SearchIndexer implements SearchIndexerInterface
                         continue;
                     }
 
-                    // If last row or more then 5000 keywords fetched, write results to index
+                    // If last row or more than 5000 keywords fetched, write results to index
                     if ($currentRow == \count($getTableKeywords) - 1 || \count($keywords) > $this->batchSize) {
                         $keywords = array_unique($keywords); // Remove duplicates
                         $sql_keywords = 'INSERT IGNORE INTO `s_search_keywords` (`keyword`) VALUES';
                         $sql_keywords .= ' (' . implode('), (', $keywords) . ')';
 
                         // Insert Keywords
-                        $this->connection->executeUpdate($sql_keywords);
+                        $this->connection->executeStatement($sql_keywords);
 
                         $keywords = [];
 
@@ -227,7 +217,7 @@ class SearchIndexer implements SearchIndexerInterface
                         $sqlIndex = implode("\n\nUNION ALL\n\n", $sqlIndex);
                         $sqlIndex = "INSERT IGNORE INTO s_search_index (keywordID, elementID, fieldID)\n\n" . $sqlIndex;
 
-                        $this->connection->executeUpdate($sqlIndex);
+                        $this->connection->executeStatement($sqlIndex);
                         $sqlIndex = [];
                     }
                 }
@@ -242,7 +232,7 @@ class SearchIndexer implements SearchIndexerInterface
     /**
      * Updates the last update timestamp in the database
      */
-    private function setNextUpdateTimestamp()
+    private function setNextUpdateTimestamp(): void
     {
         $sql = '
             SET @parent = (SELECT id FROM s_core_config_elements WHERE name = \'fuzzysearchlastupdate\');
@@ -250,13 +240,13 @@ class SearchIndexer implements SearchIndexerInterface
             INSERT INTO `s_core_config_values` (`element_id`, `shop_id`, `value`) VALUES
             (@parent, 1, CONCAT(\'s:\', LENGTH(NOW()), \':"\', NOW(), \'";\'));
         ';
-        $this->connection->executeUpdate($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
-    private function cleanupIndex()
+    private function cleanupIndex(): void
     {
         $tables = $this->getSearchTables();
         $qb = $this->connection->createQueryBuilder();
@@ -321,20 +311,20 @@ class SearchIndexer implements SearchIndexerInterface
             substr_replace($qb->getSQL(), 'SELECT STRAIGHT_JOIN', 0, 6)
         );
 
-        $collectToDelete = $this->connection->fetchAll($mappedSql);
+        $collectToDelete = $this->connection->fetchAllAssociative($mappedSql);
         foreach ($collectToDelete as $delete) {
             $sql = '
                 DELETE FROM s_search_index
                 WHERE keywordID=? AND fieldID=?
             ';
-            $this->connection->executeUpdate($sql, [$delete['keywordID'], $delete['fieldID']]);
+            $this->connection->executeStatement($sql, [$delete['keywordID'], $delete['fieldID']]);
         }
     }
 
     /**
      * Cleanups search keywords in the database.
      */
-    private function cleanupKeywords()
+    private function cleanupKeywords(): void
     {
         $sql = '
             DELETE sk FROM `s_search_keywords` sk
@@ -342,17 +332,15 @@ class SearchIndexer implements SearchIndexerInterface
             ON sk.id=si.keywordID
             WHERE si.keywordID IS NULL
         ';
-        $this->connection->executeUpdate($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
      * Get all tables and columns that might be involved in this search request as an array
-     *
-     * @return array
      */
-    private function getSearchTables()
+    private function getSearchTables(): array
     {
-        return $this->connection->fetchAll("
+        return $this->connection->fetchAllAssociative("
             SELECT STRAIGHT_JOIN
                 st.id AS tableID,
                 st.table,
@@ -370,10 +358,7 @@ class SearchIndexer implements SearchIndexerInterface
        ");
     }
 
-    /**
-     * @return array
-     */
-    private function mapCategoryKeywords(array $keywords)
+    private function mapCategoryKeywords(array $keywords): array
     {
         $ids = array_column($keywords, 'id');
 
