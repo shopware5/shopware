@@ -159,7 +159,7 @@ Ext.define('Shopware.form.field.PagingComboBox', {
         }
 
         if (!this.displayTplData.length) {
-            return this.emptyText;
+            return '';
         }
 
         if (!this.isValidRecordData(this.displayTplData[0])) {
