@@ -8,7 +8,7 @@ If you are not sure which license to use, or want more details about available l
 
 
 ## Contributing to the Shopware code base
-If you want to learn how to contribute code to Shopware, please refer to [Contribution Code](https://developers.shopware.com/contributing/contributing-code/).  
+If you want to learn how to contribute code to Shopware, please refer to [Contribution Code](https://developers.shopware.com/community/contributing-code/).  
 
 ## Documentation
 
