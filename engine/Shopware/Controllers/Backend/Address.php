@@ -177,6 +177,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     protected function getQueryPaginator(QueryBuilder $builder, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
     {
+        /** @var Query<AddressModel> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
         $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
@@ -190,15 +191,13 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
     protected function getDetailQuery($id)
     {
         $query = parent::getDetailQuery($id);
-        $query = $this->addAssociations($query);
 
-        return $query;
+        return $this->addAssociations($query);
     }
 
     private function addAssociations(QueryBuilder $query): QueryBuilder
     {
-        $query
-            ->addSelect(['country', 'state', 'PARTIAL customer.{id,email}'])
+        $query->addSelect(['country', 'state', 'PARTIAL customer.{id,email}'])
             ->join('address.customer', 'customer')
             ->join('address.country', 'country')
             ->leftJoin('address.state', 'state');

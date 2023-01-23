@@ -24,6 +24,8 @@
 
 namespace Shopware\Models\Order\Document;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelRepository;
 
 /**
@@ -51,7 +53,7 @@ class Repository extends ModelRepository
      * @param int|null   $limit
      * @param int|null   $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Document>
      */
     public function getListQuery($orderId, $filter = null, $orderBy = null, $limit = null, $offset = null)
     {
@@ -77,9 +79,9 @@ class Repository extends ModelRepository
     /**
      * Helper function which sets the fromPath and the selectPath for the order list query.
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
-    protected function selectListQuery(\Doctrine\ORM\QueryBuilder $builder)
+    protected function selectListQuery(QueryBuilder $builder)
     {
         // select the different entities
         $builder->select([
@@ -95,13 +97,13 @@ class Repository extends ModelRepository
         ]);
 
         // join the required tables for the order list
-        $builder->from('Shopware\Models\Order\Document\Document', 'documents')
+        $builder->from(Document::class, 'documents')
                 ->join('documents.type', 'type');
 
         return $builder;
     }
 
-    protected function filterListQuery(\Doctrine\ORM\QueryBuilder $builder, $filter = null)
+    protected function filterListQuery(QueryBuilder $builder, $filter = null)
     {
         return $builder;
     }

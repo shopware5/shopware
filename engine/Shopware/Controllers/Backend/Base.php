@@ -580,7 +580,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $total = $paginator->count();
 
         // Select all shop as array
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
 
         // Return the data and total count
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => $total]);

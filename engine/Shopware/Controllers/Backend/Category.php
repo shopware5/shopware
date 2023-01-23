@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Components\CategoryHandling\CategoryDuplicator;
 use Shopware\Components\Model\CategoryDenormalization;
 use Shopware\Components\Model\ModelManager;
@@ -183,10 +184,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $node = is_numeric($node) ? (int) $node : 1;
             $filter[] = ['property' => 'c.parentId', 'value' => $node];
         }
+        /** @var Query<array<string, mixed>> $query */
         $query = $this->getRepository()->getBackendDetailQuery($node)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $this->getModelManager()->createPaginator($query);
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
         $data = $data[0];
 
         $data['imagePath'] = $data['media']['id'];
@@ -414,7 +416,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
         $paginator = $this->getModelManager()->createPaginator($query);
 
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
         $count = $paginator->count();
 
         $this->View()->assign([
@@ -598,10 +600,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $this->em->flush();
 
         $categoryId = $categoryModel->getId();
+        /** @var Query<array<string, mixed>> $query */
         $query = $repo->getBackendDetailQuery($categoryId)->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $this->em->createPaginator($query);
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
         $data = $data[0];
         $data['imagePath'] = $data['media']['path'];
 

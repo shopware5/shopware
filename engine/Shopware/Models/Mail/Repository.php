@@ -39,7 +39,7 @@ class Repository extends ModelRepository
      *
      * @param int $mailId
      *
-     * @return Query
+     * @return Query<Mail>
      */
     public function getMailQuery($mailId)
     {
@@ -74,7 +74,7 @@ class Repository extends ModelRepository
      *
      * @param int $mailId
      *
-     * @return Query
+     * @return Query<MailAttribute>
      */
     public function getAttributesQuery($mailId)
     {
@@ -109,7 +109,7 @@ class Repository extends ModelRepository
      * @param string   $name
      * @param int|null $mailId
      *
-     * @return Query
+     * @return Query<Mail>
      */
     public function getValidateNameQuery($name, $mailId = null)
     {
@@ -149,7 +149,7 @@ class Repository extends ModelRepository
      * @param int|null     $offset
      * @param int|null     $limit
      *
-     * @return Query
+     * @return Query<Mail>
      */
     public function getMailListQuery(array $filter = [], array $order = null, $offset = null, $limit = null)
     {

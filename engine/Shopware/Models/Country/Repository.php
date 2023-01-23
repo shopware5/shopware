@@ -28,6 +28,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\Country as CountryAttribute;
 use Shopware\Models\Attribute\CountryState;
 
 /**
@@ -43,8 +44,7 @@ class Repository extends ModelRepository
      * @param int|null                  $offset
      * @param int|null                  $limit
      *
-     * @return Query
-     * @return Query
+     * @return Query<Country>
      */
     public function getCountriesQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -131,7 +131,7 @@ class Repository extends ModelRepository
      *
      * @param int $areaId
      *
-     * @return Query
+     * @return Query<Country>
      */
     public function getCountriesByAreaIdQuery($areaId)
     {
@@ -162,7 +162,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a
      * list of areas.
      *
-     * @return Query
+     * @return Query<Area>
      */
     public function getAreasQuery()
     {
@@ -190,7 +190,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return Query
+     * @return Query<Country>
      */
     public function getCountryQuery($countryId)
     {
@@ -224,7 +224,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return Query
+     * @return Query<CountryAttribute>
      */
     public function getCountryAttributesQuery($countryId)
     {
@@ -246,7 +246,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         return $builder->select(['attribute'])
-                         ->from(\Shopware\Models\Attribute\Country::class, 'attribute')
+                         ->from(CountryAttribute::class, 'attribute')
                          ->where('attribute.countryId = ?1')
                          ->setParameter(1, $countryId);
     }
@@ -257,7 +257,7 @@ class Repository extends ModelRepository
      *
      * @param int $countryId
      *
-     * @return Query
+     * @return Query<State>
      */
     public function getStatesByCountryIdQuery($countryId)
     {
@@ -291,7 +291,7 @@ class Repository extends ModelRepository
      *
      * @param int $stateId
      *
-     * @return Query
+     * @return Query<CountryState>
      */
     public function getStateAttributesQuery($stateId)
     {

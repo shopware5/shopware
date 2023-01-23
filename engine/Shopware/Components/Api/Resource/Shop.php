@@ -24,8 +24,19 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\Query;
 use Exception;
-use Shopware\Components\Api\Exception as ApiException;
+use RuntimeException;
+use Shopware\Components\Api\Exception\NotFoundException;
+use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Group;
+use Shopware\Models\Shop\Currency;
+use Shopware\Models\Shop\Locale;
+use Shopware\Models\Shop\Repository;
+use Shopware\Models\Shop\Shop as ShopModel;
+use Shopware\Models\Shop\Template;
 
 /**
  * Shop API Resource
@@ -33,27 +44,27 @@ use Shopware\Components\Api\Exception as ApiException;
 class Shop extends Resource
 {
     /**
-     * @return \Shopware\Models\Shop\Repository
+     * @return Repository
      */
     public function getRepository()
     {
-        return $this->getManager()->getRepository('Shopware\Models\Shop\Shop');
+        return $this->getManager()->getRepository(ShopModel::class);
     }
 
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return array|\Shopware\Models\Shop\Shop
+     * @return array|ShopModel
      */
     public function getOne($id)
     {
         $this->checkPrivilege('read');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
         $builder = $this->getRepository()->createQueryBuilder('shop')
@@ -65,11 +76,10 @@ class Shop extends Resource
         $query = $builder->getQuery();
         $query->setHydrationMode($this->getResultMode());
 
-        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $query->getOneOrNullResult($this->getResultMode());
 
         if (!$shop) {
-            throw new ApiException\NotFoundException(sprintf('Shop by id %s not found', $id));
+            throw new NotFoundException(sprintf('Shop by id %s not found', $id));
         }
 
         return $shop;
@@ -91,6 +101,7 @@ class Shop extends Resource
                 ->addOrderBy($orderBy)
                 ->setFirstResult($offset)
                 ->setMaxResults($limit);
+        /** @var Query<ShopModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($this->resultMode);
 
@@ -100,16 +111,16 @@ class Shop extends Resource
         $totalResult = $paginator->count();
 
         // returns the category data
-        $shops = $paginator->getIterator()->getArrayCopy();
+        $shops = iterator_to_array($paginator);
 
         return ['data' => $shops, 'total' => $totalResult];
     }
 
     /**
-     * @throws \Shopware\Components\Api\Exception\ValidationException
      * @throws Exception
+     * @throws ValidationException
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return ShopModel
      */
     public function create(array $params)
     {
@@ -117,12 +128,12 @@ class Shop extends Resource
 
         $params = $this->prepareShopData($params);
 
-        $shop = new \Shopware\Models\Shop\Shop();
+        $shop = new ShopModel();
         $shop->fromArray($params);
 
         $violations = $this->getManager()->validate($shop);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->getManager()->persist($shop);
@@ -134,26 +145,24 @@ class Shop extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ValidationException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\CustomValidationException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
+     * @throws ValidationException
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return ShopModel
      */
     public function update($id, array $params)
     {
         $this->checkPrivilege('update');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $this->getRepository()->find($id);
 
         if (!$shop) {
-            throw new ApiException\NotFoundException(sprintf('Shop by id %s not found', $id));
+            throw new NotFoundException(sprintf('Shop by id %s not found', $id));
         }
 
         $params = $this->prepareShopData($params, $shop);
@@ -161,7 +170,7 @@ class Shop extends Resource
 
         $violations = $this->getManager()->validate($shop);
         if ($violations->count() > 0) {
-            throw new ApiException\ValidationException($violations);
+            throw new ValidationException($violations);
         }
 
         $this->flush();
@@ -172,24 +181,23 @@ class Shop extends Resource
     /**
      * @param int $id
      *
-     * @throws \Shopware\Components\Api\Exception\ParameterMissingException
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
+     * @throws ParameterMissingException
      *
-     * @return \Shopware\Models\Shop\Shop
+     * @return ShopModel
      */
     public function delete($id)
     {
         $this->checkPrivilege('delete');
 
         if (empty($id)) {
-            throw new ApiException\ParameterMissingException('id');
+            throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\Shop\Shop|null $shop */
         $shop = $this->getRepository()->find($id);
 
         if (!$shop) {
-            throw new ApiException\NotFoundException(sprintf('Shop by id %s not found', $id));
+            throw new NotFoundException(sprintf('Shop by id %s not found', $id));
         }
 
         $this->getManager()->remove($shop);
@@ -198,81 +206,86 @@ class Shop extends Resource
         return $shop;
     }
 
-    private function prepareShopData($params, $shop = null)
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>
+     */
+    private function prepareShopData(array $params, ?ShopModel $shop = null): array
     {
         $requiredParams = ['name', 'localeId', 'currencyId', 'customerGroupId', 'categoryId'];
         foreach ($requiredParams as $param) {
             if (!$shop) {
                 if (!isset($params[$param]) || empty($params[$param])) {
-                    throw new ApiException\ParameterMissingException($param);
+                    throw new ParameterMissingException($param);
                 }
             } else {
                 if (isset($params[$param]) && empty($params[$param])) {
-                    throw new Exception(sprintf('param %s may not be empty', $param));
+                    throw new RuntimeException(sprintf('param %s may not be empty', $param));
                 }
             }
         }
 
         if (isset($params['currencyId'])) {
-            $currency = Shopware()->Models()->find('\Shopware\Models\Shop\Currency', $params['currencyId']);
+            $currency = Shopware()->Models()->find(Currency::class, $params['currencyId']);
             if ($currency !== null) {
                 $params['currency'] = $currency;
             } else {
-                throw new Exception(sprintf('%s is not a valid currency id', $params['currencyId']));
+                throw new RuntimeException(sprintf('%s is not a valid currency id', $params['currencyId']));
             }
         }
 
         if (isset($params['localeId'])) {
-            $locale = Shopware()->Models()->find('\Shopware\Models\Shop\Locale', $params['localeId']);
+            $locale = Shopware()->Models()->find(Locale::class, $params['localeId']);
             if ($locale !== null) {
                 $params['locale'] = $locale;
             } else {
-                throw new Exception(sprintf('%s is not a valid locale id', $params['localeId']));
+                throw new RuntimeException(sprintf('%s is not a valid locale id', $params['localeId']));
             }
         }
 
         if (isset($params['customerGroupId'])) {
-            $customerGroup = Shopware()->Models()->find('\Shopware\Models\Customer\Group', $params['customerGroupId']);
+            $customerGroup = Shopware()->Models()->find(Group::class, $params['customerGroupId']);
             if ($customerGroup !== null) {
                 $params['customerGroup'] = $customerGroup;
             } else {
-                throw new Exception(sprintf('%s is not a valid customerGroup id', $params['customerGroupId']));
+                throw new RuntimeException(sprintf('%s is not a valid customerGroup id', $params['customerGroupId']));
             }
         }
 
         if (isset($params['mainId'])) {
-            $shop = Shopware()->Models()->find('\Shopware\Models\Shop\Shop', $params['mainId']);
-            if ($shop !== null) {
-                $params['main'] = $shop;
+            $shopModel = Shopware()->Models()->find(ShopModel::class, $params['mainId']);
+            if ($shopModel instanceof ShopModel) {
+                $params['main'] = $shopModel;
             } else {
-                throw new Exception(sprintf('%s is not a valid shop id', $params['mainId']));
+                throw new RuntimeException(sprintf('%s is not a valid shop id', $params['mainId']));
             }
         }
 
         if (isset($params['templateId'])) {
-            $template = Shopware()->Models()->find('\Shopware\Models\Shop\Template', $params['templateId']);
+            $template = Shopware()->Models()->find(Template::class, $params['templateId']);
             if ($template !== null) {
                 $params['template'] = $template;
             } else {
-                throw new Exception(sprintf('%s is not a valid template id', $params['templateId']));
+                throw new RuntimeException(sprintf('%s is not a valid template id', $params['templateId']));
             }
         }
 
         if (isset($params['documentTemplateId'])) {
-            $template = Shopware()->Models()->find('\Shopware\Models\Shop\Template', $params['documentTemplateId']);
+            $template = Shopware()->Models()->find(Template::class, $params['documentTemplateId']);
             if ($template !== null) {
                 $params['documentTemplate'] = $template;
             } else {
-                throw new Exception(sprintf('%s is not a valid template id', $params['documentTemplateId']));
+                throw new RuntimeException(sprintf('%s is not a valid template id', $params['documentTemplateId']));
             }
         }
 
         if (isset($params['categoryId'])) {
-            $category = Shopware()->Models()->find('\Shopware\Models\Category\Category', $params['categoryId']);
+            $category = Shopware()->Models()->find(Category::class, $params['categoryId']);
             if ($category !== null) {
                 $params['category'] = $category;
             } else {
-                throw new Exception(sprintf('%s is not a valid category id', $params['categoryId']));
+                throw new RuntimeException(sprintf('%s is not a valid category id', $params['categoryId']));
             }
         }
 

@@ -124,7 +124,7 @@ class sExport implements Enlight_Hook
     protected $mediaRepository;
 
     /**
-     * @var Album
+     * @var Album|null
      */
     protected $articleMediaAlbum;
 
@@ -575,9 +575,13 @@ class sExport implements Enlight_Hook
         $fileName = pathinfo($hash, PATHINFO_FILENAME);
 
         // Get thumbnail sizes
-        $sizes = $this->articleMediaAlbum
-            ->getSettings()
-            ->getThumbnailSize();
+        $sizes = [];
+        if ($this->articleMediaAlbum) {
+            $settings = $this->articleMediaAlbum->getSettings();
+            if ($settings) {
+                $sizes = $settings->getThumbnailSize();
+            }
+        }
 
         $sizes = array_map(function ($size) {
             $parts = explode('x', $size);

@@ -72,7 +72,7 @@ class Repository extends ModelRepository
      * @param DateTimeInterface|null $date
      * @param string|null            $deviceType
      *
-     * @return Query
+     * @return Query<ArticleImpression>
      */
     public function getArticleImpressionQuery($articleId, $shopId, $date = null, $deviceType = null)
     {

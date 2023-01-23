@@ -24,8 +24,12 @@
 
 namespace Shopware\Models\Property;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Model\Query\SqlWalker;
+use Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker;
+use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\PropertyGroup;
 
 /**
  * @extends ModelRepository<Group>
@@ -35,12 +39,12 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which allows you to get property relations
      *
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
-     * @param int|null                                     $limit
-     * @param int|null                                     $offset
+     * @param array|null          $filter
+     * @param string|OrderBy|null $order
+     * @param int|null            $limit
+     * @param int|null            $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Relation>
      */
     public function getPropertyRelationQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -57,10 +61,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getPropertyRelationQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param array|null          $filter
+     * @param string|OrderBy|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getPropertyRelationQueryBuilder($filter, $order)
     {
@@ -68,7 +72,7 @@ class Repository extends ModelRepository
         $builder->select([
             'relations',
         ]);
-        $builder->from(\Shopware\Models\Property\Relation::class, 'relations')
+        $builder->from(Relation::class, 'relations')
             ->leftJoin('relations.option', 'options')
             ->leftJoin('relations.group', 'groups');
 
@@ -85,12 +89,12 @@ class Repository extends ModelRepository
     /**
      * Receives all known property groups
      *
-     * @param array|null                                         $filter
-     * @param array|string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
-     * @param int                                                $limit
-     * @param int                                                $offset
+     * @param array|null                $filter
+     * @param array|string|OrderBy|null $order
+     * @param int                       $limit
+     * @param int                       $offset
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Group>
      */
     public function getListGroupsQuery($filter = null, $order = null, $limit = null, $offset = null)
     {
@@ -108,10 +112,10 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getListGroupsQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @param array|null                                   $filter
-     * @param string|\Doctrine\ORM\Query\Expr\OrderBy|null $order
+     * @param array|null          $filter
+     * @param string|OrderBy|null $order
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListGroupsQueryBuilder($filter = null, $order = null)
     {
@@ -121,7 +125,7 @@ class Repository extends ModelRepository
             'options',
             'attributes',
         ]);
-        $builder->from(\Shopware\Models\Property\Group::class, 'groups')
+        $builder->from(Group::class, 'groups')
             ->leftJoin('groups.options', 'options')
             ->leftJoin('groups.attribute', 'attributes');
 
@@ -142,7 +146,7 @@ class Repository extends ModelRepository
      * @param int   $limit
      * @param array $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Group>
      */
     public function getSetsQuery($offset, $limit, $filter)
     {
@@ -164,13 +168,13 @@ class Repository extends ModelRepository
      *
      * @param array $filter
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSetsQueryBuilder($filter)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['groups', 'attribute'])
-                ->from(\Shopware\Models\Property\Group::class, 'groups')
+                ->from(Group::class, 'groups')
                 ->leftJoin('groups.attribute', 'attribute')
                 ->orderBy('groups.position');
 
@@ -189,7 +193,7 @@ class Repository extends ModelRepository
      * @param int   $limit
      * @param array $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Option>
      */
     public function getOptionsQuery($offset, $limit, $filter)
     {
@@ -211,13 +215,13 @@ class Repository extends ModelRepository
      *
      * @param array $filter
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getOptionsQueryBuilder($filter)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['options'])
-                ->from(\Shopware\Models\Property\Option::class, 'options')
+                ->from(Option::class, 'options')
                 ->orderBy('options.name');
 
         if (!empty($filter[0]['value'])) {
@@ -233,7 +237,7 @@ class Repository extends ModelRepository
      *
      * @param int $setId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Option>
      */
     public function getSetAssignsQuery($setId)
     {
@@ -248,7 +252,7 @@ class Repository extends ModelRepository
      *
      * @param int $setId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getSetAssignsQueryBuilder($setId)
     {
@@ -260,7 +264,7 @@ class Repository extends ModelRepository
             'relations.position',
         ]);
 
-        $builder->from(\Shopware\Models\Property\Option::class, 'options')
+        $builder->from(Option::class, 'options')
                 ->innerJoin('options.relations', 'relations')
                 ->where('relations.groupId = :id')
                 ->setParameter('id', $setId)
@@ -275,7 +279,7 @@ class Repository extends ModelRepository
      *
      * @param int $groupId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<PropertyGroup>
      */
     public function getAttributesQuery($groupId)
     {
@@ -290,15 +294,15 @@ class Repository extends ModelRepository
      *
      * @param int $groupId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAttributesQueryBuilder($groupId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                      ->from(\Shopware\Models\Attribute\PropertyGroup::class, 'attribute')
-                      ->where('attribute.propertyGroupId = ?1')
-                      ->setParameter(1, $groupId);
+            ->from(PropertyGroup::class, 'attribute')
+            ->where('attribute.propertyGroupId = ?1')
+            ->setParameter(1, $groupId);
 
         return $builder;
     }
@@ -309,7 +313,7 @@ class Repository extends ModelRepository
      *
      * @param int $groupId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Group>
      */
     public function getGroupDetailQuery($groupId)
     {
@@ -324,13 +328,13 @@ class Repository extends ModelRepository
      *
      * @param int $groupId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getGroupDetailQueryBuilder($groupId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['groups', 'attribute'])
-                ->from(\Shopware\Models\Property\Group::class, 'groups')
+                ->from(Group::class, 'groups')
                 ->leftJoin('groups.attribute', 'attribute')
                 ->where('groups.id = ?1')
                 ->setParameter(1, $groupId);
@@ -343,7 +347,7 @@ class Repository extends ModelRepository
      *
      * @param int $optionId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Value>
      */
     public function getPropertyValueByOptionIdQuery($optionId)
     {
@@ -358,13 +362,13 @@ class Repository extends ModelRepository
      *
      * @param int $optionId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getPropertyValueByOptionIdQueryBuilder($optionId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['value', 'media'])
-                ->from(\Shopware\Models\Property\Value::class, 'value')
+                ->from(Value::class, 'value')
                 ->leftJoin('value.media', 'media')
                 ->where('value.optionId = ?0')
                 ->orderBy('value.position', 'ASC')
@@ -376,20 +380,18 @@ class Repository extends ModelRepository
     /**
      * Helper function to set the FORCE INDEX path.
      *
-     * @param \Doctrine\ORM\Query $query
-     * @param string              $index
-     * @param bool                $straightJoin
+     * @param Query<Option> $query
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Option>
      */
-    private function getForceIndexQuery($query, $index = null, $straightJoin = false)
+    private function getForceIndexQuery(Query $query, ?string $index = null, bool $straightJoin = false): Query
     {
-        $query->setHint(\Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER, 'Shopware\Components\Model\Query\SqlWalker\ForceIndexWalker');
+        $query->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, ForceIndexWalker::class);
         if ($index !== null) {
-            $query->setHint(SqlWalker\ForceIndexWalker::HINT_FORCE_INDEX, $index);
+            $query->setHint(ForceIndexWalker::HINT_FORCE_INDEX, $index);
         }
         if ($straightJoin) {
-            $query->setHint(SqlWalker\ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
+            $query->setHint(ForceIndexWalker::HINT_STRAIGHT_JOIN, true);
         }
 
         return $query;

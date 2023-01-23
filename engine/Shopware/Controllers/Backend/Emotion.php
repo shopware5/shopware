@@ -36,6 +36,7 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Emotion\Exception\MappingRequiredException;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Category\Category;
@@ -963,7 +964,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
             $result = [
                 'success' => true,
                 'total' => $paginator->count(),
-                'data' => $paginator->getIterator()->getArrayCopy(),
+                'data' => iterator_to_array($paginator),
             ];
         } catch (Exception $e) {
             return ['success' => false, 'error' => $e->getMessage()];
@@ -977,7 +978,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
      * @param int|null $limit
      * @param int|null $id
      *
-     * @return Doctrine\ORM\QueryBuilder|Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     protected function getTemplatesQuery($offset = null, $limit = null, $id = null)
     {
@@ -1384,7 +1385,7 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
         }
 
         if (\is_array($value)) {
-            throw new \UnexpectedValueException(sprintf('Use field value type "%s" if arrays should be saved. Got value type "%s" instead', Field::VALUE_TYPE_JSON, $valueType));
+            throw new UnexpectedValueException(sprintf('Use field value type "%s" if arrays should be saved. Got value type "%s" instead', Field::VALUE_TYPE_JSON, $valueType));
         }
 
         return $value;
@@ -1472,6 +1473,8 @@ class Shopware_Controllers_Backend_Emotion extends Shopware_Controllers_Backend_
     }
 
     /**
+     * @param Query<Template> $query
+     *
      * @return Paginator<Template>
      */
     private function getQueryPaginator(Query $query): Paginator

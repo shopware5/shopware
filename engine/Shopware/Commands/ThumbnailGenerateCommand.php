@@ -204,7 +204,7 @@ class ThumbnailGenerateCommand extends ShopwareCommand implements CompletionAwar
         $progressBar->setRedrawFrequency(10);
         $progressBar->start();
 
-        foreach ($paginator->getIterator() as $media) {
+        foreach ($paginator as $media) {
             try {
                 $this->createMediaThumbnails($media);
             } catch (Exception $e) {

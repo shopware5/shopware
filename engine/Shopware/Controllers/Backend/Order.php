@@ -213,7 +213,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @param int[]  $orderIds
      * @param string $docType
      *
-     * @return Query
+     * @return Query<Order>
      */
     public function getOrderDocumentsQuery($orderIds, $docType)
     {
@@ -242,7 +242,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
      * @param int|null                                                               $offset
      * @param int|null                                                               $limit
      *
-     * @return Query
+     * @return Query<Status>
      */
     public function getOrderStatusQuery($filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -1226,7 +1226,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $query = $this->getRepository()->getOrdersQuery([['property' => 'orders.id', 'value' => $orderId]], null, 0, 1);
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
-        $order = $this->getModelManager()->createPaginator($query)->getIterator()->getArrayCopy();
+        $order = iterator_to_array($this->getModelManager()->createPaginator($query));
 
         $order = $translationComponent->translateOrders($order);
 

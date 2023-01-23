@@ -50,7 +50,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $shopId
      *
-     * @return Query
+     * @return Query<Blog>
      *
      *@internal param $blogCategory
      */
@@ -130,7 +130,7 @@ class Repository extends ModelRepository
      * @param int      $blogId
      * @param int|null $shopId
      *
-     * @return Query
+     * @return Query<Comment>
      */
     public function getAverageVoteQuery($blogId, $shopId = null)
     {
@@ -171,7 +171,7 @@ class Repository extends ModelRepository
      *
      * @param int $blogId
      *
-     * @return Query
+     * @return Query<Tag>
      */
     public function getTagsByBlogId($blogId)
     {
@@ -208,7 +208,7 @@ class Repository extends ModelRepository
      * @param array    $filter
      * @param int|null $shopId
      *
-     * @return Query
+     * @return Query<Blog>
      */
     public function getDisplayDateFilterQuery($categoryIds, $filter, $shopId = null)
     {
@@ -246,7 +246,7 @@ class Repository extends ModelRepository
      * @param array    $filter
      * @param int|null $shopId
      *
-     * @return Query
+     * @return Query<Blog>
      */
     public function getAuthorFilterQuery($categoryIds, $filter, $shopId = null)
     {
@@ -285,7 +285,7 @@ class Repository extends ModelRepository
      * @param array    $filter
      * @param int|null $shopId
      *
-     * @return Query
+     * @return Query<Blog>
      */
     public function getTagsFilterQuery($categoryIds, $filter, $shopId = null)
     {
@@ -362,7 +362,7 @@ class Repository extends ModelRepository
      * @param int|null                                               $offset
      * @param int|null                                               $limit
      *
-     * @return Query
+     * @return Query<Blog>
      */
     public function getBackendListQuery($blogCategoryIds, array $filter = null, $order = null, $offset = null, $limit = null)
     {
@@ -428,7 +428,7 @@ class Repository extends ModelRepository
      * @param int      $blogArticleId
      * @param int|null $shopId
      *
-     * @return Query
+     * @return Query<Blog>
      */
     public function getDetailQuery($blogArticleId, $shopId = null)
     {
@@ -482,7 +482,7 @@ class Repository extends ModelRepository
      *
      * @param array $filter
      *
-     * @return Query
+     * @return Query<Blog>
      */
     public function getBackendDetailQuery($filter)
     {
@@ -522,7 +522,7 @@ class Repository extends ModelRepository
      * @param int   $offset
      * @param int   $limit
      *
-     * @return Query
+     * @return Query<Comment>
      */
     public function getBlogCommentsById($blogId, $filter, $order, $offset, $limit)
     {
@@ -586,7 +586,7 @@ class Repository extends ModelRepository
      *
      * @param int $blogId
      *
-     * @return Query
+     * @return Query<Tag>
      */
     public function getBlogTagsById($blogId)
     {

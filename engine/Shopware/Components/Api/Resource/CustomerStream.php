@@ -27,14 +27,16 @@ namespace Shopware\Components\Api\Resource;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Query;
 use Shopware\Bundle\CustomerSearchBundle\Condition\AssignedToStreamCondition;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
+use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
-use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
+use Shopware\Components\Api\Exception\PrivilegeException;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\CustomerStream\CustomerStreamCriteriaFactoryInterface;
 use Shopware\Components\CustomerStream\StreamIndexerInterface;
@@ -50,40 +52,19 @@ class CustomerStream extends Resource
      */
     protected $manager;
 
-    /**
-     * @var LogawareReflectionHelper
-     */
-    private $reflectionHelper;
+    private LogawareReflectionHelper $reflectionHelper;
 
-    /**
-     * @var CustomerNumberSearchInterface
-     */
-    private $customerNumberSearch;
+    private CustomerNumberSearchInterface $customerNumberSearch;
 
-    /**
-     * @var CustomerStreamRepositoryInterface
-     */
-    private $streamRepository;
+    private CustomerStreamRepositoryInterface $streamRepository;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var SearchIndexerInterface
-     */
-    private $searchIndexer;
+    private SearchIndexerInterface $searchIndexer;
 
-    /**
-     * @var StreamIndexerInterface
-     */
-    private $streamIndexer;
+    private StreamIndexerInterface $streamIndexer;
 
-    /**
-     * @var CustomerStreamCriteriaFactoryInterface
-     */
-    private $criteriaFactory;
+    private CustomerStreamCriteriaFactoryInterface $criteriaFactory;
 
     public function __construct(
         LogawareReflectionHelper $reflectionHelper,
@@ -111,7 +92,7 @@ class CustomerStream extends Resource
      * @param string   $conditions
      * @param string   $sortings
      *
-     * @return \Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult
+     * @return CustomerNumberSearchResult
      */
     public function getOne($id, $offset, $limit, $conditions, $sortings)
     {
@@ -119,14 +100,13 @@ class CustomerStream extends Resource
 
         $criteria = new Criteria();
 
-        $conditions = $this->getConditions($id, $conditions);
+        $parsedConditions = $this->getConditions($id, $conditions);
 
-        foreach ($conditions as $condition) {
+        foreach ($parsedConditions as $condition) {
             $criteria->addCondition($condition);
         }
         $decodedSortings = json_decode($sortings, true);
         if (!empty($decodedSortings)) {
-            /** @var SortingInterface[] $unserializedSortings */
             $unserializedSortings = $this->reflectionHelper->unserialize($decodedSortings, '');
 
             foreach ($unserializedSortings as $sorting) {
@@ -167,11 +147,12 @@ class CustomerStream extends Resource
             $builder->addOrderBy($orderBy);
         }
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $builder->getQuery();
-        $query->setHydrationMode($this->getResultMode());
+        $query->setHydrationMode(self::HYDRATE_ARRAY);
         $paginator = $this->getManager()->createPaginator($query);
         $total = $paginator->count();
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
 
         $ids = array_column($data, 'id');
         if (empty($ids)) {
@@ -189,7 +170,8 @@ class CustomerStream extends Resource
                 $row = array_merge($row, $counts[$id]);
             }
 
-            if ($result = $this->updateFrozenState($id, $row['freezeUp'], $row['conditions'])) {
+            $result = $this->updateFrozenState($id, $row['freezeUp'], $row['conditions']);
+            if ($result) {
                 $row['freezeUp'] = $result['freezeUp'];
                 $row['static'] = $result['static'];
             }
@@ -253,7 +235,6 @@ class CustomerStream extends Resource
             throw new ParameterMissingException('id');
         }
 
-        /** @var \Shopware\Models\CustomerStream\CustomerStream|null $stream */
         $stream = $this->getManager()->find(CustomerStreamEntity::class, $id);
 
         if (!$stream) {
@@ -286,6 +267,8 @@ class CustomerStream extends Resource
 
     /**
      * @param int $id
+     *
+     * @return void
      */
     public function delete($id)
     {
@@ -315,7 +298,7 @@ class CustomerStream extends Resource
         $ids = $this->streamRepository->fetchSearchIndexIds($lastId, $full);
 
         if (!empty($ids)) {
-            $this->connection->executeUpdate(
+            $this->connection->executeStatement(
                 'DELETE FROM s_customer_search_index WHERE id IN (:ids)',
                 [':ids' => $ids],
                 [':ids' => Connection::PARAM_INT_ARRAY]
@@ -327,6 +310,9 @@ class CustomerStream extends Resource
         return $ids;
     }
 
+    /**
+     * @return void
+     */
     public function cleanupIndexSearchIndex()
     {
         $this->searchIndexer->cleanupIndex();
@@ -336,13 +322,16 @@ class CustomerStream extends Resource
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @throws \Shopware\Components\Api\Exception\PrivilegeException
+     * @throws PrivilegeException
+     *
+     * @return void
      */
     public function indexStream(CustomerStreamEntity $stream, $offset = null, $limit = null)
     {
         $this->checkPrivilege('save');
 
-        if ($result = $this->updateFrozenState($stream->getId(), $stream->getFreezeUp(), $stream->getConditions())) {
+        $result = $this->updateFrozenState($stream->getId(), $stream->getFreezeUp(), $stream->getConditions());
+        if ($result) {
             $stream->setStatic($result['static']);
             $stream->setFreezeUp($result['freezeUp']);
         }
@@ -373,13 +362,13 @@ class CustomerStream extends Resource
      * @param int    $streamId
      * @param string $conditions
      *
-     * @return array|bool
+     * @return array|null
      */
     public function updateFrozenState($streamId, DateTimeInterface $freezeUp = null, $conditions)
     {
         $now = new DateTime();
         if (!$freezeUp || $freezeUp >= $now) {
-            return false;
+            return null;
         }
 
         $conditions = json_decode($conditions, true);
@@ -389,7 +378,7 @@ class CustomerStream extends Resource
             'static' => empty($conditions),
         ];
 
-        $this->manager->getConnection()->executeUpdate(
+        $this->manager->getConnection()->executeStatement(
             'UPDATE s_customer_streams SET static = :static, freeze_up = :freezeUp WHERE id = :id',
             $params
         );
@@ -397,13 +386,7 @@ class CustomerStream extends Resource
         return $params;
     }
 
-    /**
-     * @param int         $streamId
-     * @param string|null $conditions
-     *
-     * @return array
-     */
-    private function getConditions($streamId, $conditions = null)
+    private function getConditions(?int $streamId, ?string $conditions = null): array
     {
         if (!empty($conditions)) {
             return $this->reflectionHelper->unserialize(
@@ -416,13 +399,16 @@ class CustomerStream extends Resource
             return [];
         }
         $stream = $this->manager->find(CustomerStreamEntity::class, $streamId);
+        if (!$stream instanceof CustomerStreamEntity) {
+            return [];
+        }
 
         if ($stream->isStatic() || $stream->getFreezeUp()) {
             return [new AssignedToStreamCondition($streamId)];
         }
 
         return $this->reflectionHelper->unserialize(
-            json_decode($stream->getConditions(), true),
+            json_decode($stream->getConditions() ?? '', true),
             'Serialization error in Customer Stream'
         );
     }
@@ -430,7 +416,7 @@ class CustomerStream extends Resource
     /**
      * @param int $streamId
      */
-    private function insertCustomers(array $customerIds, $streamId)
+    private function insertCustomers(array $customerIds, $streamId): void
     {
         $connection = $this->connection;
 

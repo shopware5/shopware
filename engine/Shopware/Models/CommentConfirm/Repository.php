@@ -26,6 +26,7 @@ namespace Shopware\Models\CommentConfirm;
 
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the CommentConfirm model (Shopware\Models\CommentConfirm\CommentConfirm).
@@ -42,7 +43,7 @@ class Repository extends ModelRepository
      *
      * @param string $hash
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<CommentConfirm>
      */
     public function getConfirmationByHashQuery($hash)
     {
@@ -57,7 +58,7 @@ class Repository extends ModelRepository
      *
      * @param string $hash
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getConfirmationByHashBuilder($hash)
     {

@@ -139,7 +139,7 @@ class Category extends Resource
         $totalResult = $paginator->count();
 
         // Returns the category data
-        $categories = $paginator->getIterator()->getArrayCopy();
+        $categories = iterator_to_array($paginator);
 
         return ['data' => $categories, 'total' => $totalResult];
     }

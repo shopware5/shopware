@@ -24,6 +24,7 @@
 
 namespace Shopware\Components\Api\Resource;
 
+use Doctrine\ORM\Query;
 use Exception;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -93,13 +94,13 @@ class CustomerGroup extends Resource
         $this->checkPrivilege('read');
 
         $builder = $this->getRepository()->createQueryBuilder('customerGroup')
-                ->select('customerGroup', 'd')
-                ->leftJoin('customerGroup.discounts', 'd');
-
-        $builder->addFilter($criteria)
-                ->addOrderBy($orderBy)
-                ->setFirstResult($offset)
-                ->setMaxResults($limit);
+            ->select('customerGroup', 'd')
+            ->leftJoin('customerGroup.discounts', 'd')
+            ->addFilter($criteria)
+            ->addOrderBy($orderBy)
+            ->setFirstResult($offset)
+            ->setMaxResults($limit);
+        /** @var Query<Group|array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($this->resultMode);
 
@@ -109,7 +110,7 @@ class CustomerGroup extends Resource
         $totalResult = $paginator->count();
 
         // Returns the category data
-        $results = $paginator->getIterator()->getArrayCopy();
+        $results = iterator_to_array($paginator);
 
         return ['data' => $results, 'total' => $totalResult];
     }

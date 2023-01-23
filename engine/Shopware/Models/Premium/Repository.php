@@ -24,6 +24,7 @@
 
 namespace Shopware\Models\Premium;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 
@@ -46,7 +47,7 @@ class Repository extends ModelRepository
      * @param array<array{property: string, direction: string}> $order
      * @param string|null                                       $filterValue
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Premium>
      */
     public function getBackendPremiumListQuery($start, $limit, $order, $filterValue = null)
     {

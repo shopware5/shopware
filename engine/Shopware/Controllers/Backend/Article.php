@@ -24,6 +24,7 @@
 
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Bundle\MediaBundle\Exception\MediaFileExtensionIsBlacklistedException;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
@@ -425,6 +426,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function saveMediaMappingAction()
     {
         $imageId = (int) $this->Request()->getParam('id');
@@ -438,6 +442,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $query = $this->getRepository()->getArticleImageDataQuery($imageId);
         $image = $query->getOneOrNullResult(AbstractQuery::HYDRATE_OBJECT);
+        if (!$image instanceof Image) {
+            throw new ModelNotFoundException(Image::class, $imageId);
+        }
+
         $imageData = $query->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
         $this->getRepository()->getDeleteImageChildrenQuery($imageId)->execute();
 
@@ -1612,7 +1620,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
             $totalResult = $paginator->count();
 
             // returns the customer data
-            $result = $paginator->getIterator()->getArrayCopy();
+            $result = iterator_to_array($paginator);
 
             $products = $this->buildListProducts($result);
             $products = $this->getAdditionalTexts($products);
@@ -1643,7 +1651,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $totalResult = $paginator->count();
 
         // returns the customer data
-        $result = $paginator->getIterator()->getArrayCopy();
+        $result = iterator_to_array($paginator);
 
         // inserts esd attributes into the result
         $result = $this->getEsdListingAttributes($result);
@@ -1677,7 +1685,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $totalResult = $paginator->count();
 
         // returns the customer data
-        $result = $paginator->getIterator()->getArrayCopy();
+        $result = iterator_to_array($paginator);
 
         $this->View()->assign([
             'data' => $result,
@@ -2154,10 +2162,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $commands = $this->prepareNumberSyntax($syntax);
 
         $builder = $this->getVariantsWithOptionsBuilder($productId, $offset, $limit);
+        /** @var Query<ProductVariant> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_OBJECT);
         $paginator = $this->getModelManager()->createPaginator($query);
-        $details = $paginator->getIterator()->getArrayCopy();
+        $details = iterator_to_array($paginator);
 
         $counter = $offset;
         if ($offset == 0) {
@@ -4315,7 +4324,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @return \Doctrine\ORM\QueryBuilder|QueryBuilder
+     * @return QueryBuilder
      */
     protected function getVariantsWithOptionsBuilder($articleId, $offset = null, $limit = null)
     {

@@ -24,6 +24,7 @@
 
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\Proxy;
 use Shopware\Components\Model\ModelEntity;
@@ -369,8 +370,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
     {
         $builder = $this->getDetailQuery($id);
 
-        $paginator = $this->getQueryPaginator($builder);
-        $data = $paginator->getIterator()->current();
+        $data = iterator_to_array($this->getQueryPaginator($builder))[0];
         if (!\is_array($data)) {
             $data = [];
         }
@@ -547,7 +547,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
 
         $paginator = $this->getQueryPaginator($builder);
 
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
 
         return [
             'success' => true,
@@ -614,7 +614,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         }
 
         $paginator = $this->getQueryPaginator($builder);
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
 
         return [
             'success' => true,
@@ -683,7 +683,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         }
 
         $paginator = $this->getQueryPaginator($builder);
-        $data = $paginator->getIterator()->getArrayCopy();
+        $data = iterator_to_array($paginator);
         $count = $paginator->count();
 
         return ['success' => true, 'data' => $data, 'total' => $count];
@@ -1137,6 +1137,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
      */
     protected function getQueryPaginator(QueryBuilder $builder, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
     {
+        /** @var Query<TEntityClass|array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
 

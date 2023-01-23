@@ -29,6 +29,7 @@ use Doctrine\ORM\Query\Parameter;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Order\Order;
 use Shopware\Models\Partner\Partner;
 use Shopware\Models\Shop\Shop;
 
@@ -348,6 +349,8 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
     /**
      * Helper function returns total count of the passed query builder
+     *
+     * @param Query<Order> $dataQuery
      */
     private function getStatisticListTotalCount(Query $dataQuery): ?int
     {

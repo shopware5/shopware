@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Components\Api\Resource;
 
 use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Bundle\AccountBundle\Service\AddressServiceInterface;
 use Shopware\Bundle\AccountBundle\Service\RegisterServiceInterface;
@@ -190,6 +191,7 @@ class Customer extends Resource
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
 
+        /** @var Query<CustomerModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
 
         $query->setHydrationMode($this->getResultMode());
@@ -200,7 +202,7 @@ class Customer extends Resource
         $totalResult = $paginator->count();
 
         // Returns the customer data
-        $customers = $paginator->getIterator()->getArrayCopy();
+        $customers = iterator_to_array($paginator);
 
         return ['data' => $customers, 'total' => $totalResult];
     }

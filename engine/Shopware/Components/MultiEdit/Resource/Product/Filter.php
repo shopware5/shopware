@@ -24,7 +24,9 @@
 
 namespace Shopware\Components\MultiEdit\Resource\Product;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Detail;
 
 /**
@@ -77,7 +79,7 @@ class Filter
      * @param int|null   $limit
      * @param array|null $orderBy
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Detail>
      */
     public function getFilterQuery($tokens, $offset = null, $limit = null, $orderBy = null)
     {
@@ -114,7 +116,6 @@ class Filter
         }
         $joinEntities = $this->filterJoinEntities($joinEntities);
 
-        /** @var QueryBuilder $builder */
         $builder = $this->getDqlHelper()->getEntityManager()->createQueryBuilder()
                 ->select('partial detail.{id}')
                 ->from(Detail::class, 'detail')
@@ -171,9 +172,9 @@ class Filter
     }
 
     /**
-     * @param \Doctrine\ORM\Query $query
+     * @param Query<Detail> $query
      *
-     * @return array
+     * @return array{0: array<int>, 1: int}
      */
     public function getPaginatedResult($query)
     {
@@ -186,7 +187,7 @@ class Filter
             function ($item) {
                 return $item->getId();
             },
-            $paginator->getIterator()->getArrayCopy()
+            iterator_to_array($paginator)
         );
 
         // Detach currently handled models in order to avoid invalid models later
@@ -229,21 +230,14 @@ class Filter
         ];
     }
 
-    /**
-     * @param array $joinEntities
-     *
-     * @return array
-     */
-    private function filterJoinEntities($joinEntities)
+    private function filterJoinEntities(array $joinEntities): array
     {
         // Remove Article-Entity
-        $joinEntities = array_filter(
+        return array_filter(
             $joinEntities,
             function ($item) {
-                return $item !== 'Shopware\Models\Article\Article' && $item !== 'Shopware\Models\Article\Detail';
+                return $item !== Article::class && $item !== Detail::class;
             }
         );
-
-        return $joinEntities;
     }
 }

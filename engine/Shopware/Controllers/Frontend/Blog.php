@@ -182,7 +182,7 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $totalResult = $paginator->count();
 
         // Returns the blog article data
-        $blogArticles = $paginator->getIterator()->getArrayCopy();
+        $blogArticles = iterator_to_array($paginator);
 
         $blogArticles = $this->translateBlogArticles($blogArticles);
 

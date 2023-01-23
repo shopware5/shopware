@@ -65,6 +65,7 @@
             <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\StoreClient"/>
             <argument type="service" id="Doctrine\DBAL\Connection"/>
             <argument type="service" id="Shopware\Bundle\PluginInstallerBundle\Service\PluginExtractor"/>
+            <argument type="service" id="Shopware\Components\HttpClient\GuzzleHttpClient"/>
         </service>
 
         <service id="shopware_plugininstaller.plugin_service_store" alias="shopware_plugininstaller.plugin_service_store_production"/>

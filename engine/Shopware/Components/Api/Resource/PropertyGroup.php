@@ -88,7 +88,7 @@ class PropertyGroup extends Resource
         $totalResult = $paginator->count();
 
         // Returns the property groups data
-        $propertyGroups = $paginator->getIterator()->getArrayCopy();
+        $propertyGroups = iterator_to_array($paginator);
 
         return ['data' => $propertyGroups, 'total' => $totalResult];
     }

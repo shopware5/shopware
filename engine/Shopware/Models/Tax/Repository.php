@@ -83,15 +83,21 @@ class Repository extends ModelRepository
         ];
 
         $dbalConnection = $this->getEntityManager()->getConnection();
-        $taxRate = $dbalConnection->fetchAssoc($sql, $parameters);
+        $taxRate = $dbalConnection->fetchAssociative($sql, $parameters);
 
         if (empty($taxRate['id'])) {
-            $taxRate = $dbalConnection->fetchAssoc('SELECT tax FROM s_core_tax WHERE id = ?', [$taxId]);
+            $taxRate = $dbalConnection->fetchAssociative('SELECT tax FROM s_core_tax WHERE id = ?', [$taxId]);
         }
 
         return $taxRate['tax'];
     }
 
+    /**
+     * @param array<string, mixed>|array<array{property: string, value: mixed, expression?: string, operator?: string|null}>|null $filters
+     * @param array<array{property: string, direction?: string}>|null                                                             $orderBy
+     *
+     * @return Query<Tax>
+     */
     public function getTaxQuery(array $filters = null, array $orderBy = null, int $offset = null, int $limit = null): Query
     {
         return $this->getTaxQueryBuilder($filters, $orderBy, $offset, $limit)->getQuery();

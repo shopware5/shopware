@@ -26,7 +26,9 @@ namespace Shopware\Models\Banner;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * Repository for the banner model (Shopware\Models\Banner\Banner).
@@ -43,7 +45,7 @@ class Repository extends ModelRepository
      *
      * @param int|null $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Banner>
      */
     public function getBanners($filter = null)
     {
@@ -60,6 +62,8 @@ class Repository extends ModelRepository
      * @param int|null $filter    Category ID
      * @param int      $limit     Limit
      * @param bool     $randomize
+     *
+     * @return Query<Banner>|null
      */
     public function getAllActiveBanners($filter = null, $limit = 0, $randomize = false)
     {
@@ -76,7 +80,7 @@ class Repository extends ModelRepository
 
         $ids = $this->getBannerIds($filter, $limit);
         if (!\count($ids)) {
-            return false;
+            return null;
         }
 
         $builder->andWhere('banner.id IN (?7)')
@@ -92,7 +96,7 @@ class Repository extends ModelRepository
      *
      * @param int|null $filter
      *
-     * @return \Shopware\Components\Model\QueryBuilder
+     * @return QueryBuilder
      */
     public function getBannerMainQuery($filter = null)
     {

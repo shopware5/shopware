@@ -26,6 +26,7 @@ namespace Shopware\Components\Api\Resource;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query;
 use Exception;
 use RuntimeException;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
@@ -43,6 +44,7 @@ use Shopware\Models\Article\Article as ProductModel;
 use Shopware\Models\Article\Configurator;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
+use Shopware\Models\Article\Configurator\Set;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Article\Download;
 use Shopware\Models\Article\Image;
@@ -278,6 +280,7 @@ class Article extends Resource implements BatchInterface
             ->setFirstResult($offset)
             ->setMaxResults($limit);
 
+        /** @var Query<ProductModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
 
         $query->setHydrationMode($this->getResultMode());
@@ -287,18 +290,18 @@ class Article extends Resource implements BatchInterface
         // Returns the total count of the query
         $totalResult = $paginator->count();
 
-        $products = $paginator->getIterator()->getArrayCopy();
+        $products = iterator_to_array($paginator);
 
-        if ($this->getResultMode() === self::HYDRATE_ARRAY
-            && isset($options['language'])
-            && !empty($options['language'])) {
+        if ($this->getResultMode() === self::HYDRATE_ARRAY && !empty($options['language'])) {
             $shop = $this->findEntityByConditions(Shop::class, [['id' => $options['language']]]);
             if (!$shop instanceof Shop) {
                 throw new ModelNotFoundException(Shop::class, $options['language']);
             }
 
             foreach ($products as &$product) {
-                $product = $this->translateArticle($product, $shop);
+                if (\is_array($product)) {
+                    $product = $this->translateArticle($product, $shop);
+                }
             }
         }
 
@@ -480,7 +483,9 @@ class Article extends Resource implements BatchInterface
     /**
      * Helper function which converts the passed data for the main variant of the product.
      *
-     * @return array
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
      */
     public function prepareMainDetail(array $data, ProductModel $article)
     {
@@ -506,8 +511,8 @@ class Article extends Resource implements BatchInterface
      *
      * @param bool $force Force all images to be regenerated
      *
-     * @see \Shopware\Components\Api\Resource\Article::generateMainThumbnails()
-     * @see \Shopware\Components\Api\Resource\Article::generateVariantImages()
+     * @see Article::generateMainThumbnails
+     * @see Article::generateVariantImages
      */
     public function generateImages(ProductModel $article, $force = false)
     {
@@ -565,13 +570,12 @@ class Article extends Resource implements BatchInterface
                     ->setParameter($alias, $option->getId());
             }
 
-            /** @var Detail $variant */
-            foreach ($builder->getQuery()->getResult() as $variant) {
-                if (!$force && $this->getCollectionElementByProperty(
-                    $variant->getImages(),
-                    'parent',
-                    $mapping->getImage()
-                )) {
+            /** @var Query<Detail> $query */
+            $query = $builder->getQuery();
+            foreach ($query->getResult() as $variant) {
+                if (!$force
+                    && $this->getCollectionElementByProperty($variant->getImages(), 'parent', $mapping->getImage())
+                ) {
                     continue;
                 }
 
@@ -718,13 +722,14 @@ class Article extends Resource implements BatchInterface
      * The groups are sorted by the position value.
      *
      * @param int $articleId
+     *
+     * @return array<string, mixed>
      */
     protected function getArticleConfiguratorSet($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['configuratorSet', 'groups'])
-            ->from(Configurator\Set::class, 'configuratorSet')
+            ->from(Set::class, 'configuratorSet')
             ->innerJoin('configuratorSet.articles', 'article')
             ->leftJoin('configuratorSet.groups', 'groups')
             ->addOrderBy('groups.position', 'ASC')
@@ -740,11 +745,10 @@ class Article extends Resource implements BatchInterface
      *
      * @param int $articleId
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     protected function getArticleImages($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['images'])
             ->from(Image::class, 'images')
@@ -762,11 +766,10 @@ class Article extends Resource implements BatchInterface
      *
      * @param int $articleId
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     protected function getArticleDownloads($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['downloads'])
             ->from(Download::class, 'downloads')
@@ -783,11 +786,10 @@ class Article extends Resource implements BatchInterface
      *
      * @param int $articleId
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     protected function getArticleLinks($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['links'])
             ->from(Link::class, 'links')
@@ -805,11 +807,10 @@ class Article extends Resource implements BatchInterface
      *
      * @param int $articleId
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     protected function getArticleCategories($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['categories.id', 'categories.name'])
             ->from(Category::class, 'categories')
@@ -824,10 +825,11 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all similar products of the passed product id.
      *
      * @param int $articleId
+     *
+     * @return array<string, mixed>|null
      */
     protected function getArticleSimilar($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL similar.{id, name}'])
             ->from(ProductModel::class, 'article')
@@ -844,10 +846,11 @@ class Article extends Resource implements BatchInterface
      * Helper function which selects all accessory products of the passed product id.
      *
      * @param int $articleId
+     *
+     * @return array<string, mixed>|null
      */
     protected function getArticleRelated($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['article', 'PARTIAL related.{id, name}'])
             ->from(ProductModel::class, 'article')
@@ -888,7 +891,7 @@ class Article extends Resource implements BatchInterface
      *
      * @param int $articleId
      *
-     * @return array
+     * @return array<array<string, mixed>>
      */
     protected function getArticleVariants($articleId)
     {
@@ -904,6 +907,8 @@ class Article extends Resource implements BatchInterface
      * Helper function to remove product details for a given product
      *
      * @param ProductModel $article
+     *
+     * @return void
      */
     protected function removeArticleDetails($article)
     {
@@ -931,9 +936,9 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareAssociatedData($data, ProductModel $article)
     {
@@ -1118,12 +1123,12 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      * @throws Exception
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareConfiguratorSet($data, ProductModel $article)
     {
@@ -1133,7 +1138,7 @@ class Article extends Resource implements BatchInterface
 
         $configuratorSet = $article->getConfiguratorSet();
         if (!$configuratorSet) {
-            $configuratorSet = new Configurator\Set();
+            $configuratorSet = new Set();
             $number = $data['mainDetail']['number'] ?? $article->getMainDetail()->getNumber();
 
             $configuratorSet->setName('Set-' . $number);
@@ -1227,11 +1232,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareArticleAssociatedData($data, ProductModel $article)
     {
@@ -1302,9 +1307,9 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareAttributeAssociatedData($data, ProductModel $article)
     {
@@ -1320,11 +1325,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareCategoryAssociatedData($data, ProductModel $article)
     {
@@ -1375,11 +1380,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareSeoCategoryAssociatedData($data, ProductModel $article)
     {
@@ -1458,11 +1463,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareAvoidCustomerGroups($data, ProductModel $article)
     {
@@ -1486,11 +1491,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareRelatedAssociatedData($data, ProductModel $article)
     {
@@ -1546,11 +1551,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function prepareSimilarAssociatedData($data, ProductModel $article)
     {
@@ -1606,11 +1611,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
-     * @param array $data
+     * @param array<string, mixed> $data
      *
      * @throws CustomValidationException
      *
-     * @return array
+     * @return array<string, mixed>
      */
     protected function preparePropertyValuesData($data, ProductModel $article)
     {
@@ -1740,7 +1745,6 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleImageMappingsQuery($articleId)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select(['mappings', 'image', 'rules'])
             ->from(Image\Mapping::class, 'mappings')
@@ -1783,7 +1787,6 @@ class Article extends Resource implements BatchInterface
      */
     protected function getArticleVariantQuery($id)
     {
-        /** @var QueryBuilder $builder */
         $builder = $this->getManager()->createQueryBuilder();
         $builder->select('variants');
         $builder->from(Detail::class, 'variants')
@@ -2166,27 +2169,31 @@ class Article extends Resource implements BatchInterface
      * to get a single row of the query builder result for the current resource result mode
      * using the query paginator.
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getSingleResult(QueryBuilder $builder)
+    private function getSingleResult(QueryBuilder $builder): array
     {
+        /** @var Query<array<string, mixed>> $query */
         $query = $builder->getQuery();
-        $query->setHydrationMode($this->getResultMode());
+        $query->setHydrationMode(self::HYDRATE_ARRAY);
 
-        return $this->getManager()->createPaginator($query)->getIterator()->current();
+        return iterator_to_array($this->getManager()->createPaginator($query))[0] ?? [];
     }
 
     /**
      * Helper function to prevent duplicate source code
      * to get the full query builder result for the current resource result mode
      * using the query paginator.
+     *
+     * @return array<array<string, mixed>>
      */
     private function getFullResult(QueryBuilder $builder): array
     {
+        /** @var Query<array<string, mixed>> $query */
         $query = $builder->getQuery();
-        $query->setHydrationMode($this->getResultMode());
+        $query->setHydrationMode(self::HYDRATE_ARRAY);
 
-        return $this->getManager()->createPaginator($query)->getIterator()->getArrayCopy();
+        return iterator_to_array($this->getManager()->createPaginator($query));
     }
 
     /**
@@ -2222,7 +2229,11 @@ class Article extends Resource implements BatchInterface
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @throws CustomValidationException
+     *
+     * @return array<string, mixed>
      */
     private function prepareDownloadsAssociatedData(array $data, ProductModel $product): array
     {
@@ -2270,7 +2281,11 @@ class Article extends Resource implements BatchInterface
      * Resolves the passed images data to valid Shopware\Models\Article\Image
      * entities.
      *
+     * @param array<string, mixed> $data
+     *
      * @throws CustomValidationException
+     *
+     * @return array<string, mixed>
      */
     private function prepareImageAssociatedData(array $data, ProductModel $product): array
     {

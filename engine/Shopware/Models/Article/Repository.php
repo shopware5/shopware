@@ -60,7 +60,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleBaseDataQuery($articleId)
     {
@@ -100,7 +100,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleCategoriesQuery($articleId)
     {
@@ -138,7 +138,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleSimilarsQuery($articleId)
     {
@@ -172,7 +172,7 @@ class Repository extends ModelRepository
     /**
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleRelatedProductStreamsQuery($articleId)
     {
@@ -206,7 +206,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleRelatedQuery($articleId)
     {
@@ -245,7 +245,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleWithImagesQuery($articleId)
     {
@@ -288,7 +288,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleLinksQuery($articleId)
     {
@@ -327,7 +327,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleDownloadsQuery($articleId)
     {
@@ -366,7 +366,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleCustomerGroupsQuery($articleId)
     {
@@ -404,7 +404,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleConfiguratorSetQuery($articleId)
     {
@@ -447,7 +447,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleQuery($articleId)
     {
@@ -520,7 +520,7 @@ class Repository extends ModelRepository
      * @param int   $articleId
      * @param array $options
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getDetailsForOptionIdsQuery($articleId, $options)
     {
@@ -568,7 +568,7 @@ class Repository extends ModelRepository
      *
      * @param int $imageId
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getArticleImageDataQuery($imageId)
     {
@@ -600,7 +600,7 @@ class Repository extends ModelRepository
      *
      * @param int $imageId
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getDeleteImageChildrenQuery($imageId)
     {
@@ -631,7 +631,7 @@ class Repository extends ModelRepository
      *
      * @param int $imageId
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getArticleImageQuery($imageId)
     {
@@ -667,7 +667,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleConfiguratorSetByArticleIdQuery($articleId)
     {
@@ -705,7 +705,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleConfiguratorSetByArticleIdIndexedByIdsQuery($articleId)
     {
@@ -745,7 +745,7 @@ class Repository extends ModelRepository
      * @param int $articleId
      * @param int $optionId
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getArticleDetailByConfiguratorOptionIdQuery($articleId, $optionId)
     {
@@ -791,7 +791,7 @@ class Repository extends ModelRepository
      *
      * @param int[] $optionsIds
      *
-     * @return Query
+     * @return Query<ConfiguratorGroup>
      */
     public function getConfiguratorGroupsAndOptionsByOptionsIdsIndexedByOptionIdsQuery($optionsIds)
     {
@@ -829,7 +829,7 @@ class Repository extends ModelRepository
      * @param Article $article
      * @param string  $customerGroupKey
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getArticleDetailForTableConfiguratorOptionCombinationQuery(
         $articleId,
@@ -901,7 +901,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticleWithVariantsAndOptionsQuery($articleId)
     {
@@ -937,7 +937,7 @@ class Repository extends ModelRepository
      * @param string        $customerGroupKey
      * @param array|Article $article
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getConfiguratorTablePreSelectionItemQuery($articleId, $customerGroupKey, $article)
     {
@@ -986,7 +986,7 @@ class Repository extends ModelRepository
      *
      * @param int[] $ids
      *
-     * @return Query
+     * @return Query<ConfiguratorSet>
      */
     public function getConfiguratorSetsWithExcludedIdsQuery($ids)
     {
@@ -1032,7 +1032,7 @@ class Repository extends ModelRepository
      *
      * @param int $configuratorSetId
      *
-     * @return Query
+     * @return Query<ConfiguratorSet>
      */
     public function getConfiguratorSetQuery($configuratorSetId)
     {
@@ -1069,7 +1069,7 @@ class Repository extends ModelRepository
      *
      * @param int $configuratorSetId
      *
-     * @return Query
+     * @return Query<ConfiguratorDependency>
      */
     public function getConfiguratorDependenciesQuery($configuratorSetId)
     {
@@ -1103,7 +1103,7 @@ class Repository extends ModelRepository
      *
      * @param int $configuratorSetId
      *
-     * @return Query
+     * @return Query<ConfiguratorDependency>
      */
     public function getConfiguratorDependenciesIndexedByParentIdQuery($configuratorSetId)
     {
@@ -1138,7 +1138,7 @@ class Repository extends ModelRepository
      *
      * @param int $configuratorSetId
      *
-     * @return Query
+     * @return Query<ConfiguratorPriceVariation>
      */
     public function getConfiguratorPriceVariationsQuery($configuratorSetId)
     {
@@ -1195,7 +1195,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which selects all defined configurator groups.
      * Used for the backend module to display all groups for the article, even the inactive groups.
      *
-     * @return Query
+     * @return Query<ConfiguratorGroup>
      */
     public function getConfiguratorGroupsQuery()
     {
@@ -1225,7 +1225,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getFirstArticleDetailWithKindTwoQuery($articleId)
     {
@@ -1261,7 +1261,7 @@ class Repository extends ModelRepository
      *
      * @param array|null $filter
      *
-     * @return Query
+     * @return Query<ConfiguratorOption>
      */
     public function getAllConfiguratorOptionsIndexedByIdQuery($filter = null)
     {
@@ -1297,7 +1297,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getConfiguratorListIdsQuery($articleId, $filter = null, $sort = null, $offset = null, $limit = null)
     {
@@ -1352,7 +1352,7 @@ class Repository extends ModelRepository
      *
      * @param int[] $ids
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getDetailsByIdsQuery($ids, $sort = null)
     {
@@ -1396,7 +1396,7 @@ class Repository extends ModelRepository
      * Returns a list of all defined price groups. Used for the article
      * detail page in the backend module to assign the article to a price group.
      *
-     * @return Query
+     * @return Query<PriceGroup>
      */
     public function getPriceGroupQuery()
     {
@@ -1424,7 +1424,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * all defined taxes. Used for the tax combo box on the article detail page in the article backend module.
      *
-     * @return Query
+     * @return Query<Tax>
      */
     public function getTaxesQuery()
     {
@@ -1452,7 +1452,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * all defined pack units. Used for the unit combo box on the article detail page in the article backend module.
      *
-     * @return Query
+     * @return Query<Unit>
      */
     public function getUnitsQuery()
     {
@@ -1479,7 +1479,7 @@ class Repository extends ModelRepository
      * Returns an instance of \Doctrine\ORM\Query object which selects a list of
      * all article property groups. Used for the property combo box on the article detail page in the article backend module.
      *
-     * @return Query
+     * @return Query<PropertyGroup>
      */
     public function getPropertiesQuery()
     {
@@ -1508,7 +1508,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Template>
      */
     public function getConfiguratorTemplateByArticleIdQuery($articleId)
     {
@@ -1550,7 +1550,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleDetailId
      *
-     * @return Query
+     * @return Query<Price>
      */
     public function getPricesQuery($articleDetailId)
     {
@@ -1586,7 +1586,7 @@ class Repository extends ModelRepository
      *
      * @param int $imageId
      *
-     * @return Query
+     * @return Query<ProductImageAttribute>
      */
     public function getImageAttributesQuery($imageId)
     {
@@ -1620,7 +1620,7 @@ class Repository extends ModelRepository
      *
      * @param int $linkId
      *
-     * @return Query
+     * @return Query<ProductLinkAttribute>
      */
     public function getLinkAttributesQuery($linkId)
     {
@@ -1652,7 +1652,7 @@ class Repository extends ModelRepository
      *
      * @param int $downloadId
      *
-     * @return Query
+     * @return Query<ProductDownloadAttribute>
      */
     public function getDownloadAttributesQuery($downloadId)
     {
@@ -1684,7 +1684,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleDetailId
      *
-     * @return Query
+     * @return Query<ProductAttribute>
      */
     public function getAttributesQuery($articleDetailId)
     {
@@ -1716,7 +1716,7 @@ class Repository extends ModelRepository
      *
      * @param int $priceId
      *
-     * @return Query
+     * @return Query<ProductPriceAttribute>
      */
     public function getPriceAttributesQuery($priceId)
     {
@@ -1749,7 +1749,7 @@ class Repository extends ModelRepository
      * @param string $number
      * @param int    $articleDetailId
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getValidateNumberQuery($number, $articleDetailId)
     {
@@ -1786,7 +1786,7 @@ class Repository extends ModelRepository
      * @param int|null   $offset
      * @param int|null   $limit
      *
-     * @return Query
+     * @return Query<Product>
      */
     public function getArticlesWithExcludedIdsQuery($ids = null, $filter = null, $offset = null, $limit = null)
     {
@@ -1843,7 +1843,7 @@ class Repository extends ModelRepository
      *
      * @param int $supplierId
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getSupplierQuery($supplierId)
     {
@@ -1874,7 +1874,7 @@ class Repository extends ModelRepository
      * Returns a list of all defined article suppliers as array, ordered by the supplier name.
      * Used for the article detail page in the backend module.
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getSuppliersQuery()
     {
@@ -1905,7 +1905,7 @@ class Repository extends ModelRepository
      * @param int|null   $offset
      * @param int|null   $limit
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getSuppliersWithExcludedIdsQuery($ids = null, $filter = null, $offset = null, $limit = null)
     {
@@ -1956,7 +1956,7 @@ class Repository extends ModelRepository
      * @param int|null $limit
      * @param int|null $offset
      *
-     * @return Query
+     * @return Query<Supplier>
      */
     public function getSupplierListQuery($filter, array $orderBy, $limit = null, $offset = null)
     {
@@ -2017,7 +2017,7 @@ class Repository extends ModelRepository
      * @param int|null    $limit
      * @param array|null  $order
      *
-     * @return Query
+     * @return Query<Vote>
      */
     public function getVoteListQuery($filter = null, $offset = null, $limit = null, $order = null)
     {
@@ -2077,7 +2077,7 @@ class Repository extends ModelRepository
      * @param int|null  $limit
      * @param bool|null $summarize
      *
-     * @return Query
+     * @return Query<Notification>
      */
     public function getArticlesWithRegisteredNotificationsQuery(
         $filter = null,
@@ -2152,7 +2152,7 @@ class Repository extends ModelRepository
      *
      * @internal param $articleOrderNumber
      *
-     * @return Query
+     * @return Query<Notification>
      */
     public function getNotificationCustomerByArticleQuery($articleOrderNumber, $filter, $offset, $limit, $order)
     {
@@ -2229,7 +2229,7 @@ class Repository extends ModelRepository
      * @param int   $limit
      * @param array $order
      *
-     * @return Query
+     * @return Query<Esd>
      */
     public function getEsdByArticleQuery($articleId, $filter, $offset, $limit, $order)
     {
@@ -2307,7 +2307,7 @@ class Repository extends ModelRepository
      * @param int   $limit
      * @param array $order
      *
-     * @return Query
+     * @return Query<EsdSerial>
      */
     public function getSerialsByEsdQuery($esdId, $filter, $offset, $limit, $order)
     {
@@ -2371,7 +2371,7 @@ class Repository extends ModelRepository
      *
      * @param int $esdId
      *
-     * @return Query
+     * @return Query<Esd>
      */
     public function getFreeSerialsCountByEsdQuery($esdId)
     {
@@ -2405,7 +2405,7 @@ class Repository extends ModelRepository
      *
      * @param int $esdId
      *
-     * @return Query
+     * @return Query<EsdSerial>
      */
     public function getUnusedSerialsByEsdQuery($esdId)
     {
@@ -2439,7 +2439,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getArticleCoverImageQuery($articleId)
     {
@@ -2482,7 +2482,7 @@ class Repository extends ModelRepository
      *
      * @internal param $article
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getArticleFallbackCoverQuery($articleId)
     {
@@ -2525,7 +2525,7 @@ class Repository extends ModelRepository
      * @param int    $offset
      * @param int    $limit
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getVariantImagesByArticleNumberQuery($number, $offset = null, $limit = null)
     {
@@ -2586,7 +2586,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getArticleImagesQuery($articleId)
     {
@@ -2625,7 +2625,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Price>
      */
     public function getRemovePricesQuery($articleId)
     {
@@ -2657,7 +2657,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleDetailId
      *
-     * @return Query
+     * @return Query<ProductAttribute>
      */
     public function getRemoveAttributesQuery($articleDetailId)
     {
@@ -2688,7 +2688,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Esd>
      */
     public function getRemoveESDQuery($articleId)
     {
@@ -2720,7 +2720,7 @@ class Repository extends ModelRepository
      *
      * @param int $articleId
      *
-     * @return Query
+     * @return Query<Translation>
      */
     public function getRemoveArticleTranslationsQuery($articleId)
     {
@@ -2753,7 +2753,7 @@ class Repository extends ModelRepository
      *
      * @param int $detailId
      *
-     * @return Query
+     * @return Query<Translation>
      */
     public function getRemoveVariantTranslationsQuery($detailId)
     {
@@ -2786,7 +2786,7 @@ class Repository extends ModelRepository
      *
      * @param int $detailId
      *
-     * @return Query
+     * @return Query<Image>
      */
     public function getRemoveImageQuery($detailId)
     {
@@ -2817,7 +2817,7 @@ class Repository extends ModelRepository
      *
      * @param int $detailId
      *
-     * @return Query
+     * @return Query<Detail>
      */
     public function getRemoveDetailQuery($detailId)
     {

@@ -28,6 +28,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Exception\ORMException;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\TransactionRequiredException;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
@@ -159,14 +160,14 @@ class Order extends Resource
 
         $builder = $this->getRepository()->createQueryBuilder('orders')
             ->addSelect(['attribute'])
-            ->leftJoin('orders.attribute', 'attribute');
-
-        $builder->addFilter($criteria);
-        $builder->addOrderBy($orderBy);
-        $builder->setFirstResult($offset)
-                ->setMaxResults($limit);
-        $builder->addSelect(['partial customer.{id,email}']);
-        $builder->leftJoin('orders.customer', 'customer');
+            ->leftJoin('orders.attribute', 'attribute')
+            ->addFilter($criteria)
+            ->addOrderBy($orderBy)
+            ->setFirstResult($offset)
+                ->setMaxResults($limit)
+            ->addSelect(['partial customer.{id,email}'])
+            ->leftJoin('orders.customer', 'customer');
+        /** @var Query<OrderModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
 
         $query->setHydrationMode($this->getResultMode());
@@ -177,7 +178,7 @@ class Order extends Resource
         $totalResult = $paginator->count();
 
         // Returns the order data
-        $orders = $paginator->getIterator()->getArrayCopy();
+        $orders = iterator_to_array($paginator);
 
         foreach ($orders as &$order) {
             if (\is_array($order)) {

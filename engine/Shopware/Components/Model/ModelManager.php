@@ -132,6 +132,8 @@ class ModelManager extends EntityManager
     /**
      * Returns the total count of the passed query builder.
      *
+     * @param Query<ModelEntity|array<string, mixed>> $query
+     *
      * @return int|null
      */
     public function getQueryCount(Query $query)
@@ -145,11 +147,13 @@ class ModelManager extends EntityManager
      * This method should be used instead of
      * new \Doctrine\ORM\Tools\Pagination\Paginator($query).
      *
-     * As of SW 4.2 $paginator->setUseOutputWalkers(false) will be set here.
-     *
      * @since 4.1.4
      *
-     * @return Paginator
+     * @template TModel of (ModelEntity|array<string, mixed>)
+     *
+     * @param Query<TModel> $query
+     *
+     * @return Paginator<TModel>
      */
     public function createPaginator(Query $query)
     {
@@ -243,11 +247,14 @@ class ModelManager extends EntityManager
     /**
      * Helper function to add mysql specified command to increase the sql performance.
      *
-     * @param mixed|null $index        Name of the forced index
-     * @param bool       $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
-     * @param bool       $sqlNoCache
+     * @template TModel of (ModelEntity|array<string, mixed>)
      *
-     * @return Query
+     * @param Query<TModel> $query
+     * @param mixed|null    $index        Name of the forced index
+     * @param bool          $straightJoin true or false. Allow to add STRAIGHT_JOIN select condition
+     * @param bool          $sqlNoCache
+     *
+     * @return Query<TModel>
      */
     public function addCustomHints(Query $query, $index = null, $straightJoin = false, $sqlNoCache = false)
     {

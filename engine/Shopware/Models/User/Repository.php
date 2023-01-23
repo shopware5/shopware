@@ -24,8 +24,11 @@
 
 namespace Shopware\Models\User;
 
+use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\User as UserAttribute;
+use Shopware\Models\User\Resource as UserResource;
 
 /**
  * Repository for the customer model (Shopware\Models\User\User).
@@ -44,7 +47,7 @@ class Repository extends ModelRepository
      *
      * @param int $userId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<User>
      */
     public function getUserDetailQuery($userId)
     {
@@ -81,7 +84,7 @@ class Repository extends ModelRepository
      * @param int|null    $offset
      * @param array|null  $orderBy
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<User>
      */
     public function getUsersQuery($filter = null, $limit = null, $offset = null, $orderBy = null)
     {
@@ -137,7 +140,7 @@ class Repository extends ModelRepository
      * @param int|null $offset
      * @param int|null $limit
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Role>
      */
     public function getRolesQuery($offset = null, $limit = null)
     {
@@ -171,7 +174,7 @@ class Repository extends ModelRepository
      *
      * @param int $userId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<UserAttribute>
      */
     public function getAttributesQuery($userId)
     {
@@ -192,7 +195,7 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                ->from(\Shopware\Models\Attribute\User::class, 'attribute')
+                ->from(UserAttribute::class, 'attribute')
                 ->where('attribute.userId = ?1')
                 ->setParameter(1, $userId);
 
@@ -204,7 +207,7 @@ class Repository extends ModelRepository
      *
      * @param string|null $filter
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<UserResource>
      */
     public function getResourcesQuery($filter = null)
     {
@@ -226,7 +229,7 @@ class Repository extends ModelRepository
         $builder = $this->getEntityManager()->createQueryBuilder();
 
         $builder->select(['resources', 'privileges', 'requirements'])
-                ->from('Shopware\Models\User\Resource', 'resources')
+                ->from(UserResource::class, 'resources')
                 ->leftJoin('resources.privileges', 'privileges')
                 ->leftJoin('privileges.requirements', 'requirements')
                 ->orderBy('resources.name');
@@ -245,7 +248,7 @@ class Repository extends ModelRepository
      *
      * @param int $roleId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Rule>
      */
     public function getResourcesWithAdminRuleQuery($roleId)
     {
@@ -278,7 +281,7 @@ class Repository extends ModelRepository
     /**
      * Returns an instance of the \Doctrine\ORM\Query object which select all role data for the passed role id.
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Role>
      */
     public function getRoleDetailQuery()
     {
@@ -309,7 +312,7 @@ class Repository extends ModelRepository
      *
      * @param int $resourceId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<UserResource>
      */
     public function getResourceDeleteQuery($resourceId)
     {
@@ -329,7 +332,7 @@ class Repository extends ModelRepository
     public function getResourceDeleteQueryBuilder($resourceId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
-        $builder->delete(Resource::class, 'resource')
+        $builder->delete(UserResource::class, 'resource')
                 ->where('resource.id = ?1')
                 ->setParameter(1, $resourceId);
 
@@ -341,7 +344,7 @@ class Repository extends ModelRepository
      *
      * @param int $privilegeId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Privilege>
      */
     public function getPrivilegeDeleteQuery($privilegeId)
     {
@@ -374,7 +377,7 @@ class Repository extends ModelRepository
      *
      * @param int $resourceId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Privilege>
      */
     public function getPrivilegeDeleteByResourceIdQuery($resourceId)
     {
@@ -407,7 +410,7 @@ class Repository extends ModelRepository
      *
      * @param int $privilegeId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Rule>
      */
     public function getRuleDeleteByPrivilegeIdQuery($privilegeId)
     {
@@ -439,7 +442,7 @@ class Repository extends ModelRepository
      *
      * @param int $roleId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Rule>
      */
     public function getRuleDeleteByRoleIdQuery($roleId)
     {
@@ -472,7 +475,7 @@ class Repository extends ModelRepository
      *
      * @param int $resourceId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Rule>
      */
     public function getRuleDeleteByResourceIdQuery($resourceId)
     {
@@ -504,7 +507,7 @@ class Repository extends ModelRepository
      *
      * @param int $roleId
      *
-     * @return \Doctrine\ORM\Query
+     * @return Query<Rule>
      */
     public function getAdminRuleDeleteQuery($roleId)
     {

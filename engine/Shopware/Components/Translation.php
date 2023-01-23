@@ -417,7 +417,7 @@ class Shopware_Components_Translation
     }
 
     /**
-     * Translates an order by translating it's document types, payment and dispatch methods.
+     * Translates an order by translating its document types, payment and dispatch methods.
      */
     public function translateOrders(array $orders, ?int $language = null, ?int $fallback = null): array
     {

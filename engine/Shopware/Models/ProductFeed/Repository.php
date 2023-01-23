@@ -27,6 +27,7 @@ namespace Shopware\Models\ProductFeed;
 use Doctrine\ORM\Query;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
+use Shopware\Models\Attribute\ProductFeed as ProductFeedAttribute;
 
 /**
  * Repository for the ProductFeed model (Shopware\Models\ProductFeed\ProductFeed).
@@ -47,7 +48,7 @@ class Repository extends ModelRepository
      * @param int|null                                               $offset
      * @param int|null                                               $limit
      *
-     * @return Query
+     * @return Query<ProductFeed>
      */
     public function getListQuery($orderBy = null, $offset = null, $limit = null)
     {
@@ -65,7 +66,7 @@ class Repository extends ModelRepository
      *
      * @param array<array{property: string, direction: string}>|null $orderBy
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getListQueryBuilder(array $orderBy = null)
     {
@@ -94,7 +95,7 @@ class Repository extends ModelRepository
      * Returns an instance of the \Doctrine\ORM\Query object which select a list of active
      * product feeds.
      *
-     * @return Query
+     * @return Query<ProductFeed>
      */
     public function getActiveListQuery()
     {
@@ -107,7 +108,7 @@ class Repository extends ModelRepository
      * Helper function to create the query builder for the "getActiveListQuery" function.
      * This function can be hooked to modify the query builder of the query object.
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getActiveListQueryBuilder()
     {
@@ -128,7 +129,7 @@ class Repository extends ModelRepository
      *
      * @param int $feedId
      *
-     * @return Query
+     * @return Query<ProductFeed>
      */
     public function getDetailQuery($feedId)
     {
@@ -143,7 +144,7 @@ class Repository extends ModelRepository
      *
      * @param int $feedId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getDetailQueryBuilder($feedId)
     {
@@ -165,7 +166,7 @@ class Repository extends ModelRepository
      *
      * @param int $productFeedId
      *
-     * @return Query
+     * @return Query<ProductFeedAttribute>
      */
     public function getAttributesQuery($productFeedId)
     {
@@ -180,13 +181,13 @@ class Repository extends ModelRepository
      *
      * @param int $productFeedId
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getAttributesQueryBuilder($productFeedId)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select(['attribute'])
-                ->from(\Shopware\Models\Attribute\ProductFeed::class, 'attribute')
+                ->from(ProductFeedAttribute::class, 'attribute')
                 ->where('attribute.productFeedId = ?1')
                 ->setParameter(1, $productFeedId);
 

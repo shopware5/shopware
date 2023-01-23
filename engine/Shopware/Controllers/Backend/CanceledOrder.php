@@ -23,6 +23,7 @@
  */
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Components\Model\ModelManager;
@@ -668,11 +669,12 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
 
+        /** @var Query<array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = $this->getModelManager()->createPaginator($query);
         $total = $paginator->count();
-        $orders = $paginator->getIterator()->getArrayCopy();
+        $orders = iterator_to_array($paginator);
 
         // Translate payment and dispatch method names.
         $translationComponent = $this->get(Shopware_Components_Translation::class);
