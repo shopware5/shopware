@@ -570,8 +570,7 @@ SELECT u.articleID, u.articleName, u.Rel
         AND ag.customergroupID = {$this->customerGroupId}
 
       INNER JOIN s_articles_similar s
-        ON s.articleID = a.id
-        AND s.relatedarticle = a.id
+        ON s.relatedarticle = a.id
 
       INNER JOIN s_articles_categories_ro s1
         ON s1.articleID = a.id
@@ -583,6 +582,7 @@ SELECT u.articleID, u.articleName, u.Rel
       WHERE a.active = 1
         AND ag.articleID IS NULL
         AND a.id != {$productId}
+        AND s.articleID = {$productId}
 
     LIMIT {$limit}
   )
@@ -707,7 +707,8 @@ SQL;
                 case Container::TYPE_BANNER:
                     // Query Banner
                     $getBanner = $this->connection->fetchAssociative(
-                        'SELECT image, link, linkTarget, description FROM s_campaigns_banner
+                        'SELECT image, link, linkTarget, description
+                         FROM s_campaigns_banner
                          WHERE parentID=:parentId',
                         ['parentId' => $parentId]
                     );
@@ -729,7 +730,8 @@ SQL;
                 case Container::TYPE_LINKS:
                     // Query links
                     $getLinks = $this->connection->fetchAllAssociative(
-                        'SELECT description, link, target FROM s_campaigns_links
+                        'SELECT description, link, target
+                         FROM s_campaigns_links
                          WHERE parentID=:parentId
                          ORDER BY position',
                         ['parentId' => $parentId]
@@ -737,7 +739,8 @@ SQL;
                     $getCampaignContainers[$campaignKey]['data'] = $getLinks;
                     break;
                 case Container::TYPE_PRODUCTS:
-                    $sql = 'SELECT articleordernumber, type FROM s_campaigns_articles
+                    $sql = 'SELECT articleordernumber, type
+                            FROM s_campaigns_articles
                             WHERE parentID=:parentId
                             ORDER BY position';
 
@@ -747,7 +750,7 @@ SQL;
                 case Container::TYPE_TEXT:
                 case Container::TYPE_VOUCHER:
                     $getText = $this->connection->fetchAssociative(
-                        'SELECT headline, html,image,alignment,link
+                        'SELECT headline, html, image, alignment, link
                          FROM s_campaigns_html
                          WHERE parentID=:parentId',
                         ['parentId' => $parentId]

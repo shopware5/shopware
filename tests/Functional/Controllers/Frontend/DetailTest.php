@@ -27,14 +27,16 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class DetailTest extends Enlight_Components_Test_Controller_TestCase
+class DetailTest extends ControllerTestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private const PRODUCT_ID_WITH_SIMILAR_PRODUCTS = 2;
 
     private Connection $connection;
 
@@ -45,6 +47,25 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
         $this->connection = $this->getContainer()->get(Connection::class);
     }
 
+    public function testErrorActionShowsDirectSimilarProductsFirst(): void
+    {
+        $similarProductIds = $this->connection->fetchFirstColumn(
+            'SELECT relatedarticle FROM s_articles_similar WHERE articleID = :productId',
+            ['productId' => self::PRODUCT_ID_WITH_SIMILAR_PRODUCTS]
+        );
+        $similarProductIds = array_map('\intval', $similarProductIds);
+
+        $this->Request()->setParam('sArticle', self::PRODUCT_ID_WITH_SIMILAR_PRODUCTS);
+        $this->dispatch('/detail/error');
+        $similarProducts = $this->View()->getAssign('sRelatedArticles');
+
+        $shownSimilarProductIds = array_map('\intval', array_column($similarProducts, 'articleID'));
+
+        foreach ($shownSimilarProductIds as $shownSimilarProductId) {
+            static::assertContains($shownSimilarProductId, $similarProductIds);
+        }
+    }
+
     public function testDefaultVariant(): void
     {
         // Request a variant that is not the default one
@@ -52,10 +73,10 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
-        $article = $this->View()->getAssign('sArticle');
+        $product = $this->View()->getAssign('sArticle');
 
-        static::assertSame('SW10201.2', $article['ordernumber']);
-        static::assertSame(444, $article['articleDetailsID']);
+        static::assertSame('SW10201.2', $product['ordernumber']);
+        static::assertSame(444, $product['articleDetailsID']);
     }
 
     public function testNonDefaultVariant(): void
@@ -70,9 +91,9 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
-        $article = $this->View()->getAssign('sArticle');
-        static::assertSame('SW10201.5', $article['ordernumber']);
-        static::assertSame(447, $article['articleDetailsID']);
+        $product = $this->View()->getAssign('sArticle');
+        static::assertSame('SW10201.5', $product['ordernumber']);
+        static::assertSame(447, $product['articleDetailsID']);
     }
 
     /**
@@ -125,7 +146,7 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
             ]
         );
         $this->dispatch('/detail/productQuickView?ordernumber=' . $orderNumberExport);
-        $sArticle = $this->View()->getAssign('sArticle');
-        static::assertSame($orderNumber, $sArticle['ordernumber']);
+        $product = $this->View()->getAssign('sArticle');
+        static::assertSame($orderNumber, $product['ordernumber']);
     }
 }
