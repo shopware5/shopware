@@ -44831,21 +44831,6 @@ parameters:
 			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
 
 		-
-			message: "#^Access to an undefined property Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapListenerTest\\:\\:\\$sitemapFolder\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/SitemapListenerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapListenerTest\\:\\:testListEmptyFolder\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/SitemapListenerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapListenerTest\\:\\:testListWithSitemap\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/SitemapListenerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapLockTest\\:\\:testAcquireLockDefaultFalse\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SitemapBundle/SitemapLockTest.php
@@ -45979,26 +45964,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\MyReferenceTestClass\\:\\:myPublic\\(\\) has parameter \\$foo with no type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Hook/MyReferenceTestClass.php
-
-		-
-			message: "#^Access to an undefined property Shopware\\\\Tests\\\\Unit\\\\Components\\\\HttpCache\\\\StoreTest\\:\\:\\$httpCacheStore\\.$#"
-			count: 5
-			path: tests/Unit/Components/HttpCache/StoreTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\HttpCache\\\\StoreTest\\:\\:provideUrls\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/HttpCache/StoreTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\HttpCache\\\\StoreTest\\:\\:testGenerateCacheKey\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/HttpCache/StoreTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\HttpCache\\\\StoreTest\\:\\:testVerifyIgnoredParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/HttpCache/StoreTest.php
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_GET\\.$#"

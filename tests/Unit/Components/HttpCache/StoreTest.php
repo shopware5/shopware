@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,13 +28,16 @@ namespace Shopware\Tests\Unit\Components\HttpCache;
 
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use Shopware\Components\HttpCache\Store;
 use Symfony\Component\HttpFoundation\Request;
 
 class StoreTest extends TestCase
 {
+    private Store $httpCacheStore;
+
     public function setUp(): void
     {
-        $this->httpCacheStore = new \Shopware\Components\HttpCache\Store(
+        $this->httpCacheStore = new Store(
             'test',
             [],
             true,
@@ -44,7 +49,10 @@ class StoreTest extends TestCase
         );
     }
 
-    public function provideUrls()
+    /**
+     * @return array<array{original: string, compare: string}>
+     */
+    public function provideUrls(): array
     {
         return [
             [
@@ -173,16 +181,12 @@ class StoreTest extends TestCase
     /**
      * @dataProvider provideUrls
      *
-     * @param string $originalURL
-     * @param string $expectedURL
-     *
-     * @see Shopware\Components\HttpCache\Store::generateCacheKey
+     * @see Store::generateCacheKey
      */
-    public function testGenerateCacheKey($originalURL, $expectedURL)
+    public function testGenerateCacheKey(string $originalURL, string $expectedURL): void
     {
         $originalRequest = Request::create($originalURL);
-        $class = new ReflectionClass($this->httpCacheStore);
-        $method = $class->getMethod('generateCacheKey');
+        $method = (new ReflectionClass($this->httpCacheStore))->getMethod('generateCacheKey');
         $method->setAccessible(true);
 
         static::assertSame(
@@ -194,16 +198,12 @@ class StoreTest extends TestCase
     /**
      * @dataProvider provideUrls
      *
-     * @param string $originalURL
-     * @param string $expectedURL
-     *
-     * @see Shopware\Components\HttpCache\Store::verifyIgnoredParameters
+     * @see Store::verifyIgnoredParameters
      */
-    public function testVerifyIgnoredParameters($originalURL, $expectedURL)
+    public function testVerifyIgnoredParameters(string $originalURL, string $expectedURL): void
     {
         $originalRequest = Request::create($originalURL);
-        $class = new ReflectionClass($this->httpCacheStore);
-        $method = $class->getMethod('verifyIgnoredParameters');
+        $method = (new ReflectionClass($this->httpCacheStore))->getMethod('verifyIgnoredParameters');
         $method->setAccessible(true);
 
         static::assertSame(

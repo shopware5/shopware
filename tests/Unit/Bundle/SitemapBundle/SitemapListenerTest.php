@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,20 +37,11 @@ use Shopware\Components\Filesystem\PublicUrlGenerator;
 
 class SitemapListenerTest extends TestCase
 {
-    /**
-     * @var SitemapLister
-     */
-    private $listener;
+    private SitemapLister $listener;
 
-    /**
-     * @var SitemapNameGenerator
-     */
-    private $generator;
+    private SitemapNameGenerator $generator;
 
-    /**
-     * @var Filesystem
-     */
-    private $fs;
+    private Filesystem $fileSystem;
 
     protected function setUp(): void
     {
@@ -56,33 +49,32 @@ class SitemapListenerTest extends TestCase
 
         $factory = new LocalAdapterFactory();
 
-        $this->fs = new Filesystem($factory->create([
+        $this->fileSystem = new Filesystem($factory->create([
             'root' => sys_get_temp_dir(),
         ]));
 
-        $this->sitemapFolder = __DIR__ . '/sitemap';
-        $this->generator = new SitemapNameGenerator($this->fs);
+        $this->generator = new SitemapNameGenerator($this->fileSystem);
 
         $generator = new PublicUrlGenerator(new Container(), '', 'https//foo.de', 'foo');
-        $this->listener = new SitemapLister($this->fs, $generator);
+        $this->listener = new SitemapLister($this->fileSystem, $generator);
     }
 
     protected function tearDown(): void
     {
         parent::tearDown();
-        $this->fs->deleteDir('shop-1');
-        $this->fs->deleteDir('shop-2');
+        $this->fileSystem->deleteDir('shop-1');
+        $this->fileSystem->deleteDir('shop-2');
     }
 
-    public function testListEmptyFolder()
+    public function testListEmptyFolder(): void
     {
         static::assertEmpty($this->listener->getSitemaps(1));
     }
 
-    public function testListWithSitemap()
+    public function testListWithSitemap(): void
     {
         $file = $this->generator->getSitemapFilename(1);
-        $this->fs->write($file, '');
+        $this->fileSystem->write($file, '');
 
         $sitemaps = $this->listener->getSitemaps(1);
         static::assertNotEmpty($sitemaps);
