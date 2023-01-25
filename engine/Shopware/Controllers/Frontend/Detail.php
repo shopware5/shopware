@@ -58,7 +58,7 @@ class Shopware_Controllers_Frontend_Detail extends Enlight_Controller_Action
         $this->Response()->setStatusCode($config->get('PageNotFoundCode', 404));
         $this->View()->assign('sRelatedArticles', $this->container->get('modules')->Marketing()->sGetSimilarArticles(
             (int) $this->Request()->getParam('sArticle'),
-            4
+            (int) $config->get('maxcrosssimilar', 4)
         ));
     }
 

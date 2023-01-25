@@ -47,6 +47,32 @@ class DetailTest extends ControllerTestCase
         $this->connection = $this->getContainer()->get(Connection::class);
     }
 
+    public function testProductWithSimilarProducts(): void
+    {
+        $this->dispatch('/genusswelten/2/muensterlaender-lagerkorn-32');
+        $product = $this->View()->getAssign('sArticle');
+
+        $similarProducts = $product['sSimilarArticles'];
+
+        static::assertCount(6, $similarProducts);
+    }
+
+    public function testProductWithMaxSimilarProducts(): void
+    {
+        $maxSimilarConfigBefore = (int) $this->getContainer()->get('config')->get('maxcrosssimilar');
+        $maxSimilarConfigNew = 3;
+        static::assertNotSame($maxSimilarConfigNew, $maxSimilarConfigBefore);
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigNew);
+        $this->dispatch('/genusswelten/2/muensterlaender-lagerkorn-32');
+        $product = $this->View()->getAssign('sArticle');
+
+        $similarProducts = $product['sSimilarArticles'];
+
+        static::assertCount($maxSimilarConfigNew, $similarProducts);
+
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigBefore);
+    }
+
     public function testErrorActionShowsDirectSimilarProductsFirst(): void
     {
         $similarProductIds = $this->connection->fetchFirstColumn(
@@ -61,9 +87,25 @@ class DetailTest extends ControllerTestCase
 
         $shownSimilarProductIds = array_map('\intval', array_column($similarProducts, 'articleID'));
 
-        foreach ($shownSimilarProductIds as $shownSimilarProductId) {
-            static::assertContains($shownSimilarProductId, $similarProductIds);
+        foreach ($similarProductIds as $similarProductId) {
+            static::assertContains($similarProductId, $shownSimilarProductIds);
         }
+    }
+
+    public function testErrorActionConsiderMaxSimilarProductsConfig(): void
+    {
+        $maxSimilarConfigBefore = (int) $this->getContainer()->get('config')->get('maxcrosssimilar');
+        $maxSimilarConfigNew = 3;
+        static::assertNotSame($maxSimilarConfigNew, $maxSimilarConfigBefore);
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigNew);
+
+        $this->Request()->setParam('sArticle', self::PRODUCT_ID_WITH_SIMILAR_PRODUCTS);
+        $this->dispatch('/detail/error');
+        $similarProducts = $this->View()->getAssign('sRelatedArticles');
+
+        static::assertCount($maxSimilarConfigNew, $similarProducts);
+
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigBefore);
     }
 
     public function testDefaultVariant(): void
