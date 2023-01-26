@@ -99,7 +99,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
 
             if ($variables['sError'] == false) {
                 // Prepare eMail
-                $product['linkDetails'] = $this->Front()->Router()->assemble(['sViewport' => 'detail', 'sArticle' => $product['articleID']]);
+                $product['linkDetails'] = $this->Front()->ensureRouter()->assemble(['sViewport' => 'detail', 'sArticle' => $product['articleID']]);
 
                 $context = [
                     'sName' => $this->sSYSTEM->_POST['sName'],
@@ -122,7 +122,7 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $mail->send();
 
                 $this->View()->assign('sSuccess', true);
-                $url = $this->Front()->Router()->assemble(['controller' => 'tellafriend', 'action' => 'success']);
+                $url = $this->Front()->ensureRouter()->assemble(['controller' => 'tellafriend', 'action' => 'success']);
                 $this->redirect($url);
             } else {
                 $this->View()->assign('sError', true);

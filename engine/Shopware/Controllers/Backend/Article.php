@@ -2278,7 +2278,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         Shopware()->Session()->set('Admin', true);
 
-        $url = $this->Front()->Router()->assemble(
+        $url = $this->Front()->ensureRouter()->assemble(
             [
                 'module' => 'frontend',
                 'controller' => 'detail',

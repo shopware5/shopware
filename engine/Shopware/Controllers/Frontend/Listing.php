@@ -340,7 +340,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         }
 
         if ($this->isShopsBaseCategoryPage($categoryContent['id'])) {
-            return $this->Front()->Router()->assemble(['controller' => 'index']);
+            return $this->Front()->ensureRouter()->assemble(['controller' => 'index']);
         }
 
         $checkRedirect = ($hasEmotion && $this->Request()->getParam('sPage')) || (!$hasEmotion);
@@ -364,7 +364,7 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
         $products = $result->getProducts();
         $firstProducts = array_shift($products);
 
-        return $this->Front()->Router()->assemble([
+        return $this->Front()->ensureRouter()->assemble([
             'controller' => 'detail',
             'sArticle' => $firstProducts->getId(),
         ]);

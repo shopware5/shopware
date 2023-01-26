@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,35 +27,101 @@
 namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class DetailTest extends Enlight_Components_Test_Controller_TestCase
+class DetailTest extends ControllerTestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
+
+    private const PRODUCT_ID_WITH_SIMILAR_PRODUCTS = 2;
+
+    private Connection $connection;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get(Connection::class);
+        $this->connection = $this->getContainer()->get(Connection::class);
     }
 
-    public function testDefaultVariant()
+    public function testProductWithSimilarProducts(): void
+    {
+        $this->dispatch('/genusswelten/2/muensterlaender-lagerkorn-32');
+        $product = $this->View()->getAssign('sArticle');
+
+        $similarProducts = $product['sSimilarArticles'];
+
+        static::assertCount(6, $similarProducts);
+    }
+
+    public function testProductWithMaxSimilarProducts(): void
+    {
+        $maxSimilarConfigBefore = (int) $this->getContainer()->get('config')->get('maxcrosssimilar');
+        $maxSimilarConfigNew = 3;
+        static::assertNotSame($maxSimilarConfigNew, $maxSimilarConfigBefore);
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigNew);
+        $this->dispatch('/genusswelten/2/muensterlaender-lagerkorn-32');
+        $product = $this->View()->getAssign('sArticle');
+
+        $similarProducts = $product['sSimilarArticles'];
+
+        static::assertCount($maxSimilarConfigNew, $similarProducts);
+
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigBefore);
+    }
+
+    public function testErrorActionShowsDirectSimilarProductsFirst(): void
+    {
+        $similarProductIds = $this->connection->fetchFirstColumn(
+            'SELECT relatedarticle FROM s_articles_similar WHERE articleID = :productId',
+            ['productId' => self::PRODUCT_ID_WITH_SIMILAR_PRODUCTS]
+        );
+        $similarProductIds = array_map('\intval', $similarProductIds);
+
+        $this->Request()->setParam('sArticle', self::PRODUCT_ID_WITH_SIMILAR_PRODUCTS);
+        $this->dispatch('/detail/error');
+        $similarProducts = $this->View()->getAssign('sRelatedArticles');
+
+        $shownSimilarProductIds = array_map('\intval', array_column($similarProducts, 'articleID'));
+
+        foreach ($similarProductIds as $similarProductId) {
+            static::assertContains($similarProductId, $shownSimilarProductIds);
+        }
+    }
+
+    public function testErrorActionConsiderMaxSimilarProductsConfig(): void
+    {
+        $maxSimilarConfigBefore = (int) $this->getContainer()->get('config')->get('maxcrosssimilar');
+        $maxSimilarConfigNew = 3;
+        static::assertNotSame($maxSimilarConfigNew, $maxSimilarConfigBefore);
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigNew);
+
+        $this->Request()->setParam('sArticle', self::PRODUCT_ID_WITH_SIMILAR_PRODUCTS);
+        $this->dispatch('/detail/error');
+        $similarProducts = $this->View()->getAssign('sRelatedArticles');
+
+        static::assertCount($maxSimilarConfigNew, $similarProducts);
+
+        $this->setConfig('maxcrosssimilar', $maxSimilarConfigBefore);
+    }
+
+    public function testDefaultVariant(): void
     {
         // Request a variant that is not the default one
-        $this->Request()
-            ->setMethod('POST');
+        $this->Request()->setMethod('POST');
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
-        $article = $this->View()->getAssign('sArticle');
+        $product = $this->View()->getAssign('sArticle');
 
-        static::assertEquals('SW10201.2', $article['ordernumber']);
-        static::assertEquals(444, $article['articleDetailsID']);
+        static::assertSame('SW10201.2', $product['ordernumber']);
+        static::assertSame(444, $product['articleDetailsID']);
     }
 
-    public function testNonDefaultVariant()
+    public function testNonDefaultVariant(): void
     {
         // Request a variant that is not the default one
         $this->Request()
@@ -65,32 +133,33 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/beispiele/konfiguratorartikel/202/artikel-mit-standardkonfigurator?c=22');
 
-        $article = $this->View()->getAssign('sArticle');
-        static::assertEquals('SW10201.5', $article['ordernumber']);
-        static::assertEquals('447', $article['articleDetailsID']);
+        $product = $this->View()->getAssign('sArticle');
+        static::assertSame('SW10201.5', $product['ordernumber']);
+        static::assertSame(447, $product['articleDetailsID']);
     }
 
     /**
-     * @param string|null $gtin
-     * @param string      $value
-     *
-     * @dataProvider gtinDataprovider
+     * @dataProvider gtinDataProvider
      */
-    public function testGtins($gtin, $value)
+    public function testGtins(?string $gtin, string $value): void
     {
-        $this->connection->executeUpdate('UPDATE `s_articles_details` SET `ean`=? WHERE `ordernumber`="SW10006"', [$value]);
+        $this->connection->executeStatement("UPDATE `s_articles_details` SET `ean`=? WHERE `ordernumber`='SW10006'", [$value]);
 
-        $response = $this->dispatch('/genusswelten/edelbraende/6/cigar-special-40');
+        $body = $this->dispatch('/genusswelten/edelbraende/6/cigar-special-40')->getBody();
+        static::assertIsString($body);
 
-        if ($gtin) {
-            static::assertStringContainsString($gtin, $response->getBody());
-            static::assertStringContainsString('"' . trim($value) . '"', $response->getBody());
+        if (\is_string($gtin)) {
+            static::assertStringContainsString($gtin, $body);
+            static::assertStringContainsString(sprintf('"%s"', trim($value)), $body);
         } else {
-            static::assertStringNotContainsString(trim($value), $response->getBody());
+            static::assertStringNotContainsString(trim($value), $body);
         }
     }
 
-    public function gtinDataprovider()
+    /**
+     * @return list<array{gtin: string|null, value: string}>
+     */
+    public function gtinDataProvider(): array
     {
         return [
             ['gtin' => 'gtin8', 'value' => '12345678'],
@@ -105,14 +174,21 @@ class DetailTest extends Enlight_Components_Test_Controller_TestCase
         ];
     }
 
-    public function testProductQuickView()
+    public function testProductQuickView(): void
     {
-        $dbal = Shopware()->Container()->get('dbal_connection');
-        $ordernumber_export = 't3st' . mt_rand(1000, 9999);
-        $ordernumber = 'SW10170';
-        $dbal->insert('s_addon_premiums', ['startprice' => 0, 'ordernumber' => $ordernumber, 'ordernumber_export' => $ordernumber_export, 'subshopID' => 0]);
-        $this->dispatch('/detail/productQuickView?ordernumber=' . $ordernumber_export);
-        $sArticle = $this->View()->getAssign('sArticle');
-        static::assertEquals($ordernumber, $sArticle['ordernumber']);
+        $orderNumberExport = 't3st' . mt_rand(1000, 9999);
+        $orderNumber = 'SW10170';
+        $this->connection->insert(
+            's_addon_premiums',
+            [
+                'startprice' => 0,
+                'ordernumber' => $orderNumber,
+                'ordernumber_export' => $orderNumberExport,
+                'subshopID' => 0,
+            ]
+        );
+        $this->dispatch('/detail/productQuickView?ordernumber=' . $orderNumberExport);
+        $product = $this->View()->getAssign('sArticle');
+        static::assertSame($orderNumber, $product['ordernumber']);
     }
 }

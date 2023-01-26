@@ -1590,7 +1590,7 @@ EOD;
 
         $this->get(ShopRegistrationServiceInterface::class)->registerShop($parent);
 
-        return $this->Front()->Router()->assemble([
+        return $this->Front()->ensureRouter()->assemble([
             'controller' => 'campaign',
             'module' => 'frontend',
             'emotionId' => $emotionId,

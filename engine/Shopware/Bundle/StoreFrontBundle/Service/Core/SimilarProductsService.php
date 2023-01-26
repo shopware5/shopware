@@ -86,7 +86,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
          * Loads the list product data for the selected numbers.
          * All numbers are joined in the `extractNumbers` function to prevent that a product will be loaded multiple times
          */
-        $listProducts = $this->listProductService->getList(
+        $similarProducts = $this->listProductService->getList(
             $this->extractNumbers($numbers),
             $context
         );
@@ -101,7 +101,7 @@ class SimilarProductsService implements SimilarProductsServiceInterface
             }
 
             $result[$product->getNumber()] = $this->getProductsByNumbers(
-                $listProducts,
+                $similarProducts,
                 $numbers[$product->getId()]
             );
         }
@@ -135,18 +135,21 @@ class SimilarProductsService implements SimilarProductsServiceInterface
     }
 
     /**
-     * @param array<string, ListProduct> $products
-     * @param array<string>              $numbers
+     * @param array<string, ListProduct> $similarProducts
+     * @param array<string>              $similarProductNumbersByProductId
      *
      * @return array<string, ListProduct>
      */
-    private function getProductsByNumbers(array $products, array $numbers): array
+    private function getProductsByNumbers(array $similarProducts, array $similarProductNumbersByProductId): array
     {
+        $maxSimilarProducts = (int) $this->config->get('maxcrosssimilar');
+        $count = 1;
         $result = [];
 
-        foreach ($products as $product) {
-            if (\in_array($product->getNumber(), $numbers)) {
+        foreach ($similarProducts as $product) {
+            if ($count <= $maxSimilarProducts && \in_array($product->getNumber(), $similarProductNumbersByProductId, true)) {
                 $result[$product->getNumber()] = $product;
+                ++$count;
             }
         }
 

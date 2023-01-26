@@ -158,7 +158,7 @@ class Shopware_Components_Config implements ArrayAccess
      */
     public function formatName($name)
     {
-        if (strpos($name, 's') === 0 && preg_match('#^s[A-Z]#', $name)) {
+        if (str_starts_with($name, 's') && preg_match('#^s[A-Z]#', $name)) {
             $name = substr($name, 1);
         }
 

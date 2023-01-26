@@ -200,3 +200,8 @@ parameters:
             message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
             count: 1
             path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+
+        - # Bug in PHPStan. See https://github.com/phpstan/phpstan/issues/6653
+            message: "#^Method sArticles\\:\\:sGetProductByOrdernumber\\(\\) should return array\\<string, mixed\\>\\|false but returns array\\<string, mixed\\>\\|bool\\.$#"
+            count: 1
+            path: engine/Shopware/Core/sArticles.php

@@ -25,7 +25,6 @@
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
-use Shopware\Bundle\SearchBundle;
 use Shopware\Bundle\SearchBundle\Condition\VariantCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\FacetResultInterface;
@@ -108,110 +107,52 @@ class sArticles implements Enlight_Hook
      */
     protected $mediaRepository = null;
 
-    /**
-     * @var ContextServiceInterface
-     */
-    private $contextService;
+    private ContextServiceInterface $contextService;
+
+    private Shopware_Components_Config $config;
+
+    private ListProductServiceInterface $listProductService;
+
+    private ProductServiceInterface $productService;
+
+    private ConfiguratorServiceInterface $configuratorService;
+
+    private PropertyServiceInterface $propertyService;
+
+    private AdditionalTextServiceInterface $additionalTextService;
+
+    private ProductSearchInterface $searchService;
+
+    private Enlight_Event_EventManager $eventManager;
+
+    private Enlight_Components_Db_Adapter_Pdo_Mysql $db;
+
+    private Connection $connection;
+
+    private LegacyStructConverter $legacyStructConverter;
+
+    private LegacyEventManager $legacyEventManager;
+
+    private QueryAliasMapper $queryAliasMapper;
+
+    private Enlight_Controller_Front $frontController;
+
+    private ProductNumberSearchInterface $productNumberSearch;
+
+    private Enlight_Components_Session_Namespace $session;
+
+    private StoreFrontCriteriaFactoryInterface $storeFrontCriteriaFactory;
 
     /**
-     * @var Shopware_Components_Config
+     * @var array<int>
      */
-    private $config;
+    private array $cachePromotions = [];
 
-    /**
-     * @var ListProductServiceInterface
-     */
-    private $listProductService;
+    private sArticlesComparisons $productComparisons;
 
-    /**
-     * @var ProductServiceInterface
-     */
-    private $productService;
+    private ProductNumberServiceInterface $productNumberService;
 
-    /**
-     * @var ConfiguratorServiceInterface
-     */
-    private $configuratorService;
-
-    /**
-     * @var PropertyServiceInterface
-     */
-    private $propertyService;
-
-    /**
-     * @var AdditionalTextServiceInterface
-     */
-    private $additionalTextService;
-
-    /**
-     * @var SearchBundle\ProductSearch
-     */
-    private $searchService;
-
-    /**
-     * @var Enlight_Event_EventManager
-     */
-    private $eventManager;
-
-    /**
-     * @var Enlight_Components_Db_Adapter_Pdo_Mysql
-     */
-    private $db;
-
-    /**
-     * @var LegacyStructConverter
-     */
-    private $legacyStructConverter;
-
-    /**
-     * @var LegacyEventManager
-     */
-    private $legacyEventManager;
-
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
-
-    /**
-     * @var Enlight_Controller_Front
-     */
-    private $frontController;
-
-    /**
-     * @var ProductNumberSearchInterface
-     */
-    private $productNumberSearch;
-
-    /**
-     * @var Enlight_Components_Session_Namespace
-     */
-    private $session;
-
-    /**
-     * @var StoreFrontCriteriaFactoryInterface
-     */
-    private $storeFrontCriteriaFactory;
-
-    /**
-     * @var array
-     */
-    private $cachePromotions = [];
-
-    /**
-     * @var sArticlesComparisons
-     */
-    private $productComparisons;
-
-    /**
-     * @var ProductNumberServiceInterface
-     */
-    private $productNumberService;
-
-    /**
-     * @var ListingLinkRewriteService
-     */
-    private $listingLinkRewriteService;
+    private ListingLinkRewriteService $listingLinkRewriteService;
 
     public function __construct(
         Category $category = null,
@@ -227,6 +168,7 @@ class sArticles implements Enlight_Hook
 
         $this->config = $container->get(Shopware_Components_Config::class);
         $this->db = $container->get('db');
+        $this->connection = $container->get(Connection::class);
         $this->eventManager = $container->get('events');
         $this->contextService = $container->get(ContextServiceInterface::class);
         $this->listProductService = $container->get(ListProductServiceInterface::class);
@@ -340,7 +282,7 @@ class sArticles implements Enlight_Hook
      */
     public function sGetArticleProperties($articleId)
     {
-        $orderNumber = $this->getOrderNumberByProductId($articleId);
+        $orderNumber = $this->getOrderNumberByProductId((int) $articleId);
         if (!$orderNumber) {
             return [];
         }
@@ -406,8 +348,7 @@ class sArticles implements Enlight_Hook
             $shopId = $container->get('shop')->getId();
         }
 
-        $connection = $container->get(Connection::class);
-        $query = $connection->createQueryBuilder();
+        $query = $this->connection->createQueryBuilder();
         $query->insert('s_articles_vote');
         $query->values([
             'articleID' => ':productId',
@@ -438,7 +379,7 @@ class sArticles implements Enlight_Hook
             throw new Enlight_Exception('sSaveComment #00: Could not save comment');
         }
 
-        $insertId = $connection->lastInsertId();
+        $insertId = $this->connection->lastInsertId();
         if (!isset($this->session['sArticleCommentInserts'])) {
             $this->session['sArticleCommentInserts'] = new ArrayObject();
         }
@@ -759,6 +700,7 @@ class sArticles implements Enlight_Hook
      */
     public function getProductNavigation($orderNumber, $categoryId, Enlight_Controller_Request_RequestHttp $request)
     {
+        $categoryId = (int) $categoryId;
         $context = $this->contextService->getShopContext();
 
         $criteria = $this->createProductNavigationCriteria($categoryId, $context, $request);
@@ -1100,7 +1042,7 @@ class sArticles implements Enlight_Hook
      * Get one product with all available data
      *
      * @param int         $id          article id
-     * @param string|null $sCategoryID
+     * @param int|null    $sCategoryID
      * @param string|null $number
      *
      * @return array
@@ -1266,7 +1208,7 @@ class sArticles implements Enlight_Hook
     /**
      * @param string $ordernumber
      *
-     * @return array|false
+     * @return array<string, mixed>|false
      */
     public function sGetProductByOrdernumber($ordernumber)
     {
@@ -1287,15 +1229,16 @@ class sArticles implements Enlight_Hook
     /**
      * Get basic product data in various modes (firmly defined by id, random, top, new)
      *
-     * @param string $mode      Modus (fix, random, top, new)
-     * @param int    $category  filter by category
-     * @param int    $value     product id / ordernumber for firmly definied products
-     * @param bool   $withImage
+     * @param string                    $mode      Modus (fix, random, top, new)
+     * @param int                       $category  filter by category
+     * @param int|string|numeric-string $value     product id / order number for firmly defined products
+     * @param bool                      $withImage
      *
-     * @return array|false
+     * @return array<string, mixed>|false
      */
     public function sGetPromotionById($mode, $category = 0, $value = 0, $withImage = false)
     {
+        $category = (int) $category;
         $notifyUntil = $this->eventManager->notifyUntil(
             'Shopware_Modules_Articles_GetPromotionById_Start',
             [
@@ -1310,13 +1253,13 @@ class sArticles implements Enlight_Hook
             return false;
         }
 
-        $value = $this->getPromotionNumberByMode($mode, $category, $value, $withImage);
+        $value = $this->getPromotionNumberByMode($mode, $category, $value);
 
-        if (!$value) {
+        if ($value === '') {
             return false;
         }
 
-        $result = $this->getPromotion((int) $category, $value);
+        $result = $this->getPromotion($category, $value);
 
         if (!$result) {
             return false;
@@ -1559,7 +1502,7 @@ class sArticles implements Enlight_Hook
      * @param bool   $returnAll   Return only name or additional data, too
      * @param bool   $translate   Disables the translation of the product if set to false
      *
-     * @return ($returnAll is true ? array : string)|false
+     * @return ($returnAll is true ? array{id: numeric-string, main_detail_id: numeric-string, did: numeric-string, articleName: string, configurator_set_id: numeric-string} : string)|false
      */
     public function sGetArticleNameByOrderNumber($orderNumber, $returnAll = false, $translate = true)
     {
@@ -1633,15 +1576,16 @@ class sArticles implements Enlight_Hook
      * @param int  $articleId
      * @param bool $returnAll
      *
-     * @return string name
+     * @return ($returnAll is true ? array{id: numeric-string, main_detail_id: numeric-string, did: numeric-string, articleName: string, configurator_set_id: numeric-string} : string)|false
      */
     public function sGetArticleNameByArticleId($articleId, $returnAll = false)
     {
-        $ordernumber = $this->db->fetchOne('
-            SELECT ordernumber FROM s_articles_details WHERE kind=1 AND articleID=?
-        ', [$articleId]);
+        $orderNumber = (string) $this->db->fetchOne(
+            'SELECT ordernumber FROM s_articles_details WHERE kind=1 AND articleID=?',
+            [$articleId]
+        );
 
-        return $this->sGetArticleNameByOrderNumber($ordernumber, $returnAll);
+        return $this->sGetArticleNameByOrderNumber($orderNumber, $returnAll);
     }
 
     /**
@@ -2056,17 +2000,15 @@ class sArticles implements Enlight_Hook
             $value = $diff[array_rand($diff)];
         }
 
-        $this->cachePromotions[] = $value;
+        $this->cachePromotions[] = (int) $value;
 
         return $value;
     }
 
     /**
      * Helper function to get access to the media repository.
-     *
-     * @return MediaRepository
      */
-    private function getMediaRepository()
+    private function getMediaRepository(): MediaRepository
     {
         if ($this->mediaRepository === null) {
             $this->mediaRepository = Shopware()->Models()->getRepository(Media::class);
@@ -2077,10 +2019,8 @@ class sArticles implements Enlight_Hook
 
     /**
      * Helper function to get access to the product repository.
-     *
-     * @return ArticleRepository
      */
-    private function getProductRepository()
+    private function getProductRepository(): ArticleRepository
     {
         if ($this->articleRepository === null) {
             $this->articleRepository = Shopware()->Models()->getRepository(Article::class);
@@ -2090,17 +2030,13 @@ class sArticles implements Enlight_Hook
     }
 
     /**
-     * @param int $categoryId
-     *
      * @throws Exception
-     *
-     * @return Criteria
      */
     private function createProductNavigationCriteria(
-        $categoryId,
+        int $categoryId,
         ShopContextInterface $context,
         Enlight_Controller_Request_RequestHttp $request
-    ) {
+    ): Criteria {
         $streamId = $this->getStreamIdOfCategory($categoryId);
         if ($streamId === null) {
             return $this->storeFrontCriteriaFactory->createProductNavigationCriteria(
@@ -2120,34 +2056,23 @@ class sArticles implements Enlight_Hook
         return $criteria;
     }
 
-    /**
-     * @param int $categoryId
-     *
-     * @return int|null
-     */
-    private function getStreamIdOfCategory($categoryId)
+    private function getStreamIdOfCategory(int $categoryId): ?int
     {
         $streamId = $this->db->fetchOne('SELECT `stream_id` FROM `s_categories` WHERE id = ?', [$categoryId]);
 
-        if ($streamId === null) {
+        if (empty($streamId)) {
             return null;
         }
 
         return (int) $streamId;
     }
 
-    /**
-     * @param string $orderNumber
-     * @param int    $categoryId
-     *
-     * @return array
-     */
     private function buildNavigation(
         ProductNumberSearchResult $searchResult,
-        $orderNumber,
-        $categoryId,
+        string $orderNumber,
+        int $categoryId,
         ShopContextInterface $context
-    ) {
+    ): array {
         $products = array_values($searchResult->getProducts());
 
         if (empty($products)) {
@@ -2199,12 +2124,7 @@ class sArticles implements Enlight_Hook
         return [];
     }
 
-    /**
-     * @param int $categoryId
-     *
-     * @return string
-     */
-    private function buildCategoryLink($categoryId, Enlight_Controller_Request_RequestHttp $request)
+    private function buildCategoryLink(int $categoryId, Enlight_Controller_Request_RequestHttp $request): string
     {
         $params = $this->queryAliasMapper->replaceLongParams($request->getParams());
 
@@ -2227,7 +2147,7 @@ class sArticles implements Enlight_Hook
 
         $queryPrams = http_build_query($params, '', '&');
 
-        return $this->config->get('sBASEFILE') . '?' . $queryPrams;
+        return sprintf('%s?%s', $this->config->get('sBASEFILE'), $queryPrams);
     }
 
     /**
@@ -2253,7 +2173,10 @@ class sArticles implements Enlight_Hook
         return (int) $type;
     }
 
-    private function getPromotionNumberByMode($mode, $category, $value, $withImage)
+    /**
+     * @param int|string|numeric-string $value
+     */
+    private function getPromotionNumberByMode(string $mode, int $category, $value): string
     {
         switch ($mode) {
             case 'top':
@@ -2267,28 +2190,31 @@ class sArticles implements Enlight_Hook
         }
 
         if (!$value) {
-            return false;
+            return '';
         }
 
-        if (is_numeric($value)) {
-            $number = $this->getOrderNumberByProductId($value);
-            if ($number) {
-                $value = $number;
+        $checkOrderNumber = $this->connection->fetchOne(
+            'SELECT `ordernumber` FROM `s_articles_details` WHERE `ordernumber` = :orderNumber',
+            ['orderNumber' => $value]
+        );
+        if ($checkOrderNumber === false) {
+            $number = $this->getOrderNumberByProductId((int) $value);
+            if ($number !== '') {
+                return $number;
             }
         }
 
-        return $value;
+        return (string) $value;
     }
 
     /**
      * Internal helper function to convert the image data from the database to the frontend structure.
      *
-     * @param array $image
-     * @param Album $productAlbum
+     * @param array<string, mixed> $image
      *
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getDataOfProductImage($image, $productAlbum)
+    private function getDataOfProductImage(array $image, Album $productAlbum): array
     {
         // Initial the data array
         $imageData = [];
@@ -2320,8 +2246,7 @@ class sArticles implements Enlight_Hook
 
         // Attributes as array as they come from non configurator products
         if (!empty($image['attribute'])) {
-            unset($image['attribute']['id']);
-            unset($image['attribute']['articleImageId']);
+            unset($image['attribute']['id'], $image['attribute']['articleImageId']);
             $imageData['attribute'] = $image['attribute'];
         } else {
             $imageData['attribute'] = [];
@@ -2341,8 +2266,8 @@ class sArticles implements Enlight_Hook
         }
 
         foreach ($sizes as $key => $size) {
-            if (strpos($size, 'x') === 0) {
-                $size = $size . 'x' . $size;
+            if (str_starts_with($size, 'x')) {
+                $size = sprintf('%sx%s', $size, $size);
             }
 
             if ($image['type'] === Media::TYPE_IMAGE || $image['media']['type'] === Media::TYPE_IMAGE) {
@@ -2375,7 +2300,7 @@ class sArticles implements Enlight_Hook
      * Returns a minified product which can be used for listings,
      * sliders or emotions.
      *
-     * @return array|false
+     * @return array<string, mixed>|false
      */
     private function getPromotion(?int $category, string $number)
     {
@@ -2682,14 +2607,9 @@ class sArticles implements Enlight_Hook
         return $formattedSelection;
     }
 
-    /**
-     * @param int $productId
-     *
-     * @return string
-     */
-    private function getOrderNumberByProductId($productId)
+    private function getOrderNumberByProductId(int $productId): string
     {
-        return $this->db->fetchOne(
+        return (string) $this->db->fetchOne(
             'SELECT ordernumber
              FROM s_articles_details
                 INNER JOIN s_articles

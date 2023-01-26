@@ -26,7 +26,6 @@ namespace Shopware\Bundle\StoreFrontBundle\Service;
 
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ProductContextInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface SimilarProductsServiceInterface
 {

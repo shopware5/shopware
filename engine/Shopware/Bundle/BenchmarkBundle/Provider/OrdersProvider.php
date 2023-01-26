@@ -45,15 +45,9 @@ class OrdersProvider implements BatchableProviderInterface
      */
     protected $shopId;
 
-    /**
-     * @var MatcherService
-     */
-    private $paymentMatcher;
+    private MatcherService $paymentMatcher;
 
-    /**
-     * @var MatcherService
-     */
-    private $shipmentMatcher;
+    private MatcherService $shipmentMatcher;
 
     public function __construct(Connection $dbalConnection, MatcherService $paymentMatcher, MatcherService $shipmentMatcher)
     {
@@ -103,32 +97,17 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
-    /**
-     * @param int $batchSize
-     *
-     * @return array
-     */
-    private function getOrdersList($batchSize = null)
+    private function getOrdersList(?int $batchSize = null): array
     {
         $config = $this->getOrderConfig();
-        $batch = (int) $config['batch_size'];
-
-        if ($batchSize !== null) {
-            $batch = $batchSize;
-        }
+        $batch = $batchSize ?? (int) $config['batch_size'];
 
         $orderData = $this->getOrderData($config, $batch);
-        $orderData = $this->hydrateData($orderData);
 
-        return $orderData;
+        return $this->hydrateData($orderData);
     }
 
-    /**
-     * @param int $batch
-     *
-     * @return array
-     */
-    private function getOrderData(array $config, $batch)
+    private function getOrderData(array $config, int $batch): array
     {
         $ordersBasicData = $this->getOrdersBasicData($config, $batch);
 
@@ -144,7 +123,7 @@ class OrdersProvider implements BatchableProviderInterface
         $billingCountries = $this->getBillingCountry($orderIds);
         $shippingCountries = $this->getShippingCountry($orderIds);
 
-        foreach ($orderDetails as $detailsId => $orderDetail) {
+        foreach ($orderDetails as $orderDetail) {
             $orderId = $orderDetail['orderID'];
             unset($orderDetail['orderID']);
             $ordersBasicData[$orderId]['details'][] = $orderDetail;
@@ -191,8 +170,8 @@ class OrdersProvider implements BatchableProviderInterface
             $basicOrder['payment'] = $paymentData[$basicOrder['paymentID']];
 
             $basicOrder['customer'] = $customerData[$basicOrder['userID']];
-            $basicOrder['customer']['billing']['country'] = isset($billingCountries[$orderId]) ? $billingCountries[$orderId] : '--';
-            $basicOrder['customer']['shipping']['country'] = isset($shippingCountries[$orderId]) ? $shippingCountries[$orderId] : '--';
+            $basicOrder['customer']['billing']['country'] = $billingCountries[$orderId] ?? '--';
+            $basicOrder['customer']['shipping']['country'] = $shippingCountries[$orderId] ?? '--';
 
             if (\strlen($basicOrder['customer']['billing']['country']) !== 2) {
                 $basicOrder['customer']['billing']['country'] = '--';
@@ -206,10 +185,7 @@ class OrdersProvider implements BatchableProviderInterface
         return $ordersBasicData;
     }
 
-    /**
-     * @return array
-     */
-    private function hydrateData(array $orderData)
+    private function hydrateData(array $orderData): array
     {
         $hydratedOrders = [];
 
@@ -226,8 +202,8 @@ class OrdersProvider implements BatchableProviderInterface
             $currentHydratedOrder['invoiceAmountNet'] = (float) $order['invoice_amount_net'];
             $currentHydratedOrder['isTaxFree'] = (bool) $order['taxfree'];
             $currentHydratedOrder['isNet'] = (bool) $order['net'];
-            $currentHydratedOrder['date'] = $dateTime->format('Y-m-d');
-            $currentHydratedOrder['datetime'] = $dateTime->format('Y-m-d H:i:s');
+            $currentHydratedOrder['date'] = $dateTime ? $dateTime->format('Y-m-d') : null;
+            $currentHydratedOrder['datetime'] = $dateTime ? $dateTime->format('Y-m-d H:i:s') : null;
             $currentHydratedOrder['customer'] = $order['customer'];
 
             // PHP DateTime can handle also invalid dates
@@ -238,7 +214,7 @@ class OrdersProvider implements BatchableProviderInterface
 
             $currentHydratedOrder['analytics'] = [
                 'device' => empty($order['deviceType']) ? 'desktop' : $order['deviceType'],
-                'referer' => $order['referer'] ? true : false,
+                'referer' => (bool) $order['referer'],
             ];
 
             $currentHydratedOrder['shipment'] = [
@@ -258,7 +234,7 @@ class OrdersProvider implements BatchableProviderInterface
                 ],
             ];
 
-            $currentHydratedOrder['items'] = isset($order['details']) ? $order['details'] : [];
+            $currentHydratedOrder['items'] = $order['details'] ?? [];
 
             $isCancelOrder = $currentHydratedOrder['status'] === 4;
 
@@ -286,14 +262,10 @@ class OrdersProvider implements BatchableProviderInterface
         return $hydratedOrders;
     }
 
-    /**
-     * @return array
-     */
-    private function getOrderDetails(array $orderIds)
+    private function getOrderDetails(array $orderIds): array
     {
-        $orderDetailsQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $orderDetailsQueryBuilder->select([
+        return $this->dbalConnection->createQueryBuilder()
+            ->select([
                 'details.id',
                 'details.orderID',
                 'details.id as detailId',
@@ -310,14 +282,10 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
-    /**
-     * @return array
-     */
-    private function getDispatchData(array $dispatchIds)
+    private function getDispatchData(array $dispatchIds): array
     {
-        $dispatchQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $dispatchQueryBuilder->select('dispatch.id, dispatch.name, MIN(costs.value) as minPrice, MAX(costs.value) as maxPrice')
+        return $this->dbalConnection->createQueryBuilder()
+            ->select('dispatch.id, dispatch.name, MIN(costs.value) as minPrice, MAX(costs.value) as maxPrice')
             ->from('s_premium_dispatch', 'dispatch')
             ->innerJoin('dispatch', 's_premium_shippingcosts', 'costs', 'dispatch.id = costs.dispatchID')
             ->where('dispatch.id IN (:dispatchIds)')
@@ -327,14 +295,10 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
-    /**
-     * @return array
-     */
-    private function getPaymentData(array $paymentIds)
+    private function getPaymentData(array $paymentIds): array
     {
-        $paymentQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $paymentQueryBuilder->select([
+        return $this->dbalConnection->createQueryBuilder()
+            ->select([
                 'payment.id',
                 'payment.name',
                 'payment.debit_percent as percentCosts',
@@ -348,14 +312,10 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
     }
 
-    /**
-     * @return array
-     */
-    private function getOrderConfig()
+    private function getOrderConfig(): array
     {
-        $configsQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $configsQueryBuilder->select('configs.*')
+        return $this->dbalConnection->createQueryBuilder()
+            ->select('configs.*')
             ->from('s_benchmark_config', 'configs')
             ->where('configs.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopId)
@@ -363,14 +323,10 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetch();
     }
 
-    /**
-     * @return array
-     */
-    private function getCustomerData(array $customerIds)
+    private function getCustomerData(array $customerIds): array
     {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        $customers = $queryBuilder->select([
+        $customers = $this->dbalConnection->createQueryBuilder()
+            ->select([
                 'customer.id',
                 'customer.accountmode = 0 as registered',
                 'YEAR(customer.birthday) as birthYear',
@@ -391,14 +347,10 @@ class OrdersProvider implements BatchableProviderInterface
         return array_map([$this, 'matchGenders'], $customers);
     }
 
-    /**
-     * @return array
-     */
-    private function getBillingCountry(array $orderIds)
+    private function getBillingCountry(array $orderIds): array
     {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('billingAddress.orderID, country.countryiso')
+        return $this->dbalConnection->createQueryBuilder()
+            ->select('billingAddress.orderID, country.countryiso')
             ->from('s_order_billingaddress', 'billingAddress')
             ->innerJoin('billingAddress', 's_core_countries', 'country', 'country.id = billingAddress.countryID')
             ->where('billingAddress.orderID IN (:orderIds)')
@@ -407,14 +359,10 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    /**
-     * @return array
-     */
-    private function getShippingCountry(array $orderIds)
+    private function getShippingCountry(array $orderIds): array
     {
-        $queryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $queryBuilder->select('shippingAddress.orderID, country.countryiso')
+        return $this->dbalConnection->createQueryBuilder()
+            ->select('shippingAddress.orderID, country.countryiso')
             ->from('s_order_shippingaddress', 'shippingAddress')
             ->innerJoin('shippingAddress', 's_core_countries', 'country', 'country.id = shippingAddress.countryID')
             ->where('shippingAddress.orderID IN (:orderIds)')
@@ -423,10 +371,7 @@ class OrdersProvider implements BatchableProviderInterface
             ->fetchAll(PDO::FETCH_KEY_PAIR);
     }
 
-    /**
-     * @return array
-     */
-    private function matchGenders(array $customer)
+    private function matchGenders(array $customer): array
     {
         if ($customer['gender'] === 'mr') {
             $customer['gender'] = 'male';
@@ -447,12 +392,8 @@ class OrdersProvider implements BatchableProviderInterface
 
     /**
      * Fetches a column of an associative array and returns the unique values.
-     *
-     * @param string $column
-     *
-     * @return array
      */
-    private function getUniqueColumnValues(array $dataSet, $column)
+    private function getUniqueColumnValues(array $dataSet, string $column): array
     {
         $columnValues = array_column($dataSet, $column);
 
@@ -460,15 +401,14 @@ class OrdersProvider implements BatchableProviderInterface
         return array_keys(array_flip($columnValues));
     }
 
-    /**
-     * @param string $date
-     *
-     * @return bool
-     */
-    private function isValidDate($date)
+    private function isValidDate(?string $date): bool
     {
+        if (empty($date)) {
+            return false;
+        }
+
         $re = '/^([0-9]{2,4})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$/m';
 
-        return preg_match($re, $date);
+        return (bool) preg_match($re, $date);
     }
 }

@@ -117,6 +117,6 @@ class sCore implements \Enlight_Hook
             $newQueryArray[(string) $key] = $queryItem;
         }
 
-        return $this->front->Router()->assemble($newQueryArray);
+        return $this->front->ensureRouter()->assemble($newQueryArray);
     }
 }

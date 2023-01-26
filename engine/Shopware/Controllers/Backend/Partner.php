@@ -317,7 +317,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
 
         $this->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
-        $url = $this->Front()->Router()->assemble(['module' => 'frontend', 'controller' => 'index']);
+        $url = $this->Front()->ensureRouter()->assemble(['module' => 'frontend', 'controller' => 'index']);
 
         $this->redirect($url . '?sPartner=' . urlencode($partnerId));
     }

@@ -103,7 +103,7 @@ class Router
         $front = $args->getSubject();
         $request = $front->Request();
         /** @var RouterInterface $router */
-        $router = $front->Router();
+        $router = $front->ensureRouter();
         // Fix context on forward
         $context = $router->getContext();
         $context->setGlobalParams($context::getGlobalParamsFromRequest($request));

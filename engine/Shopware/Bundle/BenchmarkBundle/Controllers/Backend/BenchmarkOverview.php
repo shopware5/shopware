@@ -98,7 +98,7 @@ class Shopware_Controllers_Backend_BenchmarkOverview extends Shopware_Controller
 
         $this->View()->assign([
             'shops' => $shops,
-            'shopSwitchUrl' => $this->Front()->Router()->assemble([
+            'shopSwitchUrl' => $this->Front()->ensureRouter()->assemble([
                 'controller' => 'BenchmarkOverview',
                 'action' => 'render',
                 'shopId' => 'replaceShopId',

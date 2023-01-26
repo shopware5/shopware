@@ -83,7 +83,7 @@ class Shopware_Plugins_Frontend_RouterRewrite_Bootstrap extends Shopware_Compone
         ) {
             return;
         }
-        $router = $args->getSubject()->Router();
+        $router = $args->getSubject()->ensureRouter();
 
         $query = $request->getQuery();
         $location = $router->assemble($query);
