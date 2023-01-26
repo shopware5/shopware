@@ -232,6 +232,7 @@ Elasticsearch 7:
     script:
         - apk add --no-cache sudo
         - export SW_HOST=$(hostname -i)
+        - composer update laminas/laminas-code
         - make init
         - make prepare-mink
         - chown -R www-data:www-data .
@@ -250,11 +251,11 @@ Mink:
     image: "gitlab.shopware.com:5005/shopware/5/product/image/continuous:$IMAGE_TAG"
     parallel:
       matrix:
-        - IMAGE_TAG: [ '7.4', '8.0' ]
+        - IMAGE_TAG: [ '7.4', '8.2' ]
           MINK_TAG: [ 'account', 'checkout1', 'checkout2', 'detail', 'listing', 'note', 'sitemap', 'misc', 'backend' ]
     rules:
         - if: '$CI_PIPELINE_SOURCE == "schedule"'
-        - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $IMAGE_TAG != "8.0"'
+        - if: '$CI_PIPELINE_SOURCE == "merge_request_event" && $IMAGE_TAG != "7.4"'
         - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
           when: manual
           allow_failure: true
