@@ -137,6 +137,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     /**
      * @return static
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this;
@@ -153,6 +154,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     /**
      * @return mixed scalar on success, or null on failure
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return key($this->siblings);

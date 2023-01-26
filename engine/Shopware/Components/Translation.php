@@ -123,7 +123,7 @@ class Shopware_Components_Translation
     {
         $tmp = unserialize($data, ['allowed_classes' => false]);
         if ($tmp === false) {
-            $tmp = unserialize(utf8_decode($data), ['allowed_classes' => false]);
+            $tmp = unserialize(mb_convert_encoding($data, 'ISO-8859-1', 'UTF-8'), ['allowed_classes' => false]);
         }
         if ($tmp === false) {
             return [];

@@ -653,6 +653,7 @@ abstract class Smarty_Resource
  * @property bool   $template  Extended Template reference
  * @property string $content   Source Content
  */
+#[AllowDynamicProperties]
 class Smarty_Template_Source
 {
     /**

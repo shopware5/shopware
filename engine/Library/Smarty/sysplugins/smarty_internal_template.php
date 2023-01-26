@@ -19,6 +19,7 @@
  * @property Smarty_Template_Compiled $compiled
  * @property Smarty_Template_Cached   $cached
  */
+#[AllowDynamicProperties]
 class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
 
     /**

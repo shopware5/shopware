@@ -73,6 +73,13 @@ class Smarty_Internal_Templatelexer
     				'TO' => 'to',
     				);
 
+    public $ldel;
+    public $ldel_length;
+    private $smarty;
+    private $compiler;
+    private $rdel;
+    private $rdel_length;
+    private $mbstring_overload;
 
     function __construct($data,$compiler)
     {
