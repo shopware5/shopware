@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1a12d032cedaf45b61ce434e05553e03",
+    "content-hash": "c3809a0ee2c32294b18dff991ab0156c",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -152,23 +152,26 @@
         },
         {
             "name": "bcremer/line-reader",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bcremer/LineReader.git",
-                "reference": "568aae7a35a73e9ae6a6e2063e6f6760208006f2"
+                "reference": "5c84ef9e6be043ef1db463c6ae3b81e1a923873a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bcremer/LineReader/zipball/568aae7a35a73e9ae6a6e2063e6f6760208006f2",
-                "reference": "568aae7a35a73e9ae6a6e2063e6f6760208006f2",
+                "url": "https://api.github.com/repos/bcremer/LineReader/zipball/5c84ef9e6be043ef1db463c6ae3b81e1a923873a",
+                "reference": "5c84ef9e6be043ef1db463c6ae3b81e1a923873a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3|^7.4|^8.0|^8.1"
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "infection/infection": "^0.18",
+                "friendsofphp/php-cs-fixer": "3.13.2",
+                "infection/infection": "^0.26",
+                "phpstan/phpstan": "1.9.14",
+                "phpstan/phpstan-phpunit": "1.3.3",
                 "phpunit/phpunit": "^9.4"
             },
             "type": "library",
@@ -190,9 +193,9 @@
             "description": "Read large files line by line in a memory efficient (constant) way.",
             "support": {
                 "issues": "https://github.com/bcremer/LineReader/issues",
-                "source": "https://github.com/bcremer/LineReader/tree/1.2.0"
+                "source": "https://github.com/bcremer/LineReader/tree/1.3.0"
             },
-            "time": "2021-10-13T16:06:27+00:00"
+            "time": "2023-01-27T12:08:54+00:00"
         },
         {
             "name": "beberlei/assert",
