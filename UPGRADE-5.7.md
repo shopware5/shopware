@@ -46,6 +46,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/polyfill-php81` to version 1.27.0
 * Updated `symfony/serializer` to version 5.4.17
 * Updated `symfony/validator` to version 4.4.48
+* Updated `wikimedia/less.php` to version 3.2.0
 * Updated several indirect dependencies
 * Updated npm dependencies in `themes/package.json`
 * Updated npm dependencies in `themes/Frontend/Responsive/package.json`

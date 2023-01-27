@@ -93,6 +93,9 @@ class Smarty_Internal_Configfileparser#line 79 "smarty_internal_configfileparser
     public $retvalue = 0;
     private $lex;
     private $internalError = false;
+    private $smarty;
+    private $compiler;
+    private $yymajor;
 
     function __construct($lex, $compiler) {
         // set instance object

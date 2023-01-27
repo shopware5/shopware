@@ -14,6 +14,7 @@
  * @author Rodney Rehm
  */
 abstract class Smarty_CacheResource_Custom extends Smarty_CacheResource {
+    private $cache;
 
     /**
      * fetch cached content and its modification time from data source

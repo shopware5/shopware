@@ -123,9 +123,23 @@ class Smarty_Internal_Templateparser#line 79 "smarty_internal_templateparser.php
     // states whether the parse was successful or not
     public $successful = true;
     public $retvalue = 0;
+    public $block_nesting_level;
+    public $asp_tags;
+    public $root_buffer;
+    public $current_buffer;
+    public $compiler;
+    public $prefix_number;
     private $lex;
     private $internalError = false;
     private $strip = false;
+    private $smarty;
+    private $template;
+    private $security;
+    private $php_handling;
+    private $is_xml;
+    private $last_variable;
+    private $last_index;
+    private $yymajor;
 
     function __construct($lex, $compiler) {
         $this->lex = $lex;

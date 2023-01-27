@@ -136,6 +136,14 @@ abstract class Smarty_Internal_TemplateCompilerBase {
      */
     public $known_modifier_type = array();
 
+    public $nocache;
+    public $tag_nocache;
+    public $has_code;
+    public $has_output;
+    public $abort_and_recompile;
+    public $prefix_code;
+    public $has_variable_string;
+
     /**
      * Initialize compiler
      */

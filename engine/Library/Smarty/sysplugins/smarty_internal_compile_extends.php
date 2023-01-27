@@ -39,6 +39,10 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase {
     */
     public $mbstring_overload = 0;
 
+    private $_rdl;
+
+    private $_ldl;
+
     /**
     * Compiles code for the {extends} tag
     *

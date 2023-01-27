@@ -44,7 +44,7 @@ class DetailContext extends SubContext
      */
     public function iAmOnTheDetailPageForArticle(int $productId): void
     {
-        $this->getPage(Detail::class)->open(['articleId' => $productId, 'number' => null]);
+        $this->getPage(Detail::class)->open(['articleId' => $productId, 'number' => '']);
     }
 
     /**

@@ -3461,11 +3461,6 @@ parameters:
 			path: engine/Library/Enlight/Template/Default.php
 
 		-
-			message: "#^Access to an undefined property Smarty_Security\\:\\:\\$smarty\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
 			message: "#^If condition is always true\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php

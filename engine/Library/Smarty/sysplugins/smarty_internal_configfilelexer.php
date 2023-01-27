@@ -23,6 +23,9 @@ class Smarty_Internal_Configfilelexer
     public $smarty_token_names = array (		// Text for parser error messages
    				);
 
+    private $smarty;
+
+    private $mbstring_overload;
 
     function __construct($data, $smarty)
     {

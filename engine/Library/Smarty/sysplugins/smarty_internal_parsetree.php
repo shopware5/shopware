@@ -131,6 +131,7 @@ class _smarty_code extends _smarty_parsetree {
  * @ignore
  */
 class _smarty_doublequoted extends _smarty_parsetree {
+    private $subtrees;
 
     /**
      * Create parse tree buffer for double quoted string subtrees
