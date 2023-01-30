@@ -77,6 +77,7 @@ return (new Config())
         'ordered_class_elements' => true,
         'phpdoc_line_span' => true,
         'phpdoc_order' => true,
+        'phpdoc_separation' => ['groups' => [['ORM\*', 'Assert\*', 'ShopwareAssert\*'], ['deprecated', 'link', 'see', 'since'], ['author', 'copyright', 'license'], ['category', 'package', 'subpackage'], ['property', 'property-read', 'property-write']]],
         'phpdoc_summary' => false,
         'phpdoc_var_annotation_correct_order' => true,
         'php_unit_dedicate_assert' => true,
