@@ -129,6 +129,7 @@ class Smarty_Internal_Templateparser#line 79 "smarty_internal_templateparser.php
     public $current_buffer;
     public $compiler;
     public $prefix_number;
+    public $yymajor;
     private $lex;
     private $internalError = false;
     private $strip = false;
@@ -139,7 +140,6 @@ class Smarty_Internal_Templateparser#line 79 "smarty_internal_templateparser.php
     private $is_xml;
     private $last_variable;
     private $last_index;
-    private $yymajor;
 
     function __construct($lex, $compiler) {
         $this->lex = $lex;

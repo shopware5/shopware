@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Closure;
 use DateInterval;
 use DateTime;
 use Doctrine\DBAL\Connection;
@@ -367,7 +368,7 @@ class WidgetsTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @return \Closure(array<string, mixed>): bool
+     * @return Closure(array<string, mixed>): bool
      */
     private function getResponseSuccessValidator(bool $expectSuccess): callable
     {
