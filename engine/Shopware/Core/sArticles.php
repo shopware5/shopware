@@ -2210,11 +2210,11 @@ class sArticles implements Enlight_Hook
     /**
      * Internal helper function to convert the image data from the database to the frontend structure.
      *
-     * @param array<string, mixed> $image
+     * @param array<string, mixed>|null $image
      *
      * @return array<string, mixed>
      */
-    private function getDataOfProductImage(array $image, Album $productAlbum): array
+    private function getDataOfProductImage(?array $image, Album $productAlbum): array
     {
         // Initial the data array
         $imageData = [];
