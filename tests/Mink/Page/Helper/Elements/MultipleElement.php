@@ -31,6 +31,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Session;
 use Countable;
 use Iterator;
+use ReturnTypeWillChange;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Factory;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
@@ -137,7 +138,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     /**
      * @return static
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         return $this;
@@ -154,7 +155,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
     /**
      * @return mixed scalar on success, or null on failure
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return key($this->siblings);
