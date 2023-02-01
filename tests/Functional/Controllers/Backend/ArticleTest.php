@@ -335,7 +335,7 @@ class ArticleTest extends Enlight_Components_Test_Controller_TestCase
 
     private function turnToDefaultProduct(): void
     {
-        $productDataParams = require __DIR__ . '/_assets/productData.php';
+        $productDataParams = require __DIR__ . '/_fixtures/article/productData.php';
 
         $view = new Enlight_View_Default(new Enlight_Template_Manager());
         $request = new Enlight_Controller_Request_RequestTestCase();

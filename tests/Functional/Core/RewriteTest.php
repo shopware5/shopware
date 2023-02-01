@@ -22,6 +22,8 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Functional\Core;
+
 use DateTimeImmutable;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_TestCase;
@@ -35,8 +37,10 @@ use Shopware\Components\Routing\RouterInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware_Components_Config;
+use sRewriteTable;
 
-class sRewriteTest extends Enlight_Components_Test_TestCase
+class RewriteTest extends Enlight_Components_Test_TestCase
 {
     use ContainerTrait;
 
@@ -97,12 +101,15 @@ class sRewriteTest extends Enlight_Components_Test_TestCase
     /**
      * * @dataProvider provider
      */
-    public function testRewriteString($string, $result)
+    public function testRewriteString(string $string, string $result): void
     {
         static::assertEquals($result, $this->rewriteTable->sCleanupPath($string));
     }
 
-    public function provider()
+    /**
+     * @return array<array{0: string, 1: string}>
+     */
+    public function provider(): array
     {
         return [
             [' a  b ', 'a-b'],
