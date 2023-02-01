@@ -31,6 +31,8 @@ interface OptimizerServiceInterface
 {
     /**
      * @param string $filepath
+     *
+     * @return void
      */
     public function optimize($filepath);
 

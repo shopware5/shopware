@@ -31,6 +31,8 @@ interface AddressValidatorInterface
 {
     /**
      * @throws ValidationException
+     *
+     * @return void
      */
     public function validate(Address $address);
 

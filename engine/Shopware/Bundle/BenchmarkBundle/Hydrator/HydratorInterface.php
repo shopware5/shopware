@@ -24,7 +24,18 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Hydrator;
 
+use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
+use Shopware\Bundle\BenchmarkBundle\Struct\BenchmarkResponseInterface;
+
+/**
+ * @template TResponse of BenchmarkResponseInterface
+ */
 interface HydratorInterface
 {
+    /**
+     * @throws StatisticsHydratingException
+     *
+     * @return TResponse
+     */
     public function hydrate(array $data);
 }

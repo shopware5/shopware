@@ -190,11 +190,12 @@ parameters:
         # This is a bleeding edge feature and not working well since now. See https://github.com/phpstan/phpstan-doctrine/issues/332
         - '#Parameter .* of method Doctrine\\ORM\\.*::.*\(\) expects .*literal-string.* given#'
 
-        - # Doctrine type is integer|string. PHPStan allows only specific values
+        - # Doctrine type is integer|string. PHPStan allows only specific values defined by constants
             message: '#Property Shopware\\Models\\.*\\.*::\$.* type mapping mismatch: database can contain (int|string) but property expects .*#'
             paths:
                  - engine/Shopware/Models/Dispatch/Dispatch.php
                  - engine/Shopware/Models/Newsletter/Container.php
+                 - engine/Shopware/Models/ProductStream/ProductStream.php
 
         - # PHPStan DBA extension complains about temporary database table, which is only active during the time the migrations run
             message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"

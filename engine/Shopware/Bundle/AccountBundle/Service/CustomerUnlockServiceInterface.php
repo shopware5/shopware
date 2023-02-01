@@ -28,6 +28,8 @@ interface CustomerUnlockServiceInterface
 {
     /**
      * @param int $customerId
+     *
+     * @return void
      */
     public function unlock($customerId);
 }

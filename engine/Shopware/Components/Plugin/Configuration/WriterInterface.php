@@ -26,5 +26,11 @@ namespace Shopware\Components\Plugin\Configuration;
 
 interface WriterInterface
 {
+    /**
+     * @param array<string, mixed> $elements
+     * @param int                  $shopId
+     *
+     * @return void
+     */
     public function setByPluginName(string $pluginName, array $elements, $shopId = 1);
 }

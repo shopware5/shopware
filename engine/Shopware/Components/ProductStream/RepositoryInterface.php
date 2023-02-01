@@ -30,6 +30,8 @@ interface RepositoryInterface
 {
     /**
      * @param int $productStreamId
+     *
+     * @return void
      */
     public function prepareCriteria(Criteria $criteria, $productStreamId);
 

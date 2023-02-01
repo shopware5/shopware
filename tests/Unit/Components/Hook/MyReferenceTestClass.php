@@ -28,7 +28,7 @@ namespace Shopware\Tests\Unit\Components\Hook;
 
 class MyReferenceTestClass implements MyReferenceInterface
 {
-    public function myPublic(&$bar, $foo)
+    public function myPublic(string &$bar, string $foo): string
     {
         return $bar . $foo;
     }

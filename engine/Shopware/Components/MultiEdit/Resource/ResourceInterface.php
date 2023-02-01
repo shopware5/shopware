@@ -30,6 +30,8 @@ interface ResourceInterface
 {
     /**
      * Needs to return the grammar for out lexer
+     *
+     * @return array<string, array<string, string|array<string>>>
      */
     public function getGrammar();
 
@@ -39,6 +41,8 @@ interface ResourceInterface
      * @param class-string<ModelEntity> $attribute
      * @param string                    $operator
      * @param array                     $queryConfig
+     *
+     * @return array{data: array<array{title: mixed}>, total: int}
      */
     public function getValuesFor($attribute, $operator, $queryConfig);
 
@@ -48,11 +52,15 @@ interface ResourceInterface
      * @param array $tokens
      * @param int   $offset
      * @param int   $limit
+     *
+     * @return array{data: array<array<string, mixed>>, total: int}
      */
     public function filter($tokens, $offset, $limit, $orderBy = null);
 
     /**
      * Returns columns to be shown in the batchProcess window
+     *
+     * @return array<string, array<string>>
      */
     public function getBatchColumns();
 
@@ -60,6 +68,8 @@ interface ResourceInterface
      * The actual batch processing
      *
      * @param int $queueId
+     *
+     * @return array{totalCount: int, remaining: int, done: bool, processed: int}
      */
     public function batchProcess($queueId);
 
@@ -71,11 +81,15 @@ interface ResourceInterface
      * @param int   $offset
      * @param int   $limit
      * @param int   $queueId
+     *
+     * @return array{totalCount: int, offset: int, queueId: int, done: bool}
      */
     public function createQueue($filterArray, $operations, $offset, $limit, $queueId);
 
     /**
      * Needs to return the columns that can be shown as well as their data type.
+     *
+     * @return array<array<string, mixed>>
      */
     public function getColumnConfig();
 
@@ -83,6 +97,8 @@ interface ResourceInterface
      * Saves a single modified instance of the entity
      *
      * @param array $params
+     *
+     * @return array<string, mixed>|null
      */
     public function save($params);
 
@@ -91,6 +107,8 @@ interface ResourceInterface
      *
      * @param int $offset
      * @param int $limit
+     *
+     * @return array{totalCount: int, data: array<array<string, mixed>>}
      */
     public function listBackups($offset, $limit);
 
@@ -99,6 +117,8 @@ interface ResourceInterface
      *
      * @param int $id
      * @param int $offset
+     *
+     * @return array{totalCount: int, offset: int, done: bool}
      */
     public function restoreBackup($id, $offset);
 
@@ -106,6 +126,8 @@ interface ResourceInterface
      * Delete a given backup
      *
      * @param int $id
+     *
+     * @return bool
      */
     public function deleteBackup($id);
 }

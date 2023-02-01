@@ -32,6 +32,7 @@ use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsSendingException;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\HydratorInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\RequestException;
 use Shopware\Components\HttpClient\Response;
@@ -42,36 +43,24 @@ use Shopware\Models\Benchmark\BenchmarkConfig;
  */
 class StatisticsClient implements StatisticsClientInterface
 {
-    /**
-     * @var string
-     */
-    private $statisticsApiEndpoint;
+    private string $statisticsApiEndpoint;
+
+    private HttpClientInterface $client;
 
     /**
-     * @var HttpClientInterface
+     * @var HydratorInterface<StatisticsResponse>
      */
-    private $client;
+    private HydratorInterface $statisticsResponseHydrator;
+
+    private LoggerInterface $logger;
+
+    private Connection $connection;
 
     /**
-     * @var HydratorInterface
-     */
-    private $statisticsResponseHydrator;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
-
-    /**
-     * @var Connection
-     */
-    private $connection;
-
-    /**
-     * @param string $statisticsApiEndpoint
+     * @param HydratorInterface<StatisticsResponse> $statisticsResponseHydrator
      */
     public function __construct(
-        $statisticsApiEndpoint,
+        string $statisticsApiEndpoint,
         HttpClientInterface $client,
         HydratorInterface $statisticsResponseHydrator,
         LoggerInterface $logger,
@@ -87,7 +76,7 @@ class StatisticsClient implements StatisticsClientInterface
     /**
      * @throws StatisticsSendingException
      *
-     * @return Struct\StatisticsResponse
+     * @return StatisticsResponse
      */
     public function sendStatistics(StatisticsRequest $statisticsRequest)
     {
@@ -118,10 +107,8 @@ class StatisticsClient implements StatisticsClientInterface
 
     /**
      * @throws StatisticsHydratingException
-     *
-     * @return Struct\StatisticsResponse
      */
-    private function hydrateStatisticsResponse(Response $response)
+    private function hydrateStatisticsResponse(Response $response): StatisticsResponse
     {
         $data = json_decode(
             $response->getBody(),
@@ -135,7 +122,7 @@ class StatisticsClient implements StatisticsClientInterface
         return $this->statisticsResponseHydrator->hydrate($data);
     }
 
-    private function resetBenchmarkConfig(BenchmarkConfig $config)
+    private function resetBenchmarkConfig(BenchmarkConfig $config): void
     {
         $this->connection->update('s_benchmark_config', [
             'id' => Uuid::uuid4(),

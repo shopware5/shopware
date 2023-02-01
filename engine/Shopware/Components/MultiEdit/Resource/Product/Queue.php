@@ -133,7 +133,7 @@ class Queue
      *
      * @throws RuntimeException
      *
-     * @return array
+     * @return array{totalCount: int, offset: int, queueId: int, done: bool}
      */
     public function create($filterArray, $operations, $offset, $limit, $queueId)
     {

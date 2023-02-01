@@ -128,7 +128,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsHookMyBasicTestClassProxy extends
     /**
      * @inheritdoc
      */
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], ?\Shopware\Tests\Unit\Components\Hook\MyInterface $fooFoo = null)
+    public function myPublic(string $bar, string $foo = 'bar', array $barBar = [], ?\Shopware\Tests\Unit\Components\Hook\MyInterface $fooFoo = null) : string
     {
         return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,
@@ -253,7 +253,7 @@ class ShopwareTests_ShopwareTestsUnitComponentsHookMyReferenceTestClassProxy ext
     /**
      * @inheritdoc
      */
-    public function myPublic(&$bar, $foo)
+    public function myPublic(string &$bar, string $foo) : string
     {
         return $this->__getActiveHookManager(__FUNCTION__)->executeHooks(
             $this,

@@ -32,6 +32,8 @@ interface SearchTermLoggerInterface
 {
     /**
      * Traces the search result into the s_statistic_search
+     *
+     * @return void
      */
     public function logResult(Criteria $criteria, ProductNumberSearchResult $result, Shop $shop);
 }

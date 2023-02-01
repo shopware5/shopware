@@ -29,13 +29,34 @@ use Shopware\Bundle\ESIndexingBundle\Console\EvaluationHelperInterface;
 
 interface EsClientInterface
 {
+    /**
+     * @return void
+     */
     public function setLogger(LoggerInterface $logger);
 
+    /**
+     * @return void
+     */
     public function setEvaluation(EvaluationHelperInterface $evaluation);
 
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>
+     */
     public function info($params = []);
 
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>
+     */
     public function bulk($params = []);
 
+    /**
+     * @param array<string, mixed> $params
+     *
+     * @return array<string, mixed>
+     */
     public function search($params = []);
 }

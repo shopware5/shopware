@@ -35,6 +35,8 @@ interface CrudServiceInterface
      * @param string $table
      * @param string $column
      * @param bool   $updateDependingTables
+     *
+     * @return void
      */
     public function delete($table, $column, $updateDependingTables = false);
 
@@ -51,6 +53,8 @@ interface CrudServiceInterface
      * @param string|null           $newColumnName
      * @param bool                  $updateDependingTables
      * @param string|int|float|null $defaultValue
+     *
+     * @return void
      */
     public function update(
         $table,

@@ -33,6 +33,8 @@ interface ConfigurationLayerInterface
 
     /**
      * Write the values attached to this layer by shop and plugin name
+     *
+     * @param array<string, mixed> $data
      */
     public function writeValues(string $pluginName, ?int $shopId, array $data): void;
 }

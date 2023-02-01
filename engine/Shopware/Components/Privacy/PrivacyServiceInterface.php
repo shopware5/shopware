@@ -30,6 +30,8 @@ interface PrivacyServiceInterface
      * Delete guest users which have a firstlogin date in months greater than $months and no orders
      *
      * @param int $months
+     *
+     * @return void
      */
     public function cleanupGuestUsers($months);
 
@@ -37,6 +39,8 @@ interface PrivacyServiceInterface
      * Delete canceled orders that have a creation time in months greater or equal than $months
      *
      * @param int $months Amount of months
+     *
+     * @return void
      */
     public function cleanupCanceledOrders($months);
 }

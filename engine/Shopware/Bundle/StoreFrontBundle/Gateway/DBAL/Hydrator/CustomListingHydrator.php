@@ -24,6 +24,8 @@
 
 namespace Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator;
 
+use Shopware\Bundle\SearchBundle\FacetInterface;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomFacet;
 use Shopware\Bundle\StoreFrontBundle\Struct\Search\CustomSorting;
 use Shopware\Components\LogawareReflectionHelper;
@@ -52,6 +54,7 @@ class CustomListingHydrator extends Hydrator
         $sorting->setLabel($data['__customSorting_label']);
         $sorting->setPosition((int) $data['__customSorting_position']);
 
+        /** @var array<SortingInterface> $sortings */
         $sortings = $this->reflector->unserialize(
             json_decode($data['__customSorting_sortings'], true),
             sprintf('Serialization error in custom sorting %s', $sorting->getLabel())
@@ -97,8 +100,12 @@ class CustomListingHydrator extends Hydrator
         if (empty($facets)) {
             return null;
         }
+        $firstFacet = array_shift($facets);
+        if (!$firstFacet instanceof FacetInterface) {
+            return null;
+        }
 
-        $customFacet->setFacet(array_shift($facets));
+        $customFacet->setFacet($firstFacet);
 
         return $customFacet;
     }

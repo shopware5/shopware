@@ -28,5 +28,8 @@ use Shopware\Models\Customer\Customer;
 
 interface CustomerServiceInterface
 {
+    /**
+     * @return void
+     */
     public function update(Customer $customer);
 }

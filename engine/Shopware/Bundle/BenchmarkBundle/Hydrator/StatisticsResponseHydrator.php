@@ -29,14 +29,13 @@ use DateTimeZone;
 use Shopware\Bundle\BenchmarkBundle\Exception\StatisticsHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Struct\StatisticsResponse;
 
+/**
+ * @implements HydratorInterface<StatisticsResponse>
+ */
 class StatisticsResponseHydrator implements HydratorInterface
 {
     /**
      * {@inheritdoc}
-     *
-     * @throws StatisticsHydratingException
-     *
-     * @return StatisticsResponse
      */
     public function hydrate(array $data)
     {
@@ -50,6 +49,6 @@ class StatisticsResponseHydrator implements HydratorInterface
             throw new StatisticsHydratingException('Missing field "responseToken" from server response');
         }
 
-        return new StatisticsResponse($date = new DateTime('now', new DateTimeZone('UTC')), $data['responseToken'], false);
+        return new StatisticsResponse(new DateTime('now', new DateTimeZone('UTC')), $data['responseToken'], false);
     }
 }

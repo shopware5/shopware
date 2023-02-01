@@ -31,6 +31,8 @@ interface UserValidatorInterface
 {
     /**
      * @throws ValidationException
+     *
+     * @return void
      */
     public function validate(User $user);
 

@@ -28,11 +28,15 @@ interface SearchIndexerInterface
 {
     /**
      * Check if search index is valid anymore and rebuild if necessary
+     *
+     * @return void
      */
     public function validate();
 
     /**
      * Rebuilds the search index for the shopware default search query builder.
+     *
+     * @return void
      */
     public function build();
 }

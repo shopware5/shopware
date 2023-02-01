@@ -33,6 +33,8 @@ interface ContainerAwareInterface
      * Sets the Container.
      *
      * @param Container|null $Container A ContainerInterface instance or null
+     *
+     * @return void
      */
     public function setContainer(Container $Container = null);
 }

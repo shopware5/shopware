@@ -594,11 +594,11 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
     }
 
     /**
-     * @param array[] $result
+     * @param array{data: array<array<string, mixed>>, total: int} $result
      *
-     * @return array[]
+     * @return array{data: array<array<string, mixed>>, total: int}
      */
-    private function addAdditionalText($result): array
+    private function addAdditionalText(array $result): array
     {
         $products = $this->buildListProducts($result['data']);
 
@@ -610,23 +610,22 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
             if (!isset($products[$number])) {
                 continue;
             }
-            $product = $products[$number];
-            $item['Detail_additionalText_dynamic'] = $product->getAdditional();
+            $item['Detail_additionalText_dynamic'] = $products[$number]->getAdditional();
         }
 
         return $result;
     }
 
     /**
-     * @param array<string, mixed> $result
+     * @param array<array<string, mixed>> $result
      *
-     * @return ListProduct[]
+     * @return array<string, ListProduct>
      */
     private function buildListProducts(array $result): array
     {
         $products = [];
         foreach ($result as $item) {
-            $number = $item['Detail_number'];
+            $number = (string) $item['Detail_number'];
 
             $product = new ListProduct(
                 $item['Article_id'],

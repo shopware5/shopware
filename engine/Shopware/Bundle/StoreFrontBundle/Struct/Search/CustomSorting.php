@@ -50,7 +50,7 @@ class CustomSorting extends Extendable
     protected $position;
 
     /**
-     * @var SortingInterface[]
+     * @var array<SortingInterface>
      */
     protected $sortings;
 
@@ -119,7 +119,7 @@ class CustomSorting extends Extendable
     }
 
     /**
-     * @return SortingInterface[]
+     * @return array<SortingInterface>
      */
     public function getSortings()
     {
@@ -127,7 +127,7 @@ class CustomSorting extends Extendable
     }
 
     /**
-     * @param SortingInterface[] $sortings
+     * @param array<SortingInterface> $sortings
      */
     public function setSortings(array $sortings)
     {

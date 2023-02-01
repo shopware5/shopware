@@ -31,6 +31,9 @@ interface BasketHelperInterface
     public const DISCOUNT_ABSOLUTE = 1;
     public const DISCOUNT_PERCENT = 2;
 
+    /**
+     * @return void
+     */
     public function addProportionalDiscount(DiscountContext $discountContext);
 
     /**

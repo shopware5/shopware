@@ -45,6 +45,8 @@ interface LogRepositoryInterface extends ObjectRepository, Selectable
      * The deleteByDate method removes all log entries created between $since and $until.
      * If either of the parameters is left out, the default constant MIN_DATE (since) or MAX_DATE (until)
      * is used.
+     *
+     * @return int|mixed
      */
     public function deleteByDate(?DateTimeInterface $since, ?DateTimeInterface $until);
 

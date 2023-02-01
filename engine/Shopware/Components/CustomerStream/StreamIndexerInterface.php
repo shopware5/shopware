@@ -32,6 +32,8 @@ interface StreamIndexerInterface
 {
     /**
      * @param int $streamId
+     *
+     * @return void
      */
     public function populate($streamId, ProgressHelperInterface $helper);
 
@@ -44,6 +46,8 @@ interface StreamIndexerInterface
 
     /**
      * @param int $streamId
+     *
+     * @return void
      */
     public function clearStreamIndex($streamId);
 }

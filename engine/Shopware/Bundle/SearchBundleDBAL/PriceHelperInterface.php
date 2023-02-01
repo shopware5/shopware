@@ -40,16 +40,22 @@ interface PriceHelperInterface
 
     /**
      * Joins the customer prices to the provided query
+     *
+     * @return void
      */
     public function joinPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins the fallback customer group prices for the provided query
+     *
+     * @return void
      */
     public function joinDefaultPrices(QueryBuilder $query, ShopContextInterface $context);
 
     /**
      * Joins variants to the selected products which are available
+     *
+     * @return void
      */
     public function joinAvailableVariant(QueryBuilder $query);
 }

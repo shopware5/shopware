@@ -30,6 +30,8 @@ interface SearchIndexerInterface
      * Indexes the provided customer ids into the search index
      *
      * @param int[] $ids
+     *
+     * @return void
      */
     public function populate(array $ids);
 
@@ -37,11 +39,15 @@ interface SearchIndexerInterface
      * @deprecated in 5.6, will be removed in 5.7 without replacement.
      *
      * Clears the whole search index at once
+     *
+     * @return void
      */
     public function clearIndex();
 
     /**
      * Removes all customer rows from the generated search index which do not exist anymore
+     *
+     * @return void
      */
     public function cleanupIndex();
 }

@@ -204,7 +204,7 @@ class Filter
      * @param int   $limit
      * @param array $orderBy
      *
-     * @return array
+     * @return array{data: array<array<string, mixed>>, total: int}
      */
     public function filter($tokens, $offset, $limit, $orderBy)
     {

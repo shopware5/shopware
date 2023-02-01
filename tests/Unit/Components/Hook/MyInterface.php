@@ -28,5 +28,5 @@ namespace Shopware\Tests\Unit\Components\Hook;
 
 interface MyInterface
 {
-    public function myPublic($bar, $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null);
+    public function myPublic(string $bar, string $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null): string;
 }

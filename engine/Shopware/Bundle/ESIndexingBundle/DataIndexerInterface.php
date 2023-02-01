@@ -29,6 +29,9 @@ use Shopware\Bundle\ESIndexingBundle\Struct\ShopIndex;
 
 interface DataIndexerInterface
 {
+    /**
+     * @return void
+     */
     public function populate(ShopIndex $index, ProgressHelperInterface $progress);
 
     /**

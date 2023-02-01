@@ -38,9 +38,18 @@ interface VariantHelperInterface
      */
     public function getVariantFacet();
 
+    /**
+     * @return void
+     */
     public function joinVariantCondition(QueryBuilder $query, VariantCondition $condition);
 
+    /**
+     * @return void
+     */
     public function joinPrices(QueryBuilder $query, ShopContextInterface $context, Criteria $criteria);
 
+    /**
+     * @return void
+     */
     public function joinVariants(QueryBuilder $query);
 }

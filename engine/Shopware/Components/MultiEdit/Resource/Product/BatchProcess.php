@@ -114,7 +114,7 @@ class BatchProcess
      *
      * @throws RuntimeException When the column was not defined
      *
-     * @return array
+     * @return array<string, array<string>>
      */
     public function getEditableColumns()
     {
@@ -308,7 +308,7 @@ class BatchProcess
      *
      * @throws RuntimeException
      *
-     * @return array
+     * @return array{totalCount: int, remaining: int, done: bool, processed: int}
      */
     public function batchProcess($queueId)
     {

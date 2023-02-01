@@ -46,9 +46,9 @@ class CustomerOrderGateway
     }
 
     /**
-     * @param int[] $customerIds
+     * @param array<int> $customerIds
      *
-     * @return CustomerOrder[] indexed by customer id
+     * @return array<int, CustomerOrder> indexed by customer id
      */
     public function getList($customerIds)
     {

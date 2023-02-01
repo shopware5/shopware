@@ -33,6 +33,8 @@ interface OptimizerInterface
 
     /**
      * @param string $filepath
+     *
+     * @return void
      */
     public function run($filepath);
 

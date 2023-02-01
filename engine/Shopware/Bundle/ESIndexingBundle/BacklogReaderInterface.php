@@ -43,6 +43,8 @@ interface BacklogReaderInterface
 
     /**
      * @param int $lastId
+     *
+     * @return void
      */
     public function setLastBacklogId($lastId);
 }

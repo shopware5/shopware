@@ -59,7 +59,7 @@ class Value
      * @param string                    $operator
      * @param array                     $queryConfig
      *
-     * @return array
+     * @return array{data: array<array{title: mixed}>, total: int}
      */
     public function getValuesFor($attribute, $operator, $queryConfig)
     {

@@ -33,6 +33,8 @@ interface SchemaOperatorInterface
      * @param string                $column
      * @param string                $type
      * @param string|int|float|null $defaultValue
+     *
+     * @return void
      */
     public function createColumn($table, $column, $type, $defaultValue = null);
 
@@ -42,12 +44,16 @@ interface SchemaOperatorInterface
      * @param string                $newName
      * @param string                $type
      * @param string|int|float|null $defaultValue
+     *
+     * @return void
      */
     public function changeColumn($table, $originalName, $newName, $type, $defaultValue = null);
 
     /**
      * @param string $table
      * @param string $column
+     *
+     * @return void
      */
     public function dropColumn($table, $column);
 
@@ -56,6 +62,8 @@ interface SchemaOperatorInterface
      *
      * @param string $table
      * @param string $column
+     *
+     * @return void
      */
     public function resetColumn($table, $column);
 }

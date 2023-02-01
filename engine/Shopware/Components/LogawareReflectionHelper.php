@@ -26,6 +26,7 @@ namespace Shopware\Components;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\FacetInterface;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 
@@ -51,7 +52,7 @@ class LogawareReflectionHelper
      * @param array  $serialized
      * @param string $errorSource
      *
-     * @return array
+     * @return array<ConditionInterface|SortingInterface|FacetInterface>
      */
     public function unserialize($serialized, $errorSource)
     {
@@ -59,7 +60,7 @@ class LogawareReflectionHelper
 
         foreach ($serialized as $className => $arguments) {
             $className = explode('|', $className);
-            /** @var class-string<SortingInterface|FacetInterface> $className */
+            /** @var class-string<ConditionInterface|SortingInterface|FacetInterface> $className */
             $className = $className[0];
 
             try {
