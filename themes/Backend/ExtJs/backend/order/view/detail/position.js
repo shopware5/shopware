@@ -475,7 +475,8 @@ Ext.define('Shopware.apps.Order.view.detail.Position', {
             name: name,
             returnValue: returnValue,
             hiddenReturnValue: hiddenReturnValue,
-            articleStore: Ext.create('Shopware.apps.Base.store.Variant'),
+            articleStore: Ext.create('Shopware.apps.Order.store.PositionProductSearch'),
+            extraParam: { 'orderId': this.record.data.id },
             allowBlank: false,
             getValue: function() {
                 return this.getSearchField().getValue();

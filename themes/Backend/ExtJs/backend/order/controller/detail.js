@@ -378,6 +378,8 @@ Ext.define('Shopware.apps.Order.controller.Detail', {
                 column.setValue(record.get('name'));
             } else if (column.name === 'price'){
                 column.setValue(record.get('price'));
+            } else if (column.name === 'taxId'){
+                column.setValue(record.get('taxId'));
             }
         });
 
