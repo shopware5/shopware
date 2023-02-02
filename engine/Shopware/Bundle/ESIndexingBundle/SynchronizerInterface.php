@@ -31,6 +31,8 @@ interface SynchronizerInterface
 {
     /**
      * @param Backlog[] $backlogs
+     *
+     * @return void
      */
     public function synchronize(ShopIndex $shopIndex, array $backlogs);
 

@@ -57,11 +57,6 @@ class SearchIndexer implements SearchIndexerInterface
         $this->batchSize = $batchSize > 0 ? $batchSize : 4000;
     }
 
-    /**
-     * Check if search index is valid anymore and rebuild if necessary
-     *
-     * @return void
-     */
     public function validate()
     {
         $strategy = $this->config->get('searchRefreshStrategy', 3);
@@ -101,11 +96,6 @@ class SearchIndexer implements SearchIndexerInterface
         }
     }
 
-    /**
-     * Rebuilds the search index for the shopware default search query builder.
-     *
-     * @return void
-     */
     public function build()
     {
         MemoryLimit::setMinimumMemoryLimit(1024 * 1024 * 512);

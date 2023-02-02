@@ -31,6 +31,8 @@ interface CustomerValidatorInterface
 {
     /**
      * @throws ValidationException
+     *
+     * @return void
      */
     public function validate(Customer $customer);
 

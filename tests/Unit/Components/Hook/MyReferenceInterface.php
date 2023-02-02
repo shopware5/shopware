@@ -28,5 +28,5 @@ namespace Shopware\Tests\Unit\Components\Hook;
 
 interface MyReferenceInterface
 {
-    public function myPublic(&$bar, $foo);
+    public function myPublic(string &$bar, string $foo): string;
 }

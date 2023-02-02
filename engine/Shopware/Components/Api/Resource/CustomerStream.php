@@ -33,6 +33,7 @@ use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchInterface;
 use Shopware\Bundle\CustomerSearchBundle\CustomerNumberSearchResult;
 use Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\SearchIndexerInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
+use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\Api\Exception\CustomValidationException;
 use Shopware\Components\Api\Exception\NotFoundException;
 use Shopware\Components\Api\Exception\ParameterMissingException;
@@ -110,6 +111,9 @@ class CustomerStream extends Resource
             $unserializedSortings = $this->reflectionHelper->unserialize($decodedSortings, '');
 
             foreach ($unserializedSortings as $sorting) {
+                if (!$sorting instanceof SortingInterface) {
+                    continue;
+                }
                 $criteria->addSorting($sorting);
             }
         }

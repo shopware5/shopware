@@ -33,6 +33,8 @@ interface PresetDataSynchronizerInterface
      * @param string $elementSyncKey
      *
      * @throws PresetAssetImportException
+     *
+     * @return void
      */
     public function importElementAssets(Preset $preset, $elementSyncKey);
 

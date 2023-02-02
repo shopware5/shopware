@@ -26,34 +26,17 @@ namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
 use DateTimeInterface;
 
-class StatisticsResponse
+class StatisticsResponse implements BenchmarkResponseInterface
 {
-    /**
-     * @var DateTimeInterface
-     */
-    private $dateUpdated;
+    private DateTimeInterface $dateUpdated;
 
-    /**
-     * @var string
-     */
-    private $token;
+    private string $token;
 
-    /**
-     * @var bool
-     */
-    private $isFinished;
+    private bool $isFinished;
 
-    /**
-     * @var int
-     */
-    private $shopId;
+    private ?int $shopId;
 
-    /**
-     * @param string $token
-     * @param bool   $isFinished
-     * @param int    $shopId
-     */
-    public function __construct(DateTimeInterface $dateUpdated, $token, $isFinished, $shopId = null)
+    public function __construct(DateTimeInterface $dateUpdated, string $token, bool $isFinished, int $shopId = null)
     {
         $this->dateUpdated = $dateUpdated;
         $this->token = $token;

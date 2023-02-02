@@ -42,6 +42,8 @@ interface UrlFilterInterface
 
     /**
      * @param int $shopId
+     *
+     * @return void
      */
     public function addFilterContainer(FilterContainer $filterContainer, $shopId);
 

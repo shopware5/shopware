@@ -29,7 +29,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\Customer;
 interface CustomerServiceInterface
 {
     /**
-     * @param int[] $customerIds
+     * @param array<int> $customerIds
      *
      * @return array<int, Customer> indexed by customer id
      */

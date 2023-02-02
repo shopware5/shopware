@@ -30,10 +30,8 @@ use Doctrine\ORM\QueryBuilder;
 use Generator;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
-use Shopware\Components\DependencyInjection\Container;
-use Shopware\Models\Customer\Address;
+use Shopware\Tests\Functional\Controllers\Backend\Mock\ApplicationControllerMock;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
-use Shopware_Controllers_Backend_Application;
 
 class ApplicationTest extends TestCase
 {
@@ -41,6 +39,8 @@ class ApplicationTest extends TestCase
 
     /**
      * @dataProvider formatSearchValueTestDataProvider
+     *
+     * @param array{0: string, 1: array{type: string}} $parameter
      */
     public function testFormatSearchValue(array $parameter, string $expectedResult): void
     {
@@ -55,12 +55,36 @@ class ApplicationTest extends TestCase
     }
 
     /**
+     * @return array<array{0: array{0: string, 1: array{type: string}}, 1: string}>
+     */
+    public function formatSearchValueTestDataProvider(): array
+    {
+        return [
+            [['', ['type' => '']], '%%'],
+            [['test', ['type' => '']], '%test%'],
+            [['12-12', ['type' => '']], '%12-12%'],
+            [['12-12', ['type' => 'date']], '%12-12%'],
+            [['12-12', ['type' => 'datetime']], '%12-12%'],
+            [['2019-1016', ['type' => 'date']], '%2019-1016%'],
+            [['2019-10-16', ['type' => 'datetime']], '%2019-10-16%'],
+            [['2019-1016', ['type' => 'datetime']], '%2019-1016%'],
+            [['23.06.1999', ['type' => 'datetime']], '%1999-06-23%'],
+            [['23-1999', ['type' => 'date']], '%23-1999%'],
+            [['23-1999', ['type' => 'datetime']], '%23-1999%'],
+            [['2319-991', ['type' => 'datetime']], '%2319-991%'],
+            [['2019-991', ['type' => 'date']], '%2019-991%'],
+            [['2019-991', ['type' => 'datetime']], '%2019-991%'],
+            [['2019-10-16', ['type' => 'date']], '2019-10-16'],
+            [['23.06.1999', ['type' => 'date']], '1999-06-23'],
+        ];
+    }
+
+    /**
      * @dataProvider searchProvider
      */
     public function testGetSearchAssociationQueryDoesNotContainUnnecessaryParameters(?string $search, ?int $id): void
     {
-        $controller = new ApplicationControllerDerivateMock();
-        static::assertInstanceOf(Container::class, $this->getContainer());
+        $controller = new ApplicationControllerMock();
         $controller->setContainer($this->getContainer());
 
         $getAssociationModel = Closure::bind(function (string $association): string {
@@ -103,30 +127,8 @@ class ApplicationTest extends TestCase
         }
     }
 
-    public function formatSearchValueTestDataProvider(): array
-    {
-        return [
-            [['', ['type' => '']], '%%'],
-            [['test', ['type' => '']], '%test%'],
-            [['12-12', ['type' => '']], '%12-12%'],
-            [['12-12', ['type' => 'date']], '%12-12%'],
-            [['12-12', ['type' => 'datetime']], '%12-12%'],
-            [['2019-1016', ['type' => 'date']], '%2019-1016%'],
-            [['2019-10-16', ['type' => 'datetime']], '%2019-10-16%'],
-            [['2019-1016', ['type' => 'datetime']], '%2019-1016%'],
-            [['23.06.1999', ['type' => 'datetime']], '%1999-06-23%'],
-            [['23-1999', ['type' => 'date']], '%23-1999%'],
-            [['23-1999', ['type' => 'datetime']], '%23-1999%'],
-            [['2319-991', ['type' => 'datetime']], '%2319-991%'],
-            [['2019-991', ['type' => 'date']], '%2019-991%'],
-            [['2019-991', ['type' => 'datetime']], '%2019-991%'],
-            [['2019-10-16', ['type' => 'date']], '2019-10-16'],
-            [['23.06.1999', ['type' => 'date']], '1999-06-23'],
-        ];
-    }
-
     /**
-     * @return Generator<string, array>
+     * @return Generator<string, list<mixed>>
      */
     public function searchProvider(): Generator
     {
@@ -137,24 +139,14 @@ class ApplicationTest extends TestCase
         yield 'search parameter empty, id set' => ['', 2];
         yield 'search parameter set, id set' => ['24146963-df33-4ca8-b8ca-97eb4885e832', 2];
     }
-}
 
-/**
- * @extends \Shopware_Controllers_Backend_Application<Address>
- */
-class ApplicationControllerMock extends Shopware_Controllers_Backend_Application
-{
-    protected $model = Address::class;
+    public function testGetDetail(): void
+    {
+        $controller = new ApplicationControllerMock();
+        $controller->setContainer($this->getContainer());
 
-    protected $alias = 'address';
-}
-
-/**
- * @extends \Shopware_Controllers_Backend_Application<Address>
- */
-class ApplicationControllerDerivateMock extends Shopware_Controllers_Backend_Application
-{
-    protected $model = Address::class;
-
-    protected $alias = 'address';
+        $detail = $controller->getDetail(9999);
+        static::assertTrue($detail['success']);
+        static::assertEmpty($detail['data']);
+    }
 }

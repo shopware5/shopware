@@ -28,11 +28,11 @@ use DateTime;
 use DateTimeZone;
 use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
 
+/**
+ * @implements HydratorInterface<BusinessIntelligenceResponse>
+ */
 class BusinessIntelligenceResponseHydrator implements HydratorInterface
 {
-    /**
-     * @return BusinessIntelligenceResponse
-     */
     public function hydrate(array $data)
     {
         return new BusinessIntelligenceResponse(new DateTime('now', new DateTimeZone('UTC')), $data['html']);

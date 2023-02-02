@@ -34,6 +34,9 @@ use Shopware\Models\Attribute\ProductStream as ProductStreamAttribute;
  */
 class ProductStream extends ModelEntity
 {
+    public const TYPE_CONDITION = 1;
+    public const TYPE_SELECTION = 2;
+
     /**
      * INVERSE SIDE
      *
@@ -67,7 +70,7 @@ class ProductStream extends ModelEntity
     private $description;
 
     /**
-     * @var int
+     * @var self::TYPE_*
      *
      * @ORM\Column(name="type", type="integer", nullable=false)
      */
@@ -151,7 +154,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @return int
+     * @return self::TYPE_*
      */
     public function getType()
     {
@@ -159,7 +162,7 @@ class ProductStream extends ModelEntity
     }
 
     /**
-     * @param int $type
+     * @param self::TYPE_* $type
      */
     public function setType($type)
     {

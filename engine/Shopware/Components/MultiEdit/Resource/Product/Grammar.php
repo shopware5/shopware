@@ -144,7 +144,7 @@ class Grammar
     /**
      * Returns an array which represents the grammar of out product resource
      *
-     * @return array
+     * @return array<string, array<string, string|array<string>>>
      */
     public function getGrammar()
     {

@@ -26,5 +26,10 @@ namespace Shopware\Bundle\CustomerSearchBundleDBAL\Indexing;
 
 interface CustomerProviderInterface
 {
+    /**
+     * @param array<int> $customerIds
+     *
+     * @return array<int, AnalyzedCustomer>
+     */
     public function get($customerIds);
 }

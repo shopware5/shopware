@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,35 +24,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\Struct;
+namespace Shopware\Tests\Functional\Controllers\Backend\Mock;
 
-class BenchmarkDataResult
+use Shopware\Models\Customer\Address;
+use Shopware_Controllers_Backend_Application;
+
+/**
+ * @extends \Shopware_Controllers_Backend_Application<Address>
+ */
+class ApplicationControllerMock extends Shopware_Controllers_Backend_Application
 {
-    private ?StatisticsResponse $statisticsResponse;
+    protected $model = Address::class;
 
-    private ?BusinessIntelligenceResponse $biResponse;
-
-    public function __construct(
-        StatisticsResponse $statisticsResponse = null,
-        BusinessIntelligenceResponse $biResponse = null
-    ) {
-        $this->statisticsResponse = $statisticsResponse;
-        $this->biResponse = $biResponse;
-    }
-
-    /**
-     * @return StatisticsResponse|null
-     */
-    public function getStatisticsResponse()
-    {
-        return $this->statisticsResponse;
-    }
-
-    /**
-     * @return BusinessIntelligenceResponse|null
-     */
-    public function getBiResponse()
-    {
-        return $this->biResponse;
-    }
+    protected $alias = 'address';
 }

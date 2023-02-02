@@ -31,11 +31,15 @@ interface BacklogProcessorInterface
 {
     /**
      * @param Backlog[] $backlogs
+     *
+     * @return void
      */
     public function add($backlogs);
 
     /**
      * @param Backlog[] $backlogs
+     *
+     * @return void
      */
     public function process(ShopIndex $shopIndex, $backlogs);
 }

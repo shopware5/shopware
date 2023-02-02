@@ -370,7 +370,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
     {
         $builder = $this->getDetailQuery($id);
 
-        $data = iterator_to_array($this->getQueryPaginator($builder))[0];
+        $data = iterator_to_array($this->getQueryPaginator($builder))[0] ?? [];
         if (!\is_array($data)) {
             $data = [];
         }

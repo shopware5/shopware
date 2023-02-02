@@ -30,6 +30,8 @@ interface EvaluationHelperInterface
 {
     /**
      * @param bool $active
+     *
+     * @return static
      */
     public function setActive($active);
 
@@ -40,6 +42,8 @@ interface EvaluationHelperInterface
 
     /**
      * @param bool $stopOnError
+     *
+     * @return static
      */
     public function setStopOnError($stopOnError);
 
@@ -48,9 +52,18 @@ interface EvaluationHelperInterface
      */
     public function getStopOnError();
 
+    /**
+     * @return static
+     */
     public function setOutput(OutputInterface $output);
 
+    /**
+     * @return void
+     */
     public function addResult(array $data);
 
+    /**
+     * @return void
+     */
     public function finish();
 }

@@ -31,18 +31,13 @@ use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\SortingInterface;
 use Shopware\Components\LogawareReflectionHelper;
+use Shopware\Models\ProductStream\ProductStream;
 
 class Repository implements RepositoryInterface
 {
-    /**
-     * @var Connection
-     */
-    private $conn;
+    private Connection $conn;
 
-    /**
-     * @var LogawareReflectionHelper
-     */
-    private $reflector;
+    private LogawareReflectionHelper $reflector;
 
     public function __construct(Connection $conn, LogawareReflectionHelper $reflector)
     {
@@ -50,23 +45,18 @@ class Repository implements RepositoryInterface
         $this->reflector = $reflector;
     }
 
-    /**
-     * @param int $productStreamId
-     */
     public function prepareCriteria(Criteria $criteria, $productStreamId)
     {
         $productStream = $this->getStreamById($productStreamId);
 
-        if ($productStream['type'] == 1) {
+        if ((int) $productStream['type'] === ProductStream::TYPE_CONDITION) {
             $this->prepareConditionStream($productStream, $criteria);
 
             return;
         }
 
-        if ($productStream['type'] == 2) {
+        if ((int) $productStream['type'] === ProductStream::TYPE_SELECTION) {
             $this->prepareSelectionStream($productStream, $criteria);
-
-            return;
         }
     }
 
@@ -80,7 +70,7 @@ class Repository implements RepositoryInterface
         return $this->reflector->unserialize($serializedConditions, 'Serialization error in Product stream');
     }
 
-    private function prepareConditionStream(array $productStream, Criteria $criteria)
+    private function prepareConditionStream(array $productStream, Criteria $criteria): void
     {
         $this->assignConditions($productStream, $criteria);
 
@@ -90,9 +80,9 @@ class Repository implements RepositoryInterface
         }
     }
 
-    private function prepareSelectionStream(array $productStream, Criteria $criteria)
+    private function prepareSelectionStream(array $productStream, Criteria $criteria): void
     {
-        $productIds = $this->getProductIds($productStream['id']);
+        $productIds = $this->getProductIds((int) $productStream['id']);
         $criteria->addBaseCondition(new ProductIdCondition($productIds));
 
         $sortings = $criteria->getSortings();
@@ -102,11 +92,9 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * @param int $productStreamId
-     *
      * @return int[]
      */
-    private function getProductIds($productStreamId)
+    private function getProductIds(int $productStreamId): array
     {
         $query = $this->conn->createQueryBuilder();
         $query->select('article_id')
@@ -117,14 +105,9 @@ class Repository implements RepositoryInterface
         return $query->execute()->fetchAll(PDO::FETCH_COLUMN);
     }
 
-    /**
-     * @param int $productStreamId
-     *
-     * @return array
-     */
-    private function getStreamById($productStreamId)
+    private function getStreamById(int $productStreamId): array
     {
-        $row = $this->conn->fetchAssoc(
+        return $this->conn->fetchAssociative(
             'SELECT streams.*, customSorting.sortings as customSortings
              FROM s_product_streams streams
              LEFT JOIN s_search_custom_sorting customSorting
@@ -133,11 +116,9 @@ class Repository implements RepositoryInterface
              LIMIT 1',
             ['productStreamId' => $productStreamId]
         );
-
-        return $row;
     }
 
-    private function assignSortings(array $productStream, Criteria $criteria)
+    private function assignSortings(array $productStream, Criteria $criteria): void
     {
         $sorting = $productStream['sorting'];
         if (!empty($productStream['customSortings'])) {
@@ -153,7 +134,7 @@ class Repository implements RepositoryInterface
         }
     }
 
-    private function assignConditions(array $productStream, Criteria $criteria)
+    private function assignConditions(array $productStream, Criteria $criteria): void
     {
         $serializedConditions = json_decode($productStream['conditions'], true);
         /** @var ConditionInterface[] $conditions */

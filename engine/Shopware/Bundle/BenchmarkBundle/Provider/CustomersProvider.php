@@ -73,8 +73,8 @@ class CustomersProvider implements BatchableProviderInterface
     private function getCustomersList($batchSize = null)
     {
         $config = $this->getConfig();
-        $batch = (int) $config['batch_size'];
-        $lastCustomerId = $config['last_customer_id'];
+        $batch = (int) ($config['batch_size'] ?? 1);
+        $lastCustomerId = $config['last_customer_id'] ?? 0;
 
         if ($batchSize !== null) {
             $batch = $batchSize;
@@ -186,17 +186,21 @@ class CustomersProvider implements BatchableProviderInterface
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getConfig()
+    private function getConfig(): array
     {
-        $configsQueryBuilder = $this->dbalConnection->createQueryBuilder();
-
-        return $configsQueryBuilder->select('configs.*')
+        $config = $this->dbalConnection->createQueryBuilder()->select('configs.*')
             ->from('s_benchmark_config', 'configs')
             ->where('configs.shop_id = :shopId')
             ->setParameter(':shopId', $this->shopId)
             ->execute()
             ->fetch();
+
+        if (!\is_array($config)) {
+            return [];
+        }
+
+        return $config;
     }
 }

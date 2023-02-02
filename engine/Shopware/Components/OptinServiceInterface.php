@@ -32,6 +32,8 @@ interface OptinServiceInterface
     /**
      * @param string $type
      * @param int    $duration
+     *
+     * @return string
      */
     public function add($type, $duration, array $data);
 
@@ -46,6 +48,8 @@ interface OptinServiceInterface
     /**
      * @param string $type
      * @param string $hash
+     *
+     * @return void
      */
     public function delete($type, $hash);
 }

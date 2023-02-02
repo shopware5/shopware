@@ -32,6 +32,8 @@ interface FacetFilterInterface
     /**
      * Adds \Shopware\Bundle\SearchBundle\FacetInterface to the provided criteria,
      * which not already filtered by the stream
+     *
+     * @return void
      */
     public function add(Criteria $criteria);
 

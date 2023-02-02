@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,33 +26,17 @@
 
 namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
-class BenchmarkDataResult
+interface BenchmarkResponseInterface
 {
-    private ?StatisticsResponse $statisticsResponse;
-
-    private ?BusinessIntelligenceResponse $biResponse;
-
-    public function __construct(
-        StatisticsResponse $statisticsResponse = null,
-        BusinessIntelligenceResponse $biResponse = null
-    ) {
-        $this->statisticsResponse = $statisticsResponse;
-        $this->biResponse = $biResponse;
-    }
+    /**
+     * @param int $shopId
+     *
+     * @return void
+     */
+    public function setShopId($shopId);
 
     /**
-     * @return StatisticsResponse|null
+     * @return int|null
      */
-    public function getStatisticsResponse()
-    {
-        return $this->statisticsResponse;
-    }
-
-    /**
-     * @return BusinessIntelligenceResponse|null
-     */
-    public function getBiResponse()
-    {
-        return $this->biResponse;
-    }
+    public function getShopId();
 }

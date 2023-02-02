@@ -35,6 +35,8 @@ interface DataPersisterInterface
      * @param string     $table
      * @param array      $data
      * @param int|string $foreignKey
+     *
+     * @return void
      */
     public function persist($data, $table, $foreignKey);
 
@@ -42,6 +44,8 @@ interface DataPersisterInterface
      * @param string $table
      * @param int    $sourceForeignKey
      * @param int    $targetForeignKey
+     *
+     * @return void
      */
     public function cloneAttribute($table, $sourceForeignKey, $targetForeignKey);
 
@@ -49,6 +53,8 @@ interface DataPersisterInterface
      * @param string $table
      * @param int    $sourceForeignKey
      * @param int    $targetForeignKey
+     *
+     * @return void
      */
     public function cloneAttributeTranslations($table, $sourceForeignKey, $targetForeignKey);
 }

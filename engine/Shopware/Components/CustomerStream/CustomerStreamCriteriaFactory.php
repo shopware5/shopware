@@ -27,6 +27,7 @@ namespace Shopware\Components\CustomerStream;
 use Doctrine\DBAL\Connection;
 use PDO;
 use RuntimeException;
+use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Components\LogawareReflectionHelper;
 
@@ -72,6 +73,9 @@ class CustomerStreamCriteriaFactory implements CustomerStreamCriteriaFactoryInte
         $criteria = new Criteria();
 
         foreach ($conditions as $condition) {
+            if (!$condition instanceof ConditionInterface) {
+                continue;
+            }
             $criteria->addCondition($condition);
         }
 

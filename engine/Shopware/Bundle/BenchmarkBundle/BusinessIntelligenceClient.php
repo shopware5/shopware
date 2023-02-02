@@ -32,57 +32,47 @@ use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkHydratingException;
 use Shopware\Bundle\BenchmarkBundle\Exception\BenchmarkSendingException;
 use Shopware\Bundle\BenchmarkBundle\Hydrator\HydratorInterface;
 use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceRequest;
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse;
+use Shopware\Bundle\BenchmarkBundle\Struct\BusinessIntelligenceResponse as BusinessIntelligenceResponseAlias;
 use Shopware\Components\HttpClient\HttpClientInterface;
 use Shopware\Components\HttpClient\Response;
 
 class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
 {
-    /**
-     * @var string
-     */
-    private $biEndpoint;
+    private string $biEndpoint;
+
+    private HttpClientInterface $client;
 
     /**
-     * @var HttpClientInterface
+     * @var HydratorInterface<BusinessIntelligenceResponseAlias>
      */
-    private $client;
+    private HydratorInterface $biResponseHydrator;
+
+    private BenchmarkEncryption $benchmarkEncryption;
+
+    private LoggerInterface $logger;
 
     /**
-     * @var HydratorInterface
-     */
-    private $biResponseHydrator;
-
-    /**
-     * @var BenchmarkEncryption
-     */
-    private $benchmarkEncryption;
-
-    /**
-     * @var LoggerInterface|null
-     */
-    private $logger;
-
-    /**
-     * @param string $biEndpoint
+     * @param HydratorInterface<BusinessIntelligenceResponse> $biResponseHydrator
      */
     public function __construct(
-        $biEndpoint,
+        string $biEndpoint,
         HttpClientInterface $client,
         HydratorInterface $biResponseHydrator,
         BenchmarkEncryption $benchmarkEncryption,
         LoggerInterface $logger = null
     ) {
-        $this->biEndpoint = (string) $biEndpoint;
+        $this->biEndpoint = $biEndpoint;
         $this->client = $client;
         $this->biResponseHydrator = $biResponseHydrator;
         $this->benchmarkEncryption = $benchmarkEncryption;
-        $this->logger = $logger ?: new NullLogger();
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
      * @throws BenchmarkSendingException
      *
-     * @return Struct\BusinessIntelligenceResponse
+     * @return BusinessIntelligenceResponse
      */
     public function fetchBusinessIntelligence(BusinessIntelligenceRequest $biRequest)
     {
@@ -103,10 +93,8 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
 
     /**
      * @throws BenchmarkHydratingException
-     *
-     * @return Struct\BusinessIntelligenceResponse
      */
-    private function hydrateBiResponse(Response $response)
+    private function hydrateBiResponse(Response $response): BusinessIntelligenceResponseAlias
     {
         $data = $response->getBody();
 
@@ -122,7 +110,7 @@ class BusinessIntelligenceClient implements BusinessIntelligenceClientInterface
     /**
      * @throws RuntimeException
      */
-    private function verifyResponseSignature(Response $response)
+    private function verifyResponseSignature(Response $response): void
     {
         $signatureHeaderName = 'x-shopware-signature';
         $signature = $response->getHeader($signatureHeaderName);

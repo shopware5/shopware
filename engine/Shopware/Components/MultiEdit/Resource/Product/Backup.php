@@ -26,6 +26,7 @@ namespace Shopware\Components\MultiEdit\Resource\Product;
 
 use DateTime;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Query;
 use Exception;
 use PDO;
 use RuntimeException;
@@ -137,11 +138,13 @@ class Backup
      * @param int $offset
      * @param int $limit
      *
-     * @return array
+     * @return array{totalCount: int, data: array<array<string, mixed>>}
      */
     public function getList($offset, $limit)
     {
-        $query = $this->getDqlHelper()->getEntityManager()->getRepository(BackupModel::class)->getBackupListQuery($offset, $limit);
+        /** @var Query<array<string, mixed>> $query */
+        $query = $this->getDqlHelper()->getEntityManager()->getRepository(BackupModel::class)
+            ->getBackupListQuery($offset, $limit);
         $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
         $paginator = Shopware()->Models()->createPaginator($query);
         $totalCount = $paginator->count();
@@ -222,7 +225,7 @@ class Backup
      *
      * @throws RuntimeException
      *
-     * @return array
+     * @return array{totalCount: int, offset: int, done: bool}
      */
     public function restore($id, $offset = 0)
     {

@@ -29,6 +29,9 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 interface CriteriaRequestHandlerInterface
 {
+    /**
+     * @return void
+     */
     public function handleRequest(
         Request $request,
         Criteria $criteria,

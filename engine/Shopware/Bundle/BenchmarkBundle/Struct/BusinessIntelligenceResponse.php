@@ -26,28 +26,15 @@ namespace Shopware\Bundle\BenchmarkBundle\Struct;
 
 use DateTimeInterface;
 
-class BusinessIntelligenceResponse
+class BusinessIntelligenceResponse implements BenchmarkResponseInterface
 {
-    /**
-     * @var DateTimeInterface
-     */
-    private $dateTime;
+    private DateTimeInterface $dateTime;
 
-    /**
-     * @var string
-     */
-    private $html;
+    private string $html;
 
-    /**
-     * @var int
-     */
-    private $shopId;
+    private ?int $shopId;
 
-    /**
-     * @param string $html
-     * @param int    $shopId
-     */
-    public function __construct(DateTimeInterface $dateTime, $html, $shopId = null)
+    public function __construct(DateTimeInterface $dateTime, string $html, ?int $shopId = null)
     {
         $this->dateTime = $dateTime;
         $this->html = $html;
