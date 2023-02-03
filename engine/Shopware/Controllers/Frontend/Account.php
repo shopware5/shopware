@@ -101,6 +101,9 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
             return;
         }
 
+        $this->response->headers->addCacheControlDirective('no-store');
+        $this->response->headers->addCacheControlDirective('no-cache');
+
         $activeBillingAddressId = $customerData['additional']['user']['default_billing_address_id'];
         $activeShippingAddressId = $customerData['additional']['user']['default_shipping_address_id'];
 

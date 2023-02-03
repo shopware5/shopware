@@ -119,6 +119,10 @@ class AppCache extends HttpCache
         $response->headers->remove('cache-control');
         $response->headers->addCacheControlDirective('no-cache');
 
+        if (str_starts_with($request->getPathInfo(), '/account')) {
+            $response->headers->addCacheControlDirective('no-store');
+        }
+
         $response = $this->handleCookies($request, $response);
 
         $this->filterHttp2ServerPushHeader($request, $response);
