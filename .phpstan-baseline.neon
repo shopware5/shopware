@@ -19981,11 +19981,6 @@ parameters:
 			path: engine/Shopware/Components/ProductStream/Repository.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\ProductStream\\\\Repository\\:\\:getStreamById\\(\\) should return array but returns array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ProductStream/Repository.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\ProductStream\\\\Repository\\:\\:prepareConditionStream\\(\\) has parameter \\$productStream with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ProductStream/Repository.php

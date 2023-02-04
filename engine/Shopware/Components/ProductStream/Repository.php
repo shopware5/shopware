@@ -107,7 +107,7 @@ class Repository implements RepositoryInterface
 
     private function getStreamById(int $productStreamId): array
     {
-        return $this->conn->fetchAssociative(
+        $stream = $this->conn->fetchAssociative(
             'SELECT streams.*, customSorting.sortings as customSortings
              FROM s_product_streams streams
              LEFT JOIN s_search_custom_sorting customSorting
@@ -116,6 +116,12 @@ class Repository implements RepositoryInterface
              LIMIT 1',
             ['productStreamId' => $productStreamId]
         );
+
+        if (!\is_array($stream)) {
+            return [];
+        }
+
+        return $stream;
     }
 
     private function assignSortings(array $productStream, Criteria $criteria): void
