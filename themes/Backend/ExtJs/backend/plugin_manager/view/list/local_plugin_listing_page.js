@@ -46,6 +46,11 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
      */
     hasTriedLogin: false,
 
+    safeModeState: {
+        inSafeMode: false,
+        hasActiveThirdPartyPlugins: false
+    },
+
     configure: function() {
         return {
             addButton: false,
@@ -388,28 +393,30 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
     },
 
     updateSafeModeCheckbox: function() {
-        var me = this,
-            state = me.checkInSafeMode();
+        var me = this;
 
-        me.suspendSafeModeToggle = true;
-        me.safeModeCheckbox.setDisabled(!state.inSafeMode && !state.hasActiveThirdPartyPlugins);
-        me.safeModeCheckbox.setValue(state.inSafeMode);
-        me.suspendSafeModeToggle = false;
+        me.checkInSafeMode(function() {
+            me.suspendSafeModeToggle = true;
+            me.safeModeCheckbox.setDisabled(!me.safeModeState.inSafeMode && !me.safeModeState.hasActiveThirdPartyPlugins);
+            me.safeModeCheckbox.setValue(me.safeModeState.inSafeMode);
+            me.suspendSafeModeToggle = false;
+        });
     },
 
     createSafeModeCheckbox: function () {
         var me = this,
-            state = me.checkInSafeMode(),
             label = '{s name="safe_mode"}Safe Mode{/s}';
 
         me.safeModeCheckbox = Ext.create('Ext.form.field.Checkbox', {
             fieldLabel: label,
             labelStyle: 'width:65px; margin-top: 2px;',
-            checked: state.inSafeMode,
-            disabled: !state.inSafeMode && !state.hasActiveThirdPartyPlugins,
+            checked: me.safeModeState.inSafeMode,
+            disabled: !me.safeModeState.inSafeMode && !me.safeModeState.hasActiveThirdPartyPlugins,
             dock: 'bottom',
             handler: Ext.bind(me.onToggleSafeMode, me)
         });
+
+        this.updateSafeModeCheckbox();
 
         Shopware.app.Application.on('plugin-state-changed', Ext.bind(me.updateSafeModeCheckbox, me));
 
@@ -423,60 +430,70 @@ Ext.define('Shopware.apps.PluginManager.view.list.LocalPluginListingPage', {
         if (me.suspendSafeModeToggle) {
             return;
         }
-        state = me.checkInSafeMode();
 
-        if (state.inSafeMode) {
-            me.toggleSafeMode();
-            return;
-        }
-
-        Ext.Msg.confirm(
-            '{s name="safemodepopup/title"}{/s}',
-            '{s name="safemodepopup/warning"}{/s}',
-            function (button) {
-                if (button == 'yes') {
-                    me.toggleSafeMode();
-                } else {
-                    me.safeModeCheckbox.setRawValue(false);
-                    me.safeModeCheckbox.lastValue = false;
-                }
+        me.checkInSafeMode(function () {
+            if (me.safeModeState.inSafeMode) {
+                me.toggleSafeMode();
+                return;
             }
-        );
+
+            Ext.Msg.confirm(
+                '{s name="safemodepopup/title"}{/s}',
+                '{s name="safemodepopup/warning"}{/s}',
+                function (button) {
+                    if (button == 'yes') {
+                        me.toggleSafeMode();
+                    } else {
+                        me.safeModeCheckbox.setRawValue(false);
+                        me.safeModeCheckbox.lastValue = false;
+                    }
+                }
+            );
+        });
     },
 
     toggleSafeMode: function () {
         var content,
             msg = Shopware.Notification;
 
-        var toggleSafeMode = Ext.Ajax.request({
-            async: false,
+        Ext.Ajax.request({
             url: '{url controller=PluginManager action=toggleSafeMode}',
             method: 'GET',
-            params: { }
+            params: { },
+            success: function (response) {
+                var responseContent = Ext.decode(response.responseText);
+
+                var title = '{s name="title/safe_mode"}{/s}';
+                if (responseContent.inSafeMode) {
+                    content = '{s name="content/safe_mode_on"}{/s}';
+                } else {
+                    content = '{s name="content/safe_mode_off"}{/s}';
+                }
+                Shopware.app.Application.fireEvent('clear-all-cache');
+                msg.createGrowlMessage(title, content);
+                Shopware.app.Application.fireEvent('reload-local-listing');
+            }
         });
-
-        var response = Ext.decode(toggleSafeMode.responseText);
-
-        var title = '{s name="title/safe_mode"}{/s}';
-        if (response.inSafeMode) {
-            content = '{s name="content/safe_mode_on"}{/s}';
-        } else {
-            content = '{s name="content/safe_mode_off"}{/s}';
-        }
-        Shopware.app.Application.fireEvent('clear-all-cache');
-        msg.createGrowlMessage(title, content);
-        Shopware.app.Application.fireEvent('reload-local-listing');
     },
 
-    checkInSafeMode: function () {
-        var checkInSafeMode = Ext.Ajax.request({
-            async: false,
+    checkInSafeMode: function (callback) {
+        var me = this;
+
+        Ext.Ajax.request({
             url: '{url controller=PluginManager action=isInSafeMode}',
             method: 'GET',
-            params: { }
+            params: {},
+            success: function (response) {
+                // Update tree-node text
+                me.safeModeState = Ext.decode(response.responseText)
+                if (callback) {
+                    callback()
+                }
+            },
+            failure: function () {
+                Shopware.Msg.createGrowlMessage('', '{s name="groupList/renameError"}Error while creating group{/s}', '{s name="window_title"}{/s}');
+            },
         });
-
-        return Ext.decode(checkInSafeMode.responseText);
     },
 
     createActionColumnItems: function() {
