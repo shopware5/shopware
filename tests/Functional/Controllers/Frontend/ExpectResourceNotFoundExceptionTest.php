@@ -62,14 +62,14 @@ class ExpectResourceNotFoundExceptionTest extends Enlight_Components_Test_Contro
         $this->getContainer()->get('dbal_connection')->executeStatement($sql);
 
         $this->expectException(ResourceNotFoundException::class);
-        $this->expectErrorMessage('Category not found. The request comes from: "notFound". Module: "frontend", Controller: "listing", Action: "index"');
+        $this->expectExceptionMessage('Category not found. The request comes from: "notFound". Module: "frontend", Controller: "listing", Action: "index"');
         $this->dispatch('/cat/?sCategory=312', true);
     }
 
     public function testCustomIndexExpectedResourceNotFoundException(): void
     {
         $this->expectException(ResourceNotFoundException::class);
-        $this->expectErrorMessage('Custom page not found. The request comes from: "notFound". Module: "frontend", Controller: "custom", Action: "index"');
+        $this->expectExceptionMessage('Custom page not found. The request comes from: "notFound". Module: "frontend", Controller: "custom", Action: "index"');
         $this->dispatch('/custom/?sCustom=312', true);
     }
 }
