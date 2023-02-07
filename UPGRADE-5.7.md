@@ -33,6 +33,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `laminas/laminas-code` to version 4.7.1
 * Updated `laminas/laminas-escaper` to version 2.12.0
 * Updated `league/flysystem` to version 1.1.10
+* Updated `monolog/monolog` to version 2.9.1
 * Updated `mpdf/mpdf` to version 8.1.4
 * Updated `phpunit/phpunit` to version 9.6.3
 * Updated `sensiolabs/behat-page-object-extension` to version 2.3.7
