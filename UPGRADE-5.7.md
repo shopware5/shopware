@@ -20,7 +20,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `bcremer/line-reader` to version 1.3.0
 * Updated `behat/behat` to version 3.12.0
 * Updated `cocur/slugify` to version 4.3.0
-* Updated `doctrine/annotations` to version 1.14.2
+* Updated `doctrine/annotations` to version 1.14.3
 * Updated `doctrine/collections` to version 1.8.0
 * Updated `doctrine/common` to version 3.4.3
 * Updated `doctrine/event-manager` to version 1.2.0
