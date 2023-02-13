@@ -2046,32 +2046,37 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $data['taxRate'] = (float) $tax->getTax();
         }
 
-        $shop = $order->getShop();
+        $customer = $order->getCustomer();
+        $customerGroupKey = $customer instanceof Customer ? $customer->getGroupKey() : self::DEFAULT_CUSTOMER_GROUP;
         $areaId = null;
         $countryId = null;
         $stateId = null;
-        $billingAddress = $order->getBilling();
-        if ($billingAddress instanceof Billing) {
-            $countryId = $billingAddress->getCountry()->getId();
 
-            $area = $billingAddress->getCountry()->getArea();
+        $currencyId = (int) $this->container->get(Connection::class)->fetchOne(
+            'SELECT `id` FROM `s_core_currencies` WHERE `currency` = :currency',
+            ['currency' => $order->getCurrency()]
+        );
+
+        $shippingAddress = $order->getShipping();
+        if ($shippingAddress instanceof Shipping) {
+            $countryId = $shippingAddress->getCountry()->getId();
+
+            $area = $shippingAddress->getCountry()->getArea();
             if ($area instanceof Area) {
                 $areaId = $area->getId();
             }
 
-            $state = $billingAddress->getState();
+            $state = $shippingAddress->getState();
             if ($state instanceof State) {
                 $stateId = $state->getId();
             }
         }
 
-        $customer = $order->getCustomer();
-        $customerGroupKey = $customer instanceof Customer ? $customer->getGroupKey() : self::DEFAULT_CUSTOMER_GROUP;
-
+        $shop = $order->getShop();
         $shopContext = $this->container->get('shopware_storefront.shop_context_factory')->create(
             $shop->getBaseUrl() ?? '',
             $shop->getId(),
-            null,
+            $currencyId,
             $customerGroupKey,
             $areaId,
             $countryId,

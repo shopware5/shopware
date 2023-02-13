@@ -36,9 +36,9 @@ use Enlight_View_Default;
 use Exception;
 use Generator;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
+use Shopware\Controllers\Backend\OrderProductSearch;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
-use Shopware_Controllers_Backend_OrderProductSearch;
 use Shopware_Plugins_Backend_Auth_Bootstrap as AuthPlugin;
 
 /**
@@ -146,7 +146,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function provideSearchDataAndReturnValues(): Generator
     {
-        yield 'searchTerm: orderNumber explicit - customergroup: "H"' => [
+        yield 'searchTerm: orderNumber explicit - customer group: "H"' => [
             'searchParams' => [
                 'searchString' => 'SW10178',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -169,7 +169,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'price' => 19.95,
             ],
         ];
-        yield 'searchTerm: productName - customergroup: "H"' => [
+        yield 'searchTerm: productName - customer group: "H"' => [
             'searchParams' => [
                 'searchString' => 'schoko',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -192,7 +192,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'price' => 8.98,
             ],
         ];
-        yield 'searchTerm: supplier with products not mapped to a category - customergroup: "EK"' => [
+        yield 'searchTerm: supplier with products not mapped to a category - customer group: "EK"' => [
             'searchParams' => [
                 'searchString' => 'trusted',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
@@ -215,7 +215,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'price' => 0.98,
             ],
         ];
-        yield 'searchTerm: productName - customergroup: "EK" - variants' => [
+        yield 'searchTerm: productName - customer group: "EK" - variants' => [
             'searchParams' => [
                 'searchString' => 'flip',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
@@ -278,7 +278,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
      * @param array<string, float>        $expectedValues
      * @param array<array<string, mixed>> $sqlParamsTaxRule
      * @param array<string, mixed>        $sqlParamsProduct
-     * @param array<string, mixed>        $sqlParamsBillingAddress
+     * @param array<string, mixed>        $sqlParamsShippingAddress
      *
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
@@ -288,7 +288,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
         array $expectedValues,
         array $sqlParamsTaxRule,
         array $sqlParamsProduct,
-        array $sqlParamsBillingAddress
+        array $sqlParamsShippingAddress
     ): void {
         if (!empty($sqlParamsTaxRule)) {
             $this->createTaxRules($sqlParamsTaxRule);
@@ -298,8 +298,8 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
             $this->createCustomerGroupSpecificProductPrice($sqlParamsProduct);
         }
 
-        if (!empty($sqlParamsBillingAddress)) {
-            $this->changeBillingAddress($sqlParamsBillingAddress);
+        if (!empty($sqlParamsShippingAddress)) {
+            $this->changeShippingAddress($sqlParamsShippingAddress);
         }
 
         $params = $this->getSearchParams($searchParams);
@@ -320,11 +320,11 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @return Generator<array{searchParams: array<string, mixed>, expectedValues: array<string, float>, sqlParamsTaxRule: array<array<string, mixed>>, sqlParamsProduct: array<string, mixed>, sqlParamsBillingAddress: array<string, mixed>}>
+     * @return Generator<array{searchParams: array<string, mixed>, expectedValues: array<string, float>, sqlParamsTaxRule: array<array<string, mixed>>, sqlParamsProduct: array<string, mixed>, sqlParamsShippingAddress: array<string, mixed>}>
      */
     public function provideDataForDifferentProductPricesForCustomerGroups(): Generator
     {
-        yield 'customergroup: "H" with a specific product-price' => [
+        yield 'customer group: "H" with a specific product-price' => [
             'searchParams' => [
                 'searchString' => 'stuhl',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -340,9 +340,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'customerGroup' => 'H',
                 'productDetailsId' => 137,
             ],
-            'sqlParamsBillingAddress' => [],
+            'sqlParamsShippingAddress' => [],
         ];
-        yield 'customergroup: "H", billing-address don\'t match with a tax-rule and with no specific product-price should use default-price' => [
+        yield 'customer group: "H", shipping address doesn\'t match with a tax-rule and with no specific product-price should use default-price' => [
             'searchParams' => [
                 'searchString' => 'stuhl',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -364,9 +364,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 ],
             ],
             'sqlParamsProduct' => [],
-            'sqlParamsBillingAddress' => [],
+            'sqlParamsShippingAddress' => [],
         ];
-        yield 'customergroup: "H", billing-address match with tax-rule + custom product price' => [
+        yield 'customer group: "H", shipping address match with tax-rule + custom product price' => [
             'searchParams' => [
                 'filterProperty' => self::SEARCH_PARAMS_FILTER_PROPERTY,
                 'searchString' => 'Schokoleim',
@@ -401,7 +401,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'customerGroup' => 'H',
                 'productDetailsId' => 46,
             ],
-            'sqlParamsBillingAddress' => [
+            'sqlParamsShippingAddress' => [
                 'countryID' => self::FINLAND_COUNTRY_ID,
                 'stateID' => null,
                 'orderID' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -491,14 +491,14 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
      * @throws \Doctrine\DBAL\Exception
      * @throws Exception
      */
-    public function testGetProductVariantsActionThrowsExceptionsBillingNotFound(): void
+    public function testGetProductVariantsActionThrowsExceptionsShippingNotFound(): void
     {
         $params = require __DIR__ . '/_assets/getProductVariantsParams.php';
         static::assertIsArray($params);
         $params['orderId'] = self::ORDER_ID_CUSTOMER_GROUP_DEFAULT;
         $params['filter']['property'] = self::SEARCH_PARAMS_FILTER_PROPERTY;
 
-        $sql = 'UPDATE s_order_billingaddress SET orderID = :orderIdNotExist WHERE orderID = :orderId;';
+        $sql = 'UPDATE s_order_shippingaddress SET orderID = :orderIdNotExist WHERE orderID = :orderId;';
         $this->connection->executeQuery($sql, [
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
                 'orderIdNotExist' => self::ORDER_ID_NOT_EXIST,
@@ -511,7 +511,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
         $controller = $this->getController();
         $controller->setRequest($request);
         $this->expectException(ModelNotFoundException::class);
-        $this->expectExceptionMessage('Model of "Shopware\Models\Order\Billing" for id "' . self::ORDER_ID_CUSTOMER_GROUP_DEFAULT . '"');
+        $this->expectExceptionMessage('Model of "Shopware\Models\Order\Shipping" for id "' . self::ORDER_ID_CUSTOMER_GROUP_DEFAULT . '"');
         $controller->getProductVariantsAction();
     }
 
@@ -573,9 +573,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @throws \Doctrine\DBAL\Exception
      */
-    private function changeBillingAddress(array $sqlParams): void
+    private function changeShippingAddress(array $sqlParams): void
     {
-        $sql = file_get_contents(__DIR__ . '/_fixtures/order/billing_address.sql');
+        $sql = file_get_contents(__DIR__ . '/_fixtures/order/shipping_address.sql');
         static::assertIsString($sql);
         $this->connection->executeQuery(
             $sql, [
@@ -589,7 +589,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @param array<string, mixed> $searchParams
      *
-     * @return array<mixed>
+     * @return array<string, mixed>
      */
     private function getSearchParams(array $searchParams): array
     {
@@ -615,9 +615,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
         return $params;
     }
 
-    private function getController(): Shopware_Controllers_Backend_OrderProductSearch
+    private function getController(): OrderProductSearch
     {
-        $controller = $this->getContainer()->get('shopware_controllers_backend_orderproductsearch');
+        $controller = $this->getContainer()->get(OrderProductSearch::class);
         $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
         $controller->setContainer($this->getContainer());
 

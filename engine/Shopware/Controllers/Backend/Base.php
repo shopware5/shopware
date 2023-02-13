@@ -1224,26 +1224,18 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $builder->where('details.id IN (:detailsId)');
         $builder->setParameter('detailsId', $variantIds, Connection::PARAM_INT_ARRAY);
 
-        $statement = $builder->execute();
-        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $result = $builder->execute()->fetchAllAssociative();
 
         $tmpVariant = $this->buildDynamicText($tmpVariant, $result);
 
-        // Maps the associative data array back to an normal indexed array
-        $data = [];
-        foreach ($tmpVariant as $variant) {
-            $data[] = $variant;
-        }
-
-        return $data;
+        // Maps the associative data array back to a normal indexed array
+        return array_values($tmpVariant);
     }
 
     /**
      * Prepares the sort params for the variant search
-     *
-     * @return array
      */
-    private function prepareVariantParam(array $properties, array $fields)
+    private function prepareVariantParam(array $properties, array $fields): array
     {
         // Maps the fields to the correct table
         foreach ($properties as $key => $property) {
@@ -1290,10 +1282,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
 
     /**
      * Helper function to generate the additional text dynamically
-     *
-     * @return array
      */
-    private function buildDynamicText(array $data, array $variantsWithoutAdditionalText)
+    private function buildDynamicText(array $data, array $variantsWithoutAdditionalText): array
     {
         foreach ($variantsWithoutAdditionalText as $variantWithoutAdditionalText) {
             $variantData = &$data[$variantWithoutAdditionalText['id']];
@@ -1310,10 +1300,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         return $data;
     }
 
-    /**
-     * @return array
-     */
-    private function getAvailableSalutationKeys()
+    private function getAvailableSalutationKeys(): array
     {
         $builder = Shopware()->Container()->get(ModelManager::class)->createQueryBuilder();
         $builder->select(['element', 'values'])
@@ -1332,19 +1319,16 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         foreach ($data['values'] as $shopValue) {
             $value = array_merge($value, explode(',', $shopValue['value']));
         }
-        $value = array_unique(array_filter($value));
 
-        return $value;
+        return array_unique(array_filter($value));
     }
 
     /**
      * Replaces the locales with the snippets data
      *
-     * @param array $data
-     *
      * @return array $data
      */
-    private function getSnippetsForLocales($data)
+    private function getSnippetsForLocales(array $data): array
     {
         $snippets = $this->container->get('snippets');
         foreach ($data as &$locale) {

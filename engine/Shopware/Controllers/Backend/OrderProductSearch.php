@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,23 +24,24 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Controllers\Backend;
+
 use Doctrine\DBAL\Connection;
+use RuntimeException;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax as TaxStruct;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;
-use Shopware\Models\Order\Billing;
 use Shopware\Models\Order\Order;
+use Shopware\Models\Order\Shipping;
 use Shopware\Models\Shop\Shop;
+use Shopware_Controllers_Backend_Base;
 
-class Shopware_Controllers_Backend_OrderProductSearch extends \Shopware_Controllers_Backend_Base
+class OrderProductSearch extends Shopware_Controllers_Backend_Base
 {
     private const DEFAULT_CUSTOMER_GROUP = 'EK';
 
-    /**
-     * @throws Exception
-     */
     public function getProductVariantsAction(): void
     {
         $orderId = (int) $this->Request()->getParam('orderId');
@@ -49,8 +49,7 @@ class Shopware_Controllers_Backend_OrderProductSearch extends \Shopware_Controll
             throw new RuntimeException('The parameter orderId is not set');
         }
 
-        $modelManager = $this->container->get(ModelManager::class);
-        $order = $modelManager->find(Order::class, $orderId);
+        $order = $this->container->get(ModelManager::class)->find(Order::class, $orderId);
         if (!$order instanceof Order) {
             throw new ModelNotFoundException(Order::class, $orderId);
         }
@@ -60,9 +59,9 @@ class Shopware_Controllers_Backend_OrderProductSearch extends \Shopware_Controll
             throw new ModelNotFoundException(Customer::class, $orderId);
         }
 
-        $orderBillingAddress = $order->getBilling();
-        if (!$orderBillingAddress instanceof Billing) {
-            throw new ModelNotFoundException(Billing::class, $orderId);
+        $orderShippingAddress = $order->getShipping();
+        if (!$orderShippingAddress instanceof Shipping) {
+            throw new ModelNotFoundException(Shipping::class, $orderId);
         }
 
         $shop = $order->getShop();
@@ -73,14 +72,16 @@ class Shopware_Controllers_Backend_OrderProductSearch extends \Shopware_Controll
         $customerGroup = $customer->getGroup();
         $customerGroupKey = $customerGroup instanceof Group ? $customerGroup->getKey() : self::DEFAULT_CUSTOMER_GROUP;
 
+        $area = $orderShippingAddress->getCountry()->getArea();
+        $state = $orderShippingAddress->getState();
         $shopContext = $this->container->get('shopware_storefront.shop_context_factory')->create(
             $shop->getBaseUrl() ?? '',
             $shop->getId(),
             null,
             $customerGroupKey,
-            $orderBillingAddress->getCountry()->getArea() ? $orderBillingAddress->getCountry()->getArea()->getId() : null,
-            $orderBillingAddress->getCountry()->getId(),
-            $orderBillingAddress->getState() ? $orderBillingAddress->getState()->getId() : null
+            $area ? $area->getId() : null,
+            $orderShippingAddress->getCountry()->getId(),
+            $state ? $state->getId() : null
         );
 
         $builder = $this->container->get(Connection::class)->createQueryBuilder();
@@ -108,11 +109,10 @@ class Shopware_Controllers_Backend_OrderProductSearch extends \Shopware_Controll
         $builder->leftJoin('details', 's_articles_prices', 'customer_group_prices', 'details.id = customer_group_prices.articledetailsID AND  customer_group_prices.pricegroup = :customerGroup');
         $builder->setParameters(['defaultCustomerGroup' => self::DEFAULT_CUSTOMER_GROUP, 'customerGroup' => $customerGroupKey]);
 
-        $filters = $this->Request()->getParam('filter', []);
-        foreach ($filters as $filter) {
+        foreach ($this->Request()->getParam('filter', []) as $filter) {
             if ($filter['property'] === 'free') {
                 $builder->andWhere(
-                    $builder->expr()->orX(
+                    $builder->expr()->or(
                         'details.ordernumber LIKE :free',
                         'product.name LIKE :free',
                         'supplier.name LIKE :free'
