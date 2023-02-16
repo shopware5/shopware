@@ -39886,11 +39886,6 @@ parameters:
 			path: tests/Functional/Controllers/Frontend/SearchTest.php
 
 		-
-			message: "#^Parameter \\#2 \\$haystack of static method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:assertStringContainsStringIgnoringWhitespace\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SitemapTest\\:\\:sitemapDataprovider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/SitemapTest.php

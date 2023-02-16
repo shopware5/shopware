@@ -1984,7 +1984,11 @@ class sExport implements Enlight_Hook
             return $url;
         }
 
-        $url = str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
+        if (\in_array(parse_url($url, PHP_URL_PORT), [443, 80, null])) {
+            $url = str_replace(parse_url($url, PHP_URL_HOST), $this->shopData['host'], $url);
+        } else {
+            $url = str_replace(parse_url($url, PHP_URL_HOST) . ':' . parse_url($url, PHP_URL_PORT), $this->shopData['host'], $url);
+        }
 
         if ($this->shopData['secure']) {
             return str_replace('http:', 'https:', $url);

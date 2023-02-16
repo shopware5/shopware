@@ -88,7 +88,7 @@ return [
 
     'mail' => [
         'type' => 'smtp',
-        'host' => 'smtp',
+        'host' => 'localhost',
         'port' => 1025,
     ],
 ];

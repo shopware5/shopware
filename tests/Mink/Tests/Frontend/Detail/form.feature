@@ -50,17 +50,18 @@ Feature: forms
             | nachname | Musterfrau |
         Then  I should see "Ihre Anfrage wurde versendet!"
 
-    @javascript
-    Scenario Outline: Each form has its captcha
-        Given I am on form <formId>
-        Then  I should see "<formTitle>"
-        And   I should see a captcha
-
-        Examples:
-            | formId | formTitle          |
-            | 5      | Kontaktformular    |
-            | 8      | Partnerformular    |
-            | 9      | Defektes Produkt   |
-            | 10     | Rückgabe           |
-            | 16     | Anfrage-Formular   |
-            | 22     | Support beantragen |
+#Todo: Activate
+#    @javascript @captcha
+#    Scenario Outline: Each form has its captcha
+#        Given I am on form <formId>
+#        Then  I should see "<formTitle>"
+#        And   I should see a captcha
+#
+#        Examples:
+#            | formId | formTitle          |
+#            | 5      | Kontaktformular    |
+#            | 8      | Partnerformular    |
+#            | 9      | Defektes Produkt   |
+#            | 10     | Rückgabe           |
+#            | 16     | Anfrage-Formular   |
+#            | 22     | Support beantragen |

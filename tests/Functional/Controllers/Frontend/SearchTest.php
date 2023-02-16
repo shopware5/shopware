@@ -43,17 +43,24 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         // Ignore whitespace, since this testcase checks wether the list is structured correctly (li following ul)
         self::assertStringContainsStringIgnoringWhitespace(
             '<ul class="results--list"> <li class="list--entry',
-            $this->Response()->getBody()
+            $this->getResponseContent()
         );
         // Check for expected search link and number of results
         self::assertStringContainsStringIgnoringWhitespace(
-            '/search?sSearch=ipad" class="search-result--link entry--all-results-link block"> <i class="icon--arrow-right"></i> Alle Ergebnisse anzeigen </a> <span class="entry--all-results-number block"> 1 Treffer </span>',
-            $this->Response()->getBody()
+            '/search?sSearch=ipad" class="search-result--link entry--all-results-link block"',
+            $this->getResponseContent()
         );
+
+        // Split up because of post filter
+        self::assertStringContainsStringIgnoringWhitespace(
+            '> <i class="icon--arrow-right"></i> Alle Ergebnisse anzeigen </a> <span class="entry--all-results-number block"> 1 Treffer </span>',
+            $this->getResponseContent()
+        );
+
         // Check for expected name and price
         self::assertStringContainsStringIgnoringWhitespace(
             ' alt="iPadtasche mit Stiftmappe" class="media--image"> </span> <span class="entry--name block"> iPadtasche mit Stiftmappe </span> <span class="entry--price block"> <div class="product--price"> <span class="price--default is--nowrap"> 39,99&nbsp;&euro; * </span> </div> <div class="price--unit" title="Inhalt"> </div> </span> </a> </li> <li class="entry--all-results block-group result--item">',
-            $this->Response()->getBody()
+            $this->getResponseContent()
         );
 
         $this->Response()->clearBody();
@@ -127,5 +134,13 @@ alert(2)
             preg_replace('/\s/', '', $haystack),
             $message
         );
+    }
+
+    private function getResponseContent(): string
+    {
+        $content = $this->Response()->getBody();
+        static::assertIsString($content);
+
+        return $content;
     }
 }

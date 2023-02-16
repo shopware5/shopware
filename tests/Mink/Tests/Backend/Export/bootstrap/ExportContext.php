@@ -191,6 +191,7 @@ SQL;
     private function validate(TableNode $entries, array $export, string $shopType): void
     {
         $baseUrl = rtrim($this->getMinkParameter('base_url') ?? '', '/');
+
         $basePath = trim((string) parse_url($baseUrl, PHP_URL_PATH), '/');
         $subshopBaseUrl = rtrim('http://' . $this->subShopDomain . '/' . $basePath, '/');
 

@@ -1,108 +1,195 @@
-name: PHPUnit
+name: Php Unit
 
 on:
-  push:
-  pull_request:
+    push:
+    pull_request:
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  php:
-    strategy:
-      matrix:
-        php: ['7.4', '8.0']
-    runs-on: ubuntu-latest
-    env:
-        DB_USER: shopware
-        DB_PASSWORD: shopware
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_NAME: shopware
-        SW_HOST: localhost
-        SW_BASE_PATH: ""
-        ELASTICSEARCH_HOST: elasticsearch
+    php:
+        strategy:
+            matrix:
+                php: ['7.4', '8.0', '8.1', '8.2']
+                mysql: ['pkgs.mysql80']
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: cachix/install-nix-action@v20
+              with:
+                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
+            - uses: cachix/cachix-action@v12
+              with:
+                  name: devenv
+            - name: Install devenv.sh
+              run: nix-env -if https://github.com/cachix/devenv/tarball/main
 
-    steps:
-    - uses: actions/checkout@v2
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
+            - run: |
+                  cat > devenv.local.nix << EOF
+                  { pkgs, lib, config, ... }:
 
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        tools: composer, prestissimo
-        coverage: none
+                  {
+                      languages.php.version = "${{ matrix.php }}";
+                      services.mysql.package = ${{ matrix.mysql }};
+                  }
+                  EOF
+            - run: cat devenv.local.nix
+            - run: devenv shell info-setup
+            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            - run: devenv up &
+            - run: devenv shell composer update laminas/laminas-code
+            - run: devenv shell test-phpunit
 
-    - name: Start MySQL
-      run: ./.github/setup-db.sh mysql:5.7
+    mysql:
+        strategy:
+            matrix:
+                php: ['8.1']
+                mysql: ['pkgs.mysql80', 'pkgs.mariadb', 'pkgs.mariadb_104', 'config.nur.repos.pascalthesing.mysql57']
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
 
-    - name: PHPUnit
-      run: make test-phpunit
+            - uses: cachix/install-nix-action@v20
+              with:
+                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
+            - uses: cachix/cachix-action@v12
+              with:
+                  name: devenv
 
-  mysql:
-    strategy:
-      matrix:
-        mysql: ['mysql:8.0', 'mariadb:10.1', 'mariadb:10.4']
-    runs-on: ubuntu-latest
-    env:
-        DB_USER: shopware
-        DB_PASSWORD: shopware
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_NAME: shopware
-        SW_HOST: localhost
-        SW_BASE_PATH: ""
-        ELASTICSEARCH_HOST: elasticsearch
+            - name: Use Shopware Cache
+              uses: cachix/cachix-action@v12
+              with:
+                  name: shopware
+                  authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    steps:
-    - uses: actions/checkout@v2
+            - name: Install devenv.sh
+              run: nix-env -if https://github.com/cachix/devenv/tarball/main
 
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        tools: composer, prestissimo
-        coverage: none
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
 
-    - name: Start MySQL
-      run: ./.github/setup-db.sh ${{ matrix.mysql }}
+            - run: |
+                  cat > devenv.local.nix << EOF
+                  { pkgs, lib, config, ... }:
 
-    - name: PHPUnit
-      run: make test-phpunit
+                  {
+                      languages.php.version = "${{ matrix.php }}";
+                      services.mysql.package = ${{ matrix.mysql }};
+                  }
+                  EOF
+            - run: cat devenv.local.nix
 
-  es:
-    strategy:
-      matrix:
-        elasticsearch: ['elastic/elasticsearch:7.0.0']
-    runs-on: ubuntu-latest
-    env:
-        DB_USER: shopware
-        DB_PASSWORD: shopware
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_NAME: shopware
-        SW_HOST: localhost
-        SW_BASE_PATH: ""
-        ELASTICSEARCH_HOST: elasticsearch
+            - run: devenv shell info-setup
+            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            - run: devenv up &
+            - run: devenv shell ./.github/check-mysql.sh
+            - run: devenv shell test-phpunit
 
-    steps:
-    - uses: actions/checkout@v2
+    Code-Coverage:
+        runs-on: ubuntu-latest
+        env:
+            TESTSUITE: 'all'
+        steps:
+            - uses: actions/checkout@v2
+            - uses: cachix/install-nix-action@v20
+              with:
+                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: '7.4'
-        tools: composer, prestissimo
-        coverage: none
+            - uses: cachix/cachix-action@v12
+              with:
+                  name: devenv
 
-    - name: Start MySQL
-      run: ./.github/setup-db.sh mysql:5.7
+            -   name: Use Shopware Cache
+                uses: cachix/cachix-action@v12
+                with:
+                    name: shopware
+                    authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    - name: Start Elasticsearch
-      run: ./.github/setup-es.sh ${{ matrix.elasticsearch }}
+            - name: Install devenv.sh
+              run: nix-env -if https://github.com/cachix/devenv/tarball/main
 
-    - name: Setup DNS
-      run: sudo echo "127.0.0.1 elasticsearch" | sudo tee -a /etc/hosts
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
 
-    - name: Install Shopware
-      run: make init
+            - run: devenv shell info-setup
+            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            - run: devenv up &
+            - run: devenv shell ./.github/check-mysql.sh
+            - run: devenv shell test-phpunit-coverage-statistic
 
-    - name: PHPUnit
-      run: make test-phpunit-elasticsearch
+    es:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   uses: cachix/install-nix-action@v20
+                with:
+                    github_access_token: ${{ secrets.GITHUB_TOKEN }}
+            -   uses: cachix/cachix-action@v12
+                with:
+                    name: devenv
+
+            -   name: Use Shopware Cache
+                uses: cachix/cachix-action@v12
+                with:
+                    name: shopware
+                    authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+            -   name: Install devenv.sh
+                run: nix-env -if https://github.com/cachix/devenv/tarball/main
+
+
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   run: |
+                    cat > devenv.local.nix << EOF
+                    { pkgs, lib, config, ... }:
+
+                    {
+                        services.elasticsearch.enable = true;
+                        env.ELASTICSEARCH_HOST = lib.mkDefault "localhost:9200";
+                    }
+                    EOF
+
+            - run: devenv shell info-setup
+            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            - run: devenv up &
+            - run: devenv shell ./.github/check-mysql.sh
+            - run: devenv shell init-shopware
+            - run: devenv shell test-phpunit-elasticsearch
