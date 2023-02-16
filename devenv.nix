@@ -73,4 +73,22 @@
   services.adminer.enable = lib.mkDefault true;
   services.adminer.listen = lib.mkDefault "127.0.0.1:9080";
   services.mailhog.enable = lib.mkDefault true;
+
+  env.SW_HOST = lib.mkDefault "localhost:8000";
+  env.DB_USER = lib.mkDefault "shopware";
+  env.DB_PASSWORD = lib.mkDefault "shopware";
+  env.DB_NAME = lib.mkDefault "shopware";
+  env.DB_HOST = lib.mkDefault "localhost";
+  env.DB_PORT = lib.mkDefault "3306";
+  env.MAILER_DSN = lib.mkDefault "smtp://localhost:1025";
+  env.SW_BASE_PATH = lib.mkDefault "";
+
+  scripts.init-shopware.exec= ''
+    make init
+  '';
+
+  scripts.check-code.exec= ''
+    make check-code
+  '';
+
 }
