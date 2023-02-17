@@ -40,7 +40,7 @@
             <tag name="shopware.controller" module="backend" controller="base"/>
         </service>
 
-        <service id="shopware_controllers_backend_orderproductsearch" class="Shopware_Controllers_Backend_OrderProductSearch">
+        <service id="Shopware\Controllers\Backend\OrderProductSearch">
             <tag name="shopware.controller" module="backend" controller="orderproductsearch"/>
         </service>
 

@@ -30,15 +30,12 @@ use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
-use Doctrine\ORM\Exception\ORMException;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\TransactionRequiredException;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
-use Exception;
 use Generator;
+use RuntimeException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
@@ -232,11 +229,6 @@ class OrderTest extends ControllerTestCase
 
     /**
      * @dataProvider provideTaxRuleParams
-     *
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
-     * @throws \Doctrine\DBAL\Exception
      */
     public function testSavePositionActionWithTaxRule(int $customerGroupId, string $customerGroupKey): void
     {
@@ -294,11 +286,6 @@ class OrderTest extends ControllerTestCase
         ];
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     * @throws TransactionRequiredException
-     */
     public function testSavePositionActionWithDifferentTax(): void
     {
         $this->prepareTestSavePositionActionWithDifferentTax();
@@ -533,8 +520,6 @@ class OrderTest extends ControllerTestCase
      * Tests a data array for an entry with a specified key value pair
      *
      * @param array<array<string, mixed>> $data
-     *
-     * @throws Exception
      */
     private function assertElementWithKeyValuePairExists(string $expected, string $dataKey, int $id, array $data): void
     {
@@ -546,7 +531,7 @@ class OrderTest extends ControllerTestCase
             }
         }
 
-        throw new Exception('Entry not found');
+        throw new RuntimeException('Entry not found');
     }
 
     /**
@@ -880,19 +865,12 @@ class OrderTest extends ControllerTestCase
         ];
     }
 
-    /**
-     * @throws \Doctrine\DBAL\Exception
-     */
     private function prepareTestSavePositionActionWithTaxRule(int $customerGroupId, string $customerGroupKey): void
     {
         $taxRuleSQL = file_get_contents(__DIR__ . '/_fixtures/order/tax_rules.sql');
         static::assertIsString($taxRuleSQL);
         $this->connection->executeStatement($taxRuleSQL, [
             'customerGroupId' => $customerGroupId,
-            'tax' => self::NEW_TAX,
-            'countryId' => self::GERMANY_COUNTRY_ID,
-            'stateId' => self::NRW_STATE_ID,
-            'areaId' => self::GERMANY_AREA_ID,
         ]);
 
         $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
