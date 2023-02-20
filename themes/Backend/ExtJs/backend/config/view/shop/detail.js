@@ -53,9 +53,11 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             listeners: {
                 scope: me,
                 change: function (hidden, value) {
-                    var form = hidden.up('form'),
+                    var me = this,
+                        form = hidden.up('form'),
                         typeSwitchField = form.down('[name=typeSwitch]'),
                         mainIdField,
+                        isDefault,
                         type;
 
                     if (Ext.isEmpty(value)) {
@@ -66,8 +68,11 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
 
                     mainIdField = form.down('[name=mainId]');
                     type = mainIdField.getValue() ? 'lang' : 'sub';
+
+                    isDefault = me.getRecord().raw.default;
+
                     typeSwitchField.setValue(type);
-                    typeSwitchField.setDisabled(value == 1);
+                    typeSwitchField.setDisabled(isDefault);
                 }
             }
         }
