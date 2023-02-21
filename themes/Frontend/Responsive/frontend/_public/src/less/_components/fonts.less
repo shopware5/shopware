@@ -1,91 +1,169 @@
 @OpenSansPath: "./fonts";
 
-/* BEGIN Light */
-@font-face {
-    @hash-open-sans-light-woff2: swhash('@{OpenSansPath}/Light/OpenSans-Light.woff2');
-    @hash-open-sans-light-woff: swhash('@{OpenSansPath}/Light/OpenSans-Light.woff');
-    @hash-open-sans-light-ttf: swhash('@{OpenSansPath}/Light/OpenSans-Light.ttf');
+@supports not (font-variation-settings: normal) {
+    @font-face {
+        @hash-open-sans-light-woff2: swhash('@{OpenSansPath}/Light/OpenSans-Light.woff2');
+        @hash-open-sans-light-woff: swhash('@{OpenSansPath}/Light/OpenSans-Light.woff');
+        @hash-open-sans-light-ttf: swhash('@{OpenSansPath}/Light/OpenSans-Light.ttf');
 
-    font-family: 'Open Sans';
-    font-display: swap;
-    src: local('Open Sans Light'),
-    local('OpenSans-Light'),
-    url('@{OpenSansPath}/Light/OpenSans-Light.woff2?@{hash-open-sans-light-woff2}') format('woff2'),
-    url('@{OpenSansPath}/Light/OpenSans-Light.woff?@{hash-open-sans-light-woff}') format('woff'),
-    url('@{OpenSansPath}/Light/OpenSans-Light.ttf?@{hash-open-sans-light-ttf}') format('truetype');
-    font-weight: 300;
-    font-style: normal;
+        font-family: 'Open Sans';
+        font-display: swap;
+        src: local('Open Sans Light'),
+            local('OpenSans-Light'),
+            url('@{OpenSansPath}/Light/OpenSans-Light.woff2?@{hash-open-sans-light-woff2}') format('woff2'),
+            url('@{OpenSansPath}/Light/OpenSans-Light.woff?@{hash-open-sans-light-woff}') format('woff'),
+            url('@{OpenSansPath}/Light/OpenSans-Light.ttf?@{hash-open-sans-light-ttf}') format('truetype');
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    @font-face {
+        @hash-open-sans-regular-woff-2: swhash('@{OpenSansPath}/Regular/OpenSans-Regular.woff2');
+        @hash-open-sans-regular-woff: swhash('@{OpenSansPath}/Regular/OpenSans-Regular.woff');
+        @hash-open-sans-regular-ttf: swhash('@{OpenSansPath}/Regular/OpenSans-Regular.ttf');
+
+        font-family: 'Open Sans';
+        font-display: swap;
+        src: local('Open Sans Regular'),
+            local('Open Sans'),
+            url('@{OpenSansPath}/Regular/OpenSans-Regular.woff2?@{hash-open-sans-regular-woff-2}') format('woff2'),
+            url('@{OpenSansPath}/Regular/OpenSans-Regular.woff?@{hash-open-sans-regular-woff}') format('woff'),
+            url('@{OpenSansPath}/Regular/OpenSans-Regular.ttf?@{hash-open-sans-regular-ttf}') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+    }
+
+    @font-face {
+        @hash-open-sans-semibold-woff-2: swhash('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff2');
+        @hash-open-sans-semibold-woff: swhash('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff');
+        @hash-open-sans-semibold-ttf: swhash('@{OpenSansPath}/Semibold/OpenSans-Semibold.ttf');
+
+        font-family: 'Open Sans';
+        font-display: swap;
+        src: local('Open Sans Semibold'),
+            local('OpenSans-SemiBold'),
+            url('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff2?@{hash-open-sans-semibold-woff-2}') format('woff2'),
+            url('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff?@{hash-open-sans-semibold-woff}') format('woff'),
+            url('@{OpenSansPath}/Semibold/OpenSans-Semibold.ttf?@{hash-open-sans-semibold-ttf}') format('truetype');
+        font-weight: 600;
+        font-style: normal;
+    }
+
+    @font-face {
+        @hash-open-sans-bold-woff-2: swhash('@{OpenSansPath}/Bold/OpenSans-Bold.woff2');
+        @hash-open-sans-bold-woff: swhash('@{OpenSansPath}/Bold/OpenSans-Bold.woff');
+        @hash-open-sans-bold-ttf: swhash('@{OpenSansPath}/Bold/OpenSans-Bold.ttf');
+
+        font-family: 'Open Sans';
+        font-display: swap;
+        src: local('Open Sans Bold'),
+            local('OpenSans-Bold'),
+            url('@{OpenSansPath}/Bold/OpenSans-Bold.woff2?@{hash-open-sans-bold-woff-2}') format('woff2'),
+            url('@{OpenSansPath}/Bold/OpenSans-Bold.woff?@{hash-open-sans-bold-woff}') format('woff'),
+            url('@{OpenSansPath}/Bold/OpenSans-Bold.ttf?@{hash-open-sans-bold-ttf}') format('truetype');
+        font-weight: bold;
+        font-style: normal;
+    }
+
+    @font-face {
+        @hash-open-sans-extrabold-woff-2: swhash('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff2');
+        @hash-open-sans-extrabold-woff: swhash('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff');
+        @hash-open-sans-extrabold-ttf: swhash('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.ttf');
+
+        font-family: 'Open Sans';
+        font-display: swap;
+        src: local('Open Sans ExtraBold'),
+            local('OpenSans-ExtraBold'),
+            url('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff2?@{hash-open-sans-extrabold-woff-2}') format('woff2'),
+            url('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff?@{hash-open-sans-extrabold-woff}') format('woff'),
+            url('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.ttf?@{hash-open-sans-extrabold-ttf}') format('truetype');
+        font-weight: 800;
+        font-style: normal;
+    }
 }
-/* END Light */
 
-/* BEGIN Regular */
-@font-face {
-    @hash-open-sans-regular-woff-2: swhash('@{OpenSansPath}/Regular/OpenSans-Regular.woff2');
-    @hash-open-sans-regular-woff: swhash('@{OpenSansPath}/Regular/OpenSans-Regular.woff');
-    @hash-open-sans-regular-ttf: swhash('@{OpenSansPath}/Regular/OpenSans-Regular.ttf');
+@supports (font-variation-settings: normal) {
+    @font-face {
+        @hash-open-sans-variable-cyrillic-ext-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.cyrillic-ext.var.woff2');
 
-    font-family: 'Open Sans';
-    font-display: swap;
-    src: local('Open Sans Regular'),
-    local('Open Sans'),
-    url('@{OpenSansPath}/Regular/OpenSans-Regular.woff2?@{hash-open-sans-regular-woff-2}') format('woff2'),
-    url('@{OpenSansPath}/Regular/OpenSans-Regular.woff?@{hash-open-sans-regular-woff}') format('woff'),
-    url('@{OpenSansPath}/Regular/OpenSans-Regular.ttf?@{hash-open-sans-regular-ttf}') format('truetype');
-    font-weight: normal;
-    font-style: normal;
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.cyrillic-ext.var.woff2?@{hash-open-sans-variable-cyrillic-ext-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.cyrillic-ext.var.woff2?@{hash-open-sans-variable-cyrillic-ext-woff-2}');
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
+    }
+
+    @font-face {
+        @hash-open-sans-variable-cyrillic-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.cyrillic.var.woff2');
+
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.cyrillic.var.woff2?@{hash-open-sans-variable-cyrillic-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.cyrillic.var.woff2?@{hash-open-sans-variable-cyrillic-woff-2}') format('woff2-variations');
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+    }
+
+    @font-face {
+        @hash-open-sans-variable-greek-ext-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.greek-ext.var.woff2');
+
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.greek-ext.var.woff2?@{hash-open-sans-variable-greek-ext-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.greek-ext.var.woff2?@{hash-open-sans-variable-greek-ext-woff-2}') format('woff2-variations');
+        unicode-range: U+1F00-1FFF;
+    }
+
+    @font-face {
+        @hash-open-sans-variable-greek-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.greek.var.woff2');
+
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.greek.var.woff2?@{hash-open-sans-variable-greek-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.greek.var.woff2?@{hash-open-sans-variable-greek-woff-2}') format('woff2-variations');
+        unicode-range: U+0370-03FF;
+    }
+
+    @font-face {
+        @hash-open-sans-variable-vietnamese-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.vietnamese.var.woff2');
+
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.vietnamese.var.woff2?@{hash-open-sans-variable-vietnamese-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.vietnamese.var.woff2?@{hash-open-sans-variable-vietnamese-woff-2}') format('woff2-variations');
+        unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
+    }
+
+    @font-face {
+        @hash-open-sans-variable-latin-ext-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.latin-ext.var.woff2');
+
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.latin-ext.var.woff2?@{hash-open-sans-variable-latin-ext-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.latin-ext.var.woff2?@{hash-open-sans-variable-latin-ext-woff-2}') format('woff2-variations');
+        unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+    }
+
+    @font-face {
+        @hash-open-sans-variable-latin-woff-2: swhash('@{OpenSansPath}/Variable/OpenSans.latin.var.woff2');
+
+        font-family: 'Open Sans';
+        font-style: normal;
+        font-weight: 300 800;
+        font-display: fallback;
+        src: url('@{OpenSansPath}/Variable/OpenSans.latin.var.woff2?@{hash-open-sans-variable-latin-woff-2}') format('woff2 supports variations'),
+            url('@{OpenSansPath}/Variable/OpenSans.latin.var.woff2?@{hash-open-sans-variable-latin-woff-2}') format('woff2-variations');
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+    }
 }
-/* END Regular */
-
-/* BEGIN Semibold */
-@font-face {
-    @hash-open-sans-semibold-woff-2: swhash('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff2');
-    @hash-open-sans-semibold-woff: swhash('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff');
-    @hash-open-sans-semibold-ttf: swhash('@{OpenSansPath}/Semibold/OpenSans-Semibold.ttf');
-
-    font-family: 'Open Sans';
-    font-display: swap;
-    src: local('Open Sans Semibold'),
-    local('OpenSans-SemiBold'),
-    url('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff2?@{hash-open-sans-semibold-woff-2}') format('woff2'),
-    url('@{OpenSansPath}/Semibold/OpenSans-Semibold.woff?@{hash-open-sans-semibold-woff}') format('woff'),
-    url('@{OpenSansPath}/Semibold/OpenSans-Semibold.ttf?@{hash-open-sans-semibold-ttf}') format('truetype');
-    font-weight: 600;
-    font-style: normal;
-}
-/* END Semibold */
-
-/* BEGIN Bold */
-@font-face {
-    @hash-open-sans-bold-woff-2: swhash('@{OpenSansPath}/Bold/OpenSans-Bold.woff2');
-    @hash-open-sans-bold-woff: swhash('@{OpenSansPath}/Bold/OpenSans-Bold.woff');
-    @hash-open-sans-bold-ttf: swhash('@{OpenSansPath}/Bold/OpenSans-Bold.ttf');
-
-    font-family: 'Open Sans';
-    font-display: swap;
-    src: local('Open Sans Bold'),
-    local('OpenSans-Bold'),
-    url('@{OpenSansPath}/Bold/OpenSans-Bold.woff2?@{hash-open-sans-bold-woff-2}') format('woff2'),
-    url('@{OpenSansPath}/Bold/OpenSans-Bold.woff?@{hash-open-sans-bold-woff}') format('woff'),
-    url('@{OpenSansPath}/Bold/OpenSans-Bold.ttf?@{hash-open-sans-bold-ttf}') format('truetype');
-    font-weight: bold;
-    font-style: normal;
-}
-/* END Bold */
-
-/* BEGIN Extrabold */
-@font-face {
-    @hash-open-sans-extrabold-woff-2: swhash('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff2');
-    @hash-open-sans-extrabold-woff: swhash('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff');
-    @hash-open-sans-extrabold-ttf: swhash('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.ttf');
-
-    font-family: 'Open Sans';
-    font-display: swap;
-    src: local('Open Sans ExtraBold'),
-    local('OpenSans-ExtraBold'),
-    url('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff2?@{hash-open-sans-extrabold-woff-2}') format('woff2'),
-    url('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.woff?@{hash-open-sans-extrabold-woff}') format('woff'),
-    url('@{OpenSansPath}/ExtraBold/OpenSans-ExtraBold.ttf?@{hash-open-sans-extrabold-ttf}') format('truetype');
-    font-weight: 800;
-    font-style: normal;
-}
-/* END Extrabold */
