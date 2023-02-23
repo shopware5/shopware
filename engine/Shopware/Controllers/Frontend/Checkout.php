@@ -589,8 +589,13 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $ordernumber = trim($this->Request()->getParam('sAdd'));
         $quantity = (int) $this->Request()->getParam('sQuantity');
         $productId = Shopware()->Modules()->Articles()->sGetArticleIdByOrderNumber($ordernumber);
+        $instockInfo = $this->getInstockInfo($ordernumber, $quantity);
 
-        $this->View()->assign('sBasketInfo', $this->getInstockInfo($ordernumber, $quantity));
+        $this->View()->assign('sBasketInfo', $instockInfo);
+
+        if ($instockInfo !== null) {
+            $this->session->offsetSet('sErrorMessages', $instockInfo);
+        }
 
         if (!empty($productId)) {
             $insertId = $this->basket->sAddArticle($ordernumber, $quantity);
