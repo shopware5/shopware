@@ -1461,7 +1461,7 @@ class sOrder implements Enlight_Hook
     }
 
     /**
-     * Set payment status by order id
+     * Set order status by order id
      *
      * @param int         $orderId
      * @param int         $orderStatusId
