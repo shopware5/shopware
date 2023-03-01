@@ -82,7 +82,8 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
                 'filter',
                 'f',
                 InputOption::VALUE_REQUIRED,
-                'Filter Plugins (inactive, active, installed, uninstalled)'
+                'Filter Plugins (inactive, active, installed, uninstalled)',
+                ''
             )
             ->addOption(
                 'namespace',
