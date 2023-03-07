@@ -57,7 +57,7 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         $this->setPaymentSurcharge(5);
         Shopware()->Container()->get(Connection::class)->executeQuery('UPDATE s_premium_dispatch SET surcharge_calculation = 0');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
 
         $this->dispatch('/checkout/cart');
 
@@ -85,8 +85,8 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         $this->setPaymentSurcharge(5);
         Shopware()->Container()->get(Connection::class)->executeQuery('UPDATE s_premium_dispatch SET surcharge_calculation = 0');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 7.00));
 
         $this->dispatch('/checkout/cart');
 
@@ -114,7 +114,7 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         $this->setPaymentSurcharge(0);
         Shopware()->Container()->get(Connection::class)->executeQuery('UPDATE s_premium_dispatch SET active = 1 WHERE id = 12');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
 
         $this->dispatch('/checkout/cart');
 
@@ -144,8 +144,8 @@ class ProportionalCartCalculationDispatchTest extends CheckoutTest
         $this->setPaymentSurcharge(0);
         Shopware()->Container()->get(Connection::class)->executeQuery('UPDATE s_premium_dispatch SET active = 1 WHERE id = 12');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 7.00));
 
         $this->dispatch('/checkout/cart');
 

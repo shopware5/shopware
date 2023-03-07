@@ -262,6 +262,8 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @param string|array $url
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function redirect($url, array $options = [])
     {

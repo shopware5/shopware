@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 
 namespace Shopware\Tests\Functional\Components\Cart;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Tests\Functional\Components\CheckoutTest;
 
 /**
@@ -34,13 +37,13 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
     public function setUp(): void
     {
         parent::setUp();
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
         $this->setConfig('proportionalTaxCalculation', true);
 
         $this->setPaymentSurcharge(0);
         $this->setCustomerGroupSurcharge(20, 5);
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
+        Shopware()->Container()->get(Connection::class)->executeQuery('UPDATE s_premium_dispatch SET active = 0 WHERE id = 12');
     }
 
     protected function tearDown(): void
@@ -50,12 +53,12 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
         $this->clearCustomerGroupDiscount('EK');
         $this->setConfig('proportionalTaxCalculation', false);
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Container()->get(Connection::class)->rollBack();
     }
 
     public function testCustomerGroupWithMinimumOrderNormal()
     {
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(5, 19.00), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(5, 19.00), 1);
 
         $this->dispatch('/checkout/cart');
 
@@ -82,8 +85,8 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
 
     public function testCustomerGroupWithMinimumOrderTaxes()
     {
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(5, 19.00), 1);
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(3, 7.00), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(5, 19.00), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(3, 7.00), 1);
 
         $this->dispatch('/checkout/cart');
 
@@ -113,7 +116,7 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
     {
         $this->addCustomerGroupDiscount('EK', 20, 10);
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(500, 19.00), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(500, 19.00), 1);
 
         $this->dispatch('/checkout/cart');
 
@@ -142,8 +145,8 @@ class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
     {
         $this->addCustomerGroupDiscount('EK', 20, 10);
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(500, 19.00), 1);
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(500, 7.00), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(500, 19.00), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(500, 7.00), 1);
 
         $this->dispatch('/checkout/cart');
 

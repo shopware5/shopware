@@ -359,6 +359,8 @@ class sOrder implements Enlight_Hook
 
     /**
      * Delete temporary created order
+     *
+     * @return void
      */
     public function sDeleteTemporaryOrder()
     {
@@ -388,6 +390,8 @@ class sOrder implements Enlight_Hook
      * Create temporary order (for order cancellation reports)
      *
      * @throws Enlight_Exception
+     *
+     * @return void
      */
     public function sCreateTemporaryOrder()
     {
@@ -532,6 +536,8 @@ class sOrder implements Enlight_Hook
 
     /**
      * Finally save order and send order confirmation to customer
+     *
+     * @return string|false
      */
     public function sSaveOrder()
     {

@@ -65,7 +65,7 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
     }
 
     /**
-     * @param array<string, array> $products
+     * @param array<string, array<string, mixed>> $products
      *
      * @return Product[]
      */

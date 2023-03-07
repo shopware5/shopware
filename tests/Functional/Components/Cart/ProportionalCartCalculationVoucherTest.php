@@ -59,7 +59,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     public function testAbsoluteVoucher(): void
     {
         $this->setVoucherTax('absolut', 'default');
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
         Shopware()->Modules()->Basket()->sAddVoucher('absolut');
 
         $this->dispatch('/checkout/cart');
@@ -89,8 +89,8 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     {
         $this->setVoucherTax('GUTABS', 'default');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 7.00));
         Shopware()->Modules()->Basket()->sAddVoucher('absolut');
 
         $this->dispatch('/checkout/cart');
@@ -120,8 +120,8 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     {
         $this->setVoucherTax('GUTABS', 'auto');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 7.00));
         Shopware()->Modules()->Basket()->sAddVoucher('absolut');
 
         $this->dispatch('/checkout/cart');
@@ -152,7 +152,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     {
         $this->setVoucherTax('GUTPROZ', 'default');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(100, 19.00));
         Shopware()->Modules()->Basket()->sAddVoucher('prozentual');
 
         $this->dispatch('/checkout/cart');
@@ -182,7 +182,7 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     {
         $this->setVoucherTax('GUTPROZ', 'auto');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(100, 19.00));
         Shopware()->Modules()->Basket()->sAddVoucher('prozentual');
 
         $this->dispatch('/checkout/cart');
@@ -212,8 +212,8 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     {
         $this->setVoucherTax('GUTPROZ', 'auto');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 7.00));
         Shopware()->Modules()->Basket()->sAddVoucher('prozentual');
 
         $this->dispatch('/checkout/cart');
@@ -244,8 +244,8 @@ class ProportionalCartCalculationVoucherTest extends CheckoutTest
     {
         $this->setVoucherTax('GUTABS', 'auto');
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 19.00));
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(50, 7.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 19.00));
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(50, 7.00));
         Shopware()->Modules()->Basket()->sAddVoucher('absolut');
 
         $this->dispatch('/checkout/cart');
