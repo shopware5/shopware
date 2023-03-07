@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,17 +26,18 @@
 
 namespace Shopware\Tests\Functional\Components\Cart;
 
+use Doctrine\DBAL\Connection;
 use Shopware\Tests\Functional\Components\CheckoutTest;
 
 class CartRaceConditionTest extends CheckoutTest
 {
-    public $clearBasketOnReset = false;
+    public bool $clearBasketOnReset = false;
 
-    public function testPriceChangesInConfirmWithoutPriceModifications()
+    public function testPriceChangesInConfirmWithoutPriceModifications(): void
     {
-        $productNumber = $this->createArticle(5, 19.00);
+        $productNumber = $this->createProduct(5, 19.00);
 
-        $this->loginFrontendUser();
+        $this->loginFrontendCustomer();
 
         $this->addProduct($productNumber);
         $this->visitConfirm();
@@ -43,24 +46,31 @@ class CartRaceConditionTest extends CheckoutTest
 
         $this->visitFinish();
 
-        static::assertEquals($orderAmount, $this->View()->getAssign('sBasket')['AmountNumeric']);
+        static::assertSame($orderAmount, $this->View()->getAssign('sBasket')['AmountNumeric']);
     }
 
-    public function testPriceChangesInConfirmWithPriceModifications()
+    public function testPriceChangesInConfirmWithPriceModifications(): void
     {
-        $productNumber = $this->createArticle(5, 19.00);
+        $productNumber1 = $this->createProduct(5, 19.00);
 
-        $this->loginFrontendUser();
+        $this->loginFrontendCustomer();
 
-        $this->addProduct($productNumber);
+        $this->addProduct($productNumber1);
         $this->visitConfirm();
 
-        $orderAmount = $this->View()->getAssign('sBasket')['AmountNumeric'];
+        $orderAmount = (float) $this->View()->getAssign('sBasket')['AmountNumeric'];
+        static::assertGreaterThan(0.0, $orderAmount);
 
-        $this->updateProductPrice($productNumber, 20, 19.00);
+        $this->updateProductPrice($productNumber1, 20, 19.00);
 
         $this->visitFinish();
 
-        static::assertEquals($orderAmount, $this->View()->getAssign('sBasket')['AmountNumeric']);
+        $orderNumber = $this->View()->getAssign('sOrderNumber');
+
+        $savedOrderAmount = (float) $this->getContainer()->get(Connection::class)->executeQuery(
+            'SELECT invoice_amount FROM s_order WHERE ordernumber = :orderNumber', ['orderNumber' => $orderNumber]
+        )->fetchOne();
+
+        static::assertSame($orderAmount, $savedOrderAmount);
     }
 }
