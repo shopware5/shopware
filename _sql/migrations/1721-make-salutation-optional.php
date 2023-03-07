@@ -39,7 +39,7 @@ EOD;
             INSERT IGNORE s_core_config_elements
                 (`form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`, `options`)
             VALUE
-                (@formId, 'shopSalutationRequired', 'b:1;', 'Anrede benötigt', 'Ob eine Anrede bei der Regestrierung benötigt wird oder nicht.', 'boolean', 1, 1015, 1, '');
+                (@formId, 'shopSalutationRequired', 'b:1;', 'Anrede benötigt', 'Ob eine Anrede bei der Registrierung benötigt wird oder nicht.', 'boolean', 1, 1015, 1, '');
 EOD;
         $this->addSql($sql);
 
