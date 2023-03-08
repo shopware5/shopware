@@ -30,6 +30,11 @@ use SwagPaymentPayPalUnified\Setup\FirstRunWizardInstaller;
 class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_Controllers_Backend_ExtJs
 {
     /**
+     * @var array<string, LocaleStruct>
+     */
+    public static array $locales = [];
+
+    /**
      * Loads integrated plugins from SBP
      */
     public function getIntegratedPluginsAction()
@@ -251,25 +256,23 @@ class Shopware_Controllers_Backend_FirstRunWizardPluginManager extends Shopware_
      */
     private function getCurrentLocale(): ?LocaleStruct
     {
-        static $locales;
-
-        if (\is_array($locales) && empty($locales)) {
+        if (empty(self::$locales)) {
             $accountManagerService = $this->container->get('shopware_plugininstaller.account_manager_service');
 
             foreach ($accountManagerService->getLocales() as $serverLocale) {
-                $locales[$serverLocale->getName()] = $serverLocale;
+                self::$locales[$serverLocale->getName()] = $serverLocale;
             }
         }
 
-        $localeCode = Shopware()->Container()->get('auth')->getIdentity()->locale->getLocale();
+        $localeCode = $this->container->get('auth')->getIdentity()->locale->getLocale();
 
-        if (\array_key_exists($localeCode, $locales)) {
-            return $locales[$localeCode];
+        if (\array_key_exists($localeCode, self::$locales)) {
+            return self::$locales[$localeCode];
         }
 
         // Fallback to english locale when available
-        if (\array_key_exists('en_GB', $locales)) {
-            return $locales['en_GB'];
+        if (\array_key_exists('en_GB', self::$locales)) {
+            return self::$locales['en_GB'];
         }
 
         return null;
