@@ -31,6 +31,7 @@ use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionProduct;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionRebate;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
@@ -302,6 +303,20 @@ class CheckoutCart extends Page implements HelperSelectorInterface
 
         $this->path = $originalPath;
         $this->open();
+    }
+
+    /**
+     * @param list<array{taxRate: string, value: string}> $taxValues
+     */
+    public function checkPositionTaxes(CartPositionRebate $cartPositionToCheck, array $taxValues): void
+    {
+        $positionText = $cartPositionToCheck->getText();
+        foreach ($taxValues as $taxValue) {
+            $taxString = sprintf('%s: %s', $taxValue['taxRate'], $taxValue['value']);
+            if (!str_contains($positionText, $taxString)) {
+                Helper::throwException(sprintf('Could not find tax "%s" in position "%s"', $taxString, $positionText));
+            }
+        }
     }
 
     protected function verify(array $urlParameters): void

@@ -57,7 +57,7 @@ Feature: Checkout articles
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
 
     @paymentsurcharge
-    Scenario:   I can switch to payment method with percentual surcharge and everything is calculated correctly
+    Scenario:   I can switch to payment method with percentage surcharge and everything is calculated correctly
         Given   I proceed to order confirmation
         When    I change the payment method to 5
         And     Wait until ajax requests are done
@@ -73,6 +73,44 @@ Feature: Checkout articles
 
         When  I proceed to checkout
         Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
+
+    @proportionalTax @configChange
+    Scenario:   I can checkout the cart with different tax items
+        Given   the config value of "proportionalTaxCalculation" is 1
+        And     I add the article "SW10036" to my basket
+        Then    I proceed to order confirmation
+        When    I change the payment method to 4
+        And     Wait until ajax requests are done
+        Then    the current payment method should be "Rechnung"
+        And     I should see "Zuschlag für Zahlungsart"
+        And     the aggregations should look like this:
+            | label         | value   |
+            | sum           | 65,04 € |
+            | shipping      | 3,90 €  |
+            | total         | 68,94 € |
+            | sumWithoutVat | 60,20 € |
+            | 7%            | 1,58 €  |
+            | 19%           | 7,15 €  |
+        And   I should see "AGB und Widerrufsbelehrung"
+        And   I should see 2 ".product--essential-features" elements
+        And   Position "Warenkorbrabatt" contains following taxes
+            | taxRate | value   |
+            | 7%      | -0,04 € |
+            | 19%     | -0,20 € |
+        And   Position "Zuschlag für Zahlungsart" contains following taxes
+            | taxRate | value  |
+            | 7%      | 0,12 € |
+            | 19%     | 0,50 € |
+        When  I proceed to checkout
+        Then  I should see "Vielen Dank für Ihre Bestellung bei Shopware Demo!"
+        And     the aggregations should look like this:
+            | label         | value   |
+            | sum           | 65,04 € |
+            | shipping      | 3,90 €  |
+            | total         | 68,94 € |
+            | sumWithoutVat | 60,20 € |
+            | 7%            | 1,58 €  |
+            | 19%           | 7,15 €  |
 
     @shipping @payment
     Scenario: I can change the shipping-country to a non-EU-country and back and pay via bill

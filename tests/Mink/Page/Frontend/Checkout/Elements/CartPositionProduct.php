@@ -31,8 +31,8 @@ use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
- * Element: CartPosition
- * Location: Cart positions on cart and checkout confirm page
+ * Element: CartPositionProduct
+ * Location: Cart positions with products on cart and checkout confirm page
  *
  * Available retrievable properties:
  * - number (string, e.g. "SW10181")
