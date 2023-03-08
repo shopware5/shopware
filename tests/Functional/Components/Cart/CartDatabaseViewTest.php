@@ -28,15 +28,17 @@ namespace Shopware\Tests\Functional\Components\Cart;
 
 use Doctrine\DBAL\Connection;
 use Shopware\Tests\Functional\Components\CheckoutTest;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class CartRaceConditionTest extends CheckoutTest
+class CartDatabaseViewTest extends CheckoutTest
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
 
     public bool $clearBasketOnReset = false;
 
-    public function testPriceChangesInConfirmWithoutPriceModifications(): void
+    public function testEnsureCartInViewHasSameIDsAsTheDatabase(): void
     {
         $productNumber = $this->createProduct(5, 19.00);
 
@@ -45,35 +47,15 @@ class CartRaceConditionTest extends CheckoutTest
         $this->addProduct($productNumber);
         $this->visitConfirm();
 
-        $orderAmount = $this->View()->getAssign('sBasket')['AmountNumeric'];
+        $cartItems = $this->View()->getAssign('sBasket')['content'];
+        $cartPositionIds = array_map('\intval', array_column($cartItems, 'id'));
 
-        $this->visitFinish();
-
-        static::assertSame($orderAmount, $this->View()->getAssign('sBasket')['AmountNumeric']);
-    }
-
-    public function testPriceChangesInConfirmWithPriceModifications(): void
-    {
-        $productNumber1 = $this->createProduct(5, 19.00);
-
-        $this->loginFrontendCustomer();
-
-        $this->addProduct($productNumber1);
-        $this->visitConfirm();
-
-        $orderAmount = (float) $this->View()->getAssign('sBasket')['AmountNumeric'];
-        static::assertGreaterThan(0.0, $orderAmount);
-
-        $this->updateProductPrice($productNumber1, 20, 19.00);
-
-        $this->visitFinish();
-
-        $orderNumber = $this->View()->getAssign('sOrderNumber');
-
-        $savedOrderAmount = (float) $this->getContainer()->get(Connection::class)->executeQuery(
-            'SELECT invoice_amount FROM s_order WHERE ordernumber = :orderNumber', ['orderNumber' => $orderNumber]
-        )->fetchOne();
-
-        static::assertSame($orderAmount, $savedOrderAmount);
+        $connection = $this->getContainer()->get(Connection::class);
+        $preparedStatement = $connection->prepare('SELECT id FROM s_order_basket WHERE id = :id');
+        foreach ($cartPositionIds as $cartPositionId) {
+            $preparedStatement->bindValue('id', $cartPositionId);
+            $cartPositionDatabaseId = (int) $preparedStatement->executeQuery()->fetchOne();
+            static::assertSame($cartPositionId, $cartPositionDatabaseId, 'Cart position in view is not the same as in the database.');
+        }
     }
 }
