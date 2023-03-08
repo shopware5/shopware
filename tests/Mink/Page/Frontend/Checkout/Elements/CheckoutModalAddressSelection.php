@@ -38,7 +38,7 @@ use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 class CheckoutModalAddressSelection extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.address-manager--selection'];
 

@@ -126,7 +126,7 @@ debug-config-test: .make.config.build.debug
 	touch $@
 
 .make.config.behat:
-	@sed -e 's/%sw\.host%/$(SW_HOST)/g' -e 's|%sw\.path%|$(SW_BASE_PATH)|g' < ./build/behat.yml.dist > ./tests/Mink/behat.yml
+	@sed -e 's/%sw\.host%/$(SW_HOST)/g' -e 's|%sw\.path%|$(SW_BASE_PATH)|g' < ./tests/Mink/behat.yml.dist > ./tests/Mink/behat.yml
 	touch $@
 
 .make.install.composer-dependencies:

@@ -45,7 +45,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class Article extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--product'];
 

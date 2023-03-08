@@ -42,7 +42,7 @@ use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountOrder;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutCart;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm;
-use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionProduct;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBox;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBoxModal;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutModalAddressSelection;
@@ -96,7 +96,7 @@ class CheckoutContext extends SubContext
     {
         $page = $this->getPage(CheckoutCart::class);
 
-        $cartPosition = $this->getMultipleElement($page, CartPosition::class, $position);
+        $cartPosition = $this->getMultipleElement($page, CartPositionProduct::class, $position);
         $page->removeProduct($cartPosition);
     }
 
@@ -193,7 +193,7 @@ class CheckoutContext extends SubContext
     {
         $page = $this->getPage(CheckoutCart::class);
 
-        $cartPositions = $this->getMultipleElement($page, CartPosition::class);
+        $cartPositions = $this->getMultipleElement($page, CartPositionProduct::class);
         $page->checkCartProducts($cartPositions, $items->getHash());
     }
 

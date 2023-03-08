@@ -40911,11 +40911,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountOrder.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountOrder\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Account/Elements/AccountOrder.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountPayment\\:\\:getPaymentMethodProperty\\(\\) should return string but returns string\\|false\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountPayment.php
@@ -40929,11 +40924,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Account\\\\Elements\\\\AccountShipping\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Account/Elements/AccountShipping.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Address/Elements/AddressBox.php
 
 		-
 			message: "#^Binary operation \"\\.\" between array\\|float\\|string and ' ' results in an error\\.$#"
@@ -40971,24 +40961,9 @@ parameters:
 			path: tests/Mink/Page/Frontend/Address/Elements/AddressManagementAddressBox.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Address\\\\Elements\\\\AddressManagementAddressBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Address/Elements/AddressManagementAddressBox.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\Article\\:\\:getImageProperty\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Article/Elements/Article.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\Article\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Article/Elements/Article.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleEvaluation\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Article/Elements/ArticleEvaluation.php
 
 		-
 			message: "#^Ternary operator condition is always true\\.$#"
@@ -41007,11 +40982,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleSlider\\:\\:getImageProperty\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Article/Elements/ArticleSlider.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\ArticleSlider\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Article/Elements/ArticleSlider.php
 
@@ -41082,11 +41052,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogComment\\:\\:getStars\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Blog/Elements/BlogComment.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Blog\\\\Elements\\\\BlogComment\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Blog/Elements/BlogComment.php
 
@@ -41201,11 +41166,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/CheckoutConfirm.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CartPosition\\:\\:getUniqueName\\(\\) has parameter \\$names with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CartPosition.php
-
-		-
 			message: "#^Binary operation \"\\.\" between array\\|float\\|string and ' ' results in an error\\.$#"
 			count: 2
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBox.php
@@ -41237,11 +41197,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBox\\:\\:hasTitle\\(\\) has parameter \\$title with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBox.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBox\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBox.php
 
@@ -41281,24 +41236,9 @@ parameters:
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBoxModal.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutAddressBoxModal\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutAddressBoxModal.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutBilling\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutBilling.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutModalAddressEditor\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutModalAddressEditor.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutModalAddressSelection\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Checkout/Elements/CheckoutModalAddressSelection.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Checkout\\\\Elements\\\\CheckoutPayment\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
@@ -41391,11 +41331,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Elements/Banner.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\Banner\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/Banner.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\CategoryTeaser\\:\\:getImageProperty\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/CategoryTeaser.php
@@ -41426,17 +41361,7 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Elements/CategoryTeaser.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\CategoryTeaser\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/CategoryTeaser.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\CompareColumn\\:\\:getImageProperty\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/CompareColumn.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\CompareColumn\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/CompareColumn.php
 
@@ -41452,11 +41377,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\ManufacturerSlider\\:\\:getLinkProperty\\(\\) should return string but returns string\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/ManufacturerSlider.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\ManufacturerSlider\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/ManufacturerSlider.php
 
@@ -41492,11 +41412,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\YouTube\\:\\:getCodeProperty\\(\\) should return array but returns string\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/YouTube.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\YouTube\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Elements/YouTube.php
 
@@ -41816,11 +41731,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Sitemap/Elements/SitemapGroup.php
 
 		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Sitemap\\\\Elements\\\\SitemapGroup\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Sitemap/Elements/SitemapGroup.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Sitemap\\\\Sitemap\\:\\:checkGroup\\(\\) has parameter \\$sites with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Sitemap/Sitemap.php
@@ -41884,11 +41794,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\BannerSlider\\:\\:getImageProperty\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Mink/Page/Helper/Elements/BannerSlider.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\FilterGroup\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Helper/Elements/FilterGroup.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Helper\\\\Elements\\\\HeaderCart\\:\\:\\$selector type has no value type specified in iterable type array\\.$#"

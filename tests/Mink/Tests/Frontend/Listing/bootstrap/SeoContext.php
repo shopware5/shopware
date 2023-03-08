@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap;
+namespace Shopware\Tests\Mink\Tests\Frontend\Listing\bootstrap;
 
 use Shopware\Tests\Mink\Page\Frontend\Generic\GenericPage;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;

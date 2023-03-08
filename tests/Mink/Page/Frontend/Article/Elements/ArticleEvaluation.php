@@ -39,7 +39,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class ArticleEvaluation extends BlogComment
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.review--entry:not(.is--answer)'];
 

@@ -28,7 +28,6 @@ namespace Shopware\Tests\Mink\Page\Frontend\Homepage\Elements;
 
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: CompareColumn
@@ -37,10 +36,10 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class CompareColumn extends MultipleElement implements HelperSelectorInterface
+class CompareColumn extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'ul.compare--group-list:not(.list--head)'];
 

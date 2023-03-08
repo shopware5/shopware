@@ -26,8 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Page\Frontend\Homepage\Elements;
 
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: CategoryTeaser
@@ -38,10 +38,10 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * - image (string, e.g. "genuss_tees_banner.jpg")
  * - link (string, e.g. "/genusswelten/tees-und-zubehoer/")
  */
-class CategoryTeaser extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement implements HelperSelectorInterface
+class CategoryTeaser extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--category-teaser'];
 

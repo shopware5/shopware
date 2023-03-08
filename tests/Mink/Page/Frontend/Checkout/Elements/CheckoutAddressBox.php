@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Page\Frontend\Checkout\Elements;
 
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
@@ -35,10 +36,10 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
  * Available retrievable properties:
  * -
  */
-class CheckoutAddressBox extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement
+class CheckoutAddressBox extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.information--panel'];
 

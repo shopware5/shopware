@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap;
+namespace Shopware\Tests\Mink\Tests\Frontend\Listing\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
 use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox;
@@ -114,17 +114,6 @@ class ListingContext extends SubContext
         $articleBox = $this->getMultipleElement($page, ArticleBox::class, $position);
         $properties = Helper::convertTableHashToArray($properties->getHash());
         $page->checkArticleBox($articleBox, $properties);
-    }
-
-    /**
-     * @When /^I order the article on position (?P<position>\d+)$/
-     */
-    public function iOrderTheArticleOnPosition(int $position): void
-    {
-        $page = $this->getPage(Listing::class);
-
-        $articleBox = $this->getMultipleElement($page, ArticleBox::class, $position);
-        Helper::clickNamedLink($articleBox, 'order');
     }
 
     /**

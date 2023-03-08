@@ -28,7 +28,6 @@ namespace Shopware\Tests\Mink\Page\Frontend\Homepage\Elements;
 
 use Behat\Mink\Element\NodeElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: ManufacturerSlider
@@ -37,10 +36,10 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class ManufacturerSlider extends SliderElement implements HelperSelectorInterface
+class ManufacturerSlider extends SliderElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--manufacturer'];
 

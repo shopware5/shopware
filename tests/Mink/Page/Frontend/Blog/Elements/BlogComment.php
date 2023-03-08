@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
 
 use Behat\Mink\Element\NodeElement;
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
@@ -36,10 +37,10 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class BlogComment extends \Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement
+class BlogComment extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'ul.comments--list > li.list--entry'];
 

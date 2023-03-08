@@ -29,7 +29,6 @@ namespace Shopware\Tests\Mink\Page\Frontend\Homepage\Elements;
 use Behat\Mink\Exception\ElementException;
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
-use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
 /**
  * Element: Banner
@@ -40,10 +39,10 @@ use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
  * - link (string, e.g. "/Campaign/index/emotionId/6")
  * - mapping (array[])
  */
-class Banner extends MultipleElement implements HelperSelectorInterface
+class Banner extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--banner'];
 

@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
 
-use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 
 /**
  * Element: BlogBox
@@ -35,8 +35,11 @@ use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class BlogBox extends CartPosition
+class BlogBox extends MultipleElement
 {
+    /**
+     * @var array<string, string>
+     */
     protected $selector = ['css' => 'div.blog--box.panel'];
 
     /**

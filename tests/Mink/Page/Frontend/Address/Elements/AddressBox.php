@@ -38,7 +38,7 @@ use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 class AddressBox extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.address--container .panel'];
 
