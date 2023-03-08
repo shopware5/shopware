@@ -282,9 +282,10 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
             return;
         }
 
+        $normalizer = $this->container->get('shopware.components.cart.proportional_cart_normalizer');
         $sOrderVariables = $this->View()->getAssign();
         $sOrderVariables['sBasketView'] = $sOrderVariables['sBasket'];
-        $sOrderVariables['sBasket'] = $this->getBasket(false);
+        $sOrderVariables['sBasket'] = $normalizer->normalize($sOrderVariables['sBasketView']);
 
         $this->session['sOrderVariables'] = new ArrayObject($sOrderVariables, ArrayObject::ARRAY_AS_PROPS);
 
@@ -340,7 +341,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign('invalidBillingAddress', !$this->isValidAddress($activeBillingAddressId, $activeShippingAddressId === $activeBillingAddressId));
         $this->View()->assign('invalidShippingAddress', !$this->isValidAddress($activeShippingAddressId, true));
-        $this->View()->assign('sBasket', $this->getBasket());
     }
 
     /**
@@ -848,7 +848,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sDispatch', $this->getSelectedDispatch());
         $this->View()->assign('sDispatches', $this->getDispatches($this->View()->getAssign('sFormData')['payment']));
 
-        // We might change the shop context here so we need to initialize it again
+        // We might change the shop context here, so we need to initialize it again
         $this->get(ContextServiceInterface::class)->initializeShopContext();
 
         $this->View()->assign('sBasket', $this->getBasket());
@@ -1018,12 +1018,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $order = Shopware()->Modules()->Order();
 
-        $orgBasketData = $this->View()->getAssign('sBasket');
-        $this->View()->assign('sBasket', $this->getBasket(false));
+        $normalizer = $this->container->get('shopware.components.cart.proportional_cart_normalizer');
 
         $order->sUserData = $this->View()->getAssign('sUserData');
-        $order->sComment = isset($this->session['sComment']) ? $this->session['sComment'] : '';
-        $order->sBasketData = $this->View()->getAssign('sBasket');
+        $order->sComment = $this->session['sComment'] ?? '';
+        $order->sBasketData = $normalizer->normalize($this->View()->getAssign('sBasket'));
         $order->sAmount = $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT];
         $order->sAmountWithTax = !empty($this->View()->getAssign('sBasket')[CartKey::AMOUNT_WITH_TAX_NUMERIC]) ? $this->View()->getAssign('sBasket')[CartKey::AMOUNT_WITH_TAX_NUMERIC] : $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NUMERIC];
         $order->sAmountNet = $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NET_NUMERIC];
@@ -1033,8 +1032,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->getAssign('sUserData')['additional']['charge_vat'];
         $order->deviceType = $this->Request()->getDeviceType();
-
-        $this->View()->assign('sBasket', $orgBasketData);
 
         $order->sDeleteTemporaryOrder();    // Delete previous temporary orders
         $order->sCreateTemporaryOrder();    // Create new temporary order
@@ -1051,12 +1048,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     {
         $order = Shopware()->Modules()->Order();
 
-        $orgBasketData = $this->View()->getAssign('sBasket');
         $normalizer = $this->container->get('shopware.components.cart.proportional_cart_normalizer');
 
         $order->sUserData = $this->View()->getAssign('sUserData');
         $order->sComment = $this->session['sComment'] ?? '';
-        $order->sBasketData = $normalizer->normalize($orgBasketData);
+        $order->sBasketData = $normalizer->normalize($this->View()->getAssign('sBasket'));
         $order->sAmount = $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT];
         $order->sAmountWithTax = !empty($this->View()->getAssign('sBasket')[CartKey::AMOUNT_WITH_TAX_NUMERIC]) ? $this->View()->getAssign('sBasket')[CartKey::AMOUNT_WITH_TAX_NUMERIC] : $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NUMERIC];
         $order->sAmountNet = $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NET_NUMERIC];
@@ -1066,8 +1062,6 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $order->dispatchId = $this->session['sDispatch'];
         $order->sNet = !$this->View()->getAssign('sUserData')['additional']['charge_vat'];
         $order->deviceType = $this->Request()->getDeviceType();
-
-        $this->View()->assign('sBasket', $orgBasketData);
 
         return $order->sSaveOrder();
     }
