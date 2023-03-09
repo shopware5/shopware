@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,7 +34,7 @@ class CalculationOnLogoutTest extends CheckoutTest
 {
     use DatabaseTransactionBehaviour;
 
-    public $clearBasketOnReset = false;
+    public bool $clearBasketOnReset = false;
 
     public function setUp(): void
     {
@@ -46,13 +48,13 @@ class CalculationOnLogoutTest extends CheckoutTest
 
         $this->setConfig('clearBasketAfterLogout', false);
 
-        $productNumber = $this->createArticle(100, 19.00);
+        $productNumber = $this->createProduct(100, 19.00);
         Shopware()->Modules()->Basket()->sAddArticle($productNumber);
         $this->visitCart();
 
         $currentAmount = Shopware()->Session()->get('sBasketAmount');
 
-        $this->loginFrontendUser('H');
+        $this->loginFrontendCustomer('H');
 
         Shopware()->Modules()->Admin()->logout();
 

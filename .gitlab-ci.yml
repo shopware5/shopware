@@ -16,6 +16,7 @@ variables:
     DB_NAME: shopware
     SW_HOST: "localhost"
     SW_BASE_PATH: ""
+    SELENIUM_HOST: selenium
     ELASTICSEARCH_HOST: elasticsearch
 
 # Include the default gitlab rules template for "MergeRequest-Pipelines".
@@ -238,7 +239,7 @@ Elasticsearch 7:
         - chown -R www-data:www-data .
         - sudo -E -u www-data vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --format=junit --out=${ARTIFACTS_ROOT}/mink --tags ${MINK_TAG}
     services:
-        -   name: selenium/standalone-chrome:84.0
+        -   name: selenium/standalone-chrome:94.0
             alias: selenium
         -   name: mailhog/mailhog
             alias: smtp

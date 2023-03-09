@@ -40,7 +40,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class AccountOrder extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => '.order--item'];
 

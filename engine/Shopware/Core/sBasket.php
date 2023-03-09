@@ -980,6 +980,8 @@ class sBasket implements \Enlight_Hook
                 );
 
                 $this->db->query($sql, $params);
+                $insertId = (int) $this->db->lastInsertId('s_order_basket');
+                $this->connection->insert('s_order_basket_attributes', ['basketID' => $insertId]);
             }
 
             return !empty($prices);
@@ -1035,7 +1037,8 @@ class sBasket implements \Enlight_Hook
             return false;
         }
 
-        $insertId = $this->db->lastInsertId('s_order_basket');
+        $insertId = (int) $this->db->lastInsertId('s_order_basket');
+        $this->connection->insert('s_order_basket_attributes', ['basketID' => $insertId]);
 
         $this->eventManager->notify(
             'Shopware_Modules_Basket_AddVoucher_Inserted',

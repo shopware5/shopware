@@ -24,39 +24,18 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Mink\Page\Frontend\Blog\Elements;
+namespace Shopware\Tests\Mink\Page\Frontend\Checkout\Elements;
 
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 
 /**
- * Element: BlogBox
- * Location: Billing address box on account dashboard
- *
- * Available retrievable properties:
- * - address (Element[], please use Account::checkAddress())
+ * Element: CartPositionRebate
+ * Location: Cart positions with discounts or surcharges on cart and checkout confirm page
  */
-class BlogBox extends MultipleElement
+class CartPositionRebate extends MultipleElement
 {
     /**
      * @var array<string, string>
      */
-    protected $selector = ['css' => 'div.blog--box.panel'];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCssSelectors(): array
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getNamedSelectors(): array
-    {
-        return [
-            'readMore' => ['de' => 'Mehr lesen', 'en' => 'Read more'],
-        ];
-    }
+    protected $selector = ['css' => 'div.row--rebate'];
 }

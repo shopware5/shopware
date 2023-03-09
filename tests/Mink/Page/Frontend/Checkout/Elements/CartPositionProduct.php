@@ -31,8 +31,8 @@ use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
- * Element: CartPosition
- * Location: Cart positions on cart and checkout confirm page
+ * Element: CartPositionProduct
+ * Location: Cart positions with products on cart and checkout confirm page
  *
  * Available retrievable properties:
  * - number (string, e.g. "SW10181")
@@ -41,7 +41,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
  * - itemPrice (float, e.g. "139,99")
  * - sum (float, e.g. "139,99")
  */
-class CartPosition extends MultipleElement
+class CartPositionProduct extends MultipleElement
 {
     /**
      * @var array<string, string>
@@ -82,8 +82,8 @@ class CartPosition extends MultipleElement
         $elements = Helper::findElements($this, ['name', 'thumbnailLink', 'thumbnailImage']);
 
         $names = [
-            'articleTitle' => $elements['name']->getAttribute('title'),
-            'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title'),
+            'articleTitle' => $elements['name']->getAttribute('title') ?? '',
+            'articleThumbnailLinkTitle' => $elements['thumbnailLink']->getAttribute('title') ?? '',
             'articleName' => rtrim($elements['name']->getText(), '.'),
         ];
 
@@ -111,6 +111,8 @@ class CartPosition extends MultipleElement
     }
 
     /**
+     * @param array<string, string> $names
+     *
      * @throws Exception
      */
     private function getUniqueName(array $names): string

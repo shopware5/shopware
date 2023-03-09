@@ -864,6 +864,7 @@ class AdminTest extends TestCase
         // Test with translations but display_states = false
         $result = $this->module->sGetCountryList();
         $country = array_shift($result); // Germany
+        static::assertIsArray($country);
         static::assertArrayHasKey('id', $country);
         static::assertArrayHasKey('countryname', $country);
         static::assertArrayHasKey('countryiso', $country);

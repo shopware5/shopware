@@ -74,7 +74,7 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
      * @param int    $paymentStatusId
      * @param bool   $sendStatusMail
      *
-     * @return int|false
+     * @return string|false
      */
     public function saveOrder($transactionId, $paymentUniqueId, $paymentStatusId = null, $sendStatusMail = false)
     {

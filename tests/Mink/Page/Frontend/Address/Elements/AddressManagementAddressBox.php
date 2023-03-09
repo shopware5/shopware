@@ -39,7 +39,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class AddressManagementAddressBox extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.address--box'];
 

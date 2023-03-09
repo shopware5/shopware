@@ -39,7 +39,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class YouTube extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--element.youtube-element'];
 

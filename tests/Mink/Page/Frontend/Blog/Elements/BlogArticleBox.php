@@ -37,5 +37,8 @@ use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleBox;
  */
 class BlogArticleBox extends ArticleBox
 {
+    /**
+     * @var array<string, string>
+     */
     protected $selector = ['css' => 'div.blog--crossselling div.product-slider--item'];
 }

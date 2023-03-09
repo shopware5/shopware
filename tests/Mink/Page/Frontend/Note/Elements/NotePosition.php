@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Page\Frontend\Note\Elements;
 
-use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
+use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 /**
@@ -36,8 +36,11 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
  * Available retrievable properties:
  * - address (Element[], please use Account::checkAddress())
  */
-class NotePosition extends CartPosition
+class NotePosition extends MultipleElement
 {
+    /**
+     * @var array<string, string>
+     */
     protected $selector = ['css' => 'div.note--item'];
 
     /**

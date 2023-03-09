@@ -50,13 +50,10 @@ default:
             javascript_session: 'selenium2'
             browser_name: chrome
             selenium2:
-                wd_host: "http://selenium:4444/wd/hub"
+                wd_host: "http://%selenium.host%:4444/wd/hub"
                 capabilities:
                     browser: chrome
                     marionette: true
-                    extra_capabilities:
-                        chromeOptions:
-                            w3c: false
 
     suites:
         default:
@@ -70,9 +67,9 @@ default:
                 - Shopware\Tests\Mink\Tests\Frontend\Checkout\bootstrap\CheckoutContext
                 - Shopware\Tests\Mink\Tests\Frontend\Detail\bootstrap\DetailContext
                 - Shopware\Tests\Mink\Tests\Frontend\Detail\bootstrap\FormContext
-                - Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap\ListingContext
+                - Shopware\Tests\Mink\Tests\Frontend\Listing\bootstrap\ListingContext
                 - Shopware\Tests\Mink\Tests\Frontend\Note\bootstrap\NoteContext
-                - Shopware\Tests\Mink\Tests\Backend\Listing\bootstrap\SeoContext
+                - Shopware\Tests\Mink\Tests\Frontend\Listing\bootstrap\SeoContext
                 - Shopware\Tests\Mink\Tests\Frontend\Homepage\bootstrap\ShopwareContext
                 - Shopware\Tests\Mink\Tests\Frontend\Sitemap\bootstrap\SitemapContext
                 - Shopware\Tests\Mink\Tests\General\Helpers\SpecialContext

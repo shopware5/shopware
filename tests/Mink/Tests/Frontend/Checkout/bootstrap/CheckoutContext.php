@@ -42,7 +42,8 @@ use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Account\Elements\AccountOrder;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutCart;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\CheckoutConfirm;
-use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionProduct;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionRebate;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBox;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutAddressBoxModal;
 use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CheckoutModalAddressSelection;
@@ -96,7 +97,7 @@ class CheckoutContext extends SubContext
     {
         $page = $this->getPage(CheckoutCart::class);
 
-        $cartPosition = $this->getMultipleElement($page, CartPosition::class, $position);
+        $cartPosition = $this->getMultipleElement($page, CartPositionProduct::class, $position);
         $page->removeProduct($cartPosition);
     }
 
@@ -193,7 +194,7 @@ class CheckoutContext extends SubContext
     {
         $page = $this->getPage(CheckoutCart::class);
 
-        $cartPositions = $this->getMultipleElement($page, CartPosition::class);
+        $cartPositions = $this->getMultipleElement($page, CartPositionProduct::class);
         $page->checkCartProducts($cartPositions, $items->getHash());
     }
 
@@ -841,5 +842,30 @@ EOD;
     public function iCheckoutUsingGet(string $path = '/checkout/finish'): void
     {
         $this->getSession()->executeScript(sprintf('window.location.href = \'%s\'', $path));
+    }
+
+    /**
+     * @Given /^Position "([^"]*)" contains following taxes$/
+     */
+    public function positionContainsFollowingTaxes(string $cartPositionName, TableNode $taxes): void
+    {
+        /** @var list<array{taxRate: string, value: string}> $taxValues */
+        $taxValues = $taxes->getHash();
+
+        $page = $this->getPage(CheckoutCart::class);
+        $cartPositions = $this->getMultipleElement($page, CartPositionRebate::class);
+        $cartPositionToCheck = null;
+        foreach ($cartPositions as $cartPosition) {
+            if (str_contains($cartPosition->getText(), $cartPositionName)) {
+                $cartPositionToCheck = $cartPosition;
+                break;
+            }
+        }
+
+        if (!$cartPositionToCheck instanceof CartPositionRebate) {
+            Helper::throwException(sprintf('No discount or surcharge element found with name: "%s"', $cartPositionName));
+        }
+
+        $page->checkPositionTaxes($cartPositionToCheck, $taxValues);
     }
 }

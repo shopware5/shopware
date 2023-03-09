@@ -343,13 +343,16 @@ class sAdmin implements \Enlight_Hook
     /**
      * Get all available payments
      *
-     * @return array Payments data
+     * @return array<array<string, mixed>> Payments data
      */
     public function sGetPaymentMeans()
     {
         $isMobile = $this->front->Request()->getDeviceType() === 'mobile';
 
         $user = $this->sGetUserData();
+        if (!\is_array($user)) {
+            throw new RuntimeException('Could not get customer data');
+        }
 
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
 
@@ -688,6 +691,9 @@ class sAdmin implements \Enlight_Hook
 
             $countries = $this->sGetCountryList();
             $country = reset($countries);
+            if (!\is_array($country)) {
+                $country = null;
+            }
 
             $this->sGetPremiumShippingcosts($country);
 
@@ -1068,7 +1074,7 @@ class sAdmin implements \Enlight_Hook
     /**
      * Get list of currently active countries. Includes states and translations
      *
-     * @return array Country list
+     * @return array<int, array<string, mixed>> Country list, indexed by ID
      */
     public function sGetCountryList()
     {
@@ -1086,13 +1092,11 @@ class sAdmin implements \Enlight_Hook
             return $country;
         }, $countryList);
 
-        $countryList = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Shopware_Modules_Admin_GetCountries_FilterResult',
             $countryList,
             ['subject' => $this]
         );
-
-        return $countryList;
     }
 
     /**
@@ -1438,7 +1442,7 @@ class sAdmin implements \Enlight_Hook
      *
      * @param int $id User id
      *
-     * @return array first name/last name
+     * @return array{firstname: string, lastname: string}|array{}
      */
     public function sGetUserNameById($id)
     {
@@ -1446,9 +1450,9 @@ class sAdmin implements \Enlight_Hook
     }
 
     /**
-     * Get all data from the current logged in user
+     * Get all data from the current logged-in user
      *
-     * @return array|false User data, of false if interrupted
+     * @return array<string, mixed>|false User data, of false if interrupted
      */
     public function sGetUserData()
     {
@@ -1519,13 +1523,11 @@ class sAdmin implements \Enlight_Hook
             $userData['additional']['stateShipping']['id'] = !empty($state) ? $state : 0;
         }
 
-        $userData = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Shopware_Modules_Admin_GetUserData_FilterResult',
             $userData,
             ['subject' => $this, 'id' => $this->session->offsetGet('sUserId')]
         );
-
-        return $userData;
     }
 
     /**
@@ -2600,7 +2602,7 @@ class sAdmin implements \Enlight_Hook
         if (!empty($paymentID)) {
             $paymentID = (int) $paymentID;
         } elseif (!empty($userId)) {
-            $user = $this->sGetUserData();
+            $user = $this->sGetUserData() ?: [];
             $paymentID = (int) $user['additional']['payment']['id'];
         } elseif (!empty($postPaymentId)) {
             $paymentID = (int) $postPaymentId;
@@ -2679,7 +2681,7 @@ class sAdmin implements \Enlight_Hook
      * @param int $paymentID Payment mean id
      * @param int $stateId   Country state id
      *
-     * @return array Shipping methods data
+     * @return array<int, array<string, mixed>> Shipping methods data, indexed by ID
      */
     public function sGetPremiumDispatches($countryID = null, $paymentID = null, $stateId = null)
     {

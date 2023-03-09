@@ -74,6 +74,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      */
     protected $blogBaseUrl;
 
+    /**
+     * @return void
+     */
     public function init()
     {
         $this->blogBaseUrl = Shopware()->Config()->get('baseFile');
@@ -142,6 +145,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
     /**
      * Index action method
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -240,7 +245,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         if (!empty($categoryContent['external'])) {
-            return $this->redirect($categoryContent['external'], ['code' => 301]);
+            $this->redirect($categoryContent['external'], ['code' => 301]);
+
+            return;
         }
 
         $assigningData = [
@@ -273,6 +280,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      * Contains the logic for the detail page of a blog article
      *
      * @throws Enlight_Controller_Exception
+     *
+     * @return void
      */
     public function detailAction()
     {
@@ -309,7 +318,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         }
 
         if (isset($location)) {
-            return $this->redirect($location, ['code' => 301]);
+            $this->redirect($location, ['code' => 301]);
+
+            return;
         }
 
         // Load the right template
@@ -320,11 +331,13 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $this->View()->assign('userLoggedIn', !empty(Shopware()->Session()->get('sUserId')));
         if (!empty(Shopware()->Session()->get('sUserId')) && empty($this->Request()->get('name'))
             && $this->Request()->getParam('__cache') === null) {
-            $userData = Shopware()->Modules()->Admin()->sGetUserData();
-            $this->View()->assign('sFormData', [
-                'eMail' => $userData['additional']['user']['email'],
-                'name' => $userData['billingaddress']['firstname'] . ' ' . $userData['billingaddress']['lastname'],
-            ]);
+            $customerData = Shopware()->Modules()->Admin()->sGetUserData();
+            if (\is_array($customerData)) {
+                $this->View()->assign('sFormData', [
+                    'eMail' => $customerData['additional']['user']['email'],
+                    'name' => $customerData['billingaddress']['firstname'] . ' ' . $customerData['billingaddress']['lastname'],
+                ]);
+            }
         }
 
         $mediaIds = array_column($blogArticleData['media'], 'mediaId');
@@ -374,6 +387,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      * Rating action method
      *
      * Save and review the blog comment and rating
+     *
+     * @return void
      */
     public function ratingAction()
     {
@@ -400,7 +415,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
 
                     $this->sSaveComment($commentData, $blogArticleId);
 
-                    return $this->forward('detail');
+                    $this->forward('detail');
+
+                    return;
                 }
                 $sErrorFlag['invalidHash'] = true;
             }
@@ -561,6 +578,8 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
      * @param int   $blogArticleId
      *
      * @throws Enlight_Exception
+     *
+     * @return void
      */
     protected function sSaveComment($commentData, $blogArticleId)
     {
@@ -650,9 +669,12 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
     /**
      * Helper method to fill the data set with the right category link
      *
-     * @param string $requestParameterName
-     * @param string $requestParameterValue
-     * @param bool   $addRemoveProperty     | true to add a remove property to remove the selected filters
+     * @param array<array<string, mixed>> $filterData
+     * @param string                      $requestParameterName
+     * @param string                      $requestParameterValue
+     * @param bool                        $addRemoveProperty     | true to add a remove property to remove the selected filters
+     *
+     * @return array<array<string, mixed>>
      */
     protected function addLinksToFilter(array $filterData, $requestParameterName, $requestParameterValue, $addRemoveProperty = true)
     {

@@ -38,7 +38,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class FilterGroup extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.filter--container label.filter-panel--title'];
 

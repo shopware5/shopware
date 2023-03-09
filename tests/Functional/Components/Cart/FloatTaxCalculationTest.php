@@ -52,7 +52,7 @@ class FloatTaxCalculationTest extends CheckoutTest
 
     public function testCartWithVoucher(): void
     {
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 7.75), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(100, 7.75), 1);
         $voucherCode = $this->createVoucher(10, $this->taxId);
         Shopware()->Modules()->Basket()->sAddVoucher($voucherCode);
 
@@ -67,7 +67,7 @@ class FloatTaxCalculationTest extends CheckoutTest
     {
         $this->setConfig('proportionalTaxCalculation', true);
 
-        Shopware()->Modules()->Basket()->sAddArticle($this->createArticle(100, 7.75), 1);
+        Shopware()->Modules()->Basket()->sAddArticle($this->createProduct(100, 7.75), 1);
         $voucherCode = $this->createVoucher(10, $this->taxId);
         Shopware()->Modules()->Basket()->sAddVoucher($voucherCode);
 

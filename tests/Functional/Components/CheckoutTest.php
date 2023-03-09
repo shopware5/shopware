@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,7 +31,6 @@ use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Random;
 use Shopware\Components\ShopRegistrationServiceInterface;
-use Shopware\Models\Shop\Repository;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
@@ -42,12 +43,9 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
 
     public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 
-    public $clearBasketOnReset = true;
+    public bool $clearBasketOnReset = true;
 
-    /**
-     * @var Helper
-     */
-    protected $apiHelper;
+    protected Helper $apiHelper;
 
     public function setUp(): void
     {
@@ -55,7 +53,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         $this->apiHelper = new Helper($this->getContainer());
     }
 
-    public function reset()
+    public function reset(): void
     {
         parent::reset();
 
@@ -66,13 +64,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         $this->Request()->setHeader('User-Agent', self::USER_AGENT);
     }
 
-    /**
-     * @param int   $price
-     * @param float $taxRate
-     *
-     * @return string
-     */
-    protected function createArticle($price = 10, $taxRate = 19.0)
+    protected function createProduct(float $price = 10, float $taxRate = 19.0): string
     {
         $orderNumber = 'swTEST' . uniqid((string) rand());
 
@@ -107,9 +99,9 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         return $orderNumber;
     }
 
-    protected function updateProductPrice($orderNumber, $price, $taxRate)
+    protected function updateProductPrice(string $orderNumber, float $price, float $taxRate): void
     {
-        $this->apiHelper->updateArticle($orderNumber, [
+        $this->apiHelper->updateProduct($orderNumber, [
             'mainDetail' => [
                 'prices' => [
                     [
@@ -124,14 +116,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    /**
-     * @param float $value
-     * @param int   $taxId
-     * @param int   $percent
-     *
-     * @return string
-     */
-    protected function createVoucher($value, $taxId, $percent = 1)
+    protected function createVoucher(float $value, int $taxId, bool $percental = true): string
     {
         $code = Random::getAlphanumericString(12);
         $this->getContainer()->get(Connection::class)
@@ -145,7 +130,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
                 'ordercode' => $code,
                 'modus' => 0,
                 'numorder' => 1000,
-                'percental' => $percent,
+                'percental' => $percental,
                 'taxconfig' => $taxId,
             ]);
 
@@ -153,13 +138,9 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @param array  $sBasket
-     * @param string $itemName
-     * @param float  $itemPrice
-     * @param float  $itemNetPrice
-     * @param string $itemOrdernumber
+     * @param array<array<string, mixed>> $sBasket
      */
-    protected function hasBasketItem($sBasket, $itemName, $itemPrice, $itemNetPrice, $itemOrdernumber)
+    protected function hasBasketItem(array $sBasket, string $itemName, float $itemPrice, float $itemNetPrice, string $itemOrdernumber): void
     {
         $cartItemFound = false;
         foreach ($sBasket as $item) {
@@ -178,12 +159,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         }
     }
 
-    /**
-     * @param int    $surchargeAbsolute
-     * @param int    $surchargePercent
-     * @param string $surchargeCountry
-     */
-    protected function setPaymentSurcharge($surchargeAbsolute, $surchargePercent = 0, $surchargeCountry = '')
+    protected function setPaymentSurcharge(float $surchargeAbsolute, float $surchargePercent = 0.0, string $surchargeCountry = ''): void
     {
         $this->getContainer()->get(Connection::class)->executeQuery('UPDATE s_core_paymentmeans SET surcharge = ?, debit_percent = ?, surchargestring = ?', [
             $surchargeAbsolute,
@@ -192,11 +168,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    /**
-     * @param float $minOrderValue
-     * @param float $surcharge
-     */
-    protected function setCustomerGroupSurcharge($minOrderValue, $surcharge)
+    protected function setCustomerGroupSurcharge(float $minOrderValue, float $surcharge): void
     {
         $this->getContainer()->get(Connection::class)->executeQuery('UPDATE s_core_customergroups SET minimumorder = ?, minimumordersurcharge = ?', [
             $minOrderValue,
@@ -204,12 +176,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    /**
-     * @param string $customerGroupKey
-     * @param float  $discountStart
-     * @param float  $discountValuePercent
-     */
-    protected function addCustomerGroupDiscount($customerGroupKey, $discountStart, $discountValuePercent)
+    protected function addCustomerGroupDiscount(string $customerGroupKey, float $discountStart, float $discountValuePercent): void
     {
         $this->clearCustomerGroupDiscount($customerGroupKey);
         $this->getContainer()->get(Connection::class)->executeQuery('INSERT INTO s_core_customergroups_discounts VALUES (null, (SELECT id FROM s_core_customergroups WHERE groupkey = ?), ?, ?)', [
@@ -219,19 +186,12 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    /**
-     * @param string $customerGroupKey
-     */
-    protected function clearCustomerGroupDiscount($customerGroupKey)
+    protected function clearCustomerGroupDiscount(string $customerGroupKey): void
     {
         $this->getContainer()->get(Connection::class)->executeQuery('DELETE FROM s_core_customergroups_discounts WHERE groupID = (SELECT id FROM s_core_customergroups WHERE groupkey = ?)', [$customerGroupKey]);
     }
 
-    /**
-     * @param string $orderCode
-     * @param string $taxConfig
-     */
-    protected function setVoucherTax($orderCode, $taxConfig)
+    protected function setVoucherTax(string $orderCode, string $taxConfig): void
     {
         $this->getContainer()->get(Connection::class)->update('s_emarketing_vouchers', [
             'taxconfig' => $taxConfig,
@@ -240,32 +200,32 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    /**
-     * Login as a frontend user
-     */
-    protected function loginFrontendUser(string $group = 'EK')
+    protected function loginFrontendCustomer(string $group = 'EK'): void
     {
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
-        $user = Shopware()->Db()->fetchRow(
+        $customer = Shopware()->Db()->fetchRow(
             'SELECT id, email, password, subshopID, language FROM s_user WHERE customergroup = ? LIMIT 1',
             $group
         );
 
-        /** @var Repository $repository */
-        $repository = Shopware()->Models()->getRepository(Shop::class);
-        $shop = $repository->getActiveById($user['language']);
+        $request = new Enlight_Controller_Request_RequestHttp();
+        $request->setPost([
+            'email' => $customer['email'],
+            'passwordMD5' => $customer['password'],
+        ]);
+        Shopware()->Front()->setRequest($request);
+
+        $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveById($customer['language']);
+        static::assertInstanceOf(Shop::class, $shop);
 
         $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         Shopware()->Session()->set('Admin', true);
-        Shopware()->System()->_POST = [
-            'email' => $user['email'],
-            'passwordMD5' => $user['password'],
-        ];
-        Shopware()->Modules()->Admin()->sLogin(true);
+        $result = Shopware()->Modules()->Admin()->sLogin(true);
+        static::assertIsArray($result);
+        static::assertNull($result['sErrorMessages']);
     }
 
-    protected function addProduct($productNumber, $quantity = 1)
+    protected function addProduct(string $productNumber, int $quantity = 1): void
     {
         $this->reset();
         $this->Request()->setMethod('POST');
@@ -275,20 +235,20 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/checkout/addArticle');
     }
 
-    protected function visitCart()
+    protected function visitCart(): void
     {
         $this->reset();
         $this->dispatch('/checkout/cart');
     }
 
-    protected function visitConfirm()
+    protected function visitConfirm(): void
     {
         $this->reset();
         $this->Request()->setMethod('POST');
         $this->dispatch('/checkout/confirm');
     }
 
-    protected function visitFinish()
+    protected function visitFinish(): void
     {
         $this->reset();
         $this->Request()->setMethod('POST');

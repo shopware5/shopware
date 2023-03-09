@@ -30,7 +30,8 @@ use Behat\Mink\Exception\ResponseTextException;
 use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
-use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPosition;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionProduct;
+use Shopware\Tests\Mink\Page\Frontend\Checkout\Elements\CartPositionRebate;
 use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\HelperSelectorInterface;
 
@@ -72,13 +73,13 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     public function getNamedSelectors(): array
     {
         return [
-            'checkout' => ['de' => 'Zur Kasse',   'en' => 'Checkout'],
-            'sum' => ['de' => 'Summe:', 'en' => 'Proceed to checkout'],
-            'shipping' => ['de' => 'Versandkosten:', 'en' => 'Proceed to checkout'],
-            'total' => ['de' => 'Gesamtsumme:', 'en' => 'Proceed to checkout'],
-            'sumWithoutVat' => ['de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Proceed to checkout'],
-            'tax' => ['de' => 'zzgl. %d' . html_entity_decode('&nbsp;') . '%% MwSt.:', 'en' => 'Proceed to checkout'],
-            'changePaymentButton' => ['de' => 'Weiter', 'en' => 'Next'],
+            'checkout' => ['de' => 'Zur Kasse', 'en' => 'Checkout'],
+            'sum' => ['de' => 'Summe:', 'en' => 'Sum:'],
+            'shipping' => ['de' => 'Versandkosten:', 'en' => 'Shipping costs:'],
+            'total' => ['de' => 'Gesamtsumme:', 'en' => 'Total amount:'],
+            'sumWithoutVat' => ['de' => 'Gesamtsumme ohne MwSt.:', 'en' => 'Total amount without VAT:'],
+            'tax' => ['de' => 'zzgl. %d %% MwSt.:', 'en' => 'Plus %d %% VAT:'],
+            'changePaymentButton' => ['de' => 'Weiter', 'en' => 'Next:'],
         ];
     }
 
@@ -144,7 +145,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * Remove a product from the cart
      */
-    public function removeProduct(CartPosition $item): void
+    public function removeProduct(CartPositionProduct $item): void
     {
         Helper::pressNamedButton($item, 'remove');
     }
@@ -163,7 +164,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     /**
      * Removes all products from the cart
      */
-    public function emptyCart(CartPosition $items): void
+    public function emptyCart(CartPositionProduct $items): void
     {
         foreach ($items as $item) {
             $this->removeProduct($item);
@@ -189,7 +190,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
      * Checks the cart positions
      * Available properties are: number (required), name (required), quantity, itemPrice, sum
      */
-    public function checkCartProducts(CartPosition $cartPositions, array $items): void
+    public function checkCartProducts(CartPositionProduct $cartPositions, array $items): void
     {
         Helper::assertElementCount($cartPositions, \count($items));
         $items = Helper::floatArray($items, ['itemPrice', 'sum']);
@@ -304,6 +305,20 @@ class CheckoutCart extends Page implements HelperSelectorInterface
         $this->open();
     }
 
+    /**
+     * @param list<array{taxRate: string, value: string}> $taxValues
+     */
+    public function checkPositionTaxes(CartPositionRebate $cartPositionToCheck, array $taxValues): void
+    {
+        $positionText = $cartPositionToCheck->getText();
+        foreach ($taxValues as $taxValue) {
+            $taxString = sprintf('%s: %s', $taxValue['taxRate'], $taxValue['value']);
+            if (!str_contains($positionText, $taxString)) {
+                Helper::throwException(sprintf('Could not find tax "%s" in position "%s"', $taxString, $positionText));
+            }
+        }
+    }
+
     protected function verify(array $urlParameters): void
     {
         $this->verifyResponse();
@@ -315,7 +330,7 @@ class CheckoutCart extends Page implements HelperSelectorInterface
         $labels = $this->getNamedSelectors();
 
         if (str_contains($key, '%')) {
-            $taxRate = (int) $key;
+            $taxRate = (float) $key;
 
             return sprintf($labels['tax'][$language], $taxRate);
         }
@@ -335,20 +350,11 @@ class CheckoutCart extends Page implements HelperSelectorInterface
     {
         $givenLabel = $this->getLabel($labelKey, $language);
 
-        $key = 0;
-        $lastKey = max(array_keys($labels));
-
-        do {
-            if (\array_key_exists($key, $labels)) {
-                $readLabel = $labels[$key]->getText();
-
-                if ($givenLabel === $readLabel) {
-                    return $key;
-                }
+        foreach ($labels as $key => $label) {
+            if ($givenLabel === $label->getText()) {
+                return $key;
             }
-
-            ++$key;
-        } while ($key <= $lastKey);
+        }
 
         $message = sprintf('Label "%s" does not exist on the page! ("%s")', $labelKey, $givenLabel);
         Helper::throwException($message);

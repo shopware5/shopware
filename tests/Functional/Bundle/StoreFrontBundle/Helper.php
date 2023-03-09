@@ -176,7 +176,10 @@ class Helper
         $this->translationApi->create($data);
     }
 
-    public function updateArticle(string $orderNumber, array $data): ProductModel
+    /**
+     * @param array<string, mixed> $data
+     */
+    public function updateProduct(string $orderNumber, array $data): ProductModel
     {
         return $this->articleApi->updateByNumber($orderNumber, $data);
     }

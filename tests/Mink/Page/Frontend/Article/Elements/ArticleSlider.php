@@ -43,7 +43,7 @@ use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 class ArticleSlider extends SliderElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => 'div.emotion--product-slider'];
 

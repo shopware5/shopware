@@ -39,7 +39,7 @@ use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
 class SitemapGroup extends MultipleElement
 {
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $selector = ['css' => '.sitemap--navigation-head'];
 
