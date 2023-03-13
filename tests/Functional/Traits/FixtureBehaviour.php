@@ -24,6 +24,7 @@
 
 namespace Shopware\Tests\Functional\Traits;
 
+use Doctrine\DBAL\Connection;
 use RuntimeException;
 
 trait FixtureBehaviour
@@ -36,6 +37,6 @@ trait FixtureBehaviour
             throw new RuntimeException(sprintf('Could not read fixture "%s"', $name));
         }
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->exec($sql);
+        Shopware()->Container()->get(Connection::class)->executeStatement($sql);
     }
 }

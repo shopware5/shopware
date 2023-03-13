@@ -38771,11 +38771,6 @@ parameters:
 			path: tests/Functional/Components/Cart/BasketQueryHelperTest.php
 
 		-
-			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
-			count: 1
-			path: tests/Functional/Components/Cart/CartMigrationTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\PaymentTokenServiceTest\\:\\:paymentTokenProviders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Cart/PaymentTokenServiceTest.php

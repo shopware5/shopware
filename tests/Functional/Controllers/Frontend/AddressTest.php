@@ -31,7 +31,6 @@ use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
-use Shopware\Components\DependencyInjection\Bridge\Config;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware_Components_Config;

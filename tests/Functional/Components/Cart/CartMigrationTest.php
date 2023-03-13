@@ -64,9 +64,8 @@ class CartMigrationTest extends TestCase
         static::assertEquals($currentBasketAmount, Shopware()->Session()->get('sBasketAmount'));
     }
 
-    protected function loginFrontendUser(): void
+    private function loginFrontendUser(): void
     {
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestHttp());
         $user = Shopware()->Db()->fetchRow(
             'SELECT `id`, `email`, `password`, `subshopID`, `language` FROM s_user WHERE `id` = 1'
         );
@@ -75,11 +74,13 @@ class CartMigrationTest extends TestCase
         static::assertNotNull($shop);
         Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerResources($shop);
 
-        Shopware()->Session()->set('Admin', true);
-        Shopware()->System()->_POST = [
+        $request = new Enlight_Controller_Request_RequestHttp();
+        $request->setPost([
             'email' => $user['email'],
             'passwordMD5' => $user['password'],
-        ];
+        ]);
+        Shopware()->Front()->setRequest($request);
+        Shopware()->Session()->set('Admin', true);
         Shopware()->Modules()->Admin()->sLogin(true);
     }
 }

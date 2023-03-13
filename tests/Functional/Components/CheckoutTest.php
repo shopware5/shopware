@@ -28,17 +28,16 @@ namespace Shopware\Tests\Functional\Components;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
-use Enlight_Controller_Request_RequestHttp;
 use Shopware\Components\Random;
-use Shopware\Components\ShopRegistrationServiceInterface;
-use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
 {
     use ContainerTrait;
+    use CustomerLoginTrait;
     use DatabaseTransactionBehaviour;
 
     public const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
@@ -207,22 +206,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
             $group
         );
 
-        $request = new Enlight_Controller_Request_RequestHttp();
-        $request->setPost([
-            'email' => $customer['email'],
-            'passwordMD5' => $customer['password'],
-        ]);
-        Shopware()->Front()->setRequest($request);
-
-        $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveById($customer['language']);
-        static::assertInstanceOf(Shop::class, $shop);
-
-        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
-
-        Shopware()->Session()->set('Admin', true);
-        $result = Shopware()->Modules()->Admin()->sLogin(true);
-        static::assertIsArray($result);
-        static::assertNull($result['sErrorMessages']);
+        $this->loginCustomer(null, (int) $customer['id'], $customer['email'], null, 2, 3, $group);
     }
 
     protected function addProduct(string $productNumber, int $quantity = 1): void
