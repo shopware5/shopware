@@ -40,35 +40,23 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class SubContext extends PageObjectContext implements KernelAwareContext, MinkAwareContext
 {
-    /**
-     * @var Mink
-     */
-    private $mink;
+    private Mink $mink;
 
-    /**
-     * @var array
-     */
-    private $minkParameters;
+    private array $minkParameters;
 
-    /**
-     * @var Kernel
-     */
-    private $kernel;
+    private Kernel $kernel;
 
     /**
      * Sets Mink instance.
      *
      * @param Mink $mink Mink session manager
      */
-    public function setMink(Mink $mink)
+    public function setMink(Mink $mink): void
     {
         $this->mink = $mink;
     }
 
-    /**
-     * @return Mink
-     */
-    public function getMink()
+    public function getMink(): Mink
     {
         return $this->mink;
     }
@@ -76,56 +64,50 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
     /**
      * Sets parameters provided for Mink.
      */
-    public function setMinkParameters(array $parameters)
+    public function setMinkParameters(array $parameters): void
     {
         $this->minkParameters = $parameters;
     }
 
     /**
      * Returns specific mink parameter.
-     *
-     * @param string $name
      */
-    public function getMinkParameter($name)
+    public function getMinkParameter(string $name): ?string
     {
-        return isset($this->minkParameters[$name]) ? $this->minkParameters[$name] : null;
+        return $this->minkParameters[$name] ?? null;
     }
 
-    /**
-     * @return Session
-     */
-    public function getSession()
+    public function getSession(): Session
     {
         return $this->mink->getSession();
     }
 
-    /**
-     * @return DriverInterface
-     */
-    public function getDriver()
+    public function getDriver(): DriverInterface
     {
         return $this->getSession()->getDriver();
     }
 
-    public function setKernel(Kernel $kernel)
+    public function setKernel(Kernel $kernel): void
     {
         $this->kernel = $kernel;
     }
 
     /**
      * Returns HttpKernel service container.
-     *
-     * @return ContainerInterface
      */
-    public function getContainer()
+    public function getContainer(): ContainerInterface
     {
         return $this->kernel->getContainer();
     }
 
     /**
-     * @return mixed Services from the container
+     * @template TService of object
+     *
+     * @param class-string<TService> $id
+     *
+     * @return TService
      */
-    protected function getService(string $id)
+    protected function getService(string $id): object
     {
         return $this->getContainer()->get($id);
     }
@@ -139,7 +121,7 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
      *
      * @return TElement
      */
-    protected function getMultipleElement(Page $page, string $elementName, int $instance = 1)
+    protected function getMultipleElement(Page $page, string $elementName, int $instance = 1): MultipleElement
     {
         $element = $this->getElement($elementName);
         if (!$element instanceof $elementName) {

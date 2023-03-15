@@ -208,7 +208,7 @@ class CheckoutContext extends SubContext
         $priceGroup = $modelManager->getRepository(Group::class)->findOneBy(['name' => $priceGroupName]);
         $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $productNumber]);
 
-        if ($productVariant === null) {
+        if (!$productVariant instanceof ProductVariant) {
             Helper::throwException(sprintf('Product with number "%s" was not found.', $productNumber));
         }
 
@@ -390,7 +390,7 @@ class CheckoutContext extends SubContext
 
         $productVariant = $modelManager->getRepository(ProductVariant::class)->findOneBy(['number' => $productNumber]);
 
-        if ($productVariant === null) {
+        if (!$productVariant instanceof ProductVariant) {
             Helper::throwException('Product with number "' . $productNumber . '" was not found.');
         }
 
@@ -449,7 +449,7 @@ class CheckoutContext extends SubContext
      */
     public function iShouldSeeAppear(string $text): void
     {
-        $this->spin(function () use ($text) {
+        Helper::spin(function () use ($text) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextContains(str_replace('\\"', '"', $text));
 
@@ -460,32 +460,6 @@ class CheckoutContext extends SubContext
 
             return false;
         });
-    }
-
-    /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @throws Exception
-     */
-    public function spin(callable $lambda, int $wait = 60): void
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return;
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        throw new Exception("Spin function timed out after {$wait} seconds");
     }
 
     /**
@@ -559,7 +533,7 @@ class CheckoutContext extends SubContext
             Helper::throwException('Invalid address given');
         }
 
-        $this->spin(function () use ($titleToDisappear) {
+        Helper::spin(function () use ($titleToDisappear) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
 
@@ -603,7 +577,7 @@ class CheckoutContext extends SubContext
 
         $testAddress = array_values(array_filter(explode(', ', $address)));
 
-        $this->spin(function ($context) use ($titleToDisappear) {
+        Helper::spin(function () use ($titleToDisappear) {
             try {
                 $this->getMink()->assertSession($this->getSession())->pageTextNotContains(str_replace('\\"', '"', $titleToDisappear));
 

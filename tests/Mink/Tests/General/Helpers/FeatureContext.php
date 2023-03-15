@@ -29,7 +29,6 @@ namespace Shopware\Tests\Mink\Tests\General\Helpers;
 use Behat\Behat\Context\SnippetAcceptingContext;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Mink\Driver\BrowserKitDriver;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\Exception as MinkException;
 use Behat\Mink\Session;
@@ -43,6 +42,7 @@ use Shopware\Components\CacheManager;
 use Shopware\Components\ConfigWriter;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Theme\Installer;
+use Shopware\Kernel;
 use Shopware_Components_Config;
 
 class FeatureContext extends SubContext implements SnippetAcceptingContext
@@ -73,7 +73,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
     /**
      * Initializes context.
-     * Every scenario gets it's own context object.
+     * Every scenario gets its own context object.
      */
     public function __construct()
     {
@@ -106,7 +106,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
         $isResettable = \count(array_intersect(self::$doNotResetFeatureTags, $scope->getFeature()->getTags())) < 1;
 
-        // Scenario skips a line so it's not a new example
+        // Scenario skips a line, so it's not a new example
         if ($isResettable && $scope->getScenario()->getLine() !== self::$lastScenarioLine + 1) {
             $this->reset();
         }
@@ -221,7 +221,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $this->dirtyConfigElements = [];
 
         $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
-        $this->getService('db')->exec($sql);
+        $this->getService(Connection::class)->executeStatement($sql);
 
         $this->clearCache();
     }
@@ -241,27 +241,27 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function registerErrorHandler(): void
     {
         error_reporting(-1);
-        $errorNameMap = [
-            E_ERROR => 'E_ERROR',
-            E_WARNING => 'E_WARNING',
-            E_PARSE => 'E_PARSE',
-            E_NOTICE => 'E_NOTICE',
-            E_CORE_ERROR => 'E_CORE_ERROR',
-            E_CORE_WARNING => 'E_CORE_WARNING',
-            E_COMPILE_ERROR => 'E_COMPILE_ERROR',
-            E_COMPILE_WARNING => 'E_COMPILE_WARNING',
-            E_USER_ERROR => 'E_USER_ERROR',
-            E_USER_WARNING => 'E_USER_WARNING',
-            E_USER_NOTICE => 'E_USER_NOTICE',
-            E_STRICT => 'E_STRICT',
-            E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
-            E_DEPRECATED => 'E_DEPRECATED',
-            E_USER_DEPRECATED => 'E_USER_DEPRECATED',
-            E_ALL => 'E_ALL',
-        ];
 
-        set_error_handler(function ($errno, $errstr, $errfile, $errline) use ($errorNameMap) {
-            $filepath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+        set_error_handler(function ($errno, $errstr, $errfile, $errline) {
+            $errorNameMap = [
+                E_ERROR => 'E_ERROR',
+                E_WARNING => 'E_WARNING',
+                E_PARSE => 'E_PARSE',
+                E_NOTICE => 'E_NOTICE',
+                E_CORE_ERROR => 'E_CORE_ERROR',
+                E_CORE_WARNING => 'E_CORE_WARNING',
+                E_COMPILE_ERROR => 'E_COMPILE_ERROR',
+                E_COMPILE_WARNING => 'E_COMPILE_WARNING',
+                E_USER_ERROR => 'E_USER_ERROR',
+                E_USER_WARNING => 'E_USER_WARNING',
+                E_USER_NOTICE => 'E_USER_NOTICE',
+                E_STRICT => 'E_STRICT',
+                E_RECOVERABLE_ERROR => 'E_RECOVERABLE_ERROR',
+                E_DEPRECATED => 'E_DEPRECATED',
+                E_USER_DEPRECATED => 'E_USER_DEPRECATED',
+                E_ALL => 'E_ALL',
+            ];
+            $filepath = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
             // No effect in other environments.
             $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
@@ -322,7 +322,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             self::$suite->getSetting('template')
         );
 
-        $templateId = $this->getService('db')->fetchOne($sql);
+        $templateId = $this->getService(Connection::class)->fetchOne($sql);
         if (!$templateId) {
             throw new RuntimeException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
         }
@@ -332,7 +332,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
             UPDATE `s_core_paymentmeans` SET `active`= 1;
 EOD;
-        $this->getService('db')->exec($sql);
+        $this->getService(Connection::class)->executeStatement($sql);
 
         Helper::setCurrentLanguage('de');
 
@@ -365,26 +365,25 @@ EOD;
 
             SET FOREIGN_KEY_CHECKS = 1;
 EOD;
-        $this->getService('db')->exec($sql);
+        $this->getService(Connection::class)->executeStatement($sql);
     }
 
     private function logRequest(): void
     {
         $session = $this->getSession();
         $log = sprintf('Current page: %d %s', $this->getStatusCode(), $session->getCurrentUrl()) . "\n";
-        $log .= $this->getRequestDataLogMessage($session);
         $log .= $this->getResponseHeadersLogMessage($session);
         $log .= $this->getRequestContentLogMessage($session);
-        $this->saveLog($log, 'log');
+        $this->saveLog($log);
     }
 
-    private function saveLog(string $content, string $type): void
+    private function saveLog(string $content): void
     {
-        $logDir = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+        $logDir = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
         $currentDateAsString = date('YmdHis');
 
-        $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, $type);
+        $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, 'log');
         if (!file_put_contents($path, $content)) {
             throw new RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
         }
@@ -394,19 +393,6 @@ EOD;
     {
         try {
             return $this->getSession()->getStatusCode();
-        } catch (MinkException $exception) {
-            return null;
-        }
-    }
-
-    private function getRequestDataLogMessage(Session $session): ?string
-    {
-        $driver = $session->getDriver();
-        if (!$driver instanceof BrowserKitDriver) {
-            return null;
-        }
-        try {
-            return "Request:\n" . print_r($driver->getClient()->getRequest(), true) . "\n";
         } catch (MinkException $exception) {
             return null;
         }
@@ -437,7 +423,7 @@ EOD;
             return;
         }
 
-        $filePath = $this->getService('kernel')->getRootdir() . '/build/logs/mink';
+        $filePath = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
         $this->saveScreenshot(null, $filePath);
     }

@@ -41411,11 +41411,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Elements/YouTube.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
 			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
@@ -41666,11 +41661,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Note/Elements/NotePosition.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Note/Note.php
-
-		-
 			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Note/Note.php
@@ -41866,16 +41856,6 @@ parameters:
 			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/SecurityContext.php
 
 		-
-			message: "#^Call to method getClient\\(\\) on an unknown class Behat\\\\Mink\\\\Driver\\\\BrowserKitDriver\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/FeatureContext.php
-
-		-
-			message: "#^Class Behat\\\\Mink\\\\Driver\\\\BrowserKitDriver not found\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/FeatureContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:assertElementProperties\\(\\) has parameter \\$properties with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
@@ -41989,26 +41969,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:throwException\\(\\) has parameter \\$messages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMinkParameter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setKernel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setMink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setMinkParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setMinkParameters\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"

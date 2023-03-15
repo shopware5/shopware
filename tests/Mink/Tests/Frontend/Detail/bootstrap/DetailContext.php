@@ -29,6 +29,7 @@ namespace Shopware\Tests\Mink\Tests\Frontend\Detail\bootstrap;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleEvaluation;
 use Shopware\Tests\Mink\Page\Frontend\Detail\Detail;
@@ -113,7 +114,7 @@ class DetailContext extends SubContext
     public function theShopOwnerActivateMyLatestEvaluation(int $limit = 1): void
     {
         $sql = 'UPDATE `s_articles_vote` SET `active`= 1 ORDER BY id DESC LIMIT ' . $limit;
-        $this->getService('db')->exec($sql);
+        $this->getService(Connection::class)->executeStatement($sql);
     }
 
     /**

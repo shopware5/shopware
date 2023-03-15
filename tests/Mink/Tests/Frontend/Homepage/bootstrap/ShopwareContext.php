@@ -30,6 +30,7 @@ use Behat\Behat\Context\Environment\InitializedContextEnvironment;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
+use Doctrine\DBAL\Connection;
 use RuntimeException;
 use Shopware\Tests\Mink\Page\Frontend\Article\Elements\Article;
 use Shopware\Tests\Mink\Page\Frontend\Article\Elements\ArticleSlider;
@@ -176,7 +177,7 @@ class ShopwareContext extends SubContext
     public function iConfirmTheLinkInTheEmail(int $limit = 1): void
     {
         $sql = 'SELECT `type`, `hash` FROM `s_core_optin` ORDER BY `id` DESC LIMIT ' . $limit;
-        $hashes = $this->getService('db')->fetchAll($sql);
+        $hashes = $this->getService(Connection::class)->fetchAllAssociative($sql);
 
         $session = $this->getSession();
         $link = $session->getCurrentUrl();
