@@ -63,6 +63,6 @@ class CustomRecipes extends Page
             return;
         }
 
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', CustomRecipesListWindow::class));
+        throw new ElementNotFoundException(sprintf("Couldn't find '%s' on the current page", CustomRecipesListWindow::class));
     }
 }

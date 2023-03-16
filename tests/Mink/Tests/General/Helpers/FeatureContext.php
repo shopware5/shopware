@@ -36,7 +36,6 @@ use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
 use Doctrine\DBAL\Connection;
-use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\CacheManager;
 use Shopware\Components\ConfigWriter;
@@ -78,7 +77,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     public function __construct()
     {
         if (!self::$suite->hasSetting('template')) {
-            throw new RuntimeException('Template not set. Please start testsuite using the --profile argument.');
+            Helper::throwException('Template not set. Please start testsuite using the --profile argument.');
         }
 
         $this->registerErrorHandler();
@@ -324,7 +323,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
 
         $templateId = $this->getService(Connection::class)->fetchOne($sql);
         if (!$templateId) {
-            throw new RuntimeException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
+            Helper::throwException(sprintf('Unable to find template by name %s', self::$suite->getSetting('template')));
         }
 
         // set the template for shop "Deutsch" and activate SEPA payment method
@@ -385,7 +384,7 @@ EOD;
 
         $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, 'log');
         if (!file_put_contents($path, $content)) {
-            throw new RuntimeException(sprintf('Failed while trying to write log in "%s".', $path));
+            Helper::throwException(sprintf('Failed while trying to write log in "%s".', $path));
         }
     }
 

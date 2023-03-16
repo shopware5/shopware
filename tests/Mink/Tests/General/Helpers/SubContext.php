@@ -30,7 +30,6 @@ use Behat\Mink\Driver\DriverInterface;
 use Behat\Mink\Mink;
 use Behat\Mink\Session;
 use Behat\MinkExtension\Context\MinkAwareContext;
-use RuntimeException;
 use SensioLabs\Behat\PageObjectExtension\Context\PageObjectContext;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Behat\ShopwareExtension\Context\KernelAwareContext;
@@ -125,7 +124,7 @@ class SubContext extends PageObjectContext implements KernelAwareContext, MinkAw
     {
         $element = $this->getElement($elementName);
         if (!$element instanceof $elementName) {
-            throw new RuntimeException(sprintf('Element expected to be a %s', $elementName));
+            Helper::throwException(sprintf('Element expected to be a %s', $elementName));
         }
 
         $element->setParent($page);

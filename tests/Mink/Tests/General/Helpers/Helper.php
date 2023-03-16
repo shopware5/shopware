@@ -31,6 +31,7 @@ use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Session;
 use Exception;
+use RuntimeException;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
@@ -399,7 +400,7 @@ EOD
 
         switch ($type) {
             case self::EXCEPTION_GENERIC:
-                throw new Exception($message);
+                throw new RuntimeException($message);
             case self::EXCEPTION_PENDING:
                 throw new PendingException($message);
             default:

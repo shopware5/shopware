@@ -40756,16 +40756,6 @@ parameters:
 			path: tests/Mink/Page/Backend/Backend/Backend.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\Backend\\\\Backend\\:\\:login\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\Backend\\\\Backend\\:\\:login\\(\\) has parameter \\$user with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\ContentTypeManager\\\\Elements\\\\ContentTypeManagerDetailWindow\\:\\:\\$elements type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Backend/ContentTypeManager/Elements/ContentTypeManagerDetailWindow.php
