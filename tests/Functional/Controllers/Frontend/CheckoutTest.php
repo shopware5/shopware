@@ -28,7 +28,6 @@ namespace Shopware\Tests\Functional\Controllers\Frontend;
 
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
-use Enlight_Controller_Request_RequestHttp;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Template_Manager;
@@ -39,7 +38,6 @@ use sBasket;
 use Shopware\Bundle\CartBundle\CheckoutKey;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
 use Shopware\Components\Model\ModelManager;
-use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Shop;
@@ -169,7 +167,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
     public function testRequestPaymentWithoutAGB(): void
     {
         // Login
-        $this->loginFrontendUser();
+        $this->loginCustomer();
 
         // Add product to basket
         $this->addBasketProduct(self::USER_AGENT, 5);
@@ -198,7 +196,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
     public function testRequestPaymentWithoutServiceAgreement(): void
     {
         // Login
-        $this->loginFrontendUser();
+        $this->loginCustomer();
 
         // Add product to basket
         $this->addBasketProduct(self::USER_AGENT, 5);
@@ -268,7 +266,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 
     public function testRedirectShippingPaymentPageOnEmptyBasket(): void
     {
-        $this->loginFrontendUser();
+        $this->loginCustomer();
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
 
         $this->Request()->setMethod('GET');
@@ -370,7 +368,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         // Simulate checkout in frontend
 
         // Login
-        $this->loginFrontendUser();
+        $this->loginCustomer();
 
         // Add product to basket
         $this->addBasketProduct(self::USER_AGENT, 5);
@@ -421,29 +419,6 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertEqualsWithDelta($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, Utils::FORMER_PHPUNIT_FLOAT_EPSILON, $messageNet);
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
-    }
-
-    /**
-     * Login as a frontend user
-     */
-    private function loginFrontendUser(): void
-    {
-        $user = $this->connection->fetchAssociative(
-            'SELECT id, email, password, subshopID, language FROM s_user WHERE id = 1'
-        );
-        static::assertIsArray($user);
-
-        $shop = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class)->getActiveById($user['language']);
-        static::assertInstanceOf(Shop::class, $shop);
-
-        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
-
-        $request = new Enlight_Controller_Request_RequestHttp();
-        $request->setPost('email', $user['email']);
-        $request->setPost('passwordMD5', $user['password']);
-        $this->getContainer()->get('front')->setRequest($request);
-        $this->getContainer()->get('session')->set('Admin', true);
-        $this->getContainer()->get('modules')->Admin()->sLogin(true);
     }
 
     /**

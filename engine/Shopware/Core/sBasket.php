@@ -1499,13 +1499,12 @@ class sBasket implements \Enlight_Hook
                 $result[CartKey::POSITIONS][$key]['tax'] = $calcDifference;
             }
         }
-        $result = $this->eventManager->filter(
+
+        return $this->eventManager->filter(
             'Shopware_Modules_Basket_GetBasket_FilterResult',
             $result,
             ['subject' => $this]
         );
-
-        return $result;
     }
 
     /**

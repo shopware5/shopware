@@ -32,7 +32,7 @@ use RuntimeException;
 trait CustomerLoginTrait
 {
     public function loginCustomer(
-        string $sessionId = 'sessionId',
+        ?string $sessionId = null,
         int $customerId = 1,
         string $email = 'test@example.com',
         ?string $passwordChangeDate = null,
@@ -54,6 +54,10 @@ trait CustomerLoginTrait
                     'customerId' => $customerId,
                 ]
             );
+        }
+
+        if (empty($sessionId)) {
+            $sessionId = $session->getId();
         }
 
         $session->offsetSet('sessionId', $sessionId);
