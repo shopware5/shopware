@@ -130,6 +130,7 @@ debug-config-test: .make.config.build.debug
 	touch $@
 
 .make.install.composer-dependencies:
+	composer update laminas/laminas-code
 	composer install
 	composer install -d recovery/common
 	composer bin all install

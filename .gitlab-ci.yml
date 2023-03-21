@@ -177,9 +177,6 @@ PHP 8.1:
 PHP 8.2:
     extends: .phpunit_base
     image: gitlab.shopware.com:5005/shopware/5/product/image/continuous:8.2
-    script:
-        - composer update laminas/laminas-code
-        - make test-phpunit
 
 MySQL 8.0:
     extends: .phpunit_base
@@ -233,7 +230,6 @@ Elasticsearch 7:
     script:
         - apk add --no-cache sudo
         - export SW_HOST=$(hostname -i)
-        - composer update laminas/laminas-code
         - make init
         - make prepare-mink
         - chown -R www-data:www-data .
