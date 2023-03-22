@@ -13,6 +13,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Changes
 
 * Updated `setasign/fpdi` to version 2.3.7
+* Updated `phpunit/phpunit` to version 9.6.5
+* Updated `symfony/serializer` to version 5.4.21
+* Updated `voku/anti-xss` to version 4.1.41
+* Updated several indirect dependencies
 
 ## 5.7.17
 
