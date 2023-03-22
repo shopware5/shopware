@@ -2,6 +2,18 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.18
+
+[View all changes from v5.7.17...v5.7.18](https://github.com/shopware/shopware/compare/v5.7.17...v5.7.18)
+
+### Additions
+
+### Deprecations
+
+### Changes
+
+* Updated `setasign/fpdi` to version 2.3.7
+
 ## 5.7.17
 
 [View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)
