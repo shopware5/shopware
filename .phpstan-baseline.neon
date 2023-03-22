@@ -13631,11 +13631,6 @@ parameters:
 			path: engine/Shopware/Commands/PluginListCommand.php
 
 		-
-			message: "#^Method Shopware\\\\Commands\\\\PluginListCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginListCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginRefreshCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginRefreshCommand.php

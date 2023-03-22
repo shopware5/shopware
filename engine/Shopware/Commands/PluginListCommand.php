@@ -38,7 +38,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
     /**
      * {@inheritdoc}
      */
-    public function completeOptionValues($optionName, CompletionContext $context)
+    public function completeOptionValues($optionName, CompletionContext $context): array
     {
         if ($optionName === 'filter') {
             return [
@@ -65,7 +65,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
     /**
      * {@inheritdoc}
      */
-    public function completeArgumentValues($argumentName, CompletionContext $context)
+    public function completeArgumentValues($argumentName, CompletionContext $context): array
     {
         return [];
     }
@@ -73,7 +73,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('sw:plugin:list')
@@ -104,7 +104,7 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $em = $this->container->get(ModelManager::class);
 
@@ -146,7 +146,6 @@ class PluginListCommand extends ShopwareCommand implements CompletionAwareInterf
 
         $rows = [];
 
-        /** @var Plugin $plugin */
         foreach ($plugins as $plugin) {
             $rows[] = [
                 $plugin->getName(),
