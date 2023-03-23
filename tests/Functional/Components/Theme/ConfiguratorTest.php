@@ -157,7 +157,7 @@ class ConfiguratorTest extends Base
             [$container]
         );
 
-        static::assertTrue(true, 'validateConfig doesn\'t throw an exception');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testValidateConfigException(): void

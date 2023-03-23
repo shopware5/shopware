@@ -89,7 +89,9 @@ class ContentTypeManager extends Page
     {
         $listWindowPresent = $this->waitFor(10, function (ContentTypeManager $page): bool {
             try {
-                return $page->getListWindow() instanceof Element;
+                $page->getListWindow();
+
+                return true;
             } catch (Throwable $e) {
                 return false;
             }
@@ -99,7 +101,7 @@ class ContentTypeManager extends Page
             return;
         }
 
-        throw new ElementNotFoundException(sprintf('Couldn\'t find "%s" on the current page', ContentTypeManagerListWindow::class));
+        throw new ElementNotFoundException(sprintf("Couldn't find '%s' on the current page", ContentTypeManagerListWindow::class));
     }
 
     private function clickUsingJs(NodeElement $el, ?NodeElement $contextNode = null): void

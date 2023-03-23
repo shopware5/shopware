@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -45,25 +47,13 @@ class BacklogProcessorTest extends TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    /**
-     * @var BacklogProcessorInterface
-     */
-    private $backlogProcessor;
+    private BacklogProcessorInterface $backlogProcessor;
 
-    /**
-     * @var BacklogReader
-     */
-    private $backlogReader;
+    private BacklogReader $backlogReader;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var ContainerAwareEventManager
-     */
-    private $eventManager;
+    private ContainerAwareEventManager $eventManager;
 
     public function setUp(): void
     {
@@ -83,18 +73,15 @@ class BacklogProcessorTest extends TestCase
 
         $backlog = $this->retrieveLatestBacklog();
 
-        static::assertNotNull($backlog);
         static::assertNotNull($backlog->getPayload());
         static::assertEquals($payloadId, $backlog->getPayload()['id']);
     }
 
     public function testBacklogProcessorProcesses(): void
     {
-        $synchronizers = new ArrayCollection([$this->mockProductSynchronizer()]);
-
         $processor = new BacklogProcessor(
             $this->connection,
-            $synchronizers,
+            new ArrayCollection([$this->mockProductSynchronizer()]),
             $this->eventManager
         );
 

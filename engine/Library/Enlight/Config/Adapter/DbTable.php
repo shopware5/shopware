@@ -226,18 +226,16 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $insertData[$this->_createdColumn] = new Zend_Date();
         }
 
-        if (\is_array($section)) {
-            if (\is_array($this->_sectionColumn)) {
-                foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (isset($section[$key])) {
-                        $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
-                        $insertData[$sectionColumn] = $section[$key];
-                    }
+        if (\is_array($this->_sectionColumn)) {
+            foreach ($this->_sectionColumn as $key => $sectionColumn) {
+                if (isset($section[$key])) {
+                    $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
+                    $insertData[$sectionColumn] = $section[$key];
                 }
-            } else {
-                $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
-                $insertData[$this->_sectionColumn] = $section;
             }
+        } else {
+            $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
+            $insertData[$this->_sectionColumn] = $section;
         }
 
         foreach ((array) $fields as $field) {
@@ -317,18 +315,16 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
             $where[] = $db->quoteInto($this->_namespaceColumn . '=?', $name);
         }
 
-        if (\is_array($section)) {
-            if (\is_array($this->_sectionColumn)) {
-                foreach ($this->_sectionColumn as $key => $sectionColumn) {
-                    if (isset($section[$key])) {
-                        $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
-                        $insertData[$sectionColumn] = $section[$key];
-                    }
+        if (\is_array($this->_sectionColumn)) {
+            foreach ($this->_sectionColumn as $key => $sectionColumn) {
+                if (isset($section[$key])) {
+                    $where[] = $db->quoteInto($sectionColumn . '=?', $section[$key]);
+                    $insertData[$sectionColumn] = $section[$key];
                 }
-            } else {
-                $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
-                $insertData[$this->_sectionColumn] = $section;
             }
+        } else {
+            $where[] = $db->quoteInto($this->_sectionColumn . '=?', $section);
+            $insertData[$this->_sectionColumn] = $section;
         }
 
         $where[] = $db->quoteInto($this->_nameColumn . ' IN (?)', $fields);

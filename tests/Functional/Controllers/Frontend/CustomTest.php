@@ -30,7 +30,6 @@ use Enlight_Class;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Controllers_Frontend_Custom;
@@ -58,7 +57,6 @@ class CustomTest extends ControllerTestCase
         $controller->setRequest($this->Request());
 
         $container = $this->getContainer();
-        static::assertInstanceOf(Container::class, $container);
         $controller->setContainer($container);
         $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 

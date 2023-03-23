@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,7 +32,7 @@ use ReflectionClass;
 
 class EnlightHookProxyFactoryTest extends TestCase
 {
-    private $proxyFactory;
+    private TestProxyFactory $proxyFactory;
 
     public function setUp(): void
     {
@@ -41,9 +43,9 @@ class EnlightHookProxyFactoryTest extends TestCase
         $this->proxyFactory = new TestProxyFactory($hookManager, 'ShopwareTests');
     }
 
-    public function testGenerateBasicProxyClass()
+    public function testGenerateBasicProxyClass(): void
     {
-        $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyBasicTestClass::class]);
+        $generatedClass = $this->invokeMethod($this->proxyFactory, [MyBasicTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
 class ShopwareTests_ShopwareTestsUnitComponentsHookMyBasicTestClassProxy extends \Shopware\Tests\Unit\Components\Hook\MyBasicTestClass implements Enlight_Hook_Proxy
@@ -166,9 +168,9 @@ EOT;
         static::assertSame($expectedClass, $generatedClass);
     }
 
-    public function testGenerateProxyClassWithReferenceParameter()
+    public function testGenerateProxyClassWithReferenceParameter(): void
     {
-        $generatedClass = $this->invokeMethod($this->proxyFactory, 'generateProxyClass', [MyReferenceTestClass::class]);
+        $generatedClass = $this->invokeMethod($this->proxyFactory, [MyReferenceTestClass::class]);
         $expectedClass = <<<'EOT'
 <?php
 class ShopwareTests_ShopwareTestsUnitComponentsHookMyReferenceTestClassProxy extends \Shopware\Tests\Unit\Components\Hook\MyReferenceTestClass implements Enlight_Hook_Proxy
@@ -267,11 +269,12 @@ EOT;
         static::assertSame($expectedClass, $generatedClass);
     }
 
-    private function invokeMethod($object, string $methodName, array $parameters = [])
+    /**
+     * @param array<class-string> $parameters
+     */
+    private function invokeMethod(TestProxyFactory $object, array $parameters = []): string
     {
-        $className = \get_class($object);
-        static::assertIsString($className);
-        $method = (new ReflectionClass($className))->getMethod($methodName);
+        $method = (new ReflectionClass($object))->getMethod('generateProxyClass');
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);

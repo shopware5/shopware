@@ -31,7 +31,7 @@ interface ResourceInterface
     /**
      * Needs to return the grammar for out lexer
      *
-     * @return array<string, array<string, string|array<string>>>
+     * @return array<string, array<int|string, string|array<string>>>
      */
     public function getGrammar();
 

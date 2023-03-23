@@ -925,11 +925,10 @@ class AdminTest extends TestCase
             unset($existingStateData['id']);
             $this->connection->update('s_core_translations', $existingStateData, ['id' => $existingStateDataId]);
         }
-        if (\is_array($existingGermanyData)) {
-            $existingGermanyDataId = $existingGermanyData['id'];
-            unset($existingGermanyData['id']);
-            $this->connection->update('s_core_countries', $existingGermanyData, ['id' => $existingGermanyDataId]);
-        }
+
+        $existingGermanyDataId = $existingGermanyData['id'];
+        unset($existingGermanyData['id']);
+        $this->connection->update('s_core_countries', $existingGermanyData, ['id' => $existingGermanyDataId]);
 
         // Remove shop hack
         $context->getShop()->setIsDefault(true);
@@ -1162,7 +1161,6 @@ class AdminTest extends TestCase
 
             // This tests SW-5653
             if ($order['id'] == $orderId) {
-                static::assertNotEmpty($order);
                 static::assertSame($orderNumber, $order['ordernumber']);
                 static::assertSame($customer->getId(), (int) $order['userID']);
                 break;
@@ -2306,21 +2304,20 @@ class AdminTest extends TestCase
         $this->basketModule->sAddArticle('SW10010');
 
         // With country data, no dispatch method
-        static::assertSame(
-            sAdmin::NO_SHIPPING_COSTS,
-            $this->module->sGetPremiumShippingcosts($germany)
-        );
+        $noResult = $this->module->sGetPremiumShippingcosts($germany);
+        static::assertSame(sAdmin::NO_SHIPPING_COSTS, $noResult);
 
         // With dispatch method
         $this->session->offsetSet('sDispatch', self::DEFAULT_SHIPPING_METHOD_ID);
         $result = $this->module->sGetPremiumShippingcosts($germany);
         static::assertIsArray($result);
-        static::assertArrayHasKey('brutto', $result);
-        static::assertArrayHasKey('netto', $result);
-        static::assertArrayHasKey('value', $result);
-        static::assertArrayHasKey('factor', $result);
-        static::assertArrayHasKey('surcharge', $result);
-        static::assertArrayHasKey('tax', $result);
+        static::assertSame('3.90', $result['value']);
+        static::assertSame('0.00', $result['factor']);
+        static::assertSame(3.9, $result['brutto']);
+        static::assertSame(0.0, $result['surcharge']);
+        static::assertSame('0', $result['taxMode']);
+        static::assertSame(19.0, $result['tax']);
+        static::assertSame(3.28, $result['netto']);
     }
 
     public function testsGetPremiumShippingcostsWithCountryTaxRule(): void

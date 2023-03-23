@@ -236,7 +236,7 @@ class Shopware_Components_Config implements ArrayAccess
         if (!isset($this->_data[$name])) {
             $baseName = $this->formatName($name);
 
-            return isset($this->_data[$baseName]) && $this->_data[$baseName] !== null;
+            return isset($this->_data[$baseName]);
         }
 
         return true;

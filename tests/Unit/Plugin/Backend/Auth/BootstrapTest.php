@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,7 +37,6 @@ class BootstrapTest extends TestCase
 {
     public function testValidatesAlsoSnakeCaseControllers(): void
     {
-        /** @var Shopware_Plugins_Backend_Auth_Bootstrap $authPlugin */
         $authPlugin = $this->createPartialMock(Shopware_Plugins_Backend_Auth_Bootstrap::class, ['initLocale', 'checkAuth']);
         $authPlugin->setNoAcl(true);
 

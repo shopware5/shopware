@@ -46,15 +46,9 @@ use Shopware_Components_Config;
 
 class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var SearchTermPreProcessorInterface
-     */
-    private $searchTermPreProcessor;
+    private SearchTermPreProcessorInterface $searchTermPreProcessor;
 
     public function __construct(
         Shopware_Components_Config $config,
@@ -86,43 +80,36 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $this->addLengthCondition($request, $criteria);
     }
 
-    private function addCategoryCondition(Request $request, Criteria $criteria)
+    private function addCategoryCondition(Request $request, Criteria $criteria): void
     {
         if ($request->has('sCategory')) {
-            /** @var int[] $ids */
-            $ids = explode('|', $request->getParam('sCategory'));
+            /** @var array<numeric-string> $ids */
+            $ids = explode('|', $request->getParam('sCategory')) ?: [];
 
-            $criteria->addBaseCondition(
-                new CategoryCondition($ids)
-            );
+            $criteria->addBaseCondition(new CategoryCondition($ids));
         } elseif ($request->has('categoryFilter')) {
-            /** @var int[] $ids */
-            $ids = explode('|', $request->getParam('categoryFilter'));
+            /** @var array<numeric-string> $ids */
+            $ids = explode('|', $request->getParam('categoryFilter')) ?: [];
 
-            $criteria->addCondition(
-                new CategoryCondition($ids)
-            );
+            $criteria->addCondition(new CategoryCondition($ids));
         }
     }
 
-    private function addManufacturerCondition(Request $request, Criteria $criteria)
+    private function addManufacturerCondition(Request $request, Criteria $criteria): void
     {
         if (!$request->has('sSupplier')) {
             return;
         }
 
-        /** @var int[] $manufacturerIds */
-        $manufacturerIds = explode(
-            '|',
-            $request->getParam('sSupplier')
-        );
+        /** @var array<numeric-string> $manufacturerIds */
+        $manufacturerIds = explode('|', $request->getParam('sSupplier')) ?: [];
 
         if (!empty($manufacturerIds)) {
             $criteria->addCondition(new ManufacturerCondition($manufacturerIds));
         }
     }
 
-    private function addShippingFreeCondition(Request $request, Criteria $criteria)
+    private function addShippingFreeCondition(Request $request, Criteria $criteria): void
     {
         $shippingFree = $request->getParam('shippingFree');
         if (!$shippingFree) {
@@ -132,7 +119,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition(new ShippingFreeCondition());
     }
 
-    private function addImmediateDeliveryCondition(Request $request, Criteria $criteria)
+    private function addImmediateDeliveryCondition(Request $request, Criteria $criteria): void
     {
         $immediateDelivery = $request->getParam('immediateDelivery');
         if (!$immediateDelivery) {
@@ -142,7 +129,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition(new ImmediateDeliveryCondition());
     }
 
-    private function addRatingCondition(Request $request, Criteria $criteria)
+    private function addRatingCondition(Request $request, Criteria $criteria): void
     {
         $average = $request->getParam('rating');
         if (!$average) {
@@ -152,7 +139,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition(new VoteAverageCondition($average));
     }
 
-    private function addPriceCondition(Request $request, Criteria $criteria)
+    private function addPriceCondition(Request $request, Criteria $criteria): void
     {
         $min = $request->getParam('priceMin');
         $max = $request->getParam('priceMax');
@@ -165,17 +152,17 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition($condition);
     }
 
-    private function addSearchCondition(Request $request, Criteria $criteria)
+    private function addSearchCondition(Request $request, Criteria $criteria): void
     {
         $term = $request->getParam('sSearch');
-        if ($term == null) {
+        if (empty($term)) {
             return;
         }
         $term = $this->searchTermPreProcessor->process($term);
         $criteria->addBaseCondition(new SearchTermCondition($term));
     }
 
-    private function addCustomerGroupCondition(Criteria $criteria, ShopContextInterface $context)
+    private function addCustomerGroupCondition(Criteria $criteria, ShopContextInterface $context): void
     {
         $condition = new CustomerGroupCondition(
             [$context->getCurrentCustomerGroup()->getId()]
@@ -183,7 +170,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addBaseCondition($condition);
     }
 
-    private function addOffset(Request $request, Criteria $criteria)
+    private function addOffset(Request $request, Criteria $criteria): void
     {
         $page = (int) $request->getParam('sPage', 1);
         $page = ($page > 0) ? $page : 1;
@@ -194,18 +181,18 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         );
     }
 
-    private function addLimit(Request $request, Criteria $criteria)
+    private function addLimit(Request $request, Criteria $criteria): void
     {
         $limit = (int) $request->getParam('sPerPage', $this->config->get('articlesPerPage'));
         $max = $this->config->get('maxStoreFrontLimit');
         if ($max) {
             $limit = min($limit, $max);
         }
-        $limit = $limit >= 1 ? $limit : 1;
+        $limit = max($limit, 1);
         $criteria->limit($limit);
     }
 
-    private function addIsAvailableCondition(Criteria $criteria)
+    private function addIsAvailableCondition(Criteria $criteria): void
     {
         if (!$this->config->get('hideNoInStock')) {
             return;
@@ -213,7 +200,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addBaseCondition(new IsAvailableCondition());
     }
 
-    private function addWeightCondition(Request $request, Criteria $criteria)
+    private function addWeightCondition(Request $request, Criteria $criteria): void
     {
         $min = $request->getParam('minWeight');
         $max = $request->getParam('maxWeight');
@@ -226,7 +213,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition($condition);
     }
 
-    private function addWidthCondition(Request $request, Criteria $criteria)
+    private function addWidthCondition(Request $request, Criteria $criteria): void
     {
         $min = $request->getParam('minWidth');
         $max = $request->getParam('maxWidth');
@@ -239,7 +226,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition($condition);
     }
 
-    private function addLengthCondition(Request $request, Criteria $criteria)
+    private function addLengthCondition(Request $request, Criteria $criteria): void
     {
         $min = $request->getParam('minLength');
         $max = $request->getParam('maxLength');
@@ -252,7 +239,7 @@ class CoreCriteriaRequestHandler implements CriteriaRequestHandlerInterface
         $criteria->addCondition($condition);
     }
 
-    private function addHeightCondition(Request $request, Criteria $criteria)
+    private function addHeightCondition(Request $request, Criteria $criteria): void
     {
         $min = $request->getParam('minHeight');
         $max = $request->getParam('maxHeight');

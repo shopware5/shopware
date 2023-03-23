@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,10 +33,7 @@ use Shopware\Components\Plugin\XmlReader\XmlCronjobReader;
 
 class XmlCronjobReaderTest extends TestCase
 {
-    /**
-     * @var XmlCronjobReader
-     */
-    private $cronjobReader;
+    private XmlCronjobReader $cronjobReader;
 
     protected function setUp(): void
     {
@@ -43,9 +42,8 @@ class XmlCronjobReaderTest extends TestCase
 
     public function testReadFile(): void
     {
-        $result = $this->readFile('cronjob.xml');
+        $result = $this->readFile();
 
-        static::assertIsArray($result);
         static::assertCount(2, $result);
 
         $firstCron = $result[0];
@@ -89,10 +87,10 @@ class XmlCronjobReaderTest extends TestCase
         static::assertCount(0, $result);
     }
 
-    private function readFile(string $file): array
+    private function readFile(): array
     {
         return $this->cronjobReader->read(
-            sprintf('%s/examples/cronjob/%s', __DIR__, $file)
+            sprintf('%s/examples/cronjob/%s', __DIR__, 'cronjob.xml')
         );
     }
 }

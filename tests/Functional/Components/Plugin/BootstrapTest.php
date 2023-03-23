@@ -28,13 +28,14 @@ namespace Shopware\Tests\Functional\Components\Plugin;
 
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Components\Plugin\fixtures\TestPlugin;
-use Shopware_Components_Plugin_Bootstrap;
 
 class BootstrapTest extends TestCase
 {
     public function testInstantiation(): void
     {
-        $pluginInstance = new TestPlugin('Test');
-        static::assertInstanceOf(Shopware_Components_Plugin_Bootstrap::class, $pluginInstance);
+        $expectedPluginName = 'Test';
+        $pluginInstance = new TestPlugin($expectedPluginName);
+        $pluginName = $pluginInstance->getName();
+        static::assertSame($expectedPluginName, $pluginName);
     }
 }

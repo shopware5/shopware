@@ -82,12 +82,6 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
      */
     public function batchAction()
     {
-        // To support the batch mode, the controller just needs to reference the api resource
-        // with the "resource" property
-        if (!property_exists($this, 'resource')) {
-            throw new RuntimeException('Property "resource" not found.');
-        }
-
         $params = $this->Request()->getPost();
 
         $this->resource->setResultMode(AbstractResource::HYDRATE_ARRAY);
@@ -105,12 +99,6 @@ class Shopware_Controllers_Api_Rest extends Enlight_Controller_Action
      */
     public function batchDeleteAction()
     {
-        // To support the batch mode, the controller just needs to reference the api resource
-        // with the "resource" property
-        if (!property_exists($this, 'resource')) {
-            throw new RuntimeException('Property "resource" not found.');
-        }
-
         // getParams() returns some additional, irrelevant parameters
         $params = array_merge($this->Request()->getQuery(), $this->Request()->getPost());
 

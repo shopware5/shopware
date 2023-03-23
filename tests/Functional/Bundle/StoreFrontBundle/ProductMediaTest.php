@@ -188,7 +188,6 @@ class ProductMediaTest extends TestCase
 
     private function assertMediaFile(string $expected, Media $media): void
     {
-        static::assertInstanceOf(Media::class, $media);
         static::assertNotEmpty($media->getThumbnails());
         static::assertStringContainsString($expected, $media->getFile());
 

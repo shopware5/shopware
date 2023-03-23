@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,15 +32,9 @@ use sSystem;
 
 class GetWrapperTest extends TestCase
 {
-    /**
-     * @var Enlight_Controller_Request_RequestTestCase
-     */
-    private $request;
+    private Enlight_Controller_Request_RequestTestCase $request;
 
-    /**
-     * @var sSystem
-     */
-    private $system;
+    private sSystem $system;
 
     public function setUp(): void
     {
@@ -51,7 +47,7 @@ class GetWrapperTest extends TestCase
         $this->request->clearAll();
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $this->system->_GET->offsetSet('foo', 'bar');
         static::assertEquals('bar', $this->request->getQuery('foo'));
@@ -60,11 +56,11 @@ class GetWrapperTest extends TestCase
         static::assertNull($this->request->getQuery('bar'));
 
         $this->system->_GET->offsetSet('foo', []);
-        static::assertEmpty($this->request->getQuery('bar'));
+        static::assertNull($this->request->getQuery('bar'));
         static::assertIsArray($this->request->getQuery('foo'));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->request->setQuery('foo', 'bar');
         static::assertEquals('bar', $this->system->_GET->offsetGet('foo'));
@@ -73,11 +69,11 @@ class GetWrapperTest extends TestCase
         static::assertNull($this->system->_GET->offsetGet('bar'));
 
         $this->request->setQuery('foo', []);
-        static::assertEmpty($this->system->_GET->offsetGet('bar'));
+        static::assertNull($this->system->_GET->offsetGet('bar'));
         static::assertIsArray($this->system->_GET->offsetGet('foo'));
     }
 
-    public function testUnset()
+    public function testUnset(): void
     {
         $this->system->_GET->offsetSet('foo', 'bar');
         static::assertEquals('bar', $this->request->getQuery('foo'));
@@ -85,7 +81,7 @@ class GetWrapperTest extends TestCase
         static::assertNull($this->request->getQuery('foo'));
     }
 
-    public function testSetAll()
+    public function testSetAll(): void
     {
         $this->system->_GET->offsetSet('foo', 'bar');
         static::assertEquals('bar', $this->request->getQuery('foo'));
@@ -95,7 +91,7 @@ class GetWrapperTest extends TestCase
         static::assertEquals('too', $this->request->getQuery('foo'));
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $this->request->setQuery('foo', 'bar');
         static::assertEquals(['foo' => 'bar'], $this->system->_GET->toArray());

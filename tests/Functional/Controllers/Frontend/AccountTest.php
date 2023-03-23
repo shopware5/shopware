@@ -38,6 +38,7 @@ use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Controllers_Frontend_Account;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AccountTest extends ControllerTestCase
 {
@@ -184,7 +185,7 @@ class AccountTest extends ControllerTestCase
         $controller->setResponse($response);
         $controller->resetPasswordAction();
 
-        static::assertNotNull($response);
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
     /**

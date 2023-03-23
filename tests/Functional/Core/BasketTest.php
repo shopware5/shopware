@@ -754,7 +754,8 @@ class BasketTest extends TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Voucher should work ok now
-        static::assertTrue($this->module->sAddVoucher('testOne'));
+        $result = $this->module->sAddVoucher('testOne');
+        static::assertTrue($result);
         static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values with tax from user group
@@ -848,7 +849,8 @@ class BasketTest extends TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        static::assertTrue($this->module->sAddVoucher($voucherCodeData['code']));
+        $result = $this->module->sAddVoucher($voucherCodeData['code']);
+        static::assertTrue($result);
         static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values. This voucher has no taxes
@@ -938,7 +940,8 @@ class BasketTest extends TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+        $result = $this->module->sAddVoucher($voucherData['vouchercode']);
+        static::assertTrue($result);
         static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values with custom tax from voucher
@@ -1462,7 +1465,8 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Test with empty basket, empty
-        static::assertNull($this->module->sGetBasketIds());
+        $noIds = $this->module->sGetBasketIds();
+        static::assertNull($noIds);
 
         // Add the first product to the basket, test we get the product id
         $this->connection->insert(

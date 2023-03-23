@@ -56,19 +56,12 @@ parameters:
         # Interface / Implementation Switch
         - '#expects Shopware\\Bundle\\SearchBundle\\Facet\\[a-zA-Z]+Facet, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
         - '#expects Shopware\\Bundle\\SearchBundle\\Condition\\[a-zA-Z]+Condition, Shopware\\Bundle\\SearchBundle\\[a-zA-Z]+Interface given#'
-        # Product/Shopcontext mixup
+        # Product/ShopContext mix-up
         - '#expects Shopware\\Bundle\\StoreFrontBundle\\Struct\\ProductContextInterface, Shopware\\Bundle\\StoreFrontBundle\\Struct\\ShopContextInterface given#'
 
         - # Config is read out in kernel, so there is a context for $this
             message: '#Variable \$this might not be defined#'
             path: engine/Shopware/Configs/Default.php
-
-        - # Seem to be issues, but need tests to verify changes there
-            message: '#Negated boolean expression is always false#'
-            path: 'engine/Shopware/Core/sArticles.php'
-        -
-            message: '#Comparison operation ">=" between int<1, max> and 1 is always true#'
-            path: 'engine/Shopware/Core/sArticles.php'
 
         - # Every API resource class has those methods, but we cannot put that into an interface or abstract class, because the parameter amount is different
             message: '#Call to an undefined method \$this\(Shopware\\Components\\Api\\Resource\\Resource\)&Shopware\\Components\\Api\\BatchInterface::(delete|update|create)\(\)#'
@@ -94,13 +87,13 @@ parameters:
         - '#type specified in iterable type PDOStatement#'
         - '#generic class PDOStatement .*does not specify its types: rowType#'
 
-        # This method does not exists, but it does not throw an error. Needs to be checked
+        # This method does not exist, but it does not throw an error. Needs to be checked
         - '#Call to an undefined method Enlight_Template_Manager::setCompileId\(\)#'
 
         # Needs some improvements in the doctrine PHPStan extensions: see https://github.com/phpstan/phpstan-doctrine/pull/167
         - '#Cannot call method (fetch.*|rowCount)\(\) on Doctrine\\DBAL\\.*\|int#'
 
-        - # This property contains many different repositories, so we do not specify the type
+        - # This property contains many repositories, so we do not specify the type
             message: '#with generic class Shopware\\Components\\Model\\ModelRepository does not specify its types: TEntityClass#'
             path: engine/Shopware/Controllers/Backend/Config.php
 
@@ -121,7 +114,7 @@ parameters:
                 - engine/Shopware/Models/Config/Element.php
                 - engine/Shopware/Models/Config/Value.php
 
-        - # Testing DI container stuff with autowiring services into controller actions. No possibility to teach that to PHPStan
+        - # Testing DI container stuff with auto-wiring services into controller actions. No possibility to teach that to PHPStan
             message: '#Service "Shopware\\Tests\\Functional\\Bundle\\ControllerBundle\\TestController\\Test" is not registered in the container#'
             path: tests/Functional/Bundle/ControllerBundle/ControllerActionTest.php
         -
@@ -130,11 +123,6 @@ parameters:
         -
             message: '#Parameter \#1 \$loader of method Enlight_Controller_Action::setContainer\(\) expects Shopware\\Components\\DependencyInjection\\Container\|null, TestContainer given#'
             path: tests/Functional/Bundle/ControllerBundle/ControllerActionTest.php
-
-        - # Somehow PHPStan does not recognize the return types correctly
-            message: '#Call to static method PHPUnit\\Framework\\Assert::assertIsArray\(\) with true|null will always evaluate to false#'
-            count: 4
-            path: tests/Functional/Core/BasketTest.php
 
         - # PHPStan has issues to recognize the inheritance of SortingInterface and ConditionInterface
             message: '#Parameter \#1 \$criteriaPart of method Shopware\\Bundle\\SearchBundleES\\SortingHandler\\.*SortingHandler::getSorting\(\) expects Shopware\\Bundle\\SearchBundle\\Sorting\\.*Sorting, Shopware\\Bundle\\SearchBundle\\CriteriaPartInterface given#'
@@ -149,7 +137,7 @@ parameters:
             message: '#Parameter \#1 \$sorting of method Shopware\\Bundle\\CustomerSearchBundleDBAL\\SortingHandler\\.*SortingHandler::addSorting\(\) expects Shopware\\Bundle\\CustomerSearchBundle\\Sorting\\.*Sorting, Shopware\\Bundle\\SearchBundle\\SortingInterface given#'
             path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/SortingHandler
 
-        - # For testing it is not necessary to declare the whole basket array correctly
+        - # For testing, it is not necessary to declare the whole basket array correctly
             message: '#Parameter \#1 \$basket of method Shopware\\Components\\BasketSignature\\BasketSignatureGenerator::generateSignature\(\) expects array.*, array.* given#'
             path: tests/Unit/Components/BasketSignature/BasketSignatureCreatorTest.php
 

@@ -202,7 +202,7 @@ abstract class ModelEntity
         // Iterate all passed items
         foreach ($data as $item) {
             // To get the right collection item use the internal helper function
-            if (\is_array($item) && isset($item['id']) && $item['id'] !== null) {
+            if (\is_array($item) && isset($item['id'])) {
                 $attribute = $this->getArrayCollectionElementById($this->$getterFunction(), $item['id']);
                 if (!$attribute instanceof $model) {
                     $attribute = new $model();

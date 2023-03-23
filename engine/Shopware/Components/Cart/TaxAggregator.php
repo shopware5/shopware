@@ -74,7 +74,6 @@ class TaxAggregator implements TaxAggregatorInterface
             return null;
         }
 
-        /** @var array<numeric-string, float> $result */
         $result = [];
 
         foreach ($cart[CartKey::POSITIONS] as $cartPosition) {
@@ -112,13 +111,10 @@ class TaxAggregator implements TaxAggregatorInterface
             return null;
         }
 
-        /** @var array<numeric-string, float> $result */
         $result = [];
 
         if (!empty($cart[CheckoutKey::SHIPPING_COSTS_TAX_PROPORTIONAL])) {
-            /** @var callable(array<numeric-string, float> $carry, Price $shippingTax): array<numeric-string, float> $callback */
             $callback = static function (array $carry, Price $shippingTax) {
-                /** @var numeric-string $taxRate */
                 $taxRate = number_format($shippingTax->getTaxRate(), 2);
 
                 if (!\array_key_exists($taxRate, $carry)) {
@@ -132,7 +128,6 @@ class TaxAggregator implements TaxAggregatorInterface
 
             $result = array_reduce($cart[CheckoutKey::SHIPPING_COSTS_TAX_PROPORTIONAL], $callback, []);
         } else {
-            /** @var numeric-string $taxRate */
             $taxRate = number_format((float) $cart[CheckoutKey::SHIPPING_COSTS_TAX], 2);
 
             $result[$taxRate] = $cart[CheckoutKey::SHIPPING_COSTS_WITH_TAX] - $cart[CheckoutKey::SHIPPING_COSTS_NET];
@@ -183,7 +178,6 @@ class TaxAggregator implements TaxAggregatorInterface
             array_diff_key($shippingCostsTaxSum, $positionTaxSum)
         );
 
-        /** @var callable(array<numeric-string, float> $carry, int|numeric-string $taxRate): array<numeric-string, float> $callback */
         $callback = static function (array $carry, $taxRate) use ($positionTaxSum, $shippingCostsTaxSum): array {
             $carry[$taxRate] = $positionTaxSum[$taxRate] + $shippingCostsTaxSum[$taxRate];
 

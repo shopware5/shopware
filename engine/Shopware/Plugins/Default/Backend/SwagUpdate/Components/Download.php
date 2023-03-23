@@ -96,7 +96,8 @@ class Download
             throw new RuntimeException('Invalid sourceUri given');
         }
 
-        if (($destination = fopen($destinationUri, 'a+')) === false) {
+        $destination = fopen($destinationUri, 'a+');
+        if (!\is_resource($destination)) {
             throw new Exception(sprintf('Destination "%s" is invalid.', $destinationUri));
         }
 
@@ -184,16 +185,12 @@ class Download
             // close local file connections before move for windows
             $partFilePath = $partFile->getPathname();
 
-            if (\is_resource($destination)) {
-                fclose($destination);
-            }
+            fclose($destination);
 
             unset($partFile);
             $this->moveFile($partFilePath, $destinationUri);
-        }
-
-        // close local file
-        if (\is_resource($destination)) {
+        } else {
+            // close local file
             fclose($destination);
         }
 

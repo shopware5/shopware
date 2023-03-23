@@ -520,7 +520,6 @@ class TranslationTest extends TestCase
     public function testFilterGroupNumber(): void
     {
         $entity = $this->getFilterGroupName();
-        static::assertIsArray($entity);
         $this->numberCreate('propertyoption', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('propertyoption', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertyoption', $entity['name']);
@@ -529,7 +528,6 @@ class TranslationTest extends TestCase
     public function testFilterOptionNumber(): void
     {
         $entity = $this->getFilterOptionName();
-        static::assertIsArray($entity);
         $this->numberCreate('propertyvalue', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('propertyvalue', (int) $entity['id'], $entity['name']);
         $this->numberDelete('propertyvalue', $entity['name']);
@@ -547,7 +545,6 @@ class TranslationTest extends TestCase
     public function testConfiguratorOptionNumber(): void
     {
         $entity = $this->getConfiguratorOptionName();
-        static::assertIsArray($entity);
         $this->numberCreate('configuratoroption', (int) $entity['id'], $entity['name']);
         $this->numberUpdate('configuratoroption', (int) $entity['id'], $entity['name']);
         $this->numberDelete('configuratoroption', $entity['name']);
@@ -857,8 +854,7 @@ class TranslationTest extends TestCase
      */
     public function testGetOneWithMissingPrivilegeShouldThrowPrivilegeException(): void
     {
-        // Do not remove
-        static::assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**
@@ -868,8 +864,7 @@ class TranslationTest extends TestCase
      */
     public function testGetOneWithInvalidIdShouldThrowNotFoundException(): void
     {
-        // Do not remove
-        static::assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     /**
@@ -879,8 +874,7 @@ class TranslationTest extends TestCase
      */
     public function testGetOneWithMissingIdShouldThrowParameterMissingException(): void
     {
-        // Do not remove
-        static::assertTrue(true);
+        $this->expectNotToPerformAssertions();
     }
 
     private function createProduct(): int

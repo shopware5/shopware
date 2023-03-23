@@ -29,25 +29,28 @@ use Enlight\Event\SubscriberInterface;
 use RuntimeException;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandlerInterface;
 
+/**
+ * @deprecated - Not used. The events are emitted in other classes. This class will be removed without replacement in 5.8
+ */
 class SearchBundleDBALSubscriber implements SubscriberInterface
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<SortingHandlerInterface>
+     * @var ArrayCollection<SortingHandlerInterface>
      */
     private $sortingHandlers;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<ConditionHandlerInterface>
+     * @var ArrayCollection<ConditionHandlerInterface>
      */
     private $conditionHandlers;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<FacetHandlerInterface|PartialFacetHandlerInterface>
+     * @var ArrayCollection<FacetHandlerInterface|PartialFacetHandlerInterface>
      */
     private $facetHandlers;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<CriteriaRequestHandlerInterface>
+     * @var ArrayCollection<CriteriaRequestHandlerInterface>
      */
     private $criteriaRequestHandlers;
 
@@ -83,7 +86,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<FacetHandlerInterface|PartialFacetHandlerInterface>
+     * @return ArrayCollection<FacetHandlerInterface|PartialFacetHandlerInterface>
      */
     public function registerFacetHandlers()
     {
@@ -91,7 +94,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<SortingHandlerInterface>
+     * @return ArrayCollection<SortingHandlerInterface>
      */
     public function registerSortingHandlers()
     {
@@ -99,7 +102,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<ConditionHandlerInterface>
+     * @return ArrayCollection<ConditionHandlerInterface>
      */
     public function registerConditionHandlers()
     {
@@ -107,7 +110,7 @@ class SearchBundleDBALSubscriber implements SubscriberInterface
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<CriteriaRequestHandlerInterface>
+     * @return ArrayCollection<CriteriaRequestHandlerInterface>
      */
     public function registerRequestHandlers()
     {

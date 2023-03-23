@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\SearchBundle;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SearchBundle\Condition\CategoryCondition;
 use Shopware\Bundle\SearchBundle\CriteriaRequestHandler\CoreCriteriaRequestHandler;
@@ -46,7 +47,14 @@ class SearchBundleDBALSubscriberTest extends TestCase
             $criteriaRequestHandler,
         ]);
 
-        static::assertInstanceOf(SearchBundleDBALSubscriber::class, $subscriber);
+        $conditionHandlers = $subscriber->registerConditionHandlers();
+        static::assertInstanceOf(ArrayCollection::class, $conditionHandlers);
+        $facetHandlers = $subscriber->registerFacetHandlers();
+        static::assertInstanceOf(ArrayCollection::class, $facetHandlers);
+        $requestHandlers = $subscriber->registerRequestHandlers();
+        static::assertInstanceOf(ArrayCollection::class, $requestHandlers);
+        $sortingHandlers = $subscriber->registerSortingHandlers();
+        static::assertInstanceOf(ArrayCollection::class, $sortingHandlers);
     }
 
     public function testNestedArrays(): void
