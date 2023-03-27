@@ -101,6 +101,9 @@ class CustomerStreamRepositoryTest extends TestCase
         static::assertSame($customerCountBefore, $customerCountAfter);
     }
 
+    /**
+     * @return array{customer: 0, groupID: 1, email: 'someone@example.com', lastmailing: 0, lastread: 0, added: numeric-string, double_optin_confirmed: null}
+     */
     private static function getCampaignsEntryData(): array
     {
         return [
@@ -114,6 +117,9 @@ class CustomerStreamRepositoryTest extends TestCase
         ];
     }
 
+    /**
+     * @return array{name: 'Teststream', static: false, description: 'Stream created for testing purposes', conditions: '{"Shopware\Bundle\CustomerSearchBundle\Condition\HasOrderCountCondition":{"minimumOrderCount":0}}', indexStream: true}
+     */
     private static function getCustomerStreamData(): array
     {
         return [
@@ -125,6 +131,9 @@ class CustomerStreamRepositoryTest extends TestCase
         ];
     }
 
+    /**
+     * @return array{salutation: 'mr', firstname: 'Some', lastname: 'One', email: 'someone@example.com', password: 'loremIpsumDolorSitAmet'}
+     */
     private static function getCustomerData(): array
     {
         return [

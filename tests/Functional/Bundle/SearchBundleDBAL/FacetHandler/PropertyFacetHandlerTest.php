@@ -127,6 +127,6 @@ class PropertyFacetHandlerTest extends TestCase
             ['optionName' => self::BOTTLE_SIZE_PROPERTY_NAME]
         )->fetchOne();
 
-        $connection->update('s_filter', ['sortMode' => Set::SORT_POSITION], ['id' => $setId]);
+        $connection->update('s_filter', ['sortmode' => Set::SORT_POSITION], ['id' => $setId]);
     }
 }

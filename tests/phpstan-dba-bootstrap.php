@@ -32,6 +32,7 @@ use staabm\PHPStanDba\QueryReflection\RuntimeConfiguration;
 $config = new RuntimeConfiguration();
 $config->stringifyTypes(true);
 $config->errorMode(RuntimeConfiguration::ERROR_MODE_BOOL);
+$config->analyzeWriteQueries(false);
 
 $shopwareConfig = include __DIR__ . '/../config.php';
 $pdo = Db::createPDO($shopwareConfig['db']);

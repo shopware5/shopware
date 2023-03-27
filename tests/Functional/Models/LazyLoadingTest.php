@@ -295,17 +295,19 @@ class LazyLoadingTest extends TestCase
         $conn = $this->em->getConnection();
 
         $orderNumber = $conn->fetchOne('SELECT ordernumber FROM s_articles_details');
+        static::assertIsString($orderNumber);
         $email = $conn->fetchOne('SELECT email FROM s_user');
+        static::assertIsString($email);
 
         $conn->insert('s_articles_notification', [
             'ordernumber' => $orderNumber,
             'mail' => $email,
         ]);
 
-        $id = $conn->lastInsertId();
+        $id = (int) $conn->lastInsertId();
 
         $notification = $this->em->getRepository(Notification::class)->find($id);
-        static::assertNotNull($notification);
+        static::assertInstanceOf(Notification::class, $notification);
         static::assertEquals($orderNumber, $notification->getArticleDetail()->getNumber());
         static::assertEquals($email, $notification->getCustomer()->getEmail());
 
@@ -335,10 +337,10 @@ class LazyLoadingTest extends TestCase
         $conn->insert('s_article_configurator_template_prices', [
             'customer_group_key' => 'ek',
         ]);
-        $id = $conn->lastInsertId();
+        $id = (int) $conn->lastInsertId();
 
         $templatePrice = $this->em->getRepository(ConfiguratorPrice::class)->find($id);
-        static::assertNotNull($templatePrice);
+        static::assertInstanceOf(ConfiguratorPrice::class, $templatePrice);
         static::assertNotNull($templatePrice->getCustomerGroup());
         static::assertEquals('EK', $templatePrice->getCustomerGroup()->getKey());
 
@@ -353,10 +355,11 @@ class LazyLoadingTest extends TestCase
     {
         $conn = $this->em->getConnection();
         $email = $conn->fetchOne('SELECT email FROM s_user');
+        static::assertIsString($email);
         $conn->insert('s_campaigns_mailaddresses', [
             'email' => $email,
         ]);
-        $id = $conn->lastInsertId();
+        $id = (int) $conn->lastInsertId();
 
         $address = $this->em->getRepository(Address::class)->find($id);
         static::assertInstanceOf(Address::class, $address);
@@ -384,14 +387,15 @@ class LazyLoadingTest extends TestCase
     {
         $conn = $this->em->getConnection();
         $orderNumber = $conn->fetchOne('SELECT ordernumber FROM s_articles_details ORDER by id');
+        static::assertIsString($orderNumber);
         $conn->insert('s_campaigns_articles', [
             'articleordernumber' => $orderNumber,
         ]);
 
-        $id = $conn->lastInsertId();
+        $id = (int) $conn->lastInsertId();
 
         $productContainerType = $this->em->getRepository(NewsletterProduct::class)->find($id);
-        static::assertNotNull($productContainerType);
+        static::assertInstanceOf(NewsletterProduct::class, $productContainerType);
         static::assertEquals($orderNumber, $productContainerType->getArticleDetail()->getNumber());
 
         $conn->delete('s_campaigns_articles', ['id' => $id]);

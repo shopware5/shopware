@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,16 +28,17 @@ namespace Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\Components;
 
 use Enlight_Event_EventArgs;
 use Shopware\Tests\Functional\Plugins\Core\MarketingAggregate\AbstractMarketing;
+use Symfony\Component\HttpFoundation\Response;
 
 class SimilarShownTest extends AbstractMarketing
 {
-    public function testResetSimilarShown()
+    public function testResetSimilarShown(): void
     {
         $this->SimilarShown()->resetSimilarShown();
         static::assertCount(0, $this->getAllSimilarShown());
     }
 
-    public function testInitSimilarShown()
+    public function testInitSimilarShown(): void
     {
         $this->insertDemoData();
 
@@ -46,7 +49,7 @@ class SimilarShownTest extends AbstractMarketing
         static::assertCount(144, $data);
     }
 
-    public function testUpdateElapsedSimilarShownArticles()
+    public function testUpdateElapsedSimilarShownArticles(): void
     {
         $this->insertDemoData();
 
@@ -68,7 +71,7 @@ class SimilarShownTest extends AbstractMarketing
         );
     }
 
-    public function testRefreshSimilarShown()
+    public function testRefreshSimilarShown(): void
     {
         $this->insertDemoData();
         $this->SimilarShown()->initSimilarShown();
@@ -76,20 +79,20 @@ class SimilarShownTest extends AbstractMarketing
         $similarShown = $this->getAllSimilarShown();
 
         foreach ($similarShown as $combination) {
-            $this->SimilarShown()->refreshSimilarShown($combination['article_id'], $combination['related_article_id']);
+            $this->SimilarShown()->refreshSimilarShown((int) $combination['article_id'], (int) $combination['related_article_id']);
             $updated = $this->getAllSimilarShown(
                 ' WHERE article_id = ' . $combination['article_id'] .
                 ' AND related_article_id = ' . $combination['related_article_id']
             );
             $updated = $updated[0];
-            static::assertEquals($combination['viewed'] + 1, $updated['viewed']);
+            static::assertSame((int) $combination['viewed'] + 1, (int) $updated['viewed']);
         }
     }
 
     /**
      * @group skipElasticSearch
      */
-    public function testSimilarShownLiveRefresh()
+    public function testSimilarShownLiveRefresh(): void
     {
         $this->insertDemoData();
         $this->SimilarShown()->initSimilarShown();
@@ -98,7 +101,7 @@ class SimilarShownTest extends AbstractMarketing
         $this->saveConfig('similarRefreshStrategy', 3);
         Shopware()->Container()->get('cache')->clean();
 
-        $this->setSimilarShownInvalid('2010-01-01', 'LIMIT 20');
+        $this->setSimilarShownInvalid(' LIMIT 20');
 
         Shopware()->Events()->notify('Shopware_Plugins_LastArticles_ResetLastArticles', []);
 
@@ -107,7 +110,7 @@ class SimilarShownTest extends AbstractMarketing
         static::assertCount($countBefore - 20, $articles);
     }
 
-    public function testSimilarCronJobRefresh()
+    public function testSimilarCronJobRefresh(): void
     {
         $this->insertDemoData();
         $this->SimilarShown()->initSimilarShown();
@@ -118,7 +121,7 @@ class SimilarShownTest extends AbstractMarketing
         $this->setSimilarShownInvalid();
 
         $result = $this->dispatch('/sommerwelten/accessoires/170/sonnenbrille-red');
-        static::assertEquals(200, $result->getHttpResponseCode());
+        static::assertSame(Response::HTTP_OK, $result->getHttpResponseCode());
 
         $articles = $this->getAllSimilarShown(" WHERE init_date > '2010-01-01' ");
         static::assertCount(0, $articles);
@@ -136,7 +139,10 @@ class SimilarShownTest extends AbstractMarketing
         );
     }
 
-    protected function getDemoData()
+    /**
+     * @return list<array{articleID: string, sessionID: string, time: string, userID: string, shopID: string}>
+     */
+    private function getDemoData(): array
     {
         return require __DIR__ . '/fixtures/similarShown.php';
     }
@@ -144,7 +150,7 @@ class SimilarShownTest extends AbstractMarketing
     /**
      * The demo data contains 144 combinations of the similar shown articles for three users.
      */
-    protected function insertDemoData()
+    private function insertDemoData(): void
     {
         $this->Db()->query('DELETE FROM s_emarketing_lastarticles');
         $statement = $this->Db()->prepare(
@@ -156,20 +162,18 @@ class SimilarShownTest extends AbstractMarketing
         }
     }
 
-    protected function getAllSimilarShown($condition = '')
+    /**
+     * @return array<array<string, string>>
+     */
+    private function getAllSimilarShown(string $condition = ''): array
     {
         return $this->Db()->fetchAll('SELECT * FROM s_articles_similar_shown_ro ' . $condition);
     }
 
-    protected function resetSimilarShown($condition = '')
-    {
-        $this->Db()->query('DELETE FROM s_articles_similar_shown_ro ' . $condition);
-    }
-
-    protected function setSimilarShownInvalid($date = '2010-01-01', $condition = '')
+    private function setSimilarShownInvalid(string $condition = ''): void
     {
         $this->Db()->query(' UPDATE s_articles_similar_shown_ro SET init_date = :date ' . $condition, [
-            'date' => $date,
+            'date' => '2010-01-01',
         ]);
     }
 }

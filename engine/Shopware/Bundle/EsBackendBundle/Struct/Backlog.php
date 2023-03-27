@@ -41,6 +41,9 @@ class Backlog
      */
     public $time;
 
+    /**
+     * @param int|null $entity_id
+     */
     public function __construct(string $entity, $entity_id)
     {
         $this->entity = $entity;
@@ -48,6 +51,9 @@ class Backlog
         $this->time = date('Y-m-d H:i:s');
     }
 
+    /**
+     * @return array{entity: string, entity_id: int|null, time: string}
+     */
     public function toArray(): array
     {
         return get_object_vars($this);

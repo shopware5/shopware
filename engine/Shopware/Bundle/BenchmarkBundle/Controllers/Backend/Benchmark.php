@@ -94,8 +94,8 @@ class Shopware_Controllers_Backend_Benchmark extends Shopware_Controllers_Backen
     public function disableBenchmarkTeaserAction()
     {
         $conn = $this->container->get(Connection::class);
-        $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
-        $valueId = $conn->fetchColumn(
+        $elementId = (int) $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "benchmarkTeaser"');
+        $valueId = (int) $conn->fetchColumn(
             'SELECT id FROM s_core_config_values WHERE element_id = :elementId',
             ['elementId' => $elementId]
         );

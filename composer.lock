@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5a1515b07cb574c1b428256346e30db3",
+    "content-hash": "33852343934048eeedc0023c0dda1584",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10303,37 +10303,40 @@
         },
         {
             "name": "staabm/phpstan-dba",
-            "version": "0.2.55",
+            "version": "0.2.70",
             "source": {
                 "type": "git",
                 "url": "https://github.com/staabm/phpstan-dba.git",
-                "reference": "af71a9ea81a9fa95b04b7abf304d73da8a86183c"
+                "reference": "de7afb4e9e7370cd6d8ade89ae17fda5450b7ee4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/af71a9ea81a9fa95b04b7abf304d73da8a86183c",
-                "reference": "af71a9ea81a9fa95b04b7abf304d73da8a86183c",
+                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/de7afb4e9e7370cd6d8ade89ae17fda5450b7ee4",
+                "reference": "de7afb4e9e7370cd6d8ade89ae17fda5450b7ee4",
                 "shasum": ""
             },
             "require": {
                 "composer-runtime-api": "^2.0",
                 "composer/semver": "^3.2",
-                "php": "^7.3 || ^8.0",
-                "phpstan/phpstan": "^1.5.6"
+                "php": "^7.2 || ^8.0",
+                "phpstan/phpstan": "^1.9.4"
+            },
+            "conflict": {
+                "sqlftw/sqlftw": "<0.1.10"
             },
             "require-dev": {
                 "dibi/dibi": "^4.2",
-                "doctrine/dbal": "^3.2",
                 "ext-mysqli": "*",
                 "ext-pdo": "*",
-                "friendsofphp/php-cs-fixer": "3.4.0",
                 "php-parallel-lint/php-parallel-lint": "^1.3",
                 "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan-deprecation-rules": "^1.1",
                 "phpstan/phpstan-php-parser": "^1.1",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.1",
-                "phpunit/phpunit": "^9",
-                "tomasvotruba/unused-public": "^0.0.34",
+                "phpunit/phpunit": "^8.5|^9.5",
+                "symplify/easy-coding-standard": "^11.3",
+                "tomasvotruba/unused-public": "^0.1.9",
                 "vlucas/phpdotenv": "^5.4"
             },
             "type": "phpstan-extension",
@@ -10353,11 +10356,19 @@
             "license": [
                 "MIT"
             ],
+            "keywords": [
+                "Database Access Layer",
+                "PHPStan",
+                "code quality",
+                "dev",
+                "phpstan-extension",
+                "static analysis"
+            ],
             "support": {
                 "issues": "https://github.com/staabm/phpstan-dba/issues",
-                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.55"
+                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.70"
             },
-            "time": "2023-01-06T19:26:33+00:00"
+            "time": "2023-03-27T21:27:47+00:00"
         },
         {
             "name": "symfony/browser-kit",

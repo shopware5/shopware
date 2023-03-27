@@ -93,7 +93,7 @@ class LogService implements LogServiceInterface
                     'order_id' => $entry->getOrder() ? $entry->getOrder()->getId() : null,
                     'shop_id' => $entry->getShop() ? $entry->getShop()->getId() : null,
                     'subject' => $entry->getSubject(),
-                    'sender' => $entry->getSender(),
+                    'sender' => (string) $entry->getSender(),
                     'sent_at' => $entry->getSentAt()->format('Y-m-d H:i:s'),
                     'content_html' => $entry->getContentHtml(),
                     'content_text' => $entry->getContentText(),
@@ -112,7 +112,7 @@ class LogService implements LogServiceInterface
 
                     $this->connection->insert('s_mail_log_recipient', [
                         'log_id' => $mailLogId,
-                        'contact_id' => $recipient->getId() ?: $contacts[$mail],
+                        'contact_id' => $recipient->getId() ?: (int) $contacts[$mail],
                     ]);
                 }
             }

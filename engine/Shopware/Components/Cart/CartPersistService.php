@@ -30,25 +30,19 @@ use PDO;
 
 class CartPersistService implements CartPersistServiceInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
+
+    private Session $session;
 
     /**
-     * @var Session
+     * @var array<int, array<string, mixed>>
      */
-    private $session;
+    private array $cart = [];
 
     /**
-     * @var array
+     * @var array<int, array<string, mixed>>
      */
-    private $cart;
-
-    /**
-     * @var array
-     */
-    private $cartAttributes;
+    private array $cartAttributes = [];
 
     public function __construct(Connection $connection, Session $session)
     {
