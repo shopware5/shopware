@@ -1092,7 +1092,7 @@ class Zend_Mail extends Zend_Mime_Message
             $recipient = 'unknown';
         }
 
-        $hostName = $this->messageIdHostName;
+        $hostName = $this->messageIdHostName ?? '';
         if (!$hostName) {
             $hostName = (string) ($_SERVER['SERVER_NAME'] ?? '');
         }
