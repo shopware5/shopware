@@ -1,0 +1,115 @@
+name: Create release package
+on:
+    push:
+        tags:
+            - "*"
+        branches:
+            - "**"
+
+jobs:
+    create-install-package:
+        env:
+            PACKAGE_DIR: ./package/
+            PACKAGE_PREFIX: install
+            DB_NAME: Shopware
+            DB_USER: root
+            DB_PORT: 4406
+            DB_HOST: 127.0.0.1
+            DB_PASSWORD: root
+
+        services:
+            mysql:
+                image: mysql:5.6
+                ports:
+                    - 4406:3306
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Clone
+                uses: actions/checkout@v3
+
+            -   name: Set current date as env variable
+                run: echo "REVISION=$(date +'%Y%m%dT%H%M')" >> $GITHUB_ENV
+
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
+
+            -   name: Install Composer
+                run: |
+                    composer install
+                    cd recovery/common && composer install
+
+            -   name: Replace placeholder
+                run: |
+                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION_TEXT___= =g' ./engine/Shopware/Kernel.php
+                    sed -i 's=___REVISION___=${{ env.REVISION }}=g' ./engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./recovery/install/data/version
+                    sed -i 's=___VERSION_TEXT___= =g' ./recovery/install/data/version
+
+            -   name: Create hash files
+                run: |
+                    mkdir -p engine/Shopware/Components/Check/Data
+                    find engine/Shopware themes -type f \( -iname '*.php' -o -iname '*.tpl' -o -iname '*.js' -o -iname '*.less' \) -print0 | xargs -0 md5sum | sort -k 2 -d > engine/Shopware/Components/Check/Data/Files.md5sums
+
+            -   name: Download CaRoot
+                run: |
+                    wget -O ./engine/Shopware/Components/HttpClient/cacert.pem https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
+
+            -   name: Create database
+                run: |
+                    mysql -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }} -e "DROP DATABASE IF EXISTS ${{ env.DB_NAME }}; CREATE DATABASE ${{ env.DB_NAME }} CHARACTER SET utf8 COLLATE utf8_unicode_ci;"
+
+            -   name: Load latest sql
+                run: |
+                    mysql -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }}  ${{ env.DB_NAME }} < ./_sql/install/latest.sql
+
+            -   name: Generate new sql
+                run: |
+                    make config
+                    php bin/console sw:migrations:migrate --mode=install
+                    php bin/console sw:snippets:to:sql ./recovery/install/data/sql/snippets.sql --force --include-default-plugins --update=false
+
+            -   name: Save sql
+                run: |
+                    mysqldump --column-statistics=0 --quick  -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }}  ${{ env.DB_NAME }} > ./recovery/install/data/sql/install.sql
+
+            -   name: Copy Config
+                run: |
+                    mv config.php.dist config.php
+                    chmod 0664 config.php
+
+            -   name: Copy htaccess
+                run: |
+                    mv .htaccess.dist .htaccess
+                    chmod 0664 .htaccess
+
+            -   name: Create Zip
+                run: |
+                    git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip --add-file=.htaccess --add-file=config.php --add-file=./recovery/install/data/sql/install.sql --add-file=./engine/Shopware/Components/Check/Data/Files.md5sums --add-file=./engine/Shopware/Components/HttpClient/cacert.pem HEAD
+                    zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor
+
+            -   name: Archive results
+                if: always()
+                uses: actions/upload-artifact@v3
+                with:
+                    path: ${{ env.PACKAGE_PREFIX }}.zip
+
+            -   name: Push to release
+                uses: xresloader/upload-to-github-release@v1.3.12
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    file: "*.zip"
+                    tags: true
+                    draft: true
