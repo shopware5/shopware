@@ -347,10 +347,7 @@ class AppCache extends HttpCache
             return;
         }
 
-        $noCache = $request->cookies->get('nocache');
-        if (!\is_string($noCache)) {
-            return;
-        }
+        $noCache = $request->cookies->get('nocache', '');
 
         $noCache = array_filter(explode(', ', $noCache));
         if (\in_array('slt', $noCache, true)) {
