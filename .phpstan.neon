@@ -189,6 +189,10 @@ parameters:
             message: "#^Query error\\: SQLSTATE\\[42S02\\]\\: Base table or view not found\\: 1146 Table .*translation_migration_id' doesn't exist \\(42S02\\)\\.$#"
             count: 1
             path: _sql/migrations/common/AttributeTranslationMigrationHelper.php
+        - # PHPStan DBA extension complains about temporary database column, which is only active during the time of the test
+            message: '#Query error: Column "s_order_basket_attributes.test_attr" does not exist#'
+            count: 1
+            path: tests/Functional/Components/Cart/CartToOrderAttributeTest.php
 
         - # Bug in PHPStan. See https://github.com/phpstan/phpstan/issues/6653
             message: "#^Method sArticles\\:\\:sGetProductByOrdernumber\\(\\) should return array\\<string, mixed\\>\\|false but returns array\\<string, mixed\\>\\|bool\\.$#"
