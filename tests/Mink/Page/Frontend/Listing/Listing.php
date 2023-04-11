@@ -130,7 +130,7 @@ class Listing extends Page implements HelperSelectorInterface
     {
         $this->clickLink('Filtern');
 
-        $this->spin(function () {
+        Helper::spin(function () {
             $elements = Helper::findElements($this, ['filterShowResults']);
             $showResults = $elements['filterShowResults'];
             if ($showResults->isVisible()) {
@@ -212,37 +212,6 @@ class Listing extends Page implements HelperSelectorInterface
     }
 
     /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @param callable $lambda
-     * @param int      $wait
-     *
-     * @throws Exception
-     *
-     * @return bool
-     */
-    public function spin($lambda, $wait = 60)
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return true;
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        throw new Exception("Spin function timed out after {$wait} seconds");
-    }
-
-    /**
      * Resets all filters
      */
     protected function resetFilters()
@@ -256,7 +225,7 @@ class Listing extends Page implements HelperSelectorInterface
         $showResults = $elements['filterShowResults'];
 
         $activeProperties[0]->click();
-        $this->spin(function () use ($showResults) {
+        Helper::spin(function () use ($showResults) {
             if (!$showResults->hasClass('is--loading')) {
                 usleep(100);
 
@@ -293,7 +262,7 @@ class Listing extends Page implements HelperSelectorInterface
                         Helper::throwException($message);
                     }
 
-                    $this->spin(function () use ($showResults) {
+                    Helper::spin(function () use ($showResults) {
                         if (!$showResults->hasClass('is--loading')) {
                             return true;
                         }
@@ -310,35 +279,6 @@ class Listing extends Page implements HelperSelectorInterface
                 Helper::throwException($message);
             }
         }
-    }
-
-    /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @param callable $lambda
-     * @param int      $wait
-     *
-     * @return bool
-     */
-    protected function spinWithNoException($lambda, $wait = 60)
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return true;
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        return false;
     }
 
     /**
@@ -365,7 +305,7 @@ class Listing extends Page implements HelperSelectorInterface
     {
         $elements = Helper::findElements($this, ['filterShowResults']);
         $showResults = $elements['filterShowResults'];
-        $this->spin(function () use ($showResults) {
+        Helper::spin(function () use ($showResults) {
             if (!$showResults->hasClass('is--loading')) {
                 return true;
             }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,10 +31,7 @@ use Shopware\Components\Plugin\XmlReader\XmlPluginReader;
 
 class XmlPluginReaderTest extends TestCase
 {
-    /**
-     * @var XmlPluginReader
-     */
-    private $pluginReader;
+    private XmlPluginReader $pluginReader;
 
     protected function setUp(): void
     {
@@ -41,9 +40,7 @@ class XmlPluginReaderTest extends TestCase
 
     public function testReadFile(): void
     {
-        $result = $this->readFile('plugin.xml');
-
-        static::assertIsArray($result);
+        $result = $this->readFile();
 
         static::assertArrayHasKey('label', $result);
         static::assertArrayHasKey('en', $result['label']);
@@ -106,10 +103,10 @@ class XmlPluginReaderTest extends TestCase
         static::assertArrayNotHasKey('blacklist', $secondRequiredPlugin);
     }
 
-    private function readFile(string $file): array
+    private function readFile(): array
     {
         return $this->pluginReader->read(
-            sprintf('%s/examples/plugin/%s', __DIR__, $file)
+            sprintf('%s/examples/plugin/%s', __DIR__, 'plugin.xml')
         );
     }
 }

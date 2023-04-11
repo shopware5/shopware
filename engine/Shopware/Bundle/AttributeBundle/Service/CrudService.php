@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,25 +33,13 @@ use Shopware\Models\Attribute\Configuration;
 
 class CrudService implements CrudServiceInterface
 {
-    /**
-     * @var ModelManager
-     */
-    private $entityManager;
+    private ModelManager $entityManager;
 
-    /**
-     * @var SchemaOperatorInterface
-     */
-    private $schemaOperator;
+    private SchemaOperatorInterface $schemaOperator;
 
-    /**
-     * @var TableMappingInterface
-     */
-    private $tableMapping;
+    private TableMappingInterface $tableMapping;
 
-    /**
-     * @var TypeMappingInterface
-     */
-    private $typeMapping;
+    private TypeMappingInterface $typeMapping;
 
     public function __construct(
         ModelManager $entityManager,
@@ -140,7 +130,7 @@ class CrudService implements CrudServiceInterface
 
         $columns = $this->getList($table);
         foreach ($columns as $column) {
-            if ($column->getColumnName() == $columnName) {
+            if ($column->getColumnName() === $columnName) {
                 return $column;
             }
         }
@@ -218,15 +208,12 @@ class CrudService implements CrudServiceInterface
         return $items;
     }
 
-    /**
-     * @param int|null $id
-     */
-    private function updateConfig($id, array $data)
+    private function updateConfig(?int $id, array $data): void
     {
         $model = null;
 
         if ($id) {
-            $model = $this->entityManager->find('Shopware\Models\Attribute\Configuration', $id);
+            $model = $this->entityManager->find(Configuration::class, $id);
         }
 
         if (isset($data['arrayStore']) && \is_array($data['arrayStore'])) {
@@ -243,13 +230,9 @@ class CrudService implements CrudServiceInterface
     }
 
     /**
-     * @param string                $name
-     * @param string                $type
      * @param string|int|float|null $defaultValue
-     *
-     * @return bool
      */
-    private function schemaChanged(ConfigurationStruct $config, $name, $type, $defaultValue = null)
+    private function schemaChanged(ConfigurationStruct $config, string $name, string $type, $defaultValue = null): bool
     {
         return $config->getColumnType() !== $type
             || $config->getColumnName() !== $name
@@ -257,16 +240,11 @@ class CrudService implements CrudServiceInterface
         ;
     }
 
-    /**
-     * @param string $table
-     *
-     * @return array
-     */
-    private function getTableConfiguration($table)
+    private function getTableConfiguration(string $table): array
     {
         $query = $this->entityManager->createQueryBuilder();
         $query->select('configuration')
-            ->from('Shopware\Models\Attribute\Configuration', 'configuration', 'configuration.columnName')
+            ->from(Configuration::class, 'configuration', 'configuration.columnName')
             ->where('configuration.tableName = :tableName')
             ->orderBy('configuration.position')
             ->setParameter('tableName', $table);
@@ -275,14 +253,11 @@ class CrudService implements CrudServiceInterface
     }
 
     /**
-     * @param string                $table
-     * @param string                $column
-     * @param string                $unifiedType
      * @param string|int|float|null $defaultValue
      *
      * @throws Exception
      */
-    private function createAttribute($table, $column, $unifiedType, array $data = [], $defaultValue = null)
+    private function createAttribute(string $table, string $column, string $unifiedType, array $data = [], $defaultValue = null): void
     {
         $this->schemaOperator->createColumn(
             $table,
@@ -307,23 +282,22 @@ class CrudService implements CrudServiceInterface
     }
 
     /**
-     * @param string                $table
-     * @param string                $originalColumnName
-     * @param string                $newColumnName
-     * @param string                $unifiedType
      * @param string|int|float|null $defaultValue
      *
      * @throws Exception
      */
     private function changeAttribute(
-        $table,
-        $originalColumnName,
-        $newColumnName,
-        $unifiedType,
+        string $table,
+        string $originalColumnName,
+        string $newColumnName,
+        string $unifiedType,
         array $data = [],
         $defaultValue = null
-    ) {
+    ): void {
         $config = $this->get($table, $originalColumnName);
+        if (!$config instanceof ConfigurationStruct) {
+            return;
+        }
 
         $data = array_merge($data, [
             'tableName' => $table,
@@ -355,26 +329,25 @@ class CrudService implements CrudServiceInterface
     }
 
     /**
-     * @param string                $type
      * @param string|int|float|null $defaultValue
      *
      * @return string|int|float
      */
-    private function parseDefaultValue($type, $defaultValue)
+    private function parseDefaultValue(string $type, $defaultValue)
     {
         $types = $this->typeMapping->getTypes();
-        $type = $types[$type];
+        $typeArray = $types[$type];
 
-        if ($type['unified'] === TypeMappingInterface::TYPE_BOOLEAN) {
+        if ($typeArray['unified'] === TypeMappingInterface::TYPE_BOOLEAN) {
             return (bool) $defaultValue === true ? 1 : 0;
         }
-        if (!$type['allowDefaultValue'] || $defaultValue === null) {
+        if (!$typeArray['allowDefaultValue'] || $defaultValue === null) {
             return CrudServiceInterface::NULL_STRING;
         }
         if ($defaultValue === CrudServiceInterface::NULL_STRING) {
             return $defaultValue;
         }
-        if ($type['quoteDefaultValue'] && $defaultValue !== null) {
+        if ($typeArray['quoteDefaultValue']) {
             return $this->entityManager->getConnection()->quote($defaultValue);
         }
 
@@ -383,12 +356,8 @@ class CrudService implements CrudServiceInterface
 
     /**
      * Process the column name to handle edge cases
-     *
-     * @param string $column
-     *
-     * @return string
      */
-    private function formatColumnName($column)
+    private function formatColumnName(string $column): string
     {
         return strtolower($column);
     }

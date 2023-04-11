@@ -143,7 +143,7 @@ SQL;
      */
     protected function pathTo(array $feed): string
     {
-        return rtrim($this->getMinkParameter('base_url'), '/') . "/backend/export/index/{$feed['file']}?feedID={$feed['id']}&hash=4ebfa063359a73c356913df45b3fbe7f";
+        return rtrim($this->getMinkParameter('base_url') ?? '', '/') . "/backend/export/index/{$feed['file']}?feedID={$feed['id']}&hash=4ebfa063359a73c356913df45b3fbe7f";
     }
 
     private function parseXml(string $content): array
@@ -190,7 +190,8 @@ SQL;
 
     private function validate(TableNode $entries, array $export, string $shopType): void
     {
-        $baseUrl = rtrim($this->getMinkParameter('base_url'), '/');
+        $baseUrl = rtrim($this->getMinkParameter('base_url') ?? '', '/');
+
         $basePath = trim((string) parse_url($baseUrl, PHP_URL_PATH), '/');
         $subshopBaseUrl = rtrim('http://' . $this->subShopDomain . '/' . $basePath, '/');
 

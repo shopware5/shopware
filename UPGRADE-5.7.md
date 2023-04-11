@@ -2,6 +2,24 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.18
+
+[View all changes from v5.7.17...v5.7.18](https://github.com/shopware/shopware/compare/v5.7.17...v5.7.18)
+
+### Additions
+
+### Deprecations
+
+### Changes
+
+* Updated `guzzlehttp/psr7` to version 2.4.4
+* Updated `laminas/laminas-code` to version 4.10.0 for PHP 8.1 and newer
+* Updated `phpunit/phpunit` to version 9.6.5
+* Updated `setasign/fpdi` to version 2.3.7
+* Updated `symfony/serializer` to version 5.4.21
+* Updated `voku/anti-xss` to version 4.1.41
+* Updated several indirect dependencies
+
 ## 5.7.17
 
 [View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)

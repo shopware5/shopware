@@ -8,32 +8,77 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  php:
     runs-on: ubuntu-latest
-    env:
-        DB_USER: shopware
-        DB_PASSWORD: shopware
-        DB_HOST: 127.0.0.1
-        DB_PORT: 3306
-        DB_NAME: shopware
-        SW_HOST: localhost
-        SW_BASE_PATH: ""
-        ELASTICSEARCH_HOST: elasticsearch
-
     steps:
     - uses: actions/checkout@v2
-
-    - uses: shivammathur/setup-php@v2
+    - uses: cachix/install-nix-action@v20
       with:
-        php-version: '7.4'
-        tools: composer, prestissimo
-        coverage: none
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: Start MySQL
-      run: ./.github/setup-db.sh mysql:5.7
+    - uses: cachix/cachix-action@v12
+      with:
+        name: devenv
 
-    - name: Install Shopware
-      run: make init
+    -   name: Use Shopware Cache
+        uses: cachix/cachix-action@v12
+        with:
+            name: shopware
+            authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-    - name: Check code
-      run: make check-code
+
+    - name: Install devenv.sh
+      run: nix-env -if https://github.com/cachix/devenv/tarball/main
+      shell: sh
+
+    - name: Get Composer Cache Directory
+      id: composer-cache
+      run: |
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+    - uses: actions/cache@v3
+      with:
+        path: ${{ steps.composer-cache.outputs.dir }}
+        key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-composer-
+
+    - run: devenv up &
+    - run: devenv shell init-shopware
+    - run: devenv shell check-code
+
+  js:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v2
+          - uses: cachix/install-nix-action@v20
+            with:
+                github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+          - uses: cachix/cachix-action@v12
+            with:
+                name: devenv
+
+          -   name: Use Shopware Cache
+              uses: cachix/cachix-action@v12
+              with:
+                  name: shopware
+                  authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+          - name: Install devenv.sh
+            run: nix profile install github:cachix/devenv/v0.5
+            shell: sh
+
+          - name: Get Composer Cache Directory
+            id: composer-cache
+            run: |
+                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          - uses: actions/cache@v3
+            with:
+                path: ${{ steps.composer-cache.outputs.dir }}
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: |
+                    ${{ runner.os }}-composer-
+
+          - run: devenv up &
+          - run: devenv shell check-js-code
+          - run: devenv shell test-jest

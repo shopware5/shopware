@@ -30,43 +30,34 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Emotion\Preset\PresetInstaller;
 use Shopware\Components\Emotion\Preset\PresetMetaDataInterface;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 /**
  * @group EmotionPreset
  */
 class PresetInstallerTest extends TestCase
 {
-    /**
-     * @var PresetInstaller
-     */
-    private $presetInstaller;
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private PresetInstaller $presetInstaller;
+
+    private Connection $connection;
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(Connection::class);
-        $this->connection->beginTransaction();
+        $this->connection = $this->getContainer()->get(Connection::class);
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
-        $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->presetInstaller = Shopware()->Container()->get('shopware.emotion.preset_installer');
-    }
-
-    protected function tearDown(): void
-    {
-        $this->connection->rollBack();
+        $this->presetInstaller = $this->getContainer()->get('shopware.emotion.preset_installer');
     }
 
     public function testPresetInstallationShouldSucceedWithEmptyPresetData(): void
     {
         $presetMetaData = $this->buildMetaDataMock('foo');
 
-        static::assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetInstaller->installOrUpdate([$presetMetaData]);
         $presets = $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets');
 
@@ -80,7 +71,6 @@ class PresetInstallerTest extends TestCase
         $presetMetaData = $this->buildMetaDataMock('foo');
         $presetMetaDataUpdate = $this->buildMetaDataMock('foo', true);
 
-        static::assertInstanceOf(PresetMetaDataInterface::class, $presetMetaData);
         $this->presetInstaller->installOrUpdate([$presetMetaData]);
         $presets = $this->connection->fetchAllAssociative('SELECT * FROM s_emotion_presets');
 

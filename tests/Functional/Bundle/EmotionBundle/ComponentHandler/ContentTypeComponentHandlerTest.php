@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -47,7 +49,7 @@ class ContentTypeComponentHandlerTest extends Enlight_Components_Test_TestCase
         static::assertFalse($this->getContainer()->has('shopware.bundle.content_type.testcontent'));
         $fixtures = file_get_contents(__DIR__ . '/fixtures/fixtures.sql');
         static::assertIsString($fixtures);
-        $this->getContainer()->get(Connection::class)->exec($fixtures);
+        $this->getContainer()->get(Connection::class)->executeStatement($fixtures);
         KernelStorage::unset();
         static::assertTrue($this->getContainer()->has('shopware.bundle.content_type.testcontent'));
     }
@@ -56,12 +58,14 @@ class ContentTypeComponentHandlerTest extends Enlight_Components_Test_TestCase
     {
         parent::tearDown();
 
-        static::assertTrue($this->getContainer()->has('shopware.bundle.content_type.testcontent'));
+        $firstCheck = $this->getContainer()->has('shopware.bundle.content_type.testcontent');
+        static::assertTrue($firstCheck);
         $fixtures = file_get_contents(__DIR__ . '/fixtures/cleanUp.sql');
         static::assertIsString($fixtures);
-        $this->getContainer()->get(Connection::class)->exec($fixtures);
+        $this->getContainer()->get(Connection::class)->executeStatement($fixtures);
         KernelStorage::unset();
-        static::assertFalse($this->getContainer()->has('shopware.bundle.content_type.testcontent'));
+        $secondCheck = $this->getContainer()->has('shopware.bundle.content_type.testcontent');
+        static::assertFalse($secondCheck);
     }
 
     public function testLoadAllSelectedContent(): void

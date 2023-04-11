@@ -120,9 +120,6 @@ class Container extends BaseContainer
      * Getter method for a single resource. If the source is not already registered, this function will
      * load the resource automatically. In case the resource is not found the status STATUS_NOT_FOUND is
      * set and an \Exception is thrown.
-     *
-     * @param string $name
-     * @param int    $invalidBehavior
      */
     public function get($name, $invalidBehavior = self::EXCEPTION_ON_INVALID_REFERENCE)
     {

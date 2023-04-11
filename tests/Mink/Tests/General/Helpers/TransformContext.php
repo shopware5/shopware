@@ -32,10 +32,8 @@ class TransformContext extends SubContext
 {
     /**
      * @Transform /^(\d+)$/
-     *
-     * @param string $string
      */
-    public function castStringToNumber($string): int
+    public function castStringToNumber(string $string): int
     {
         return (int) $string;
     }

@@ -729,7 +729,7 @@ class sBasket implements \Enlight_Hook
         $voucherCode = strtolower(trim(stripslashes($voucherCode)));
 
         // Load the voucher details
-        $date = $date = new DateTime();
+        $date = new DateTime();
         $date = $date->format('Y-m-d');
 
         $voucherDetails = $this->db->fetchRow(
@@ -755,7 +755,7 @@ class sBasket implements \Enlight_Hook
         }
 
         if ($voucherDetails['id']) {
-            // If we have voucher details, its a reusable code
+            // If we have voucher details, it's a reusable code
             // We need to check how many times it has already been used
             $usedVoucherCount = $this->db->fetchRow(
                 'SELECT COUNT(id) AS vouchers
@@ -765,7 +765,7 @@ class sBasket implements \Enlight_Hook
                 [$voucherDetails['ordercode']]
             ) ?: [];
         } else {
-            // If we don't have voucher details yet, need to check if its a one-time code
+            // If we don't have voucher details yet, need to check if it's a one-time code
             $voucherCodeDetails = $this->db->fetchRow(
                 'SELECT id, voucherID, code as vouchercode FROM s_emarketing_voucher_codes c WHERE c.code = ? AND c.cashed != 1 LIMIT 1;',
                 [$voucherCode]
@@ -909,7 +909,6 @@ class sBasket implements \Enlight_Hook
 
         if ($this->proportionalTaxCalculation && !$this->session->get('taxFree') && $voucherDetails['taxconfig'] === 'auto') {
             $taxCalculator = Shopware()->Container()->get('shopware.cart.proportional_tax_calculator');
-            $system = Shopware()->Container()->get('system');
             $prices = $this->basketHelper->getPositionPrices(
                 new DiscountContext(
                     $this->session->get('sessionId'),

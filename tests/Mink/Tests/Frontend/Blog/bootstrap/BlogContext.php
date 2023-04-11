@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Mink\Tests\Frontend\Blog\bootstrap;
 
 use Behat\Gherkin\Node\TableNode;
+use Doctrine\DBAL\Connection;
 use Shopware\Tests\Mink\Page\Frontend\Blog\Blog;
 use Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogBox;
 use Shopware\Tests\Mink\Page\Frontend\Blog\Elements\BlogComment;
@@ -69,7 +70,7 @@ class BlogContext extends SubContext
     public function theShopOwnerActivateMyLatestComment(): void
     {
         $sql = 'UPDATE `s_blog_comments` SET `active`= 1 ORDER BY id DESC LIMIT 1';
-        $this->getService('db')->exec($sql);
+        $this->getService(Connection::class)->executeStatement($sql);
         $this->getSession()->reload();
     }
 

@@ -77,7 +77,7 @@ class Grammar
      *
      * @throws RuntimeException When the column was not defined
      *
-     * @return array
+     * @return array<string, array<string>>
      */
     public function generateAttributesFromColumns()
     {
@@ -144,7 +144,7 @@ class Grammar
     /**
      * Returns an array which represents the grammar of out product resource
      *
-     * @return array<string, array<string, string|array<string>>>
+     * @return array<string, array<int|string, string|array<string>>>
      */
     public function getGrammar()
     {
@@ -181,12 +181,10 @@ class Grammar
         ];
 
         // Allow users to add own operators / rules
-        $grammar = $this->getEventManager()->filter(
+        return $this->getEventManager()->filter(
             'SwagMultiEdit_Product_Grammar_getGrammar_filterGrammar',
             $grammar,
             ['subject' => $this]
         );
-
-        return $grammar;
     }
 }

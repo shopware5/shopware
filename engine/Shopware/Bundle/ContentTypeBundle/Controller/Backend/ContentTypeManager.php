@@ -139,7 +139,7 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
             'internalName' => $type->getInternalName(),
             'name' => $type->getName(),
             'source' => $type->getSource(),
-            'config' => json_encode($type),
+            'config' => json_encode($type, JSON_THROW_ON_ERROR),
         ]);
 
         $this->typeProvider->addType($type->getInternalName(), $type);
@@ -158,7 +158,7 @@ class ContentTypeManager extends Shopware_Controllers_Backend_ExtJs
         $this->getModelManager()->getConnection()->update('s_content_types', [
             'name' => $type->getName(),
             'source' => $type->getSource(),
-            'config' => json_encode($type),
+            'config' => json_encode($type, JSON_THROW_ON_ERROR),
         ], [
             'internalName' => $type->getInternalName(),
         ]);

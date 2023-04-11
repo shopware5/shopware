@@ -30,9 +30,9 @@ use Behat\Behat\Context\ServiceContainer\ContextExtension;
 use Behat\Testwork\EventDispatcher\ServiceContainer\EventDispatcherExtension;
 use Behat\Testwork\ServiceContainer\Extension as ExtensionInterface;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
-use RuntimeException;
 use Shopware\Behat\ShopwareExtension\Context\Initializer\KernelAwareInitializer;
 use Shopware\Kernel;
+use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -116,7 +116,7 @@ class ShopwareExtension implements ExtensionInterface
         // get base path
         $basePath = $container->getParameter('paths.base');
         if (!\is_string($basePath)) {
-            throw new RuntimeException('Invalid container parameter "paths.base"');
+            Helper::throwException('Invalid container parameter "paths.base"');
         }
 
         // find and require bootstrap
@@ -133,7 +133,7 @@ class ShopwareExtension implements ExtensionInterface
         // find and require kernel
         $kernelPath = $container->getParameter('shopware_extension.kernel.path');
         if (!\is_string($kernelPath)) {
-            throw new RuntimeException('Invalid container parameter "shopware_extension.kernel.path"');
+            Helper::throwException('Invalid container parameter "shopware_extension.kernel.path"');
         }
 
         $kernel = $basePath . '/' . $kernelPath;

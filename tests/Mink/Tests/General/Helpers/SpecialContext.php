@@ -31,7 +31,7 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\DriverException;
 use Behat\Mink\Exception\ResponseTextException;
 use Behat\Mink\WebAssert;
-use Exception;
+use Doctrine\DBAL\Connection;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
@@ -56,7 +56,7 @@ class SpecialContext extends SubContext
             $supplier
         );
 
-        $this->getService('db')->exec($sql);
+        $this->getService(Connection::class)->executeStatement($sql);
     }
 
     /**
@@ -104,7 +104,7 @@ class SpecialContext extends SubContext
             return;
         }
 
-        $this->spin(function (SpecialContext $context) use ($page, $count, $elementClass) {
+        Helper::spin(function (SpecialContext $context) use ($page, $count, $elementClass) {
             try {
                 $elements = $context->getMultipleElement($page, $elementClass);
                 Helper::assertElementCount($elements, $count);
@@ -115,7 +115,7 @@ class SpecialContext extends SubContext
             }
 
             return false;
-        });
+        }, Helper::DEFAULT_WAIT_TIME, $this);
     }
 
     /**
@@ -210,53 +210,13 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @throws Exception
-     */
-    protected function spin(callable $lambda, int $wait = 60): void
-    {
-        if (!$this->spinWithNoException($lambda, $wait)) {
-            throw new Exception(sprintf('Spin function timed out after %s seconds', $wait));
-        }
-    }
-
-    /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @return bool
-     */
-    protected function spinWithNoException(callable $lambda, int $wait = 60)
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return true;
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        return false;
-    }
-
-    /**
      * Tries to click on a named link until the click is successful or the timeout is reached
      *
      * @param (Page|Element)&HelperSelectorInterface $element
      */
-    protected function clickNamedLinkWhenClickable($element, string $linkName, int $timeout = 60): void
+    protected function clickNamedLinkWhenClickable($element, string $linkName, int $timeout = Helper::DEFAULT_WAIT_TIME): void
     {
-        $this->spin(function (SpecialContext $context) use ($element, $linkName) {
+        Helper::spin(function () use ($element, $linkName) {
             try {
                 Helper::clickNamedLink($element, $linkName);
 
@@ -270,13 +230,13 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * Tries to click on a named button until the click is successfull or the timeout is reached
+     * Tries to click on a named button until the click is successful or the timeout is reached
      *
      * @param (Page|Element)&HelperSelectorInterface $element
      */
-    protected function clickNamedButtonWhenClickable($element, string $key, int $timeout = 60): void
+    protected function clickNamedButtonWhenClickable($element, string $key, int $timeout = Helper::DEFAULT_WAIT_TIME): void
     {
-        $this->spin(function (SpecialContext $context) use ($element, $key) {
+        Helper::spin(function () use ($element, $key) {
             try {
                 Helper::pressNamedButton($element, $key);
 
@@ -290,13 +250,11 @@ class SpecialContext extends SubContext
     }
 
     /**
-     * Tries to click on an element until the click is successfull or the timeout is reached
-     *
-     * @param int $timeout Defaults to 60 seconds
+     * Tries to click on an element until the click is successful or the timeout is reached
      */
-    protected function clickElementWhenClickable(NodeElement $element, int $timeout = 60): void
+    protected function clickElementWhenClickable(NodeElement $element, int $timeout = Helper::DEFAULT_WAIT_TIME): void
     {
-        $this->spin(function (SpecialContext $context) use ($element) {
+        Helper::spin(function () use ($element) {
             try {
                 $element->click();
 

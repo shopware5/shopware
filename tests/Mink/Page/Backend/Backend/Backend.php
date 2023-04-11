@@ -26,8 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Page\Backend\Backend;
 
-use Exception;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
+use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 
 class Backend extends Page
 {
@@ -50,7 +50,7 @@ class Backend extends Page
         ];
     }
 
-    public function login($user, $password): void
+    public function login(string $user, string $password): void
     {
         $xpath = $this->getXPathSelectors();
         $this->find('xpath', $xpath['loginUsernameInput'])->setValue($user);
@@ -58,30 +58,24 @@ class Backend extends Page
         $this->find('xpath', $xpath['loginLoginButton'])->click();
     }
 
-    /**
-     * @param string $moduleName
-     */
-    public function openModule($moduleName): void
+    public function openModule(string $moduleName): void
     {
         $name = 'Shopware.apps.' . $moduleName;
         $this->getSession()->evaluateScript("openNewModule('$name');");
     }
 
-    /**
-     * @throws Exception
-     */
     public function verifyModule(): void
     {
         $selector = "document.querySelector('.x-window-header-text') !== null";
         $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, $selector);
         if (!$result) {
-            throw new Exception('No Module was opened');
+            Helper::throwException('No Module was opened');
         }
 
         $selector = "document.querySelector('.x-window-header-text').innerHTML != 'Shopware Fehler Reporter'";
         $result = $this->getSession()->wait(self::TIMEOUT_MILLISECONDS, $selector);
         if (!$result) {
-            throw new Exception('Error Module was opened');
+            Helper::throwException('Error Module was opened');
         }
     }
 }

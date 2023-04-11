@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -78,7 +80,6 @@ class sArticlesTest extends TestCase
      */
     public function testStrings($input, $expectedResult)
     {
-        /** @var sArticles $sArticles */
         $sArticles = $this->createPartialMock(sArticles::class, []);
 
         static::assertSame($expectedResult, $sArticles->sOptimizeText($input));

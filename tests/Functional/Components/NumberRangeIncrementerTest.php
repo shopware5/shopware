@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,41 +26,34 @@
 
 namespace Shopware\Tests\Functional\Components;
 
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Shopware\Components\NumberRangeIncrementer;
-use Shopware\Components\NumberRangeIncrementerInterface;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
-class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
+class NumberRangeIncrementerTest extends TestCase
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    public $connection;
+    use ContainerTrait;
+
+    private Connection $connection;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = $this->getContainer()->get(Connection::class);
     }
 
-    public function testItShouldImplementInterface()
-    {
-        $manager = new NumberRangeIncrementer($this->connection);
-        static::assertInstanceOf(NumberRangeIncrementerInterface::class, $manager);
-    }
-
-    public function testIncrement()
+    public function testIncrement(): void
     {
         // Fetch actual number from DB
         $rangeName = 'invoice';
-        $expectedNumber = $this->connection->fetchColumn(
+        $expectedNumber = $this->connection->fetchOne(
             'SELECT number
-            FROM s_order_number
-            WHERE name = ?',
-            [
-                $rangeName,
-            ]
+             FROM s_order_number
+             WHERE name = ?',
+            [$rangeName]
         );
         ++$expectedNumber;
 
@@ -67,7 +62,7 @@ class NumberRangeIncrementerTest extends \PHPUnit\Framework\TestCase
         static::assertEquals($expectedNumber, $manager->increment($rangeName));
     }
 
-    public function testIncrementWithInvalidName()
+    public function testIncrementWithInvalidName(): void
     {
         $manager = new NumberRangeIncrementer($this->connection);
 

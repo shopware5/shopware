@@ -36,17 +36,17 @@ class ManufacturerCondition implements ConditionInterface, JsonSerializable
     private const NAME = 'manufacturer';
 
     /**
-     * @var int[]
+     * @var array<int>
      */
     protected $manufacturerIds;
 
     /**
-     * @param int[] $manufacturerIds
+     * @param array<int|numeric-string> $manufacturerIds
      */
     public function __construct(array $manufacturerIds)
     {
         Assertion::allIntegerish($manufacturerIds);
-        $this->manufacturerIds = array_map('intval', $manufacturerIds);
+        $this->manufacturerIds = array_map('\intval', $manufacturerIds);
         sort($this->manufacturerIds, SORT_NUMERIC);
     }
 
@@ -59,7 +59,7 @@ class ManufacturerCondition implements ConditionInterface, JsonSerializable
     }
 
     /**
-     * @return int[]
+     * @return array<int>
      */
     public function getManufacturerIds()
     {

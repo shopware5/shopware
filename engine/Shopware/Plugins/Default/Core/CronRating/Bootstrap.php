@@ -24,6 +24,7 @@
 
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Routing\RouterInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
@@ -411,25 +412,19 @@ class Shopware_Plugins_Core_CronRating_Bootstrap extends Shopware_Components_Plu
      *
      * by using the corresponding shopId for every order's positions.
      *
-     * @param array $orderPositions
-     *
-     * @return array
+     * @return array<int, array<string, BaseProduct>>
      */
-    private function structurePositionsArray($orderPositions)
+    private function structurePositionsArray(array $orderPositions): array
     {
         $shopPositionNumbers = [];
 
-        foreach ($orderPositions as $order_id => $positions) {
-            $firstPosition = $positions[array_keys($positions)[0]];
-            $shopId = is_numeric($firstPosition['language']) ? $firstPosition['language'] : $firstPosition['subshopID'];
-
-            if (!\is_array($shopPositionNumbers[$shopId])) {
-                $shopPositionNumbers[$shopId] = [];
-            }
+        foreach ($orderPositions as $positions) {
+            $firstPosition = $positions[array_key_first($positions)];
+            $shopId = is_numeric($firstPosition['language']) ? (int) $firstPosition['language'] : (int) $firstPosition['subshopID'];
 
             $shopPositionNumbers[$shopId] = array_merge(
                 array_column($positions, 'articleordernumber'),
-                $shopPositionNumbers[$shopId]
+                $shopPositionNumbers[$shopId] ?? []
             );
         }
 

@@ -118,11 +118,11 @@ clean:
 debug-config-test: .make.config.build.debug
 
 .make.config: check-config-variables .make.config.behat
-	@sed -e 's/%db\.user%/$(DB_USER)/g' -e 's/%db\.password%/$(DB_PASSWORD)/g' -e 's/%db\.database%/$(DB_NAME)/g' -e 's/%db\.host%/$(DB_HOST)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%elasticsearch\.host%/$(ELASTICSEARCH_HOST)/g' < ./config.php.dist > ./config.php
+	@sed -e 's/%db\.user%/$(DB_USER)/g' -e 's/%db\.password%/$(DB_PASSWORD)/g' -e 's/%db\.database%/$(DB_NAME)/g' -e 's/%db\.host%/$(DB_HOST)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%elasticsearch\.host%/$(ELASTICSEARCH_HOST)/g' -e 's|%smtp\.host%|$(SMTP_HOST)|g' < ./config.php.dist > ./config.php
 	touch $@
 
 .make.config.build.%: check-config-variables .make.config.behat
-	@sed -e 's/%db\.user%/$(DB_USER)/g' -e 's/%db\.password%/$(DB_PASSWORD)/g' -e 's/%db\.database%/$(DB_NAME)/g' -e 's/%db\.host%/$(DB_HOST)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%elasticsearch\.host%/$(ELASTICSEARCH_HOST)/g' < ./build/config-$*.php > ./config.php
+	@sed -e 's/%db\.user%/$(DB_USER)/g' -e 's/%db\.password%/$(DB_PASSWORD)/g' -e 's/%db\.database%/$(DB_NAME)/g' -e 's/%db\.host%/$(DB_HOST)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%db\.port%/$(DB_PORT)/g' -e 's/%elasticsearch\.host%/$(ELASTICSEARCH_HOST)/g' -e 's|%smtp\.host%|$(SMTP_HOST)|g' < ./build/config-$*.php > ./config.php
 	touch $@
 
 .make.config.behat:

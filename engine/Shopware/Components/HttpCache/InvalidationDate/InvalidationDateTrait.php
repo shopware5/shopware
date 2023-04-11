@@ -25,15 +25,16 @@
 namespace Shopware\Components\HttpCache\InvalidationDate;
 
 use DateTime;
+use DateTimeInterface;
 
 trait InvalidationDateTrait
 {
     /**
      * getMostRecentDate sorts an array of DateTime objects and returns the most recent one.
      *
-     * @param DateTime[] $dates
+     * @param array<DateTimeInterface|string> $dates
      *
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     protected function getMostRecentDate(array $dates)
     {
@@ -41,7 +42,7 @@ trait InvalidationDateTrait
 
         // Convert all date-strings into DateTime-objects
         $dates = array_map(function ($el) use ($now) {
-            if (!$el instanceof DateTime) {
+            if (!$el instanceof DateTimeInterface) {
                 $el = new DateTime($el);
             }
 

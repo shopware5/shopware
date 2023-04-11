@@ -65,7 +65,6 @@ class LogEntryMailBuilderTest extends TestCase
         $entry = $this->entryBuilder->build($mail);
         $built = $this->mailBuilder->build($entry);
 
-        static::assertNotNull($built);
         static::assertSame($mail->getFrom(), $built->getFrom());
         static::assertCount(\count($mail->getTo()), $built->getTo());
 

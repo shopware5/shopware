@@ -706,7 +706,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             $thumbnailSizes = [];
 
             foreach ($data['thumbnailSize'] as $size) {
-                if (!empty($size['value']) && $size['value'] !== '') {
+                if (!empty($size['value'])) {
                     $thumbnailSizes[] = str_replace(' ', '', $size['value']);
                 }
             }
@@ -1069,7 +1069,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         $albumData = $settingsQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
         $settings = $albumData['settings'];
 
-        if (!empty($settings) && $settings !== null) {
+        if (!empty($settings)) {
             $node['iconCls'] = $settings['icon'];
             $node['createThumbnails'] = $settings['createThumbnails'];
             $node['thumbnailHighDpi'] = $settings['thumbnailHighDpi'];

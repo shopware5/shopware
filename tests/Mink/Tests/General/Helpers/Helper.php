@@ -31,6 +31,7 @@ use Behat\Mink\Element\DocumentElement;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Session;
 use Exception;
+use RuntimeException;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Element;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Page;
 use Shopware\Tests\Mink\Page\Helper\Elements\MultipleElement;
@@ -40,6 +41,7 @@ class Helper
 {
     public const EXCEPTION_GENERIC = 1;
     public const EXCEPTION_PENDING = 2;
+    public const DEFAULT_WAIT_TIME = 60;
 
     private static string $language;
 
@@ -58,12 +60,12 @@ class Helper
      *
      * @throws Exception
      *
-     * @return bool|int|string
+     * @return true|array-key
      */
     public static function checkArray(array $check, bool $strict = false)
     {
         foreach ($check as $key => $comparison) {
-            if ((!\is_array($comparison)) || (\count($comparison) != 2)) {
+            if ((!\is_array($comparison)) || (\count($comparison) !== 2)) {
                 self::throwException('Each comparison have to be an array with exactly two values!');
             }
 
@@ -144,7 +146,7 @@ class Helper
     }
 
     /**
-     * Helper function to count a HTML-Element on a page.
+     * Helper function to count an HTML-Element on a page.
      * If the number is equal to $count, the function will return true.
      * If the number is not equal to $count, the function will return the count of the element.
      *
@@ -373,7 +375,7 @@ class Helper
         $debugLine = $debug[0]['line'] ?? '';
 
         $message = [<<<EOD
-Exception thrown in {$debugClass}{$debugType}{$debug[1]['function']}():{$debugLine}
+Exception thrown in $debugClass$debugType{$debug[1]['function']}():$debugLine
 
 Stacktrace:
 EOD
@@ -388,7 +390,7 @@ EOD
 
             $nextType = $next['type'] ?? '';
             $callLine = $call['line'] ?? '';
-            $message[] = "{$next['class']}{$nextType}{$next['function']}():{$callLine}";
+            $message[] = "{$next['class']}$nextType{$next['function']}():$callLine";
         }
 
         $message[] = "\r\nException:";
@@ -398,7 +400,7 @@ EOD
 
         switch ($type) {
             case self::EXCEPTION_GENERIC:
-                throw new Exception($message);
+                throw new RuntimeException($message);
             case self::EXCEPTION_PENDING:
                 throw new PendingException($message);
             default:
@@ -467,10 +469,8 @@ EOD
      * Checks if a page or element has the requested named link
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     *
-     * @return bool
      */
-    public static function hasNamedButton(HelperSelectorInterface $parent, string $key)
+    public static function hasNamedButton(HelperSelectorInterface $parent, string $key): bool
     {
         return self::hasNamedButtons($parent, [$key]) === true;
     }
@@ -569,7 +569,7 @@ EOD
                 }
 
                 if ($waitForOverlays) {
-                    Helper::waitForOverlay($parent->getSession()->getPage());
+                    self::waitForOverlay($parent->getSession()->getPage());
                 }
 
                 if ($key !== 'value') {
@@ -805,7 +805,7 @@ EOD
     }
 
     /**
-     * @return bool|array
+     * @return true|array
      */
     public static function searchElements(array $needles, MultipleElement $haystack)
     {
@@ -861,21 +861,26 @@ EOD
         }
     }
 
+    public static function spin(callable $lambda, int $wait = self::DEFAULT_WAIT_TIME, ?object $callingClass = null): void
+    {
+        if (!self::spinWithNoException($lambda, $wait, $callingClass)) {
+            self::throwException(sprintf('Spin function timed out after %s seconds', $wait));
+        }
+    }
+
     /**
      * Based on Behat's own example
      *
      * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @throws Exception
      */
-    public static function spin(callable $lambda, int $wait = 60): void
+    public static function spinWithNoException(callable $lambda, int $wait = self::DEFAULT_WAIT_TIME, ?object $callingClass = null): bool
     {
         $time = time();
         $stopTime = $time + $wait;
         while (time() < $stopTime) {
             try {
-                if ($lambda()) {
-                    return;
+                if ($lambda($callingClass)) {
+                    return true;
                 }
             } catch (Exception $e) {
                 // do nothing
@@ -884,13 +889,12 @@ EOD
             usleep(250000);
         }
 
-        self::throwException("Spin function timed out after {$wait} seconds");
+        return false;
     }
 
     public static function waitForOverlay(DocumentElement $page): void
     {
         $page->waitFor(4000, static function () use ($page) {
-            $element = null;
             try {
                 $element = $page->find('css', '.js--overlay');
 

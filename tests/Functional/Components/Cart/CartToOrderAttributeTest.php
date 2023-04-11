@@ -159,7 +159,7 @@ class CartToOrderAttributeTest extends TestCase
                     $this->connection->update(
                         's_order_basket_attributes',
                         [self::TEST_ATTRIBUTE_NAME => self::TEST_ATTRIBUTE_VALUE],
-                        ['basketID' => $lineItem['id']],
+                        ['basketID' => (int) $lineItem['id']],
                     );
                 }
             });

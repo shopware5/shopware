@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,14 +32,10 @@ use Shopware\Bundle\ContentTypeBundle\Field\DummyField;
 use Shopware\Bundle\ContentTypeBundle\Field\TextField;
 use Shopware\Bundle\ContentTypeBundle\Services\TypeBuilder;
 use Shopware\Bundle\ContentTypeBundle\Services\XmlReader\ContentTypesReader;
-use Shopware\Bundle\ContentTypeBundle\Structs\Type;
 
 class XmlReaderTest extends TestCase
 {
-    /**
-     * @var ContentTypesReader
-     */
-    private $reader;
+    private ContentTypesReader $reader;
 
     public function setUp(): void
     {
@@ -65,8 +63,6 @@ class XmlReaderTest extends TestCase
 
         $type = $this->getTypeBuilder()->createType('store', $store);
 
-        static::assertInstanceOf(Type::class, $type);
-
         static::assertEquals('store', $type->getInternalName());
         static::assertEquals('stores', $type->getName());
         static::assertCount(3, $type->getFields());
@@ -80,8 +76,6 @@ class XmlReaderTest extends TestCase
         $store = $data['store'];
 
         $type = $this->getTypeBuilder()->createType('store', $store);
-
-        static::assertInstanceOf(Type::class, $type);
 
         static::assertCount(2, $type->getFields());
 
@@ -103,7 +97,10 @@ class XmlReaderTest extends TestCase
 
     public function testReadValidTypeNameWithNumber(): void
     {
-        static::assertIsArray($this->reader->read(__DIR__ . '/fixtures/valid_with_number_in_typeName.xml'));
+        $contentTypes = $this->reader->read(__DIR__ . '/fixtures/valid_with_number_in_typeName.xml');
+        static::assertArrayHasKey('a123Test', $contentTypes);
+        $testContentType = $contentTypes['a123Test'];
+        static::assertSame('TEST 123', $testContentType['name']);
     }
 
     public function testReadInvalidTypeNameStartingWithNumberFile(): void

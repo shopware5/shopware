@@ -106,18 +106,20 @@ class DatabaseContentTypeSynchronizer implements DatabaseContentTypeSynchronizer
         return $this->synchronizerService->sync($destructive);
     }
 
+    /**
+     * @param array<string, Type> $types
+     */
     private function updateContentTypesTable(array $types): void
     {
         $dbal = $this->connection;
 
-        /** @var Type $type */
         foreach ($types as $type) {
-            $id = $dbal->fetchColumn('SELECT id FROM s_content_types WHERE internalName = ?', [$type->getInternalName()]);
+            $id = (int) $dbal->fetchOne('SELECT id FROM s_content_types WHERE internalName = ?', [$type->getInternalName()]);
             $update = [
                 'internalName' => $type->getInternalName(),
                 'name' => $type->getName(),
                 'source' => $type->getSource(),
-                'config' => json_encode($type),
+                'config' => json_encode($type, JSON_THROW_ON_ERROR),
             ];
 
             if ($id) {

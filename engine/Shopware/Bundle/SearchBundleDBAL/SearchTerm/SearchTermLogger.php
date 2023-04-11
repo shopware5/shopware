@@ -26,16 +26,14 @@ namespace Shopware\Bundle\SearchBundleDBAL\SearchTerm;
 
 use DateTime;
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SearchBundle\Condition\SearchTermCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchResult;
 use Shopware\Bundle\StoreFrontBundle\Struct\Shop;
 
 class SearchTermLogger implements SearchTermLoggerInterface
 {
-    /**
-     * @var \Doctrine\DBAL\Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -55,6 +53,9 @@ class SearchTermLogger implements SearchTermLoggerInterface
         }
 
         $condition = $criteria->getCondition('search');
+        if (!$condition instanceof SearchTermCondition) {
+            return;
+        }
 
         $now = new DateTime();
         $this->connection->insert('s_statistics_search', [

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,10 +34,7 @@ use Shopware\Components\Plugin\XmlReader\XmlMenuReader;
 
 class XmlMenuReaderTest extends TestCase
 {
-    /**
-     * @var XmlMenuReader
-     */
-    private $menuReader;
+    private XmlMenuReader $menuReader;
 
     protected function setUp(): void
     {
@@ -61,7 +60,6 @@ class XmlMenuReaderTest extends TestCase
     {
         $result = $this->readFile('menu.xml');
 
-        static::assertIsArray($result);
         static::assertCount(2, $result);
 
         $firstMenu = $result[0];

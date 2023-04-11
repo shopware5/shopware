@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,15 +32,9 @@ use sSystem;
 
 class PostWrapperTest extends TestCase
 {
-    /**
-     * @var Enlight_Controller_Request_RequestTestCase
-     */
-    private $request;
+    private Enlight_Controller_Request_RequestTestCase $request;
 
-    /**
-     * @var sSystem
-     */
-    private $system;
+    private sSystem $system;
 
     public function setUp(): void
     {
@@ -51,7 +47,7 @@ class PostWrapperTest extends TestCase
         $this->request->clearAll();
     }
 
-    public function testSet()
+    public function testSet(): void
     {
         $this->system->_POST->offsetSet('foo', 'bar');
         static::assertEquals('bar', $this->request->getPost('foo'));
@@ -60,11 +56,11 @@ class PostWrapperTest extends TestCase
         static::assertNull($this->request->getPost('bar'));
 
         $this->system->_POST->offsetSet('foo', []);
-        static::assertEmpty($this->request->getPost('bar'));
+        static::assertNull($this->request->getPost('bar'));
         static::assertIsArray($this->request->getPost('foo'));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $this->request->setPost('foo', 'bar');
         static::assertEquals('bar', $this->system->_POST->offsetGet('foo'));
@@ -73,11 +69,11 @@ class PostWrapperTest extends TestCase
         static::assertNull($this->system->_POST->offsetGet('bar'));
 
         $this->request->setPost('foo', []);
-        static::assertEmpty($this->system->_POST->offsetGet('bar'));
+        static::assertNull($this->system->_POST->offsetGet('bar'));
         static::assertIsArray($this->system->_POST->offsetGet('foo'));
     }
 
-    public function testUnset()
+    public function testUnset(): void
     {
         $this->system->_POST->offsetSet('foo', 'bar');
         static::assertEquals('bar', $this->request->getPost('foo'));
@@ -85,7 +81,7 @@ class PostWrapperTest extends TestCase
         static::assertNull($this->request->getPost('foo'));
     }
 
-    public function testSetAll()
+    public function testSetAll(): void
     {
         $this->system->_POST->offsetSet('foo', 'bar');
         static::assertEquals('bar', $this->request->getPost('foo'));
@@ -95,7 +91,7 @@ class PostWrapperTest extends TestCase
         static::assertEquals('too', $this->request->getPost('foo'));
     }
 
-    public function testToArray()
+    public function testToArray(): void
     {
         $this->request->setPost('foo', 'bar');
         static::assertEquals(['foo' => 'bar'], $this->system->_POST->toArray());

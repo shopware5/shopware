@@ -931,16 +931,6 @@ parameters:
 			path: _sql/migrations/719-create-address-attribute-tables.php
 
 		-
-			message: "#^Call to function array_key_exists\\(\\) with 'swag_mode' and array\\{id\\: numeric\\-string, emotionID\\: numeric\\-string\\|null\\} will always evaluate to false\\.$#"
-			count: 1
-			path: _sql/migrations/747-ekw-mode-migration.php
-
-		-
-			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: _sql/migrations/747-ekw-mode-migration.php
-
-		-
 			message: "#^Method Migrations_Migration775\\:\\:createUniqueIndex\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: _sql/migrations/775-add-asset-version-config-element.php
@@ -1431,6 +1421,11 @@ parameters:
 			path: engine/Library/Enlight/Components/Cron/Adapter.php
 
 		-
+			message: "#^Argument \\#0 expects a constant string, got string$#"
+			count: 4
+			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
+
+		-
 			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:isJobStillOverdue\\(\\) has parameter \\$jobId with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
@@ -1453,16 +1448,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$value of method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobByColumn\\(\\) expects string, int given\\.$#"
 			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between int and null will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Ternary operator condition is always true\\.$#"
-			count: 3
 			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
 
 		-
@@ -1622,11 +1607,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Components_Db_Adapter_Pdo_Mysql\\:\\:query\\(\\) has parameter \\$bind with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Db/Adapter/Pdo/Mysql.php
 
@@ -2176,16 +2156,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between Enlight_Plugin_PluginCollection and null will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between string and true will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:getPadding\\(\\) should return string but returns bool\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
@@ -2231,11 +2201,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between Enlight_Plugin_PluginCollection and null will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
@@ -2276,11 +2241,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/ScriptRenderer/Bootstrap.php
-
-		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
 			count: 2
 			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
@@ -2317,11 +2277,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_View_Default\\:\\:render\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/ViewRenderer/Bootstrap.php
 
@@ -3451,11 +3406,6 @@ parameters:
 			path: engine/Library/Enlight/Template/Default.php
 
 		-
-			message: "#^If condition is always true\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Manager.php
-
-		-
 			message: "#^Method Enlight_Template_Manager\\:\\:__construct\\(\\) has parameter \\$backendOptions with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Manager.php
@@ -4576,27 +4526,7 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Service/ConfigurationStruct.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
-			message: "#^Cannot call method getTableName\\(\\) on Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:changeAttribute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:changeAttribute\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:createAttribute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
 
@@ -4616,17 +4546,7 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:updateConfig\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:updateConfig\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
-
-		-
-			message: "#^Parameter \\#1 \\$config of method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\CrudService\\:\\:schemaChanged\\(\\) expects Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct, Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Service/CrudService.php
 
@@ -5626,11 +5546,6 @@ parameters:
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/DatabaseContentTypeSynchronizer.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\DatabaseContentTypeSynchronizer\\:\\:updateContentTypesTable\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/ContentTypeBundle/Services/DatabaseContentTypeSynchronizer.php
-
-		-
 			message: "#^Property Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\DatabaseContentTypeSynchronizer\\:\\:\\$fieldAlias type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/DatabaseContentTypeSynchronizer.php
@@ -5709,6 +5624,11 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\MenuSynchronizerInterface\\:\\:synchronize\\(\\) has parameter \\$menu with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/ContentTypeBundle/Services/MenuSynchronizerInterface.php
+
+		-
+			message: "#^Argument \\#0 expects a constant string, got string$#"
+			count: 3
+			path: engine/Shopware/Bundle/ContentTypeBundle/Services/Repository.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\Repository\\:\\:buildQuery\\(\\) has parameter \\$filters with no type specified\\.$#"
@@ -7441,42 +7361,12 @@ parameters:
 			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionElementHydrator.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Service\\\\Gateway\\\\Hydrator\\\\EmotionHydrator\\:\\:assignTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Service\\\\Gateway\\\\Hydrator\\\\EmotionHydrator\\:\\:assignTemplate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Service\\\\Gateway\\\\Hydrator\\\\EmotionHydrator\\:\\:hydrate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$createDate of method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCreateDate\\(\\) expects DateTimeInterface, DateTime\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$modifiedDate of method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setModifiedDate\\(\\) expects DateTimeInterface, DateTime\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$parentId of method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setParentId\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$validFrom of method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setValidFrom\\(\\) expects DateTimeInterface, DateTime\\|false\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
-
-		-
-			message: "#^Parameter \\#1 \\$validTo of method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setValidTo\\(\\) expects DateTimeInterface, DateTime\\|false\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EmotionBundle/Service/Gateway/Hydrator/EmotionHydrator.php
 
@@ -7696,166 +7586,6 @@ parameters:
 			path: engine/Shopware/Bundle/EmotionBundle/Struct/ElementViewport.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setActive\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setArticleHeight\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCategories\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCategoryIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCellHeight\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCellSpacing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCols\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setCreateDate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setDevices\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setFullscreen\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setIsLandingPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setIsPreview\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setMode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setModifiedDate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setParentId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setPreviewSecret\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setRows\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setSeoDescription\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setSeoKeywords\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setSeoTitle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setShopIds\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setShops\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setShowListing\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setTemplate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setTemplateId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setUserId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setValidFrom\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\Emotion\\:\\:setValidTo\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EmotionBundle/Struct/Emotion.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\EmotionBundle\\\\Struct\\\\EmotionTemplate\\:\\:setFile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EmotionBundle/Struct/EmotionTemplate.php
@@ -7917,6 +7647,11 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\BacklogService\\:\\:read\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Bundle/EsBackendBundle/BacklogService.php
+
+		-
+			message: "#^Query error\\: Column \"s_es_backend_backlog\\.entity_id\" expects value type int, got type int\\|null$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/BacklogService.php
 
@@ -8016,12 +7751,7 @@ parameters:
 			path: engine/Shopware/Bundle/EsBackendBundle/Searcher/GenericSearcher.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Struct\\\\Backlog\\:\\:__construct\\(\\) has parameter \\$entity_id with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/EsBackendBundle/Struct/Backlog.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Struct\\\\Backlog\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
+			message: "#^Method Shopware\\\\Bundle\\\\EsBackendBundle\\\\Struct\\\\Backlog\\:\\:toArray\\(\\) should return array\\{entity\\: string, entity_id\\: int\\|null, time\\: string\\} but returns array\\<string, mixed\\>\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/EsBackendBundle/Struct/Backlog.php
 
@@ -8926,61 +8656,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginCategoryService.php
 
 		-
-			message: "#^Cannot access offset 'name' on array\\|false\\.$#"
-			count: 3
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:assertNoDirectoryTraversal\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:assertPrefix\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:clearOpcodeCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:extract\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:validatePluginRequirements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:validatePluginZip\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Parameter \\#1 \\$files of method Symfony\\\\Component\\\\Filesystem\\\\Filesystem\\:\\:remove\\(\\) expects iterable\\|string, string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Parameter \\#1 \\$oldFile of method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginExtractor\\:\\:createBackupFile\\(\\) expects string\\|false, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Parameter \\#1 \\$origin of method Symfony\\\\Component\\\\Filesystem\\\\Filesystem\\:\\:rename\\(\\) expects string, string\\|true given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
-			message: "#^Parameter \\#2 \\$target of method Symfony\\\\Component\\\\Filesystem\\\\Filesystem\\:\\:rename\\(\\) expects string, bool\\|string given\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginExtractor.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installCronjob\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
@@ -9046,6 +8721,51 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTimeInterface$#"
+			count: 1
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.author\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.id\" expects value type int, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.label\" expects value type string, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.link\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.refresh_date\" expects value type string\\|null, got type DateTimeInterface$#"
+			count: 2
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.translations\" expects value type string\\|null, got type non\\-empty\\-string\\|false\\|null$#"
+			count: 2
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.update_version\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.version\" expects value type string, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
+
+		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLicenceService\\:\\:cleanupLocalLicenseInformation\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLicenceService.php
@@ -9092,6 +8812,11 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLicenceService\\:\\:updateLocalLicenseInformation\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLicenceService.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_licenses\\.id\" expects value type int, got type mixed$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLicenceService.php
 
@@ -9796,81 +9521,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundle/Condition/VariantCondition.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addCategoryCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addCustomerGroupCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addHeightCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addImmediateDeliveryCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addIsAvailableCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addLengthCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addLimit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addManufacturerCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addOffset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addPriceCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addRatingCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addSearchCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addShippingFreeCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addWeightCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\CoreCriteriaRequestHandler\\:\\:addWidthCondition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/CoreCriteriaRequestHandler.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundle\\\\CriteriaRequestHandler\\\\FacetCriteriaRequestHandler\\:\\:handleCombinedConditionFacet\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundle/CriteriaRequestHandler/FacetCriteriaRequestHandler.php
@@ -10226,11 +9876,6 @@ parameters:
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
 
 		-
-			message: "#^Cannot call method getTerm\\(\\) on Shopware\\\\Bundle\\\\SearchBundle\\\\ConditionInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchTermLogger.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\SearchTerm\\\\SearchTermQueryBuilder\\:\\:addAndSearchLogic\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchTermQueryBuilder.php
@@ -10289,11 +9934,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleDBAL\\\\VariantHelper\\:\\:joinSalePrices\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SearchBundleDBAL/VariantHelper.php
-
-		-
-			message: "#^If condition is always true\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/SearchBundleES/CombinedConditionQueryBuilder.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SearchBundleES\\\\CombinedConditionQueryBuilder\\:\\:build\\(\\) has parameter \\$conditions with no value type specified in iterable type array\\.$#"
@@ -10417,6 +10057,16 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\ConfigHandler\\\\Database\\:\\:saveExcludedUrls\\(\\) has parameter \\$excludedUrls with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Bundle/SitemapBundle/ConfigHandler/Database.php
+
+		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<mixed~'id', mixed\\>&hasOffsetValue\\('identifier', mixed~''\\)$#"
+			count: 1
+			path: engine/Shopware/Bundle/SitemapBundle/ConfigHandler/Database.php
+
+		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<mixed~'id', mixed\\>&hasOffsetValue\\('last_mod', mixed\\)$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/ConfigHandler/Database.php
 
@@ -13361,7 +13011,27 @@ parameters:
 			path: engine/Shopware/Commands/FirstRunWizardDisableCommand.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_config_values\\.element_id\" expects value type int, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Commands/FirstRunWizardDisableCommand.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_values\\.id\" expects value type int, got type mixed~0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null$#"
+			count: 1
+			path: engine/Shopware/Commands/FirstRunWizardDisableCommand.php
+
+		-
 			message: "#^Method Shopware\\\\Commands\\\\FirstRunWizardEnableCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: engine/Shopware/Commands/FirstRunWizardEnableCommand.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_values\\.element_id\" expects value type int, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Commands/FirstRunWizardEnableCommand.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_values\\.id\" expects value type int, got type mixed~0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null$#"
 			count: 1
 			path: engine/Shopware/Commands/FirstRunWizardEnableCommand.php
 
@@ -13627,11 +13297,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Commands\\\\PluginListCommand\\:\\:completeOptionValues\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/PluginListCommand.php
-
-		-
-			message: "#^Method Shopware\\\\Commands\\\\PluginListCommand\\:\\:configure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/PluginListCommand.php
 
@@ -15476,6 +15141,11 @@ parameters:
 			path: engine/Shopware/Components/BasketSignature/BasketPersister.php
 
 		-
+			message: "#^Query error\\: Column \"s_order_basket_signatures\\.basket\" expects value type string, got type non\\-empty\\-string\\|false$#"
+			count: 1
+			path: engine/Shopware/Components/BasketSignature/BasketPersister.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\BasketSignature\\\\CleanupSignatureSubscriber\\:\\:cleanup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/BasketSignature/CleanupSignatureSubscriber.php
@@ -15646,6 +15316,16 @@ parameters:
 			path: engine/Shopware/Components/Cart/BasketHelperInterface.php
 
 		-
+			message: "#^Query error\\: Column \"s_order_basket\\.sessionID\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Components/Cart/CartMigration.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.userID\" expects value type int, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Components/Cart/CartMigration.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\CartOrderNumberProvider\\:\\:getAll\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/CartOrderNumberProvider.php
@@ -15661,14 +15341,29 @@ parameters:
 			path: engine/Shopware/Components/Cart/CartOrderNumberProviderInterface.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\Cart\\\\CartPersistService\\:\\:\\$cart type has no value type specified in iterable type array\\.$#"
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<string, mixed\\>$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/CartPersistService.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\Cart\\\\CartPersistService\\:\\:\\$cartAttributes type has no value type specified in iterable type array\\.$#"
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got non\\-empty\\-array\\<string, mixed\\>&hasOffsetValue\\('basketID', int\\|string\\|false\\)$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/CartPersistService.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.currencyFactor\" expects value type float\\|int, got type mixed~0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null$#"
+			count: 1
+			path: engine/Shopware/Components/Cart/ConditionalLineItemService.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.sessionID\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Components/Cart/ConditionalLineItemService.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket_attributes\\.basketID\" expects value type int\\|null, got type int\\|string\\|false$#"
+			count: 1
+			path: engine/Shopware/Components/Cart/ConditionalLineItemService.php
 
 		-
 			message: "#^Parameter \\#4 \\$path of class Symfony\\\\Component\\\\HttpFoundation\\\\Cookie constructor expects string\\|null, string\\|false given\\.$#"
@@ -16386,7 +16081,7 @@ parameters:
 			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\ShopContextInterface and null will always evaluate to false\\.$#"
+			message: "#^Query error\\: Column \"s_user\\.id\" expects value type int, got type mixed$#"
 			count: 1
 			path: engine/Shopware/Components/CustomerStream/CookieSubscriber.php
 
@@ -16504,21 +16199,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$request of static method Shopware\\\\Components\\\\Routing\\\\Context\\:\\:getGlobalParamsFromRequest\\(\\) expects Enlight_Controller_Request_Request, Enlight_Controller_Request_Request\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Router.php
-
-		-
-			message: "#^Offset 'save_handler' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\: string, use_trans_sid\\: int, locking\\: bool\\} in isset\\(\\) always exists and is not nullable\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
-
-		-
-			message: "#^Offset 'save_path' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\?\\: string, use_trans_sid\\: int, name\\: non\\-falsy\\-string, cookie_secure\\?\\: true, \\.\\.\\.\\} in isset\\(\\) does not exist\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
-
-		-
-			message: "#^Offset 'unitTestEnabled' on array\\{cookie_lifetime\\: int, cookie_httponly\\: int, gc_probability\\: int, gc_divisor\\: int, save_handler\\?\\: string, use_trans_sid\\: int, name\\: non\\-falsy\\-string, cookie_secure\\?\\: true, \\.\\.\\.\\} in empty\\(\\) does not exist\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
 
 		-
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, string given\\.$#"
@@ -18281,6 +17961,11 @@ parameters:
 			path: engine/Shopware/Components/Log/Formatter/WildfireFormatter.php
 
 		-
+			message: "#^Argument \\#0 expects a constant string, got string$#"
+			count: 1
+			path: engine/Shopware/Components/Log/Handler/DoctrineDBALHandler.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\Log\\\\Handler\\\\DoctrineDBALHandler\\:\\:__construct\\(\\) has parameter \\$columnMap with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Log/Handler/DoctrineDBALHandler.php
@@ -18766,11 +18451,6 @@ parameters:
 			path: engine/Shopware/Components/Model/ModelEntity.php
 
 		-
-			message: "#^Negated boolean expression is always true\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/ModelEntity.php
-
-		-
 			message: "#^Call to an undefined method Doctrine\\\\ORM\\\\Configuration\\:\\:getAttributeDir\\(\\)\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/ModelManager.php
@@ -19211,11 +18891,6 @@ parameters:
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Filter.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Grammar\\:\\:generateAttributesFromColumns\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/MultiEdit/Resource/Product/Grammar.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\MultiEdit\\\\Resource\\\\Product\\\\Queue\\:\\:create\\(\\) has parameter \\$filterArray with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/MultiEdit/Resource/Product/Queue.php
@@ -19581,6 +19256,21 @@ parameters:
 			path: engine/Shopware/Components/Plugin/CronjobSynchronizer.php
 
 		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<mixed~'active', mixed\\>&hasOffsetValue\\('pluginID', int\\)$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/CronjobSynchronizer.php
+
+		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got hasOffsetValue\\('end', DateTime\\)&hasOffsetValue\\('next', DateTime\\)&hasOffsetValue\\('pluginID', int\\)&non\\-empty\\-array$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/CronjobSynchronizer.php
+
+		-
+			message: "#^Query error\\: Column \"s_crontab\\.id\" expects value type int, got type mixed~0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/CronjobSynchronizer.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\DBALConfigReader\\:\\:getByPluginName\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/DBALConfigReader.php
@@ -19733,6 +19423,91 @@ parameters:
 		-
 			message: "#^Method Shopware_Components_Plugin_Namespace\\:\\:updatePlugin\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTimeInterface$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.author\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.capability_enable\" expects value type int, got type bool$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.capability_install\" expects value type int, got type bool$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.capability_secure_uninstall\" expects value type int, got type bool$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.capability_update\" expects value type int, got type bool$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.copyright\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.description\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.license\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.link\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.refresh_date\" expects value type string\\|null, got type DateTimeInterface$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.source\" expects value type string, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.support\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.update_date\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.update_source\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.update_version\" expects value type string\\|null, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Components/Plugin/Namespace.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.version\" expects value type string, got type mixed$#"
+			count: 2
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
 		-
@@ -20346,6 +20121,11 @@ parameters:
 			path: engine/Shopware/Components/Snippet/Writer/DatabaseWriter.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_snippets\\.id\" expects value type int, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Components/Snippet/Writer/DatabaseWriter.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\Snippet\\\\Writer\\\\QueryWriter\\:\\:generateInsertQueries\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Snippet/Writer/QueryWriter.php
@@ -20721,42 +20501,7 @@ parameters:
 			path: engine/Shopware/Components/Theme/Compiler.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:clearDirectory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:clearDirectory\\(\\) has parameter \\$names with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:clearThemeCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compile\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compileJavascript\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compileLess\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:compileLessDefinition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:createThemeTimestamp\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Compiler.php
 
@@ -20767,11 +20512,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:getConfig\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:recompile\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Compiler.php
 
@@ -20822,11 +20562,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$timestamp of method Shopware\\\\Components\\\\Theme\\\\Compiler\\:\\:clearThemeCache\\(\\) expects int, string given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Theme/Compiler.php
-
-		-
-			message: "#^Strict comparison using \\=\\=\\= between int and null will always evaluate to false\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Theme/Compiler.php
 
@@ -21716,7 +21451,7 @@ parameters:
 			path: engine/Shopware/Controllers/Api/Translations.php
 
 		-
-			message: "#^Else branch is unreachable because previous condition is always true\\.$#"
+			message: "#^Strict comparison using \\!\\=\\= between int\\<1, max\\> and 0 will always evaluate to true\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Analytics.php
 
@@ -23851,6 +23586,16 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Feedback.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_config_values\\.element_id\" expects value type int, got type mixed$#"
+			count: 2
+			path: engine/Shopware/Controllers/Backend/Feedback.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_values\\.id\" expects value type int, got type mixed~0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null$#"
+			count: 1
+			path: engine/Shopware/Controllers/Backend/Feedback.php
+
+		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
@@ -24756,6 +24501,11 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_licenses\\.module\" expects value type string, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
+
+		-
 			message: "#^Method Shopware\\\\Controllers\\\\Backend\\\\PluginManager\\:\\:getTechnicalNameOfOrderNumber\\(\\) has parameter \\$positions with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/PluginManager.php
@@ -25196,37 +24946,7 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Snippet.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:createSupplierAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:deleteSupplierAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:getAllSupplier\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:getSingleSupplier\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:getSuppliersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:saveSuppliers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Supplier.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Supplier\\:\\:updateSupplierAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Supplier.php
 
@@ -25396,118 +25116,8 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Vote.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Components_Mail\\:\\:\\$Body\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Mail\\:\\:\\$From\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Mail\\:\\:\\$FromName\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Mail\\:\\:\\$Subject\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Cannot call method setColumn\\(\\) on Shopware\\\\Models\\\\Widget\\\\View\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Cannot call method setPosition\\(\\) on Shopware\\\\Models\\\\Widget\\\\View\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:addWidgetViewAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:fetchRssFeedData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getLastMerchantAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getLastOrdersAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getNoticeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getShopwareNewsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getTurnOverVisitorsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:getVisitorsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:removeWidgetViewAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:requestMerchantFormAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:saveNoticeAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:savePositionAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:savePositionsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:sendMailToMerchantAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Widgets\\:\\:setWidgetPosition\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 2
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
 		-
@@ -25527,11 +25137,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$data of class SimpleXMLElement constructor expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Widgets.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Widget\\\\View\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Widgets.php
 
@@ -26956,6 +26561,41 @@ parameters:
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.city\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.firstname\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.groupID\" expects value type int, got type mixed$#"
+			count: 3
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.lastname\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.salutation\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.street\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
+			message: "#^Query error\\: Column \"s_campaigns_maildata\\.title\" expects value type string\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Core/sAdmin.php
+
+		-
 			message: "#^Binary operation \"\\-\" between int\\|string and 1 results in an error\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sArticles.php
@@ -27527,11 +27167,6 @@ parameters:
 
 		-
 			message: "#^Property sBasket\\:\\:\\$contextService \\(Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\) does not accept Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Service\\\\ContextServiceInterface\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sBasket.php
-
-		-
-			message: "#^Service \"system\" is not registered in the container\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sBasket.php
 
@@ -33281,6 +32916,26 @@ parameters:
 			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
 
 		-
+			message: "#^Query error\\: Column \"s_order_history\\.order_status_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_history\\.payment_status_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_history\\.previous_order_status_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_history\\.previous_payment_status_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: engine/Shopware/Models/Order/OrderHistorySubscriber.php
+
+		-
 			message: "#^Method Shopware\\\\Models\\\\Order\\\\Repository\\:\\:getOrderStatusQuery\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Order/Repository.php
@@ -35786,11 +35441,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Download.php
 
 		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Download.php
-
-		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\ExtJsResultMapper\\:\\:toExtJs\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/ExtJsResultMapper.php
@@ -35966,11 +35616,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
 
 		-
-			message: "#^Call to function array_key_exists\\(\\) with 'SwagSecurity' and array\\{ErrorHandler\\: string, Router\\: string, System\\: string, ViewportForward\\: string, Shop\\: string, PostFilter\\: string, ControllerBase\\: string, RouterRewrite\\: string, \\.\\.\\.\\} will always evaluate to false\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
 			message: "#^Cannot access property \\$version on ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Struct\\\\Version\\|null\\.$#"
 			count: 2
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
@@ -36132,11 +35777,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Core_CronRating_Bootstrap\\:\\:structurePositionsArray\\(\\) has parameter \\$orderPositions with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_CronRating_Bootstrap\\:\\:structurePositionsArray\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/CronRating/Bootstrap.php
 
@@ -36552,6 +36192,21 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Components_TopSeller\\:\\:updateElapsedTopSeller\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/TopSeller.php
+
+		-
+			message: "#^Query expects placeholder \\:article_id, but it is missing from values given\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/TopSeller.php
+
+		-
+			message: "#^Query expects placeholder \\:last_cleared, but it is missing from values given\\.$#"
+			count: 1
+			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/TopSeller.php
+
+		-
+			message: "#^Query expects placeholder \\:sales, but it is missing from values given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Components/TopSeller.php
 
@@ -37116,11 +36771,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
 
 		-
-			message: "#^Strict comparison using \\=\\=\\= between string and null will always evaluate to false\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Frontend/Statistics/Bootstrap.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$controller\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Frontend/TagCloud/Bootstrap.php
@@ -37261,11 +36911,6 @@ parameters:
 			path: tests/Functional/Bundle/AccountBundle/Controller/AddressTest.php
 
 		-
-			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertNull\\(\\) with int will always evaluate to false\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AccountBundle/Service/AddressServiceTest.php
-
-		-
 			message: "#^Cannot call method getCustomer\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
 			count: 3
 			path: tests/Functional/Bundle/AccountBundle/Service/AddressServiceTest.php
@@ -37399,6 +37044,26 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AttributeBundle\\\\SchemaOperatorTest\\:\\:iterateTypeArray\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AttributeBundle/SchemaOperatorTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_benchmark_config\\.NULL\" does not exist$#"
+			count: 1
+			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
+
+		-
+			message: "#^Query error\\: Column \"s_benchmark_config\\.last_customer_id\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
+
+		-
+			message: "#^Query error\\: Column \"s_benchmark_config\\.last_order_id\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
+
+		-
+			message: "#^Query error\\: Column \"s_benchmark_config\\.last_product_id\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Bundle/BenchmarkBundle/Providers/ProviderTestCase.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\ExtjsBuilderTest\\:\\:dataProviderColumnFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -37711,6 +37376,11 @@ parameters:
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/SearchResultTest.php
 
 		-
+			message: "#^Argument \\#0 expects a constant string, got string$#"
+			count: 1
+			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/TestCase.php
+
+		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\TestCase\\:\\:createCustomer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/TestCase.php
@@ -37737,6 +37407,11 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\TestCase\\:\\:search\\(\\) has parameter \\$customers with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/TestCase.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.customernumber\" expects value type string\\|null, got type mixed$#"
 			count: 1
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/TestCase.php
 
@@ -38171,6 +37846,21 @@ parameters:
 			path: tests/Functional/Bundle/SearchBundle/Sorting/ReleaseDateSortingTest.php
 
 		-
+			message: "#^Query error\\: Column \"s_filter\\.id\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Bundle/SearchBundleDBAL/FacetHandler/PropertyFacetHandlerTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_filter_values\\.id\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Bundle/SearchBundleDBAL/FacetHandler/PropertyFacetHandlerTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_filter_values\\.position\" expects value type int, got type int\\|string$#"
+			count: 1
+			path: tests/Functional/Bundle/SearchBundleDBAL/FacetHandler/PropertyFacetHandlerTest.php
+
+		-
 			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundleDBAL/SearchIndexerTest.php
@@ -38426,6 +38116,36 @@ parameters:
 			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
 
 		-
+			message: "#^Query error\\: Column \"s_articles_vote\\.active\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
+
+		-
+			message: "#^Query error\\: Column \"s_articles_vote\\.id\" expects value type int, got type null$#"
+			count: 1
+			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
+
+		-
+			message: "#^Query error\\: Column \"s_articles_vote\\.points\" expects value type float\\|int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
+
+		-
+			message: "#^Query error\\: Column \"s_filter_relations\\.groupID\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
+
+		-
+			message: "#^Query error\\: Column \"s_filter_relations\\.optionID\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
+
+		-
+			message: "#^Query error\\: Column \"s_filter_values\\.optionID\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Bundle/StoreFrontBundle/Helper.php
+
+		-
 			message: "#^Cannot call method getMedia\\(\\) on Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Product\\|null\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/ProductMediaTest.php
@@ -38439,11 +38159,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\PropertyHydratorTest\\:\\:hydrateDataProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/StoreFrontBundle/PropertyHydratorTest.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/StoreFrontBundle/SimilarProductsTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\StoreFrontBundle\\\\TestCase\\:\\:assertSearchResult\\(\\) has parameter \\$expectedNumbers with no value type specified in iterable type array\\.$#"
@@ -38636,6 +38351,16 @@ parameters:
 			path: tests/Functional/Components/Api/CustomerStreamTest.php
 
 		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<string, mixed\\>$#"
+			count: 2
+			path: tests/Functional/Components/Api/EmotionPresetTest.php
+
+		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got non\\-empty\\-array\\<string, mixed\\>&hasOffsetValue\\('presetID', int\\|string\\|false\\)$#"
+			count: 1
+			path: tests/Functional/Components/Api/EmotionPresetTest.php
+
+		-
 			message: "#^Cannot access offset 'id' on array\\|Shopware\\\\Models\\\\Property\\\\Group\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/PropertyGroupTest.php
@@ -38741,6 +38466,11 @@ parameters:
 			path: tests/Functional/Components/AuthTest.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
+			count: 1
+			path: tests/Functional/Components/CacheSubscriberTest.php
+
+		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\CaptchaRepositoryTest\\:\\:testThrowCaptchaNotFoundException\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Captcha/CaptchaRepositoryTest.php
@@ -38771,6 +38501,16 @@ parameters:
 			path: tests/Functional/Components/Cart/BasketQueryHelperTest.php
 
 		-
+			message: "#^Query error\\: Column \"s_order_basket\\.sessionID\" expects value type string\\|null, got type mixed$#"
+			count: 4
+			path: tests/Functional/Components/Cart/CartPersistServiceTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_tax\\.tax\" expects value type numeric\\-string, got type 7\\.75$#"
+			count: 1
+			path: tests/Functional/Components/Cart/FloatTaxCalculationTest.php
+
+		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\PaymentTokenServiceTest\\:\\:paymentTokenProviders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Cart/PaymentTokenServiceTest.php
@@ -38796,14 +38536,19 @@ parameters:
 			path: tests/Functional/Components/Cart/ProportionalCartCalculationCustomerGroupTest.php
 
 		-
+			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.percental\" expects value type int, got type bool$#"
+			count: 1
+			path: tests/Functional/Components/CheckoutTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.taxconfig\" expects value type string, got type int$#"
+			count: 1
+			path: tests/Functional/Components/CheckoutTest.php
+
+		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\Compiler\\\\ConfigureContainerAwareCommandsTest\\:\\:getShopwareCommands\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/DependencyInjection/Compiler/ConfigureContainerAwareCommandsTest.php
-
-		-
-			message: "#^Call to static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertInstanceOf\\(\\) with 'Shopware\\\\\\\\Tests\\\\\\\\Functional\\\\\\\\Components\\\\\\\\DependencyInjection\\\\\\\\OriginalService' and Shopware\\\\Components\\\\Cart\\\\NetRounding\\\\RoundLineAfterQuantity will always evaluate to false\\.$#"
-			count: 1
-			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\ContainerTest\\:\\:attachEvent\\(\\) has parameter \\$callback with no type specified\\.$#"
@@ -38844,6 +38589,16 @@ parameters:
 			message: "#^Service \"originalservice\" is not registered in the container\\.$#"
 			count: 1
 			path: tests/Functional/Components/DependencyInjection/ContainerTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_translations\\.objectkey\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_translations\\.objectlanguage\" expects value type string, got type 2$#"
+			count: 1
+			path: tests/Functional/Components/Emotion/Preset/EmotionToPresetDataTransformerTest.php
 
 		-
 			message: "#^Cannot call method toArray\\(\\) on array\\.$#"
@@ -38951,21 +38706,6 @@ parameters:
 			path: tests/Functional/Components/Model/GeneratorTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\NumberRangeIncrementerTest\\:\\:testIncrement\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/NumberRangeIncrementerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\NumberRangeIncrementerTest\\:\\:testIncrementWithInvalidName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/NumberRangeIncrementerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\NumberRangeIncrementerTest\\:\\:testItShouldImplementInterface\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/NumberRangeIncrementerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\OptinServiceTest\\:\\:testAssertAdd\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/OptinServiceTest.php
@@ -39001,6 +38741,41 @@ parameters:
 			path: tests/Functional/Components/OptinServiceTest.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_config_elements\\.form_id\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_forms\\.parent_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_forms\\.plugin_id\" expects value type int\\|null, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_elements\\.form_id\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigWriterTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_forms\\.parent_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigWriterTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/ConfigWriterTest.php
+
+		-
 			message: "#^Cannot call method count\\(\\) on array\\<Shopware\\\\Models\\\\Config\\\\Element\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Config\\\\Element\\>\\)\\.$#"
 			count: 2
 			path: tests/Functional/Components/Plugin/FormSynchronizerTest.php
@@ -39024,6 +38799,41 @@ parameters:
 			message: "#^Parameter \\#1 \\$em of class Shopware\\\\Components\\\\Plugin\\\\FormSynchronizer constructor expects Shopware\\\\Components\\\\Model\\\\ModelManager, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
 			count: 1
 			path: tests/Functional/Components/Plugin/FormSynchronizerTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_elements\\.form_id\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_forms\\.parent_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_forms\\.plugin_id\" expects value type int\\|null, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigReaderTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_elements\\.form_id\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigWriterTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_config_forms\\.parent_id\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigWriterTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
+			count: 1
+			path: tests/Functional/Components/Plugin/LegacyConfigWriterTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has no return type specified\\.$#"
@@ -39159,6 +38969,16 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Privacy\\\\IpAnonymizerTest\\:\\:testIpAnonymizer\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Privacy/IpAnonymizerTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.active\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.subshopID\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Components/Privacy/PrivacyServiceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\ReflectionHelperTest\\:\\:testCreationOfInvalidClass\\(\\) has no return type specified\\.$#"
@@ -39339,6 +39159,81 @@ parameters:
 			message: "#^Property Shopware\\\\Themes\\\\TestResponsive\\\\Theme\\:\\:\\$javascript type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/Theme/Themes/TestResponsive/Theme.php
+
+		-
+			message: "#^Query error\\: Column \"s_articles_categories_ro\\.articleID\" expects value type int, got type int\\|null$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount\" expects value type float\\|int, got type '1000'$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount\" expects value type float\\|int, got type '500'$#"
+			count: 2
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount_net\" expects value type float\\|int, got type '420'$#"
+			count: 2
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount_net\" expects value type float\\|int, got type '840'$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.language\" expects value type string, got type 1$#"
+			count: 3
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.status\" expects value type int, got type '\\-1'$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_billingaddress\\.orderID\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.articleID\" expects value type int, got type int\\|null$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.orderID\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_statistics_article_impression\\.articleId\" expects value type int, got type int\\|null$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.active\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.default_billing_address_id\" expects value type int\\|null, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.default_shipping_address_id\" expects value type int\\|null, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.subshopID\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CanceledOrderTest\\:\\:testCanceledOrderSummary\\(\\) has no return type specified\\.$#"
@@ -39776,47 +39671,37 @@ parameters:
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:prepareTestGetVisitors\\(\\) has no return type specified\\.$#"
+			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:prepareTestGetVisitors\\(\\) has parameter \\$addressData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:prepareTestGetVisitors\\(\\) has parameter \\$addressData with no type specified\\.$#"
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got non\\-empty\\-array$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testConversionIsCalucatedFromBeginningOfDay\\(\\) has no return type specified\\.$#"
+			message: "#^Query error\\: Column \"s_order\\.ordernumber\" expects value type string\\|null, got type 999$#"
+			count: 3
+			path: tests/Functional/Controllers/Backend/WidgetsTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_statistics_currentusers\\.time\" expects value type string\\|null, got type Zend_Db_Expr$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testConversionIsEmpty\\(\\) has no return type specified\\.$#"
+			message: "#^Query error\\: Column \"s_user\\.active\" expects value type int, got type '1'$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testConversionStillWorks\\(\\) has no return type specified\\.$#"
+			message: "#^Query error\\: Column \"s_user\\.default_billing_address_id\" expects value type int\\|null, got type int\\|string\\|false$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testGetVisitorsWithCompanyAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/WidgetsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testGetVisitorsWithEmptyCompanyAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/WidgetsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testGetVisitorsWithoutCompanyAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/WidgetsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:testIfNoConversionAfterEightDays\\(\\) has no return type specified\\.$#"
+			message: "#^Query error\\: Column \"s_user\\.subshopID\" expects value type int, got type '1'$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
@@ -39861,6 +39746,11 @@ parameters:
 			path: tests/Functional/Controllers/Frontend/BlogTest.php
 
 		-
+			message: "#^Query error\\: Column \"s_core_rulesets\\.value1\" expects value type string, got type 100$#"
+			count: 1
+			path: tests/Functional/Controllers/Frontend/CheckoutTest.php
+
+		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:searchTermProvider\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/SearchTest.php
@@ -39883,11 +39773,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:assertStringContainsStringIgnoringWhitespace\\(\\) expects string, array\\|string\\|null given\\.$#"
-			count: 3
 			path: tests/Functional/Controllers/Frontend/SearchTest.php
 
 		-
@@ -39921,7 +39806,317 @@ parameters:
 			path: tests/Functional/Controllers/Widgets/IndexTest.php
 
 		-
+			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<string, mixed\\>$#"
+			count: 7
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_countries\\.id\" expects value type int, got type mixed$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_rulesets\\.id\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_rulesets\\.value1\" expects value type string, got type 20$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_rulesets\\.value1\" expects value type string, got type string\\|null$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_translations\\.id\" expects value type int, got type mixed$#"
+			count: 12
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_translations\\.objectlanguage\" expects value type string, got type 1$#"
+			count: 6
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_translations\\.objectlanguage\" expects value type string, got type 10000$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_core_translations\\.objectlanguage\" expects value type string, got type 2$#"
+			count: 6
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.cleared\" expects value type int, got type '17'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.currencyFactor\" expects value type float\\|int, got type '1'$#"
+			count: 3
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.dispatchID\" expects value type int, got type '9'$#"
+			count: 3
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.id\" expects value type int, got type int\\|string\\|false$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.id\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount\" expects value type float\\|int, got type '16\\.89'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount\" expects value type float\\|int, got type '37\\.99'$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount_net\" expects value type float\\|int, got type '14\\.2'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_amount_net\" expects value type float\\|int, got type '31\\.92'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_shipping\" expects value type float\\|int, got type '0'$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_shipping\" expects value type float\\|int, got type '3\\.9'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_shipping_net\" expects value type float\\|int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.invoice_shipping_net\" expects value type float\\|int, got type '3\\.28'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.net\" expects value type int, got type '0'$#"
+			count: 3
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.paymentID\" expects value type int, got type '4'$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.paymentID\" expects value type int, got type '5'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.status\" expects value type int, got type '0'$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.subshopID\" expects value type int, got type '1'$#"
+			count: 3
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.taxfree\" expects value type int, got type '0'$#"
+			count: 3
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order\\.userID\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.articleID\" expects value type int, got type '98765'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.esdarticle\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.modus\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.orderID\" expects value type int, got type int\\|string\\|false$#"
+			count: 2
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.orderID\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.price\" expects value type float\\|int, got type '34\\.99'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.quantity\" expects value type int, got type '1'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.shipped\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.shippedgroup\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.status\" expects value type int, got type '0'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.taxID\" expects value type int\\|null, got type '1'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_details\\.tax_rate\" expects value type float\\|int, got type '19'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_esd\\.esdID\" expects value type int, got type '2'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_esd\\.id\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_esd\\.orderID\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_esd\\.orderdetailsID\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_esd\\.serialID\" expects value type int, got type '8'$#"
+			count: 1
+			path: tests/Functional/Core/AdminTest.php
+
+		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Core\\\\BasketTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_articles\\.id\" expects value type int, got type mixed$#"
+			count: 4
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_articles\\.taxID\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_articles_details\\.id\" expects value type int, got type mixed$#"
+			count: 2
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_emarketing_voucher_codes\\.voucherID\" expects value type int, got type int\\|string\\|false$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.customergroup\" expects value type int\\|null, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.restrictarticles\" expects value type string, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.taxconfig\" expects value type string, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.articleID\" expects value type int, got type mixed$#"
+			count: 12
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.ordernumber\" expects value type string, got type mixed$#"
+			count: 12
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.ordernumber\" expects value type string, got type string\\|null$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.quantity\" expects value type int, got type \\(float\\|int\\)$#"
+			count: 4
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_order_basket\\.tax_rate\" expects value type float\\|int, got type mixed$#"
+			count: 2
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_premium_shippingcosts\\.dispatchID\" expects value type int, got type mixed$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_premium_shippingcosts\\.value\" expects value type numeric\\-string, got type 2\\.8$#"
+			count: 1
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.customergroup\" expects value type string, got type mixed$#"
+			count: 2
+			path: tests/Functional/Core/BasketTest.php
+
+		-
+			message: "#^Query error\\: Column \"s_user\\.paymentID\" expects value type int, got type int\\|string\\|false$#"
 			count: 1
 			path: tests/Functional/Core/BasketTest.php
 
@@ -40129,21 +40324,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$forceStateInRegistration of method Shopware\\\\Models\\\\Country\\\\Country\\:\\:setForceStateInRegistration\\(\\) expects bool, int given\\.$#"
 			count: 1
 			path: tests/Functional/Models/Customer/CustomerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Models\\\\CustomerStream\\\\CustomerStreamRepositoryTest\\:\\:getCampaignsEntryData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Models/CustomerStream/CustomerStreamRepositoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Models\\\\CustomerStream\\\\CustomerStreamRepositoryTest\\:\\:getCustomerData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Models/CustomerStream/CustomerStreamRepositoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Models\\\\CustomerStream\\\\CustomerStreamRepositoryTest\\:\\:getCustomerStreamData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Models/CustomerStream/CustomerStreamRepositoryTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$status of method Shopware\\\\Models\\\\Mail\\\\Mail\\:\\:setStatus\\(\\) expects array\\<Shopware\\\\Models\\\\Order\\\\Status\\>\\|null, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject&Shopware\\\\Models\\\\Order\\\\Status given\\.$#"
@@ -40586,81 +40766,6 @@ parameters:
 			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/AlsoBoughtTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:getAllSimilarShown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:getAllSimilarShown\\(\\) has parameter \\$condition with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:getDemoData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:insertDemoData\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:resetSimilarShown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:resetSimilarShown\\(\\) has parameter \\$condition with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:setSimilarShownInvalid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:setSimilarShownInvalid\\(\\) has parameter \\$condition with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:setSimilarShownInvalid\\(\\) has parameter \\$date with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:testInitSimilarShown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:testRefreshSimilarShown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:testResetSimilarShown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:testSimilarCronJobRefresh\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:testSimilarShownLiveRefresh\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\SimilarShownTest\\:\\:testUpdateElapsedSimilarShownArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/SimilarShownTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\Components\\\\TopSellerTest\\:\\:getAllTopSeller\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Plugins/Core/MarketingAggregate/Components/TopSellerTest.php
@@ -40752,16 +40857,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\Backend\\\\Backend\\:\\:getXPathSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\Backend\\\\Backend\\:\\:login\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\Backend\\\\Backend\\:\\:login\\(\\) has parameter \\$user with no type specified\\.$#"
 			count: 1
 			path: tests/Mink/Page/Backend/Backend/Backend.php
 
@@ -40959,11 +41054,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Article\\\\Elements\\\\Article\\:\\:getImageProperty\\(\\) should return string but returns string\\|null\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Article/Elements/Article.php
-
-		-
-			message: "#^Ternary operator condition is always true\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Article/Elements/ArticleEvaluation.php
 
 		-
 			message: "#^Cannot call method getAttribute\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
@@ -41411,11 +41501,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Homepage/Elements/YouTube.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
-
-		-
 			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Homepage/Homepage.php
@@ -41666,11 +41751,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Note/Elements/NotePosition.php
 
 		-
-			message: "#^Argument of an invalid type array\\|false supplied for foreach, only iterables are supported\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Note/Note.php
-
-		-
 			message: "#^Cannot access offset 'controller' on array\\|bool\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Note/Note.php
@@ -41866,16 +41946,6 @@ parameters:
 			path: tests/Mink/Tests/Frontend/Homepage/bootstrap/SecurityContext.php
 
 		-
-			message: "#^Call to method getClient\\(\\) on an unknown class Behat\\\\Mink\\\\Driver\\\\BrowserKitDriver\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/FeatureContext.php
-
-		-
-			message: "#^Class Behat\\\\Mink\\\\Driver\\\\BrowserKitDriver not found\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/FeatureContext.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:assertElementProperties\\(\\) has parameter \\$properties with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
@@ -41989,26 +42059,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\Helper\\:\\:throwException\\(\\) has parameter \\$messages with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Tests/General/Helpers/Helper.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:getMinkParameter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setKernel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setMink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setMinkParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Tests/General/Helpers/SubContext.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Tests\\\\General\\\\Helpers\\\\SubContext\\:\\:setMinkParameters\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
@@ -43071,36 +43121,6 @@ parameters:
 			path: tests/Unit/Components/Event/EventManagerTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberArrayTest\\:\\:testAddSubscriber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/SubscriberArrayTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberArrayTest\\:\\:testCanCreateInstance\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/SubscriberArrayTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberArrayTest\\:\\:testRemoveSubscriber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/SubscriberArrayTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberConfigTest\\:\\:testAddSubscriber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/SubscriberConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberConfigTest\\:\\:testCanCreateInstance\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/SubscriberConfigTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Event\\\\SubscriberConfigTest\\:\\:testRemoveSubscriber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Event/SubscriberConfigTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Filesystem\\\\Adapter\\\\AwsS3v3FactoryTest\\:\\:testCreationWithEmptyConfig\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Filesystem/Adapter/AwsS3v3FactoryTest.php
@@ -43366,36 +43386,6 @@ parameters:
 			path: tests/Unit/Components/Filesystem/PrefixFilesystemTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\EnlightHookProxyFactoryTest\\:\\:invokeMethod\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/EnlightHookProxyFactoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\EnlightHookProxyFactoryTest\\:\\:invokeMethod\\(\\) has parameter \\$object with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/EnlightHookProxyFactoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\EnlightHookProxyFactoryTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/EnlightHookProxyFactoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\EnlightHookProxyFactoryTest\\:\\:testGenerateBasicProxyClass\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/EnlightHookProxyFactoryTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\EnlightHookProxyFactoryTest\\:\\:testGenerateProxyClassWithReferenceParameter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/EnlightHookProxyFactoryTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Components\\\\Hook\\\\EnlightHookProxyFactoryTest\\:\\:\\$proxyFactory has no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Hook/EnlightHookProxyFactoryTest.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Hook_HookArgs\\:\\:\\$limit\\.$#"
 			count: 11
 			path: tests/Unit/Components/Hook/HookManagerTest.php
@@ -43631,58 +43621,8 @@ parameters:
 			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testSet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testSetAll\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testToArray\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\GetWrapperTest\\:\\:testUnset\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
-
-		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
 			count: 11
-			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testGet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testSet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testSetAll\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testToArray\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\LegacyRequestWrapper\\\\PostWrapperTest\\:\\:testUnset\\(\\) has no return type specified\\.$#"
-			count: 1
 			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
@@ -44099,26 +44039,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\Test\\\\Theme\\\\PathResolverTest\\:\\:testFiles\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Theme/PathResolverTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\UploadMaxSizeValidatorTest\\:\\:testContentLengthInRange\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/UploadMaxSizeValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\UploadMaxSizeValidatorTest\\:\\:testEmptyContentLength\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/UploadMaxSizeValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\UploadMaxSizeValidatorTest\\:\\:testExceededContentLength\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/UploadMaxSizeValidatorTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$value of method Enlight_Controller_Request_RequestTestCase\\:\\:setServer\\(\\) expects string\\|null, int given\\.$#"
-			count: 1
-			path: tests/Unit/Components/UploadMaxSizeValidatorTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Core\\\\sArticlesTest\\:\\:provideData\\(\\) has no return type specified\\.$#"

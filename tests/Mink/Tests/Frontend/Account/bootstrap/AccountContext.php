@@ -29,7 +29,6 @@ namespace Shopware\Tests\Mink\Tests\Frontend\Account\bootstrap;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\WebAssert;
 use Doctrine\DBAL\Connection;
-use RuntimeException;
 use Shopware\Tests\Mink\Page\Frontend\Account\Account;
 use Shopware\Tests\Mink\Page\Frontend\Address\Address;
 use Shopware\Tests\Mink\Page\Frontend\Address\AddressDelete;
@@ -242,7 +241,7 @@ class AccountContext extends SubContext
     {
         $welcome = preg_replace("/\s\s+/", ' ', $welcome);
         if (!\is_string($welcome)) {
-            throw new RuntimeException('Invalid welcome text');
+            Helper::throwException('Invalid welcome text');
         }
 
         $assert = new WebAssert($this->getSession());

@@ -18,6 +18,7 @@ variables:
     SW_BASE_PATH: ""
     SELENIUM_HOST: selenium
     ELASTICSEARCH_HOST: elasticsearch
+    SMTP_HOST: smtp
 
 # Include the default gitlab rules template for "MergeRequest-Pipelines".
 # This makes pipelines run for the default branch, tags, and all types of merge

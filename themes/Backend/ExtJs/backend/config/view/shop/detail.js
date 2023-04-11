@@ -21,12 +21,7 @@
  * our trademarks remain entirely with us.
  */
 
-/**
- * todo@all: Documentation
- */
-
 //{namespace name="backend/config/view/form"}
-
 //{block name="backend/config/view/shop/detail"}
 Ext.define('Shopware.apps.Config.view.shop.Detail', {
     extend: 'Shopware.apps.Config.view.base.Detail',
@@ -53,21 +48,24 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
             listeners: {
                 scope: me,
                 change: function (hidden, value) {
-                    var form = hidden.up('form'),
-                        typeSwitchField = form.down('[name=typeSwitch]'),
+                    var panel = hidden.up('form'),
+                        typeSwitchField = panel.down('[name=typeSwitch]'),
                         mainIdField,
+                        form = panel.getForm(),
+                        isDefault = form.getRecord().get('default'),
                         type;
 
                     if (Ext.isEmpty(value)) {
-                        form.getForm().reset();
+                        form.reset();
                         typeSwitchField.setDisabled(false);
                         return;
                     }
 
-                    mainIdField = form.down('[name=mainId]');
+                    mainIdField = panel.down('[name=mainId]');
                     type = mainIdField.getValue() ? 'lang' : 'sub';
+
                     typeSwitchField.setValue(type);
-                    typeSwitchField.setDisabled(value == 1);
+                    typeSwitchField.setDisabled(isDefault);
                 }
             }
         }
@@ -128,7 +126,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
     },
 
     getMainField: function() {
-        var me = this;
         return {
             xtype: 'base-element-select',
             name: 'mainId',
@@ -141,7 +138,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
     },
 
     getDefaultField: function() {
-        var me = this;
         return {
             xtype: 'base-element-boolean',
             name: 'default',

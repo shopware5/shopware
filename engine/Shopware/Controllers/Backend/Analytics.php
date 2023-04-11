@@ -335,13 +335,11 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         );
 
         $referrer = [];
-        $customers = [];
         foreach ($result->getData() as $row) {
-            $url = parse_url($row['referrer']);
-            if (!\is_array($url) || !\array_key_exists('host', $url)) {
+            $host = parse_url($row['referrer'], PHP_URL_HOST);
+            if (!\is_string($host)) {
                 continue;
             }
-            $host = $url['host'];
 
             if (!\array_key_exists($host, $referrer)) {
                 $referrer[$host] = [
@@ -358,14 +356,12 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
                 ];
             }
 
-            if (!\in_array($row['userID'], $customers)) {
-                if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
-                    $referrer[$host]['turnoverNewCustomer'] += $row['turnover'];
-                    ++$referrer[$host]['newCustomers'];
-                } else {
-                    $referrer[$host]['turnoverRegularCustomer'] += $row['turnover'];
-                    ++$referrer[$host]['regularCustomers'];
-                }
+            if (strtotime($row['orderTime']) - strtotime($row['firstLogin']) < 60 * 60 * 24) {
+                $referrer[$host]['turnoverNewCustomer'] += $row['turnover'];
+                ++$referrer[$host]['newCustomers'];
+            } else {
+                $referrer[$host]['turnoverRegularCustomer'] += $row['turnover'];
+                ++$referrer[$host]['regularCustomers'];
             }
 
             $referrer[$host]['turnover'] += $row['turnover'];

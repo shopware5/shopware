@@ -33,37 +33,24 @@ use ZipArchive;
 
 class PluginExtractor
 {
-    /**
-     * @var string
-     */
-    private $pluginDir;
+    private string $pluginDir;
 
-    /**
-     * @var Filesystem
-     */
-    private $filesystem;
+    private Filesystem $filesystem;
 
     /**
      * @var string[]
      */
-    private $pluginDirectories;
+    private array $pluginDirectories;
+
+    private ShopwareReleaseStruct $release;
+
+    private RequirementValidator $requirementsValidator;
 
     /**
-     * @var ShopwareReleaseStruct
-     */
-    private $release;
-
-    /**
-     * @var RequirementValidator
-     */
-    private $requirementsValidator;
-
-    /**
-     * @param string   $pluginDir
      * @param string[] $pluginDirectories
      */
     public function __construct(
-        $pluginDir,
+        string $pluginDir,
         Filesystem $filesystem,
         array $pluginDirectories,
         ShopwareReleaseStruct $release,
@@ -82,6 +69,8 @@ class PluginExtractor
      * @param ZipArchive $archive
      *
      * @throws Exception
+     *
+     * @return void
      */
     public function extract($archive)
     {
@@ -107,7 +96,7 @@ class PluginExtractor
 
             unlink($archive->filename);
         } catch (Exception $e) {
-            if ($backupFile !== false) {
+            if ($oldFile !== false) {
                 $this->filesystem->rename($backupFile, $oldFile);
             }
             throw $e;
@@ -120,25 +109,26 @@ class PluginExtractor
      * Iterates all files of the provided zip archive
      * path and validates the plugin namespace, directory traversal
      * and multiple plugin directories.
-     *
-     * @param string $prefix
      */
-    private function validatePluginZip($prefix, ZipArchive $archive)
+    private function validatePluginZip(string $prefix, ZipArchive $archive): void
     {
         for ($i = 2; $i < $archive->numFiles; ++$i) {
             $stat = $archive->statIndex($i);
+            if (!\is_array($stat)) {
+                continue;
+            }
 
             $this->assertNoDirectoryTraversal($stat['name']);
             $this->assertPrefix($stat['name'], $prefix);
         }
     }
 
-    /**
-     * @return string
-     */
-    private function getPluginPrefix(ZipArchive $archive)
+    private function getPluginPrefix(ZipArchive $archive): string
     {
         $entry = $archive->statIndex(0);
+        if (!\is_array($entry)) {
+            return '';
+        }
 
         return explode('/', $entry['name'])[0];
     }
@@ -147,7 +137,7 @@ class PluginExtractor
      * Clear opcode caches to make sure that the
      * updated plugin files are used in the following requests.
      */
-    private function clearOpcodeCache()
+    private function clearOpcodeCache(): void
     {
         if (\function_exists('opcache_reset')) {
             opcache_reset();
@@ -158,21 +148,14 @@ class PluginExtractor
         }
     }
 
-    /**
-     * @param string $filename
-     * @param string $prefix
-     */
-    private function assertPrefix($filename, $prefix)
+    private function assertPrefix(string $filename, string $prefix): void
     {
         if (strpos($filename, $prefix) !== 0) {
             throw new RuntimeException(sprintf('Detected invalid file/directory %s in the plugin zip: %s', $filename, $prefix));
         }
     }
 
-    /**
-     * @param string $filename
-     */
-    private function assertNoDirectoryTraversal($filename)
+    private function assertNoDirectoryTraversal(string $filename): void
     {
         if (strpos($filename, '../') !== false) {
             throw new RuntimeException('Directory Traversal detected');
@@ -180,11 +163,9 @@ class PluginExtractor
     }
 
     /**
-     * @param string $pluginName
-     *
-     * @return bool|string
+     * @return false|string
      */
-    private function findOldFile($pluginName)
+    private function findOldFile(string $pluginName)
     {
         $dir = $this->pluginDir . '/' . $pluginName;
         if ($this->filesystem->exists($dir)) {
@@ -208,7 +189,7 @@ class PluginExtractor
     /**
      * @param string|false $oldFile
      *
-     * @return bool|string
+     * @return false|string
      */
     private function createBackupFile($oldFile)
     {
@@ -222,19 +203,19 @@ class PluginExtractor
         return $backupFile;
     }
 
-    /**
-     * @param string $prefix
-     */
-    private function validatePluginRequirements($prefix, ZipArchive $archive)
+    private function validatePluginRequirements(string $prefix, ZipArchive $archive): void
     {
-        if ($xml = $archive->getFromName($prefix . '/plugin.xml')) {
-            $tmpFile = tempnam(sys_get_temp_dir(), uniqid()) . '.xml';
-            file_put_contents($tmpFile, $xml);
-            try {
-                $this->requirementsValidator->validate($tmpFile, $this->release->getVersion());
-            } finally {
-                unlink($tmpFile);
-            }
+        $xml = $archive->getFromName($prefix . '/plugin.xml');
+        if (!$xml) {
+            return;
+        }
+
+        $tmpFile = tempnam(sys_get_temp_dir(), uniqid()) . '.xml';
+        file_put_contents($tmpFile, $xml);
+        try {
+            $this->requirementsValidator->validate($tmpFile, $this->release->getVersion());
+        } finally {
+            unlink($tmpFile);
         }
     }
 }

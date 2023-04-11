@@ -44,19 +44,23 @@ use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Helper\Utils;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Translation;
+use Shopware_Controllers_Frontend_Checkout;
 use Symfony\Component\HttpFoundation\Request;
 
 class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use ContainerTrait;
     use CustomerLoginTrait;
+    use DatabaseTransactionBehaviour;
 
     private const PRODUCT_NUMBER = 'SW10239';
     private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
     private const ENGLISH_SHOP_ID = 2;
     private const COUNTRY_SETTINGS_TRANSLATION_KEY = 'config_countries';
     private const PAYMENT_ID_INVOICE = 4;
+    private const ERROR_MESSAGE_LAST_STOCK = 'Leider können wir den von Ihnen gewünschten Artikel nicht mehr in ausreichender Stückzahl liefern.';
 
     private Connection $connection;
 
@@ -146,6 +150,39 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertStringContainsString('<div class="modal--checkout-add-article">', $responseText);
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
+    }
+
+    public function testAddProductActionErrorMessages(): void
+    {
+        $this->connection->executeQuery(
+            'UPDATE s_articles_details, s_articles SET s_articles_details.laststock = 1, s_articles.laststock = 1 WHERE s_articles_details.ordernumber = :ordernumber AND s_articles.id = s_articles_details.articleID',
+            [':ordernumber' => self::PRODUCT_NUMBER]
+        );
+
+        $controller = $this->createController();
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+
+        $front = $this->getContainer()->get('front');
+        $front->setRequest($request);
+        $front->setResponse($response);
+
+        $request->setMethod(Request::METHOD_POST);
+        $request->setPost([
+            'sAdd' => self::PRODUCT_NUMBER,
+        ]);
+
+        $controller->setFront($front);
+        $controller->setRequest($request);
+        $controller->setResponse($response);
+        $controller->init();
+        $controller->addArticleAction();
+
+        static::assertTrue($controller->Response()->isRedirect());
+        static::assertSame(302, $controller->Response()->getHttpResponseCode());
+        static::assertStringEndsWith('/index/cart', $response->getHeader('Location'));
+        static::assertSame(self::ERROR_MESSAGE_LAST_STOCK, $this->getContainer()->get('session')->get('sErrorMessages'));
+        static::assertSame(self::ERROR_MESSAGE_LAST_STOCK, $controller->View()->getAssign('sBasketInfo'));
     }
 
     /**
@@ -297,7 +334,6 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
     {
         $this->loginCustomer();
 
-        $this->getContainer()->get(Connection::class)->beginTransaction();
         static::assertTrue($this->adminModule->sUpdatePayment(self::PAYMENT_ID_INVOICE));
 
         $this->connection->insert(
@@ -334,7 +370,6 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
 
         $controller->init();
         $controller->ajaxCartAction();
-        $this->getContainer()->get(Connection::class)->rollBack();
 
         static::assertTrue($controller->View()->getAssign('paymentBlocked'));
 
@@ -419,6 +454,7 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertEqualsWithDelta($order->getInvoiceAmountNet(), $previousInvoiceAmountNet, Utils::FORMER_PHPUNIT_FLOAT_EPSILON, $messageNet);
 
         $this->getContainer()->get('modules')->Basket()->sDeleteBasket();
+        $this->reset();
     }
 
     /**
@@ -436,5 +472,13 @@ class CheckoutTest extends Enlight_Components_Test_Plugin_TestCase
         $this->dispatch('/checkout/addArticle', true);
 
         return $this->getContainer()->get('session')->getId();
+    }
+
+    private function createController(): Shopware_Controllers_Frontend_Checkout
+    {
+        $controller = $this->getContainer()->get('shopware_controllers_frontend_checkout');
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+
+        return $controller;
     }
 }

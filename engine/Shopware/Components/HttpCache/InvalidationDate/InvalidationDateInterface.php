@@ -24,7 +24,7 @@
 
 namespace Shopware\Components\HttpCache\InvalidationDate;
 
-use DateTime;
+use DateTimeInterface;
 use Enlight_Controller_Request_Request as Request;
 
 interface InvalidationDateInterface
@@ -39,7 +39,7 @@ interface InvalidationDateInterface
     /**
      * Returns the next point in time at which the given resource is unlocked.
      *
-     * @return DateTime|null
+     * @return DateTimeInterface|null
      */
     public function getInvalidationDate(Request $request);
 }

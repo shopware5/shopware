@@ -125,7 +125,7 @@ class StatisticsClient implements StatisticsClientInterface
     private function resetBenchmarkConfig(BenchmarkConfig $config): void
     {
         $this->connection->update('s_benchmark_config', [
-            'id' => Uuid::uuid4(),
+            'id' => (string) Uuid::uuid4(),
             'last_sent' => '1970-01-01 00:00:00',
             'last_received' => '1970-01-01 00:00:00',
             'last_updated_orders_date' => null,

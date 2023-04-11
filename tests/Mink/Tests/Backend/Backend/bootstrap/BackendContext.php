@@ -26,8 +26,8 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Mink\Tests\Backend\Backend\bootstrap;
 
-use Exception;
 use Shopware\Tests\Mink\Page\Backend\Backend\Backend;
+use Shopware\Tests\Mink\Tests\General\Helpers\Helper;
 use Shopware\Tests\Mink\Tests\General\Helpers\SubContext;
 
 class BackendContext extends SubContext
@@ -56,13 +56,13 @@ class BackendContext extends SubContext
      */
     public function iOpenTheModule(string $moduleName): void
     {
-        $this->spin(function (BackendContext $context) use ($moduleName) {
+        Helper::spin(function (BackendContext $context) use ($moduleName) {
             $backendPage = $context->getPage(Backend::class);
             \assert($backendPage instanceof Backend);
             $backendPage->openModule($moduleName);
 
             return true;
-        });
+        }, Helper::DEFAULT_WAIT_TIME, $this);
     }
 
     /**
@@ -72,13 +72,13 @@ class BackendContext extends SubContext
     {
         $this->getPage(Backend::class);
 
-        $this->spin(function (BackendContext $context) {
+        Helper::spin(function (BackendContext $context) {
             $backendPage = $context->getPage(Backend::class);
             \assert($backendPage instanceof Backend);
             $backendPage->verifyModule();
 
             return true;
-        });
+        }, Helper::DEFAULT_WAIT_TIME, $this);
     }
 
     /**
@@ -86,9 +86,9 @@ class BackendContext extends SubContext
      */
     public function iShouldSeeADropdownAppear(): void
     {
-        $this->spin(function ($context) {
+        Helper::spin(function (BackendContext $context) {
             return $context->getPage(Backend::class)->find('css', '.x-boundlist-item') !== null;
-        });
+        }, Helper::DEFAULT_WAIT_TIME, $this);
     }
 
     /**
@@ -97,32 +97,6 @@ class BackendContext extends SubContext
     public function iShouldSeeASuccessMessage(): void
     {
         $this->waitIfThereIsText('Erfolgreich');
-    }
-
-    /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     *
-     * @throws Exception
-     */
-    public function spin(callable $lambda, int $wait = 60): bool
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return true;
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        throw new Exception("Spin function timed out after {$wait} seconds");
     }
 
     /**
@@ -142,30 +116,6 @@ JS;
     }
 
     /**
-     * Based on Behat's own example
-     *
-     * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
-     */
-    protected function spinWithNoException(callable $lambda, int $wait = 60): bool
-    {
-        $time = time();
-        $stopTime = $time + $wait;
-        while (time() < $stopTime) {
-            try {
-                if ($lambda($this)) {
-                    return true;
-                }
-            } catch (Exception $e) {
-                // do nothing
-            }
-
-            usleep(250000);
-        }
-
-        return false;
-    }
-
-    /**
      * Checks via a string exists
      */
     protected function checkIfThereIsText(string $text, SubContext $context): bool
@@ -181,9 +131,9 @@ JS;
     protected function waitForText(string $text, int $sleep = 2): void
     {
         sleep($sleep);
-        $this->spin(function (SubContext $context) use ($text) {
+        Helper::spin(function (BackendContext $context) use ($text) {
             return $this->checkIfThereIsText($text, $context);
-        });
+        }, Helper::DEFAULT_WAIT_TIME, $this);
     }
 
     /**
@@ -191,8 +141,8 @@ JS;
      */
     protected function waitIfThereIsText(string $text, int $wait = 5): bool
     {
-        return $this->spinWithNoException(function (SubContext $context) use ($text) {
+        return Helper::spinWithNoException(function (BackendContext $context) use ($text) {
             return $this->checkIfThereIsText($text, $context);
-        }, $wait);
+        }, $wait, $this);
     }
 }

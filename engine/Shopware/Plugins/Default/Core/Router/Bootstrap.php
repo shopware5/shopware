@@ -89,7 +89,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
                 $shop->setBasePath('');
             }
 
-            $request->setSecure();
+            $request->setSecure($shop->getSecure());
             $request->setBasePath($shop->getBasePath());
             $request->setBaseUrl($shop->getBaseUrl());
             $request->setHttpHost($shop->getHost());

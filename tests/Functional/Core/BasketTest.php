@@ -93,7 +93,7 @@ class BasketTest extends TestCase
             [
                 'price' => 123,
                 'quantity' => 2,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
             ]
         );
 
@@ -104,7 +104,7 @@ class BasketTest extends TestCase
 
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -142,7 +142,7 @@ class BasketTest extends TestCase
             [
                 'price' => 123,
                 'quantity' => $inStockProduct['instock'] - 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $inStockProduct['ordernumber'],
                 'articleID' => $inStockProduct['articleID'],
             ]
@@ -181,7 +181,7 @@ class BasketTest extends TestCase
             [
                 'price' => 123,
                 'quantity' => $outStockProduct['instock'] + 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $outStockProduct['ordernumber'],
                 'articleID' => $outStockProduct['articleID'],
             ]
@@ -205,7 +205,7 @@ class BasketTest extends TestCase
             [
                 'price' => 123,
                 'quantity' => $inStockProduct['instock'] - 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $inStockProduct['ordernumber'],
                 'articleID' => $inStockProduct['articleID'],
             ]
@@ -224,7 +224,7 @@ class BasketTest extends TestCase
         // Clear the current cart
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -250,7 +250,7 @@ class BasketTest extends TestCase
             [
                 'price' => 123,
                 'quantity' => $ignoreStockProduct['instock'] + 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $ignoreStockProduct['ordernumber'],
                 'articleID' => $ignoreStockProduct['articleID'],
             ]
@@ -267,7 +267,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -294,7 +294,7 @@ class BasketTest extends TestCase
             [
                 'price' => 2,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProductOne['ordernumber'],
                 'articleID' => $randomProductOne['articleID'],
             ]
@@ -304,7 +304,7 @@ class BasketTest extends TestCase
             [
                 'price' => 3,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProductTwo['ordernumber'],
                 'articleID' => $randomProductTwo['articleID'],
             ]
@@ -394,7 +394,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -453,7 +453,7 @@ class BasketTest extends TestCase
             [
                 'price' => 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $normalProduct['ordernumber'],
                 'articleID' => $normalProduct['articleID'],
                 'modus' => 0,
@@ -464,7 +464,7 @@ class BasketTest extends TestCase
             1,
             $this->connection->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
-                [$this->session->get('sessionId')]
+                [$this->getSessionId()]
             )
         );
 
@@ -475,7 +475,7 @@ class BasketTest extends TestCase
             [
                 'price' => 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $premiumProductOne['ordernumber'],
                 'articleID' => $premiumProductOne['id'],
                 'modus' => 1,
@@ -486,7 +486,7 @@ class BasketTest extends TestCase
             [
                 'price' => 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $premiumProductTwo['ordernumber'],
                 'articleID' => $premiumProductTwo['id'],
                 'modus' => 1,
@@ -497,7 +497,7 @@ class BasketTest extends TestCase
             1,
             $this->connection->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
-                [$this->session->get('sessionId')]
+                [$this->getSessionId()]
             )
         );
 
@@ -514,7 +514,7 @@ class BasketTest extends TestCase
             [
                 'price' => 10000,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $normalProduct['ordernumber'],
                 'articleID' => $normalProduct['articleID'],
                 'modus' => 0,
@@ -530,7 +530,7 @@ class BasketTest extends TestCase
             2,
             $this->connection->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
-                [$this->session->get('sessionId')]
+                [$this->getSessionId()]
             )
         );
 
@@ -541,14 +541,14 @@ class BasketTest extends TestCase
             3,
             $this->connection->fetchOne(
                 'SELECT count(*) FROM s_order_basket WHERE sessionID = ?',
-                [$this->session->get('sessionId')]
+                [$this->getSessionId()]
             )
         );
 
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -580,7 +580,7 @@ class BasketTest extends TestCase
             $ordernumberExport,
             $this->connection->fetchOne(
                 'SELECT ordernumber FROM s_order_basket WHERE sessionID = ? AND modus = 1',
-                [$this->session->get('sessionId')]
+                [$this->getSessionId()]
             )
         );
 
@@ -619,7 +619,7 @@ class BasketTest extends TestCase
             [
                 'price' => 100,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $products[0]['ordernumber'],
                 'articleID' => $products[0]['articleID'],
                 'tax_rate' => $products[0]['tax'],
@@ -633,7 +633,7 @@ class BasketTest extends TestCase
             [
                 'price' => 100,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $products[1]['ordernumber'],
                 'articleID' => $products[1]['articleID'],
                 'tax_rate' => $products[1]['tax'],
@@ -646,7 +646,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -719,7 +719,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -754,13 +754,14 @@ class BasketTest extends TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Voucher should work ok now
-        static::assertTrue($this->module->sAddVoucher('testOne'));
+        $result = $this->module->sAddVoucher('testOne');
+        static::assertTrue($result);
         static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values with tax from user group
         $discount = $this->connection->fetchAssociative(
             'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
-            [$this->session->get('sessionId')]
+            [$this->getSessionId()]
         );
         static::assertIsArray($discount);
         static::assertEquals($voucherData['value'] * -1, $discount['price']);
@@ -784,7 +785,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -840,7 +841,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -848,13 +849,14 @@ class BasketTest extends TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        static::assertTrue($this->module->sAddVoucher($voucherCodeData['code']));
+        $result = $this->module->sAddVoucher($voucherCodeData['code']);
+        static::assertTrue($result);
         static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values. This voucher has no taxes
         $discount = $this->connection->fetchAssociative(
             'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
-            [$this->session->get('sessionId')]
+            [$this->getSessionId()]
         );
         static::assertIsArray($discount);
         static::assertEquals($voucherData['value'] * -1, $discount['price']);
@@ -878,7 +880,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -927,7 +929,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -938,13 +940,14 @@ class BasketTest extends TestCase
 
         $previousAmount = $this->module->sGetAmount();
         // Test with one-time code, success
-        static::assertTrue($this->module->sAddVoucher($voucherData['vouchercode']));
+        $result = $this->module->sAddVoucher($voucherData['vouchercode']);
+        static::assertTrue($result);
         static::assertLessThan($previousAmount, $this->module->sGetAmount());
 
         // Test the voucher values with custom tax from voucher
         $discount = $this->connection->fetchAssociative(
             'SELECT * FROM s_order_basket WHERE modus = 2 and sessionID = ?',
-            [$this->session->get('sessionId')]
+            [$this->getSessionId()]
         );
         static::assertIsArray($discount);
         static::assertEquals($voucherData['value'] * -1, $discount['price']);
@@ -967,7 +970,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -1024,7 +1027,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherOneData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -1055,7 +1058,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -1110,7 +1113,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -1146,7 +1149,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -1191,7 +1194,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomArticles[1]['ordernumber'],
                 'articleID' => $randomArticles[1]['articleID'],
             ]
@@ -1216,7 +1219,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomArticles[0]['ordernumber'],
                 'articleID' => $randomArticles[0]['articleID'],
             ]
@@ -1230,7 +1233,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -1280,7 +1283,7 @@ class BasketTest extends TestCase
                 [
                     'price' => $basketAmountWithoutVoucher,
                     'quantity' => 1,
-                    'sessionID' => $this->session->get('sessionId'),
+                    'sessionID' => $this->getSessionId(),
                     'ordernumber' => $randomProduct['ordernumber'],
                     'articleID' => $randomProduct['articleID'],
                 ]
@@ -1293,7 +1296,7 @@ class BasketTest extends TestCase
             // Housekeeping
             $this->connection->delete(
                 's_order_basket',
-                ['sessionID' => $this->session->get('sessionId')]
+                ['sessionID' => $this->getSessionId()]
             );
         }
 
@@ -1335,7 +1338,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProductTwo['ordernumber'],
                 'articleID' => $randomProductTwo['articleID'],
             ]
@@ -1367,7 +1370,7 @@ class BasketTest extends TestCase
             [
                 'price' => $voucherData['minimumcharge'] + 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProductOne['ordernumber'],
                 'articleID' => $randomProductOne['articleID'],
             ]
@@ -1381,7 +1384,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_emarketing_vouchers',
@@ -1462,7 +1465,8 @@ class BasketTest extends TestCase
         $this->generateBasketSession();
 
         // Test with empty basket, empty
-        static::assertNull($this->module->sGetBasketIds());
+        $noIds = $this->module->sGetBasketIds();
+        static::assertNull($noIds);
 
         // Add the first product to the basket, test we get the product id
         $this->connection->insert(
@@ -1470,7 +1474,7 @@ class BasketTest extends TestCase
             [
                 'price' => 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProducts[0]['ordernumber'],
                 'articleID' => $randomProducts[0]['articleID'],
             ]
@@ -1486,7 +1490,7 @@ class BasketTest extends TestCase
             [
                 'price' => 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProducts[0]['ordernumber'],
                 'articleID' => $randomProducts[0]['articleID'],
             ]
@@ -1502,7 +1506,7 @@ class BasketTest extends TestCase
             [
                 'price' => 1,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProducts[1]['ordernumber'],
                 'articleID' => $randomProducts[1]['articleID'],
             ]
@@ -1522,7 +1526,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -1550,7 +1554,7 @@ class BasketTest extends TestCase
             [
                 'price' => 2,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomArticle['ordernumber'],
                 'articleID' => $randomArticle['articleID'],
             ]
@@ -1565,7 +1569,7 @@ class BasketTest extends TestCase
             [
                 'price' => 20,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomArticle['ordernumber'],
                 'articleID' => $randomArticle['articleID'],
             ]
@@ -1578,7 +1582,7 @@ class BasketTest extends TestCase
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'] = $oldMinimumOrderSurcharge;
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -1604,7 +1608,7 @@ class BasketTest extends TestCase
             [
                 'price' => 2,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -1616,7 +1620,7 @@ class BasketTest extends TestCase
         // Check that we have no surcharge
         $surchargeRowBefore = $this->connection->fetchAssociative(
             'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
-            [$this->session->get('sessionId')]
+            [$this->getSessionId()]
         );
         static::assertEmpty($surchargeRowBefore);
 
@@ -1631,7 +1635,7 @@ class BasketTest extends TestCase
         // Fetch the surcharge row, should have price 5
         $surchargeRow = $this->connection->fetchAssociative(
             'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
-            [$this->session->get('sessionId')]
+            [$this->getSessionId()]
         );
         static::assertIsArray($surchargeRow);
         static::assertEquals(5, $surchargeRow['price']);
@@ -1641,7 +1645,7 @@ class BasketTest extends TestCase
         $this->module->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge'] = $oldMinimumOrderSurcharge;
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -1688,7 +1692,7 @@ class BasketTest extends TestCase
             [
                 'price' => 2,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -1698,7 +1702,7 @@ class BasketTest extends TestCase
         static::assertEmpty(
             $this->connection->fetchAssociative(
                 'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus=4',
-                [$this->session->get('sessionId')]
+                [$this->getSessionId()]
             )
         );
 
@@ -1713,7 +1717,7 @@ class BasketTest extends TestCase
         // Fetch the surcharge row, should have price 5
         $surchargeRow = $this->connection->fetchAssociative(
             'SELECT * FROM s_order_basket WHERE sessionID = ? AND modus = 4',
-            [$this->session->get('sessionId')]
+            [$this->getSessionId()]
         );
         static::assertIsArray($surchargeRow);
         static::assertEquals(2 / 100 * 5, $surchargeRow['price']);
@@ -1722,7 +1726,7 @@ class BasketTest extends TestCase
         $this->deleteDummyCustomer($customer);
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->delete(
             's_core_paymentmeans',
@@ -1744,7 +1748,7 @@ class BasketTest extends TestCase
             [
                 'price' => 2,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -2011,7 +2015,7 @@ class BasketTest extends TestCase
             [
                 'price' => 2,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $product->getMainDetail()->getNumber(),
                 'articleID' => $product->getId(),
             ]
@@ -2174,7 +2178,7 @@ class BasketTest extends TestCase
             [
                 'price' => 0.01,
                 'quantity' => 1,
-                'sessionID' => $this->session->get('sessionId'),
+                'sessionID' => $this->getSessionId(),
                 'ordernumber' => $randomProduct['ordernumber'],
                 'articleID' => $randomProduct['articleID'],
             ]
@@ -2199,7 +2203,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -2256,7 +2260,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
         $this->connection->update(
             's_articles_details',
@@ -2430,7 +2434,7 @@ class BasketTest extends TestCase
         // Housekeeping
         $this->connection->delete(
             's_order_basket',
-            ['sessionID' => $this->session->get('sessionId')]
+            ['sessionID' => $this->getSessionId()]
         );
     }
 
@@ -2677,5 +2681,10 @@ class BasketTest extends TestCase
         $randomProduct['supplierID'] = (int) $randomProduct['supplierID'];
 
         return $randomProduct;
+    }
+
+    private function getSessionId(): string
+    {
+        return $this->session->get('sessionId');
     }
 }

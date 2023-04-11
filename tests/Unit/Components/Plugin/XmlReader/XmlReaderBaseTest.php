@@ -62,7 +62,6 @@ class XmlReaderBaseTest extends TestCase
     {
         $data = (new XmlConfigReader())->read(__DIR__ . '/examples/base/config.xml');
 
-        static::assertIsArray($data);
         static::assertCount(3, $data);
     }
 
@@ -140,7 +139,6 @@ class XmlReaderBaseTest extends TestCase
             $element1->getAttribute('required')
         );
 
-        static::assertIsBool($element1Result);
         static::assertTrue($element1Result);
 
         // required not given - passed default value
@@ -152,7 +150,6 @@ class XmlReaderBaseTest extends TestCase
             $element2->getAttribute('required')
         );
 
-        static::assertIsBool($element2Result);
         static::assertFalse($element2Result);
     }
 

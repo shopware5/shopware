@@ -48,11 +48,6 @@ class RouterTest extends TestCase
         $this->router = new Router();
     }
 
-    public function testCanGetInstance(): void
-    {
-        static::assertInstanceOf(Router::class, $this->router);
-    }
-
     /**
      * @return array<array<string|int|bool>>
      */

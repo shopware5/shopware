@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,16 +28,12 @@ namespace Shopware\Tests\Unit\Components\Event;
 
 use Enlight_Event_EventArgs;
 use Enlight_Event_Handler_Default;
-use Enlight_Event_Subscriber;
 use Enlight_Event_Subscriber_Config;
 use PHPUnit\Framework\TestCase;
 
 class SubscriberConfigTest extends TestCase
 {
-    /**
-     * @var Enlight_Event_Subscriber_Config
-     */
-    protected $eventManager;
+    protected Enlight_Event_Subscriber_Config $eventManager;
 
     public function setUp(): void
     {
@@ -43,18 +41,12 @@ class SubscriberConfigTest extends TestCase
         $this->eventManager = new Enlight_Event_Subscriber_Config('test');
     }
 
-    public function testCanCreateInstance()
-    {
-        static::assertInstanceOf(Enlight_Event_Subscriber_Config::class, $this->eventManager);
-        static::assertInstanceOf(Enlight_Event_Subscriber::class, $this->eventManager);
-    }
-
-    public function testAddSubscriber()
+    public function testAddSubscriber(): void
     {
         // Add to subscribers
         $handler0 = new Enlight_Event_Handler_Default(
             'Example',
-            function ($args) {
+            function () {
                 return 'foo';
             }
         );
@@ -62,7 +54,7 @@ class SubscriberConfigTest extends TestCase
 
         $handler1 = new Enlight_Event_Handler_Default(
             'Example',
-            function ($args) {
+            function () {
                 return 'bar';
             }
         );
@@ -75,12 +67,12 @@ class SubscriberConfigTest extends TestCase
         static::assertEquals('bar', $result[1]->execute(new Enlight_Event_EventArgs()));
     }
 
-    public function testRemoveSubscriber()
+    public function testRemoveSubscriber(): void
     {
         // Add to subscribers
         $handler0 = new Enlight_Event_Handler_Default(
             'Example',
-            function ($args) {
+            function () {
                 return 'foo';
             }
         );
@@ -88,7 +80,7 @@ class SubscriberConfigTest extends TestCase
 
         $handler1 = new Enlight_Event_Handler_Default(
             'Example',
-            function ($args) {
+            function () {
                 return 'bar';
             }
         );

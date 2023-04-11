@@ -36,22 +36,22 @@ class CategoryCondition implements ConditionInterface, JsonSerializable
     private const NAME = 'category';
 
     /**
-     * @var int[]
+     * @var array<int>
      */
     protected $categoryIds;
 
     /**
-     * @param int[] $categoryIds
+     * @param array<int|numeric-string> $categoryIds
      */
     public function __construct(array $categoryIds)
     {
         Assertion::allIntegerish($categoryIds);
-        $this->categoryIds = array_map('intval', $categoryIds);
+        $this->categoryIds = array_map('\intval', $categoryIds);
         sort($this->categoryIds, SORT_NUMERIC);
     }
 
     /**
-     * @return int[]
+     * @return array<int>
      */
     public function getCategoryIds()
     {

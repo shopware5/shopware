@@ -70,7 +70,7 @@ return [
 
     'mail' => [
         'type' => 'smtp',
-        'host' => 'smtp',
+        'host' => '%smtp.host%',
         'port' => 1025,
     ],
 ];

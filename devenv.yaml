@@ -1,4 +1,11 @@
+allowUnfree: true
 inputs:
-  nixpkgs:
-    url: github:NixOS/nixpkgs/nixpkgs-unstable
-# can't point to the local modules here as it's used as a template
+    nixpkgs:
+        url: github:NixOS/nixpkgs/nixpkgs-unstable
+    nur:
+        url: github:nix-community/NUR
+    phps:
+        url: github:fossar/nix-phps
+        inputs:
+            nixpkgs:
+                follows: nixpkgs
