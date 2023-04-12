@@ -40,7 +40,6 @@ use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\ConfiguratorService;
-use Shopware\Bundle\StoreFrontBundle\Service\Core\ListingLinkRewriteService;
 use Shopware\Bundle\StoreFrontBundle\Service\ListingLinkRewriteServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductNumberServiceInterface;
@@ -152,7 +151,7 @@ class sArticles implements Enlight_Hook
 
     private ProductNumberServiceInterface $productNumberService;
 
-    private ListingLinkRewriteService $listingLinkRewriteService;
+    private ListingLinkRewriteServiceInterface $listingLinkRewriteService;
 
     public function __construct(
         Category $category = null,
