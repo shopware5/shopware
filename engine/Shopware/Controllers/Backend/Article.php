@@ -954,8 +954,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleImages($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         $thumbnailManager = Shopware()->Container()->get(Manager::class);
@@ -976,6 +974,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $result = $builder->getQuery()->getArrayResult();
 
         foreach ($result as &$item) {
+            if (empty($item['media'])) {
+                continue;
+            }
             $thumbnails = $thumbnailManager->getMediaThumbnails(
                 $item['media']['name'],
                 $item['media']['type'],

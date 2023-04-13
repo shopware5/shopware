@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
+use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestHttp;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Template_Manager;
@@ -54,6 +55,7 @@ class ArticleTest extends TestCase
     use DatabaseTransactionBehaviour;
 
     private const PRODUCT_WITH_VARIANTS_ID = 180;
+    private const PRODUCT_ID_SPACHTELMASSE = 272;
 
     private Shopware_Controllers_Backend_Article $controller;
 
@@ -250,6 +252,22 @@ class ArticleTest extends TestCase
         static::assertInstanceOf(StoreFrontConfiguratorSet::class, $configurator);
         foreach ($configurator->getGroups() as $group) {
             static::assertCount(1, $group->getOptions());
+        }
+    }
+
+    public function testGetArticleImagesIfImageWasDeleted(): void
+    {
+        $manipulatedImagePosition = 2;
+        $connection = $this->getContainer()->get(Connection::class);
+        $connection->update('s_articles_img', ['media_id' => null], ['position' => $manipulatedImagePosition]);
+        $images = $this->controller->getArticleImages(self::PRODUCT_ID_SPACHTELMASSE);
+
+        foreach ($images as $image) {
+            if ((int) $image['position'] === $manipulatedImagePosition) {
+                static::assertNull($image['media']);
+            } else {
+                static::assertIsArray($image['media']);
+            }
         }
     }
 
