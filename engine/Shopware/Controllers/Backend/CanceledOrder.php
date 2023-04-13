@@ -44,6 +44,9 @@ use Shopware\Models\Voucher\Voucher;
  */
 class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * @return void
+     */
     public function convertOrderAction()
     {
         if (!($orderId = $this->Request()->getParam('orderId'))) {
@@ -94,7 +97,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $numberModel->setNumber($newOrderNumber);
 
         // Set new ordernumber to the order and its details
-        /** @var Order $orderModel */
         $orderModel = $this->get('models')->find(Order::class, $orderId);
         $orderModel->setNumber((string) $newOrderNumber);
         foreach ($orderModel->getDetails() as $detailModel) {
@@ -126,7 +128,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             $result[0]['customer']['defaultShippingAddress'] = $result[0]['customer']['defaultBillingAddress'];
         }
 
-        /** @var Customer $customer */
         $customer = $this->get('models')->find(Customer::class, $result[0]['customer']['id']);
 
         // Copy customer number into billing address from customer
@@ -137,7 +138,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return (string) $value;
         }, $result[0]['customer']['defaultBillingAddress']);
 
-        /** @var Country $billingCountry */
         $billingCountry = $this->get('models')->find(Country::class, $result[0]['customer']['defaultBillingAddress']['countryId']);
 
         // Create new entry in s_order_billingaddress
@@ -153,7 +153,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return (string) $value;
         }, $result[0]['customer']['defaultShippingAddress']);
 
-        /** @var Country $shippingCountry */
         $shippingCountry = $this->get('models')->find(Country::class, $result[0]['customer']['defaultShippingAddress']['countryId']);
 
         // Create new entry in s_order_shippingaddress
@@ -165,7 +164,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         $this->get('models')->persist($shippingModel);
 
         // Finally set the order to be a regular order
-        /** @var Status $statusModel */
         $statusModel = $this->get('models')->find(Status::class, 1);
         $orderModel->setOrderStatus($statusModel);
 
@@ -177,6 +175,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
     /**
      * Get last viewports/exit pages. This way you can determine, where the customers do have
      * problems with the shop system.
+     *
+     * @return void
      */
     public function getViewportsAction()
     {
@@ -268,6 +268,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Get available vouchers for a customer who canceled his order.
+     *
+     * @return void
      */
     public function getVoucherAction()
     {
@@ -295,10 +297,13 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Sends a CanceledQuestion Mail to a given mail-address
+     *
+     * @return void
      */
     public function sendCanceledQuestionMailAction()
     {
-        if (!($mailTo = $this->Request()->getParam('mail'))) {
+        $mailTo = $this->Request()->getParam('mail');
+        if (!$mailTo) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('errorMessage/noMail', 'No mail passed.'),
@@ -307,7 +312,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
-        if (!($template = $this->Request()->getParam('template'))) {
+        $template = $this->Request()->getParam('template');
+        if (!$template) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('errorMessage/noTemplate', 'No template passed.'),
@@ -326,7 +332,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
-        if (!($customerId = $this->Request()->getParam('customerId'))) {
+        $customerId = $this->Request()->getParam('customerId');
+        if (!$customerId) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('errorMessage/noCustomerId', 'No customerId passed.'),
@@ -335,7 +342,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
             return;
         }
 
-        if (!($orderId = $this->Request()->getParam('orderId'))) {
+        $orderId = $this->Request()->getParam('orderId');
+        if (!$orderId) {
             $this->View()->assign([
                 'success' => false,
                 'message' => $this->translateMessage('errorMessage/noOrderId', 'No orderId passed.'),
@@ -345,8 +353,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         $code = null;
-        // Set the template depending on the voucherId. -1 is a special Id, which defines
-        // the 'Ask for Reason' question.
+        // Set the template depending on the voucherId. -1 is a special ID, which defines the 'Ask for Reason' question.
         if ($template === 'sCANCELEDQUESTION') {
             $context = [];
         } else {
@@ -359,28 +366,19 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
                 return;
             }
-            if ($code[0]['validTo'] !== null) {
-                $code[0]['validTo'] = $code[0]['validTo']->format('Y-m-d');
+            if ($code['validTo'] !== null) {
+                $code['validTo'] = $code['validTo']->format('Y-m-d');
             }
-            if ($code[0]['validFrom'] !== null) {
-                $code[0]['validFrom'] = $code[0]['validFrom']->format('Y-m-d');
+            if ($code['validFrom'] !== null) {
+                $code['validFrom'] = $code['validFrom']->format('Y-m-d');
             }
             $context = [
-                'sVouchercode' => $code[0]['code'],
-                'sVouchervalue' => $code[0]['value'],
-                'sVouchervalidto' => $code[0]['validTo'],
-                'sVouchervalidfrom' => $code[0]['validFrom'],
-                'sVoucherpercental' => $code[0]['percental'],
+                'sVouchercode' => $code['code'],
+                'sVouchervalue' => $code['value'],
+                'sVouchervalidto' => $code['validTo'],
+                'sVouchervalidfrom' => $code['validFrom'],
+                'sVoucherpercental' => $code['percental'],
             ];
-        }
-
-        if (!\is_array($code)) {
-            $this->View()->assign([
-                'success' => false,
-                'message' => $this->translateMessage('errorMessage/noVoucherCodes', 'No more free codes available.'),
-            ]);
-
-            return;
         }
 
         // Find the shop matching the order
@@ -412,19 +410,21 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
         }
 
         // Mark the used voucher-code as reserved for our user
-        $builder = $this->get('models')->createQueryBuilder();
-        $builder->update(Code::class, 'code')
+        if (\is_array($code)) {
+            $builder = $this->get('models')->createQueryBuilder();
+            $builder->update(Code::class, 'code')
                 ->set('code.customerId', $customerId)
                 ->where('code.id = ?1')
                 ->andWhere('code.customerId is NULL')
-                ->setParameter(1, $code[0]['id'])
+                ->setParameter(1, $code['id'])
                 ->getQuery()
                 ->execute();
+        }
 
         // Write to db that Voucher/Mail was already sent
         // For compatibility reason this is done the same way it was done in Shopware 3
         if ($template === 'sCANCELEDQUESTION') {
-            // 'Frage gesendet' marks a order, when its customer got a "Ask Reason" mail
+            // 'Frage gesendet' marks an order, when its customer got an "Ask Reason" mail
             // Compatible with Shopware 3
 
             $orderRepository = $this->get('models')->getRepository(Order::class);
@@ -443,6 +443,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Get data for the statistics view
+     *
+     * @return void
      */
     public function getStatisticsAction()
     {
@@ -488,6 +490,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Gert articles from canceled orders
+     *
+     * @return void
      */
     public function getArticleAction()
     {
@@ -558,6 +562,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Read canceled baskets
+     *
+     * @return void
      */
     public function getBasketAction()
     {
@@ -633,6 +639,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Read canceled orders from database
+     *
+     * @return void
      */
     public function getOrderAction()
     {
@@ -689,6 +697,8 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Delete an order
+     *
+     * @return void
      */
     public function deleteOrderAction()
     {
@@ -742,35 +752,31 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     /**
      * Read free codes from the database. If no free codes are available, null will be returned
+     *
+     * @return array<string, mixed>|null
      */
     private function getFreeVoucherCode(int $voucherId): ?array
     {
-        $builder = $this->get('models')->createQueryBuilder();
-        $builder->select([
-            'voucherCodes.id',
-            'voucherCodes.code',
-            'voucher.validTo',
-            'voucher.value',
-            'voucher.percental',
-            'voucher.validFrom',
-        ])
-                ->from(Voucher::class, 'voucher')
-                ->leftJoin('voucher.codes', 'voucherCodes')
-                ->where('voucher.modus = ?1')
-                ->andWhere('voucher.id = :voucherId')
-                ->andWhere('voucher.validTo >= CURRENT_DATE() OR voucher.validTo is NULL')
-                ->andWhere('voucherCodes.customerId is NULL')
-                ->andWhere('voucherCodes.cashed = 0')
-                ->setParameter(1, 1)
-                ->setParameter('voucherId', $voucherId)
-                ->setMaxResults(1);
-        $query = $builder->getQuery();
-        $total = $this->get('models')->getQueryCount($query);
-        if ($total === 0) {
-            return null;
-        }
-
-        return $query->getArrayResult();
+        return $this->get('models')->createQueryBuilder()
+            ->select([
+                'voucherCodes.id',
+                'voucherCodes.code',
+                'voucher.validTo',
+                'voucher.value',
+                'voucher.percental',
+                'voucher.validFrom',
+            ])
+            ->from(Voucher::class, 'voucher')
+            ->leftJoin('voucher.codes', 'voucherCodes')
+            ->where('voucher.modus = 1')
+            ->andWhere('voucher.id = :voucherId')
+            ->andWhere('voucher.validTo >= CURRENT_DATE() OR voucher.validTo is NULL')
+            ->andWhere('voucherCodes.customerId is NULL')
+            ->andWhere('voucherCodes.cashed = 0')
+            ->setParameter('voucherId', $voucherId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
 
     /**
@@ -800,7 +806,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
     private function getOrderPositionByProduct(ProductVariant $variant, Order $order): ?Detail
     {
-        /** @var Detail $detail */
         foreach ($order->getDetails() as $detail) {
             if (!$this->isProductPosition($detail)) {
                 continue;
@@ -836,7 +841,7 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
      * Function which calculates, validates and updates the new in stock when a cancelled order will be transformed into
      * a regular order
      */
-    private function convertCancelledOrderInStock(Order $orderModel): bool
+    private function convertCancelledOrderInStock(Order $orderModel): void
     {
         $entityManager = $this->get(ModelManager::class);
 
@@ -854,8 +859,6 @@ class Shopware_Controllers_Backend_CanceledOrder extends Shopware_Controllers_Ba
 
             $entityManager->persist($product);
         }
-
-        return true;
     }
 
     /**
