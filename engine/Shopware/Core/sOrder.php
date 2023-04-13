@@ -1303,19 +1303,27 @@ class sOrder implements Enlight_Hook
     {
         $statusId = (int) $statusId;
         $orderId = (int) $orderId;
-        $dispatch = null;
 
         if (empty($templateName)) {
             $templateName = 'sORDERSTATEMAIL' . $statusId;
         }
 
-        if (empty($orderId) || empty($statusId)) {
+        if ($orderId === 0) {
+            return null;
+        }
+
+        $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(
+            ['name' => $templateName]
+        );
+
+        if (!$mailModel instanceof Mail) {
             return null;
         }
 
         $order = $this->getOrderForStatusMail($orderId);
         $orderDetails = $this->getOrderDetailsForStatusMail($orderId);
 
+        $dispatch = null;
         if (!empty($order['dispatchID'])) {
             $dispatch = $this->db->fetchRow('
                 SELECT id, name, description FROM s_premium_dispatch
@@ -1352,14 +1360,6 @@ class sOrder implements Enlight_Hook
 
         if (!empty($payment['description'])) {
             $order['payment_description'] = $payment['description'];
-        }
-
-        $mailModel = $this->modelManager->getRepository(Mail::class)->findOneBy(
-            ['name' => $templateName]
-        );
-
-        if (!$mailModel) {
-            return null;
         }
 
         $context = [
