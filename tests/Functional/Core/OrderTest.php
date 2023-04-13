@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Core;
 
 use Doctrine\ORM\AbstractQuery;
+use Enlight_Components_Mail;
 use Enlight_Controller_Request_RequestHttp as ShopwareRequest;
 use Enlight_Event_EventArgs;
 use PHPUnit\Framework\TestCase;
@@ -709,7 +710,31 @@ class OrderTest extends TestCase
         $requestStack->pop();
     }
 
-    protected function createOrder(): void
+    public function testCreateStatusMailWithNoStatusButWithTemplateNameShouldReturnMailObject(): void
+    {
+        $mail = $this->module->createStatusMail(15, 0, 'sORDERDOCUMENTS');
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
+    }
+
+    public function testCreateStatusMailWithNoStatusAndNoTemplateShouldReturnNull(): void
+    {
+        $mail = $this->module->createStatusMail(15, 0);
+        static::assertNull($mail);
+    }
+
+    public function testCreateStatusMailWithStatusShouldReturnMailObject(): void
+    {
+        $mail = $this->module->createStatusMail(15, 1);
+        static::assertInstanceOf(Enlight_Components_Mail::class, $mail);
+    }
+
+    public function testCreateStatusMailWithUnknownTemplateShouldReturnNull(): void
+    {
+        $mail = $this->module->createStatusMail(15, 1, 'doesNotExist');
+        static::assertNull($mail);
+    }
+
+    private function createOrder(): void
     {
         $products = $this->getRandomProducts();
 
@@ -737,7 +762,7 @@ class OrderTest extends TestCase
         ];
     }
 
-    protected function createDummyOrder(): int
+    private function createDummyOrder(): int
     {
         $number = 'SW-' . uniqid((string) mt_rand(), true);
         Shopware()->Db()->insert('s_order', [
