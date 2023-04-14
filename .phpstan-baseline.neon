@@ -22916,56 +22916,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Cache.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:convertOrderAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:deleteOrderAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getArticleAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getBasketAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getFreeVoucherCode\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getOrderAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getStatisticsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getViewportsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:getVoucherAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_CanceledOrder\\:\\:sendCanceledQuestionMailAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CanceledOrder.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$usedIds\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Category.php
@@ -39234,11 +39184,6 @@ parameters:
 			message: "#^Query error\\: Column \"s_user\\.subshopID\" expects value type int, got type '1'$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/AnalyticsTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CanceledOrderTest\\:\\:testCanceledOrderSummary\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/CanceledOrderTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
