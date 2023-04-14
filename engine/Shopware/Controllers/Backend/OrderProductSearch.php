@@ -41,6 +41,8 @@ use Shopware_Controllers_Backend_Base;
 class OrderProductSearch extends Shopware_Controllers_Backend_Base
 {
     private const DEFAULT_CUSTOMER_GROUP = 'EK';
+    private const DEFAULT_PRODUCT_QUANTITY = 1;
+    private const PLACEHOLDER_UP_TO = 'beliebig';
 
     public function getProductVariantsAction(): void
     {
@@ -69,8 +71,11 @@ class OrderProductSearch extends Shopware_Controllers_Backend_Base
             throw new ModelNotFoundException(Shop::class, $orderId);
         }
 
-        $customerGroup = $customer->getGroup();
-        $customerGroupKey = $customerGroup instanceof Group ? $customerGroup->getKey() : self::DEFAULT_CUSTOMER_GROUP;
+        $customerGroup = $customer->getGroup() ?? $this->container->get(ModelManager::class)->getRepository(Group::class)->findOneBy(['key' => self::DEFAULT_CUSTOMER_GROUP]);
+        if (!$customerGroup instanceof Group) {
+            throw new ModelNotFoundException(Group::class, $orderId);
+        }
+        $customerGroupKey = $customerGroup->getKey();
 
         $area = $orderShippingAddress->getCountry()->getArea();
         $state = $orderShippingAddress->getState();
@@ -105,9 +110,19 @@ class OrderProductSearch extends Shopware_Controllers_Backend_Base
         $builder->innerJoin('details', 's_articles', 'product', 'details.articleID = product.id');
         $builder->innerJoin('product', 's_articles_supplier', 'supplier', 'supplier.id = product.supplierID');
         $builder->leftJoin('details', 's_articles_prices', 'default_prices',
-            'details.id = default_prices.articledetailsID AND default_prices.pricegroup = :defaultCustomerGroup');
-        $builder->leftJoin('details', 's_articles_prices', 'customer_group_prices', 'details.id = customer_group_prices.articledetailsID AND  customer_group_prices.pricegroup = :customerGroup');
-        $builder->setParameters(['defaultCustomerGroup' => self::DEFAULT_CUSTOMER_GROUP, 'customerGroup' => $customerGroupKey]);
+            'details.id = default_prices.articledetailsID
+            AND default_prices.pricegroup = :defaultCustomerGroup
+            AND (:quantity >= default_prices.from AND (default_prices.to = :placeholderUpTo OR :quantity <= default_prices.to))');
+        $builder->leftJoin('details', 's_articles_prices', 'customer_group_prices',
+            'details.id = customer_group_prices.articledetailsID
+            AND customer_group_prices.pricegroup = :customerGroup
+            AND (:quantity >= customer_group_prices.from AND (customer_group_prices.to = :placeholderUpTo OR :quantity <= customer_group_prices.to))');
+        $builder->setParameters([
+            'defaultCustomerGroup' => self::DEFAULT_CUSTOMER_GROUP,
+            'customerGroup' => $customerGroupKey,
+            'quantity' => self::DEFAULT_PRODUCT_QUANTITY,
+            'placeholderUpTo' => self::PLACEHOLDER_UP_TO,
+        ]);
 
         foreach ($this->Request()->getParam('filter', []) as $filter) {
             if ($filter['property'] === 'free') {
@@ -138,7 +153,7 @@ class OrderProductSearch extends Shopware_Controllers_Backend_Base
                 $result[$index]['tax'] = (float) $taxRule->getTax();
             }
 
-            $result[$index]['price'] = round($variant['price'] / 100 * (100 + $result[$index]['tax']), 2);
+            $result[$index]['price'] = $customerGroup->getTax() === true ? round((float) $variant['price'] / 100 * (100 + $result[$index]['tax']), 2) : round((float) $variant['price'], 2);
         }
 
         $this->View()->assign(['success' => true, 'data' => $result, 'total' => $total]);
