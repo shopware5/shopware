@@ -9,7 +9,7 @@ fi
 
 echo "Clearing caches"
 mkdir $DIR/delete
-find $DIR -mindepth 1 -maxdepth 1 -type d ! -name delete -print0 | xargs -I{} -0 mv {} $DIR/delete/
+find $DIR -mindepth 1 -maxdepth 1 -type d ! -name delete ! -name phpstan -print0 | xargs -I{} -0 mv {} $DIR/delete/
 
 rm -f $DIR/../../web/cache/*.js > /dev/null
 rm -f $DIR/../../web/cache/*.css
