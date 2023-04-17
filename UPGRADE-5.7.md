@@ -10,6 +10,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Deprecations
 
+* Deprecated `\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber`, it will be removed with Shopware 5.8, because it is not used.
+
 ### Changes
 
 * Updated `guzzlehttp/psr7` to version 2.4.4
