@@ -1,7 +1,7 @@
 {
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "3.15.1",
-        "kubawerlos/php-cs-fixer-custom-fixers": "3.13.0"
+        "friendsofphp/php-cs-fixer": "3.16.0",
+        "kubawerlos/php-cs-fixer-custom-fixers": "3.14.0"
     },
     "sort-packages": true
 }
