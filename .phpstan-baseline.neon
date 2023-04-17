@@ -31,11 +31,6 @@ parameters:
 			path: _sql/migrations/1207-add-new-seo-alias-for-variants.php
 
 		-
-			message: "#^Variable \\$shopValue in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: _sql/migrations/1207-add-new-seo-alias-for-variants.php
-
-		-
 			message: "#^Parameter \\#1 \\$str of function strtolower expects string, int\\|string\\|false\\|null given\\.$#"
 			count: 1
 			path: _sql/migrations/1226-add-blog-comment-mailtemplate.php
@@ -267,11 +262,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$variable_representation of function unserialize expects string, string\\|null given\\.$#"
-			count: 1
-			path: _sql/migrations/370-optimize-performance.php
-
-		-
-			message: "#^Variable \\$shopValue in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: _sql/migrations/370-optimize-performance.php
 
@@ -1157,11 +1147,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$localeId of method Migrations_Migration918\\:\\:getExistingSortingTranslations\\(\\) expects int, string\\|null given\\.$#"
-			count: 1
-			path: _sql/migrations/918-add-facet-module.php
-
-		-
-			message: "#^Variable \\$shopValue in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: _sql/migrations/918-add-facet-module.php
 
@@ -13041,11 +13026,6 @@ parameters:
 			path: engine/Shopware/Commands/GenerateAttributesCommand.php
 
 		-
-			message: "#^Variable \\$versions in empty\\(\\) always exists and is not falsy\\.$#"
-			count: 1
-			path: engine/Shopware/Commands/GenerateMigrationCommand.php
-
-		-
 			message: "#^Method Shopware\\\\Commands\\\\GenerateProductFeedCommand\\:\\:completeArgumentValues\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Commands/GenerateProductFeedCommand.php
@@ -19947,11 +19927,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitePageMenu\\:\\:overrideExisting\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/SitePageMenu.php
-
-		-
-			message: "#^Variable \\$activePages in empty\\(\\) always exists and is not falsy\\.$#"
 			count: 1
 			path: engine/Shopware/Components/SitePageMenu.php
 
