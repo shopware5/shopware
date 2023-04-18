@@ -961,7 +961,16 @@ class sOrder implements Enlight_Hook
         }
 
         if (!($mail instanceof Zend_Mail)) {
-            $mail = Shopware()->TemplateMail()->createMail('sORDER', $context);
+            $overrideConfig = $this->eventManager->filter(
+                'Shopware_Modules_Order_SendMail_CreateMail_FilterOverrideConfig',
+                [],
+                [
+                    'subject' => $this,
+                    'context' => $context,
+                    'variables' => $variables,
+                ]
+            );
+            $mail = Shopware()->TemplateMail()->createMail('sORDER', $context, null, $overrideConfig);
         }
 
         $mail->addTo($this->sUserData['additional']['user']['email']);
