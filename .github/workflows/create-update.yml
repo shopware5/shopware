@@ -1,0 +1,110 @@
+name: Create update package
+
+on:
+    push:
+        tags:
+            - "*"
+        branches:
+            - "**"
+
+jobs:
+    create-update-package:
+        env:
+            PACKAGE_PREFIX: 'update'
+            UPDATE_ASSET_DIR: './update-assets/'
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -   name: Clone
+                uses: actions/checkout@v3
+
+            -   name: Set current date as env variable
+                run: echo "REVISION=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   name: Install Composer
+                run: |
+                    composer install
+                    cd recovery/common && composer install
+
+            -   name: Download last package
+                run: |
+                    mkdir ./output
+                    LATEST_RELEASE=$(curl -L -s -H 'Accept: application/json' https://github.com/shopware/shopware/releases/latest)
+                    LATEST_VERSION=$(echo $LATEST_RELEASE | sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
+                    ARTIFACT_URL="https://github.com/shopware/shopware/releases/download/$LATEST_VERSION/install.zip"
+                    wget $ARTIFACT_URL
+                    unzip install.zip -d ./output/release
+
+            -   name: Replace placeholder
+                run: |
+                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION_TEXT___= =g' ./engine/Shopware/Kernel.php
+                    sed -i 's=___REVISION___=${{ env.REVISION }}=g' ./engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./recovery/install/data/version
+                    sed -i 's=___VERSION_TEXT___= =g' ./recovery/install/data/version
+
+            -   name: Create update asset dir
+                run: |
+                    mkdir ${{ env.UPDATE_ASSET_DIR }}
+
+            -   name: Create version file
+                run: |
+                    echo "${{ github.ref_name }} ${{ env.REVISION }}" > ${{ env.UPDATE_ASSET_DIR }}version
+
+            -   name: Generate cleanup list
+                run: php ./.github/deleted_files.php --input=$(pwd) > ${{ env.UPDATE_ASSET_DIR }}cleanup.txt
+
+            -   run: cat ${{ env.UPDATE_ASSET_DIR }}cleanup.txt
+
+            -   name: Generate cleanup list
+                run: ./.github/deleted_files_vendor.sh -o $(pwd)/output/release/vendor -n $(pwd)/vendor $(pwd) >> ${{ env.UPDATE_ASSET_DIR }}cleanup.txt
+            -   run: cat ${{ env.UPDATE_ASSET_DIR }}cleanup.txt
+
+            -   name: Copy Migrations
+                run: |
+                    mv ./_sql/migrations ${{ env.UPDATE_ASSET_DIR }}migrations
+
+            -   name: Dump SQL file with snippets
+                run: |
+                    php bin/console sw:snippets:to:sql ${{ env.UPDATE_ASSET_DIR }}snippets.sql --force --include-default-plugins --force
+
+            -   name: Create hash files
+                run: |
+                    mkdir -p engine/Shopware/Components/Check/Data
+                    find engine/Shopware themes -type f \( -iname '*.php' -o -iname '*.tpl' -o -iname '*.js' -o -iname '*.less' \) -print0 | xargs -0 md5sum | sort -k 2 -d > engine/Shopware/Components/Check/Data/Files.md5sums
+
+            -   name: Download CaRoot
+                run: |
+                    wget -O ./engine/Shopware/Components/HttpClient/cacert.pem https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
+
+            -   name: Create Zip
+                run: |
+                    git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip --add-file=${{ env.UPDATE_ASSET_DIR }}version --add-file=${{ env.UPDATE_ASSET_DIR }}cleanup.txt --add-file=${{ env.UPDATE_ASSET_DIR }}snippets.sql --add-file=./engine/Shopware/Components/Check/Data/Files.md5sums --add-file=./engine/Shopware/Components/HttpClient/cacert.pem HEAD
+                    zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor ${{ env.UPDATE_ASSET_DIR }}
+
+            -   name: Archive results
+                if: always()
+                uses: actions/upload-artifact@v3
+                with:
+                    path: ${{ env.PACKAGE_PREFIX }}.zip
+
+            -   name: Push to release
+                uses: xresloader/upload-to-github-release@v1.3.12
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                with:
+                    file: "*.zip"
+                    tags: true
+                    draft: true
