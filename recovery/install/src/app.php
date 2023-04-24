@@ -23,6 +23,7 @@
  */
 
 use Pimple\Container;
+use Shopware\Recovery\Common\Middelware\XssMiddleware;
 use Shopware\Recovery\Common\Utils;
 use Shopware\Recovery\Install\ContainerProvider;
 use Shopware\Recovery\Install\DatabaseFactory;
@@ -42,6 +43,7 @@ use Shopware\Recovery\Install\Service\TranslationService;
 use Shopware\Recovery\Install\Struct\DatabaseConnectionInformation;
 use Shopware\Recovery\Install\Struct\LicenseUnpackRequest;
 use Slim\Slim;
+use voku\helper\AntiXSS;
 
 $config = require __DIR__ . '/../config/production.php';
 $container = new Container();
@@ -143,18 +145,21 @@ function localeForLanguage($language)
     return strtolower($language) . '_' . strtoupper($language);
 }
 
-function prefixSessionVars(Slim $app)
+function prefixSessionVars(Slim $app, Container $container)
 {
+    /** @var AntiXSS $antiXss */
+    $antiXss = $container->offsetGet('anti.xss');
+
     // Save post parameters starting with 'c_' to session
     $params = $app->request()->params();
     foreach ($params as $key => $value) {
         if (strpos($key, 'c_') !== false) {
-            $_SESSION['parameters'][$key] = $value;
+            $_SESSION['parameters'][$key] = $antiXss->xss_clean($value);
         }
     }
 }
 
-prefixSessionVars($app);
+prefixSessionVars($app, $container);
 $selectedLanguage = selectLanguage($container->offsetGet('config')['languages']);
 $translations = require __DIR__ . "/../data/lang/$selectedLanguage.php";
 
@@ -180,6 +185,8 @@ $app->view()->setData('error', false);
 $app->view()->setData('parameters', $_SESSION['parameters']);
 
 $app->setCookie('installed-locale', localeForLanguage($selectedLanguage), time() + 7200, '/');
+
+$app->add(new XssMiddleware());
 
 $app->error(function (Exception $e) use ($app) {
     if (!$app->request()->isAjax()) {
