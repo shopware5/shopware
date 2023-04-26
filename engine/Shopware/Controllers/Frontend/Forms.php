@@ -30,6 +30,7 @@ use Shopware\Components\OrderNumberValidator\OrderNumberValidatorInterface;
 use Shopware\Components\Privacy\IpAnonymizerInterface;
 use Shopware\Components\Random;
 use Shopware\Components\Validator\EmailValidator;
+use Shopware\Components\Validator\NoUrlValidator;
 use Shopware\Models\Form\Form;
 
 /**
@@ -334,6 +335,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
             case 'email':
             case 'text':
             case 'textarea':
+            case 'alphanumeric':
             case 'file':
                 if (\is_array($post)) {
                     break;
@@ -378,6 +380,20 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                 $output .= sprintf(
                     "<input type=\"%s\" class=\"%s %s\" %s value=\"%s\" id=\"%s\" %s name=\"%s\"/>\r\n",
                     $element['typ'],
+                    $element['class'],
+                    $requiredField,
+                    $requiredFieldAria,
+                    $post,
+                    $element['name'],
+                    $placeholder,
+                    $element['name']
+                );
+                break;
+
+            case 'nourl':
+                $output .= sprintf(
+                    "<input type=\"%s\" class=\"%s %s\" %s value=\"%s\" id=\"%s\" %s name=\"%s\"/>\r\n",
+                    'text',
                     $element['class'],
                     $requiredField,
                     $requiredFieldAria,
@@ -569,6 +585,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
         $errors = [];
 
         $emailValidator = $this->container->get(EmailValidator::class);
+        $noUrlValidator = $this->container->get(NoUrlValidator::class);
 
         foreach ($elements as $element) {
             $valid = true;
@@ -635,6 +652,14 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                                 $valid = false;
                             }
                             $value = array_values($value);
+                        }
+                        break;
+
+                    case 'nourl':
+                        if (!$noUrlValidator->isValid($value)) {
+                            unset($value);
+                            $valid = false;
+                            break;
                         }
                         break;
 

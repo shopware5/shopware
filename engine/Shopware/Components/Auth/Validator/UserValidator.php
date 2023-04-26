@@ -25,6 +25,7 @@
 namespace Shopware\Components\Auth\Validator;
 
 use Shopware\Components\Api\Exception\ValidationException;
+use Shopware\Components\Auth\Constraint\NoUrl;
 use Shopware\Components\Auth\Constraint\UserEmail;
 use Shopware\Components\Auth\Constraint\UserName;
 use Shopware\Models\User\User;
@@ -61,8 +62,9 @@ class UserValidator implements UserValidatorInterface
             new UserName([
                 'userId' => $user->getId(),
             ]),
+            new NoUrl(),
         ]);
-        $this->validateField('name', $user->getName(), [new NotBlank()]);
+        $this->validateField('name', $user->getName(), [new NotBlank(), new NoUrl()]);
         $this->validateField('role', $user->getRole(), [new NotBlank()]);
         $this->validateField('email', $user->getEmail(), [
             new UserEmail([

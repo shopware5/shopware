@@ -13,6 +13,10 @@
             <tag name="shopware.bundle.content_type.field" fieldName="text"/>
         </service>
 
+        <service id="Shopware\Bundle\ContentTypeBundle\Field\NoUrlField">
+            <tag name="shopware.bundle.content_type.field" fieldName="nourl"/>
+        </service>
+
         <service id="Shopware\Bundle\ContentTypeBundle\Field\CodeMirrorField" class="Shopware\Bundle\ContentTypeBundle\Field\AceEditor">
             <tag name="shopware.bundle.content_type.field" fieldName="aceeditor"/>
         </service>

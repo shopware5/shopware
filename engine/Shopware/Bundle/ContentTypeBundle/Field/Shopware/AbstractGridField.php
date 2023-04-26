@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Field\Shopware;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Shopware\Bundle\ContentTypeBundle\Field\FieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Field\ResolveableFieldInterface;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
@@ -48,7 +48,7 @@ abstract class AbstractGridField implements FieldInterface, ResolveableFieldInte
 
     public static function getDbalType(): string
     {
-        return Type::STRING;
+        return Types::STRING;
     }
 
     public static function getExtjsField(): string

@@ -295,7 +295,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Get typ of field
+     * Get type of field
      *
      * @return string
      */
@@ -305,7 +305,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Set whether or not this field is required
+     * Set whether this field is required or not
      *
      * @param int $required
      *
@@ -319,7 +319,7 @@ class Field extends ModelEntity
     }
 
     /**
-     * Get whether or not this field is required
+     * Get whether this field is required or not
      *
      * @return int
      */

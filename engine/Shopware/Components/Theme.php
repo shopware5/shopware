@@ -33,6 +33,7 @@ use Shopware\Components\Form\Field\Color;
 use Shopware\Components\Form\Field\Date;
 use Shopware\Components\Form\Field\Em;
 use Shopware\Components\Form\Field\Media;
+use Shopware\Components\Form\Field\NoUrl;
 use Shopware\Components\Form\Field\Number;
 use Shopware\Components\Form\Field\Percent;
 use Shopware\Components\Form\Field\Pixel;
@@ -561,6 +562,21 @@ class Theme
     protected function createTextAreaField($name, $label, $defaultValue, array $options = [])
     {
         $element = new TextArea($name);
+        $element->fromArray($options);
+        $element->setLabel($label);
+        $element->setDefaultValue($defaultValue);
+
+        return $element;
+    }
+
+    /**
+     * Creates a custom no URL text field.
+     *
+     * @param array<string, string> $options
+     */
+    protected function createNoUrlField(string $name, string $label, string $defaultValue, array $options = []): NoUrl
+    {
+        $element = new NoUrl($name);
         $element->fromArray($options);
         $element->setLabel($label);
         $element->setDefaultValue($defaultValue);

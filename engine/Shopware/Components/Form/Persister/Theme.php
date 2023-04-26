@@ -26,7 +26,6 @@ namespace Shopware\Components\Form\Persister;
 
 use Doctrine\Common\Collections\Collection;
 use Shopware\Components\Form;
-use Shopware\Components\Form\Container;
 use Shopware\Components\Form\Container\FieldSet;
 use Shopware\Components\Form\Container\Tab;
 use Shopware\Components\Form\Container\TabContainer;
@@ -36,6 +35,7 @@ use Shopware\Components\Form\Field\Color;
 use Shopware\Components\Form\Field\Date;
 use Shopware\Components\Form\Field\Em;
 use Shopware\Components\Form\Field\Media;
+use Shopware\Components\Form\Field\NoUrl;
 use Shopware\Components\Form\Field\Number;
 use Shopware\Components\Form\Field\Percent;
 use Shopware\Components\Form\Field\Pixel;
@@ -203,6 +203,9 @@ class Theme implements Form\Interfaces\Persister
                 break;
             case TextArea::class:
                 $data += ['type' => 'theme-text-area-field'];
+                break;
+            case NoUrl::class:
+                $data += ['type' => 'widget.theme-nourl-field'];
                 break;
             case Selection::class:
                 $data += [

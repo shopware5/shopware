@@ -250,6 +250,7 @@
 {include file='backend/base/attribute/field_handler/Shopware.attribute.SingleSelectionFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.MultiSelectionFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.StringFieldHandler.js'}
+{include file='backend/base/attribute/field_handler/Shopware.attribute.NoUrlFieldHandler.js'}
 {include file='backend/base/attribute/field_handler/Shopware.attribute.TextAreaFieldHandler.js'}
 
 {include file='backend/base/attribute/field/Shopware.form.field.Grid.js'}

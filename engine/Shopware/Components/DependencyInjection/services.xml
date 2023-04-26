@@ -500,6 +500,7 @@
 
         <service id="validator.email" class="Shopware\Components\Validator\EmailValidator"/>
         <service id="validator.user_name" class="Shopware\Components\Validator\UserNameValidator"/>
+        <service id="Shopware\Components\Validator\NoUrlValidator"/>
 
         <service id="sitemapxml.repository" class="Shopware\Components\SitemapXMLRepository">
             <argument type="service" id="Shopware\Bundle\SearchBundle\ProductNumberSearchInterface"/>
@@ -929,6 +930,13 @@
             <argument type="service" id="Shopware\Components\Validator\UserNameValidator"/>
 
             <tag name="validator.constraint_validator" alias="UserNameValidator"/>
+        </service>
+
+        <service id="Shopware\Components\Auth\Constraint\NoUrlValidator">
+            <argument type="service" id="Shopware_Components_Snippet_Manager"/>
+            <argument type="service" id="Shopware\Components\Validator\NoUrlValidator"/>
+
+            <tag name="validator.constraint_validator" alias="NoUrlValidator"/>
         </service>
 
         <service id="shopware.components.privacy.privacy_cleanup_cron_subscriber" class="Shopware\Components\Privacy\PrivacyCleanupCronSubscriber">

@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,40 +21,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ContentTypeBundle\Field;
+/**
+ * Shopware Application
+ *
+ * @category  Shopware
+ * @package   Shopware
+ * @copyright Copyright (c) shopware AG (http://www.shopware.de)
+ */
 
-use Doctrine\DBAL\Types\Types;
-use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+//{namespace name="backend/theme/main"}
 
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
-{
-    public static function getDbalType(): string
-    {
-        return Types::STRING;
-    }
+//{block name="backend/theme/view/detail/fields/nourl"}
 
-    public static function getExtjsType(): string
-    {
-        return 'string';
-    }
+Ext.define('Shopware.apps.Theme.view.detail.NoUrlField', {
+    extend: 'Ext.form.field.Text',
 
-    public static function getExtjsOptions(Field $field): array
-    {
-        return [];
-    }
+    alias: 'widget.theme-nourl-field'
 
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
-    }
+});
 
-    public static function isMultiple(): bool
-    {
-        return false;
-    }
-
-    public static function getTemplate(): string
-    {
-        return 'frontend/content_type/field/text.tpl';
-    }
-}
+//{/block}

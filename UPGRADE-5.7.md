@@ -7,6 +7,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 [View all changes from v5.7.17...v5.7.18](https://github.com/shopware/shopware/compare/v5.7.17...v5.7.18)
 
 ### Additions
+* Added new input field that does not allow values, that contain URLs
 
 ### Deprecations
 
@@ -14,6 +15,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
+* Changed newsletter registration so that it does not allow URLs as value for first and last name
+* Changed customer registration so that it does not allow URLs as value for first and last name
 * Updated `behat/behat` to version 3.13.0
 * Updated `doctrine/dbal` to version 2.13.9
 * Updated `doctrine/orm` to version 2.15.1

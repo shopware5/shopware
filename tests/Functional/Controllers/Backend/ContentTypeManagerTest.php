@@ -60,7 +60,7 @@ class ContentTypeManagerTest extends TestCase
     {
         yield 'No search query' => [
             '',
-            14,
+            15,
         ];
 
         yield 'Search for "Pro" uppercase' => [

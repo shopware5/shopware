@@ -27,11 +27,16 @@ namespace Shopware\Bundle\ContentTypeBundle\Field;
 use Doctrine\DBAL\Types\Types;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
+class NoUrlField implements FieldInterface, TemplateProvidingFieldInterface
 {
     public static function getDbalType(): string
     {
         return Types::STRING;
+    }
+
+    public static function getExtjsField(): string
+    {
+        return 'nourl';
     }
 
     public static function getExtjsType(): string
@@ -39,14 +44,12 @@ class TextField implements FieldInterface, TemplateProvidingFieldInterface
         return 'string';
     }
 
+    /**
+     * @return array<mixed>
+     */
     public static function getExtjsOptions(Field $field): array
     {
         return [];
-    }
-
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
     }
 
     public static function isMultiple(): bool

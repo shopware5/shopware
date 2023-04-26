@@ -224,6 +224,7 @@ Ext.define('Shopware.form.plugin.Translation', {
             case 'trigger':
                 return 'top: 6px; right: 26px';
             case 'textfield':
+            case 'alphanumeric':
             default:
                 return 'top: 6px; right: 6px; z-index:1;';
         }
@@ -333,6 +334,10 @@ Ext.define('Shopware.form.plugin.Translation', {
 
             if (className === 'Ext.form.TextArea') {
                 type = 'textarea';
+            }
+
+            if (className === 'Ext.form.NoUrl') {
+                type = 'nourl'
             }
 
             if (className === 'Ext.form.TriggerField' ||

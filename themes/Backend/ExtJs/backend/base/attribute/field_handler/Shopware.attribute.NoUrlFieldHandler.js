@@ -1,4 +1,3 @@
-<?php
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -20,42 +19,23 @@
  * The licensing of the program under the AGPLv3 does not imply a
  * trademark license. Therefore any rights, title and interest in
  * our trademarks remain entirely with us.
+ *
+ * @category    Shopware
+ * @package     Base
+ * @subpackage  Attribute
+ * @version     $Id$
+ * @author      shopware AG
  */
 
-namespace Shopware\Bundle\ContentTypeBundle\Field;
+Ext.define('Shopware.attribute.NoUrlFieldHandler', {
+    extend: 'Shopware.attribute.FieldHandlerInterface',
 
-use Doctrine\DBAL\Types\Types;
-use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+    supports: function(attribute) {
+        return (attribute.get('columnType') === 'string');
+    },
 
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
-{
-    public static function getDbalType(): string
-    {
-        return Types::STRING;
+    create: function(field, attribute) {
+        field.xtype = 'nourl';
+        return field;
     }
-
-    public static function getExtjsType(): string
-    {
-        return 'string';
-    }
-
-    public static function getExtjsOptions(Field $field): array
-    {
-        return [];
-    }
-
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
-    }
-
-    public static function isMultiple(): bool
-    {
-        return false;
-    }
-
-    public static function getTemplate(): string
-    {
-        return 'frontend/content_type/field/text.tpl';
-    }
-}
+});

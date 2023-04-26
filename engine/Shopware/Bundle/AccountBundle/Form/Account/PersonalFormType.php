@@ -44,6 +44,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Regex;
 
 /**
  * Form reflects the personal fields for the registration, including auth
@@ -52,10 +53,21 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class PersonalFormType extends AbstractType
 {
+    /**
+     * The regex to check if string contains an url
+     */
+    public const DOMAIN_NAME_REGEX = '/(http[s]?\:\/\/)?(?!\-)(?:[a-zA-Z\d\-]{0,62}[a-zA-Z\d]\.){1,126}(?!\d+)[a-zA-Z\d]{1,63}/';
+
     public const SNIPPET_BIRTHDAY = [
         'namespace' => 'frontend/account/internalMessages',
         'name' => 'DateFailure',
         'default' => 'Please enter a valid birthday',
+    ];
+
+    public const SNIPPET_URL = [
+        'namespace' => 'frontend/account/internalMessages',
+        'name' => 'UrlInFieldFailure',
+        'default' => 'A URL is not allowed in this field',
     ];
 
     /**
@@ -153,11 +165,19 @@ class PersonalFormType extends AbstractType
         $builder->add('title', TextType::class);
 
         $builder->add('firstname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])],
+            'constraints' => [new NotBlank(['message' => null]), new Regex([
+                'pattern' => self::DOMAIN_NAME_REGEX,
+                'match' => false,
+                'message' => $this->getSnippet(self::SNIPPET_URL),
+            ])],
         ]);
 
         $builder->add('lastname', TextType::class, [
-            'constraints' => [new NotBlank(['message' => null])],
+            'constraints' => [new NotBlank(['message' => null]), new Regex([
+                'pattern' => self::DOMAIN_NAME_REGEX,
+                'match' => false,
+                'message' => $this->getSnippet(self::SNIPPET_URL),
+            ])],
         ]);
 
         $builder->add('birthday', BirthdayType::class, [

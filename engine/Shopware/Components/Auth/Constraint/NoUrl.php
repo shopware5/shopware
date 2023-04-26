@@ -22,40 +22,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ContentTypeBundle\Field;
+namespace Shopware\Components\Auth\Constraint;
 
-use Doctrine\DBAL\Types\Types;
-use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+use Symfony\Component\Validator\Constraint;
 
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
+class NoUrl extends Constraint
 {
-    public static function getDbalType(): string
+    public function validatedBy(): string
     {
-        return Types::STRING;
-    }
-
-    public static function getExtjsType(): string
-    {
-        return 'string';
-    }
-
-    public static function getExtjsOptions(Field $field): array
-    {
-        return [];
-    }
-
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
-    }
-
-    public static function isMultiple(): bool
-    {
-        return false;
-    }
-
-    public static function getTemplate(): string
-    {
-        return 'frontend/content_type/field/text.tpl';
+        return 'NoUrlValidator';
     }
 }
