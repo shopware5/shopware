@@ -39,7 +39,7 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization},L]
     RedirectMatch 404 /(web\/cache\/(config_\d+\.json|all.less))$
 
     # Restrict access to theme configurations
-    RedirectMatch 404 /themes/(.*)(.*\.lock|package\.json|\.gitignore|Gruntfile\.js|all\.less|node_modules\/.*)$
+    RedirectMatch 404 /themes/(.*)(.(lock|package)\.json|\.gitignore|Gruntfile\.js|all\.less|node_modules\/.*)$
 </IfModule>
 
 # Staging environment
