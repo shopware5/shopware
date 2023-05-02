@@ -31,6 +31,7 @@ use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
 use Shopware\Bundle\CartBundle\CartKey;
+use Shopware\Bundle\OrderBundle\Service\ShippingCostServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
@@ -171,6 +172,8 @@ class sAdmin implements \Enlight_Hook
 
     private CSRFTokenValidator $csrfTokenValidator;
 
+    private ShippingCostServiceInterface $shippingCostService;
+
     public function __construct(
         ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         ?Enlight_Event_EventManager $eventManager = null,
@@ -186,7 +189,8 @@ class sAdmin implements \Enlight_Hook
         ?Shopware_Components_Translation $translationComponent = null,
         ?Connection $connection = null,
         ?OptInLoginServiceInterface $optInLoginService = null,
-        ?CSRFTokenValidator $csrfTokenValidator = null
+        ?CSRFTokenValidator $csrfTokenValidator = null,
+        ?ShippingCostServiceInterface $shippingCostService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -211,6 +215,7 @@ class sAdmin implements \Enlight_Hook
         $this->conditionalLineItemService = Shopware()->Container()->get(ConditionalLineItemServiceInterface::class);
         $this->cartOrderNumberProvider = Shopware()->Container()->get(CartOrderNumberProviderInterface::class);
         $this->csrfTokenValidator = $csrfTokenValidator ?: Shopware()->Container()->get(CSRFTokenValidator::class);
+        $this->shippingCostService = $shippingCostService ?: Shopware()->Container()->get(ShippingCostServiceInterface::class);
     }
 
     /**
@@ -2967,7 +2972,7 @@ class sAdmin implements \Enlight_Hook
             ]
         );
 
-        $surcharge = $this->calculateDispatchSurcharge($basket, $dispatches);
+        $surcharge = $this->shippingCostService->calculateDispatchesSurcharge($basket, $dispatches);
 
         $surcharge = $this->eventManager->filter(
             'Shopware_Modules_Admin_sGetPremiumDispatchSurcharge_FilterSurcharge',
@@ -3095,17 +3100,16 @@ class sAdmin implements \Enlight_Hook
             return self::NO_SHIPPING_COSTS;
         }
 
-        if (empty($dispatch['calculation'])) {
-            $from = round($basket['weight'], 3);
-        } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_PRICE) {
-            $from = round($basket['amount'], 2);
-        } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
-            $from = round($basket['count_article']);
-        } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_CUSTOM) {
-            $from = round((float) $basket['calculation_value_' . $dispatch['id']], 2);
-        } else {
+        try {
+            $calculationType = (int) $dispatch['calculation'];
+            if (!\in_array($calculationType, Dispatch::CALCULATIONS, true)) {
+                throw new RuntimeException(sprintf('Invalid shipping calculation type "%d"', $calculationType));
+            }
+            $from = $this->shippingCostService->getShippingCostMultiplier($calculationType, $basket, $dispatch);
+        } catch (RuntimeException $e) {
             return false;
         }
+
         $result = $this->db->fetchRow(
             'SELECT `value` , `factor`
              FROM `s_premium_shippingcosts`
@@ -3128,6 +3132,7 @@ class sAdmin implements \Enlight_Hook
             ];
         }
         $result['brutto'] = $result['value'];
+
         if (!empty($result['factor'])) {
             $result['brutto'] += $result['factor'] / 100 * $from;
         }
@@ -3952,62 +3957,6 @@ SQL;
                 ->get('NewsletterSuccess', 'Thank you for receiving our newsletter'),
             'isNewRegistration' => $isEmailExists,
         ];
-    }
-
-    /**
-     * Helper method for sAdmin::sGetPremiumDispatchSurcharge()
-     * Calculates the surcharge for the current basket and dispatches
-     *
-     * @param array<string, mixed> $basket
-     * @param array<string, mixed> $dispatches
-     */
-    private function calculateDispatchSurcharge(array $basket, array $dispatches): float
-    {
-        $surcharge = 0;
-
-        if (empty($dispatches)) {
-            return $surcharge;
-        }
-
-        foreach ($dispatches as $dispatch) {
-            if (empty($dispatch['calculation'])) {
-                $from = round((float) $basket['weight'], 3);
-            } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_PRICE) {
-                if (
-                    ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
-                    || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
-                ) {
-                    $from = round((float) $basket['amount_net'], 2);
-                } else {
-                    $from = round((float) $basket['amount'], 2);
-                }
-            } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
-                $from = (int) $basket['count_article'];
-            } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_CUSTOM) {
-                $from = (int) $basket['calculation_value_' . $dispatch['id']];
-            } else {
-                continue;
-            }
-            $result = $this->db->fetchRow(
-                'SELECT `value` , factor
-                FROM s_premium_shippingcosts
-                WHERE `from` <= ?
-                AND dispatchID = ?
-                ORDER BY `from` DESC
-                LIMIT 1',
-                [$from, $dispatch['id']]
-            );
-
-            if ($result === false) {
-                continue;
-            }
-            $surcharge += $result['value'];
-            if (!empty($result['factor'])) {
-                $surcharge += $result['factor'] / 100 * $from;
-            }
-        }
-
-        return $surcharge;
     }
 
     private function handleBasketDiscount(float $amount, float $currencyFactor, float $discount_tax): void

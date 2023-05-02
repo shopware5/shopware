@@ -27,6 +27,7 @@ use Doctrine\ORM\AbstractQuery;
 use Shopware\Bundle\AttributeBundle\Service\CrudService;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+use Shopware\Bundle\OrderBundle\Service\ShippingCostServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ConfiguratorServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
@@ -150,12 +151,15 @@ class sExport implements Enlight_Hook
      */
     private array $cdnConfig;
 
+    private ShippingCostServiceInterface $shippingCostService;
+
     public function __construct(
         ?ContextServiceInterface $contextService = null,
         ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
         ?Shopware_Components_Config $config = null,
         ?ConfiguratorServiceInterface $configuratorService = null,
-        ?Connection $connection = null
+        ?Connection $connection = null,
+        ?ShippingCostServiceInterface $shippingCostService = null
     ) {
         $container = Shopware()->Container();
 
@@ -166,6 +170,7 @@ class sExport implements Enlight_Hook
         $this->config = $config ?: $container->get(Shopware_Components_Config::class);
         $this->configuratorService = $configuratorService ?: $container->get(ConfiguratorServiceInterface::class);
         $this->cdnConfig = (array) $container->getParameter('shopware.cdn');
+        $this->shippingCostService = $shippingCostService ?: $container->get(ShippingCostServiceInterface::class);
     }
 
     /**
@@ -1431,7 +1436,7 @@ class sExport implements Enlight_Hook
      * @param int|null $countryID
      * @param int|null $paymentID
      *
-     * @return array<string, mixed>|false
+     * @return array<string, string>|false
      */
     public function sGetDispatchBasket($article, $countryID = null, $paymentID = null)
     {
@@ -1797,39 +1802,10 @@ class sExport implements Enlight_Hook
             $sql_where
             GROUP BY d.id
         ";
-        $dispatches = $this->connection->fetchAllAssociative($sql);
-        $surcharge = 0;
-        if (!empty($dispatches)) {
-            foreach ($dispatches as $dispatch) {
-                if (empty($dispatch['calculation'])) {
-                    $from = round($basket['weight'], 3);
-                } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_PRICE) {
-                    $from = round($basket['amount'], 2);
-                } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
-                    $from = round($basket['count_article']);
-                } elseif ((int) $dispatch['calculation'] === Dispatch::CALCULATION_CUSTOM) {
-                    $from = round($basket['calculation_value_' . $dispatch['id']], 2);
-                } else {
-                    continue;
-                }
-                $sql = 'SELECT `value` , `factor`
-                        FROM `s_premium_shippingcosts`
-                        WHERE `from` <= :from
-                        AND `dispatchID` = :dispatchId
-                        ORDER BY `from` DESC
-                        LIMIT 1';
-                $result = $this->connection->fetchAssociative($sql, ['from' => $from, 'dispatchId' => $dispatch['id']]);
-                if (!$result) {
-                    continue;
-                }
-                $surcharge += $result['value'];
-                if (!empty($result['factor'])) {
-                    $surcharge += $result['factor'] / 100 * $from;
-                }
-            }
-        }
 
-        return (float) $surcharge;
+        $dispatches = $this->connection->fetchAllAssociative($sql);
+
+        return $this->shippingCostService->calculateDispatchesSurcharge($basket, $dispatches);
     }
 
     /**
@@ -1862,36 +1838,12 @@ class sExport implements Enlight_Hook
             return 0;
         }
 
-        if (empty($dispatchData['calculation'])) {
-            $from = round($basket['weight'], 3);
-        } elseif ((int) $dispatchData['calculation'] === Dispatch::CALCULATION_PRICE) {
-            $from = round($basket['amount'], 2);
-        } elseif ((int) $dispatchData['calculation'] === Dispatch::CALCULATION_NUMBER_OF_PRODUCTS) {
-            $from = round($basket['count_article']);
-        } elseif ((int) $dispatchData['calculation'] === Dispatch::CALCULATION_CUSTOM) {
-            $from = round($basket['calculation_value_' . $dispatchData['id']], 2);
-        } else {
+        try {
+            $result['shippingcosts'] = $this->shippingCostService->calculateDispatchSurcharge($basket, $dispatchData);
+        } catch (RuntimeException $e) {
             return false;
         }
 
-        $sql = "
-            SELECT `value` , `factor`
-            FROM `s_premium_shippingcosts`
-            WHERE `from`<=$from
-            AND `dispatchID`={$dispatchData['id']}
-            ORDER BY `from` DESC
-            LIMIT 1
-        ";
-        $result = $this->db->fetchRow($sql);
-
-        if (empty($result)) {
-            return false;
-        }
-
-        $result['shippingcosts'] = $result['value'];
-        if (!empty($result['factor'])) {
-            $result['shippingcosts'] += $result['factor'] / 100 * $from;
-        }
         $result['surcharge'] = $this->sGetPremiumDispatchSurcharge($basket);
         if (!empty($result['surcharge'])) {
             $result['shippingcosts'] += $result['surcharge'];

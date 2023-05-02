@@ -38,6 +38,11 @@
             <argument type="service" id="shopware_storefront.variant_cover_service"/>
         </service>
 
+        <service id="Shopware\Bundle\OrderBundle\Service\ShippingCostServiceInterface"
+                 class="Shopware\Bundle\OrderBundle\Service\ShippingCostService">
+            <argument type="service" id="dbal_connection"/>
+        </service>
+
         <service id="shopware_order.consider_inactive_list_product_service"
                  parent="shopware_storefront.list_product_service"
                  class="Shopware\Bundle\StoreFrontBundle\Service\Core\ListProductService"

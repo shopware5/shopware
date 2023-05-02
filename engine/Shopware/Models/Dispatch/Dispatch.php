@@ -66,6 +66,12 @@ class Dispatch extends ModelEntity
     public const CALCULATION_PRICE = 1;
     public const CALCULATION_NUMBER_OF_PRODUCTS = 2;
     public const CALCULATION_CUSTOM = 3;
+    public const CALCULATIONS = [
+        self::CALCULATION_WEIGHT,
+        self::CALCULATION_PRICE,
+        self::CALCULATION_NUMBER_OF_PRODUCTS,
+        self::CALCULATION_CUSTOM,
+    ];
 
     public const SURCHARGE_CALCULATION_ALWAYS = 0;
     public const SURCHARGE_CALCULATION_EXCLUDE_SHIPPING_FREE_PRODUCTS = 1;
