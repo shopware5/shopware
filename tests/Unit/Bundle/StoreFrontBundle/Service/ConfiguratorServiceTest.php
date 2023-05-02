@@ -262,6 +262,46 @@ class ConfiguratorServiceTest extends TestCase
         static::assertFalse($configuratorGroupOptionsThree[2]->isSelected());
     }
 
+    public function testNoSelectionDoesStillDisableNotAvailableVariants(): void
+    {
+        $optionOne = new Option();
+        $optionOne->setId(111);
+        $optionTwo = new Option();
+        $optionTwo->setId(222);
+
+        $groupOne = $this->getMockBuilder(Group::class)->disableOriginalConstructor()->getMock();
+        $groupOne->method('getId')->willReturn(111);
+        $groupOne->method('setSelected')->willReturn(null);
+        $groupOne->method('getOptions')->willReturn([
+            $optionOne,
+            $optionTwo,
+        ]);
+
+        $setMock = $this->getMockBuilder(Set::class)->disableOriginalConstructor()->getMock();
+        $setMock->method('getGroups')->willReturn([
+            $groupOne,
+        ]);
+        $setMock->method('getType')->willReturn(ConfiguratorService::CONFIGURATOR_TYPE_STANDARD);
+
+        $productConfigurationGateway = $this->getMockForAbstractClass(ProductConfigurationGatewayInterface::class);
+        $configurationGateway = $this->getMockForAbstractClass(ConfiguratorGatewayInterface::class);
+        $configurationGateway->method('get')->willReturn($setMock);
+        $configurationGateway->method('getAvailableConfigurations')->willReturn([111 => [[111]]]);
+
+        $shopContext = $this->getMockForAbstractClass(ShopContextInterface::class);
+        $configuratorService = new ConfiguratorService($productConfigurationGateway, $configurationGateway);
+
+        $baseProduct = new BaseProduct(1, 1, 'sw100');
+
+        $configurator = $configuratorService->getProductConfigurator($baseProduct, $shopContext, []);
+
+        $configuratorGroups = $configurator->getGroups();
+        $configuratorGroupOptionsOne = $configuratorGroups[0]->getOptions();
+
+        static::assertTrue($configuratorGroupOptionsOne[0]->getActive());
+        static::assertFalse($configuratorGroupOptionsOne[1]->getActive());
+    }
+
     public function testNoConfigurationsAreAvailable(): void
     {
         $setMock = $this->createMocks();
