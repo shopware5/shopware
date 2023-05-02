@@ -124,10 +124,6 @@ class ConfiguratorService implements ConfiguratorServiceInterface
      */
     private function isOptionValid(Group $group, int $id, array $selection, array $availableProductOptions): bool
     {
-        if (empty($selection)) {
-            return true;
-        }
-
         if (empty($availableProductOptions)) {
             return false;
         }
