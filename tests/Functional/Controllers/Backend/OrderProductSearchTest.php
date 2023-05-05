@@ -146,7 +146,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
      */
     public function provideSearchDataAndReturnValues(): Generator
     {
-        yield 'searchTerm: orderNumber explicit - customer group: "H"' => [
+        yield 'searchTerm: orderNumber explicit - customer group: "H" (config: netto-prices-in-shop)' => [
             'searchParams' => [
                 'searchString' => 'SW10178',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -166,10 +166,56 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'supplierName' => 'Beachdreams Clothes',
                 'supplierId' => '12',
                 'additionalText' => '',
-                'price' => 19.95,
+                'price' => 16.76,
             ],
         ];
-        yield 'searchTerm: productName - customer group: "H"' => [
+        yield 'searchTerm: productName - customer group: "H" (config: netto-prices-in-shop) - graduated price-product' => [
+            'searchParams' => [
+                'searchString' => 'Staffelpreis',
+                'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
+                'filterProperty' => self::SEARCH_PARAMS_FILTER_PROPERTY,
+            ],
+            'hasResults' => true,
+            [
+                'total' => 1,
+                'id' => '747',
+                'name' => 'Staffelpreise',
+                'active' => '1',
+                'taxId' => '1',
+                'tax' => 19.0,
+                'ordernumber' => 'SW10208',
+                'articleId' => '209',
+                'inStock' => '529',
+                'supplierName' => 'Example',
+                'supplierId' => '14',
+                'additionalText' => '',
+                'price' => 0.84,
+            ],
+        ];
+        yield 'searchTerm: productName - customer group: "EK" - graduated price-product' => [
+            'searchParams' => [
+                'searchString' => 'Staffelpreis',
+                'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
+                'filterProperty' => self::SEARCH_PARAMS_FILTER_PROPERTY,
+            ],
+            'hasResults' => true,
+            [
+                'total' => 1,
+                'id' => '747',
+                'name' => 'Staffelpreise',
+                'active' => '1',
+                'taxId' => '1',
+                'tax' => 19.0,
+                'ordernumber' => 'SW10208',
+                'articleId' => '209',
+                'inStock' => '529',
+                'supplierName' => 'Example',
+                'supplierId' => '14',
+                'additionalText' => '',
+                'price' => 1.00,
+            ],
+        ];
+        yield 'searchTerm: productName - customer group: "H" (config: netto-prices-in-shop)' => [
             'searchParams' => [
                 'searchString' => 'schoko',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
@@ -189,7 +235,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'supplierName' => 'The Deli Garage',
                 'supplierId' => '4',
                 'additionalText' => '',
-                'price' => 8.98,
+                'price' => 8.39,
             ],
         ];
         yield 'searchTerm: supplier with products not mapped to a category - customer group: "EK"' => [
@@ -238,7 +284,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'price' => 6.99,
             ],
         ];
-        yield 'param $filter[\'property\'] is not \'free\' shall return 10 products without filter' => [
+        yield 'param $filter[\'property\'] is not \'free\' shall return 10 products without filter - customer group: "EK"' => [
             'searchParams' => [
                 'searchString' => 'ibiza',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
@@ -279,6 +325,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
      * @param array<array<string, mixed>> $sqlParamsTaxRule
      * @param array<string, mixed>        $sqlParamsProduct
      * @param array<string, mixed>        $sqlParamsShippingAddress
+     * @param array<string, int>          $sqlParamsPriceConfig
      *
      * @throws Exception
      * @throws \Doctrine\DBAL\Driver\Exception
@@ -288,7 +335,8 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
         array $expectedValues,
         array $sqlParamsTaxRule,
         array $sqlParamsProduct,
-        array $sqlParamsShippingAddress
+        array $sqlParamsShippingAddress,
+        array $sqlParamsPriceConfig
     ): void {
         if (!empty($sqlParamsTaxRule)) {
             $this->createTaxRules($sqlParamsTaxRule);
@@ -300,6 +348,10 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
 
         if (!empty($sqlParamsShippingAddress)) {
             $this->changeShippingAddress($sqlParamsShippingAddress);
+        }
+
+        if (!empty($sqlParamsPriceConfig)) {
+            $this->setCustomerGroupSpecificPriceConfig($sqlParamsPriceConfig);
         }
 
         $params = $this->getSearchParams($searchParams);
@@ -320,18 +372,18 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * @return Generator<array{searchParams: array<string, mixed>, expectedValues: array<string, float>, sqlParamsTaxRule: array<array<string, mixed>>, sqlParamsProduct: array<string, mixed>, sqlParamsShippingAddress: array<string, mixed>}>
+     * @return Generator<array{searchParams: array<string, mixed>, expectedValues: array<string, float>, sqlParamsTaxRule: array<array<string, mixed>>, sqlParamsProduct: array<string, mixed>, sqlParamsShippingAddress: array<string, mixed>, sqlParamsPriceConfig: array<string, int>}>
      */
     public function provideDataForDifferentProductPricesForCustomerGroups(): Generator
     {
-        yield 'customer group: "H" with a specific product-price' => [
+        yield 'customer group: "H" with a specific product-price - net-prices in frontend' => [
             'searchParams' => [
                 'searchString' => 'stuhl',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
                 'filterProperty' => self::SEARCH_PARAMS_FILTER_PROPERTY,
             ],
             'expectedValues' => [
-                'price' => 119.00,
+                'price' => 100.00,
                 'tax' => 19.00,
             ],
             'sqlParamsTaxRule' => [],
@@ -341,15 +393,16 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'productDetailsId' => 137,
             ],
             'sqlParamsShippingAddress' => [],
+            'sqlParamsPriceConfig' => [],
         ];
-        yield 'customer group: "H", shipping address doesn\'t match with a tax-rule and with no specific product-price should use default-price' => [
+        yield 'customer group: "H", shipping address doesn\'t match with a tax-rule and with no specific product-price should use default-price - net-prices in frontend' => [
             'searchParams' => [
                 'searchString' => 'stuhl',
                 'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
                 'filterProperty' => self::SEARCH_PARAMS_FILTER_PROPERTY,
             ],
             'expectedValues' => [
-                'price' => 74.99,
+                'price' => 63.02,
                 'tax' => 19.00,
             ],
             'sqlParamsTaxRule' => [
@@ -365,8 +418,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
             ],
             'sqlParamsProduct' => [],
             'sqlParamsShippingAddress' => [],
+            'sqlParamsPriceConfig' => [],
         ];
-        yield 'customer group: "H", shipping address match with tax-rule + custom product price' => [
+        yield 'customer group: "H", shipping address match with tax-rule + custom product price - gross-prices in frontend' => [
             'searchParams' => [
                 'filterProperty' => self::SEARCH_PARAMS_FILTER_PROPERTY,
                 'searchString' => 'Schokoleim',
@@ -405,6 +459,10 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'countryID' => self::FINLAND_COUNTRY_ID,
                 'stateID' => null,
                 'orderID' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
+            ],
+            'sqlParamsPriceConfig' => [
+                'customerGroupId' => self::CUSTOMER_GROUP_ID_MERCHANT,
+                'grossPrices' => 1,
             ],
         ];
     }
@@ -582,6 +640,20 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
                 'countryID' => $sqlParams['countryID'],
                 'stateID' => $sqlParams['stateID'],
                 'orderID' => $sqlParams['orderID'],
+            ]
+        );
+    }
+
+    /**
+     * @param array<string, int> $sqlParams
+     */
+    private function setCustomerGroupSpecificPriceConfig(array $sqlParams): void
+    {
+        $sql = 'UPDATE s_core_customergroups SET tax = :grossPricesInFrontend  WHERE id = :customerGroupId;';
+        $this->connection->executeQuery(
+            $sql, [
+                'customerGroupId' => $sqlParams['customerGroupId'],
+                'grossPricesInFrontend' => $sqlParams['grossPrices'],
             ]
         );
     }

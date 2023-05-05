@@ -30,6 +30,7 @@ use DateTime;
 use DateTimeInterface;
 use DateTimeZone;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Template_Manager;
@@ -55,6 +56,8 @@ class OrderTest extends ControllerTestCase
 
     private const ORDER_DETAIL_ID = 6789;
     private const ORDER_ID = 12345;
+    private const ORDER_ID_DEMODATA_EK = 57;
+    private const ORDER_ID_DEMODATA_H = 15;
     private const CUSTOMER_ID = 9999;
     private const NEW_TAX_ID = 1234;
     private const NEW_TAX = 20.50;
@@ -65,6 +68,11 @@ class OrderTest extends ControllerTestCase
     private const GERMANY_COUNTRY_ID = 2;
     private const NRW_STATE_ID = 3;
     private const GERMANY_AREA_ID = 1;
+    private const PRODUCT_GRADUATED_PRICES_DEMODATA_ORDERNUMBER = 'SW10208';
+    private const PRODUCT_GRADUATED_PRICES_DEMODATA_NAME = 'Staffelpreise';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT1_ORDERNUMBER = 'SW10090.1';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT2_ORDERNUMBER = 'SW10090.2';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT_NAME = 'Teigschaber';
 
     private Connection $connection;
 
@@ -228,6 +236,131 @@ class OrderTest extends ControllerTestCase
     }
 
     /**
+     * @dataProvider provideProductParamsForSavePositionActionTestingGraduatedPrices
+     *
+     * @param array<string, mixed>     $params
+     * @param array<string, int|float> $expectedValues
+     *
+     * @throws Exception
+     */
+    public function testSavePositionActionReturnValuesForGraduatedPrices(array $params, array $expectedValues): void
+    {
+        $order = $this->modelManager->find(Order::class, $params['orderId']);
+        static::assertInstanceOf(Order::class, $order);
+
+        $productPricesSql = file_get_contents(__DIR__ . '/_fixtures/article/graduatedPrices.sql');
+        static::assertIsString($productPricesSql);
+        $this->connection->executeQuery($productPricesSql);
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams([
+            'id' => 0,
+            'orderId' => $params['orderId'],
+            'mode' => 0,
+            'articleId' => 9,
+            'articleDetailId' => null,
+            'articleNumber' => $params['productNumber'],
+            'articleName' => $params['productName'],
+            'quantity' => $params['quantity'],
+            'statusId' => 0,
+            'statusDescription' => '',
+            'taxId' => 1,
+            'taxRate' => 0,
+            'taxDescription' => '',
+            'inStock' => 0,
+            'changed' => $order->getChanged() ? $order->getChanged()->format(DateTimeInterface::ATOM) : '',
+        ]);
+
+        $controller = $this->getController();
+        $controller->setRequest($request);
+        $controller->savePositionAction();
+
+        $results = $controller->View()->getAssign();
+
+        static::assertSame($expectedValues['price'], $results['data']['price']);
+        static::assertSame($expectedValues['total'], $results['data']['total']);
+    }
+
+    /**
+     * @return Generator<array{params: array{orderId: int, productName: string, productName: string, quantity: int}, expectedValues: array{price: float, total: int|float}}>
+     */
+    public function provideProductParamsForSavePositionActionTestingGraduatedPrices(): Generator
+    {
+        yield 'customer-group H with netto-shop-price-config has to return fallback prices for EK' => [
+            'params' => [
+                'orderId' => self::ORDER_ID_DEMODATA_H,
+                'productNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDERNUMBER,
+                'productName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+                'quantity' => 30,
+            ],
+            'expectedValues' => [
+                'price' => 0.67,
+                'total' => 20.1,
+            ],
+        ];
+        yield 'customer-group EK' => [
+            'params' => [
+                'orderId' => self::ORDER_ID_DEMODATA_EK,
+                'productNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDERNUMBER,
+                'productName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+                'quantity' => 30,
+            ],
+            'expectedValues' => [
+                'price' => 0.80,
+                'total' => 24.0,
+            ],
+        ];
+        yield 'product with variants - variant 1 - customer-group EK' => [
+            'params' => [
+                'orderId' => self::ORDER_ID_DEMODATA_EK,
+                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_ORDERNUMBER,
+                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'quantity' => 5,
+            ],
+            'expectedValues' => [
+                'price' => 1.99,
+                'total' => 9.95,
+            ],
+        ];
+        yield 'product with variants - variant 2 - customer-group EK' => [
+            'params' => [
+                'orderId' => self::ORDER_ID_DEMODATA_EK,
+                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_ORDERNUMBER,
+                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'quantity' => 21,
+            ],
+            'expectedValues' => [
+                'price' => 1.29,
+                'total' => 27.09,
+            ],
+        ];
+        yield 'product with variants - variant 1 - customer-group H - netto' => [
+            'params' => [
+                'orderId' => self::ORDER_ID_DEMODATA_H,
+                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_ORDERNUMBER,
+                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'quantity' => 10,
+            ],
+            'expectedValues' => [
+                'price' => 1.99,
+                'total' => 19.9,
+            ],
+        ];
+        yield 'product with variants - variant 2 - customer-group H - netto' => [
+            'params' => [
+                'orderId' => self::ORDER_ID_DEMODATA_H,
+                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_ORDERNUMBER,
+                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'quantity' => 42,
+            ],
+            'expectedValues' => [
+                'price' => 0.89,
+                'total' => 37.38,
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider provideTaxRuleParams
      */
     public function testSavePositionActionWithTaxRule(int $customerGroupId, string $customerGroupKey): void
@@ -261,9 +394,6 @@ class OrderTest extends ControllerTestCase
         $controller = $this->getController();
         $controller->setRequest($request);
         $controller->savePositionAction();
-
-        $order = $this->modelManager->find(Order::class, self::ORDER_ID);
-        static::assertInstanceOf(Order::class, $order);
 
         $results = $controller->View()->getAssign();
         static::assertTrue($results['success'], (string) $results['message']);

@@ -33,11 +33,14 @@ use Shopware\Bundle\AttributeBundle\Repository\OrderRepository as AttributeOrder
 use Shopware\Bundle\AttributeBundle\Repository\SearchCriteria;
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
 use Shopware\Bundle\OrderBundle\Service\CalculationServiceInterface;
+use Shopware\Bundle\OrderBundle\Service\OrderListProductServiceInterface;
+use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax as TaxStruct;
 use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Random;
+use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\StateTranslatorService;
 use Shopware\Models\Article\Detail as ProductVariant;
 use Shopware\Models\Article\Unit;
@@ -1947,7 +1950,11 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             unset($data['status']);
         }
 
-        $data = $this->checkTaxRule($data, $order);
+        $shopContext = $this->createShopContext($order);
+        $data = $this->checkTaxRule($data, $shopContext);
+        if ($this->hasProductGraduatedPrices($data['articleNumber'], $order)) {
+            $data = $this->checkPrice($data, $order, $shopContext);
+        }
 
         $variant = $this->getManager()->getRepository(ProductVariant::class)
             ->findOneBy(['number' => $data['articleNumber']]);
@@ -2027,27 +2034,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         return $data;
     }
 
-    /**
-     * @param array<string, mixed> $data
-     *
-     * @return array<string, mixed>
-     */
-    private function checkTaxRule(array $data, Order $order): array
+    private function createShopContext(Order $order): ShopContextInterface
     {
-        $taxId = $data['taxId'];
-        if (empty($taxId)) {
-            unset($data['tax']);
-
-            return $data;
-        }
-        $tax = $this->getManager()->find(Tax::class, $taxId);
-        if ($tax instanceof Tax) {
-            $data['tax'] = $tax;
-            $data['taxRate'] = (float) $tax->getTax();
-        }
-
-        $customer = $order->getCustomer();
-        $customerGroupKey = $customer instanceof Customer ? $customer->getGroupKey() : self::DEFAULT_CUSTOMER_GROUP;
+        $customerGroupKey = $this->getCustomerGroupKey($order);
         $areaId = null;
         $countryId = null;
         $stateId = null;
@@ -2073,7 +2062,8 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         }
 
         $shop = $order->getShop();
-        $shopContext = $this->container->get('shopware_storefront.shop_context_factory')->create(
+
+        return $this->container->get('shopware_storefront.shop_context_factory')->create(
             $shop->getBaseUrl() ?? '',
             $shop->getId(),
             $currencyId,
@@ -2082,12 +2072,101 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $countryId,
             $stateId
         );
+    }
+
+    private function getCustomerGroupKey(Order $order): string
+    {
+        $customer = $order->getCustomer();
+
+        return $customer instanceof Customer ? $customer->getGroupKey() : self::DEFAULT_CUSTOMER_GROUP;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function checkTaxRule(array $data, ShopContextInterface $shopContext): array
+    {
+        $taxId = $data['taxId'];
+        if (empty($taxId)) {
+            unset($data['tax']);
+
+            return $data;
+        }
+        $tax = $this->getManager()->find(Tax::class, $taxId);
+        if ($tax instanceof Tax) {
+            $data['tax'] = $tax;
+            $data['taxRate'] = (float) $tax->getTax();
+        }
+
         $taxRule = $shopContext->getTaxRule($taxId);
         if ($taxRule instanceof TaxStruct) {
             $data['taxRate'] = (float) $taxRule->getTax();
         }
 
         return $data;
+    }
+
+    private function hasProductGraduatedPrices(string $productNumber, ORDER $order): bool
+    {
+        $customerGroupKey = $this->getCustomerGroupKey($order);
+
+        $sql = 'SELECT
+            prices.pricegroup, count(*)
+        FROM
+            s_articles_prices AS prices
+        INNER JOIN
+            s_articles_details ON prices.articledetailsID = s_articles_details.id
+        WHERE
+            s_articles_details.ordernumber = :productNumber
+        GROUP BY
+            prices.pricegroup;';
+
+        $result = $this->container->get(Connection::class)->executeQuery($sql, ['productNumber' => $productNumber])->fetchAllKeyValue();
+
+        return (isset($result[$customerGroupKey]) && $result[$customerGroupKey] > 1) || $result[self::DEFAULT_CUSTOMER_GROUP] > 1;
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return array<string, mixed>
+     */
+    private function checkPrice(array $data, Order $order, ShopContextInterface $shopContext): array
+    {
+        $orderListProductService = $this->container->get(OrderListProductServiceInterface::class);
+
+        if (!$orderListProductService instanceof OrderListProductServiceInterface) {
+            return $data;
+        }
+
+        $shopRegistrationService = $this->container->get(ShopRegistrationServiceInterface::class);
+        $shop = $order->getShop();
+        $shopRegistrationService->registerShop($shop);
+
+        $listProduct = $orderListProductService->getList([$data['articleNumber']], $shopContext);
+        if (empty($listProduct)) {
+            return $data;
+        }
+
+        $prices = $listProduct[$data['articleNumber']]['prices'];
+        if (\is_array($prices)) {
+            foreach ($prices as $graduatedPrice) {
+                if ($data['quantity'] >= $graduatedPrice['valFrom'] && ($data['quantity'] <= $graduatedPrice['valTo'] || $graduatedPrice['valTo'] === null)) {
+                    $data['price'] = $graduatedPrice['price_numeric'];
+                    break;
+                }
+            }
+            $data['total'] = $this->calculateTotal($data['price'], $data['quantity']);
+        }
+
+        return $data;
+    }
+
+    private function calculateTotal(float $price, int $quantity): float
+    {
+        return $price * $quantity;
     }
 
     /**
