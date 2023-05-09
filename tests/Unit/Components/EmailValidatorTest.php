@@ -29,76 +29,80 @@ use Shopware\Components\Validator\EmailValidator;
 
 class EmailValidatorTest extends TestCase
 {
-    /**
-     * @var EmailValidator
-     */
-    private $SUT;
+    private EmailValidator $SUT;
 
     protected function setUp(): void
     {
         $this->SUT = new EmailValidator();
     }
 
-    public function getValidEmails()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function getValidEmails(): array
     {
         return [
             // old domains
-            ['test@example.de'],
-            ['test@example.com'],
-            ['test@example.org'],
+            'test@example.de' => ['test@example.de'],
+            'test@example.com' => ['test@example.com'],
+            'test@example.org' => ['test@example.org'],
 
             // new released domains
-            ['test@example.berlin'],
-            ['test@example.email'],
-            ['test@example.systems'],
+            'test@example.berlin' => ['test@example.berlin'],
+            'test@example.email' => ['test@example.email'],
+            'test@example.systems' => ['test@example.systems'],
 
             // new non released domains
-            ['test@example.active'],
-            ['test@example.love'],
-            ['test@example.video'],
-            ['test@example.app'],
-            ['test@example.shop'],
+            'test@example.active' => ['test@example.active'],
+            'test@example.love' => ['test@example.love'],
+            'test@example.video' => ['test@example.video'],
+            'test@example.app' => ['test@example.app'],
+            'test@example.shop' => ['test@example.shop'],
 
-            ['disposable.style.email.with+symbol@example.com'],
-            ['other.email-with-dash@example.com'],
-
-            // We will ignore quoted string local parts
-            // this would blow up the simple regex method
-            // array('"much.more unusual"@example.com'),
+            'disposable.style.email.with+symbol@example.com' => ['disposable.style.email.with+symbol@example.com'],
+            'other.email-with-dash@example.com' => ['other.email-with-dash@example.com'],
+            '"much.more.unusual"@example.com' => ['"much.more.unusual"@example.com'],
+            '!#$%&*+-/=?^_`.{|}~@example.com' => ['!#$%&*+-/=?^_`.{|}~@example.com'],
         ];
     }
 
     /**
      * @dataProvider getValidEmails
-     *
-     * @param string $email
      */
-    public function testValidEmails($email)
+    public function testValidEmails(string $email): void
     {
         static::assertTrue($this->SUT->isValid($email));
     }
 
-    public function getinvalidEmails()
+    /**
+     * @return array<string, array<int, string>>
+     */
+    public function getInvalidEmails(): array
     {
         return [
-            ['test'],
-            ['test@.de'],
-            ['@example'],
-            ['@example.de'],
-            ['@.'],
-            [' @foo.de'],
-            ['@foo.'],
-            ['foo@ .de'],
-            ['foo@bar. '],
+            'test' => ['test'],
+            'test@.de' => ['test@.de'],
+            '@example' => ['@example'],
+            '@example.de' => ['@example.de'],
+            '@.' => ['@.'],
+            ' @foo.de' => [' @foo.de'],
+            '@foo.' => ['@foo.'],
+            'foo@ .de' => ['foo@ .de'],
+            'foo@bar. ' => ['foo@bar. '],
+            "testing@example.com'||DBMS_PIPE.RECEIVE_MESSAGE(CHR(98)||CHR(98)||CHR(" => ["testing@example.com'||DBMS_PIPE.RECEIVE_MESSAGE(CHR(98)||CHR(98)||CHR("],
+            "testing@example.com'||''||'" => ["testing@example.com'||''||'"],
+            "testing@example.com'|||'" => ["testing@example.com'|||'"],
+            "testing@example.com'||'" => ["testing@example.com'||'"],
+            'test@example.com|' => ['test@example.com|'],
+            'test@example.com(' => ['test@example.com('],
+            'test@example.com"' => ['test@example.com"'],
         ];
     }
 
     /**
      * @dataProvider getInvalidEmails
-     *
-     * @param string $email
      */
-    public function testInvalidEmails($email)
+    public function testInvalidEmails(string $email): void
     {
         static::assertFalse($this->SUT->isValid($email));
     }
