@@ -148,9 +148,9 @@ class CacheManager
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.8. Use `cache` service directly via DI
-     *
      * @return Zend_Cache_Core
+     *
+     * @deprecated in 5.6, will be removed in 5.8. Use `cache` service directly via DI
      */
     public function getCoreCache()
     {
@@ -413,16 +413,24 @@ class CacheManager
      */
     public function getOpCacheCacheInfo()
     {
-        $info = [];
-        if (\extension_loaded('Zend OPcache') && \ini_get('opcache.enable')) {
-            $status = opcache_get_status(false);
-            $info['files'] = $status['opcache_statistics']['num_cached_scripts'];
-            $info['size'] = $this->encodeSize($status['memory_usage']['used_memory']);
-            $info['freeSpace'] = $this->encodeSize($status['memory_usage']['free_memory']);
-        } else {
+        $info = ['name' => 'Zend OPcache'];
+
+        if (!\function_exists('opcache_get_status')) {
             $info['message'] = 'Zend OPcache is not available';
+
+            return $info;
         }
-        $info['name'] = 'Zend OPcache';
+
+        $status = \opcache_get_status(false);
+        if ($status === false) {
+            $info['message'] = 'Zend OPcache status is not available';
+
+            return $info;
+        }
+
+        $info['files'] = $status['opcache_statistics']['num_cached_scripts'];
+        $info['size'] = $this->encodeSize($status['memory_usage']['used_memory']);
+        $info['freeSpace'] = $this->encodeSize($status['memory_usage']['free_memory']);
 
         return $info;
     }
@@ -430,17 +438,17 @@ class CacheManager
     /**
      * Returns cache information
      *
-     * @deprecated in 5.6, will be private in 5.8 without replacement
-     *
      * @param string $dir
      *
      * @return array
+     *
+     * @deprecated in 5.6, will be private in 5.8 without replacement
      */
     public function getDirectoryInfo($dir)
     {
         $info = [];
         $info['dir'] = str_replace($this->docRoot . '/', '', $dir);
-        $info['dir'] = str_replace(DIRECTORY_SEPARATOR, '/', $info['dir']);
+        $info['dir'] = str_replace(\DIRECTORY_SEPARATOR, '/', $info['dir']);
         $info['dir'] = rtrim($info['dir'], '/') . '/';
 
         if (!file_exists($dir) || !is_dir($dir)) {
@@ -546,11 +554,11 @@ class CacheManager
     /**
      * Format size method
      *
-     * @deprecated in 5.6, will be private in 5.8 without replacement
-     *
      * @param float $bytes
      *
      * @return string
+     *
+     * @deprecated in 5.6, will be private in 5.8 without replacement
      */
     public function encodeSize($bytes)
     {

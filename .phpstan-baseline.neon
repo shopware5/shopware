@@ -15176,16 +15176,6 @@ parameters:
 			path: engine/Shopware/Components/CacheManager.php
 
 		-
-			message: "#^Cannot access offset 'memory_usage' on array\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Components/CacheManager.php
-
-		-
-			message: "#^Cannot access offset 'opcache_statistics' on array\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/CacheManager.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\CacheManager\\:\\:__construct\\(\\) has parameter \\$cacheConfig with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/CacheManager.php
