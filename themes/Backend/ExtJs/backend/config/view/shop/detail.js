@@ -52,7 +52,6 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                         typeSwitchField = panel.down('[name=typeSwitch]'),
                         mainIdField,
                         form = panel.getForm(),
-                        isDefault = form.getRecord().get('default'),
                         type;
 
                     if (Ext.isEmpty(value)) {
@@ -65,7 +64,7 @@ Ext.define('Shopware.apps.Config.view.shop.Detail', {
                     type = mainIdField.getValue() ? 'lang' : 'sub';
 
                     typeSwitchField.setValue(type);
-                    typeSwitchField.setDisabled(isDefault);
+                    typeSwitchField.setDisabled(value == 1);
                 }
             }
         }
