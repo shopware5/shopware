@@ -42926,26 +42926,6 @@ parameters:
 			path: tests/Unit/Components/DispatchFormatHelperTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\EmailValidatorTest\\:\\:getValidEmails\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/EmailValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\EmailValidatorTest\\:\\:getinvalidEmails\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/EmailValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\EmailValidatorTest\\:\\:testInvalidEmails\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/EmailValidatorTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\EmailValidatorTest\\:\\:testValidEmails\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/EmailValidatorTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Escaper\\\\EscaperTest\\:\\:testItCastsNullToEmptyStrings\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/Escaper/EscaperTest.php

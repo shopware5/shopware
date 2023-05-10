@@ -34,8 +34,6 @@ class EmailValidator implements EmailValidatorInterface
      */
     public function isValid($emailAddress)
     {
-        // Inspired by the regex used in symfony/validator
-        // See: https://github.com/symfony/validator/blob/dae70b74fe173461395cfd61a5c5245e05e511f5/Constraints/EmailValidator.php#L72
-        return (bool) preg_match('/^\S+\@\S+\.\S+$/', $emailAddress);
+        return (bool) filter_var($emailAddress, FILTER_VALIDATE_EMAIL);
     }
 }
