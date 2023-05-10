@@ -11,6 +11,7 @@
     <testsuites>
         <testsuite name="Shopware Installer">
             <directory>../tests/Install</directory>
+            <directory>../tests/Unit</directory>
         </testsuite>
     </testsuites>
 </phpunit>

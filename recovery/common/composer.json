@@ -7,7 +7,8 @@
         "symfony/console": "~4.4.34",
         "symfony/finder": "~4.4.30",
         "symfony/polyfill-php80": "^1.23",
-        "symfony/polyfill-php81": "^1.23"
+        "symfony/polyfill-php81": "^1.23",
+        "voku/anti-xss": "^4.1"
     },
     "autoload": {
         "psr-4": {
