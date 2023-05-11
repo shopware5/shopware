@@ -10,9 +10,13 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Deprecations
 
+* Deprecated `\Shopware\Bundle\SearchBundleDBAL\SearchBundleDBALSubscriber`, it will be removed with Shopware 5.8, because it is not used.
+
 ### Changes
 
-* Updated `guzzlehttp/psr7` to version 2.4.4
+* Updated `google/cloud-storage` to version 1.31.2
+* Updated `guzzlehttp/guzzle` to version 7.5.1
+* Updated `guzzlehttp/psr7` to version 2.5.0
 * Updated `laminas/laminas-code` to version 4.10.0 for PHP 8.1 and newer
 * Updated `phpunit/phpunit` to version 9.6.5
 * Updated `setasign/fpdi` to version 2.3.7
