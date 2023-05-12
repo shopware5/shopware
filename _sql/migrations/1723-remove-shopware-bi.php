@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,35 +25,40 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\BenchmarkBundle\Struct;
+use Shopware\Components\Migrations\AbstractMigration;
 
-class BenchmarkDataResult
+class Migrations_Migration1723 extends AbstractMigration
 {
-    private ?StatisticsResponse $statisticsResponse;
-
-    private ?BusinessIntelligenceResponse $biResponse;
-
-    public function __construct(
-        StatisticsResponse $statisticsResponse = null,
-        BusinessIntelligenceResponse $biResponse = null
-    ) {
-        $this->statisticsResponse = $statisticsResponse;
-        $this->biResponse = $biResponse;
+    public function up($modus)
+    {
+        $this->removeMenuEntries();
+        $this->removeConfigElement();
+        $this->removeWidget();
     }
 
-    /**
-     * @return StatisticsResponse|null
-     */
-    public function getStatisticsResponse()
+    private function removeMenuEntries(): void
     {
-        return $this->statisticsResponse;
+        $sql = <<<'SQL'
+DELETE FROM `s_core_menu` WHERE `controller` = 'Benchmark'
+SQL;
+        $this->addSql($sql);
     }
 
-    /**
-     * @return BusinessIntelligenceResponse|null
-     */
-    public function getBiResponse()
+    private function removeConfigElement(): void
     {
-        return $this->biResponse;
+        $sql = <<<'SQL'
+SET @elementId = (SELECT `id` FROM `s_core_config_elements` WHERE name = 'benchmarkTeaser');
+DELETE FROM s_core_config_values WHERE element_id = @elementId;
+DELETE FROM s_core_config_elements WHERE id = @elementId;
+SQL;
+        $this->addSql($sql);
+    }
+
+    private function removeWidget(): void
+    {
+        $sql = <<<'SQL'
+DELETE FROM `s_core_widgets` WHERE `name` = 'swag-bi-base'
+SQL;
+        $this->addSql($sql);
     }
 }

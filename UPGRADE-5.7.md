@@ -24,6 +24,10 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `voku/anti-xss` to version 4.1.41
 * Updated several indirect dependencies
 
+### Removals
+
+* Removed the Shopware BI feature, as it will be shut down.
+
 ## 5.7.17
 
 [View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)

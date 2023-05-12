@@ -745,36 +745,6 @@
         <service id="Shopware\Bundle\CustomerSearchBundleDBAL\Commands\SearchIndexPopulateCommand" alias="customer_search.dbal.search_index_populate_command" />
         <service id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderGateway" alias="customer_search.dbal.indexing.order_gateway" />
         <service id="Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrderHydrator" alias="customer_search.dbal.indexing.customer_order_hydrator" />
-        <service id="Shopware\Bundle\BenchmarkBundle\BenchmarkCollector" alias="shopware.benchmark_bundle.collector" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\ShopProvider" alias="shopware.benchmark_bundle.providers.shop" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\ShopwareProvider" alias="shopware.benchmark_bundle.providers.shopware" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\ManufacturerProvider" alias="shopware.benchmark_bundle.providers.manufacturers" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\ProductsProvider" alias="shopware.benchmark_bundle.providers.products" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\EmotionsProvider" alias="shopware.benchmark_bundle.providers.emotions" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\CategoriesProvider" alias="shopware.benchmark_bundle.providers.categories" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\AnalyticsProvider" alias="shopware.benchmark_bundle.providers.analytics" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\PluginsProvider" alias="shopware.benchmark_bundle.providers.plugins" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\PaymentsProvider" alias="shopware.benchmark_bundle.providers.payments" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\CustomersProvider" alias="shopware.benchmark_bundle.providers.customers" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\ShipmentsProvider" alias="shopware.benchmark_bundle.providers.shipments" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\OrdersProvider" alias="shopware.benchmark_bundle.providers.orders" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Provider\UpdatedOrdersProvider" alias="shopware.benchmark_bundle.providers.updated_orders" />
-        <service id="Shopware\Models\Benchmark\Repository" alias="shopware.benchmark_bundle.repository.config" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Service\TemplateCachingHandler" alias="shopware.benchmark_bundle.components.template_caching_handler" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Service\TranslationService" alias="shopware.benchmark_bundle.components.translation" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Commands\SendStatisticsCommand" alias="shopware.benchmark_bundle.commands.send_data" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Commands\ReceiveStatisticsCommand" alias="shopware.benchmark_bundle.commands.receive_data" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Service\BusinessIntelligenceService" alias="shopware.benchmark_bundle.bi_transmission" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Service\StatisticsService" alias="shopware.benchmark_bundle.statistics_transmission" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Service\BenchmarkStatisticsService" alias="shopware.benchmark_bundle.benchmark_statistics" />
-        <service id="Shopware\Bundle\BenchmarkBundle\BusinessIntelligenceClient" alias="shopware.benchmark_bundle.bi_client" />
-        <service id="Shopware\Bundle\BenchmarkBundle\StatisticsClient" alias="shopware.benchmark_bundle.statistics_client" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Hydrator\StatisticsResponseHydrator" alias="shopware.benchmark_bundle.hydrator.statistics_response_hydrator" />
-        <service id="Shopware\Bundle\BenchmarkBundle\Hydrator\BusinessIntelligenceResponseHydrator" alias="shopware.benchmark_bundle.hydrator.bi_response_hydrator" />
-        <service id="Shopware\Bundle\BenchmarkBundle\BenchmarkEncryption" alias="shopware_benchmark_bundle.benchmark_encryption" />
-        <service id="Shopware_Controllers_Backend_Benchmark" alias="shopware_attribute.backend_controllers_benchmark" />
-        <service id="Shopware_Controllers_Backend_BenchmarkLocalOverview" alias="shopware_attribute.backend_controllers_benchmark_local_overview" />
-        <service id="Shopware_Controllers_Backend_BenchmarkOverview" alias="shopware_attribute.backend_controllers_benchmark_overview" />
         <service id="Shopware\Bundle\EsBackendBundle\EsBackendIndexer" alias="shopware_es_backend.indexer" />
         <service id="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" alias="shopware_es_backend.search_query_builder" />
         <service id="Shopware\Bundle\EsBackendBundle\Searcher\OrderSearcher" alias="shopware_es_backend.order_searcher" />
