@@ -292,12 +292,6 @@ return array_replace_recursive([
             'fbclid',         // Facebook
         ],
     ],
-    'bi' => [
-        'endpoint' => [
-            'benchmark' => 'https://bi.shopware.com/benchmark',
-            'statistics' => 'https://bi.shopware.com/statistics',
-        ],
-    ],
     'session' => [
         'cookie_lifetime' => 0,
         'cookie_httponly' => 1,

@@ -91,7 +91,6 @@ Ext.define('Shopware.apps.Index', {
         'widgets.Base',
         'merchant.Window',
         'themeCache.ThemeCacheWarmUp',
-        'widgets.bi.Base'
     ],
 
     /**

@@ -147,8 +147,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('SHOPWARE_REVISION', $shopwareRelease->getRevision());
         $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
         $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
-        $this->View()->assign('biOverviewEnabled', $this->isBIOverviewEnabled());
-        $this->View()->assign('biIsActive', $this->isBIActive());
         $this->View()->assign('extJsDeveloperModeActive', $this->container->getParameter('shopware.extjs.developer_mode'));
     }
 
@@ -322,40 +320,5 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $interval = $installationDate->diff(new DateTime());
 
         return $interval->days >= self::MIN_DAYS_INSTALLATION_SURVEY;
-    }
-
-    /**
-     * @return bool
-     */
-    private function isBIOverviewEnabled()
-    {
-        if (!$this->get(Shopware_Components_Config::class)->get('benchmarkTeaser')) {
-            return false;
-        }
-
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-
-        $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
-
-        $waitingOver = true;
-        $installationDate = DateTime::createFromFormat('Y-m-d H:i', $this->container->get(Shopware_Components_Config::class)->get('installationDate'));
-        if ($installationDate) {
-            $interval = $installationDate->diff(new DateTime());
-
-            if ($interval->days < self::MIN_DAYS_BI_TEASER) {
-                $waitingOver = false;
-            }
-        }
-
-        return $waitingOver && $shopwareVersionText !== '___VERSION_TEXT___' && $configRepository->getConfigsCount() === 0;
-    }
-
-    private function isBIActive(): bool
-    {
-        $configRepository = $this->get('shopware.benchmark_bundle.repository.config');
-
-        $validShopCount = \count($configRepository->getValidShops());
-
-        return $validShopCount > 0;
     }
 }

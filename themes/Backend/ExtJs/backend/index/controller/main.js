@@ -119,19 +119,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                     });
                 }, 2000);
             }
-
-            /*{if {acl_is_allowed privilege=manage resource=benchmark}}*/
-            if (biOverviewEnabled) {
-                Ext.Function.defer(function() {
-                    Shopware.app.Application.addSubApplication({
-                        name: 'Shopware.apps.Benchmark',
-                        params: {
-                            isTeaser: true
-                        }
-                    });
-                }, 2000);
-            }
-            /* {/if} */
         }
     },
 
@@ -149,11 +136,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
 
         me.addKeyboardEvents();
         me.checkLoginStatus();
-        /*{if {acl_is_allowed privilege=submit resource=benchmark}}*/
-        if (me.subApplication.biIsActive) {
-            me.checkBenchmarksStatus();
-        }
-        /*{/if}*/
     },
 
     /**
@@ -297,71 +279,6 @@ Ext.define('Shopware.apps.Index.controller.Main', {
                 });
             }
         });
-    },
-
-    /**
-     * Helper method which checks for new Benchmark data periodically (every 10 seconds).
-     *
-     * @private
-     * @return void
-     */
-    checkBenchmarksStatus: function () {
-        var interval = 10000,
-            checkBenchmarksFn = function () {
-                Ext.Ajax.request({
-                    url: '{url controller=benchmark action=checkBenchmarks}',
-                    success: function(response) {
-                        var res = Ext.decode(response.responseText);
-
-                        interval = 10000;
-
-                        // Set interval to 5 minutes if all data was sent
-                        if (!res.statistics && res.bi) {
-                            interval = 300000;
-                        }
-
-                        // If we received new BI statistics, we print a growl message
-                        if (res.bi) {
-                            Shopware.Notification.createStickyGrowlMessage({
-                                title: '{s name="title/new_benchmark"}{/s}',
-                                text: '{s name="content/new_benchmark"}{/s}',
-                                btnDetail: {
-                                    text: '{s name="open"}{/s}',
-                                    callback: function () {
-                                        Shopware.app.Application.addSubApplication({
-                                            name: 'Shopware.apps.Benchmark',
-                                            params: {
-                                                shopId: res.shopId
-                                            }
-                                        });
-                                    }
-                                }
-                            });
-                        }
-
-                        // If neither sending nor receiving is necessary, set interval to 12 hours
-                        if (!res.statistics && !res.bi && !res.message) {
-                            interval = 43200000;
-                        }
-
-                        if (!res.success) {
-                            interval = 43200000;
-                            var cur = new Date();
-                            cur.setSeconds(cur.getSeconds() + 900);
-
-                            Ext.util.Cookies.set('benchmarkWait', '1', cur);
-                        }
-
-                        window.setTimeout(checkBenchmarksFn, interval);
-                    }
-                });
-            };
-
-        if (Ext.util.Cookies.get('benchmarkWait')) {
-            return;
-        }
-
-        window.setTimeout(checkBenchmarksFn, interval);
     }
 });
 

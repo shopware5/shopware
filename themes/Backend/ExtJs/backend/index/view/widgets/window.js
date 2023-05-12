@@ -171,8 +171,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
         me.widgetStore.each(me.createWidgets.bind(me));
 
         me.onDesktopResize(me.desktop, me.desktop.getWidth(), me.desktop.getHeight());
-
-        window.addEventListener('message', Ext.bind(me.onPostMessage, me), false);
     },
 
     /**
@@ -861,31 +859,16 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             items = [];
 
         me.widgetStore.each(function (widget) {
-            if (widget.get('name').indexOf('swag-bi') === -1) {
-                items.push({
-                    text: widget.get('label'),
-                    widgetId: widget.get('id'),
-                    iconCls: 'sprite-plus-circle-frame',
-                    listeners: {
-                        click: function (menuItem) {
-                            me.fireEvent('addWidget', me, widget.get('name'), menuItem);
-                        }
+            items.push({
+                text: widget.get('label'),
+                widgetId: widget.get('id'),
+                iconCls: 'sprite-plus-circle-frame',
+                listeners: {
+                    click: function (menuItem) {
+                        me.fireEvent('addWidget', me, widget.get('name'), menuItem);
                     }
-                });
-            }
-        });
-
-        items.push({
-            text: '{s name=shopware_bi namespace=backend/index/view/widgets}{/s}',
-            widgetId: null,
-            iconCls: 'sprite-plus-circle-frame',
-            listeners: {
-                click: function () {
-                    Shopware.app.Application.addSubApplication({
-                        name: 'Shopware.apps.Benchmark'
-                    });
                 }
-            }
+            });
         });
 
         return items;
@@ -1022,47 +1005,6 @@ Ext.define('Shopware.apps.Index.view.widgets.Window', {
             resizer[pos].show();
         }
     },
-
-    /**
-     * Adds a widget by name
-     *
-     * @param { object } configuration
-     */
-    addWidgetByName: function (configuration) {
-        this.fireEvent('addWidget', this, configuration.name, null, configuration.data);
-    },
-
-    /**
-     * Custom post message receiver
-     *
-     * @param { MessageEvent } message
-     */
-    onPostMessage: function (message) {
-        var me = this,
-            data = message.data;
-
-        if (typeof data === 'string' && (data.indexOf('swag-bi') >= 0) || data.indexOf('openBenchmarkModule') >= 0) {
-            var widgetInfo = data.split('|');
-
-            if (widgetInfo[0] === 'openBenchmarkModule') {
-                Shopware.app.Application.addSubApplication({
-                    name: 'Shopware.apps.Benchmark',
-                    params: {
-                        shopId: widgetInfo[1]
-                    }
-                });
-            } else {
-                me.addWidgetByName({
-                    name: widgetInfo[0],
-                    data: {
-                        shopId: widgetInfo[1],
-                        name: widgetInfo[2],
-                        title: widgetInfo[3]
-                    }
-                })
-            }
-        }
-    }
 });
 
 //{/block}
