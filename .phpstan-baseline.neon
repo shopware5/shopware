@@ -16781,16 +16781,6 @@ parameters:
 			path: engine/Shopware/Components/HttpCache/AppCache.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
-			message: "#^Property Shopware\\\\Components\\\\HttpCache\\\\AppCache\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/HttpCache/AppCache.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\HttpCache\\\\BlackHoleStore\\:\\:cleanup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/HttpCache/BlackHoleStore.php
