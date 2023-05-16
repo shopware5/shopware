@@ -34631,21 +34631,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/ExtJsResultMapper.php
 
 		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\FeedbackCollector\\:\\:gatherData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/FeedbackCollector.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\FeedbackCollector\\:\\:submitData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/FeedbackCollector.php
-
-		-
-			message: "#^Parameter \\#1 \\$data of method Zend_Http_Client\\:\\:setRawData\\(\\) expects resource\\|string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/FeedbackCollector.php
-
-		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\FileSystem\\:\\:checkDirectoryPermissions\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/FileSystem.php

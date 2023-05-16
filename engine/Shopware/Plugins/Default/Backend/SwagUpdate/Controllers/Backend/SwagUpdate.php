@@ -23,7 +23,6 @@
  */
 
 use Doctrine\DBAL\Connection;
-use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator;
 use Shopware\Components\CSRFWhitelistAware;
 use ShopwarePlugins\SwagUpdate\Components\Checks\EmotionTemplateCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\LicenseCheck;
@@ -34,7 +33,6 @@ use ShopwarePlugins\SwagUpdate\Components\Checks\RegexCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
 use ShopwarePlugins\SwagUpdate\Components\ExtensionMissingException;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
-use ShopwarePlugins\SwagUpdate\Components\FeedbackCollector;
 use ShopwarePlugins\SwagUpdate\Components\FileSystem as SwagUpdateFileSystem;
 use ShopwarePlugins\SwagUpdate\Components\PluginCheck;
 use ShopwarePlugins\SwagUpdate\Components\Steps\DownloadStep;
@@ -187,19 +185,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     public function popupAction()
     {
         $config = $this->getPluginConfig();
-
-        if ($config['update-send-feedback']) {
-            $apiEndpoint = $config['update-feedback-api-endpoint'];
-            $shopwareRelease = $this->container->get('shopware.release');
-
-            $collector = new FeedbackCollector($apiEndpoint, $this->getUnique(), $shopwareRelease);
-
-            try {
-                $collector->sendData();
-            } catch (Exception $e) {
-                // ignore for now
-            }
-        }
 
         try {
             $data = $this->fetchUpdateVersion();
@@ -374,15 +359,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             $fs->mkdir($destinationDirectory);
             $fs->rename($sourceFile, $destinationFile, true);
         }
-    }
-
-    /**
-     * Returns unique id of this shop installation.
-     * If no unique id exists it will be created.
-     */
-    private function getUnique(): string
-    {
-        return $this->container->get(UniqueIdGenerator::class)->getUniqueId();
     }
 
     /**

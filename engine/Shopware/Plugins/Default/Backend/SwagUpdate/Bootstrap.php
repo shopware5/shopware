@@ -169,18 +169,6 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             'value' => true,
         ]);
 
-        $form->setElement('text', 'update-feedback-api-endpoint', [
-            'label' => 'Feedback API Endpoint',
-            'required' => true,
-            'value' => 'http://feedback.update-api.shopware.com/v1/',
-            'hidden' => true,
-        ]);
-
-        $form->setElement('boolean', 'update-send-feedback', [
-            'label' => 'Send feedback',
-            'value' => true,
-        ]);
-
         $form->setElement('text', 'update-unique-id', [
             'label' => 'Unique identifier',
             'value' => '', // value will be populated on first access
@@ -191,9 +179,6 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
             ['de_DE' => [
                 'update-code' => [
                     'label' => 'Aktionscode',
-                ],
-                'update-send-feedback' => [
-                    'label' => 'Feedback senden',
                 ],
                 'update-channel' => [
                     'label' => 'Update Kanal',
