@@ -1936,7 +1936,12 @@ parameters:
 			path: engine/Library/Enlight/Controller/Action.php
 
 		-
-			message: "#^Method Enlight_Controller_Action\\:\\:createForm\\(\\) should return Symfony\\\\Component\\\\Form\\\\Form but returns Symfony\\\\Component\\\\Form\\\\FormInterface\\.$#"
+			message: "#^Method Enlight_Controller_Action\\:\\:createForm\\(\\) has parameter \\$type with generic interface Symfony\\\\Component\\\\Form\\\\FormTypeInterface but does not specify its types\\: TData$#"
+			count: 1
+			path: engine/Library/Enlight/Controller/Action.php
+
+		-
+			message: "#^Method Enlight_Controller_Action\\:\\:createForm\\(\\) return type with generic interface Symfony\\\\Component\\\\Form\\\\FormInterface does not specify its types\\: TData$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Action.php
 
@@ -4044,16 +4049,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\CustomerEmailValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Constraint/CustomerEmailValidator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\FormEmailValidator\\:\\:getSnippet\\(\\) has parameter \\$snippet with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Constraint/FormEmailValidator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\FormEmailValidator\\:\\:validate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Constraint/FormEmailValidator.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Constraint\\\\PasswordValidator\\:\\:getSnippet\\(\\) has parameter \\$snippet with no value type specified in iterable type array\\.$#"
@@ -17681,11 +17676,6 @@ parameters:
 			path: engine/Shopware/Components/Model/DBAL/Result.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Model\\\\EventSubscriber\\:\\:getEntityName\\(\\) should return string but returns class\\-string\\<Shopware\\\\Components\\\\Model\\\\ModelEntity\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Model/EventSubscriber.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Model\\\\Generator\\:\\:createTableMapping\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Model/Generator.php
@@ -22496,6 +22486,11 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Config.php
 
 		-
+			message: "#^QueryBuilder\\: \\[Semantical Error\\] line 0, col 233 near 'element LEFT'\\: Error\\: Class Shopware\\\\Components\\\\Model\\\\ModelEntity has no association named elements$#"
+			count: 1
+			path: engine/Shopware/Controllers/Backend/Config.php
+
+		-
 			message: "#^Method Shopware_Controllers_Backend_CoreLicense\\:\\:checkLicenseAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/CoreLicense.php
@@ -24521,11 +24516,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Address.php
 
 		-
-			message: "#^Method Shopware_Controllers_Frontend_Address\\:\\:getFormViewData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Address.php
-
-		-
 			message: "#^Method Shopware_Controllers_Frontend_Address\\:\\:getForwardParameters\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Address.php
@@ -24912,26 +24902,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:confirmValidationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:createBillingForm\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:createCustomerForm\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:createShippingForm\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Register.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Register\\:\\:getFormErrors\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Register.php
 

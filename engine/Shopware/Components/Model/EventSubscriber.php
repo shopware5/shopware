@@ -26,6 +26,12 @@ namespace Shopware\Components\Model;
 
 use Doctrine\Common\EventSubscriber as BaseEventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostPersistEventArgs;
+use Doctrine\ORM\Event\PostRemoveEventArgs;
+use Doctrine\ORM\Event\PostUpdateEventArgs;
+use Doctrine\ORM\Event\PrePersistEventArgs;
+use Doctrine\ORM\Event\PreRemoveEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\Proxy\Proxy;
 use Enlight_Event_EventArgs;
 use Enlight_Event_EventManager;
@@ -88,10 +94,10 @@ class EventSubscriber implements BaseEventSubscriber
      *
      * @return Enlight_Event_EventArgs|null
      */
-    public function preUpdate(LifecycleEventArgs $eventArgs)
+    public function preUpdate(PreUpdateEventArgs $eventArgs)
     {
         /** @var ModelEntity $entity */
-        $entity = $eventArgs->getEntity();
+        $entity = $eventArgs->getObject();
         $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::preUpdate', $eventArgs);
@@ -102,10 +108,10 @@ class EventSubscriber implements BaseEventSubscriber
      *
      * @return Enlight_Event_EventArgs|null
      */
-    public function preRemove(LifecycleEventArgs $eventArgs)
+    public function preRemove(PreRemoveEventArgs $eventArgs)
     {
         /** @var ModelEntity $entity */
-        $entity = $eventArgs->getEntity();
+        $entity = $eventArgs->getObject();
         $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::preRemove', $eventArgs);
@@ -116,10 +122,10 @@ class EventSubscriber implements BaseEventSubscriber
      *
      * @return Enlight_Event_EventArgs|null
      */
-    public function prePersist(LifecycleEventArgs $eventArgs)
+    public function prePersist(PrePersistEventArgs $eventArgs)
     {
         /** @var ModelEntity $entity */
-        $entity = $eventArgs->getEntity();
+        $entity = $eventArgs->getObject();
         $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::prePersist', $eventArgs);
@@ -130,10 +136,10 @@ class EventSubscriber implements BaseEventSubscriber
      *
      * @return Enlight_Event_EventArgs|null
      */
-    public function postUpdate(LifecycleEventArgs $eventArgs)
+    public function postUpdate(PostUpdateEventArgs $eventArgs)
     {
         /** @var ModelEntity $entity */
-        $entity = $eventArgs->getEntity();
+        $entity = $eventArgs->getObject();
         $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::postUpdate', $eventArgs);
@@ -144,10 +150,10 @@ class EventSubscriber implements BaseEventSubscriber
      *
      * @return Enlight_Event_EventArgs|null
      */
-    public function postRemove(LifecycleEventArgs $eventArgs)
+    public function postRemove(PostRemoveEventArgs $eventArgs)
     {
         /** @var ModelEntity $entity */
-        $entity = $eventArgs->getEntity();
+        $entity = $eventArgs->getObject();
         $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::postRemove', $eventArgs);
@@ -158,10 +164,10 @@ class EventSubscriber implements BaseEventSubscriber
      *
      * @return Enlight_Event_EventArgs|null
      */
-    public function postPersist(LifecycleEventArgs $eventArgs)
+    public function postPersist(PostPersistEventArgs $eventArgs)
     {
         /** @var ModelEntity $entity */
-        $entity = $eventArgs->getEntity();
+        $entity = $eventArgs->getObject();
         $entityName = $this->getEntityName($entity);
 
         return $this->notifyEvent($entityName . '::postPersist', $eventArgs);
@@ -170,9 +176,9 @@ class EventSubscriber implements BaseEventSubscriber
     /**
      * Returns the class name of the passed entity.
      *
-     * @param \Shopware\Components\Model\ModelEntity $entity
+     * @param ModelEntity $entity
      *
-     * @return string
+     * @return class-string
      */
     protected function getEntityName($entity)
     {
@@ -181,6 +187,7 @@ class EventSubscriber implements BaseEventSubscriber
         } else {
             $entityName = \get_class($entity);
         }
+        \assert(\is_string($entityName));
 
         return $entityName;
     }
@@ -196,8 +203,8 @@ class EventSubscriber implements BaseEventSubscriber
     protected function notifyEvent($eventName, $eventArgs)
     {
         return $this->eventManager->notify($eventName, [
-            'entityManager' => $eventArgs->getEntityManager(),
-            'entity' => $eventArgs->getEntity(),
+            'entityManager' => $eventArgs->getObjectManager(),
+            'entity' => $eventArgs->getObject(),
         ]);
     }
 }

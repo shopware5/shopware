@@ -36,7 +36,6 @@ use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Address;
 use Shopware\Models\Customer\Customer;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -407,6 +406,11 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         return $this->isUserLoggedIn() && empty($this->get('session')->offsetGet('sRegisterFinished'));
     }
 
+    /**
+     * @param FormInterface<Customer>|FormInterface<Address> $form
+     *
+     * @return array<string, string>
+     */
     private function getFormErrors(FormInterface $form): array
     {
         if ($form->isSubmitted() && $form->isValid()) {
@@ -541,7 +545,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $this->redirect(array_merge($location, $params));
     }
 
-    private function createCustomerForm(array $data): Form
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return FormInterface<Customer>
+     */
+    private function createCustomerForm(array $data): FormInterface
     {
         $customer = new Customer();
         $form = $this->createForm(PersonalFormType::class, $customer);
@@ -550,7 +559,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         return $form;
     }
 
-    private function createBillingForm(array $data): Form
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return FormInterface<Address>
+     */
+    private function createBillingForm(array $data): FormInterface
     {
         $address = new Address();
         $form = $this->createForm(AddressFormType::class, $address);
@@ -559,7 +573,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         return $form;
     }
 
-    private function createShippingForm(array $data): Form
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return FormInterface<Address>
+     */
+    private function createShippingForm(array $data): FormInterface
     {
         $address = new Address();
         $form = $this->createForm(AddressFormType::class, $address);

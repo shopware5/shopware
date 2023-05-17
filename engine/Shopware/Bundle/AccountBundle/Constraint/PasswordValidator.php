@@ -25,8 +25,8 @@
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
 use Shopware\Models\Customer\Customer;
-use Shopware_Components_Config;
-use Shopware_Components_Snippet_Manager;
+use Shopware_Components_Config as Config;
+use Shopware_Components_Snippet_Manager as SnippetManager;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
@@ -47,19 +47,13 @@ class PasswordValidator extends ConstraintValidator
         'default' => '',
     ];
 
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippets;
+    private SnippetManager $snippets;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Config $config;
 
     public function __construct(
-        Shopware_Components_Snippet_Manager $snippets,
-        Shopware_Components_Config $config
+        SnippetManager $snippets,
+        Config $config
     ) {
         $this->snippets = $snippets;
         $this->config = $config;
@@ -101,6 +95,9 @@ class PasswordValidator extends ConstraintValidator
             ->addViolation();
     }
 
+    /**
+     * @param FormInterface<Customer> $form
+     */
     private function isFastLogin(FormInterface $form): bool
     {
         if ($form->has('accountmode')) {

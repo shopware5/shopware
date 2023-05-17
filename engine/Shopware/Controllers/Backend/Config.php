@@ -30,7 +30,6 @@ use Doctrine\ORM\Query\Expr\Join;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Model\ModelRepository;
-use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Article\Unit;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Config\Element as ConfigElement;
@@ -168,7 +167,6 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
 
         $fallback = $this->getFallbackLocaleId($locale->getId());
 
-        /** @var QueryBuilder $builder */
         $builder = $repository->createQueryBuilder('form')
             ->leftJoin('form.elements', 'element')
             ->leftJoin('form.translations', 'formTranslation', Join::WITH, 'formTranslation.localeId IN (:localeId, :fallbackId)', 'formTranslation.localeId')

@@ -801,6 +801,7 @@ class OrderTest extends TestCase
     private function getHighestProductsTax(array $products): float
     {
         $productTax = array_column($products, 'tax_rate');
+        static::assertNotEmpty($productTax);
 
         return (float) max($productTax);
     }

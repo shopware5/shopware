@@ -392,9 +392,11 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
     }
 
     /**
-     * @return array
+     * @param FormInterface<Address> $form
+     *
+     * @return array<string, mixed>
      */
-    private function getFormViewData(FormInterface $form)
+    private function getFormViewData(FormInterface $form): array
     {
         $errorFlags = [];
         $errorMessages = [];
@@ -416,7 +418,6 @@ class Shopware_Controllers_Frontend_Address extends Enlight_Controller_Action
             array_unshift($errorMessages, $errorMessage);
         }
 
-        /** @var Address $address */
         $address = $form->getViewData();
 
         $formData = array_merge(

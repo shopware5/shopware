@@ -80,7 +80,7 @@ class Enlight_Loader
      */
     public function loadClass($class, $path = null)
     {
-        if (\is_array($class)) {
+        if (\is_array($class) && $class !== []) {
             return min(array_map([$this, __METHOD__], $class));
         }
         if (!\is_string($class)) {
