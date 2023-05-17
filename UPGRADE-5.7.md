@@ -15,6 +15,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Changes
 
 * Updated `behat/behat` to version 3.13.0
+* Updated `doctrine/dbal` to version 2.13.9
 * Updated `doctrine/orm` to version 2.14.3
 * Updated `elasticsearch/elasticsearch` to version 7.17.2
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.15
