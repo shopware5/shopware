@@ -14,6 +14,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Changes
 
+* Updated `doctrine/orm` to version 2.14.3
 * Updated `google/cloud-storage` to version 1.31.2
 * Updated `guzzlehttp/guzzle` to version 7.5.1
 * Updated `guzzlehttp/psr7` to version 2.5.0
