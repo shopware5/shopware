@@ -17,7 +17,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/orm` to version 2.14.3
 * Updated `elasticsearch/elasticsearch` to version 7.17.2
 * Updated `google/cloud-storage` to version 1.31.2
-* Updated `guzzlehttp/guzzle` to version 7.5.3
+* Updated `guzzlehttp/guzzle` to version 7.6.1
 * Updated `guzzlehttp/psr7` to version 2.5.0
 * Updated `laminas/laminas-code` to version 4.10.0 for PHP 8.1 and newer
 * Updated `phpunit/phpunit` to version 9.6.8
