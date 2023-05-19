@@ -20,7 +20,8 @@
 use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
 use Shopware\Components\Model\ModelManager;
-use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * Basic class for each Enlight controller action.
@@ -415,13 +416,13 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * Creates and returns a Form instance from the type of the form.
      *
-     * @param string $type    The fully qualified class name of the form type
-     * @param mixed  $data    The initial data for the form
-     * @param array  $options Options for the form
+     * @param class-string<FormTypeInterface> $type    The fully qualified class name of the form type
+     * @param mixed                           $data    The initial data for the form
+     * @param array                           $options Options for the form
      *
      * @throws Exception
      *
-     * @return Form
+     * @return FormInterface
      */
     protected function createForm($type, $data = null, array $options = [])
     {

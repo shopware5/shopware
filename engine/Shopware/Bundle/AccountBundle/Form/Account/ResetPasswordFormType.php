@@ -32,7 +32,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Form reflects the needed fields for resetting the password without logged in user
+ * Form reflects the needed fields for resetting the password without logged-in customer
+ *
+ * @extends AbstractType<Customer>
  */
 class ResetPasswordFormType extends AbstractType
 {

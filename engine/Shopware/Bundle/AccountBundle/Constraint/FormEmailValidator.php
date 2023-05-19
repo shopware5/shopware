@@ -25,8 +25,7 @@
 namespace Shopware\Bundle\AccountBundle\Constraint;
 
 use Shopware\Models\Customer\Customer;
-use Shopware_Components_Snippet_Manager;
-use Symfony\Component\Form\Form;
+use Shopware_Components_Snippet_Manager as SnippetManager;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Validator\Constraint;
@@ -40,18 +39,12 @@ class FormEmailValidator extends ConstraintValidator
         'default' => 'The mail addresses entered are not equal',
     ];
 
-    /**
-     * @var Shopware_Components_Snippet_Manager
-     */
-    private $snippets;
+    private SnippetManager $snippets;
 
-    /**
-     * @var CustomerEmailValidator
-     */
-    private $customerEmailValidator;
+    private CustomerEmailValidator $customerEmailValidator;
 
     public function __construct(
-        Shopware_Components_Snippet_Manager $snippets,
+        SnippetManager $snippets,
         CustomerEmailValidator $customerEmailValidator
     ) {
         $this->snippets = $snippets;
@@ -60,6 +53,8 @@ class FormEmailValidator extends ConstraintValidator
 
     /**
      * @param string $email
+     *
+     * @return void
      */
     public function validate($email, Constraint $constraint)
     {
@@ -67,10 +62,9 @@ class FormEmailValidator extends ConstraintValidator
             return;
         }
 
-        /** @var Form $form */
+        /** @var FormInterface<Customer> $form */
         $form = $this->context->getRoot();
 
-        /** @var Customer $customer */
         $customer = $form->getData();
 
         $accountMode = $this->getAccountMode($form);
@@ -85,7 +79,7 @@ class FormEmailValidator extends ConstraintValidator
         $this->customerEmailValidator->validate($email, $emailConstraint);
 
         if ($form->has('emailConfirmation') && $form->get('emailConfirmation')->getData() !== $email) {
-            $error = new FormError($this->getSnippet(self::SNIPPET_EMAIL_CONFIRMATION));
+            $error = new FormError($this->getSnippet());
             $error->setOrigin($form->get('emailConfirmation'));
             $form->addError($error);
         }
@@ -100,27 +94,22 @@ class FormEmailValidator extends ConstraintValidator
     }
 
     /**
-     * @return int
+     * @param FormInterface<Customer> $form
      */
-    private function getAccountMode(FormInterface $form)
+    private function getAccountMode(FormInterface $form): int
     {
         if ($form->has('accountmode')) {
             return $form->get('accountmode')->getData();
         }
 
-        /** @var Customer $customer */
         $customer = $form->getData();
 
         return $customer->getAccountMode();
     }
 
-    /**
-     * @param array $snippet with namespace, name and default value
-     *
-     * @return string
-     */
-    private function getSnippet(array $snippet)
+    private function getSnippet(): string
     {
-        return $this->snippets->getNamespace($snippet['namespace'])->get($snippet['name'], $snippet['default'], true);
+        return $this->snippets->getNamespace(self::SNIPPET_EMAIL_CONFIRMATION['namespace'])
+            ->get(self::SNIPPET_EMAIL_CONFIRMATION['name'], self::SNIPPET_EMAIL_CONFIRMATION['default'], true);
     }
 }

@@ -25,10 +25,13 @@
 namespace Shopware\Components\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
 use InvalidArgumentException;
 
 /**
  * Abstract class for shopware standard models.
+ *
+ * @ORM\MappedSuperclass()
  */
 abstract class ModelEntity
 {

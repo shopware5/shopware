@@ -40,6 +40,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Form reflects the needed fields for changing the email address in the account
+ *
+ * @extends AbstractType<Customer>
  */
 class ProfileUpdateFormType extends AbstractType
 {

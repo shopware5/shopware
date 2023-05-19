@@ -36,6 +36,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form reflects the needed fields for changing the password address in the account
+ *
+ * @extends AbstractType<Customer>
  */
 class PasswordUpdateFormType extends AbstractType
 {

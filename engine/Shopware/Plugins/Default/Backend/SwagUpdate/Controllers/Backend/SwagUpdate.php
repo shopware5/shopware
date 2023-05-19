@@ -184,8 +184,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
     public function popupAction()
     {
-        $config = $this->getPluginConfig();
-
         try {
             $data = $this->fetchUpdateVersion();
         } catch (Exception $e) {

@@ -47,6 +47,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Form reflects the personal fields for the registration, including auth
+ *
+ * @extends AbstractType<Customer>
  */
 class PersonalFormType extends AbstractType
 {

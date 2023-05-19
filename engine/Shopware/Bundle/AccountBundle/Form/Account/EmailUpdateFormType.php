@@ -39,6 +39,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Form reflects the needed fields for changing the email address in the account
+ *
+ * @extends AbstractType<Customer>
  */
 class EmailUpdateFormType extends AbstractType
 {
