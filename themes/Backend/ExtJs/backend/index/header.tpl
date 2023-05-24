@@ -70,8 +70,6 @@ iframe { border: 0 none !important; width: 100%; height: 100%; }
                 firstRunWizardEnabled: {$firstRunWizardEnabled|intval},
                 sbpLogin: {$sbpLogin},
                 updateWizardStarted: {$updateWizardStarted|intval},
-                enableInstallationFeedback: {$installationSurvey|intval},
-                enableBetaFeedback: {$feedbackRequired|intval},
                 biOverviewEnabled: {$biOverviewEnabled|intval},
                 biIsActive: {$biIsActive|intval},
             });

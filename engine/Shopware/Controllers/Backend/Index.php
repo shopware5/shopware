@@ -29,9 +29,6 @@ use Shopware\Models\Menu\Menu;
 
 class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action implements CSRFWhitelistAware
 {
-    public const MIN_DAYS_INSTALLATION_SURVEY = 14;
-    public const MIN_DAYS_BI_TEASER = 10;
-
     /**
      * @var Shopware_Plugins_Backend_Auth_Bootstrap
      */
@@ -136,7 +133,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
         $this->View()->assign('sbpLogin', $sbpLogin, true);
         $this->View()->assign('firstRunWizardEnabled', $firstRunWizardEnabled, true);
-        $this->View()->assign('installationSurvey', $this->checkForInstallationSurveyNecessity($identity), true);
 
         $config = $this->get(Shopware_Components_Config::class);
 
@@ -146,7 +142,6 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('SHOPWARE_VERSION_TEXT', $shopwareRelease->getVersionText());
         $this->View()->assign('SHOPWARE_REVISION', $shopwareRelease->getRevision());
         $this->View()->assign('updateWizardStarted', $config->get('updateWizardStarted'));
-        $this->View()->assign('feedbackRequired', $this->checkIsFeedbackRequired());
         $this->View()->assign('extJsDeveloperModeActive', $this->container->getParameter('shopware.extjs.developer_mode'));
     }
 
@@ -290,35 +285,5 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         }
 
         return $menuTree;
-    }
-
-    /**
-     * @return bool
-     */
-    private function checkIsFeedbackRequired()
-    {
-        $shopwareVersionText = $this->container->getParameter('shopware.release.version_text');
-
-        return !\in_array($shopwareVersionText, ['', '___VERSION_TEXT___'], true);
-    }
-
-    /**
-     * @param stdClass $identity
-     *
-     * @return bool
-     */
-    private function checkForInstallationSurveyNecessity($identity)
-    {
-        if ($this->checkIsFeedbackRequired() || !$identity->role->getAdmin()) {
-            return false;
-        }
-        $installationSurvey = $this->container->get(Shopware_Components_Config::class)->get('installationSurvey', false);
-        $installationDate = DateTime::createFromFormat('Y-m-d H:i', $this->container->get(Shopware_Components_Config::class)->get('installationDate'));
-        if (!$installationSurvey || !$installationDate) {
-            return false;
-        }
-        $interval = $installationDate->diff(new DateTime());
-
-        return $interval->days >= self::MIN_DAYS_INSTALLATION_SURVEY;
     }
 }
