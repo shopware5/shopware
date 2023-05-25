@@ -13,7 +13,6 @@ config.php export-ignore
 .phpstan.neon export-ignore
 .phpstan-baseline.neon export-ignore
 build/ export-ignore
-_sql/ export-ignore
 tests/ export-ignore
 dev-ops/ export-ignore
 .git export-ignore
