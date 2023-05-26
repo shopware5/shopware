@@ -16,7 +16,6 @@ build/ export-ignore
 tests/ export-ignore
 dev-ops/ export-ignore
 .git export-ignore
-snippets/ export-ignore
 devenv* export-ignore
 snippets/backend/plugins/ export-ignore
 .env.dist export-ignore
