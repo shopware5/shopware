@@ -29,6 +29,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `setasign/fpdi` to version 2.3.7
 * Updated `symfony/serializer` to version 5.4.23
 * Updated `voku/anti-xss` to version 4.1.41
+* Updated `wikimedia/less.php` to version 4.1.0
 * Updated several indirect dependencies
 
 ### Removals
