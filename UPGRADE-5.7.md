@@ -24,6 +24,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `guzzlehttp/guzzle` to version 7.7.0
 * Updated `guzzlehttp/psr7` to version 2.5.0
 * Updated `laminas/laminas-code` to version 4.11.0 for PHP 8.1 and newer
+* Updated `mpdf/mpdf` to version 8.1.6
 * Updated `phpunit/phpunit` to version 9.6.8
 * Updated `setasign/fpdi` to version 2.3.7
 * Updated `symfony/serializer` to version 5.4.23
