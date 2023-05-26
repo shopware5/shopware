@@ -1,16 +1,18 @@
 name: Create release package
 on:
     workflow_dispatch:
-        tags:
-            - "*"
         branches:
             - "**"
+    push:
+        tags:
+            - "*"
 
 jobs:
     create-install-package:
         env:
             PACKAGE_DIR: ./package/
             PACKAGE_PREFIX: install
+            PACKAGE_DELIMITER: _
             DB_NAME: Shopware
             DB_USER: root
             DB_PORT: 4406
@@ -99,11 +101,17 @@ jobs:
                     git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip --add-file=.htaccess --add-file=config.php --add-file=./recovery/install/data/sql/install.sql --add-file=./engine/Shopware/Components/Check/Data/Files.md5sums --add-file=./engine/Shopware/Components/HttpClient/cacert.pem HEAD
                     zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor
 
+            - run: echo "SHA=$(sha1sum ${{ env.PACKAGE_PREFIX }}.zip | awk '{print $1}')" >> $GITHUB_ENV
+
+            -   name: Rename Zip
+                run: |
+                    mv ${{ env.PACKAGE_PREFIX }}.zip ${{ env.PACKAGE_PREFIX }}${{ env.PACKAGE_DELIMITER }}${{ env.SHA }}.zip
+
             -   name: Archive results
                 if: always()
                 uses: actions/upload-artifact@v3
                 with:
-                    path: ${{ env.PACKAGE_PREFIX }}.zip
+                    path: ${{ env.PACKAGE_PREFIX }}${{ env.PACKAGE_DELIMITER }}${{ env.SHA }}.zip
 
             -   name: Push to release
                 uses: xresloader/upload-to-github-release@v1.3.12

@@ -34381,17 +34381,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:installForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onBackendIndexPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onInitUpdateCheck\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
 
@@ -34702,21 +34692,6 @@ parameters:
 
 		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\UpdateCheck\\:\\:checkUpdate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\UpdateCheck\\:\\:setVerifyResponseSignature\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\UpdateCheck\\:\\:verifyBody\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
-
-		-
-			message: "#^Parameter \\#1 \\$signature of method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\UpdateCheck\\:\\:verifyBody\\(\\) expects string, array\\|string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
 

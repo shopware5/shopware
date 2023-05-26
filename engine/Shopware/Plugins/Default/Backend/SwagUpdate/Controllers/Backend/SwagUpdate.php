@@ -31,7 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Checks\PHPExtensionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\PHPVersionCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\RegexCheck;
 use ShopwarePlugins\SwagUpdate\Components\Checks\WritableCheck;
-use ShopwarePlugins\SwagUpdate\Components\ExtensionMissingException;
+use ShopwarePlugins\SwagUpdate\Components\Exception\ExtensionMissingException;
 use ShopwarePlugins\SwagUpdate\Components\ExtJsResultMapper;
 use ShopwarePlugins\SwagUpdate\Components\FileSystem as SwagUpdateFileSystem;
 use ShopwarePlugins\SwagUpdate\Components\PluginCheck;
@@ -77,22 +77,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
             return;
         }
 
-        $user = Shopware()->Container()->get('auth')->getIdentity();
-        $userLang = $this->getUserLanguage($user);
-        $languagePriorities = [
-            $userLang,
-            'en',
-            'de',
-        ];
-
         $assignedData = [
             'version' => $data->version,
+            'changelog' => $data->changelog,
         ];
-
-        $changeLog = $this->getLocalizedChangeLog($data, $languagePriorities);
-        if ($changeLog !== null) {
-            $assignedData['changelog'] = $changeLog['changelog'];
-        }
 
         $this->View()->assign([
             'success' => true,
@@ -275,7 +263,18 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
     public function unpackAction()
     {
-        $version = $this->getCachedVersion();
+        try {
+            $version = $this->getCachedVersion();
+        } catch (Exception $e) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => [],
+                'message' => $e->getMessage(),
+            ]);
+
+            return;
+        }
+
         if (!$version instanceof Version) {
             $this->View()->assign('message', 'Could not get version information');
             $this->View()->assign('success', false);
@@ -435,22 +434,6 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $mapper = new ExtJsResultMapper();
 
         return $mapper->toExtJs($result);
-    }
-
-    /**
-     * @param string[] $languages
-     *
-     * @return string[]
-     */
-    private function getLocalizedChangeLog(Version $version, array $languages): ?array
-    {
-        while ($language = array_shift($languages)) {
-            if (isset($version->changelog[$language])) {
-                return $version->changelog[$language];
-            }
-        }
-
-        return null;
     }
 
     private function getUserLanguage(stdClass $user): string
