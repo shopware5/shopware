@@ -128,10 +128,6 @@
             <tag name="shopware.controller" module="backend" controller="extjs"/>
         </service>
 
-        <service id="shopware_controllers_backend_feedback" class="Shopware_Controllers_Backend_Feedback">
-            <tag name="shopware.controller" module="backend" controller="feedback"/>
-        </service>
-
         <service id="shopware_controllers_backend_firstrunwizard" class="Shopware_Controllers_Backend_FirstRunWizard">
             <tag name="shopware.controller" module="backend" controller="firstrunwizard"/>
         </service>

@@ -30,6 +30,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ### Removals
 
+* Removed the feedback popup at first login, as the feedback is no longer used.
 * Removed the Shopware BI feature, as it will be shut down.
 
 ## 5.7.17

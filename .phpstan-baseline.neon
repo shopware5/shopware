@@ -22891,26 +22891,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ExtJs.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Feedback\\:\\:disableInstallationSurveyAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Feedback.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Feedback\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Feedback.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_config_values\\.element_id\" expects value type int, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Feedback.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_config_values\\.id\" expects value type int, got type mixed~0\\|0\\.0\\|''\\|'0'\\|array\\{\\}\\|false\\|null$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Feedback.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
