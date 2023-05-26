@@ -117,7 +117,7 @@ class Data extends ModelEntity
      *
      * @ORM\Column(name="value", type="text", nullable=true)
      */
-    private $value = null;
+    private $value;
 
     public function __clone()
     {

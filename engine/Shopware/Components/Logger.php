@@ -50,7 +50,7 @@ class Logger extends BaseLogger
         $this->log(BaseLogger::DEBUG, $label, ['trace' => true]);
     }
 
-    public function addRecord(int $level, string $message, array $context = [], DateTimeImmutable $datetime = null): bool
+    public function addRecord(int $level, string $message, array $context = [], ?DateTimeImmutable $datetime = null): bool
     {
         $message = str_replace(['[', ']'], ['(', ')'], $message);
 

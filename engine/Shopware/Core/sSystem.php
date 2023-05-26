@@ -175,7 +175,7 @@ class sSystem implements Enlight_Hook
     /**
      * @param Enlight_Controller_Request_Request $request The request object
      */
-    public function __construct(Enlight_Controller_Request_Request $request = null)
+    public function __construct(?Enlight_Controller_Request_Request $request = null)
     {
         $request = $request ?: Enlight_Controller_Request_RequestHttp::createFromGlobals();
         $this->postWrapper = new PostWrapper($request);

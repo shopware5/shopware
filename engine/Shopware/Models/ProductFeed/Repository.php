@@ -68,7 +68,7 @@ class Repository extends ModelRepository
      *
      * @return QueryBuilder
      */
-    public function getListQueryBuilder(array $orderBy = null)
+    public function getListQueryBuilder(?array $orderBy = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();

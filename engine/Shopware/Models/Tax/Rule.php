@@ -85,21 +85,21 @@ class Rule extends ModelEntity
      *
      * @ORM\Column(name="areaID", type="integer", nullable=true)
      */
-    private $areaId = null;
+    private $areaId;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="countryID", type="integer", nullable=true)
      */
-    private $countryId = null;
+    private $countryId;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="stateID", type="integer", nullable=true)
      */
-    private $stateId = null;
+    private $stateId;
 
     /**
      * @var int

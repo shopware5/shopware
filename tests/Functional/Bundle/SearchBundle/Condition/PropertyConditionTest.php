@@ -275,7 +275,7 @@ class PropertyConditionTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $properties = []
     ): array {
         $product = parent::getProduct($number, $context, $category);

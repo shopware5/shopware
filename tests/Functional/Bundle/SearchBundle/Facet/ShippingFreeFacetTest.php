@@ -82,7 +82,7 @@ class ShippingFreeFacetTest extends TestCase
     protected function getProduct(
         $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $shippingFree = true
     ): array {
         $product = parent::getProduct($number, $context, $category);

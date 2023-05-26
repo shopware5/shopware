@@ -32,7 +32,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrmException extends Enlight_Exception implements ApiException
 {
-    public function __construct(string $message, Exception $previous = null)
+    public function __construct(string $message, ?Exception $previous = null)
     {
         parent::__construct($message, Response::HTTP_INTERNAL_SERVER_ERROR, $previous);
     }

@@ -292,7 +292,7 @@ class PrefixFilesystem implements FilesystemInterface
     /**
      * {@inheritdoc}
      */
-    public function get($path, Handler $handler = null)
+    public function get($path, ?Handler $handler = null)
     {
         $this->checkPath($path);
 

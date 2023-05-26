@@ -41,7 +41,7 @@ class MediaListItem extends ValueListItem
      * @param Media       $media
      * @param Attribute[] $attributes
      */
-    public function __construct($id, $label, $active, Media $media = null, $attributes = [])
+    public function __construct($id, $label, $active, ?Media $media = null, $attributes = [])
     {
         parent::__construct($id, $label, $active, $attributes);
         $this->media = $media;

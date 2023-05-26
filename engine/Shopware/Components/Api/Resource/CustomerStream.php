@@ -368,7 +368,7 @@ class CustomerStream extends Resource
      *
      * @return array|null
      */
-    public function updateFrozenState($streamId, DateTimeInterface $freezeUp = null, $conditions)
+    public function updateFrozenState($streamId, ?DateTimeInterface $freezeUp, $conditions)
     {
         $now = new DateTime();
         if (!$freezeUp || $freezeUp >= $now) {

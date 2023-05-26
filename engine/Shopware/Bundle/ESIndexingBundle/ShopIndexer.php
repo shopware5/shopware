@@ -89,7 +89,7 @@ class ShopIndexer implements ShopIndexerInterface
      *
      * @throws RuntimeException
      */
-    public function index(Shop $shop, ProgressHelperInterface $helper, array $indexNames = null)
+    public function index(Shop $shop, ProgressHelperInterface $helper, ?array $indexNames = null)
     {
         $lastBacklogId = $this->backlogReader->getLastBacklogId();
 

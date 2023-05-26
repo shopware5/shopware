@@ -287,7 +287,7 @@ class StoreClient
      *
      * @throws Exception
      */
-    private function getRequest(string $resource, array $params, array $headers = [], AccessTokenStruct $token = null): Response
+    private function getRequest(string $resource, array $params, array $headers = [], ?AccessTokenStruct $token = null): Response
     {
         $url = $this->apiEndPoint . $resource;
         if (!empty($params)) {
@@ -320,7 +320,7 @@ class StoreClient
      * @throws StoreException
      * @throws Exception
      */
-    private function postRequest(string $resource, array $params = [], array $headers = [], AccessTokenStruct $token = null): Response
+    private function postRequest(string $resource, array $params = [], array $headers = [], ?AccessTokenStruct $token = null): Response
     {
         $url = $this->apiEndPoint . $resource;
 

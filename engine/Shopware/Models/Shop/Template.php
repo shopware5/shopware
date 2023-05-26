@@ -46,7 +46,7 @@ class Template extends ModelEntity
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Shop\Template")
      * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
      */
-    protected $parent = null;
+    protected $parent;
 
     /**
      * @var ArrayCollection<Shop>
@@ -420,7 +420,7 @@ class Template extends ModelEntity
         return $this->getTemplate();
     }
 
-    public function setParent(Template $parent = null)
+    public function setParent(?Template $parent = null)
     {
         $this->parent = $parent;
     }

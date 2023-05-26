@@ -66,7 +66,7 @@ abstract class LazyFetchModelEntity extends ModelEntity
      *
      * @return TModel|null
      */
-    public function fetchLazy($object, $condition, EntityManagerInterface $em = null)
+    public function fetchLazy($object, $condition, ?EntityManagerInterface $em = null)
     {
         if (!$object instanceof Proxy || $object->__isInitialized() || !$this->getId() || !method_exists($object, 'getId')) {
             return $object;

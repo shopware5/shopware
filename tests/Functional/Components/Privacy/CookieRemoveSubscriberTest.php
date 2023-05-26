@@ -152,7 +152,7 @@ class CookieRemoveSubscriberTest extends TestCase
         static::assertNotNull($controller->View()->getAssign('cookieGroups'));
     }
 
-    private function getEventArgs(Enlight_Controller_Action $controller = null): Enlight_Controller_ActionEventArgs
+    private function getEventArgs(?Enlight_Controller_Action $controller = null): Enlight_Controller_ActionEventArgs
     {
         return new Enlight_Controller_ActionEventArgs([
             'subject' => $controller ?: $this->getController(),

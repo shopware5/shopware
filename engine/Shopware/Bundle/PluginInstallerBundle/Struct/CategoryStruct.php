@@ -44,7 +44,7 @@ class CategoryStruct implements JsonSerializable
     /**
      * @var int
      */
-    private $parentId = null;
+    private $parentId;
 
     /**
      * @var CategoryStruct[]

@@ -45,14 +45,14 @@ abstract class Enlight_Config_Writer_Writer
      *
      * @var Enlight_Config_BaseConfig
      */
-    protected $_config = null;
+    protected $_config;
 
     /**
      * Create a new adapter
      *
      * $options can only be passed as array or be omitted
      */
-    public function __construct(array $options = null)
+    public function __construct(?array $options = null)
     {
         if (\is_array($options)) {
             $this->setOptions($options);

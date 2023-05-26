@@ -46,7 +46,7 @@ class Repository extends ModelRepository
      *
      * @return Query<Group>
      */
-    public function getGroupListQuery(array $filterBy = null, array $orderBy = null, $limit = null, $offset = null)
+    public function getGroupListQuery(?array $filterBy = null, ?array $orderBy = null, $limit = null, $offset = null)
     {
         $builder = $this->getGroupListQueryBuilder($filterBy, $orderBy, $limit, $offset);
 
@@ -62,7 +62,7 @@ class Repository extends ModelRepository
      *
      * @return QueryBuilder
      */
-    public function getGroupListQueryBuilder(array $filterBy = null, array $orderBy = null, $limit = null, $offset = null)
+    public function getGroupListQueryBuilder(?array $filterBy = null, ?array $orderBy = null, $limit = null, $offset = null)
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();

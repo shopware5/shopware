@@ -52,7 +52,7 @@ class CdnOptimizerService implements OptimizerServiceInterface
     public function __construct(
         OptimizerServiceInterface $optimizerService,
         MediaServiceInterface $mediaService,
-        FilesystemInterface $filesystem = null
+        ?FilesystemInterface $filesystem = null
     ) {
         $this->optimizerService = $optimizerService;
         $this->mediaService = $mediaService;

@@ -31,7 +31,7 @@ abstract class BinaryOptimizer implements OptimizerInterface
     /**
      * @var bool
      */
-    private $isRunnable = null;
+    private $isRunnable;
 
     /**
      * @return string

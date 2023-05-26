@@ -83,7 +83,7 @@ class MenuSynchronizer implements MenuSynchronizerInterface
         $this->cleanupContentTypeEntries();
     }
 
-    protected function createMenuItem(array $menuItem, Menu $parent = null): Menu
+    protected function createMenuItem(array $menuItem, ?Menu $parent = null): Menu
     {
         $item = null;
 

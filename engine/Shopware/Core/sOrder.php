@@ -245,7 +245,7 @@ class sOrder implements Enlight_Hook
      * @throws Exception
      */
     public function __construct(
-        ContextServiceInterface $contextService = null
+        ?ContextServiceInterface $contextService = null
     ) {
         $container = Shopware()->Container();
 

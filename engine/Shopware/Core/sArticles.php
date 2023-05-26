@@ -99,12 +99,12 @@ class sArticles implements Enlight_Hook
     /**
      * @var ArticleRepository
      */
-    protected $articleRepository = null;
+    protected $articleRepository;
 
     /**
      * @var MediaRepository
      */
-    protected $mediaRepository = null;
+    protected $mediaRepository;
 
     private ContextServiceInterface $contextService;
 
@@ -154,7 +154,7 @@ class sArticles implements Enlight_Hook
     private ListingLinkRewriteServiceInterface $listingLinkRewriteService;
 
     public function __construct(
-        Category $category = null,
+        ?Category $category = null,
         $translationId = null,
         $customerGroupId = null
     ) {
@@ -422,7 +422,7 @@ class sArticles implements Enlight_Hook
      *
      * @return ListingArray|false
      */
-    public function sGetArticlesByCategory($categoryId = null, Criteria $criteria = null)
+    public function sGetArticlesByCategory($categoryId = null, ?Criteria $criteria = null)
     {
         if (Shopware()->Events()->notifyUntil('Shopware_Modules_Articles_sGetArticlesByCategory_Start', [
             'subject' => $this,

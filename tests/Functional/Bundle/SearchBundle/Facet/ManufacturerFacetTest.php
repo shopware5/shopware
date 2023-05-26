@@ -113,7 +113,7 @@ class ManufacturerFacetTest extends TestCase
     protected function getProduct(
         $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $manufacturer = null
     ): array {
         $product = parent::getProduct($number, $context, $category);

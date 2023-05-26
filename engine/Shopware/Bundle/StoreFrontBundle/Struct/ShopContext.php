@@ -100,9 +100,9 @@ class ShopContext extends Extendable implements ShopContextInterface, ProductCon
         Group $fallbackCustomerGroup,
         array $taxRules,
         array $priceGroups,
-        Area $area = null,
-        Country $country = null,
-        State $state = null,
+        ?Area $area = null,
+        ?Country $country = null,
+        ?State $state = null,
         $customerStreamIds = []
     ) {
         $this->baseUrl = $baseUrl;

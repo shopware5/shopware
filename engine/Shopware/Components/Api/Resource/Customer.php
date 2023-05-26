@@ -501,7 +501,7 @@ class Customer extends Resource
      *
      * @throws CustomValidationException
      */
-    private function setupContext(int $shopId = null): void
+    private function setupContext(?int $shopId = null): void
     {
         $shopRepository = $this->getContainer()->get(ModelManager::class)->getRepository(ShopModel::class);
 
@@ -522,7 +522,7 @@ class Customer extends Resource
      *
      * @throws CustomValidationException
      */
-    private function createAddress(array $data = null): ?AddressModel
+    private function createAddress(?array $data = null): ?AddressModel
     {
         if (empty($data)) {
             return null;

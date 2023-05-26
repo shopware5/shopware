@@ -46,5 +46,5 @@ interface TaxGatewayInterface
      *
      * @return array<string, Tax> Indexed by 'tax_' + id
      */
-    public function getRules(Group $customerGroup, Area $area = null, Country $country = null, State $state = null);
+    public function getRules(Group $customerGroup, ?Area $area = null, ?Country $country = null, ?State $state = null);
 }

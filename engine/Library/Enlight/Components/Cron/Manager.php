@@ -84,7 +84,7 @@ class Enlight_Components_Cron_Manager
      *
      * @return Enlight_Components_Cron_Manager
      */
-    public function setEventManager(Enlight_Event_EventManager $eventManager = null)
+    public function setEventManager(?Enlight_Event_EventManager $eventManager = null)
     {
         $this->eventManager = $eventManager;
 

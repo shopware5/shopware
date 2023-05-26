@@ -54,7 +54,7 @@ class SitemapContext extends SubContext
      * @Then /^I should see the group "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)":$/
      */
-    public function iShouldSeeTheGroup(string $name, TableNode $entries = null): void
+    public function iShouldSeeTheGroup(string $name, ?TableNode $entries = null): void
     {
         $this->iShouldSeeTheGroupWithLink($name, '', $entries);
     }
@@ -63,7 +63,7 @@ class SitemapContext extends SubContext
      * @Then /^I should see the group "([^"]*)" with link "([^"]*)"$/
      * @Then /^I should see the group "([^"]*)" with link "([^"]*)":$/
      */
-    public function iShouldSeeTheGroupWithLink(string $name, string $link, TableNode $entries = null): void
+    public function iShouldSeeTheGroupWithLink(string $name, string $link, ?TableNode $entries = null): void
     {
         $links = [];
 

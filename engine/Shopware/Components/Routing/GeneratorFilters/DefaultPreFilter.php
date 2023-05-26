@@ -32,7 +32,7 @@ class DefaultPreFilter implements PreFilterInterface
     /**
      * {@inheritdoc}
      */
-    public function preFilter($params, Context $context = null)
+    public function preFilter($params, ?Context $context = null)
     {
         // Add support for "shopware.php?sViewport,cat&sCategory=3"
         if (\is_string($params)) {

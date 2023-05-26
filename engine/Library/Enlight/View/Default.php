@@ -128,7 +128,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      *
      * @return Enlight_View_Default
      */
-    public function setTemplate(Enlight_Template_Default $template = null)
+    public function setTemplate(?Enlight_Template_Default $template = null)
     {
         $this->template = $template;
 

@@ -115,7 +115,7 @@ class ContentType extends Enlight_Controller_Action
         }
     }
 
-    public function getBreadcrumb(array $item = null): array
+    public function getBreadcrumb(?array $item = null): array
     {
         $breadCrumb = [
             [

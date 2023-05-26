@@ -169,7 +169,7 @@ class AccountContext extends SubContext
      * @When /^I change the payment method to (?P<paymentId>\d+)$/
      * @When /^I change the payment method to (?P<paymentId>\d+):$/
      */
-    public function iChangeThePaymentMethodTo(int $paymentId, TableNode $table = null): void
+    public function iChangeThePaymentMethodTo(int $paymentId, ?TableNode $table = null): void
     {
         $pageInfo = Helper::getPageInfo($this->getSession(), ['controller', 'action']);
         if (!\is_array($pageInfo)) {

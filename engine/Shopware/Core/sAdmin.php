@@ -172,21 +172,21 @@ class sAdmin implements \Enlight_Hook
     private CSRFTokenValidator $csrfTokenValidator;
 
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Enlight_Event_EventManager $eventManager = null,
-        Shopware_Components_Config $config = null,
-        Enlight_Components_Session_Namespace $session = null,
-        Enlight_Controller_Front $front = null,
-        Manager $passwordEncoder = null,
-        Shopware_Components_Snippet_Manager $snippetManager = null,
-        Shopware_Components_Modules $moduleManager = null,
-        sSystem $systemModule = null,
-        ContextServiceInterface $contextService = null,
-        EmailValidatorInterface $emailValidator = null,
-        Shopware_Components_Translation $translationComponent = null,
-        Connection $connection = null,
-        OptInLoginServiceInterface $optInLoginService = null,
-        CSRFTokenValidator $csrfTokenValidator = null
+        ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        ?Enlight_Event_EventManager $eventManager = null,
+        ?Shopware_Components_Config $config = null,
+        ?Enlight_Components_Session_Namespace $session = null,
+        ?Enlight_Controller_Front $front = null,
+        ?Manager $passwordEncoder = null,
+        ?Shopware_Components_Snippet_Manager $snippetManager = null,
+        ?Shopware_Components_Modules $moduleManager = null,
+        ?sSystem $systemModule = null,
+        ?ContextServiceInterface $contextService = null,
+        ?EmailValidatorInterface $emailValidator = null,
+        ?Shopware_Components_Translation $translationComponent = null,
+        ?Connection $connection = null,
+        ?OptInLoginServiceInterface $optInLoginService = null,
+        ?CSRFTokenValidator $csrfTokenValidator = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();

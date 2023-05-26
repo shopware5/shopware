@@ -246,7 +246,7 @@ class Product extends ListProduct
         return $this->visibility;
     }
 
-    public function setAvailableCombinations(array $combinations = null)
+    public function setAvailableCombinations(?array $combinations = null)
     {
         $this->availableCombinations = $combinations;
     }
@@ -259,7 +259,7 @@ class Product extends ListProduct
     /**
      * @param Group[]|null $fullConfiguration
      */
-    public function setFullConfiguration(array $fullConfiguration = null)
+    public function setFullConfiguration(?array $fullConfiguration = null)
     {
         $this->fullConfiguration = $fullConfiguration;
     }

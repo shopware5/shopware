@@ -92,18 +92,18 @@ class sMarketing implements Enlight_Hook
     private ContainerAwareEventManager $eventManager;
 
     public function __construct(
-        ContextServiceInterface $contextService = null,
-        AdditionalTextServiceInterface $additionalTextService = null,
-        Shopware_Components_Config $config = null,
-        sArticles $productModule = null,
-        sBasket $basketModule = null,
-        Enlight_Controller_Front $front = null,
-        Connection $connection = null,
-        ModelManager $modelManager = null,
-        MediaServiceInterface $mediaService = null,
-        StorefrontMediaServiceInterface $storefrontMediaService = null,
-        LegacyStructConverter $legacyStructConverter = null,
-        ContainerAwareEventManager $eventManager = null
+        ?ContextServiceInterface $contextService = null,
+        ?AdditionalTextServiceInterface $additionalTextService = null,
+        ?Shopware_Components_Config $config = null,
+        ?sArticles $productModule = null,
+        ?sBasket $basketModule = null,
+        ?Enlight_Controller_Front $front = null,
+        ?Connection $connection = null,
+        ?ModelManager $modelManager = null,
+        ?MediaServiceInterface $mediaService = null,
+        ?StorefrontMediaServiceInterface $storefrontMediaService = null,
+        ?LegacyStructConverter $legacyStructConverter = null,
+        ?ContainerAwareEventManager $eventManager = null
     ) {
         $container = Shopware()->Container();
 

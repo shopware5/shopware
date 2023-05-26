@@ -51,9 +51,9 @@ class sCms implements \Enlight_Hook
     private $translationComponent;
 
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Enlight_Controller_Front $front = null,
-        Shopware_Components_Translation $translationComponent = null
+        ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        ?Enlight_Controller_Front $front = null,
+        ?Shopware_Components_Translation $translationComponent = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->front = $front ?: Shopware()->Front();

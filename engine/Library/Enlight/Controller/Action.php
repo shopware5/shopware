@@ -240,7 +240,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @param string $module
      * @param array  $params
      */
-    public function forward($action, $controller = null, $module = null, array $params = null)
+    public function forward($action, $controller = null, $module = null, ?array $params = null)
     {
         $request = $this->Request();
 
@@ -297,7 +297,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
     /**
      * @param Container $loader
      */
-    public function setContainer(Container $loader = null)
+    public function setContainer(?Container $loader = null)
     {
         $this->container = $loader;
     }
@@ -311,7 +311,7 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      *
      * @return Enlight_Controller_Action
      */
-    public function setFront(Enlight_Controller_Front $front = null)
+    public function setFront(?Enlight_Controller_Front $front = null)
     {
         if ($front === null) {
             $front = Shopware()->Container()->get('front');

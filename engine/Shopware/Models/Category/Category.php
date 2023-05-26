@@ -253,7 +253,7 @@ class Category extends ModelEntity
      *
      * @ORM\Column(name="product_box_layout", type="string", length=50, nullable=true)
      */
-    private $productBoxLayout = null;
+    private $productBoxLayout;
 
     /**
      * @var bool
@@ -432,7 +432,7 @@ class Category extends ModelEntity
      *
      * @return Category
      */
-    public function setParent(Category $parent = null)
+    public function setParent(?Category $parent = null)
     {
         $this->parent = $parent;
 
@@ -1031,7 +1031,7 @@ class Category extends ModelEntity
         return $this->stream;
     }
 
-    public function setStream(ProductStream $stream = null)
+    public function setStream(?ProductStream $stream = null)
     {
         $this->stream = $stream;
     }

@@ -73,7 +73,7 @@ class Session
     /**
      * @return Enlight_Components_Session_Namespace
      */
-    public function createSession(Container $container, SessionHandlerInterface $saveHandler = null)
+    public function createSession(Container $container, ?SessionHandlerInterface $saveHandler = null)
     {
         // If another session is already started, save and close it before starting the frontend session below.
         // We need to do this, because the other session would use the session id of the frontend session and thus write

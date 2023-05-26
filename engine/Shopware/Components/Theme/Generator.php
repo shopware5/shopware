@@ -194,7 +194,7 @@ EOD;
      *
      * @throws Exception
      */
-    public function generateTheme(array $data, Template $parent = null)
+    public function generateTheme(array $data, ?Template $parent = null)
     {
         if (!is_writable($this->pathResolver->getFrontendThemeDirectory())) {
             throw new Exception(sprintf('Theme directory %s isn\'t writable', $this->pathResolver->getFrontendThemeDirectory()));
@@ -276,7 +276,7 @@ EOD;
      *
      * @param Template $parent
      */
-    private function generateThemePhp(array $data, Template $parent = null)
+    private function generateThemePhp(array $data, ?Template $parent = null)
     {
         $source = str_replace('$TEMPLATE$', $data['template'], $this->phpSource);
 

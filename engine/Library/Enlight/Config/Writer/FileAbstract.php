@@ -40,7 +40,7 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
      *
      * @var string
      */
-    protected $_filename = null;
+    protected $_filename;
 
     /**
      * Wether to exclusively lock the file or not
@@ -86,7 +86,7 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
      *
      * @return void
      */
-    public function write($filename = null, Enlight_Config $config = null, $exclusiveLock = null)
+    public function write($filename = null, ?Enlight_Config $config = null, $exclusiveLock = null)
     {
         if ($filename !== null) {
             $this->setFilename($filename);

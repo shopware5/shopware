@@ -196,7 +196,7 @@ class Newsletter extends ModelEntity
      *
      * @ORM\Column(name="timed_delivery", type="datetime", nullable=true)
      */
-    private $timedDelivery = null;
+    private $timedDelivery;
 
     /**
      * INVERSE SIDE

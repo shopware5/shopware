@@ -46,7 +46,7 @@ abstract class ShopwareCommand extends Command implements ContainerAwareInterfac
     /**
      * {@inheritdoc}
      */
-    public function setContainer(Container $container = null)
+    public function setContainer(?Container $container = null)
     {
         $this->container = $container;
     }

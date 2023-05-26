@@ -134,7 +134,7 @@ class Price extends Extendable
         return $this->rule;
     }
 
-    public function setRule(PriceRule $rule = null)
+    public function setRule(?PriceRule $rule = null)
     {
         $this->rule = $rule;
     }

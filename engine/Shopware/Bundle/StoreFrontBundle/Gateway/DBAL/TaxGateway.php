@@ -66,7 +66,7 @@ class TaxGateway implements TaxGatewayInterface
     /**
      * {@inheritdoc}
      */
-    public function getRules(Group $customerGroup, Area $area = null, Country $country = null, State $state = null)
+    public function getRules(Group $customerGroup, ?Area $area = null, ?Country $country = null, ?State $state = null)
     {
         $query = $this->connection->createQueryBuilder();
         $query->select($this->fieldHelper->getTaxFields())
@@ -107,9 +107,9 @@ class TaxGateway implements TaxGatewayInterface
 
     private function getAreaQuery(
         Group $customerGroup,
-        Area $area = null,
-        Country $country = null,
-        State $state = null
+        ?Area $area = null,
+        ?Country $country = null,
+        ?State $state = null
     ): QueryBuilder {
         $areaId = $area ? $area->getId() : null;
         $countryId = $country ? $country->getId() : null;

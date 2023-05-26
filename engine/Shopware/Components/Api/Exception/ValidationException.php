@@ -41,7 +41,7 @@ class ValidationException extends Enlight_Exception implements ApiException
      *
      * @var ConstraintViolationListInterface|null
      */
-    protected $violations = null;
+    protected $violations;
 
     public function __construct(ConstraintViolationListInterface $violations)
     {

@@ -32,7 +32,7 @@ interface ShopIndexerInterface
     /**
      * @return void
      */
-    public function index(Shop $shop, ProgressHelperInterface $helper, array $indexes = null);
+    public function index(Shop $shop, ProgressHelperInterface $helper, ?array $indexes = null);
 
     /**
      * Remove unused indices

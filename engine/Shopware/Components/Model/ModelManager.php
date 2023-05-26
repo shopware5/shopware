@@ -83,8 +83,8 @@ class ModelManager extends EntityManager
     public static function createInstance(
         Connection $conn,
         Configuration $config,
-        EventManager $eventManager = null,
-        QueryOperatorValidator $operatorValidator = null
+        ?EventManager $eventManager = null,
+        ?QueryOperatorValidator $operatorValidator = null
     ) {
         if (!$config->getMetadataDriverImpl()) {
             throw new MissingMappingDriverImplementation();

@@ -106,7 +106,7 @@ class RegisterService implements RegisterServiceInterface
         ShopStruct $shop,
         Customer $customer,
         Address $billing,
-        Address $shipping = null
+        ?Address $shipping = null
     ) {
         $this->modelManager->beginTransaction();
         try {

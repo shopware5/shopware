@@ -52,7 +52,7 @@ class CachedConfigReader implements ConfigReader
     /**
      * {@inheritdoc}
      */
-    public function getByPluginName($pluginName, Shop $shop = null)
+    public function getByPluginName($pluginName, ?Shop $shop = null)
     {
         if ($shop) {
             $cacheKey = $pluginName . $shop->getId();

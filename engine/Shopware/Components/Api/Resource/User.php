@@ -40,7 +40,7 @@ use Zend_Acl_Resource_Interface;
 
 /**
  * User API Resource
-` */
+ * ` */
 class User extends Resource
 {
     /**

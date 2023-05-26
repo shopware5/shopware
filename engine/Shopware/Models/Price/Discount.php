@@ -79,14 +79,14 @@ class Discount extends ModelEntity
      *
      * @ORM\Column(name="customergroupID", type="integer", nullable=true)
      */
-    private $customerGroupId = null;
+    private $customerGroupId;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="groupID", type="integer", nullable=true)
      */
-    private $groupId = null;
+    private $groupId;
 
     /**
      * @return int

@@ -188,7 +188,7 @@ class Product implements ResourceInterface
                     $model->$setter($field['value']);
                 }
                 $entityManager->persist($model);
-            // price_model
+                // price_model
             } else {
                 $detailModel = $entityManager->find(Detail::class, $primaryIdentifiers['detail']);
                 // store net prices

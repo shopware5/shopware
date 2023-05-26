@@ -306,7 +306,7 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      *
      * @return string|null
      */
-    public function getProxyUrl(Request $request = null)
+    public function getProxyUrl(?Request $request = null)
     {
         $proxyUrl = trim($this->Config()->get('proxy'));
         if (!empty($proxyUrl)) {

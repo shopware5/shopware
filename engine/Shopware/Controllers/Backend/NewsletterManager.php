@@ -37,7 +37,7 @@ use Shopware\Models\Newsletter\Sender;
 class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controllers_Backend_ExtJs
 {
     // Used to store a reference to the newsletter repository
-    protected $campaignsRepository = null;
+    protected $campaignsRepository;
 
     /**
      * @deprecated in 5.6, will be private in 5.8

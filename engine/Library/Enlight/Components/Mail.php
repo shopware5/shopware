@@ -39,35 +39,35 @@ class Enlight_Components_Mail extends Zend_Mail
      *
      * @var string|null
      */
-    protected $_fromName = null;
+    protected $_fromName;
 
     /**
      * Property for the plain body
      *
      * @var null
      */
-    protected $_plainBody = null;
+    protected $_plainBody;
 
     /**
      * Property for the plain body text. Can be filled by setBodyText function.
      *
      * @var string|null
      */
-    protected $_plainBodyText = null;
+    protected $_plainBodyText;
 
     /**
      * Property for the plain subject. Can be filled by setSubject function.
      *
      * @var string|null
      */
-    protected $_plainSubject = null;
+    protected $_plainSubject;
 
     /**
      * Property for the template name. Can be filled by setTemplateName function.
      *
      * @var string|null
      */
-    protected $templateName = null;
+    protected $templateName;
 
     /**
      * @var array

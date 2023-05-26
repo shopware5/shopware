@@ -116,7 +116,7 @@ class MenuSynchronizer
      *
      * @return Menu
      */
-    private function createMenuItem(Plugin $plugin, Menu $parent = null, array $menuItem)
+    private function createMenuItem(Plugin $plugin, ?Menu $parent = null, array $menuItem)
     {
         $item = null;
 

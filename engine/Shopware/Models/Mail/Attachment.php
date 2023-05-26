@@ -71,7 +71,7 @@ class Attachment extends File
      */
     protected $mail;
 
-    public function __construct(Mail $mail, Media $media, Shop $shop = null)
+    public function __construct(Mail $mail, Media $media, ?Shop $shop = null)
     {
         $this->mail = $mail;
         $this->media = $media;
@@ -114,7 +114,7 @@ class Attachment extends File
         return null;
     }
 
-    public function setShop(Shop $shop = null)
+    public function setShop(?Shop $shop = null)
     {
         $this->shop = $shop;
     }

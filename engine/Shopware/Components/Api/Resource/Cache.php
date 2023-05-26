@@ -63,7 +63,7 @@ class Cache extends Resource implements BatchInterface
      *
      * @param Container $container
      */
-    public function setContainer(Container $container = null)
+    public function setContainer(?Container $container = null)
     {
         if ($container) {
             $this->request = $container->get('front')->Request();

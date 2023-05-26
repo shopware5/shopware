@@ -54,7 +54,7 @@ class ConfigurationStruct implements JsonSerializable
     /**
      * @var int|null
      */
-    private $position = null;
+    private $position;
 
     /**
      * @var bool

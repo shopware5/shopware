@@ -31,7 +31,7 @@ class MetaRequest
     /**
      * @var AccessTokenStruct|null
      */
-    private $token = null;
+    private $token;
 
     /**
      * @var string

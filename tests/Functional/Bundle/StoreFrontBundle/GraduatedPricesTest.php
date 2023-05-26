@@ -205,7 +205,7 @@ class GraduatedPricesTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $additionally = null
     ): array {
         $data = parent::getProduct($number, $context, $category);
