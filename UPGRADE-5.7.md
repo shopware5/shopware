@@ -19,7 +19,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/orm` to version 2.15.1
 * Updated `doctrine/persistence` to version 3.2.0
 * Updated `elasticsearch/elasticsearch` to version 7.17.2
-* Updated `friendsofphp/proxy-manager-lts` to version 1.0.15
+* Updated `friendsofphp/proxy-manager-lts` to version 1.0.16
 * Updated `google/cloud-storage` to version 1.31.2
 * Updated `guzzlehttp/guzzle` to version 7.7.0
 * Updated `guzzlehttp/psr7` to version 2.5.0
