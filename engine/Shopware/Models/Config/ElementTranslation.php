@@ -66,14 +66,14 @@ class ElementTranslation extends ModelEntity
      *
      * @ORM\Column(name="description", type="string", nullable=true)
      */
-    private $description = null;
+    private $description;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="label", type="string", nullable=true)
      */
-    private $label = null;
+    private $label;
 
     /**
      * @var int

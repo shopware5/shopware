@@ -345,7 +345,7 @@ class ProductProvider implements ProviderInterface
         }
     }
 
-    private function formatDate(DateTimeInterface $date = null): ?string
+    private function formatDate(?DateTimeInterface $date = null): ?string
     {
         return !$date ? null : $date->format('Y-m-d');
     }

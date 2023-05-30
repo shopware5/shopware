@@ -176,7 +176,7 @@ class %className% extends ModelEntity
      *
      * @var AbstractSchemaManager
      */
-    protected $schemaManager = null;
+    protected $schemaManager;
 
     /**
      * Contains the table mapping for the existing Shopware models.
@@ -515,7 +515,7 @@ class %className% extends ModelEntity
             $parentClass = str_replace('_attributes', '', $table->getName());
             $className = $this->getClassNameOfTableName($parentClass);
 
-        // If the passed table is not an attribute table, we have to check if the table is already declared
+            // If the passed table is not an attribute table, we have to check if the table is already declared
         } elseif (\array_key_exists($table->getName(), $this->getTableMapping())) {
             // If this is the case we will use the already declared class name
             $className = $this->tableMapping[$table->getName()]['class'];

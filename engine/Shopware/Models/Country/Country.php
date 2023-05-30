@@ -40,7 +40,7 @@ use Shopware\Models\Payment\Payment;
  * </code>
  * The s_core_countries table has the follows indices:
  * <code>
-
+ *
  * </code>
  *
  * @ORM\Entity(repositoryClass="Repository")

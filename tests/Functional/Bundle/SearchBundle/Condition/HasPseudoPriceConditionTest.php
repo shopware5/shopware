@@ -68,7 +68,7 @@ class HasPseudoPriceConditionTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $data = ['groups' => []]
     ): array {
         $product = parent::getProduct($number, $context, $category);

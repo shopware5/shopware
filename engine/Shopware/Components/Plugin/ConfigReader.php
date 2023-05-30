@@ -38,5 +38,5 @@ interface ConfigReader
      *
      * @deprecated since 5.7 and removed in 5.9. Use `Shopware\Components\Plugin\Configuration\ReaderInterface`::getByPluginName instead
      */
-    public function getByPluginName($pluginName, Shop $shop = null);
+    public function getByPluginName($pluginName, ?Shop $shop = null);
 }

@@ -255,7 +255,7 @@ class Enlight_Controller_Front extends Enlight_Class implements Enlight_Hook
      *
      * @return Enlight_Controller_Front
      */
-    public function setPlugins(Enlight_Plugin_Namespace $plugins = null)
+    public function setPlugins(?Enlight_Plugin_Namespace $plugins = null)
     {
         if ($plugins === null) {
             $plugins = new Enlight_Plugin_Namespace_Loader('Controller');

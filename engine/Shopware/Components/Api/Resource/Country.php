@@ -222,7 +222,7 @@ class Country extends Resource
      *
      * @return array
      */
-    private function prepareCountryData(array $params, CountryModel $country = null)
+    private function prepareCountryData(array $params, ?CountryModel $country = null)
     {
         $requiredParams = [
             'name',

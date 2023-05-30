@@ -60,7 +60,7 @@ class Enlight_Components_Snippet_Resource extends Smarty_Internal_Resource_Exten
      *
      * @return void
      */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    public function populate(Smarty_Template_Source $source, ?Smarty_Internal_Template $_template = null)
     {
         if (!isset($source->smarty->registered_plugins[Smarty::PLUGIN_BLOCK]['snippet'])) {
             $source->smarty->registerPlugin(Smarty::PLUGIN_BLOCK, 'snippet', [__CLASS__, 'compileSnippetBlock']);

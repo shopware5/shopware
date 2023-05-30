@@ -100,11 +100,11 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
     protected function search(
         array $products,
         array $expectedNumbers,
-        Category $category = null,
+        ?Category $category = null,
         array $conditions = [],
         array $facets = [],
         array $sortings = [],
-        TestContext $context = null,
+        ?TestContext $context = null,
         array $configs = [],
         bool $variantSearch = false
     ): ProductNumberSearchResult {
@@ -279,7 +279,7 @@ abstract class TestCase extends Enlight_Components_Test_TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $additionally = []
     ): array {
         $taxRules = $context->getTaxRules();

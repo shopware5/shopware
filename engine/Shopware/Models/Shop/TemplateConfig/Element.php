@@ -88,21 +88,21 @@ class Element extends ModelEntity
      *
      * @ORM\Column(name="selection", type="array", nullable=true)
      */
-    protected $selection = null;
+    protected $selection;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="field_label", type="string", nullable=true)
      */
-    protected $fieldLabel = null;
+    protected $fieldLabel;
 
     /**
      * @var string|null
      *
      * @ORM\Column(name="support_text", type="string", nullable=true)
      */
-    protected $supportText = null;
+    protected $supportText;
 
     /**
      * @var bool

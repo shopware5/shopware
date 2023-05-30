@@ -26,7 +26,7 @@ namespace Shopware\Components\Cart\NetRounding;
 
 class RoundLineAfterQuantity implements RoundingInterface
 {
-    public function round(float $netPrice, float $tax, int $quantity = null): float
+    public function round(float $netPrice, float $tax, ?int $quantity = null): float
     {
         if ($quantity === 0) {
             return 0.0;

@@ -207,7 +207,7 @@ class CoverTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $imageCount = 1
     ): array {
         $data = parent::getProduct($number, $context, $category);

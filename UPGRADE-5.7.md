@@ -15,17 +15,21 @@ This changelog references changes done in Shopware 5.7 patch versions.
 ### Changes
 
 * Updated `behat/behat` to version 3.13.0
-* Updated `doctrine/orm` to version 2.14.3
+* Updated `doctrine/dbal` to version 2.13.9
+* Updated `doctrine/orm` to version 2.15.1
+* Updated `doctrine/persistence` to version 3.2.0
 * Updated `elasticsearch/elasticsearch` to version 7.17.2
-* Updated `friendsofphp/proxy-manager-lts` to version 1.0.15
+* Updated `friendsofphp/proxy-manager-lts` to version 1.0.16
 * Updated `google/cloud-storage` to version 1.31.2
-* Updated `guzzlehttp/guzzle` to version 7.6.1
+* Updated `guzzlehttp/guzzle` to version 7.7.0
 * Updated `guzzlehttp/psr7` to version 2.5.0
 * Updated `laminas/laminas-code` to version 4.11.0 for PHP 8.1 and newer
+* Updated `mpdf/mpdf` to version 8.1.6
 * Updated `phpunit/phpunit` to version 9.6.8
 * Updated `setasign/fpdi` to version 2.3.7
 * Updated `symfony/serializer` to version 5.4.23
 * Updated `voku/anti-xss` to version 4.1.41
+* Updated `wikimedia/less.php` to version 4.1.0
 * Updated several indirect dependencies
 
 ### Removals

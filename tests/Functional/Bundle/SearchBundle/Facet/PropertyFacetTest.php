@@ -126,7 +126,7 @@ class PropertyFacetTest extends TestCase
     protected function getProduct(
         $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $properties = []
     ): array {
         $product = parent::getProduct($number, $context, $category);

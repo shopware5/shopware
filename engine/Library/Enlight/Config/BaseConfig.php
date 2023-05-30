@@ -93,7 +93,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @var string
      */
-    protected $_loadFileErrorStr = null;
+    protected $_loadFileErrorStr;
 
     /**
      * Enlight_Config_BaseConfig provides a property based interface to

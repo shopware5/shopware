@@ -98,12 +98,12 @@ class Repository extends ModelRepository
      *
      * @return Query<Tax>
      */
-    public function getTaxQuery(array $filters = null, array $orderBy = null, int $offset = null, int $limit = null): Query
+    public function getTaxQuery(?array $filters = null, ?array $orderBy = null, ?int $offset = null, ?int $limit = null): Query
     {
         return $this->getTaxQueryBuilder($filters, $orderBy, $offset, $limit)->getQuery();
     }
 
-    public function getTaxQueryBuilder(array $filters = null, array $orderBy = null, int $offset = null, int $limit = null): QueryBuilder
+    public function getTaxQueryBuilder(?array $filters = null, ?array $orderBy = null, ?int $offset = null, ?int $limit = null): QueryBuilder
     {
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();

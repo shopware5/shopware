@@ -49,7 +49,7 @@ class Sitemap
      * @param string $filename
      * @param int    $urlCount
      */
-    public function __construct($filename, $urlCount, DateTimeInterface $created = null)
+    public function __construct($filename, $urlCount, ?DateTimeInterface $created = null)
     {
         $this->filename = $filename;
         $this->created = $created ?: new DateTime('NOW', new DateTimeZone('UTC'));

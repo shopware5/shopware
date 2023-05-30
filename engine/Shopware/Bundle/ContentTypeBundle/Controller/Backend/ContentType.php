@@ -56,7 +56,7 @@ class ContentType extends Shopware_Controllers_Backend_ExtJs
         $this->repository = $repository;
     }
 
-    public function setContainer(Container $loader = null)
+    public function setContainer(?Container $loader = null)
     {
         parent::setContainer($loader);
 

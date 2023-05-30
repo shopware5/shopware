@@ -59,14 +59,14 @@ class Area extends ModelEntity
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
-    private $name = null;
+    private $name;
 
     /**
      * @var int|null
      *
      * @ORM\Column(name="active", type="integer", nullable=true)
      */
-    private $active = null;
+    private $active;
 
     public function __construct()
     {

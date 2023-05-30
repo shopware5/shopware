@@ -99,7 +99,7 @@ class ImmediateDeliveryFacetTest extends TestCase
     protected function getProduct(
         $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $data = ['inStock' => 0, 'minPurchase' => 1]
     ): array {
         $product = parent::getProduct($number, $context, $category);

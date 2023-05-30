@@ -48,7 +48,7 @@ class ErrorResult
      * @param Exception $exception
      * @param array     $args
      */
-    public function __construct($message, Exception $exception = null, $args = [])
+    public function __construct($message, ?Exception $exception = null, $args = [])
     {
         $this->message = $message;
         $this->exception = $exception;

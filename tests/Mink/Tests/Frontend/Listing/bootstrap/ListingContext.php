@@ -74,7 +74,7 @@ class ListingContext extends SubContext
      * @When /^I set the filter to:$/
      * @When /^I reset all filters$/
      */
-    public function iSetTheFilterTo(TableNode $filter = null): void
+    public function iSetTheFilterTo(?TableNode $filter = null): void
     {
         $properties = [];
 

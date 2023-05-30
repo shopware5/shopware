@@ -48,7 +48,7 @@ class HttpKernelBrowser extends SymfonyHttpKernelBrowser
     /**
      * @param array<string, mixed> $server
      */
-    public function __construct(Kernel $kernel, array $server = [], History $history = null, CookieJar $cookieJar = null)
+    public function __construct(Kernel $kernel, array $server = [], ?History $history = null, ?CookieJar $cookieJar = null)
     {
         $this->container = $kernel->getContainer();
         $this->front = $this->container->get('front');

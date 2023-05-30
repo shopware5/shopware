@@ -148,7 +148,7 @@ class Shopware_Components_Acl extends Zend_Acl
      *
      * @throws Enlight_Exception
      */
-    public function createResource($resourceName, array $privileges = null, $menuItemName = null, $pluginID = null)
+    public function createResource($resourceName, ?array $privileges = null, $menuItemName = null, $pluginID = null)
     {
         // Check if resource already exists
         if ($this->hasResourceInDatabase($resourceName)) {

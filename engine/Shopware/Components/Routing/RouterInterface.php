@@ -38,14 +38,14 @@ interface RouterInterface
      *
      * @return array<array-key, string>
      */
-    public function generateList(array $list, Context $context = null);
+    public function generateList(array $list, ?Context $context = null);
 
     /**
      * @param array<string, mixed> $userParams
      *
      * @return string
      */
-    public function assemble($userParams = [], Context $context = null);
+    public function assemble($userParams = [], ?Context $context = null);
 
     /**
      * Switch the context
@@ -64,5 +64,5 @@ interface RouterInterface
      *
      * @return array<string, mixed>|false
      */
-    public function match($pathInfo, Context $context = null);
+    public function match($pathInfo, ?Context $context = null);
 }

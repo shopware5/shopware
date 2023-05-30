@@ -36,5 +36,5 @@ interface ContainerAwareInterface
      *
      * @return void
      */
-    public function setContainer(Container $Container = null);
+    public function setContainer(?Container $Container = null);
 }

@@ -49,7 +49,7 @@ class PriceRule extends Extendable
     /**
      * @var int|null
      */
-    protected $to = null;
+    protected $to;
 
     /**
      * The pseudo price is used to fake a discount in the store front

@@ -54,7 +54,7 @@ class Repository extends ModelRepository
      *
      *@internal param $blogCategory
      */
-    public function getListQuery($blogCategoryIds, $offset = null, $limit = null, array $filter = null, $shopId = null)
+    public function getListQuery($blogCategoryIds, $offset = null, $limit = null, ?array $filter = null, $shopId = null)
     {
         $builder = $this->getListQueryBuilder($blogCategoryIds, $filter, $shopId);
         if (!empty($offset)) {
@@ -364,7 +364,7 @@ class Repository extends ModelRepository
      *
      * @return Query<Blog>
      */
-    public function getBackendListQuery($blogCategoryIds, array $filter = null, $order = null, $offset = null, $limit = null)
+    public function getBackendListQuery($blogCategoryIds, ?array $filter = null, $order = null, $offset = null, $limit = null)
     {
         $builder = $this->getBackendListQueryBuilder($blogCategoryIds, $filter, $order);
         if ($offset !== null) {

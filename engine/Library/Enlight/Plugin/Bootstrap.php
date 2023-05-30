@@ -74,7 +74,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      *
      * @return Enlight_Plugin_Bootstrap
      */
-    public function setCollection(Enlight_Plugin_PluginCollection $collection = null)
+    public function setCollection(?Enlight_Plugin_PluginCollection $collection = null)
     {
         $this->collection = $collection;
         $this->afterInit();

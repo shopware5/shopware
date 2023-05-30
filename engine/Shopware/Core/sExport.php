@@ -151,11 +151,11 @@ class sExport implements Enlight_Hook
     private array $cdnConfig;
 
     public function __construct(
-        ContextServiceInterface $contextService = null,
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Shopware_Components_Config $config = null,
-        ConfiguratorServiceInterface $configuratorService = null,
-        Connection $connection = null
+        ?ContextServiceInterface $contextService = null,
+        ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        ?Shopware_Components_Config $config = null,
+        ?ConfiguratorServiceInterface $configuratorService = null,
+        ?Connection $connection = null
     ) {
         $container = Shopware()->Container();
 

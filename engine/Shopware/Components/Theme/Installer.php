@@ -171,7 +171,7 @@ class Installer
      *
      * @return Theme[]
      */
-    private function synchronizeThemeDirectories(DirectoryIterator $directories, Plugin $plugin = null)
+    private function synchronizeThemeDirectories(DirectoryIterator $directories, ?Plugin $plugin = null)
     {
         $themes = [];
 

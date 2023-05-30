@@ -28,7 +28,7 @@ namespace Shopware\Tests\Unit\Components\Hook;
 
 class MyBasicTestClass implements MyInterface
 {
-    public function myPublic(string $bar, string $foo = 'bar', array $barBar = [], MyInterface $fooFoo = null): string
+    public function myPublic(string $bar, string $foo = 'bar', array $barBar = [], ?MyInterface $fooFoo = null): string
     {
         return $bar . $foo;
     }

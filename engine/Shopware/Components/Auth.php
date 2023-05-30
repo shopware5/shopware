@@ -126,7 +126,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
      *
      * @return Zend_Auth_Result
      */
-    public function authenticate(Zend_Auth_Adapter_Interface $adapter = null)
+    public function authenticate(?Zend_Auth_Adapter_Interface $adapter = null)
     {
         if ($adapter == null) {
             $adapter = $this->_baseAdapter;
@@ -138,7 +138,7 @@ class Shopware_Components_Auth extends Enlight_Components_Auth
     /**
      * Refresh authentication - for example expire date -
      */
-    public function refresh(Zend_Auth_Adapter_Interface $adapter = null)
+    public function refresh(?Zend_Auth_Adapter_Interface $adapter = null)
     {
         if ($adapter == null) {
             $adapter = $this->getBaseAdapter();

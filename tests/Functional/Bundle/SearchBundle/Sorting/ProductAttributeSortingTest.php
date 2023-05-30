@@ -84,7 +84,7 @@ class ProductAttributeSortingTest extends TestCase
     protected function getProduct(
         $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $attribute = ['attr1' => null]
     ): array {
         $product = parent::getProduct($number, $context, $category);
@@ -96,7 +96,7 @@ class ProductAttributeSortingTest extends TestCase
     protected function search(
         array $products,
         array $expectedNumbers,
-        Category $category = null,
+        ?Category $category = null,
         array $conditions = [],
         array $facets = [],
         array $sortings = [],

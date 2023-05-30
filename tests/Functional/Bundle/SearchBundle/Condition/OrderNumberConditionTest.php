@@ -73,7 +73,7 @@ class OrderNumberConditionTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $name = null
     ): array {
         return parent::getProduct($number, $context, $category);

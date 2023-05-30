@@ -68,7 +68,7 @@ abstract class Enlight_Controller_Dispatcher extends Enlight_Class
      *
      * @return Enlight_Controller_Dispatcher
      */
-    public function setResponse(Enlight_Controller_Response_Response $response = null)
+    public function setResponse(?Enlight_Controller_Response_Response $response = null)
     {
         $this->response = $response;
 

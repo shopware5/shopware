@@ -199,7 +199,7 @@ class PriceConditionTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $prices = []
     ): array {
         $product = parent::getProduct($number, $context, $category);

@@ -68,7 +68,7 @@ class SimilarProductConditionTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $additionally = null
     ): array {
         if ($additionally !== null) {

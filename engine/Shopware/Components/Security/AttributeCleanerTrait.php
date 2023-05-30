@@ -38,7 +38,7 @@ trait AttributeCleanerTrait
      *
      * @return string The filtered string
      */
-    protected function cleanup($var, callable $callback = null)
+    protected function cleanup($var, ?callable $callback = null)
     {
         if (!\is_string($var)) {
             return $var;

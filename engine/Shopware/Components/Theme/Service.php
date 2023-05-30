@@ -127,7 +127,7 @@ class Service
      *
      * @return array
      */
-    public function getLayout(Template $template, Shop $shop = null)
+    public function getLayout(Template $template, ?Shop $shop = null)
     {
         $layout = $this->buildConfigLayout(
             $template,
@@ -154,7 +154,7 @@ class Service
      *
      * @return array
      */
-    public function getConfig(Template $template, Shop $shop = null, $optionNames = null)
+    public function getConfig(Template $template, ?Shop $shop = null, $optionNames = null)
     {
         $builder = $this->entityManager->createQueryBuilder();
         $builder->select([
@@ -425,7 +425,7 @@ class Service
      */
     protected function buildConfigLayout(
         Template $template,
-        Shop $shop = null,
+        ?Shop $shop = null,
         $parentId = null
     ) {
         $builder = $this->entityManager->createQueryBuilder();

@@ -260,7 +260,7 @@ class AppCache extends HttpCache
      *
      * @return Response A Response instance
      */
-    protected function forward(Request $request, $raw = false, Response $entry = null)
+    protected function forward(Request $request, $raw = false, ?Response $entry = null)
     {
         $this->getKernel()->boot();
 

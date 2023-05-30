@@ -76,7 +76,7 @@ class Article extends LazyFetchModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=true)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Ordernumber of the product

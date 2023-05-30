@@ -65,7 +65,7 @@ class Banner extends ModelEntity
      *
      * @ORM\Column(name="parentID", type="integer", length=11, nullable=false)
      */
-    private $containerId = null;
+    private $containerId;
 
     /**
      * Image of the banner

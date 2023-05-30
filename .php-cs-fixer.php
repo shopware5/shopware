@@ -73,6 +73,7 @@ return (new Config())
         'no_useless_else' => true,
         'no_useless_return' => true,
         'no_superfluous_phpdoc_tags' => true,
+        'nullable_type_declaration_for_default_null_value' => true,
         'operator_linebreak' => ['only_booleans' => true],
         'ordered_class_elements' => true,
         'phpdoc_line_span' => true,

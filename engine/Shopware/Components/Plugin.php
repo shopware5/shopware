@@ -175,7 +175,7 @@ abstract class Plugin extends Bundle implements SubscriberInterface
      *
      * @param ContainerInterface|null $container A ContainerInterface instance or null
      */
-    final public function setContainer(ContainerInterface $container = null): void
+    final public function setContainer(?ContainerInterface $container = null): void
     {
         $this->container = $container;
     }

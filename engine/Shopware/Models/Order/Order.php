@@ -347,7 +347,7 @@ class Order extends ModelEntity
      *
      * @ORM\Column(name="ordertime", type="datetime", nullable=false)
      */
-    private $orderTime = null;
+    private $orderTime;
 
     /**
      * @var string
@@ -413,7 +413,7 @@ class Order extends ModelEntity
      *
      * @ORM\Column(name="cleareddate", type="datetime", nullable=true)
      */
-    private $clearedDate = null;
+    private $clearedDate;
 
     /**
      * @var string

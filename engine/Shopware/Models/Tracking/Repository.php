@@ -45,7 +45,7 @@ class Repository extends ModelRepository
      *
      * @return Banner
      */
-    public function getOrCreateBannerStatsModel($bannerId, DateTimeInterface $date = null)
+    public function getOrCreateBannerStatsModel($bannerId, ?DateTimeInterface $date = null)
     {
         if ($date === null) {
             $date = new DateTime();

@@ -88,7 +88,7 @@ class ProductListingVariationLoader
         Shop $shop,
         array $products,
         array $configurations,
-        VariantFacet $variantFacet = null
+        ?VariantFacet $variantFacet = null
     ) {
         $combinationPrices = [];
 
@@ -156,7 +156,7 @@ class ProductListingVariationLoader
     public function getAvailability(
         array $products,
         array $configurations,
-        VariantFacet $variantFacet = null
+        ?VariantFacet $variantFacet = null
     ) {
         $combinationAvailability = [];
         $availability = $this->fetchAvailability($products);
@@ -550,7 +550,7 @@ class ProductListingVariationLoader
         array $configuration,
         array $prices,
         array $combinations,
-        VariantFacet $variantFacet = null
+        ?VariantFacet $variantFacet = null
     ): array {
         $cheapestPrices = [];
 
@@ -608,7 +608,7 @@ class ProductListingVariationLoader
         array $configuration,
         array $availabilities,
         array $combinations,
-        VariantFacet $variantFacet = null
+        ?VariantFacet $variantFacet = null
     ): array {
         $availabilityList = [];
 

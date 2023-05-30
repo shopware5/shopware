@@ -35,14 +35,14 @@ class Shopware_Controllers_Backend_Form extends Shopware_Controllers_Backend_Ext
     /**
      * @var FormRepository
      */
-    public $repository = null;
+    public $repository;
 
     /**
      * Contains the shopware model manager
      *
      * @var ModelManager
      */
-    public $manager = null;
+    public $manager;
 
     /**
      * Returns available forms

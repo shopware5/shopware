@@ -42,7 +42,7 @@ class Enlight_Components_Auth_Adapter_DbTable extends Zend_Auth_Adapter_DbTable
      *
      * @var string
      */
-    protected $lockedUntilColumn = null;
+    protected $lockedUntilColumn;
 
     /**
      * Date until a account has been disabled caused by a brute force attack

@@ -251,7 +251,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      *
      * @throws Exception
      */
-    private function handleLicenceUpdate(PluginStruct $plugin, $domain, $version, AccessTokenStruct $token = null)
+    private function handleLicenceUpdate(PluginStruct $plugin, $domain, $version, ?AccessTokenStruct $token = null)
     {
         if (!$plugin->isUpdateAvailable()) {
             $this->io->text(sprintf('No update available for plugin %s', $plugin->getLabel()));
@@ -277,7 +277,7 @@ class StoreDownloadCommand extends StoreCommand implements CompletionAwareInterf
      * @param string            $version
      * @param AccessTokenStruct $token
      */
-    private function handleLicenceInstall(PluginStruct $plugin, $domain, $version, AccessTokenStruct $token = null)
+    private function handleLicenceInstall(PluginStruct $plugin, $domain, $version, ?AccessTokenStruct $token = null)
     {
         $this->io->comment('Downloading plugin install package');
 

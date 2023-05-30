@@ -970,7 +970,7 @@ class HookManagerTest extends TestCase
      * @param string $methodName
      * @param string $hookType
      */
-    private function addHookListener($methodName, $hookType, callable $callback = null)
+    private function addHookListener($methodName, $hookType, ?callable $callback = null)
     {
         $callback = $callback ?: function (Enlight_Hook_HookArgs $args) {
             // pass

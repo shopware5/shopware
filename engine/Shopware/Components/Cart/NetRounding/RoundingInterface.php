@@ -26,5 +26,5 @@ namespace Shopware\Components\Cart\NetRounding;
 
 interface RoundingInterface
 {
-    public function round(float $netPrice, float $tax, int $quantity = null): float;
+    public function round(float $netPrice, float $tax, ?int $quantity = null): float;
 }

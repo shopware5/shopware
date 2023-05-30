@@ -104,7 +104,7 @@ class LessDefinition
      * @param string|null $importDirectory Full path to the import directory for less `@import` commands
      * @param Theme|null  $theme           the corresponding theme
      */
-    public function __construct(array $config = [], array $files = [], $importDirectory = null, Theme $theme = null)
+    public function __construct(array $config = [], array $files = [], $importDirectory = null, ?Theme $theme = null)
     {
         $this->config = $config;
         $this->files = $files;

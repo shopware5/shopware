@@ -53,7 +53,7 @@ class Models
         Connection $connection,
         // Annotation driver is not really used here but has to be loaded first
         AnnotationDriver $modelAnnotation,
-        QueryOperatorValidator $operatorValidator = null
+        ?QueryOperatorValidator $operatorValidator = null
     ) {
         $loader->registerNamespace(
             'Shopware\Models\Attribute',

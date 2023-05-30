@@ -743,7 +743,7 @@ class Emotion extends ModelEntity
     /**
      * @param Template $template
      */
-    public function setTemplate(Template $template = null)
+    public function setTemplate(?Template $template = null)
     {
         $this->template = $template;
     }

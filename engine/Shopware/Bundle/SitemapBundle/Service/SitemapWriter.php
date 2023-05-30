@@ -63,7 +63,7 @@ class SitemapWriter implements SitemapWriterInterface
     public function __construct(
         SitemapNameGenerator $sitemapNameGenerator,
         FilesystemInterface $filesystem,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->sitemapNameGenerator = $sitemapNameGenerator;
         $this->filesystem = $filesystem;

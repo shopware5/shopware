@@ -376,7 +376,7 @@ class Detail extends ModelEntity
         return $this->articleDetail;
     }
 
-    public function setArticleDetail(ArticleDetail $articleDetail = null)
+    public function setArticleDetail(?ArticleDetail $articleDetail = null)
     {
         $this->articleDetail = $articleDetail;
     }

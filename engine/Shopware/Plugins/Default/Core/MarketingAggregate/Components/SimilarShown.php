@@ -33,7 +33,7 @@ class Shopware_Components_SimilarShown extends Enlight_Class
     /**
      * Resets the similar show article data.
      */
-    public function resetSimilarShown(DateTime $validationTime = null)
+    public function resetSimilarShown(?DateTime $validationTime = null)
     {
         if ($validationTime) {
             $sql = 'DELETE FROM s_articles_similar_shown_ro WHERE init_date <= :validationTime';

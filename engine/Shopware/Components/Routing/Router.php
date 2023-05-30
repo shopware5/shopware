@@ -96,7 +96,7 @@ class Router extends EnlightRouter implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function match($pathInfo, Context $context = null)
+    public function match($pathInfo, ?Context $context = null)
     {
         if ($context === null) {
             $context = clone $this->context;
@@ -116,7 +116,7 @@ class Router extends EnlightRouter implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function generateList(array $list, Context $context = null)
+    public function generateList(array $list, ?Context $context = null)
     {
         $context = $context ?? $this->context;
         $contextList = [];
@@ -165,7 +165,7 @@ class Router extends EnlightRouter implements RouterInterface
     /**
      * {@inheritdoc}
      */
-    public function assemble($userParams = [], Context $context = null)
+    public function assemble($userParams = [], ?Context $context = null)
     {
         if ($context === null) {
             $context = clone $this->context;

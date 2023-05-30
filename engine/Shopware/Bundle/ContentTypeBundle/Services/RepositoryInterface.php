@@ -31,7 +31,7 @@ interface RepositoryInterface
 {
     public function findAll(Criteria $criteria): SearchResult;
 
-    public function save(array $data, int $id = null): int;
+    public function save(array $data, ?int $id = null): int;
 
     public function delete(int $id): bool;
 }

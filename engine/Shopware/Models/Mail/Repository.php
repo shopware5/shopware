@@ -151,7 +151,7 @@ class Repository extends ModelRepository
      *
      * @return Query<Mail>
      */
-    public function getMailListQuery(array $filter = [], array $order = null, $offset = null, $limit = null)
+    public function getMailListQuery(array $filter = [], ?array $order = null, $offset = null, $limit = null)
     {
         return $this->getMailsListQueryBuilder($filter, $order, $offset, $limit)->getQuery();
     }
@@ -162,7 +162,7 @@ class Repository extends ModelRepository
      *
      * @return QueryBuilder
      */
-    public function getMailsListQueryBuilder(array $filter = [], array $order = null, $offset = null, $limit = null)
+    public function getMailsListQueryBuilder(array $filter = [], ?array $order = null, $offset = null, $limit = null)
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder

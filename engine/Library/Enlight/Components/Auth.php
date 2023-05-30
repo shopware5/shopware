@@ -63,7 +63,7 @@ class Enlight_Components_Auth extends Zend_Auth
      *
      * @return Zend_Auth_Result
      */
-    public function authenticate(Zend_Auth_Adapter_Interface $adapter = null)
+    public function authenticate(?Zend_Auth_Adapter_Interface $adapter = null)
     {
         if ($adapter == null) {
             $adapter = $this->_adapter;
@@ -85,7 +85,7 @@ class Enlight_Components_Auth extends Zend_Auth
      *
      * @return Zend_Auth_Result
      */
-    public function refresh(Zend_Auth_Adapter_Interface $adapter = null)
+    public function refresh(?Zend_Auth_Adapter_Interface $adapter = null)
     {
         if ($adapter == null) {
             $adapter = $this->_adapter;

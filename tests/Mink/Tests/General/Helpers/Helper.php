@@ -213,7 +213,7 @@ class Helper
      * Finds elements by their selectors
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     * @param array<string> $keys
+     * @param array<string>                          $keys
      *
      * @throws Exception|PendingException
      *
@@ -295,7 +295,7 @@ class Helper
      * Returns the requested element css selectors
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     * @param array<string> $keys
+     * @param array<string>                          $keys
      *
      * @throws Exception
      * @throws PendingException
@@ -422,7 +422,7 @@ EOD
      * Searches for named links given by $keys. Returns true if all exist, otherwise an array of the not found keys.
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     * @param string[] $keys
+     * @param string[]                               $keys
      *
      * @return bool|string[]
      */
@@ -479,7 +479,7 @@ EOD
      * Searches for named buttons given by $keys. Returns true if all exist, otherwise an array of the not found keys.
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     * @param string[] $keys
+     * @param string[]                               $keys
      *
      * @return bool|string[]
      */
@@ -555,7 +555,7 @@ EOD
      * Fills inputs of a form
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     * @param array<array<string, string>> $values
+     * @param array<array<string, string>>           $values
      */
     public static function fillForm(HelperSelectorInterface $parent, string $formKey, array $values, bool $waitForOverlays = false): void
     {

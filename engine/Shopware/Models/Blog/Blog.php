@@ -110,7 +110,7 @@ class Blog extends ModelEntity
      *
      * @ORM\Column(name="author_id", type="integer", nullable=true)
      */
-    private $authorId = null;
+    private $authorId;
 
     /**
      * Flag which shows if the blog is active or not. 1= active otherwise inactive
@@ -140,7 +140,7 @@ class Blog extends ModelEntity
      *
      * @ORM\Column(name="views", type="integer", nullable=true)
      */
-    private $views = null;
+    private $views;
 
     /**
      * @var DateTimeInterface
@@ -154,7 +154,7 @@ class Blog extends ModelEntity
      *
      * @ORM\Column(name="category_id", type="integer", nullable=true)
      */
-    private $categoryId = null;
+    private $categoryId;
 
     /**
      * @var Category|null

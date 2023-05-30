@@ -77,7 +77,7 @@ class QueryBuilder extends BaseQueryBuilder
      *         ->setParameters(new ArrayCollection(array(
      *             new Parameter('user_id1', 1),
      *             new Parameter('user_id2', 2)
-     )));
+     * )));
      * </code>
      *
      * Notice: This method overrides ALL parameters in Doctrine 2.3 and up.

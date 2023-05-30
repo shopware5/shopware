@@ -266,7 +266,7 @@ class InstallerService
      *
      * @return array
      */
-    public function getPluginConfig(Plugin $plugin, Shop $shop = null)
+    public function getPluginConfig(Plugin $plugin, ?Shop $shop = null)
     {
         return $this->configReader->getByPluginName($plugin->getName(), $shop);
     }
@@ -275,7 +275,7 @@ class InstallerService
      * @param array $elements
      * @param Shop  $shop
      */
-    public function savePluginConfig(Plugin $plugin, $elements, Shop $shop = null)
+    public function savePluginConfig(Plugin $plugin, $elements, ?Shop $shop = null)
     {
         if ($shop === null) {
             /** @var Shop $shop */
@@ -291,7 +291,7 @@ class InstallerService
      *
      * @throws Exception
      */
-    public function saveConfigElement(Plugin $plugin, $name, $value, Shop $shop = null)
+    public function saveConfigElement(Plugin $plugin, $name, $value, ?Shop $shop = null)
     {
         if ($shop === null) {
             /** @var Shop $shop */

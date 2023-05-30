@@ -78,7 +78,7 @@ class DefaultRouteService
      *
      * @return array<string>|int|null
      */
-    public function findRouteValue(Enlight_Controller_Request_Request $request, array $values = null)
+    public function findRouteValue(Enlight_Controller_Request_Request $request, ?array $values = null)
     {
         if (empty($values)) {
             $values = $this->getDefaultRouteValues();

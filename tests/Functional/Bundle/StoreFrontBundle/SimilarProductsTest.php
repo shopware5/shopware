@@ -167,7 +167,7 @@ class SimilarProductsTest extends TestCase
     private function getProductObject(
         string $number,
         ShopContext $context,
-        Category $category = null
+        ?Category $category = null
     ): Article {
         $data = $this->getProduct($number, $context, $category);
 

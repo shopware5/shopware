@@ -155,16 +155,16 @@ class sBasket implements \Enlight_Hook
      * @throws \Exception
      */
     public function __construct(
-        Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
-        Enlight_Event_EventManager $eventManager = null,
-        Shopware_Components_Snippet_Manager $snippetManager = null,
-        Shopware_Components_Config $config = null,
-        Enlight_Components_Session_Namespace $session = null,
-        Enlight_Controller_Front $front = null,
-        Shopware_Components_Modules $moduleManager = null,
-        sSystem $systemModule = null,
-        ContextServiceInterface $contextService = null,
-        AdditionalTextServiceInterface $additionalTextService = null
+        ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
+        ?Enlight_Event_EventManager $eventManager = null,
+        ?Shopware_Components_Snippet_Manager $snippetManager = null,
+        ?Shopware_Components_Config $config = null,
+        ?Enlight_Components_Session_Namespace $session = null,
+        ?Enlight_Controller_Front $front = null,
+        ?Shopware_Components_Modules $moduleManager = null,
+        ?sSystem $systemModule = null,
+        ?ContextServiceInterface $contextService = null,
+        ?AdditionalTextServiceInterface $additionalTextService = null
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->eventManager = $eventManager ?: Shopware()->Events();
@@ -2536,7 +2536,7 @@ class sBasket implements \Enlight_Hook
             if ($voucherDetails['taxconfig'] === 'default' || empty($voucherDetails['taxconfig'])) {
                 $tax = round($voucherDetails['value'] / (100 + $this->config->get('sVOUCHERTAX')) * 100, 3) * -1;
                 $taxRate = $this->config->get('sVOUCHERTAX');
-            // Pre 3.5.4 behaviour
+                // Pre 3.5.4 behaviour
             } elseif ($voucherDetails['taxconfig'] === 'auto') {
                 // Check max. used tax-rate from basket
                 $tax = $this->getMaxTax();
@@ -2726,7 +2726,7 @@ class sBasket implements \Enlight_Hook
                     }
                 } elseif ($getProducts[$key]['modus'] == CartPositionsMode::CUSTOMER_GROUP_DISCOUNT) {
                     $getProducts[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
-                // Basket discount
+                    // Basket discount
                 } elseif ($getProducts[$key]['modus'] == CartPositionsMode::VOUCHER) {
                     $getProducts[$key]['amountWithTax'] = round(1 * (round($price, 2) / 100 * (100 + $tax)), 2);
 

@@ -50,7 +50,7 @@ class Enlight_Components_Snippet_Manager extends Enlight_Class
     /**
      * @var string Default config class
      */
-    protected $defaultSection = null;
+    protected $defaultSection;
 
     /**
      * @deprecated - Unused property. Will be removed in Shopware 5.8 without replacement

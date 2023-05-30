@@ -113,7 +113,7 @@ abstract class Resource implements ContainerAwareInterface
     /**
      * @return void
      */
-    public function setContainer(Container $container = null)
+    public function setContainer(?Container $container = null)
     {
         $this->container = $container;
     }

@@ -76,7 +76,7 @@ class Helper
 
     private Connection $connection;
 
-    public function __construct(ContainerInterface $container = null)
+    public function __construct(?ContainerInterface $container = null)
     {
         $this->container = $container ?? Shopware()->Container();
         $this->db = $this->container->get('db');
@@ -130,7 +130,7 @@ class Helper
     public function getSimpleProduct(
         string $number,
         $tax = null, // Either Model/Tax or Struct/Tax
-        CustomerGroupStruct $customerGroup = null,
+        ?CustomerGroupStruct $customerGroup = null,
         float $priceOffset = 0.00
     ): array {
         if ($tax === null) {
@@ -633,7 +633,7 @@ class Helper
         CustomerGroup $currentCustomerGroup,
         ShopModel $shop,
         array $taxes,
-        CustomerGroup $fallbackCustomerGroup = null,
+        ?CustomerGroup $fallbackCustomerGroup = null,
         ?Currency $currency = null
     ): TestContext {
         if ($currency === null) {

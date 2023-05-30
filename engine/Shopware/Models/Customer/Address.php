@@ -571,7 +571,7 @@ class Address extends ModelEntity
         return $this->state;
     }
 
-    public function setState(State $state = null)
+    public function setState(?State $state = null)
     {
         $this->state = $state;
     }

@@ -44,7 +44,7 @@ class StoreException extends RuntimeException
         $sbpCode,
         $message = '',
         $code = 0,
-        Exception $previous = null
+        ?Exception $previous = null
     ) {
         $this->sbpCode = $sbpCode;
 

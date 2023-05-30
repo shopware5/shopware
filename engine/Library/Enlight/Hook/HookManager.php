@@ -42,7 +42,7 @@ class Enlight_Hook_HookManager extends Enlight_Class
     /**
      * @var Enlight_Hook_ProxyFactory|null instance of the Enlight_Hook_ProxyFactory
      */
-    protected $proxyFactory = null;
+    protected $proxyFactory;
 
     /**
      * @var array internal list of all registered hook aliases

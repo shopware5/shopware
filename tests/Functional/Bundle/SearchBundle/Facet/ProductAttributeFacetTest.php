@@ -68,7 +68,7 @@ class ProductAttributeFacetTest extends TestCase
     protected function getProduct(
         string $number,
         ShopContext $context,
-        Category $category = null,
+        ?Category $category = null,
         $attribute = ['attr1' => 10]
     ): array {
         $product = parent::getProduct($number, $context, $category);

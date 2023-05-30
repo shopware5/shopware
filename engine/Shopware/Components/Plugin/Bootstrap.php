@@ -739,18 +739,18 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
      * Example $translations array:
      * <code>
      * array(
-     'en_GB' => array(
-     'plugin_form' => array(
-     'label' => 'Recently viewed items'
-     ),
-     'show' => array(
-     'label' => 'Display recently viewed items'
-     ),
-     'thumb' => array(
-     'label' => 'Thumbnail size',
-     'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
-     )
-     )
+     * 'en_GB' => array(
+     * 'plugin_form' => array(
+     * 'label' => 'Recently viewed items'
+     * ),
+     * 'show' => array(
+     * 'label' => 'Display recently viewed items'
+     * ),
+     * 'thumb' => array(
+     * 'label' => 'Thumbnail size',
+     * 'description' => 'Index of the thumbnail size of the associated album to use. Starts at 0'
+     * )
+     * )
      * )
      * </code>
      *

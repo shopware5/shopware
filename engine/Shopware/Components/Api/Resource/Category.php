@@ -53,7 +53,7 @@ class Category extends Resource
      */
     private $translationComponent;
 
-    public function __construct(TranslationComponent $translationComponent = null)
+    public function __construct(?TranslationComponent $translationComponent = null)
     {
         $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(TranslationComponent::class);
     }

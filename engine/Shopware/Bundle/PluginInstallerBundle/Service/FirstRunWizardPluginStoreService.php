@@ -66,7 +66,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return array List of plugins
      */
-    public function getRecommendedPlugins(LocaleStruct $locale = null, $shopwareVersion)
+    public function getRecommendedPlugins(?LocaleStruct $locale, $shopwareVersion)
     {
         $localeName = $locale ? $locale->getName() : null;
 
@@ -112,7 +112,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return array List of plugins
      */
-    public function getDemoDataPlugins(LocaleStruct $locale = null, $shopwareVersion)
+    public function getDemoDataPlugins(?LocaleStruct $locale, $shopwareVersion)
     {
         $localeName = $locale ? $locale->getName() : null;
 
@@ -134,7 +134,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return array List of plugins
      */
-    public function getLocalizations(LocaleStruct $locale = null, $shopwareVersion)
+    public function getLocalizations(?LocaleStruct $locale, $shopwareVersion)
     {
         $localeName = $locale ? $locale->getName() : null;
 
@@ -153,7 +153,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return string[] List of countries
      */
-    public function getIntegratedPluginsCountries(LocaleStruct $locale = null)
+    public function getIntegratedPluginsCountries(?LocaleStruct $locale = null)
     {
         $localeName = $locale ? $locale->getName() : null;
 
@@ -174,7 +174,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return PluginStruct[] List of plugins
      */
-    public function getLocalizationPlugins($localization, LocaleStruct $locale = null, $shopwareVersion)
+    public function getLocalizationPlugins($localization, ?LocaleStruct $locale, $shopwareVersion)
     {
         $localeName = $locale ? $locale->getName() : null;
 
@@ -196,7 +196,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return PluginStruct[] List of plugins
      */
-    public function getAvailableLocalizations(LocaleStruct $locale = null, $shopwareVersion)
+    public function getAvailableLocalizations(?LocaleStruct $locale, $shopwareVersion)
     {
         $localeName = $locale ? $locale->getName() : null;
 
@@ -215,7 +215,7 @@ class FirstRunWizardPluginStoreService
      *
      * @return PluginStruct[]
      */
-    private function getAdditionallyLocalData(array $plugins)
+    private function getAdditionallyLocalData(array $plugins): array
     {
         $context = new PluginsByTechnicalNameRequest('', '', array_keys($plugins));
         $local = $this->localPluginService->getPlugins($context);

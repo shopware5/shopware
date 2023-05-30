@@ -30,7 +30,7 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
      * @param Smarty_Template_Source   $source    source object
      * @param Smarty_Internal_Template $_template template object
      */
-    public function populate(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    public function populate(Smarty_Template_Source $source, ?Smarty_Internal_Template $_template = null)
     {
         $filePath = $this->buildFilepath($source, $_template);
         $s = Smarty_Resource::source(null, $source->smarty, $filePath);
@@ -69,7 +69,7 @@ class Smarty_Resource_Parent extends Smarty_Internal_Resource_File
      *
      * @return string fully qualified filepath
      */
-    protected function buildFilepath(Smarty_Template_Source $source, Smarty_Internal_Template $_template = null)
+    protected function buildFilepath(Smarty_Template_Source $source, ?Smarty_Internal_Template $_template = null)
     {
         ++$this->index;
         $file = $source->name;

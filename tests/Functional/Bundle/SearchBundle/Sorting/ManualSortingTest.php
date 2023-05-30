@@ -114,7 +114,7 @@ class ManualSortingTest extends TestCase
     protected function search(
         array $products,
         array $expectedNumbers,
-        Category $category = null,
+        ?Category $category = null,
         array $conditions = [],
         array $facets = [],
         array $sortings = [],
