@@ -1,6 +1,6 @@
 name: Create release package
 on:
-    push:
+    workflow_dispatch:
         tags:
             - "*"
         branches:
