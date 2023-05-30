@@ -142,7 +142,10 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * This method move the file pointer to the next row.
      *
      * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function next()
     {
         $this->_read();
@@ -153,7 +156,10 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * This method reset the file handler.
      *
      * @return void
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function rewind()
     {
         rewind($this->_handler);
@@ -166,7 +172,10 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * This method returns the current row number.
      *
      * @return int|null
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_key;
@@ -176,7 +185,10 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * This methods return the current CSV row data.
      *
      * @return array The row as a one-dimensional array
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function current()
     {
         $data = [];
@@ -191,7 +203,10 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      * This method checks if the current row is readable.
      *
      * @return bool if the current row is readable
+     *
+     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
+    #[\ReturnTypeWillChange]
     public function valid()
     {
         return $this->_current !== false;
