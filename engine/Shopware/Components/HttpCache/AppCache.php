@@ -59,7 +59,7 @@ class AppCache extends HttpCache
     protected $cacheDir;
 
     /**
-     * @var array
+     * @var array<string, mixed>
      */
     protected $options = [
         'purge_allowed_ips' => ['127.0.0.1', '::1'],
@@ -68,8 +68,8 @@ class AppCache extends HttpCache
     ];
 
     /**
-     * @param HttpKernelInterface $kernel  An HttpKernelInterface instance
-     * @param array               $options
+     * @param HttpKernelInterface  $kernel  An HttpKernelInterface instance
+     * @param array<string, mixed> $options
      */
     public function __construct(HttpKernelInterface $kernel, $options)
     {
@@ -347,10 +347,7 @@ class AppCache extends HttpCache
             return;
         }
 
-        $noCache = $request->cookies->get('nocache');
-        if (!\is_string($noCache)) {
-            return;
-        }
+        $noCache = $request->cookies->get('nocache', '');
 
         $noCache = array_filter(explode(', ', $noCache));
         if (\in_array('slt', $noCache, true)) {
