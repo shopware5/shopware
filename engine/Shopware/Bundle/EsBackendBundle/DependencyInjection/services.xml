@@ -16,7 +16,7 @@
 
         <service id="Shopware\Bundle\EsBackendBundle\IndexFactoryInterface" class="Shopware\Bundle\EsBackendBundle\IndexFactory">
             <argument>%shopware.es.backend.prefix%</argument>
-            <argument>%shopware.es.index_settings%</argument>
+            <argument>%shopware.es.backend.index_settings%</argument>
         </service>
 
         <service class="Shopware\Bundle\EsBackendBundle\SearchQueryBuilder" id="shopware_es_backend.search_query_builder" />
@@ -102,4 +102,3 @@
         </service>
     </services>
 </container>
-

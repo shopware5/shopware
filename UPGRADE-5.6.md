@@ -414,7 +414,7 @@ to read [this documentation](https://developers.shopware.com/developers-guide/co
 * Added `_config` property to class `Shopware_Models_Document_Order` to make it usable while model creation
 * Added new parameter to prevent certain exceptions from cluttering your logs. See [Disable logging of specific exceptions](###Disable logging of specific exceptions) for more details
 * Added a `Symfony\Component\HttpKernel\Bundle\Bundle` class to all Shopware bundles and moved all service.xml files to a corresponding `DependencyInjection` directory
-* Added `es.index_configuration` and `es.backend.index_configuration` section to `config.php` to allow custom elasticsearch settings
+* Added `es.index_settings` and `es.backend.index_settings` section to `config.php` to allow custom elasticsearch settings
 * Added getter and setter to Config/Form model
 * Added new event `Shopware_Controllers_Order_SendMail_Prepare` to `Shopware_Controllers_Backend_Order::sendMailAction`
 * Added `Shopware\Components\CacheSubscriber` to clear config cache, when plugin config changes
