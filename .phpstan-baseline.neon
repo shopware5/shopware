@@ -13721,27 +13721,7 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:getList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:getOne\\(\\) has parameter \\$limit with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:insertCustomers\\(\\) has parameter \\$customerIds with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:prepareData\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:prepareData\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
@@ -13752,21 +13732,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:updateFrozenState\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:validateStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
-
-		-
-			message: "#^Parameter \\#3 \\$conditions of method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerStream\\:\\:updateFrozenState\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/CustomerStream.php
 
@@ -22641,11 +22606,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/CustomerQuickView.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_CustomerStream\\:\\:getList\\(\\) should return array\\{success\\: true, data\\: array\\<array\\<string, mixed\\>\\|Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\>, total\\: int\\} but returns array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/CustomerStream.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$bid\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Document.php
@@ -29655,43 +29615,9 @@ parameters:
 			count: 1
 			path: engine/Shopware/Models/Customer/Repository.php
 
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:getAttribute\\(\\) should return Shopware\\\\Models\\\\Attribute\\\\CustomerStream but returns Shopware\\\\Models\\\\Attribute\\\\CustomerStream\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:getName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setAttribute\\(\\) has parameter \\$attribute with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setConditions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setDescription\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setFreezeUp\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setStatic\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Models/CustomerStream/CustomerStream.php
 
@@ -37429,16 +37355,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$id of method Shopware\\\\Components\\\\Api\\\\Resource\\\\CustomerGroup\\:\\:update\\(\\) expects int, string given\\.$#"
 			count: 1
 			path: tests/Functional/Components/Api/CustomerGroupTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerStreamTest\\:\\:createResource\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerStreamTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Api\\\\CustomerStreamTest\\:\\:testCreateStaticStream\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Api/CustomerStreamTest.php
 
 		-
 			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<string, mixed\\>$#"
