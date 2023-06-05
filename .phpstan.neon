@@ -194,3 +194,8 @@ parameters:
             message: '#Method Shopware\\Tests\\Mink\\Tests\\General\\Helpers\\SubContext::getService\(\) should return TService of object but returns object\|null#'
             count: 1
             path: tests/Mink/Tests/General/Helpers/SubContext.php
+
+        - # Intentionally pass a wrong value for the test
+            message: '#Parameter \#1 \$calculationType of method Shopware\\Bundle\\OrderBundle\\Service\\ShippingCostService::getShippingCostMultiplier\(\) expects 0\|1\|2\|3, 99 given#'
+            count: 1
+            path: tests/Unit/Bundle/OrderBundle/ShippingConstServiceTest.php
