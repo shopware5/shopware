@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,10 +24,14 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugins\SwagUpdate\Components;
+namespace ShopwarePlugins\SwagUpdate\Components\Exception;
 
-use RuntimeException;
+use Exception;
 
-class ExtensionMissingException extends RuntimeException
+class ApiLimitExceededException extends Exception
 {
+    /**
+     * @var string
+     */
+    protected $message = 'ApiLimit';
 }

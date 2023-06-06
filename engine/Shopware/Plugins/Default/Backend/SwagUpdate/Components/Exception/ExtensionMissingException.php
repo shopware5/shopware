@@ -22,57 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugins\SwagUpdate\Components\Struct;
+namespace ShopwarePlugins\SwagUpdate\Components\Exception;
 
-class Version extends Struct
+use RuntimeException;
+
+class ExtensionMissingException extends RuntimeException
 {
-    /**
-     * @var string
-     */
-    public $version;
-
-    /**
-     * @var bool
-     */
-    public $isNewer;
-
-    /**
-     * @var array
-     */
-    public $changelog;
-
-    /**
-     * @var string
-     */
-    public $uri;
-
-    /**
-     * @var int
-     */
-    public $size;
-
-    /**
-     * @var string
-     */
-    public $sha1;
-
-    /**
-     * @var array
-     */
-    public $checks;
-
-    /**
-     * @var string
-     */
-    public $release_date;
-
-    /**
-     * @var bool
-     */
-    public $security_update;
-
-    /**
-     * @var string
-     */
-    public $sha256;
 }

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,57 +25,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace ShopwarePlugins\SwagUpdate\Components\Struct;
+use Shopware\Components\Migrations\AbstractMigration;
 
-class Version extends Struct
+class Migrations_Migration1725 extends AbstractMigration
 {
-    /**
-     * @var string
-     */
-    public $version;
-
-    /**
-     * @var bool
-     */
-    public $isNewer;
-
-    /**
-     * @var array
-     */
-    public $changelog;
-
-    /**
-     * @var string
-     */
-    public $uri;
-
-    /**
-     * @var int
-     */
-    public $size;
-
-    /**
-     * @var string
-     */
-    public $sha1;
-
-    /**
-     * @var array
-     */
-    public $checks;
-
-    /**
-     * @var string
-     */
-    public $release_date;
-
-    /**
-     * @var bool
-     */
-    public $security_update;
-
-    /**
-     * @var string
-     */
-    public $sha256;
+    public function up($modus)
+    {
+        $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'SwagUpdate' LIMIT 1)");
+        $this->addSql('DELETE FROM s_core_config_element_translations WHERE element_id in (SELECT id FROM s_core_config_elements WHERE form_id = @formId)');
+        $this->addSql('DELETE FROM s_core_config_values WHERE element_id in (SELECT id FROM s_core_config_elements WHERE form_id = @formId)');
+        $this->addSql('DELETE FROM s_core_config_form_translations WHERE form_id = @formId');
+        $this->addSql('DELETE FROM s_core_config_elements WHERE form_id = @formId');
+        $this->addSql('DELETE FROM s_core_config_forms WHERE id = @formId');
+        $this->addSql('DELETE FROM s_core_config_forms WHERE id = @formId;');
+    }
 }
