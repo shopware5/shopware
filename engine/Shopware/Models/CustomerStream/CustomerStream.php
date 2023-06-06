@@ -101,7 +101,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * return string
+     * @return string
      */
     public function getName()
     {
@@ -110,6 +110,8 @@ class CustomerStream extends ModelEntity
 
     /**
      * @param string $name
+     *
+     * @return void
      */
     public function setName($name)
     {
@@ -126,6 +128,8 @@ class CustomerStream extends ModelEntity
 
     /**
      * @param string $description
+     *
+     * @return void
      */
     public function setDescription($description)
     {
@@ -142,6 +146,8 @@ class CustomerStream extends ModelEntity
 
     /**
      * @param string|null $conditions
+     *
+     * @return void
      */
     public function setConditions($conditions)
     {
@@ -158,6 +164,8 @@ class CustomerStream extends ModelEntity
 
     /**
      * @param DateTimeInterface|string|null $freezeUp
+     *
+     * @return void
      */
     public function setFreezeUp($freezeUp)
     {
@@ -177,6 +185,8 @@ class CustomerStream extends ModelEntity
 
     /**
      * @param bool $static
+     *
+     * @return void
      */
     public function setStatic($static)
     {
@@ -184,7 +194,7 @@ class CustomerStream extends ModelEntity
     }
 
     /**
-     * @return CustomerStreamAttribute
+     * @return CustomerStreamAttribute|null
      */
     public function getAttribute()
     {
