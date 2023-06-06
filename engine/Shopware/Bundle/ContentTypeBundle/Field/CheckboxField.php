@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Field;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
 class CheckboxField implements FieldInterface, TemplateProvidingFieldInterface
 {
     public static function getDbalType(): string
     {
-        return Type::BOOLEAN;
+        return Types::BOOLEAN;
     }
 
     public static function getExtjsField(): string

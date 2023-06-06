@@ -590,6 +590,29 @@ class Component extends ModelEntity
     }
 
     /**
+     * Creates a no URL Ext.form.field.Text element.
+     * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.Text
+     *
+     * options {
+     *     string $name       Required; Logical name of the component field
+     *     string $fieldLabel optional; Ext JS form field label
+     *     string $allowBlank Optional; Defines if the value can contain null
+     * }
+     *
+     * @param array{name: string, fieldLabel?: string, allowBlank?: bool} $options
+     *
+     * @return Field
+     */
+    public function createNoUrlField(array $options)
+    {
+        $options += [
+            'xtype' => 'nourl',
+        ];
+
+        return $this->createField($options);
+    }
+
+    /**
      * Creates a Ext.form.field.TextArea element.
      * http://docs.sencha.com/extjs/4.2.2/#!/api/Ext.form.field.TextArea
      *

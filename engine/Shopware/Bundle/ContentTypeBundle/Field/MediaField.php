@@ -24,7 +24,7 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Field;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Shopware\Bundle\ContentTypeBundle\FieldResolver\MediaResolver;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
@@ -32,7 +32,7 @@ class MediaField implements FieldInterface, ResolveableFieldInterface, TemplateP
 {
     public static function getDbalType(): string
     {
-        return Type::INTEGER;
+        return Types::INTEGER;
     }
 
     public static function getExtjsField(): string

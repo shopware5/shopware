@@ -22,40 +22,18 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ContentTypeBundle\Field;
+namespace Shopware\Components\Validator;
 
-use Doctrine\DBAL\Types\Types;
-use Shopware\Bundle\ContentTypeBundle\Structs\Field;
-
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
+/**
+ * The Validator\NoUrlValidator class is used to validate fields consistently across the system for URLs
+ */
+class NoUrlValidator implements NoUrlValidatorInterface
 {
-    public static function getDbalType(): string
+    /**
+     * {@inheritdoc}
+     */
+    public function isValid(string $textToValidate): bool
     {
-        return Types::STRING;
-    }
-
-    public static function getExtjsType(): string
-    {
-        return 'string';
-    }
-
-    public static function getExtjsOptions(Field $field): array
-    {
-        return [];
-    }
-
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
-    }
-
-    public static function isMultiple(): bool
-    {
-        return false;
-    }
-
-    public static function getTemplate(): string
-    {
-        return 'frontend/content_type/field/text.tpl';
+        return (bool) preg_match('/^(?:(?!(http[s]?\:\/\/)?(?!\-)(?:[a-zA-Z\d\-]{0,62}[a-zA-Z\d]\.){1,126}(?!\d+)[a-zA-Z\d]{1,63}).)*$/', $textToValidate);
     }
 }

@@ -1941,6 +1941,31 @@ class AdminTest extends TestCase
         static::assertSame(['newsletter' => true], $result['sErrorFlag']);
     }
 
+    public function testsNewsletterSubscriptionWithURLInFirstAndLastname(): void
+    {
+        // Test subscribe with empty post field and empty address, fail validation
+        $this->getRequest()->setPost([
+            'subscribeToNewsletter' => 1,
+            'newsletter' => 'test@example.org',
+            'salutation' => 'mr',
+            'firstname' => 'https://example.org',
+            'lastname' => 'https://example.org',
+            'street' => 'teststraße 1',
+            'zipcode' => '12345',
+            'city' => 'test',
+            ]);
+
+        $result = $this->module->sNewsletterSubscription('test@example.org');
+
+        static::assertArrayHasKey('code', $result);
+        static::assertArrayHasKey('message', $result);
+        static::assertSame(10, $result['code']);
+
+        $message = $this->snippetManager->getNamespace('frontend/account/internalMessages')
+        ->get('UrlInFieldFailure', 'A URL is not allowed in this field');
+        static::assertSame($message, $result['message']);
+    }
+
     public function testsNewsletterSubscription(): void
     {
         $validAddress = uniqid((string) rand()) . '@shopware.com';

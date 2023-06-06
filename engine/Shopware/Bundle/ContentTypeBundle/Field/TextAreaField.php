@@ -24,14 +24,14 @@
 
 namespace Shopware\Bundle\ContentTypeBundle\Field;
 
-use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Types\Types;
 use Shopware\Bundle\ContentTypeBundle\Structs\Field;
 
 class TextAreaField implements FieldInterface, TemplateProvidingFieldInterface
 {
     public static function getDbalType(): string
     {
-        return Type::TEXT;
+        return Types::TEXT;
     }
 
     public static function getExtjsType(): string

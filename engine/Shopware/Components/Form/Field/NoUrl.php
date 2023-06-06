@@ -22,40 +22,17 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ContentTypeBundle\Field;
+namespace Shopware\Components\Form\Field;
 
-use Doctrine\DBAL\Types\Types;
-use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+use Shopware\Components\Form\Field;
 
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
+class NoUrl extends Field
 {
-    public static function getDbalType(): string
+    /**
+     * Requires to set a name for the field
+     */
+    public function __construct(string $name)
     {
-        return Types::STRING;
-    }
-
-    public static function getExtjsType(): string
-    {
-        return 'string';
-    }
-
-    public static function getExtjsOptions(Field $field): array
-    {
-        return [];
-    }
-
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
-    }
-
-    public static function isMultiple(): bool
-    {
-        return false;
-    }
-
-    public static function getTemplate(): string
-    {
-        return 'frontend/content_type/field/text.tpl';
+        $this->name = $name;
     }
 }

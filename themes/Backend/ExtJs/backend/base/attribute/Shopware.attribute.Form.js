@@ -404,6 +404,7 @@ Ext.define('Shopware.attribute.Form', {
             Ext.create('Shopware.attribute.HtmlFieldHandler'),
             Ext.create('Shopware.attribute.IntegerFieldHandler'),
             Ext.create('Shopware.attribute.StringFieldHandler'),
+            Ext.create('Shopware.attribute.NoUrlFieldHandler'),
             Ext.create('Shopware.attribute.TextAreaFieldHandler'),
             Ext.create('Shopware.attribute.ComboBoxFieldHandler'),
             Ext.create('Shopware.attribute.SingleSelectionFieldHandler'),

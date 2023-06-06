@@ -25,6 +25,7 @@
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
+use Shopware\Bundle\AccountBundle\Form\Account\PersonalFormType;
 use Shopware\Bundle\AccountBundle\Service\OptInLoginService;
 use Shopware\Bundle\AccountBundle\Service\OptInLoginServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
@@ -2338,6 +2339,16 @@ class sAdmin implements \Enlight_Hook
                     ->get('NewsletterFailureInvalid', 'Enter valid eMail address'),
             ];
         }
+
+        if (preg_match(PersonalFormType::DOMAIN_NAME_REGEX, $this->front->Request()->getPost('firstname')) === 1
+            || preg_match(PersonalFormType::DOMAIN_NAME_REGEX, $this->front->Request()->getPost('lastname')) === 1) {
+            return [
+                'code' => 10,
+                'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
+                    ->get('UrlInFieldFailure', 'A URL is not allowed in this field'),
+            ];
+        }
+
         if (!$unsubscribe) {
             $result = $this->subscribeNewsletter($email, $groupID);
         } else {
@@ -2373,6 +2384,7 @@ class sAdmin implements \Enlight_Hook
                     $groupID,
                 ]
             );
+            $request = $this->front->ensureRequest();
 
             if (empty($mailDataExists)) {
                 $sql = '
@@ -2385,13 +2397,13 @@ class sAdmin implements \Enlight_Hook
                 $this->connection->executeQuery($sql, [
                     $email,
                     $groupID,
-                    $this->front->Request()->getPost('salutation', 'not_defined'),
-                    $this->front->Request()->getPost('title'),
-                    $this->front->Request()->getPost('firstname'),
-                    $this->front->Request()->getPost('lastname'),
-                    $this->front->Request()->getPost('street'),
-                    $this->front->Request()->getPost('zipcode'),
-                    $this->front->Request()->getPost('city'),
+                    $request->getPost('salutation', 'not_defined'),
+                    $request->getPost('title'),
+                    $request->getPost('firstname'),
+                    $request->getPost('lastname'),
+                    $request->getPost('street'),
+                    $request->getPost('zipcode'),
+                    $request->getPost('city'),
                     $added,
                     $doubleOptInConfirmed,
                 ]);
@@ -2400,12 +2412,12 @@ class sAdmin implements \Enlight_Hook
                     's_campaigns_maildata',
                     [
                         'groupID' => $groupID,
-                        'salutation' => $this->front->Request()->getPost('salutation', 'not_defined'),
-                        'title' => $this->front->Request()->getPost('title'),
-                        'firstname' => $this->front->Request()->getPost('firstname'),
-                        'lastname' => $this->front->Request()->getPost('lastname'),
-                        'street' => $this->front->Request()->getPost('street'),
-                        'city' => $this->front->Request()->getPost('city'),
+                        'salutation' => $request->getPost('salutation', 'not_defined'),
+                        'title' => $request->getPost('title'),
+                        'firstname' => $request->getPost('firstname'),
+                        'lastname' => $request->getPost('lastname'),
+                        'street' => $request->getPost('street'),
+                        'city' => $request->getPost('city'),
                     ],
                     [
                         'email' => $email,

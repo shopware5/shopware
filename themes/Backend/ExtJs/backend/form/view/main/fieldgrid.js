@@ -309,7 +309,8 @@ Ext.define('Shopware.apps.Form.view.main.Fieldgrid', {
                 ['email', 'Email'],
                 ['select', 'select'],
                 ['textarea', 'textarea'],
-                ['hidden', 'hidden']
+                ['hidden', 'hidden'],
+                ['nourl', 'nourl']
             ]
         });
     },

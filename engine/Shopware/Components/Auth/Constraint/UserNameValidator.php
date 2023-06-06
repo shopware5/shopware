@@ -82,7 +82,7 @@ class UserNameValidator extends ConstraintValidator
         $userId = $constraint->getUserId();
 
         if (empty($userName)) {
-            $this->addError($this->getSnippet(self::SNIPPET_NAME_FAILURE));
+            $this->addError($this->getSnippet(NoUrlValidator::SNIPPET_EMPTY_FIELD));
         }
 
         if (!$this->userNameValidator->isValid($userName)) {

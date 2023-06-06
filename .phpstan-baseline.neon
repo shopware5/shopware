@@ -25157,7 +25157,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method getPost\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 24
+			count: 13
 			path: engine/Shopware/Core/sAdmin.php
 
 		-

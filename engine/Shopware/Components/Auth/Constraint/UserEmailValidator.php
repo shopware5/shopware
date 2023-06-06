@@ -82,7 +82,7 @@ class UserEmailValidator extends ConstraintValidator
         $userId = $constraint->getUserId();
 
         if (empty($email)) {
-            $this->addError($this->getSnippet(self::SNIPPET_MAIL_FAILURE));
+            $this->addError($this->getSnippet(NoUrlValidator::SNIPPET_EMPTY_FIELD));
         }
 
         if (!$this->emailValidator->isValid($email)) {

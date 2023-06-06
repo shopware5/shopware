@@ -29,6 +29,7 @@ namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Enlight_Controller_Response_Response;
+use Exception;
 use InvalidArgumentException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Customer\Customer;
@@ -139,6 +140,26 @@ class RegisterTest extends ControllerTestCase
         );
     }
 
+    /**
+     * @throws Exception
+     */
+    public function testRegistrationFailsWithURLInName(): void
+    {
+        $this->Request()->setMethod('POST');
+        $this->Request()->setPost([
+            'register' => [
+                'personal' => $this->getPersonalData([
+                    'firstname' => 'https://example.com',
+                    'lastname' => 'https://example.com',
+                ]),
+                'billing' => $this->getBillingData(),
+                'shipping' => $this->getShippingData(),
+            ],
+        ]);
+
+        $this->sendRequestAndAssertNoUrlAllowedInName();
+    }
+
     public function testCompanyRegistration(): void
     {
         $this->Request()->setMethod('POST');
@@ -228,9 +249,11 @@ class RegisterTest extends ControllerTestCase
     }
 
     /**
-     * @param array<string, mixed> $personal
-     * @param array<string, mixed> $billing
-     * @param array<string, mixed> $shipping
+     * @param array<string, int|string> $personal
+     * @param array<string, int|string> $billing
+     * @param array<string, int|string> $shipping
+     *
+     * @throws Exception
      */
     private function sendRequestAndAssertCustomer(array $personal, array $billing = [], array $shipping = []): void
     {
@@ -267,6 +290,16 @@ class RegisterTest extends ControllerTestCase
         if (!empty($shipping)) {
             $this->assertAddress(self::TEST_MAIL, $shipping, 'shipping');
         }
+    }
+
+    private function sendRequestAndAssertNoUrlAllowedInName(): void
+    {
+        $this->doubleOptInSet(false);
+        $response = $this->dispatch(self::SAVE_URL);
+
+        static::assertEquals(200, $response->getHttpResponseCode());
+        static::assertIsString($response->getBody());
+        static::assertStringContainsString('Eine URL ist in diesem Feld nicht erlaubt', $response->getBody());
     }
 
     private function sendRequestAndAssertCustomerWithDoubleOptIn(): void

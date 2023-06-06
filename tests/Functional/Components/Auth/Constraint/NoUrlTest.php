@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,40 +24,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\ContentTypeBundle\Field;
+namespace Shopware\Tests\Functional\Components\Auth\Constraint;
 
-use Doctrine\DBAL\Types\Types;
-use Shopware\Bundle\ContentTypeBundle\Structs\Field;
+use PHPUnit\Framework\TestCase;
+use Shopware\Components\Auth\Constraint\NoUrl;
 
-class TextField implements FieldInterface, TemplateProvidingFieldInterface
+class NoUrlTest extends TestCase
 {
-    public static function getDbalType(): string
+    public function testNameIsCorrect(): void
     {
-        return Types::STRING;
-    }
-
-    public static function getExtjsType(): string
-    {
-        return 'string';
-    }
-
-    public static function getExtjsOptions(Field $field): array
-    {
-        return [];
-    }
-
-    public static function getExtjsField(): string
-    {
-        return 'textfield';
-    }
-
-    public static function isMultiple(): bool
-    {
-        return false;
-    }
-
-    public static function getTemplate(): string
-    {
-        return 'frontend/content_type/field/text.tpl';
+        $noUrl = new NoUrl();
+        static::assertSame('NoUrlValidator', $noUrl->validatedBy());
     }
 }
