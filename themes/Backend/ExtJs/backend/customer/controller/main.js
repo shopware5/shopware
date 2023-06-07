@@ -89,35 +89,11 @@ Ext.define('Shopware.apps.Customer.controller.Main', {
                 var config = Ext.JSON.decode(response.responseText);
 
                 if (!config || config.length <= 0) {
-                    config = { showWizard: true, autoIndex: false };
+                    config = { autoIndex: false };
                 }
 
                 me.subApplication.userConfig = config;
 
-                if (!config.showWizard) {
-                    me.mainWindow = me.getView('main.Window').create();
-                    return;
-                }
-
-                var wizard = me.getView('main.Wizard').create();
-                wizard.on('finish', Ext.bind(me.switchWizardConfig, me));
-                wizard.show();
-            }
-        });
-    },
-
-    switchWizardConfig: function() {
-        var me = this, config = me.subApplication.userConfig;
-
-        config.showWizard = false;
-
-        Ext.Ajax.request({
-            url: '{url controller=UserConfig action=save}',
-            params: {
-                config: Ext.JSON.encode(config),
-                name: 'customer_module'
-            },
-            callback: function() {
                 me.mainWindow = me.getView('main.Window').create();
             }
         });
@@ -170,6 +146,5 @@ Ext.define('Shopware.apps.Customer.controller.Main', {
             }
         });
     }
-
 });
 // {/block}

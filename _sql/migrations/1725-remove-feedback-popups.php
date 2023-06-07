@@ -26,12 +26,16 @@ class Migrations_Migration1725 extends Shopware\Components\Migrations\AbstractMi
 {
     public function up($modus)
     {
-        $sql = "DELETE FROM s_core_menu WHERE `name` = 'Feedback senden'";
+        $sql = "UPDATE s_core_menu SET onclick = 'window.open(\'https://github.com/shopware5/shopware/issues\')' WHERE `name` = 'Feedback senden'";
         $this->addSql($sql);
 
-        $sql = "DELETE FROM s_core_config_element_translations WHERE `label` = 'Feedback senden'";
-        $this->addSql($sql);
+        $sql = <<<'SQL'
+SET @elementId = (SELECT `id` FROM `s_core_config_elements` WHERE name = 'installationSurvey');
+DELETE FROM s_core_config_values WHERE element_id = @elementId;
+DELETE FROM s_core_config_element_translations WHERE element_id = @elementId;
+DELETE FROM s_core_config_elements WHERE id = @elementId;
+SQL;
 
-        $sql = "DELETE FROM s_core_config_elements WHERE `name` = 'installationSurvey'";
+        $this->addSql($sql);
     }
 }
