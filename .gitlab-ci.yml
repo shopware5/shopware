@@ -119,7 +119,7 @@ JavaScript checks:
         - sed -i -e "s;__ROOT__;$CI_PROJECT_DIR;g" /etc/nginx/sites-enabled/shopware.conf
         - /usr/bin/supervisord -c /etc/supervisord.conf &>/dev/null &
         # https://gitlab.com/gitlab-org/gitlab-foss/-/issues/27921#note_38132416
-        - eval export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME SW_HOST SW_BASE_PATH ELASTICSEARCH_HOST
+        - eval export DB_USER DB_PASSWORD DB_HOST DB_PORT DB_NAME SW_HOST SW_BASE_PATH ELASTICSEARCH_HOST SMTP_HOST
     stage: PHPUnit
     services:
         -   name: mysql:5.7

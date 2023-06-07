@@ -8226,11 +8226,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginZipDetector.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\UniqueIdGenerator\\\\UniqueIdGenerator\\:\\:storeUniqueIdInDb\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/UniqueIdGenerator/UniqueIdGenerator.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\BasketPositionStruct\\:\\:setPlugin\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/BasketPositionStruct.php
@@ -41425,16 +41420,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\MediaBundle\\\\Strategy\\\\PlainStrategyTest\\:\\:testNotEncodedPath\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/MediaBundle/Strategy/PlainStrategyTest.php
-
-		-
-			message: "#^Method UniqueIdGeneratorTest\\:\\:testReturnUniqueIdFromDb\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/PluginInstallerBundle/UniqueIdGenerator/UniqueIdGeneratorTest.php
-
-		-
-			message: "#^Method UniqueIdGeneratorTest\\:\\:testStoringGeneratedIdInDb\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/PluginInstallerBundle/UniqueIdGenerator/UniqueIdGeneratorTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SearchBundle\\\\BatchProductNumberSearchTest\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"

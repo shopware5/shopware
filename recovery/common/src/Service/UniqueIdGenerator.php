@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,19 +27,13 @@
 namespace Shopware\Recovery\Common\Service;
 
 /**
- * Generates a random unique Id and caches it in a local file.
+ * Generates a random unique ID and caches it in a local file.
  */
 class UniqueIdGenerator
 {
-    /**
-     * @var string
-     */
-    private $cacheFilePath;
+    private string $cacheFilePath;
 
-    /**
-     * @param string $cacheFilePath
-     */
-    public function __construct($cacheFilePath)
+    public function __construct(string $cacheFilePath)
     {
         $this->cacheFilePath = $cacheFilePath;
     }
@@ -75,10 +71,7 @@ class UniqueIdGenerator
         return $str;
     }
 
-    /**
-     * @param string $uniqueId
-     */
-    private function saveUniqueId($uniqueId)
+    private function saveUniqueId(string $uniqueId): void
     {
         file_put_contents($this->cacheFilePath, $uniqueId);
     }
