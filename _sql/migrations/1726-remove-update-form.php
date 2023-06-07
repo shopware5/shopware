@@ -1,7 +1,6 @@
 <?php
 
 declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,9 +26,21 @@ declare(strict_types=1);
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration1725 extends AbstractMigration
+class Migrations_Migration1726 extends AbstractMigration
 {
     public function up($modus)
+    {
+        $this->moveTrackingIdConfigOutOfUpdateForm();
+
+        $this->removeAutoUpdateForm();
+    }
+
+    private function moveTrackingIdConfigOutOfUpdateForm(): void
+    {
+        $this->addSql("UPDATE s_core_config_elements SET form_id = 0 WHERE name = 'trackingUniqueId'");
+    }
+
+    private function removeAutoUpdateForm(): void
     {
         $this->addSql("SET @formId = (SELECT id FROM s_core_config_forms WHERE name = 'SwagUpdate' LIMIT 1)");
         $this->addSql('DELETE FROM s_core_config_element_translations WHERE element_id in (SELECT id FROM s_core_config_elements WHERE form_id = @formId)');
