@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,26 +31,13 @@ use Shopware\Recovery\Common\HttpClient\Client;
 
 class Notification
 {
-    /**
-     * @var string
-     */
-    private $apiEndPoint;
+    private string $apiEndPoint;
 
-    /**
-     * @var Client
-     */
-    private $client;
+    private Client $client;
 
-    /**
-     * @var string
-     */
-    private $uniqueId;
+    private string $uniqueId;
 
-    /**
-     * @param string $apiEndPoint
-     * @param string $uniqueId
-     */
-    public function __construct($apiEndPoint, $uniqueId, Client $client)
+    public function __construct(string $apiEndPoint, string $uniqueId, Client $client)
     {
         $this->apiEndPoint = $apiEndPoint;
         $this->client = $client;

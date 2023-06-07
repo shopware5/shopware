@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,14 +31,11 @@ use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Components\Random;
 
 /**
- * A simple class for storing a generated unique Id in the database.
+ * A simple class for storing a generated unique ID in the database.
  */
 class UniqueIdGenerator implements UniqueIdGeneratorInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     public function __construct(Connection $connection)
     {
@@ -48,7 +47,8 @@ class UniqueIdGenerator implements UniqueIdGeneratorInterface
      */
     public function getUniqueId()
     {
-        if ($uniqueId = $this->readUniqueIdFromDb()) {
+        $uniqueId = $this->readUniqueIdFromDb();
+        if ($uniqueId) {
             return $uniqueId;
         }
 
@@ -59,10 +59,7 @@ class UniqueIdGenerator implements UniqueIdGeneratorInterface
         return $uniqueId;
     }
 
-    /**
-     * @return string|null
-     */
-    private function readUniqueIdFromDb()
+    private function readUniqueIdFromDb(): ?string
     {
         $sql = <<<'sql'
 SELECT s_core_config_values.value FROM s_core_config_values
@@ -71,25 +68,22 @@ INNER JOIN s_core_config_elements
     AND s_core_config_elements.name LIKE 'trackingUniqueId'
 WHERE s_core_config_values.shop_id = 1
 sql;
-        $uniqueId = $this->connection->fetchColumn($sql);
+        $uniqueId = $this->connection->fetchOne($sql);
 
-        if ($uniqueId !== false && \is_string($uniqueId)) {
+        if (\is_string($uniqueId)) {
             return unserialize($uniqueId, ['allowed_classes' => false]);
         }
 
         return null;
     }
 
-    /**
-     * @param string $uniqueId
-     */
-    private function storeUniqueIdInDb($uniqueId)
+    private function storeUniqueIdInDb(string $uniqueId): void
     {
-        $uniqueRowId = $this->connection->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE \'trackingUniqueId\' LIMIT 1');
+        $uniqueRowId = $this->connection->fetchOne("SELECT id FROM s_core_config_elements WHERE name LIKE 'trackingUniqueId' LIMIT 1");
 
         if ($uniqueRowId === false) {
-            $this->connection->executeUpdate('INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope)
-VALUES (\'0\', \'trackingUniqueId\', \'s:0:"";\', \'Unique identifier\', \'\', \'text\', \'0\', \'0\', \'1\')');
+            $this->connection->executeStatement("INSERT INTO s_core_config_elements (form_id, name, value, label, description, type, required, position, scope)
+VALUES ('0', 'trackingUniqueId', 's:0:\"\";', 'Unique identifier', '', 'text', '0', '0', '1')");
             $uniqueRowId = $this->connection->lastInsertId();
         }
 
@@ -99,7 +93,7 @@ INSERT INTO s_core_config_values (element_id, shop_id, value) VALUES (
 )
 sql;
 
-        $this->connection->executeUpdate(
+        $this->connection->executeStatement(
             $sql,
             [
                 'uniqueRowId' => $uniqueRowId,

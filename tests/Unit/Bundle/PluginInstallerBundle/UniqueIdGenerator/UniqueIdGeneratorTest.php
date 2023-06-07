@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,30 +24,33 @@
  * our trademarks remain entirely with us.
  */
 
+namespace Shopware\Tests\Unit\Bundle\PluginInstallerBundle\UniqueIdGenerator;
+
+use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator;
+use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGenerator\UniqueIdGenerator;
 
 class UniqueIdGeneratorTest extends TestCase
 {
     /**
      * Tests if an existing unique id is returned and not stored again.
      */
-    public function testReturnUniqueIdFromDb()
+    public function testReturnUniqueIdFromDb(): void
     {
-        $connectionMock = $this->getMockBuilder(\Doctrine\DBAL\Connection::class)
+        $connectionMock = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchColumn', 'executeUpdate'])
+            ->onlyMethods(['fetchOne', 'executeStatement'])
             ->getMock();
 
-        $connectionMock->expects(static::exactly(1))
-            ->method('fetchColumn')
+        $connectionMock->expects(static::once())
+            ->method('fetchOne')
             ->willReturn('s:32:"xErV4zUsI28DVKfayeIB6rqIOBjR8OEB";');
 
         $connectionMock->expects(static::exactly(0))
-            ->method('executeUpdate')
+            ->method('executeStatement')
             ->willReturn(true);
 
-        $dbStorage = new UniqueIdGenerator\UniqueIdGenerator(
+        $dbStorage = new UniqueIdGenerator(
             $connectionMock
         );
 
@@ -56,22 +61,22 @@ class UniqueIdGeneratorTest extends TestCase
      * Tests if all necessary methods are called to check for an old id in the db
      * and generate & store a new one if none exists.
      */
-    public function testStoringGeneratedIdInDb()
+    public function testStoringGeneratedIdInDb(): void
     {
-        $connectionMock = $this->getMockBuilder(\Doctrine\DBAL\Connection::class)
+        $connectionMock = $this->getMockBuilder(Connection::class)
             ->disableOriginalConstructor()
-            ->setMethods(['fetchColumn', 'executeUpdate'])
+            ->onlyMethods(['fetchOne', 'executeStatement'])
             ->getMock();
 
         $connectionMock->expects(static::exactly(2))
-            ->method('fetchColumn')
+            ->method('fetchOne')
             ->willReturn(null);
 
-        $connectionMock->expects(static::exactly(1))
-            ->method('executeUpdate')
+        $connectionMock->expects(static::once())
+            ->method('executeStatement')
             ->willReturn(true);
 
-        $dbStorage = new UniqueIdGenerator\UniqueIdGenerator(
+        $dbStorage = new UniqueIdGenerator(
             $connectionMock
         );
 
