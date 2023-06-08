@@ -1,0 +1,35 @@
+name: Feature request 🚀
+description: Suggest an idea for this project
+labels: [Feature]
+body:
+    - type: input
+      id: reference_issues
+      attributes:
+          label: "Reference Issues"
+          description: Common issues
+          placeholder: "#Issues IDs"
+      validations:
+          required: false
+    - type: textarea
+      id: summary
+      attributes:
+          label: "Summary"
+          description: Provide a brief explanation of the feature
+          placeholder: Describe in a few lines your feature request
+      validations:
+          required: true
+    - type: textarea
+      id: basic_example
+      attributes:
+          label: "Basic Example"
+          description: Indicate here some basic examples of your feature.
+          placeholder: A few specific words about your feature request.
+      validations:
+          required: false
+    - type: textarea
+      id: additional_context
+      attributes:
+          label: "Additional context"
+          description: Add any other context or screenshots about the feature request here.
+      validations:
+          required: false
