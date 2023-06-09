@@ -38,6 +38,7 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Components\Translation\SwapProductVariantTranslationService;
 use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Article\Configurator\Dependency;
 use Shopware\Models\Article\Configurator\Group;
@@ -3123,9 +3124,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!$variant instanceof ProductVariant) {
             throw new ModelNotFoundException(ProductVariant::class, $detail->getId());
         }
+
         if ($data['standard']) {
             $product = $variant->getArticle();
             $mainDetail = $product->getMainDetail();
+            if (!$mainDetail instanceof ProductVariant) {
+                throw new ModelNotFoundException(ProductVariant::class, $detail->getId());
+            }
+
             $mainDetail->setKind(2);
             $product->setMainDetail($variant);
             $this->get('models')->persist($mainDetail);
@@ -3134,7 +3140,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             // If main variant changed, swap translations
             if ($mainDetail->getId() !== $variant->getId()) {
-                $this->swapDetailTranslations($variant, $mainDetail);
+                $this->container->get(SwapProductVariantTranslationService::class)->swapProductVariantTranslation($variant, $mainDetail);
             }
         }
 
@@ -4506,95 +4512,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $fields;
-    }
-
-    /**
-     * Helper method which swaps the translations of the newMainDetail and the oldMainDetail
-     * Needed because mainDetails' translations are stored for the product, not for the variant itself
-     *
-     * @param ProductVariant $newMainDetail
-     * @param ProductVariant $oldMainDetail
-     */
-    private function swapDetailTranslations($newMainDetail, $oldMainDetail)
-    {
-        $productId = $oldMainDetail->getArticle()->getId();
-
-        // Get available translations for the old mainDetail (stored on the product)
-        $sql = "
-            SELECT objectlanguage, objectdata
-            FROM s_core_translations
-            WHERE objecttype = 'article' AND objectkey = ?
-        ";
-        $oldTranslations = Shopware()->Db()->fetchAssoc($sql, [$productId]);
-
-        // Get available translations for the new mainDetail (stored for the detail)
-        $sql = "
-            SELECT objectlanguage, objectdata
-            FROM s_core_translations
-            WHERE objecttype='variant' AND objectkey = ?
-        ";
-        $newTranslations = Shopware()->Db()->fetchAssoc($sql, [$newMainDetail->getId()]);
-
-        // We need to determine which of the old product translations can be used for the translation of the
-        // variant which was the mainDetail before.
-        // We'll get a list of translatable variant fields from the variant which is going to become the new mainDetail
-        $translatedFields = [];
-        foreach ($newTranslations as $values) {
-            $data = $values['objectdata'];
-            $unserialized = @unserialize($data, ['allowed_classes' => false]);
-
-            if ($unserialized === false) {
-                $unserialized = [];
-            }
-
-            foreach ($unserialized as $field => $translation) {
-                if (!\array_key_exists($field, $translatedFields)) {
-                    $translatedFields[$field] = true;
-                }
-            }
-        }
-
-        // Save the old product translation as new variant translations
-        foreach ($oldTranslations as $language => $values) {
-            $data = @unserialize($values['objectdata'], ['allowed_classes' => false]);
-            if ($data === false) {
-                $data = [];
-            }
-
-            $newData = array_intersect_key($data, $translatedFields);
-            $this->getTranslationComponent()->write(
-                $language,
-                'variant',
-                $oldMainDetail->getId(),
-                $newData
-            );
-        }
-
-        // Save the new mainDetail translations as product translations
-        foreach ($newTranslations as $language => $values) {
-            $data = @unserialize($values['objectdata'], ['allowed_classes' => false]);
-            if ($data === false) {
-                $data = [];
-            }
-
-            $newData = array_intersect_key($data, $translatedFields);
-            // We need to check and include old translations, as an product
-            // translation is a superset of a variant translation
-            if ($oldValues = $oldTranslations[$language]) {
-                $oldData = @unserialize($oldValues['objectdata'], ['allowed_classes' => false]);
-                if ($oldData === false) {
-                    $oldData = [];
-                }
-
-                $newData = array_merge($oldData, $newData);
-            }
-            $this->getTranslationComponent()->write(
-                $language,
-                'article',
-                $productId,
-                $newData
-            );
-        }
     }
 
     /**

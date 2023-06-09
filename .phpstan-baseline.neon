@@ -20777,7 +20777,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 4
+			count: 3
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
@@ -20787,11 +20787,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method setArticle\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method setKind\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -21571,11 +21566,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:swapDetailTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:uploadEsdFileAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -21592,11 +21582,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$number of method Shopware_Controllers_Backend_Article\\:\\:increaseAutoNumber\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\$oldMainDetail of method Shopware_Controllers_Backend_Article\\:\\:swapDetailTranslations\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
