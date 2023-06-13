@@ -36,7 +36,7 @@ class ExtJsResultMapper
      *
      * @throws Exception
      *
-     * @return array
+     * @return array<string, bool|int|string>
      */
     public function toExtJs($result)
     {

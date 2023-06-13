@@ -34387,11 +34387,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
 
 		-
-			message: "#^Parameter \\#2 \\$objectDecodeType of static method Zend_Json\\:\\:decode\\(\\) expects int, true given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/LicenseCheck.php
-
-		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Checks\\\\MySQLVersionCheck\\:\\:canHandle\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Checks/MySQLVersionCheck.php
@@ -34475,11 +34470,6 @@ parameters:
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Download\\:\\:setProgressCallback\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Download.php
-
-		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\ExtJsResultMapper\\:\\:toExtJs\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/ExtJsResultMapper.php
 
 		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\FileSystem\\:\\:checkDirectoryPermissions\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -34602,16 +34592,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Struct/Version.php
 
 		-
-			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\UpdateCheck\\:\\:checkUpdate\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
-
-		-
-			message: "#^Parameter \\#2 \\$objectDecodeType of static method Zend_Json\\:\\:decode\\(\\) expects int, true given\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/UpdateCheck.php
-
-		-
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:checkRequirements\\(\\) has parameter \\$requirements with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
@@ -34620,66 +34600,6 @@ parameters:
 			message: "#^Method ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Validation\\:\\:handleRequirement\\(\\) has parameter \\$requirement with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Validation.php
-
-		-
-			message: "#^Cannot access property \\$version on ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Struct\\\\Version\\|null\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:changelogAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:createRecursiveFileIterator\\(\\) return type with generic class RecursiveIteratorIterator does not specify its types\\: T$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:downloadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:isUpdateAllowedAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:mapResult\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:pluginsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:popupAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:replaceRecoveryFiles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:requirementsAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:startUpdateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_SwagUpdate\\:\\:unpackAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Controllers/Backend/SwagUpdate.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
