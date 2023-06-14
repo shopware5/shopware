@@ -51,6 +51,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      */
     public const CACHE_KEY = 'swag_update_response';
 
+    /**
+     * @return void
+     */
     public function changelogAction()
     {
         try {
@@ -88,6 +91,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function requirementsAction()
     {
         $data = $this->getCachedVersion();
@@ -126,9 +132,20 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function pluginsAction()
     {
         $data = $this->getCachedVersion();
+        if (!$data instanceof Version) {
+            $this->View()->assign([
+                'success' => false,
+                'data' => [],
+            ]);
+
+            return;
+        }
 
         $version = $data->version;
 
@@ -141,6 +158,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function isUpdateAllowedAction()
     {
         $fs = new SwagUpdateFileSystem();
@@ -170,6 +190,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function popupAction()
     {
         try {
@@ -204,6 +227,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         }
     }
 
+    /**
+     * @return void
+     */
     public function startUpdateAction()
     {
         $clientIp = $this->Request()->getClientIp();
@@ -218,6 +244,10 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         ];
 
         $version = $this->getCachedVersion();
+        if (!$version instanceof Version) {
+            throw new Exception('Could not get version');
+        }
+
         $payload['version'] = $version->version;
 
         $session = Shopware()->BackendSession();
@@ -237,6 +267,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         $this->redirect($base . '/recovery/update/index.php');
     }
 
+    /**
+     * @return void
+     */
     public function downloadAction()
     {
         $offset = (int) $this->Request()->get('offset', 0);
@@ -261,6 +294,9 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         }
     }
 
+    /**
+     * @return void
+     */
     public function unpackAction()
     {
         try {
@@ -319,7 +355,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     /**
      * @param string $path the path of the directory to be iterated over
      *
-     * @return RecursiveIteratorIterator
+     * @return RecursiveIteratorIterator<RecursiveDirectoryIterator>
      */
     protected function createRecursiveFileIterator($path)
     {
@@ -334,10 +370,7 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         );
     }
 
-    /**
-     * @param string $fileDir
-     */
-    private function replaceRecoveryFiles($fileDir)
+    private function replaceRecoveryFiles(string $fileDir): void
     {
         $recoveryDir = $fileDir . '/recovery';
         if (!is_dir($recoveryDir)) {
@@ -358,27 +391,12 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function getPluginConfig(): array
-    {
-        return Shopware()->Plugins()->Backend()->SwagUpdate()->Config()->toArray();
-    }
-
     private function getShopwareVersion(): string
     {
-        $pluginConfig = $this->getPluginConfig();
-
-        if (!empty($pluginConfig['update-fake-version'])) {
-            $shopwareVersion = $pluginConfig['update-fake-version'];
-        } else {
-            $shopwareVersion = $this->container->getParameter('shopware.release.version');
-
-            $versionText = $this->container->getParameter('shopware.release.version_text');
-            if (!empty($versionText)) {
-                $shopwareVersion .= '-' . $versionText;
-            }
+        $shopwareVersion = $this->container->getParameter('shopware.release.version');
+        $versionText = $this->container->getParameter('shopware.release.version_text');
+        if (!empty($versionText) && $versionText !== '___VERSION_TEXT___') {
+            $shopwareVersion .= '-' . $versionText;
         }
 
         return $shopwareVersion;
@@ -387,7 +405,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     private function getCachedVersion(): ?Version
     {
         $cache = $this->get(Zend_Cache_Core::class);
-        if (false === $version = $cache->load(self::CACHE_KEY)) {
+        $version = $cache->load(self::CACHE_KEY);
+        if ($version === false) {
             $version = $this->fetchUpdateVersion();
         }
 
@@ -398,13 +417,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
     {
         $shopwareVersion = $this->getShopwareVersion();
 
-        $pluginConfig = $this->getPluginConfig();
-        $params = [
-            'code' => $pluginConfig['update-code'],
-        ];
-
         $update = $this->get('swagupdateupdatecheck');
-        $result = $update->checkUpdate($shopwareVersion, $params);
+        $result = $update->checkUpdate($shopwareVersion);
 
         $cache = $this->get(Zend_Cache_Core::class);
         $cache->save($result, self::CACHE_KEY, [], 60);
@@ -428,6 +442,8 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
      * Map result object to extjs array format
      *
      * @param ValidResult|FinishResult|ErrorResult $result
+     *
+     * @return array<string, bool|int|string>
      */
     private function mapResult($result): array
     {

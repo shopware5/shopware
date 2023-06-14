@@ -35,6 +35,17 @@ use Zend_Http_Response;
 
 class SwagUpdateTest extends TestCase
 {
+    public function testCheckUpdateReturnsNullIfShopwareVersionIsDevelopment(): void
+    {
+        $updateChecker = new UpdateCheck(
+            $this->createMock(Zend_Http_Client::class),
+            false,
+            false
+        );
+
+        static::assertNull($updateChecker->checkUpdate('___VERSION___'));
+    }
+
     public function testCheckUpdateThrowsExceptionOnApiLimit(): void
     {
         $response = new Zend_Http_Response(403, []);

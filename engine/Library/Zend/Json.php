@@ -34,8 +34,8 @@ class Zend_Json
      * so that it is a boolean true value, allowing it to be used with
      * ext/json's functions.
      */
-    const TYPE_ARRAY  = 1;
-    const TYPE_OBJECT = 0;
+    const TYPE_ARRAY  = true;
+    const TYPE_OBJECT = false;
 
     /**
      * Decodes the given $encodedValue string which is
@@ -44,16 +44,16 @@ class Zend_Json
      * Uses ext/json's json_decode if available.
      *
      * @param string $encodedValue Encoded in JSON format
-     * @param int $objectDecodeType Optional; flag indicating how to decode
-     * objects.
+     * @param bool $objectDecodeType Optional; flag indicating how to decode objects.
      * @return mixed
      * @throws Zend_Json_Exception
      */
-    public static function decode($encodedValue, $objectDecodeType = Zend_Json::TYPE_ARRAY)
+    public static function decode($encodedValue, $objectDecodeType = self::TYPE_ARRAY)
     {
         $encodedValue = (string) $encodedValue;
         $decode = json_decode($encodedValue, $objectDecodeType);
-        if (($jsonLastErr = json_last_error()) !== JSON_ERROR_NONE) {
+        $jsonLastErr = json_last_error();
+        if (($jsonLastErr) !== JSON_ERROR_NONE) {
             switch ($jsonLastErr) {
                 case JSON_ERROR_DEPTH:
                     throw new Zend_Json_Exception('Decoding failed: Maximum stack depth exceeded');
@@ -89,7 +89,9 @@ class Zend_Json
         if (is_object($valueToEncode)) {
             if (method_exists($valueToEncode, 'toJson')) {
                 return $valueToEncode->toJson();
-            } elseif (method_exists($valueToEncode, 'toArray')) {
+            }
+
+            if (method_exists($valueToEncode, 'toArray')) {
                 return self::encode($valueToEncode->toArray(), $cycleCheck);
             }
         }

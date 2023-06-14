@@ -31,6 +31,7 @@ use ShopwarePlugins\SwagUpdate\Components\Struct\Version;
 use Symfony\Component\HttpFoundation\Response;
 use Zend_Http_Client;
 use Zend_Json;
+use Zend_Json_Exception;
 
 class UpdateCheck
 {
@@ -50,12 +51,19 @@ class UpdateCheck
     }
 
     /**
-     * @param string $shopwareVersion
+     * @deprecated Additional Parameter `$params` will be removed with Shopware 5.8, as it is not used anymore
+     *
+     * @param string               $shopwareVersion
+     * @param array<string, mixed> $params
      *
      * @return Version|null
      */
     public function checkUpdate($shopwareVersion, array $params = [])
     {
+        if ($shopwareVersion === '___VERSION___') {
+            return null;
+        }
+
         $response = $this->client->request();
 
         if ($response->getStatus() === Response::HTTP_FORBIDDEN) {
@@ -68,9 +76,17 @@ class UpdateCheck
 
         $body = $response->getBody();
 
-        if ($body != '') {
-            $json = Zend_Json::decode($body, true);
-        } else {
+        if (!\is_string($body)) {
+            return null;
+        }
+
+        if ($body === '') {
+            return null;
+        }
+
+        try {
+            $json = Zend_Json::decode($body);
+        } catch (Zend_Json_Exception $e) {
             return null;
         }
 
@@ -83,6 +99,9 @@ class UpdateCheck
 
     /**
      * @param array<string, mixed> $releaseInformation
+     *
+     * @throws UpdatePackageNotFoundException
+     * @throws ReleasePackageNotFoundException
      */
     private function createVersionFromGithubResponse(string $shopwareVersion, array $releaseInformation): Version
     {
@@ -107,6 +126,8 @@ class UpdateCheck
 
     /**
      * @param array<string, mixed> $releaseInformation
+     *
+     * @throws ReleasePackageNotFoundException
      *
      * @return array<string, mixed>
      */
@@ -133,6 +154,8 @@ class UpdateCheck
 
     /**
      * @param array<string, mixed> $assets
+     *
+     * @throws UpdatePackageNotFoundException
      *
      * @return array<string, mixed>
      */
