@@ -4381,14 +4381,15 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      * First the function executes the current command on the passed cursor object.
      * If the result is traversable
      *
-     * @param Product|ProductVariant|string $cursor
-     * @param int                           $index
-     * @param array                         $commands
+     * @param Product|ProductVariant|string|object $cursor
+     * @param int                                  $index
+     * @param array                                $commands
      *
      * @return string
      */
     protected function recursiveInterpreter($cursor, $index, $commands)
     {
+
         if (!\is_object($cursor)) {
             return '';
         }
@@ -4399,7 +4400,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         // First we execute the current command on the cursor object
         $result = $cursor->{$commands[$index]['command']}();
-
         // Now we increment the command index
         ++$index;
 
@@ -4413,8 +4413,8 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             return implode('.', $results);
 
-            // If the result of the current command on the cursor is an object
-        } elseif ($result instanceof Product || $result instanceof ProductVariant) {
+        // If the result of the current command on the cursor is an object
+        } elseif (is_object($result) && method_exists($result, $commands[$index]['command'])) {
             // We have to execute the next command on the result
             return $this->recursiveInterpreter($result, $index, $commands);
 
