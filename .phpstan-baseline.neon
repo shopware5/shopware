@@ -1316,11 +1316,6 @@ parameters:
 			path: engine/Library/Enlight/Class.php
 
 		-
-			message: "#^Method Enlight_Class\\:\\:__set\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Class.php
-
-		-
 			message: "#^Method Enlight_Class\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Class.php
@@ -1357,11 +1352,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Collection/ArrayCollection.php
-
-		-
-			message: "#^Method Enlight_Collection_ArrayCollection\\:\\:__set\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Collection/ArrayCollection.php
 
@@ -1601,11 +1591,6 @@ parameters:
 			path: engine/Library/Enlight/Components/Mail.php
 
 		-
-			message: "#^Method Enlight_Components_Mail\\:\\:__set\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Mail.php
-
-		-
 			message: "#^Method Enlight_Components_Mail\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Mail.php
@@ -1647,11 +1632,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Components_Session_Namespace\\:\\:__get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Session/Namespace.php
-
-		-
-			message: "#^Method Enlight_Components_Session_Namespace\\:\\:__set\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Session/Namespace.php
 
@@ -2276,11 +2256,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Request/Request.php
 
 		-
-			message: "#^Method Enlight_Controller_Request_Request\\:\\:__set\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Request/Request.php
-
-		-
 			message: "#^Method Enlight_Controller_Request_Request\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Request/Request.php
@@ -2397,11 +2372,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:__get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
-
-		-
-			message: "#^Method Enlight_Controller_Request_RequestHttp\\:\\:__set\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Request/RequestHttp.php
 
@@ -3899,11 +3869,6 @@ parameters:
 			message: "#^Property Smarty_Template_Source\\:\\:\\$template \\(bool\\) does not accept Smarty_Internal_Template\\|null\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/resource.parent.php
-
-		-
-			message: "#^Method Enlight_View\\:\\:__set\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/View.php
 
 		-
 			message: "#^Method Enlight_View\\:\\:__set\\(\\) has parameter \\$name with no type specified\\.$#"
@@ -15226,11 +15191,6 @@ parameters:
 			path: engine/Shopware/Components/Config.php
 
 		-
-			message: "#^Method Shopware_Components_Config\\:\\:__set\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Config.php
-
-		-
 			message: "#^Method Shopware_Components_Config\\:\\:__set\\(\\) has parameter \\$value with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Config.php
@@ -18856,6 +18816,16 @@ parameters:
 			path: engine/Shopware/Components/Plugin/ResourceSubscriber.php
 
 		-
+			message: "#^Cannot assign offset non\\-falsy\\-string to array\\<string, array\\<int, string\\|null\\>\\>\\|string\\|null\\.$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
+
+		-
+			message: "#^Cannot assign offset string to array\\<string, array\\<string, array\\<int, string\\|null\\>\\>\\|string\\|null\\>\\|string\\|null\\.$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
+
+		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\XmlPluginInfoReader\\:\\:parseInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlPluginInfoReader.php
@@ -18942,6 +18912,16 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method DOMNode\\:\\:getElementsByTagName\\(\\)\\.$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
+
+		-
+			message: "#^Cannot assign offset non\\-falsy\\-string to array\\<string, array\\<int, string\\|null\\>\\>\\|string\\.$#"
+			count: 1
+			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
+
+		-
+			message: "#^Cannot assign offset string to array\\<string, array\\<string, array\\<int, string\\|null\\>\\>\\|string\\>\\|string\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
 
@@ -27056,11 +27036,6 @@ parameters:
 			path: engine/Shopware/Core/sSystem.php
 
 		-
-			message: "#^Method sSystem\\:\\:__set\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sSystem.php
-
-		-
 			message: "#^Method sSystem\\:\\:__set\\(\\) has parameter \\$property with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sSystem.php
@@ -29609,7 +29584,6 @@ parameters:
 			message: "#^Method Shopware\\\\Models\\\\Customer\\\\Repository\\:\\:getOrdersQueryBuilder\\(\\) has parameter \\$orderBy with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Customer/Repository.php
-
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\CustomerStream\\\\CustomerStream\\:\\:setAttribute\\(\\) has parameter \\$attribute with no value type specified in iterable type array\\.$#"
@@ -33158,11 +33132,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Shop\\\\Repository\\:\\:getShopsWithThemes\\(\\) has parameter \\$order with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Shop/Repository.php
-
-		-
-			message: "#^Parameter \\#2 \\$callback of function usort expects callable\\(mixed, mixed\\)\\: int, Closure\\(mixed, mixed\\)\\: \\-1\\|0\\|1\\|bool given\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Shop/Repository.php
 

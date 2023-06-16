@@ -86,7 +86,8 @@ class XmlPluginReader extends XmlReaderBase
 
         $simpleFields = ['version', 'license', 'author', 'copyright', 'link'];
         foreach ($simpleFields as $simpleField) {
-            if (($fieldValue = self::getElementChildValueByName($pluginData, $simpleField)) !== null) {
+            $fieldValue = self::getElementChildValueByName($pluginData, $simpleField);
+            if ($fieldValue !== null) {
                 $info[$simpleField] = $fieldValue;
             }
         }
