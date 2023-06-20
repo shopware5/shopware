@@ -25,8 +25,12 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Template_Manager;
+use Enlight_View_Default;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Controllers_Backend_Base;
 use Shopware_Plugins_Backend_Auth_Bootstrap as AuthPlugin;
 
 class BaseTest extends Enlight_Components_Test_Controller_TestCase
@@ -68,20 +72,21 @@ class BaseTest extends Enlight_Components_Test_Controller_TestCase
             'page' => 1,
             'start' => 0,
             'limit' => 10,
-            'filter' => json_encode(
-                [[
+            'filter' => [[
                     'property' => 'free',
                     'value' => '%' . $searchTerm . '%',
                     'operator' => null,
                     'expression' => null,
-                ]]
-            ),
+            ]],
         ];
 
-        $this->Request()->setMethod('GET')->setParams($params);
-        $this->dispatch('backend/base/getVariants');
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($params);
 
-        $jsonBody = $this->View()->getAssign();
+        $controller = $this->createController();
+        $controller->setRequest($request);
+        $controller->getVariantsAction();
+        $jsonBody = $controller->View()->getAssign();
 
         static::assertIsArray($jsonBody);
         static::assertIsArray($jsonBody['data']);
@@ -151,31 +156,31 @@ class BaseTest extends Enlight_Components_Test_Controller_TestCase
             ]],
             'orderNumber' => ['SW1022', true, [
                 'total' => 10,
-                'id' => '779',
-                'name' => 'Magnete ABC',
-                'description' => 'Cautus Plura hac res Gens Censeo, bos Os, dissemino hac vae ter Consonum nam lacrima increpo rogo. evoco tremo bene Corrumpo .',
+                'id' => '749',
+                'name' => 'Prämienartikel ab 250 Euro Warenkorb Wert',
+                'description' => 'Diesen Artikel können die Kunden kostenpflichtig erwerben oder kostenlos als Prämienartikel ab einem Warenkorb Wert von 250 Euro bekommen.',
                 'active' => '1',
-                'ordernumber' => 'SW10220',
-                'articleId' => '226',
-                'inStock' => '150',
-                'supplierName' => 'Das blaue Haus',
-                'supplierId' => '8',
+                'ordernumber' => 'SW10221',
+                'articleId' => '211',
+                'inStock' => '100',
+                'supplierName' => 'Example',
+                'supplierId' => '14',
                 'additionalText' => '',
-                'price' => 3.99,
+                'price' => 50,
             ]],
             'supplierName' => ['Sasse', true, [
                 'total' => 10,
-                'id' => '123',
-                'name' => 'Münsterländer Lagerkorn 32%',
-                'description' => '',
+                'id' => '3',
+                'name' => 'Münsterländer Aperitif 16%',
+                'description' => 'ubi ait animadverto poema adicio',
                 'active' => '1',
-                'ordernumber' => 'SW10002.1',
-                'articleId' => '2',
-                'inStock' => '15',
+                'ordernumber' => 'SW10003',
+                'articleId' => '3',
+                'inStock' => '25',
                 'supplierName' => 'Feinbrennerei Sasse',
                 'supplierId' => '2',
-                'additionalText' => '1,5 Liter',
-                'price' => 59.99,
+                'additionalText' => '',
+                'price' => 14.95,
             ]],
             'productName' => ['sommer', true, [
                 'total' => 10,
@@ -207,5 +212,14 @@ class BaseTest extends Enlight_Components_Test_Controller_TestCase
                 'price' => 9.99,
             ]],
         ];
+    }
+
+    private function createController(): Shopware_Controllers_Backend_Base
+    {
+        $controller = $this->getContainer()->get('shopware_controllers_backend_base');
+        $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
+        $controller->setContainer($this->getContainer());
+
+        return $controller;
     }
 }
