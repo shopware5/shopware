@@ -551,20 +551,15 @@ class Repository extends ModelRepository
         return $this->fixActive($shop);
     }
 
-    /**
-     * @param string $host
-     *
-     * @return array
-     */
-    private function getShopsArrayByHost($host)
+    private function getShopsArrayByHost(string $host): array
     {
         $query = $this->getDbalShopsQuery();
         $query->andWhere('shop.active = 1');
         $query->andWhere('(shop.host = :host OR (shop.host IS NULL AND main_shop.host = :host))');
         $query->setParameter(':host', $host);
-        $shops = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $shops = $query->execute()->fetchAllAssociative();
 
-        usort($shops, function ($a, $b) {
+        usort($shops, function (array $a, array $b): int {
             if ($a['is_main'] && !$b['is_main']) {
                 return -1;
             }
@@ -574,7 +569,7 @@ class Repository extends ModelRepository
             }
 
             if ($a['is_main'] === $b['is_main']) {
-                return $a['position'] > $b['position'];
+                return $a['position'] <=> $b['position'];
             }
 
             return 0;

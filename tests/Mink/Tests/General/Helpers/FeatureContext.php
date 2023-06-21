@@ -35,6 +35,7 @@ use Behat\Mink\Session;
 use Behat\Testwork\Hook\Scope\BeforeSuiteScope;
 use Behat\Testwork\Suite\Suite;
 use Behat\Testwork\Tester\Result\TestResult;
+use DateTime;
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Components\CacheManager;
@@ -173,7 +174,8 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
     {
         // Under Cygwin, uniqid with more_entropy must be set to true.
         // No effect in other environments.
-        $filename = $filename ?: sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), date('c'), uniqid('', true), 'png');
+        $generatedFilename = sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), (new DateTime())->format('Y-m-d--H-i-s'), uniqid('', true), 'png');
+        $filename = $filename ?: $generatedFilename;
         $filepath = $filepath ?: (ini_get('upload_tmp_dir') ?: sys_get_temp_dir());
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
     }

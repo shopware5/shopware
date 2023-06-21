@@ -31,7 +31,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Models\ProductStream\ProductStream;
-use Shopware\Models\Shop\Shop;
 
 /**
  * Shopware Categories

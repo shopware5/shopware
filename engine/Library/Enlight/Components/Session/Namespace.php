@@ -45,7 +45,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      */
     public function __set($name, $value)
     {
-        return $this->set($name, $value);
+        $this->set($name, $value);
     }
 
     /**

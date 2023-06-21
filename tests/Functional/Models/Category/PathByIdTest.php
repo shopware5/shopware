@@ -121,7 +121,7 @@ class PathByIdTest extends Enlight_Components_Test_TestCase
     /**
      * @dataProvider simpleNameArrayProvider
      *
-     *                                      @param array<int, string> $expectedResult
+     * @param array<int, string> $expectedResult
      */
     public function testGetPathByIdWithDefaultNameParameter(int $categoryId, array $expectedResult): void
     {
@@ -132,7 +132,7 @@ class PathByIdTest extends Enlight_Components_Test_TestCase
     /**
      * @dataProvider simpleIdArrayProvider
      *
-     *                                    @param array<int, int> $expectedResult
+     * @param array<int, int> $expectedResult
      */
     public function testGetPathByIdWithIdParameter(int $categoryId, array $expectedResult): void
     {
@@ -143,7 +143,7 @@ class PathByIdTest extends Enlight_Components_Test_TestCase
     /**
      * @dataProvider multiArrayProvider
      *
-     *                                 @param array<int, array> $expectedResult
+     * @param array<int, array> $expectedResult
      */
     public function testGetPathByIdShouldReturnArray(int $categoryId, array $expectedResult): void
     {

@@ -29,7 +29,6 @@ use Shopware\Components\CategoryHandling\CategoryDuplicator;
 use Shopware\Components\Model\CategoryDenormalization;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
-use Shopware\Models\Article\Repository;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;

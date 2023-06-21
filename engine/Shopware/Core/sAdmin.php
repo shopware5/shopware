@@ -43,7 +43,6 @@ use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
 use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\CSRFTokenValidator;
-use Shopware\Components\DependencyInjection\Bridge\Config;
 use Shopware\Components\HolidayTableUpdater;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Password\Manager;
@@ -3825,7 +3824,7 @@ SQL;
      * Helper function for sAdmin::sGetUserData()
      * Gets user shipping data (address, payment)
      *
-     *  @return array<string, mixed>
+     * @return array<string, mixed>
      */
     private function getUserShippingData(int $userId, array $userData, string $countryQuery): array
     {

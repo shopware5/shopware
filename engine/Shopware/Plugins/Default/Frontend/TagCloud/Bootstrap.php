@@ -23,7 +23,6 @@
  */
 
 use Shopware\Models\Config\Element;
-use Shopware\Models\Config\Form;
 
 class Shopware_Plugins_Frontend_TagCloud_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {

@@ -37,7 +37,6 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Blog\Blog;
 use Shopware\Models\Category\Category;
-use Shopware\Models\Category\Repository;
 use Shopware\Models\Config\Element;
 use Shopware\Models\Country\Area;
 use Shopware\Models\Country\Country;
