@@ -32,7 +32,6 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Components\Theme;
 use Shopware\Models\Plugin\Plugin;
-use Shopware\Models\Shop;
 use Shopware\Models\Shop\Template;
 
 /**

@@ -27,7 +27,6 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\OptinServiceInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
-use Shopware\Components\Theme;
 use Shopware\Components\Theme\Installer;
 use Shopware\Components\Theme\PathResolver;
 use Shopware\Components\Theme\Service;

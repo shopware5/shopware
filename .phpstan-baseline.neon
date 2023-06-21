@@ -37306,31 +37306,6 @@ parameters:
 			path: tests/Functional/Components/Api/PropertyGroupTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\AuthTest\\:\\:createAdminUser\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AuthTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\AuthTest\\:\\:createAdminUser\\(\\) has parameter \\$password with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AuthTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\AuthTest\\:\\:createAdminUser\\(\\) has parameter \\$username with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AuthTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\AuthTest\\:\\:testAuthenticateWithPassedAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AuthTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\AuthTest\\:\\:testAuthenticateWithSetAdapter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/AuthTest.php
-
-		-
 			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
 			count: 1
 			path: tests/Functional/Components/CacheSubscriberTest.php

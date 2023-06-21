@@ -27,7 +27,6 @@ use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Models\ProductFeed\ProductFeed;
-use Shopware\Models\ProductFeed\Repository;
 use Shopware\Models\Shop\Shop;
 
 /**

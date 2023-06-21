@@ -35,7 +35,6 @@ use RuntimeException;
 use Shopware\Bundle\PluginInstallerBundle\Service\UniqueIdGeneratorInterface;
 use Shopware\Components\ShopwareReleaseStruct;
 use Shopware\Components\Theme\Compressor\CompressorInterface;
-use Shopware\Components\Theme\Compressor\Js;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use SplFileInfo;

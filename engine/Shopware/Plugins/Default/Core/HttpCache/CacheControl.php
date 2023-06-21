@@ -32,7 +32,6 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\HttpCache\CacheRouteGenerationService;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
 use Shopware\Components\HttpCache\DefaultRouteService;
-use Symfony\Component\HttpFoundation\Cookie;
 
 class CacheControl
 {

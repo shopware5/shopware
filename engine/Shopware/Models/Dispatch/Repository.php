@@ -27,7 +27,6 @@ namespace Shopware\Models\Dispatch;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Join;
-use Doctrine\ORM\Query\Expr\OrderBy;
 use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Models\Country\Country;

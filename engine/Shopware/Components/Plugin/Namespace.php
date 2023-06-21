@@ -27,7 +27,6 @@ use Shopware\Components\Plugin\Configuration\ReaderInterface as ConfigurationRea
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Shop;
-use Shopware\Models\Widget\Widget;
 
 /**
  * Shopware Plugin Namespace

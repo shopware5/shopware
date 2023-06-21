@@ -41,7 +41,6 @@ use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\Thumbnail\Manager;
 use Shopware\Models\Article\Article as ProductModel;
-use Shopware\Models\Article\Configurator;
 use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option as ConfiguratorOption;
 use Shopware\Models\Article\Configurator\Set;
