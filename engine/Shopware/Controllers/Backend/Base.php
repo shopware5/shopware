@@ -655,7 +655,8 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         }
 
         $builder->setFirstResult($this->Request()->getParam('start'))
-            ->setMaxResults($this->Request()->getParam('limit'));
+            ->setMaxResults($this->Request()->getParam('limit'))
+            ->orderBy('details.id', 'ASC');
 
         $result = $builder->execute()->fetchAll(PDO::FETCH_ASSOC);
 
