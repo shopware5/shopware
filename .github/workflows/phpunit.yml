@@ -2,7 +2,6 @@ name: Php Unit
 
 on:
     push:
-    pull_request:
 
 permissions:
     contents: read
@@ -11,112 +10,61 @@ jobs:
     php:
         strategy:
             matrix:
-                php: ['7.4', '8.0', '8.1', '8.2']
-                mysql: ['pkgs.mysql80']
+                php: [ '7.4', '8.0', '8.1', '8.2' ]
+                mysql: [ 'pkgs.mysql80' ]
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
-            - uses: cachix/install-nix-action@v20
-              with:
-                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
-            - uses: cachix/cachix-action@v12
-              with:
-                  name: devenv
-            - name: Install devenv.sh
-              run: nix-env -if https://github.com/cachix/devenv/tarball/main
+            -   uses: actions/checkout@v2
+            -   uses: cachix/install-nix-action@v20
+                with:
+                    github_access_token: ${{ secrets.GITHUB_TOKEN }}
+            -   uses: cachix/cachix-action@v12
+                with:
+                    name: devenv
+            -   name: Install devenv.sh
+                run: nix-env -if https://github.com/cachix/devenv/tarball/main
 
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-
-            - run: |
-                  cat > devenv.local.nix << EOF
-                  { pkgs, lib, config, ... }:
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+            -   run: |
+                    cat > devenv.local.nix << EOF
+                    { pkgs, lib, config, ... }:
 
-                  {
-                      languages.php.version = "${{ matrix.php }}";
-                      services.mysql.package = ${{ matrix.mysql }};
-                  }
-                  EOF
-            - run: cat devenv.local.nix
-            - run: devenv shell info-setup
-            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
-            - run: devenv up &
-            - run: devenv shell composer update laminas/laminas-code
-            - run: devenv shell test-phpunit
+                    {
+                        languages.php.version = "${{ matrix.php }}";
+                        services.mysql.package = ${{ matrix.mysql }};
+                    }
+                    EOF
+            -   run: cat devenv.local.nix
+            -   run: devenv shell info-setup
+            -   run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            -   run: devenv up &
+            -   run: devenv shell composer update laminas/laminas-code
+            -   run: devenv shell test-phpunit
 
     mysql:
         strategy:
             matrix:
-                php: ['8.1']
-                mysql: ['pkgs.mysql80', 'pkgs.mariadb', 'pkgs.mariadb_104', 'config.nur.repos.pascalthesing.mysql57']
+                php: [ '8.1' ]
+                mysql: [ 'pkgs.mysql80', 'pkgs.mariadb', 'pkgs.mariadb_104', 'config.nur.repos.pascalthesing.mysql57' ]
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v2
+            -   uses: actions/checkout@v2
 
-            - uses: cachix/install-nix-action@v20
-              with:
-                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
-            - uses: cachix/cachix-action@v12
-              with:
-                  name: devenv
-
-            - name: Use Shopware Cache
-              uses: cachix/cachix-action@v12
-              with:
-                  name: shopware
-                  authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-
-            - name: Install devenv.sh
-              run: nix-env -if https://github.com/cachix/devenv/tarball/main
-
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-
-
-            - run: |
-                  cat > devenv.local.nix << EOF
-                  { pkgs, lib, config, ... }:
-
-                  {
-                      languages.php.version = "${{ matrix.php }}";
-                      services.mysql.package = ${{ matrix.mysql }};
-                  }
-                  EOF
-            - run: cat devenv.local.nix
-
-            - run: devenv shell info-setup
-            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
-            - run: devenv up &
-            - run: devenv shell ./.github/check-mysql.sh
-            - run: devenv shell test-phpunit
-
-    Code-Coverage:
-        runs-on: ubuntu-latest
-        env:
-            TESTSUITE: 'all'
-        steps:
-            - uses: actions/checkout@v2
-            - uses: cachix/install-nix-action@v20
-              with:
-                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
-
-            - uses: cachix/cachix-action@v12
-              with:
-                  name: devenv
+            -   uses: cachix/install-nix-action@v20
+                with:
+                    github_access_token: ${{ secrets.GITHUB_TOKEN }}
+            -   uses: cachix/cachix-action@v12
+                with:
+                    name: devenv
 
             -   name: Use Shopware Cache
                 uses: cachix/cachix-action@v12
@@ -124,25 +72,76 @@ jobs:
                     name: shopware
                     authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-            - name: Install devenv.sh
-              run: nix-env -if https://github.com/cachix/devenv/tarball/main
+            -   name: Install devenv.sh
+                run: nix-env -if https://github.com/cachix/devenv/tarball/main
 
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-            - run: devenv shell info-setup
-            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
-            - run: devenv up &
-            - run: devenv shell ./.github/check-mysql.sh
-            - run: devenv shell test-phpunit-coverage-statistic
+            -   run: |
+                    cat > devenv.local.nix << EOF
+                    { pkgs, lib, config, ... }:
+
+                    {
+                        languages.php.version = "${{ matrix.php }}";
+                        services.mysql.package = ${{ matrix.mysql }};
+                    }
+                    EOF
+            -   run: cat devenv.local.nix
+
+            -   run: devenv shell info-setup
+            -   run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            -   run: devenv up &
+            -   run: devenv shell ./.github/check-mysql.sh
+            -   run: devenv shell test-phpunit
+
+    Code-Coverage:
+        runs-on: ubuntu-latest
+        env:
+            TESTSUITE: 'all'
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: cachix/install-nix-action@v20
+                with:
+                    github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+            -   uses: cachix/cachix-action@v12
+                with:
+                    name: devenv
+
+            -   name: Use Shopware Cache
+                uses: cachix/cachix-action@v12
+                with:
+                    name: shopware
+                    authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+            -   name: Install devenv.sh
+                run: nix-env -if https://github.com/cachix/devenv/tarball/main
+
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   run: devenv shell info-setup
+            -   run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            -   run: devenv up &
+            -   run: devenv shell ./.github/check-mysql.sh
+            -   run: devenv shell test-phpunit-coverage-statistic
 
     es:
         runs-on: ubuntu-latest
@@ -187,9 +186,9 @@ jobs:
                     }
                     EOF
 
-            - run: devenv shell info-setup
-            - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
-            - run: devenv up &
-            - run: devenv shell ./.github/check-mysql.sh
-            - run: devenv shell init-shopware
-            - run: devenv shell test-phpunit-elasticsearch
+            -   run: devenv shell info-setup
+            -   run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
+            -   run: devenv up &
+            -   run: devenv shell ./.github/check-mysql.sh
+            -   run: devenv shell init-shopware
+            -   run: devenv shell test-phpunit-elasticsearch

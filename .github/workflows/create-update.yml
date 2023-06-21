@@ -96,7 +96,7 @@ jobs:
                     git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip --add-file=${{ env.UPDATE_ASSET_DIR }}version --add-file=${{ env.UPDATE_ASSET_DIR }}cleanup.txt --add-file=${{ env.UPDATE_ASSET_DIR }}snippets.sql --add-file=./engine/Shopware/Components/Check/Data/Files.md5sums --add-file=./engine/Shopware/Components/HttpClient/cacert.pem HEAD
                     zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor ${{ env.UPDATE_ASSET_DIR }}
 
-            - run: echo "SHA=$(sha1sum ${{ env.PACKAGE_PREFIX }}.zip | awk '{print $1}')" >> $GITHUB_ENV
+            -   run: echo "SHA=$(sha1sum ${{ env.PACKAGE_PREFIX }}.zip | awk '{print $1}')" >> $GITHUB_ENV
 
             -   name: Rename Zip
                 run: |

@@ -1,59 +1,58 @@
 name: End-to-End
 
 on:
-  push:
-  pull_request:
+    push:
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
-  Mink:
-    strategy:
-      matrix:
-          MINK_TAG: [ 'account', 'checkout1', 'checkout2', 'detail', 'listing', 'note', 'sitemap', 'misc', 'backend' ]
-    runs-on: ubuntu-latest
-    steps:
-        - uses: actions/checkout@v2
-        - uses: cachix/install-nix-action@v20
-          with:
-            github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    Mink:
+        strategy:
+            matrix:
+                MINK_TAG: [ 'account', 'checkout1', 'checkout2', 'detail', 'listing', 'note', 'sitemap', 'misc', 'backend' ]
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+            -   uses: cachix/install-nix-action@v20
+                with:
+                    github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-        -   uses: cachix/cachix-action@v12
-            with:
-                name: devenv
+            -   uses: cachix/cachix-action@v12
+                with:
+                    name: devenv
 
-        -   name: Use Shopware Cache
-            uses: cachix/cachix-action@v12
-            with:
-                name: shopware
-                authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+            -   name: Use Shopware Cache
+                uses: cachix/cachix-action@v12
+                with:
+                    name: shopware
+                    authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
 
-        - name: Install devenv.sh
-          run: nix-env -if https://github.com/cachix/devenv/tarball/main
+            -   name: Install devenv.sh
+                run: nix-env -if https://github.com/cachix/devenv/tarball/main
 
-        - run: docker run -d --network host --shm-size 3g selenium/standalone-chrome:94.0
-        - name: Get Composer Cache Directory
-          id: composer-cache
-          run: |
-              echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-        - uses: actions/cache@v3
-          with:
-              path: ${{ steps.composer-cache.outputs.dir }}
-              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-              restore-keys: |
-                  ${{ runner.os }}-composer-
+            -   run: docker run -d --network host --shm-size 3g selenium/standalone-chrome:94.0
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-        - run: export SW_HOST=$(hostname -i)
-        - run: devenv shell info-setup
-        - run: devenv up &
-        - run: devenv shell ./.github/check-mysql.sh
-        - run: devenv shell init-shopware
-        - run: devenv shell prepare-mink
-        - run: devenv shell vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --tags ${{ matrix.MINK_TAG }}
-        - name: Archive results
-          if: always()
-          uses: actions/upload-artifact@v3
-          with:
-              name: build data
-              path: build/logs
+            -   run: export SW_HOST=$(hostname -i)
+            -   run: devenv shell info-setup
+            -   run: devenv up &
+            -   run: devenv shell ./.github/check-mysql.sh
+            -   run: devenv shell init-shopware
+            -   run: devenv shell prepare-mink
+            -   run: devenv shell vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --tags ${{ matrix.MINK_TAG }}
+            -   name: Archive results
+                if: always()
+                uses: actions/upload-artifact@v3
+                with:
+                    name: build data
+                    path: build/logs
