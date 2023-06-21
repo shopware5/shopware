@@ -14,7 +14,7 @@ jobs:
                 mysql: [ 'pkgs.mysql80' ]
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
             -   uses: cachix/install-nix-action@v20
                 with:
                     github_access_token: ${{ secrets.GITHUB_TOKEN }}
@@ -57,7 +57,7 @@ jobs:
                 mysql: [ 'pkgs.mysql80', 'pkgs.mariadb', 'pkgs.mariadb_104', 'config.nur.repos.pascalthesing.mysql57' ]
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   uses: cachix/install-nix-action@v20
                 with:
@@ -108,7 +108,7 @@ jobs:
         env:
             TESTSUITE: 'all'
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
             -   uses: cachix/install-nix-action@v20
                 with:
                     github_access_token: ${{ secrets.GITHUB_TOKEN }}
@@ -146,7 +146,7 @@ jobs:
     es:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   uses: cachix/install-nix-action@v20
                 with:
