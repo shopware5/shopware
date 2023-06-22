@@ -9,6 +9,10 @@ permissions:
 
 jobs:
     analyze:
+        concurrency:
+            group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+            cancel-in-progress: true
+
         permissions:
             actions: read  # for github/codeql-action/init to get workflow details
             contents: read  # for actions/checkout to fetch code

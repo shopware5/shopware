@@ -10,6 +10,10 @@ on:
 
 jobs:
     create-update-package:
+        concurrency:
+            group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+            cancel-in-progress: true
+
         env:
             PACKAGE_PREFIX: 'update'
             PACKAGE_DELIMITER: _
