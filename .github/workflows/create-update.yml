@@ -22,7 +22,7 @@ jobs:
                 uses: actions/checkout@v3
 
             -   name: Set current date as env variable
-                run: echo "REVISION=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+                run: echo "REVISION=$(git log -1 --format="%at" | xargs -I{} date -d @{} +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
             -   name: Get Composer Cache Directory
                 id: composer-cache
@@ -37,16 +37,17 @@ jobs:
 
             -   name: Install Composer
                 run: |
-                    composer install
-                    cd recovery/common && composer install
+                    composer install --no-dev
+                    cd recovery/common && composer install --no-dev
 
             -   name: Download last package
                 run: |
                     mkdir ./output
-                    LATEST_RELEASE=$(curl -L -s -H 'Accept: application/json' https://github.com/shopware/shopware/releases/latest)
-                    LATEST_VERSION=$(echo $LATEST_RELEASE | sed -e 's/.*"tag_name":"\([^"]*\)".*/\1/')
-                    ARTIFACT_URL="https://github.com/shopware/shopware/releases/download/$LATEST_VERSION/install.zip"
-                    wget $ARTIFACT_URL
+                    LATEST_RELEASE=$(curl -L -s -H 'Accept: application/json' https://github.com/shopware5/shopware/releases/latest)
+                    LATEST_VERSION_ID=$(echo $LATEST_RELEASE | sed -e 's/.*"id":\([^",]*\).*/\1/')
+                    ASSETS=$(curl -L -s -H 'Accept: application/json' https://api.github.com/repos/shopware5/shopware/releases/$LATEST_VERSION_ID/assets)
+                    ARTIFACT_URL=$(echo $ASSETS | sed -e 's/.*"browser_download_url": "\([^",]*install[^",]*\)".*/\1/')
+                    wget -O install.zip $ARTIFACT_URL
                     unzip install.zip -d ./output/release
 
             -   name: Replace placeholder
@@ -91,10 +92,18 @@ jobs:
                 run: |
                     wget -O ./engine/Shopware/Components/HttpClient/cacert.pem https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
 
+            -   name: Configure git
+                run: |
+                    git config --global user.name "shopware5"
+                    git config --global user.email "<>"
+
             -   name: Create Zip
                 run: |
-                    git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip --add-file=${{ env.UPDATE_ASSET_DIR }}version --add-file=${{ env.UPDATE_ASSET_DIR }}cleanup.txt --add-file=${{ env.UPDATE_ASSET_DIR }}snippets.sql --add-file=./engine/Shopware/Components/Check/Data/Files.md5sums --add-file=./engine/Shopware/Components/HttpClient/cacert.pem HEAD
-                    zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor ${{ env.UPDATE_ASSET_DIR }}
+                    rm -rf _sql
+                    git add .
+                    git commit -m "Create release package"
+                    git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip HEAD
+                    zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor ${{ env.UPDATE_ASSET_DIR }} ${{ env.UPDATE_ASSET_DIR }}version  ${{ env.UPDATE_ASSET_DIR }}cleanup.txt ${{ env.UPDATE_ASSET_DIR }}snippets.sql
 
             -   run: echo "SHA=$(sha1sum ${{ env.PACKAGE_PREFIX }}.zip | awk '{print $1}')" >> $GITHUB_ENV
 
