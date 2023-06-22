@@ -10,7 +10,6 @@ on:
 jobs:
     create-install-package:
         env:
-            PACKAGE_DIR: ./package/
             PACKAGE_PREFIX: install
             PACKAGE_DELIMITER: _
             DB_NAME: Shopware
@@ -33,7 +32,7 @@ jobs:
                 uses: actions/checkout@v3
 
             -   name: Set current date as env variable
-                run: echo "REVISION=$(date +'%Y%m%dT%H%M')" >> $GITHUB_ENV
+                run: echo "REVISION=$(git log -1 --format="%at" | xargs -I{} date -d @{} +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
             -   name: Get Composer Cache Directory
                 id: composer-cache
@@ -48,16 +47,16 @@ jobs:
 
             -   name: Install Composer
                 run: |
-                    composer install
-                    cd recovery/common && composer install
+                    composer install --no-dev
+                    composer install --no-dev -d recovery/common/
 
             -   name: Replace placeholder
                 run: |
-                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./engine/Shopware/Kernel.php
-                    sed -i 's=___VERSION_TEXT___= =g' ./engine/Shopware/Kernel.php
-                    sed -i 's=___REVISION___=${{ env.REVISION }}=g' ./engine/Shopware/Kernel.php
-                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./recovery/install/data/version
-                    sed -i 's=___VERSION_TEXT___= =g' ./recovery/install/data/version
+                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION_TEXT___= =g' engine/Shopware/Kernel.php
+                    sed -i 's=___REVISION___=${{ env.REVISION }}=g' engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' recovery/install/data/version
+                    sed -i 's=___VERSION_TEXT___= =g' recovery/install/data/version
 
             -   name: Create hash files
                 run: |
@@ -66,7 +65,7 @@ jobs:
 
             -   name: Download CaRoot
                 run: |
-                    wget -O ./engine/Shopware/Components/HttpClient/cacert.pem https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
+                    wget -O engine/Shopware/Components/HttpClient/cacert.pem https://raw.githubusercontent.com/bagder/ca-bundle/master/ca-bundle.crt
 
             -   name: Create database
                 run: |
@@ -74,7 +73,7 @@ jobs:
 
             -   name: Load latest sql
                 run: |
-                    mysql -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }}  ${{ env.DB_NAME }} < ./_sql/install/latest.sql
+                    mysql -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }}  ${{ env.DB_NAME }} < _sql/install/latest.sql
 
             -   name: Generate new sql
                 run: |
@@ -84,7 +83,7 @@ jobs:
 
             -   name: Save sql
                 run: |
-                    mysqldump --column-statistics=0 --quick  -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }}  ${{ env.DB_NAME }} > ./recovery/install/data/sql/install.sql
+                    mysqldump --column-statistics=0 --quick  -u root -proot -P ${{ env.DB_PORT }} -h ${{ env.DB_HOST }}  ${{ env.DB_NAME }} > recovery/install/data/sql/install.sql
 
             -   name: Copy Config
                 run: |
@@ -96,10 +95,18 @@ jobs:
                     mv .htaccess.dist .htaccess
                     chmod 0664 .htaccess
 
+            -   name: Configure git
+                run: |
+                    git config --global user.name "shopware5"
+                    git config --global user.email "<>"
+
             -   name: Create Zip
                 run: |
-                    git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip --add-file=.htaccess --add-file=config.php --add-file=./recovery/install/data/sql/install.sql --add-file=./engine/Shopware/Components/Check/Data/Files.md5sums --add-file=./engine/Shopware/Components/HttpClient/cacert.pem HEAD
-                    zip -r ${{ env.PACKAGE_PREFIX }}.zip ./vendor ./recovery/common/vendor
+                    rm -rf _sql
+                    git add .
+                    git commit -m "Create release package"
+                    git archive -v -o ${{ env.PACKAGE_PREFIX }}.zip HEAD
+                    zip -r ${{ env.PACKAGE_PREFIX }}.zip vendor recovery/common/vendor .htaccess config.php recovery/install/data/sql/install.sql recovery/install/data/sql/snippets.sql
 
             -   run: echo "SHA=$(sha1sum ${{ env.PACKAGE_PREFIX }}.zip | awk '{print $1}')" >> $GITHUB_ENV
 
