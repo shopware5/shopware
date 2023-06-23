@@ -99,6 +99,8 @@ jobs:
 
             -   name: Create Zip
                 run: |
+                    rm install.zip
+                    rm -rf ./output/release
                     rm -rf _sql
                     git add .
                     git commit -m "Create release package"
