@@ -16,7 +16,7 @@ permissions:
 jobs:
     build:
         concurrency:
-            group: ${{ github.workflow }}-${{ github.ref }}
+            group: ${{ github.ref }}
             cancel-in-progress: true
 
         strategy:
