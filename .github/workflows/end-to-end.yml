@@ -8,9 +8,7 @@ permissions:
 
 jobs:
     Mink:
-        concurrency:
-            group: ${{ github.workflow }}
-            cancel-in-progress: true
+
 
         strategy:
             matrix:
