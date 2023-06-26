@@ -15,8 +15,6 @@ permissions:
 
 jobs:
     build:
-        concurrency:
-            group: ${{ github.workflow }}-${{ github.ref }}
 
         strategy:
             matrix:
