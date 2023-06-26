@@ -10,7 +10,7 @@ permissions:
 jobs:
     analyze:
         concurrency:
-            group: ${{ github.head_ref }}
+            group: ${{ github.ref }}-${{ github.workflow }}
             cancel-in-progress: true
 
         permissions:
