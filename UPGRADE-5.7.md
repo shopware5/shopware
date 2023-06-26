@@ -2,11 +2,20 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.19
+
+[View all changes from v5.7.18...v5.7.19](https://github.com/shopware/shopware/compare/v5.7.18...v5.7.19)
+
+### Changes
+
+* Changed behaviour of the translation transfer while setting a product variant as the main variant
+
 ## 5.7.18
 
 [View all changes from v5.7.17...v5.7.18](https://github.com/shopware/shopware/compare/v5.7.17...v5.7.18)
 
 ### Additions
+
 * Added new input field that does not allow values, that contain URLs
 
 ### Deprecations
