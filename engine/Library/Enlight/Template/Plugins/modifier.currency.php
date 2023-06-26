@@ -22,9 +22,9 @@
  *
  * @see http://framework.zend.com/manual/de/zend.currency.options.html
  *
- * @param float        $value    Value can have a coma as a decimal separator
- * @param array|string $config
- * @param string       $position where the currency symbol should be displayed
+ * @param float|string                $value    Value can have a coma as a decimal separator
+ * @param array<string, mixed>|string $config
+ * @param string|null                 $position where the currency symbol should be displayed
  *
  * @return string
  */
@@ -49,9 +49,8 @@ function smarty_modifier_currency($value, $config = null, $position = null)
     }
 
     $currency = Shopware()->Container()->get('currency');
-    $formattedValue = (float) str_replace(',', '.', $value);
+    $formattedValue = (float) str_replace(',', '.', (string) $value);
     $formattedValue = $currency->toCurrency($formattedValue, $config);
-    $formattedValue = mb_convert_encoding($formattedValue, 'HTML-ENTITIES', 'UTF-8');
 
     return htmlentities($formattedValue, ENT_COMPAT, 'UTF-8', false);
 }

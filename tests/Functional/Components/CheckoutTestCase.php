@@ -27,14 +27,14 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Test_Controller_TestCase;
+use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Shopware\Components\Random;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
+abstract class CheckoutTestCase extends ControllerTestCase
 {
     use ContainerTrait;
     use CustomerLoginTrait;
@@ -115,7 +115,10 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    protected function createVoucher(float $value, int $taxId, bool $percental = true): string
+    /**
+     * @param 0|1 $percental
+     */
+    protected function createVoucher(float $value, int $taxId, int $percental = 1): string
     {
         $code = Random::getAlphanumericString(12);
         $this->getContainer()->get(Connection::class)
@@ -130,7 +133,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
                 'modus' => 0,
                 'numorder' => 1000,
                 'percental' => $percental,
-                'taxconfig' => $taxId,
+                'taxconfig' => (string) $taxId,
             ]);
 
         return $code;
@@ -199,7 +202,7 @@ abstract class CheckoutTest extends Enlight_Components_Test_Controller_TestCase
         ]);
     }
 
-    protected function loginFrontendCustomer(string $group = 'EK'): void
+    protected function loginCustomerOfGroup(string $group = 'EK'): void
     {
         $customer = Shopware()->Db()->fetchRow(
             'SELECT id, email, password, subshopID, language FROM s_user WHERE customergroup = ? LIMIT 1',

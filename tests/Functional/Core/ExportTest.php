@@ -183,7 +183,7 @@ class ExportTest extends TestCase
             'shippingfree' => '0',
             'amount' => '19.99',
             'max_tax' => '19.00',
-            'userID' => null,
+            'userID' => '',
             'has_topseller' => '0',
             'has_comment' => '',
             'has_esd' => '0',
@@ -192,7 +192,7 @@ class ExportTest extends TestCase
             'paymentID' => '5',
             'customergroupID' => '1',
             'multishopID' => '1',
-            'sessionID' => null,
+            'sessionID' => 'testSessionId',
         ];
         $surcharge = $this->export->sGetPremiumDispatchSurcharge($cart);
 
@@ -216,7 +216,7 @@ class ExportTest extends TestCase
             'shippingfree' => '0',
             'amount' => '19.99',
             'max_tax' => '19.00',
-            'userID' => null,
+            'userID' => '',
             'has_topseller' => '0',
             'has_comment' => '',
             'has_esd' => '0',

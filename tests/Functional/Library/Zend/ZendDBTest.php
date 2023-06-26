@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,16 +24,23 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Controllers\Frontend;
+namespace Shopware\Tests\Functional\Library\Zend;
 
-use Enlight_Components_Test_Controller_TestCase;
+use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Zend_Db_Adapter_Exception;
 
-class SitemapXmlTest extends Enlight_Components_Test_Controller_TestCase
+class ZendDBTest extends TestCase
 {
-    public function testIndex()
-    {
-        $this->dispatch('/SitemapXml');
+    use ContainerTrait;
 
-        static::assertEquals(302, $this->Response()->getHttpResponseCode());
+    public function testAdapterException(): void
+    {
+        $dbConnection = $this->getContainer()->get('db');
+
+        $this->expectException(Zend_Db_Adapter_Exception::class);
+        $this->expectExceptionMessageMatches("/SQLSTATE\[42S02\]: Base table or view not found: 1146 Table '.*\.foobar' doesn't exist/");
+        $this->expectExceptionCode(0);
+        $dbConnection->exec('SELECT * FROM foobar');
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,12 +37,12 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         parent::tearDown();
     }
 
-    public function testAjaxSearch()
+    public function testAjaxSearch(): void
     {
         $this->dispatch('ajax_search?sSearch=ipad');
 
         // Check for valid markup
-        // Ignore whitespace, since this testcase checks wether the list is structured correctly (li following ul)
+        // Ignore whitespace, since this testcase checks whether the list is structured correctly (li following ul)
         self::assertStringContainsStringIgnoringWhitespace(
             '<ul class="results--list"> <li class="list--entry',
             $this->getResponseContent()
@@ -78,7 +80,7 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         $body = $this->Response()->getBody();
 
         static::assertIsString($body);
-        static::assertStringNotContainsStringIgnoringCase('an error has occured', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
+        static::assertStringNotContainsStringIgnoringCase('an error has occurred', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
         static::assertStringNotContainsStringIgnoringCase('ein fehler ist aufgetreten', $body);
 
         // search for an emoji, might not be displayed correctly in IDE
@@ -90,14 +92,14 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         $body = $this->Response()->getBody();
 
         static::assertIsString($body);
-        static::assertStringNotContainsStringIgnoringCase('an error has occured', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
+        static::assertStringNotContainsStringIgnoringCase('an error has occurred', $body); // Check for error-handler response as well, which would fake a HTTP 200 OK response
         static::assertStringNotContainsStringIgnoringCase('ein fehler ist aufgetreten', $body);
     }
 
     /**
      * @dataProvider searchTermProvider
      */
-    public function testSearchEscapes(string $term, string $filtered)
+    public function testSearchEscapes(string $term, string $filtered): void
     {
         $this->dispatch(sprintf('search?sSearch=%s', $term));
 
@@ -108,7 +110,10 @@ class SearchTest extends Enlight_Components_Test_Controller_TestCase
         static::assertStringNotContainsString($term, $body, sprintf('Malicious term "%s" found on search page', $term));
     }
 
-    public function searchTermProvider()
+    /**
+     * @return list<list<string>>
+     */
+    public function searchTermProvider(): array
     {
         return [
             ['"Apostrophes"', htmlentities(strip_tags('"Apostrophes"'))],
@@ -127,13 +132,13 @@ alert(2)
         ];
     }
 
-    private static function assertStringContainsStringIgnoringWhitespace(string $needle, string $haystack, string $message = ''): void
+    private static function assertStringContainsStringIgnoringWhitespace(string $needle, string $haystack): void
     {
-        static::assertStringContainsString(
-            preg_replace('/\s/', '', $needle),
-            preg_replace('/\s/', '', $haystack),
-            $message
-        );
+        $needle = preg_replace('/\s/', '', $needle);
+        static::assertIsString($needle);
+        $haystack = preg_replace('/\s/', '', $haystack);
+        static::assertIsString($haystack);
+        static::assertStringContainsString($needle, $haystack);
     }
 
     private function getResponseContent(): string

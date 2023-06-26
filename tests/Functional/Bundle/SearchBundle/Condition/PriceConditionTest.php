@@ -225,7 +225,7 @@ class PriceConditionTest extends TestCase
             ];
         }
 
-        if ($prices['priceGroup']) {
+        if (isset($prices['priceGroup'])) {
             $product['priceGroupActive'] = true;
             $product['priceGroupId'] = $prices['priceGroup']->getId();
         }

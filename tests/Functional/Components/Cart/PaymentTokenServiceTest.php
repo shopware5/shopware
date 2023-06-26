@@ -119,7 +119,6 @@ class PaymentTokenServiceTest extends Enlight_Components_Test_Controller_TestCas
      */
     public function testPaymentTokenPath(string $virtualUrl, string $path): void
     {
-        session_destroy();
         Shopware()->Container()->reset('session');
 
         $currentUrl = Shopware()->Shop()->getBaseUrl();

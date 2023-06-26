@@ -24,16 +24,19 @@
 
 namespace Shopware\Tests\Functional\Components\Cart;
 
-use Enlight_Controller_Request_RequestHttp;
+use Doctrine\DBAL\Connection;
 use Enlight_Controller_Request_RequestTestCase;
 use PHPUnit\Framework\TestCase;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware\Tests\Functional\Traits\FixtureBehaviour;
 
 class CartMigrationTest extends TestCase
 {
+    use ContainerTrait;
     use DatabaseTransactionBehaviour;
     use FixtureBehaviour;
 
@@ -41,46 +44,51 @@ class CartMigrationTest extends TestCase
     {
         self::executeFixture(__DIR__ . '/fixture/cart_migration_1.sql');
 
-        Shopware()->Front()->setRequest(new Enlight_Controller_Request_RequestTestCase());
-        Shopware()->Modules()->Basket()->sRefreshBasket();
-        static::assertEquals(0, Shopware()->Session()->get('sBasketAmount'));
+        $this->setFrontRequest();
+        $this->getContainer()->get('modules')->Basket()->sRefreshBasket();
+        static::assertEquals(0, $this->getContainer()->get('session')->get('sBasketAmount'));
 
-        $this->loginFrontendUser();
+        $this->loginCustomer();
 
-        static::assertGreaterThan(0, Shopware()->Session()->get('sBasketAmount'));
+        static::assertGreaterThan(0, $this->getContainer()->get('session')->get('sBasketAmount'));
     }
 
     public function testMigrateOnLoginWithFilledCart(): void
     {
         self::executeFixture(__DIR__ . '/fixture/cart_migration_1.sql');
 
-        Shopware()->Modules()->Basket()->sAddArticle('SW10001');
-        Shopware()->Modules()->Basket()->sRefreshBasket();
+        $this->setFrontRequest();
+        $this->getContainer()->get('modules')->Basket()->sAddArticle('SW10001');
+        $this->getContainer()->get('modules')->Basket()->sRefreshBasket();
 
-        $currentBasketAmount = Shopware()->Session()->get('sBasketAmount');
+        $currentBasketAmount = $this->getContainer()->get('session')->get('sBasketAmount');
 
-        $this->loginFrontendUser();
+        $this->loginCustomer();
 
-        static::assertEquals($currentBasketAmount, Shopware()->Session()->get('sBasketAmount'));
+        static::assertEquals($currentBasketAmount, $this->getContainer()->get('session')->get('sBasketAmount'));
     }
 
-    private function loginFrontendUser(): void
+    private function setFrontRequest(): void
     {
-        $user = Shopware()->Db()->fetchRow(
-            'SELECT `id`, `email`, `password`, `subshopID`, `language` FROM s_user WHERE `id` = 1'
+        $this->getContainer()->get('front')->setRequest(new Enlight_Controller_Request_RequestTestCase());
+    }
+
+    private function loginCustomer(): void
+    {
+        $customer = $this->getContainer()->get(Connection::class)->fetchAssociative(
+            'SELECT `email`, `password`, `language` FROM s_user WHERE `id` = 1'
         );
+        static::assertIsArray($customer);
 
-        $shop = Shopware()->Models()->getRepository(Shop::class)->getActiveById($user['language']);
-        static::assertNotNull($shop);
-        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerResources($shop);
+        $shop = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class)->getActiveById($customer['language']);
+        static::assertInstanceOf(Shop::class, $shop);
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerResources($shop);
 
-        $request = new Enlight_Controller_Request_RequestHttp();
-        $request->setPost([
-            'email' => $user['email'],
-            'passwordMD5' => $user['password'],
+        $this->getContainer()->get('front')->ensureRequest()->setPost([
+            'email' => $customer['email'],
+            'passwordMD5' => $customer['password'],
         ]);
-        Shopware()->Front()->setRequest($request);
-        Shopware()->Session()->set('Admin', true);
-        Shopware()->Modules()->Admin()->sLogin(true);
+        $this->getContainer()->get('session')->set('Admin', true);
+        static::assertIsArray($this->getContainer()->get('modules')->Admin()->sLogin(true));
     }
 }

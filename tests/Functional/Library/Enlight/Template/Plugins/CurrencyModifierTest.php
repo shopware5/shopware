@@ -24,23 +24,32 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Library;
+namespace Shopware\Tests\Functional\Library\Enlight\Template\Plugins;
 
+use Enlight_Template_Manager;
+use Enlight_View_Default;
+use Generator;
 use PHPUnit\Framework\TestCase;
-use Shopware\Tests\Functional\Traits\ContainerTrait;
-use Zend_Db_Adapter_Exception;
 
-class ZendDBTest extends TestCase
+class CurrencyModifierTest extends TestCase
 {
-    use ContainerTrait;
-
-    public function testAdapterException(): void
+    /**
+     * @dataProvider currencyValues
+     *
+     * @param float|string $currencyValue
+     */
+    public function testModifier($currencyValue, string $expectedFormattedCurrencyValue): void
     {
-        $dbConnection = $this->getContainer()->get('db');
+        $template = new Enlight_View_Default(new Enlight_Template_Manager());
+        $template->Engine()->loadPlugin('smarty_modifier_currency');
+        static::assertSame($expectedFormattedCurrencyValue, \smarty_modifier_currency($currencyValue));
+    }
 
-        $this->expectException(Zend_Db_Adapter_Exception::class);
-        $this->expectExceptionMessageMatches("/SQLSTATE\[42S02\]: Base table or view not found: 1146 Table '.*\.foobar' doesn't exist/");
-        $this->expectExceptionCode(0);
-        $dbConnection->exec('SELECT * FROM foobar');
+    public function currencyValues(): Generator
+    {
+        yield 'Currency value with comma' => ['1,23', '1,23&nbsp;&euro;'];
+        yield 'Currency value as float' => [1.23, '1,23&nbsp;&euro;'];
+        yield 'Currency value as numeric string' => ['1.23', '1,23&nbsp;&euro;'];
+        yield 'Currency value with special chars' => ['\'"<>&1', '0,00&nbsp;&euro;'];
     }
 }

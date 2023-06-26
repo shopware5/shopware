@@ -1736,10 +1736,11 @@ class BasketTest extends TestCase
 
     public function testsGetBasket(): void
     {
+        $this->session->clear();
+        $this->generateBasketSession();
+
         // Test with empty basket
         static::assertEquals([], $this->module->sGetBasket());
-
-        $this->generateBasketSession();
 
         // Add one product to the basket with low amount
         $randomProduct = $this->getProductWithLowestVariantId();
@@ -1971,15 +1972,16 @@ class BasketTest extends TestCase
         // Assert that a valid basket was returned
         static::assertArrayHasKey(CartKey::AMOUNT_NUMERIC, $basketData);
         // Assert that the total is approximately 0.00
-        static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], Utils::FORMER_PHPUNIT_FLOAT_EPSILON, 'total is approxmately 0.00');
-        static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], 0.0001, 'total is approxmately 0.00');
+        static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], Utils::FORMER_PHPUNIT_FLOAT_EPSILON, 'total is approximately 0.00');
+        static::assertEqualsWithDelta(0, $basketData[CartKey::AMOUNT_NUMERIC], 0.0001, 'total is approximately 0.00');
     }
 
     public function testsGetBasketWithInvalidProduct(): void
     {
-        static::assertEquals([], $this->module->sGetBasket());
-
+        $this->session->clear();
         $this->generateBasketSession();
+
+        static::assertEquals([], $this->module->sGetBasket());
 
         // Setup product for the first basket position - a product that costs EUR 29.97
         $product = (new Helper($this->getContainer()))->createProduct([
@@ -2122,28 +2124,17 @@ class BasketTest extends TestCase
             $randomProducts[1]['ordernumber']
         ));
 
-        // Null argument, return null
+        // Test deleting an invalid ID
         static::assertFalse($this->module->sDeleteNote(0));
 
-        // Get random product that's not in the basket
-        $randomNotPresentProductId = $this->connection->fetchOne(
-            'SELECT detail.id FROM s_articles_details detail
-            INNER JOIN s_articles product
-              ON product.id = detail.articleID
-            WHERE detail.active = 1
-            AND detail.id NOT IN (?)
-            LIMIT 1',
-            [array_column($randomProducts, 'id')]
-        );
+        // Check that we currently have 2 products
+        static::assertSame(2, $this->module->sCountNotes());
 
-        // Check that we currently have 2 articles
-        static::assertEquals(2, $this->module->sCountNotes());
+        // Get true even if note ID is not in the database
+        static::assertTrue($this->module->sDeleteNote(PHP_INT_MAX));
 
-        // Get true even if product is not in the wishlist
-        static::assertTrue($this->module->sDeleteNote($randomNotPresentProductId));
-
-        // Check that we still have 2 articles
-        static::assertEquals(2, $this->module->sCountNotes());
+        // Check that we still have 2 products
+        static::assertSame(2, $this->module->sCountNotes());
 
         $noteIds = $this->connection->fetchFirstColumn(
             'SELECT id FROM s_order_notes detail
@@ -2151,17 +2142,17 @@ class BasketTest extends TestCase
             [$_COOKIE['sUniqueID']]
         );
 
-        // Get true even if product is not in the wishlist
+        // Remove first product
         static::assertTrue($this->module->sDeleteNote($noteIds[0]));
 
         // Check that we now have 1 product
-        static::assertEquals(1, $this->module->sCountNotes());
+        static::assertSame(1, $this->module->sCountNotes());
 
-        // Get true even if product is not in the wishlist
+        // Remove second product
         static::assertTrue($this->module->sDeleteNote($noteIds[1]));
 
         // Check that we now have an empty wishlist
-        static::assertEquals(0, $this->module->sCountNotes());
+        static::assertSame(0, $this->module->sCountNotes());
     }
 
     public function testsUpdateArticle(): void
@@ -2313,13 +2304,13 @@ class BasketTest extends TestCase
 
     public function testsDeleteArticle(): void
     {
+        $this->generateBasketSession();
+
         // No id, expect null
         static::assertNull($this->module->sDeleteArticle(0));
 
         // Random id, expect null
         static::assertNull($this->module->sDeleteArticle(9999999));
-
-        $this->generateBasketSession();
 
         // Get random product and add it to the basket
         $randomProduct = $this->connection->fetchAssociative(

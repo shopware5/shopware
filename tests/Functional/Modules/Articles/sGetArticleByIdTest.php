@@ -3542,7 +3542,7 @@ class sGetArticleByIdTest extends Enlight_Components_Test_Plugin_TestCase
             }
 
             static::assertEquals(
-                $expected[$property],
+                $expected[$property] ?? null,
                 $data[$property],
                 sprintf('Property %s dont match for article : %s - %s', $property, $expected['ordernumber'], $expected['articleName'])
             );

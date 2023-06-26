@@ -27,20 +27,14 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Enlight_Controller_Request_RequestHttp;
-use Shopware\Tests\Functional\Components\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class CalculationOnLogoutTest extends CheckoutTest
+class CalculationOnLogoutTest extends CheckoutTestCase
 {
     use DatabaseTransactionBehaviour;
 
     public bool $clearBasketOnReset = false;
-
-    public function setUp(): void
-    {
-        parent::setUp();
-        Shopware()->Session()->offsetSet('sessionId', null);
-    }
 
     public function testLogout(): void
     {
@@ -54,7 +48,7 @@ class CalculationOnLogoutTest extends CheckoutTest
 
         $currentAmount = Shopware()->Session()->get('sBasketAmount');
 
-        $this->loginFrontendCustomer('H');
+        $this->loginCustomerOfGroup('H');
 
         Shopware()->Modules()->Admin()->logout();
 

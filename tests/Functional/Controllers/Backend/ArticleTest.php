@@ -166,7 +166,6 @@ class ArticleTest extends TestCase
             'autoNumber' => '10002',
             'mainPrices' => [
                 [
-                    'id' => 0,
                     'from' => 1,
                     'to' => 'Beliebig',
                     'price' => 10,

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,13 +24,16 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Library;
+namespace Shopware\Tests\Functional\Library\Zend;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class ZendLocaleTest extends TestCase
 {
+    use ContainerTrait;
+
     public const KNOWN_FAILURE = [
         'wo_SN',
         'tt_RU',
@@ -64,22 +69,20 @@ class ZendLocaleTest extends TestCase
     ];
 
     /**
-     * @param string $localName
-     *
      * @dataProvider getLocales
      */
-    public function testLocalCreation($localName)
+    public function testLocalCreation(string $localName): void
     {
         static::assertFileExists(sprintf('%s/engine/Library/Zend/Locale/Data/%s.xml', Shopware()->DocPath(), $localName));
     }
 
     /**
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
-    public function getLocales()
+    public function getLocales(): array
     {
-        $con = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $sql = 'SELECT locale FROM s_core_locales WHERE locale NOT IN(?)';
 
-        return $con->fetchAll('SELECT locale FROM s_core_locales WHERE locale NOT IN(?)', [self::KNOWN_FAILURE], [Connection::PARAM_STR_ARRAY]);
+        return $this->getContainer()->get(Connection::class)->fetchAllAssociative($sql, [self::KNOWN_FAILURE], [Connection::PARAM_STR_ARRAY]);
     }
 }

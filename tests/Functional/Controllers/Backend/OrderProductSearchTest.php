@@ -680,7 +680,7 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
             ]],
         ];
 
-        if ($searchParams['orderId']) {
+        if (isset($searchParams['orderId'])) {
             $params['orderId'] = $searchParams['orderId'];
         }
 
