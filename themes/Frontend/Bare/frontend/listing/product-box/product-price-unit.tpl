@@ -1,18 +1,18 @@
 {namespace name="frontend/listing/box_article"}
 
-{$tooltip = "{s name='ListingBoxArticleContent'}{/s}"|escape:'html'}
+{$tooltip = "{s name='ListingBoxArticleContent'}{/s}"|escapeHtml:'html'}
 {$hasPurchaseUnit = $sArticle.purchaseunit && $sArticle.purchaseunit != 0}
 {$hasReferenceUnit = $sArticle.purchaseunit && $sArticle.referenceunit && $sArticle.purchaseunit != $sArticle.referenceunit}
 
 {if $hasPurchaseUnit}
     {$purchaseUnit = "{$sArticle.purchaseunit} {$sArticle.sUnit.description}"}
-    {$tooltip = "{$tooltip} {$purchaseUnit|escape:'html'}"}
+    {$tooltip = "{$tooltip} {$purchaseUnit|escapeHtml:'html'}"}
 {/if}
 
 {if $hasReferenceUnit}
     {$price = "{$sArticle.referenceprice|currency}"}
     {$unit = "{s name='Star'}{/s} / {$sArticle.referenceunit} {$sArticle.sUnit.description}"}
-    {$referenceUnit = "({$price} {$unit|escape:'html'})"}
+    {$referenceUnit = "({$price} {$unit|escapeHtml:'html'})"}
     {$tooltip = "{$tooltip} {$referenceUnit}"}
 {/if}
 

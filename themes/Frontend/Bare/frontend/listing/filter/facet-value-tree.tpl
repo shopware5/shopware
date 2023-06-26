@@ -7,17 +7,17 @@
         {$type = 'value-tree-single'}
     {/if}
 
-    <div class="filter-panel filter--value-tree facet--{$facet->getFacetName()|escape:'htmlall'}"
+    <div class="filter-panel filter--value-tree facet--{$facet->getFacetName()|escapeHtmlAttr}"
          data-filter-type="{$type}"
-         data-facet-name="{$facet->getFacetName()}"
-         data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
+         data-facet-name="{$facet->getFacetName()|escapeHtmlAttr}"
+         data-field-name="{$facet->getFieldName()|escapeHtmlAttr}">
 
         {block name="frontend_listing_filter_facet_value_tree_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_value_tree_title"}
-                    <label class="filter-panel--title" title="{$facet->getLabel()|escape:'htmlall'}">
-                        {$facet->getLabel()|escape}
+                    <label class="filter-panel--title" title="{$facet->getLabel()|escapeHtmlAttr}">
+                        {$facet->getLabel()|escapeHtml}
                     </label>
                 {/block}
 
@@ -45,9 +45,9 @@
                                                             <span class="filter-panel--input filter-panel--checkbox{if $disabled} is--disabled{/if}">
                                                                 <input type="checkbox"
                                                                        data-parent-id="{$parent}"
-                                                                       id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
-                                                                       name="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
-                                                                       value="{$option->getId()|escape:'htmlall'}"
+                                                                       id="__{$facet->getFieldName()|escapeHtmlAttr}__{$option->getId()|escapeHtmlAttr}"
+                                                                       name="__{$facet->getFieldName()|escapeHtmlAttr}__{$option->getId()|escapeHtmlAttr}"
+                                                                       value="{$option->getId()|escapeHtmlAttr}"
                                                                        {if $option->isActive()}checked="checked"{elseif $disabled}disabled="disabled"{/if}/>
 
                                                                 <span class="input--state checkbox--state">&nbsp;</span>
@@ -56,8 +56,8 @@
 
                                                         {block name="frontend_listing_filter_facet_value_tree_label"}
                                                             <label class="filter-panel--label value-tree--label"
-                                                                   for="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}">
-                                                                {$option->getLabel()|escape}
+                                                                   for="__{$facet->getFieldName()|escapeHtmlAttr}__{$option->getId()|escapeHtmlAttr}">
+                                                                {$option->getLabel()|escapeHtml}
                                                             </label>
                                                         {/block}
                                                     </div>

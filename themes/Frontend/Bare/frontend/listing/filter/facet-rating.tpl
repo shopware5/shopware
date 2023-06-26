@@ -1,17 +1,17 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_rating"}
-    <div class="filter-panel filter--rating facet--{$facet->getFacetName()|escape:'htmlall'}"
+    <div class="filter-panel filter--rating facet--{$facet->getFacetName()|escapeHtmlAttr}"
          data-filter-type="rating"
-         data-facet-name="{$facet->getFacetName()}"
-         data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
+         data-facet-name="{$facet->getFacetName()|escapeHtmlAttr}"
+         data-field-name="{$facet->getFieldName()|escapeHtmlAttr}">
 
         {block name="frontend_listing_filter_facet_rating_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_rating_title"}
-                    <label class="filter-panel--title" title="{$facet->getLabel()|escape:'htmlall'}">
-                        {$facet->getLabel()|escape}
+                    <label class="filter-panel--title" title="{$facet->getLabel()|escapeHtmlAttr}">
+                        {$facet->getLabel()|escapeHtml}
                     </label>
                 {/block}
 

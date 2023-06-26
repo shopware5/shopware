@@ -3,13 +3,13 @@
         {block name='frontend_detail_product_quick_view_inner'}
 
             {block name='frontend_detail_product_quick_view_image_link'}
-                <a class="quick-view--image-link" href="{$sArticle.linkDetails}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escape}{else}{$sArticle.articlename|escape}{/if}">
+                <a class="quick-view--image-link" href="{$sArticle.linkDetails}" title="{if $sArticle.image.res.description}{$sArticle.image.res.description|escapeHtml}{else}{$sArticle.articlename|escapeHtml}{/if}">
                     {block name='frontend_detail_product_quick_view_image'}
 
-                        {$alt = $sArticle.articlename|escape}
+                        {$alt = $sArticle.articlename|escapeHtml}
 
                         {if $sArticle.image.description}
-                            {$alt = $sArticle.image.description|escape}
+                            {$alt = $sArticle.image.description|escapeHtml}
                         {/if}
 
                         <span class="quick-view--image">
@@ -31,9 +31,9 @@
                 <div class="quick-view--header">
                     {block name='frontend_detail_product_quick_view_header_inner'}
                         {block name='frontend_detail_product_quick_view_title'}
-                            <a href="{$sArticle.linkDetails}" class="quick-view--title" title="{$sArticle.articleName|escape}">
+                            <a href="{$sArticle.linkDetails}" class="quick-view--title" title="{$sArticle.articleName|escapeHtml}">
                                 {block name='frontend_detail_product_quick_view_title_inner'}
-                                    {$sArticle.articleName|escape}
+                                    {$sArticle.articleName|escapeHtml}
                                 {/block}
                             </a>
                         {/block}
@@ -41,7 +41,7 @@
                         {block name='frontend_detail_product_quick_view_supplier'}
                             <div class="quick-view--supplier">
                                 {block name='frontend_detail_product_quick_view_supplier_inner'}
-                                    {$sArticle.supplierName|escape}
+                                    {$sArticle.supplierName|escapeHtml}
                                 {/block}
                             </div>
                         {/block}
