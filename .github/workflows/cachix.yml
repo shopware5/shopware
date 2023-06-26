@@ -4,6 +4,7 @@ on:
     push:
         branches:
             - "5.7"
+            - "*"
         paths:
             - devenv.nix
             - devenv.yaml
