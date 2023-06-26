@@ -6,9 +6,8 @@ on:
 jobs:
     check:
         concurrency:
-            group: ${{ github.workflow }}-${{ github.ref }}
+            group: ${{ github.head_ref || github.run_id }}
             cancel-in-progress: true
-
         runs-on: ubuntu-latest
         steps:
             -   name: Clone

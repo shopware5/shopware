@@ -8,7 +8,9 @@ permissions:
 
 jobs:
     Mink:
-
+        concurrency:
+            group: ${{ github.head_ref || github.run_id }}
+            cancel-in-progress: true
 
         strategy:
             matrix:
