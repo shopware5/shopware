@@ -26341,11 +26341,6 @@ parameters:
 			path: engine/Shopware/Core/sCore.php
 
 		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCore.php
-
-		-
 			message: "#^Method sExport\\:\\:_decode_line\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sExport.php

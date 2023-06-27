@@ -107,7 +107,7 @@ class sArticlesComparisons implements Enlight_Hook
         }
 
         // Check if this product is already noted
-        $checkForProduct = $this->db->fetchRow(
+        $checkForProduct = $this->db->fetchOne(
             'SELECT id FROM s_order_comparisons WHERE sessionID=? AND articleID=?',
             [$this->session->offsetGet('sessionId'), $productId]
         );
@@ -122,31 +122,31 @@ class sArticlesComparisons implements Enlight_Hook
             return 'max_reached';
         }
 
-        if (!$checkForProduct['id']) {
-            $productName = $this->db->fetchOne(
-                'SELECT s_articles.name AS articleName FROM s_articles WHERE id = ?',
-                [$productId]
-            );
+        if ($checkForProduct !== false) {
+            return true;
+        }
 
-            if (!$productName) {
-                return false;
-            }
+        $productName = $this->db->fetchOne(
+            'SELECT s_articles.name AS articleName FROM s_articles WHERE id = ?',
+            [$productId]
+        );
 
-            $sql = '
-            INSERT INTO s_order_comparisons (sessionID, userID, articlename, articleID, datum)
-            VALUES (?,?,?,?,now())
-            ';
+        if (!$productName) {
+            return false;
+        }
 
-            $queryNewPrice = $this->db->executeUpdate($sql, [
-                $this->session->offsetGet('sessionId'),
-                empty($this->session['sUserId']) ? 0 : $this->session['sUserId'],
-                $productName,
-                $productId,
-            ]);
+        $sql = 'INSERT INTO s_order_comparisons (sessionID, userID, articlename, articleID, datum)
+                VALUES (?,?,?,?,now())';
 
-            if (!$queryNewPrice) {
-                throw new Enlight_Exception('sArticles##sAddComparison##01: Error in SQL-query');
-            }
+        $queryNewPrice = $this->db->executeUpdate($sql, [
+            $this->session->offsetGet('sessionId'),
+            empty($this->session['sUserId']) ? 0 : $this->session['sUserId'],
+            $productName,
+            $productId,
+        ]);
+
+        if (!$queryNewPrice) {
+            throw new Enlight_Exception('sArticles##sAddComparison##01: Error in SQL-query');
         }
 
         return true;
@@ -294,7 +294,7 @@ class sArticlesComparisons implements Enlight_Hook
         foreach ($articles as $productKey => $product) {
             $productProperties = [];
             foreach ($properties as $propertyKey => $property) {
-                if (\is_array($product['sProperties']) && \array_key_exists($propertyKey, $product['sProperties'])) {
+                if (isset($product['sProperties']) && \is_array($product['sProperties']) && \array_key_exists($propertyKey, $product['sProperties'])) {
                     $productProperties[$propertyKey] = $product['sProperties'][$propertyKey];
                 } else {
                     $productProperties[$propertyKey] = null;

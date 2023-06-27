@@ -103,7 +103,7 @@ class sCore implements \Enlight_Hook
      */
     public function sRewriteLink($link = null, $title = null)
     {
-        $url = html_entity_decode(str_replace(',', '=', $link));
+        $url = html_entity_decode(str_replace(',', '=', $link ?? ''));
         $query = (string) parse_url($url, PHP_URL_QUERY);
         parse_str($query, $queryArray);
 
