@@ -36,7 +36,7 @@ class Shopware_Controllers_Backend_Vote extends Shopware_Controllers_Backend_App
 
     public function save($data)
     {
-        if (!empty($data['answer']) && $data['answer_date'] == null) {
+        if (!empty($data['answer']) && empty($data['answer_date'])) {
             $data['answerDate'] = new DateTime();
         }
         if (empty($data['shopId'])) {

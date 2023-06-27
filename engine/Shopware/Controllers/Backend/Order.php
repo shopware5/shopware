@@ -1508,10 +1508,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $order['locale'] = $order['languageSubShop']['locale'];
 
             // Deprecated: use payment instance
-            $order['debit'] = $order['customer']['debit'];
+            $order['debit'] = $order['customer']['debit'] ?? null;
             $order['customerEmail'] = $order['customer']['email'];
-            $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation']);
-            $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation']);
+            $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation'] ?? '');
+            $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation'] ?? '');
 
             foreach ($order['details'] as &$orderDetail) {
                 $number = $orderDetail['articleNumber'];
@@ -2422,7 +2422,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     private function getCurrentLocale(): ?ShopLocale
     {
-        return $this->get('auth')->getIdentity()->locale;
+        return $this->get('auth')->getIdentity()->locale ?? null;
     }
 
     private function checkIfOrderHasBeenModifiedSince(DateTime $lastOrderChange, Order $order, Enlight_Components_Snippet_Namespace $namespace): bool

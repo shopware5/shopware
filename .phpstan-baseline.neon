@@ -4031,11 +4031,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/AttributeData.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Attributes\\:\\:addAclPermission\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/Attributes.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Attributes\\:\\:columnNameExistsAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/Attributes.php
@@ -21036,11 +21031,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:loadStoresAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -22596,36 +22586,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Export.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$targetField\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:addAclPermission\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:getAclRules\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Property Shopware_Controllers_Backend_ExtJs\\:\\:\\$aclPermissions type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
@@ -22761,42 +22721,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Form.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:authAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:buildTree\\(\\) has parameter \\$nodes with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Index.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:buildTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:changeLocaleAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:menuAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Index.php
 
@@ -23786,11 +23716,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Search.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Search.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:resolveCategoryPath\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Search.php
@@ -24007,11 +23932,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:handleException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:indexAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
 
@@ -24784,11 +24704,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:translateCategoryTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_SitemapXml\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/SitemapXml.php
 
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sArticle\\.$#"
