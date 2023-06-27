@@ -865,11 +865,11 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
     private function hasSurrogateEsiCapability(Request $request): bool
     {
         $value = $request->getHeader('Surrogate-Capability');
-        if ($value === false) {
+        if (empty($value)) {
             return false;
         }
 
-        return strpos($value, 'ESI/1.0') !== false;
+        return str_contains($value, 'ESI/1.0');
     }
 
     /**

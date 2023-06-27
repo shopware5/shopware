@@ -2046,16 +2046,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Front.php
 
 		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertDateTime\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertDateTime\\(\\) has parameter \\$key with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertToJson\\(\\) has parameter \\$data with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
@@ -2076,82 +2066,12 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
 
 		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) should return bool but empty return statement found\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
 			message: "#^Possibly invalid array key type array\\|string\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
 
 		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$renderer \\(bool\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:getPadding\\(\\) should return string but returns bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:onPreDispatch\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setPadding\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setPadding\\(\\) has parameter \\$padding with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setParseParams\\(\\) has parameter \\$parseParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#1 \\$spec of method Enlight_Controller_Request_RequestHttp\\:\\:setPost\\(\\) expects array\\|string, bool given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:\\$padding \\(bool\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
 
@@ -3186,21 +3106,6 @@ parameters:
 			path: engine/Library/Enlight/Loader.php
 
 		-
-			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Plugin_Bootstrap\\:\\:\\$collection \\(Enlight_Plugin_PluginCollection\\) does not accept Enlight_Plugin_PluginCollection\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Plugin_Bootstrap_Config\\:\\:install\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
@@ -3774,16 +3679,6 @@ parameters:
 			message: "#^Function smarty_modifier_array_unset\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/modifier.array_unset.php
-
-		-
-			message: "#^Function smarty_modifier_count\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.count.php
-
-		-
-			message: "#^Function smarty_modifier_count\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.count.php
 
 		-
 			message: "#^Parameter \\#1 \\$date of class Zend_Date constructor expects array\\|int\\|string\\|Zend_Date\\|null, DateTime\\|int\\|false given\\.$#"
@@ -14314,11 +14209,6 @@ parameters:
 			message: "#^Property Shopware_Components_Auth\\:\\:\\$_baseAdapter \\(Zend_Auth_Adapter_Interface\\) does not accept Zend_Auth_Adapter_Interface\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Auth.php
-
-		-
-			message: "#^Cannot access property \\$username on bool\\|stdClass\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
 
 		-
 			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:_authenticateValidateResult\\(\\) has parameter \\$resultIdentity with no value type specified in iterable type array\\.$#"
@@ -34226,11 +34116,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onBackendIndexPostDispatch\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
@@ -34707,11 +34592,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:addSurrogateControl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
@@ -35491,11 +35371,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
@@ -35529,16 +35404,6 @@ parameters:
 			message: "#^Method ShopwarePlugins\\\\RestApi\\\\Components\\\\Router\\:\\:assembleRoute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Components/Router.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_System_Bootstrap\\:\\:onDispatchLoopShutdown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/System/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#1 \\$userAgent of method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:checkIsBot\\(\\) expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Core/System/Bootstrap.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getRequest\\(\\)\\.$#"

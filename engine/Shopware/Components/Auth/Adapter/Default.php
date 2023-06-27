@@ -225,6 +225,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         }
 
         $user = $this->getResultRowObject();
+        if (!\is_object($user)) {
+            return;
+        }
 
         $this->_zendDb->update(
             $this->_tableName,

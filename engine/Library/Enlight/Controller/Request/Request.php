@@ -628,7 +628,7 @@ interface Enlight_Controller_Request_Request
      *
      * @throws \Exception
      *
-     * @return string|false HTTP header value, or false if not found
+     * @return string|false|null HTTP header value, or false if not found
      */
     public function getHeader($header);
 

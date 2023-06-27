@@ -144,7 +144,7 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
         $fileNames = (array) $request->getParam('file', $this->defaultFile);
         if (empty($fileNames)) {
             $fileNames = $request->getParam('f');
-            $fileNames = explode('|', $fileNames);
+            $fileNames = explode('|', (string) $fileNames);
         }
 
         $templateNames = [];
@@ -198,7 +198,10 @@ class Enlight_Controller_Plugins_ScriptRenderer_Bootstrap extends Enlight_Plugin
     public function setViewRenderer(?Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer = null)
     {
         if ($viewRenderer === null) {
-            $viewRenderer = $this->Collection()->get('ViewRenderer');
+            $collection = $this->Collection();
+            if ($collection !== null) {
+                $viewRenderer = $collection->get('ViewRenderer');
+            }
         }
 
         $this->viewRenderer = $viewRenderer;
