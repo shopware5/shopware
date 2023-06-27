@@ -7,6 +7,7 @@
          beStrictAboutOutputDuringTests="true"
          beStrictAboutResourceUsageDuringSmallTests="true"
          beStrictAboutTodoAnnotatedTests="true"
+         convertDeprecationsToExceptions="true"
          verbose="true">
     <coverage includeUncoveredFiles="false">
         <include>
