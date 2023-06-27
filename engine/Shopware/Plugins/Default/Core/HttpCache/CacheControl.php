@@ -178,7 +178,7 @@ class CacheControl
     public function getNoCacheTagsForRequest(Request $request, $shopId)
     {
         $tags = [];
-        $autoAdmin = $this->config['admin'];
+        $autoAdmin = $this->config['admin'] ?? null;
 
         if (!empty($autoAdmin)) {
             $tags[] = 'admin-' . $shopId;

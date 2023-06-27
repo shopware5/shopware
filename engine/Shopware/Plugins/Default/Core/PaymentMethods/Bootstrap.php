@@ -22,6 +22,10 @@
  * our trademarks remain entirely with us.
  */
 
+use ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod;
+use ShopwarePlugin\PaymentMethods\Components\GenericPaymentMethod;
+use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
+
 class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
     /**
@@ -96,15 +100,17 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
         $this->Application()->Loader()->registerNamespace('ShopwarePlugin\PaymentMethods\Components', __DIR__ . '/Components/');
 
-        $dirs['debit'] = 'ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod';
-        $dirs['sepa'] = 'ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod';
-        $dirs['default'] = 'ShopwarePlugin\PaymentMethods\Components\GenericPaymentMethod';
+        $dirs['debit'] = DebitPaymentMethod::class;
+        $dirs['sepa'] = SepaPaymentMethod::class;
+        $dirs['default'] = GenericPaymentMethod::class;
 
         return $dirs;
     }
 
     /**
      * Add View path to Smarty
+     *
+     * @return void
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
@@ -117,6 +123,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
     /**
      * Called when the BackendOrderPostDispatch Event is triggered
+     *
+     * @return void
      */
     public function onBackendOrderPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -137,6 +145,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
     /**
      * Called when the BackendCustomerPostDispatch Event is triggered
+     *
+     * @return void
      */
     public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -159,7 +169,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     /**
      * Registers all necessary events and hooks.
      */
-    private function subscribeEvents()
+    private function subscribeEvents(): void
     {
         $this->subscribeEvent(
             'Shopware_Modules_Admin_InitiatePaymentClass_AddClass',

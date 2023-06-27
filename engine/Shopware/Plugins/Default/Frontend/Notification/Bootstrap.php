@@ -129,7 +129,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
         $view->assign('ShowNotification', true);
 
         $sNotificationArticleWaitingForOptInApprovement = $session->get('sNotifcationArticleWaitingForOptInApprovement', []);
-        $view->assign('WaitingForOptInApprovement', $sNotificationArticleWaitingForOptInApprovement[$sArticle['ordernumber']]);
+        $view->assign('WaitingForOptInApprovement', $sNotificationArticleWaitingForOptInApprovement[$sArticle['ordernumber']] ?? null);
     }
 
     /**

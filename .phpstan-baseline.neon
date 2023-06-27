@@ -34066,11 +34066,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onBackendIndexPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
 			message: "#^Class ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Archive\\\\Adapter implements generic interface SeekableIterator but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Archive/Adapter.php
@@ -34536,26 +34531,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/ErrorHandler/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:addContextCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:addSurrogateControl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:disableControllerCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:enableControllerCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:enableControllerCache\\(\\) has parameter \\$cacheIds with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -34566,62 +34541,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:getResponseCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:installForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onClearCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onClearHttpCache\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onInvalidateCacheId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPostPersist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPreDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:postFlush\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:renderEsiTag\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setCacheHeaders\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setCacheIdHeader\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
@@ -34631,23 +34551,8 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setNoCacheCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setNoCacheTag\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Negated boolean expression is always true\\.$#"
 			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#2 \\$cacheId of method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:invalidateWithBANRequest\\(\\) expects string, string\\|null given\\.$#"
-			count: 2
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
@@ -34931,27 +34836,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:addPaths\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:addPaymentClass\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:onBackendCustomerPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:onBackendOrderPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:subscribeEvents\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
 
@@ -35317,21 +35202,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method getModuleName\\(\\) on Enlight_Controller_Request_Request\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onFrontPreDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onInitResourceAuth\\(\\) should return Zend_Auth\\|null but empty return statement found\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
 

@@ -372,7 +372,7 @@ class Shopware_Plugins_Core_MarketingAggregate_Bootstrap extends Shopware_Compon
 
         $details = $arguments->getDetails();
         foreach ($details as $article) {
-            if ($article['modus'] != 0 || empty($article['articleID'])) {
+            if (($article['modus'] ?? null) != 0 || empty($article['articleID'])) {
                 continue;
             }
 

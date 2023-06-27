@@ -27,6 +27,7 @@ namespace ShopwarePlugin\PaymentMethods\Components;
 use DateTime;
 use Enlight_Controller_Request_Request;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Order\Order;
 
 /**
  * Used for all payment methods that require no specific logic
@@ -65,7 +66,7 @@ class GenericPaymentMethod extends BasePaymentMethod
     {
         $orderAmount = Shopware()->Models()->createQueryBuilder()
             ->select('orders.invoiceAmount')
-            ->from('Shopware\Models\Order\Order', 'orders')
+            ->from(Order::class, 'orders')
             ->where('orders.id = ?1')
             ->setParameter(1, $orderId)
             ->getQuery()
