@@ -28,8 +28,8 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\QueryBuilder;
 use Shopware\Components\Model\ModelRepository;
+use Shopware\Components\Model\QueryBuilder;
 
 /**
  * @extends ModelRepository<Log>
@@ -100,9 +100,7 @@ class LogRepository extends ModelRepository implements LogRepositoryInterface
     protected function addDateConstraint(QueryBuilder $qb, ?DateTimeInterface $since, ?DateTimeInterface $until): void
     {
         $qb->andWhere('log.sentAt BETWEEN :since AND :until')
-            ->setParameters([
-                'since' => $since ?: $this->minDate,
-                'until' => $until ?: $this->maxDate,
-            ]);
+            ->setParameter('since', $since ?: $this->minDate)
+            ->setParameter('until', $until ?: $this->maxDate);
     }
 }
