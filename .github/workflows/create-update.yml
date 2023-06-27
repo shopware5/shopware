@@ -18,6 +18,13 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+            -   name: Create version
+                run: |
+                    TAG=${{ github.ref_name }}
+                    echo "VERSION=$(echo ${TAG#v} | cut -d "-" -f 1)" >> $GITHUB_ENV
+                    echo "VERSION_TEXT=$(echo ${TAG#v} | cut -d "-" -s -f 2)" >> $GITHUB_ENV
+                shell: bash
+
             -   name: Clone
                 uses: actions/checkout@v3
 
@@ -52,11 +59,12 @@ jobs:
 
             -   name: Replace placeholder
                 run: |
-                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./engine/Shopware/Kernel.php
-                    sed -i 's=___VERSION_TEXT___= =g' ./engine/Shopware/Kernel.php
-                    sed -i 's=___REVISION___=${{ env.REVISION }}=g' ./engine/Shopware/Kernel.php
-                    sed -i 's=___VERSION___=${{ github.ref_name }}=g' ./recovery/install/data/version
-                    sed -i 's=___VERSION_TEXT___= =g' ./recovery/install/data/version
+                    sed -i 's=___VERSION___=${{ env.VERSION }}=g' engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION_TEXT___=${{ env.VERSION_TEXT }}=g' engine/Shopware/Kernel.php
+                    sed -i 's=___REVISION___=${{ env.REVISION }}=g' engine/Shopware/Kernel.php
+                    sed -i 's=___VERSION___=${{ env.VERSION }}=g' recovery/install/data/version
+                    sed -i 's=___VERSION_TEXT___=${{ env.VERSION_TEXT }}=g' recovery/install/data/version
+                shell: bash
 
             -   name: Create update asset dir
                 run: |
