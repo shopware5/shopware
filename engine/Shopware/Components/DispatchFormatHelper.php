@@ -27,8 +27,8 @@ namespace Shopware\Components;
 class DispatchFormatHelper
 {
     /**
-     * @param string $unFormatted
-     * @param bool   $isController
+     * @param string|null $unFormatted
+     * @param bool        $isController
      *
      * @return string
      */
@@ -40,17 +40,17 @@ class DispatchFormatHelper
             $allowedCharacters .= '\.';
         }
 
-        return preg_replace('#[^' . $allowedCharacters . ']+#', '', $unFormatted);
+        return preg_replace('#[^' . $allowedCharacters . ']+#', '', $unFormatted ?? '');
     }
 
     /**
-     * @param string $unFormatted
+     * @param string|null $unFormatted
      *
      * @return string
      */
     public function formatNameForDispatch($unFormatted)
     {
-        $segments = explode('_', $unFormatted);
+        $segments = explode('_', $unFormatted ?? '');
 
         foreach ($segments as $key => $segment) {
             $segment = (string) preg_replace('#[A-Z]#', ' $0', $segment);

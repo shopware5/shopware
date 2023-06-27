@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,15 +36,9 @@ use Shopware\Models\Emotion\Preset;
 
 class PresetLoader implements PresetLoaderInterface
 {
-    /**
-     * @var ModelManager
-     */
-    private $modelManager;
+    private ModelManager $modelManager;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
     public function __construct(ModelManager $modelManager, MediaServiceInterface $mediaService)
     {
@@ -63,7 +59,7 @@ class PresetLoader implements PresetLoaderInterface
 
         $presetData = json_decode($preset->getPresetData(), true);
 
-        if (!$presetData['elements']) {
+        if (empty($presetData['elements'])) {
             return $preset->getPresetData();
         }
 
@@ -80,10 +76,7 @@ class PresetLoader implements PresetLoaderInterface
         return $this->preparePresetData($presetData);
     }
 
-    /**
-     * @return array
-     */
-    private function refreshElementData(array $elements)
+    private function refreshElementData(array $elements): array
     {
         $collectedComponents = array_column($elements, 'componentId');
         $collectedComponents = array_keys(array_flip($collectedComponents));
@@ -103,7 +96,7 @@ class PresetLoader implements PresetLoaderInterface
 
                 foreach ($element['data'] as &$data) {
                     $data['componentId'] = $element['componentId'];
-                    $data['fieldId'] = $fieldMapping[$data['fieldId']]['id'];
+                    $data['fieldId'] = $fieldMapping[$data['fieldId']]['id'] ?? null;
                 }
                 unset($data);
             }
@@ -118,7 +111,7 @@ class PresetLoader implements PresetLoaderInterface
      *
      * @return string $presetData
      */
-    private function preparePresetData(array $presetData)
+    private function preparePresetData(array $presetData): string
     {
         foreach ($presetData['elements'] as &$element) {
             $fieldMapping = [];
@@ -129,7 +122,10 @@ class PresetLoader implements PresetLoaderInterface
             }
 
             foreach ($element['data'] as &$data) {
-                $field = $fieldMapping[$data['fieldId']];
+                $field = $fieldMapping[$data['fieldId']] ?? null;
+                if ($field === null) {
+                    continue;
+                }
 
                 if (\in_array($field['name'], ['file', 'image', 'fallback_picture'], true)) {
                     $data['value'] = $this->mediaService->getUrl($data['value']);
@@ -155,10 +151,7 @@ class PresetLoader implements PresetLoaderInterface
         return json_encode($presetData);
     }
 
-    /**
-     * @return array
-     */
-    private function getComponentData(array $collectedComponents)
+    private function getComponentData(array $collectedComponents): array
     {
         return $this->modelManager->createQueryBuilder()
             ->select('component', 'fields')

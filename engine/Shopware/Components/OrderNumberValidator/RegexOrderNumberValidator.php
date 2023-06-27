@@ -28,10 +28,7 @@ use Shopware\Components\OrderNumberValidator\Exception\InvalidOrderNumberExcepti
 
 class RegexOrderNumberValidator implements OrderNumberValidatorInterface
 {
-    /**
-     * @var string
-     */
-    private $pattern;
+    private string $pattern;
 
     public function __construct(string $pattern)
     {

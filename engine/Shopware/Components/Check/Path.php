@@ -75,8 +75,11 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
     /**
      * Returns the check list
      *
+     * @deprecated - Native return type will be added with Shopware 5.8
+     *
      * @return Iterator
      */
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getList();

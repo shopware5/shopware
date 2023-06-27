@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,7 +29,7 @@ namespace Shopware\Components\Escaper;
 use Laminas\Escaper\Escaper as LaminasEscaper;
 
 /**
- * @see https://github.com/laminas/laminas-escaper/blob/2.9.x/src/Escaper.php
+ * @see https://github.com/laminas/laminas-escaper/blob/2.12.x/src/Escaper.php
  */
 class Escaper implements EscaperInterface
 {

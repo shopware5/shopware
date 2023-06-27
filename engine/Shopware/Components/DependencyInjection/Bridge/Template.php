@@ -45,17 +45,16 @@ class Template
         array $securityConfig,
         array $backendOptions
     ) {
-        /** @var Enlight_Template_Manager $template */
-        $template = Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
+        $template = Enlight_Class::Instance(Enlight_Template_Manager::class, [null, $backendOptions]);
+        \assert($template instanceof Enlight_Template_Manager);
 
-        $template->enableSecurity(
-            new Security($template, $securityConfig)
-        );
+        $template->enableSecurity(new Security($template, $securityConfig));
 
         $template->setOptions($templateConfig);
         $template->setEventManager($eventManager);
 
         $template->registerResource('snippet', $snippetResource);
+        /* @phpstan-ignore-next-line is handled by magic method `\Smarty_Internal_TemplateBase::__call` and will set the property `\Smarty::$default_resource_type` */
         $template->setDefaultResourceType('snippet');
 
         $template->registerPlugin(Smarty::PLUGIN_MODIFIER, 'escapeHtml', [$escaper, 'escapeHtml']);

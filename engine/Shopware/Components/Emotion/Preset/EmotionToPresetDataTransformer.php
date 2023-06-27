@@ -163,7 +163,7 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
                 $data['emotionId'],
                 $data['elementId']
             );
-            $field = $fieldMapping[$data['fieldId']];
+            $field = $fieldMapping[$data['fieldId']] ?? null;
 
             if ($field) {
                 $data['fieldId'] = $field['name'];

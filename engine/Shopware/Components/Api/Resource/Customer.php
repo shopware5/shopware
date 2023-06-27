@@ -215,7 +215,7 @@ class Customer extends Resource
     public function create(array $params)
     {
         $this->checkPrivilege('create');
-        $this->setupContext($params['shopId']);
+        $this->setupContext($params['shopId'] ?? null);
 
         // Create models
         $customer = new CustomerModel();
@@ -237,13 +237,13 @@ class Customer extends Resource
         $customer->fromArray($params);
 
         $billing = $this->createAddress($params['billing']) ?? new AddressModel();
-        $shipping = $this->createAddress($params['shipping']);
+        $shipping = $this->createAddress($params['shipping'] ?? null);
 
         $registerService = $this->getContainer()->get(RegisterServiceInterface::class);
         $context = $this->getContainer()->get(ContextServiceInterface::class)->getShopContext()->getShop();
 
         $context->addAttribute('sendOptinMail', new Attribute([
-            'sendOptinMail' => $params['sendOptinMail'] === true,
+            'sendOptinMail' => ($params['sendOptinMail'] ?? false) === true,
         ]));
 
         $registerService->register($context, $customer, $billing, $shipping);
@@ -489,7 +489,7 @@ class Customer extends Resource
         }
 
         // If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
-        if ($customer->getId() && $customer->getPaymentId() !== $params['paymentId']) {
+        if (isset($params['paymentId']) && $customer->getId() && $customer->getPaymentId() !== $params['paymentId']) {
             $params['paymentPreset'] = $params['paymentId'];
         }
 
@@ -528,7 +528,7 @@ class Customer extends Resource
             return null;
         }
 
-        if (!$data['country']) {
+        if (empty($data['country'])) {
             throw new CustomValidationException('A country is required.');
         }
 

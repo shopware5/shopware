@@ -24,7 +24,9 @@
 
 use Doctrine\DBAL\Connection;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Translation\ObjectTranslator;
+use Shopware\Models\Shop\Locale as ShopLocale;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -58,7 +60,12 @@ class Shopware_Components_Translation
 
         // Determine how to query the current language
         if ($container->initialized('auth') && $container->get('auth')->hasIdentity()) {
-            $locale = $container->get('auth')->getIdentity()->locale;
+            $identity = $container->get('auth')->getIdentity();
+            if (isset($identity->locale)) {
+                $locale = $identity->locale;
+            } elseif (isset($identity->localeID)) {
+                $locale = $container->get(ModelManager::class)->getRepository(ShopLocale::class)->find($identity->localeID);
+            }
         } elseif ($container->initialized('shop')) {
             $locale = $container->get('shop')->getLocale();
         }
@@ -450,7 +457,7 @@ class Shopware_Components_Translation
 
         // Save the translated objects
         foreach ($orders as &$order) {
-            $orderDocuments = \is_array($order['documents']) ? $order['documents'] : [];
+            $orderDocuments = isset($order['documents']) && \is_array($order['documents']) ? $order['documents'] : [];
 
             for ($documentCounter = 0, $orderDocumentsCount = \count($orderDocuments); $documentCounter < $orderDocumentsCount; ++$documentCounter) {
                 $type = $orderDocuments[$documentCounter]['type'];

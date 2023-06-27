@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,7 +34,7 @@ trait InvalidationDateTrait
     /**
      * getMostRecentDate sorts an array of DateTime objects and returns the most recent one.
      *
-     * @param array<DateTimeInterface|string> $dates
+     * @param array<DateTimeInterface|string|null> $dates
      *
      * @return DateTimeInterface|null
      */
@@ -43,7 +45,7 @@ trait InvalidationDateTrait
         // Convert all date-strings into DateTime-objects
         $dates = array_map(function ($el) use ($now) {
             if (!$el instanceof DateTimeInterface) {
-                $el = new DateTime($el);
+                $el = new DateTime($el ?? '');
             }
 
             return $now < $el ? $el : null;
@@ -56,17 +58,10 @@ trait InvalidationDateTrait
             return null;
         }
 
-        // Pop a date as reference
-        $nearest = array_pop($dates);
+        usort($dates, function (DateTimeInterface $a, DateTimeInterface $b): int {
+            return $a <=> $b;
+        });
 
-        // Find the nearest date
-        foreach ($dates as $date) {
-            if ($now->diff($nearest) < $now->diff($date)) {
-                continue;
-            }
-            $nearest = $date;
-        }
-
-        return $nearest;
+        return array_pop($dates);
     }
 }

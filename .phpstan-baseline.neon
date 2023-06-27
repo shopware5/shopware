@@ -14161,21 +14161,6 @@ parameters:
 			path: engine/Shopware/Components/Auth/Adapter/Default.php
 
 		-
-			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:rehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
-			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:updateExpiry\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
-			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:updateHash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
 			message: "#^Property Shopware_Components_Auth_Adapter_Default\\:\\:\\$conditions type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Auth/Adapter/Default.php
@@ -14656,11 +14641,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/Struct/DiscountContext.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price\\:\\:\\$tax \\(float\\) does not accept float\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/Struct/Price.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregator\\:\\:positionsTaxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/TaxAggregator.php
@@ -15046,11 +15026,6 @@ parameters:
 			path: engine/Shopware/Components/ConfigLoader.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\ConfigWriter\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ConfigWriter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\ConfigWriter\\:\\:insert\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ConfigWriter.php
@@ -15241,11 +15216,6 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/MailTransport.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\MailTransport\\:\\:factory\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/MailTransport.php
-
-		-
 			message: "#^Unable to resolve the template type TClass in call to method static method Enlight_Class\\:\\:Instance\\(\\)$#"
 			count: 2
 			path: engine/Shopware/Components/DependencyInjection/Bridge/MailTransport.php
@@ -15314,11 +15284,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
-
-		-
-			message: "#^Call to an undefined method Enlight_Template_Manager\\:\\:setDefaultResourceType\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Template.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Template\\:\\:factory\\(\\) has parameter \\$backendOptions with no value type specified in iterable type array\\.$#"
@@ -19074,11 +19039,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\SitePageMenu\\:\\:overrideExisting\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/SitePageMenu.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SitemapXMLRepository\\:\\:filterLink\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/SitemapXMLRepository.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitemapXMLRepository\\:\\:getSitemapContent\\(\\) return type has no value type specified in iterable type array\\.$#"

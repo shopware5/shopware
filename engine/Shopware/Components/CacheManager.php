@@ -148,9 +148,9 @@ class CacheManager
     }
 
     /**
-     * @return Zend_Cache_Core
-     *
      * @deprecated in 5.6, will be removed in 5.8. Use `cache` service directly via DI
+     *
+     * @return Zend_Cache_Core
      */
     public function getCoreCache()
     {
@@ -438,11 +438,11 @@ class CacheManager
     /**
      * Returns cache information
      *
+     * @deprecated in 5.6, will be private in 5.8 without replacement
+     *
      * @param string $dir
      *
      * @return array
-     *
-     * @deprecated in 5.6, will be private in 5.8 without replacement
      */
     public function getDirectoryInfo($dir)
     {
@@ -554,11 +554,11 @@ class CacheManager
     /**
      * Format size method
      *
+     * @deprecated in 5.6, will be private in 5.8 without replacement
+     *
      * @param float $bytes
      *
      * @return string
-     *
-     * @deprecated in 5.6, will be private in 5.8 without replacement
      */
     public function encodeSize($bytes)
     {

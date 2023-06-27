@@ -45,6 +45,8 @@ class ConfigWriter
      * @param string      $name
      * @param string|null $namespace
      * @param int         $shopId
+     *
+     * @return mixed|null
      */
     public function get($name, $namespace = null, $shopId = 1)
     {
@@ -54,6 +56,10 @@ class ConfigWriter
 
         if ($result['configured']) {
             return unserialize($result['configured'], ['allowed_classes' => false]);
+        }
+
+        if ($result['value'] === null) {
+            return null;
         }
 
         return unserialize($result['value'], ['allowed_classes' => false]);
