@@ -195,6 +195,9 @@ class ConfiguratorGateway implements ConfiguratorGatewayInterface
 
         $result = [];
         foreach ($data as $row) {
+            if (empty($row)) {
+                continue;
+            }
             $rowIds = array_map('\intval', explode('|', $row));
 
             foreach ($rowIds as $optionId) {

@@ -159,6 +159,9 @@ class LogService implements LogServiceInterface
         }
 
         $recipients = array_unique(array_filter(array_map('trim', $recipients)));
+        if (empty($recipients)) {
+            return [];
+        }
 
         $sql = 'SELECT LOWER(mail_address), id FROM s_mail_log_contact WHERE mail_address IN (:addresses)';
         $foundRecipients = $this->connection->executeQuery($sql, ['addresses' => $recipients])->fetchAll(PDO::FETCH_KEY_PAIR);

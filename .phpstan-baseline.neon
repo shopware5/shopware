@@ -4006,36 +4006,6 @@ parameters:
 			path: engine/Shopware/Bundle/AccountBundle/Service/RegisterService.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$sOneTimeAccount\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$userInfo\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetchUserInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetchUserInfo\\(\\) should return array\\|null but returns array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingServiceInterface\\:\\:fetch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingServiceInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Type\\\\SalutationType\\:\\:configureOptions\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Type/SalutationType.php
@@ -5474,26 +5444,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderGateway\\:\\:getCustomerOrders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:explodeAndFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:explodeAndFilter\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:hydrate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:hydrate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\SearchIndexer\\:\\:buildData\\(\\) return type has no value type specified in iterable type array\\.$#"

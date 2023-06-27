@@ -52,8 +52,8 @@ class OrderReader extends GenericReader
         foreach ($orders as &$order) {
             $order['orderStateName'] = $namespace->get($order['orderStateKey']);
             $order['orderDocuments'] = $this->getOrderDocuments($documents, $order);
-            $order['supplierId'] = explode(',', $order['supplierId']);
-            $order['articleNumber'] = explode(',', $order['articleNumber']);
+            $order['supplierId'] = explode(',', $order['supplierId'] ?? '');
+            $order['articleNumber'] = explode(',', $order['articleNumber'] ?? '');
         }
 
         return $orders;

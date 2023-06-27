@@ -27,6 +27,7 @@ namespace Shopware\Bundle\SitemapBundle\Provider;
 use DateTime;
 use Doctrine\DBAL\Driver\Connection as ConnectionInterface;
 use PDO;
+use Shopware\Bundle\SitemapBundle\Service\LinkFilter;
 use Shopware\Bundle\SitemapBundle\Struct\Url;
 use Shopware\Bundle\SitemapBundle\UrlProviderInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
@@ -66,7 +67,7 @@ class StaticUrlProvider implements UrlProviderInterface
                 'sCustom' => $site['id'],
             ];
 
-            if (!$this->filterLink($site['link'], $site['urlParams'])) {
+            if (!LinkFilter::filterLink($site['link'], $site['urlParams'])) {
                 unset($sites[$key]);
                 continue;
             }
@@ -150,26 +151,5 @@ class StaticUrlProvider implements UrlProviderInterface
         }
 
         return array_values($sites);
-    }
-
-    /**
-     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
-     * Returns false, if the link is not allowed
-     *
-     * @param array<string, mixed> $userParams
-     */
-    private function filterLink(?string $link, array &$userParams): bool
-    {
-        if (empty($link)) {
-            return true;
-        }
-        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
-        parse_str($parsedUserParams, $userParams);
-        $blacklist = ['', 'sitemap', 'sitemapXml'];
-        if (\in_array($userParams['sViewport'], $blacklist, true)) {
-            return false;
-        }
-
-        return true;
     }
 }

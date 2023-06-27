@@ -368,16 +368,13 @@ class ProductProvider implements ProviderInterface
             ->where('mapping.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAllAssociative();
 
         $result = [];
         foreach ($data as $row) {
             $productId = (int) $row['productId'];
-            $categories = [];
-            if (isset($result[$productId])) {
-                $categories = $result[$productId];
-            }
-            $temp = explode('|', $row['path']);
+            $categories = $result[$productId] ?? [];
+            $temp = explode('|', $row['path'] ?? '');
             $temp[] = $row['id'];
 
             $result[$productId] = array_merge($categories, $temp);
@@ -470,7 +467,7 @@ class ProductProvider implements ProviderInterface
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();
 
-                $rule = $rules[$context->getFallbackCustomerGroup()->getKey()];
+                $rule = $rules[$context->getFallbackCustomerGroup()->getKey()] ?? null;
                 if (isset($rules[$customerGroup])) {
                     $rule = $rules[$customerGroup];
                 }

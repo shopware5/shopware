@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,15 +24,28 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Bundle\AccountBundle\Service;
+namespace Shopware\Bundle\SitemapBundle\Service;
 
-interface StoreFrontCustomerGreetingServiceInterface
+class LinkFilter
 {
     /**
-     * Returns the customer information for the header greeting "hi, max"
-     * In case that the slt configuration is disabled, or no customer can be detected, the function returns null.
+     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
+     * Returns false, if the link is not allowed
      *
-     * @return array<string, mixed>|null
+     * @param array<string, mixed> $userParams
      */
-    public function fetch();
+    public static function filterLink(?string $link, array &$userParams = []): bool
+    {
+        if (empty($link)) {
+            return true;
+        }
+        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
+        parse_str($parsedUserParams, $userParams);
+        $blacklist = ['', 'sitemap', 'sitemapXml'];
+        if (\in_array($userParams['sViewport'] ?? [], $blacklist, true)) {
+            return false;
+        }
+
+        return true;
+    }
 }

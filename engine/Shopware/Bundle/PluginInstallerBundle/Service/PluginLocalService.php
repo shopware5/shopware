@@ -162,7 +162,7 @@ class PluginLocalService
                 $row['iconPath'] = null;
             }
 
-            $translations = json_decode($row['translations'], true);
+            $translations = json_decode($row['translations'] ?? '', true);
 
             if (isset($translations[$locale]['label'])) {
                 $row['label'] = $translations[$locale]['label'];
@@ -265,7 +265,7 @@ class PluginLocalService
         }
 
         $dom = new DOMDocument();
-        $dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+        $dom->loadHTML(htmlentities($html));
 
         $nodes = (new DOMXPath($dom))->query("//@*[local-name() != 'href']");
         if ($nodes === false) {
