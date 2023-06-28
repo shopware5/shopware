@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ca2c5dcfece9913dd4891fff9742ab1c",
+    "content-hash": "86b231ccf8b61370d74d359efb74ab4a",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8624,16 +8624,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.20",
+            "version": "1.10.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c4c8adb56313fbd59ff5a5f4a496bbed1a6b8803"
+                "reference": "b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c4c8adb56313fbd59ff5a5f4a496bbed1a6b8803",
-                "reference": "c4c8adb56313fbd59ff5a5f4a496bbed1a6b8803",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5",
+                "reference": "b2a30186be2e4d97dce754ae4e65eb0ec2f04eb5",
                 "shasum": ""
             },
             "require": {
@@ -8682,7 +8682,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-06-20T12:07:40+00:00"
+            "time": "2023-06-21T20:07:58+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -10340,16 +10340,16 @@
         },
         {
             "name": "staabm/phpstan-dba",
-            "version": "0.2.72",
+            "version": "0.2.74",
             "source": {
                 "type": "git",
                 "url": "https://github.com/staabm/phpstan-dba.git",
-                "reference": "e01951cc63a2fe32301aa0f11ce74872e3918108"
+                "reference": "1bd0de3d457e3a49218e9eb3182ceefcd6b1b4b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/e01951cc63a2fe32301aa0f11ce74872e3918108",
-                "reference": "e01951cc63a2fe32301aa0f11ce74872e3918108",
+                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/1bd0de3d457e3a49218e9eb3182ceefcd6b1b4b9",
+                "reference": "1bd0de3d457e3a49218e9eb3182ceefcd6b1b4b9",
                 "shasum": ""
             },
             "require": {
@@ -10373,7 +10373,7 @@
                 "phpstan/phpstan-strict-rules": "^1.1",
                 "phpunit/phpunit": "^8.5|^9.5",
                 "symplify/easy-coding-standard": "^11.3",
-                "tomasvotruba/unused-public": "^0.1.9",
+                "tomasvotruba/unused-public": "^0.1.10",
                 "vlucas/phpdotenv": "^5.4"
             },
             "type": "phpstan-extension",
@@ -10403,9 +10403,9 @@
             ],
             "support": {
                 "issues": "https://github.com/staabm/phpstan-dba/issues",
-                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.72"
+                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.74"
             },
-            "time": "2023-04-13T08:57:55+00:00"
+            "time": "2023-06-27T13:58:51+00:00"
         },
         {
             "name": "symfony/browser-kit",
