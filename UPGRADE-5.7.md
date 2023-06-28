@@ -10,6 +10,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Changed behaviour of the translation transfer while setting a product variant as the main variant
 * Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
+* Updated `google/cloud-storage` to version 1.32.0
 
 ## 5.7.18
 
