@@ -18381,17 +18381,7 @@ parameters:
 			path: engine/Shopware/Components/Plugin/FormSynchronizer.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Shop\\\\Locale\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:createMenuItem\\(\\) has parameter \\$menuItem with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:removeNotExistingEntries\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
@@ -18401,17 +18391,7 @@ parameters:
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:saveMenuTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:saveMenuTranslation\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:synchronize\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
@@ -37164,36 +37144,6 @@ parameters:
 			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
 			count: 1
 			path: tests/Functional/Components/Plugin/LegacyConfigWriterTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has parameter \\$expectedQueryParameters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has parameter \\$menu with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:testIndexLowerCaseIsPartOfSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:testIndexNotPartOfSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:testOtherActionIsPartOfSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\PluginMigrationTest\\:\\:assertTableColumnExists\\(\\) has no return type specified\\.$#"
