@@ -469,10 +469,10 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         }
 
         // Clean up params and init some fields
-        $payments = $params['payments'];
-        $holidays = $params['holidays'];
-        $countries = $params['countries'];
-        $categories = $params['categories'];
+        $payments = $params['payments'] ?? [];
+        $holidays = $params['holidays'] ?? [];
+        $countries = $params['countries'] ?? [];
+        $categories = $params['categories'] ?? [];
 
         if (!isset($params['shippingFree']) || $params['shippingFree'] === '' || $params['shippingFree'] === '0') {
             $params['shippingFree'] = null;
@@ -489,13 +489,13 @@ class Shopware_Controllers_Backend_Shipping extends Shopware_Controllers_Backend
         $params['customerGroupId'] = $this->cleanData($params['customerGroupId']);
         $params['bindTimeFrom'] = $this->cleanData($params['bindTimeFrom']);
         $params['bindTimeTo'] = $this->cleanData($params['bindTimeTo']);
-        $params['bindInStock'] = $this->cleanData($params['bindInStock']);
+        $params['bindInStock'] = $this->cleanData($params['bindInStock'] ?? null);
         $params['bindWeekdayFrom'] = $this->cleanData($params['bindWeekdayFrom']);
         $params['bindWeekdayTo'] = $this->cleanData($params['bindWeekdayTo']);
         $params['bindWeightFrom'] = $this->cleanData($params['bindWeightFrom']);
         $params['bindWeightTo'] = $this->cleanData($params['bindWeightTo']);
         $params['bindPriceFrom'] = $this->cleanData($params['bindPriceFrom']);
-        $params['bindPriceTo'] = $this->cleanData($params['bindPriceTo']);
+        $params['bindPriceTo'] = $this->cleanData($params['bindPriceTo'] ?? null);
         $params['bindSql'] = $this->cleanData($params['bindSql']);
         $params['calculationSql'] = $this->cleanData($params['calculationSql']);
 

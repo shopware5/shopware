@@ -144,7 +144,7 @@ class Shopware_Controllers_Frontend_Search extends Enlight_Controller_Action
                 LIMIT 2
             ';
             $products = $this->get('db')->fetchAll($sql, [$search]);
-            if ($products[0]['configurator_set_id']) {
+            if (!empty($products[0]['configurator_set_id'])) {
                 $number = $products[0]['ordernumber'];
             }
 

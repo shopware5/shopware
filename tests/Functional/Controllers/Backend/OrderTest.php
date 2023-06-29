@@ -396,7 +396,7 @@ class OrderTest extends ControllerTestCase
         $controller->savePositionAction();
 
         $results = $controller->View()->getAssign();
-        static::assertTrue($results['success'], (string) $results['message']);
+        static::assertTrue($results['success'], $results['message'] ?? '');
 
         static::assertSame(self::NEW_TAX, $results['data']['taxRate']);
     }

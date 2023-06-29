@@ -309,7 +309,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
             ]
         );
 
-        if ($fetchConversion['visitors'] != 0) {
+        if (\is_array($fetchConversion) && $fetchConversion['visitors'] != 0) {
             $fetchConversion = number_format($fetchConversion['countOrders'] / $fetchConversion['visitors'] * 100, 2);
         } else {
             $fetchConversion = number_format(0, 2);
@@ -483,7 +483,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
      */
     public function getNoticeAction()
     {
-        $userID = $_SESSION['ShopwareBackend']['Auth']->id;
+        $userID = $_SESSION['ShopwareBackend']['Auth']->id ?? null;
 
         if (empty($userID)) {
             $this->View()->assign(['success' => false, 'message' => 'No user id']);
@@ -508,7 +508,7 @@ class Shopware_Controllers_Backend_Widgets extends Shopware_Controllers_Backend_
     {
         $noticeMsg = (string) $this->Request()->getParam('notice');
 
-        $userID = $_SESSION['ShopwareBackend']['Auth']->id;
+        $userID = $_SESSION['ShopwareBackend']['Auth']->id ?? null;
 
         if (empty($userID)) {
             $this->View()->assign(['success' => false, 'message' => 'No user id']);

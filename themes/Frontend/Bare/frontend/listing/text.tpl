@@ -29,7 +29,7 @@
                             <div class="teaser--text-short is--hidden">
                                 {$sCategoryContent.cmstext|strip_tags|truncate:200}
                                 {s namespace="frontend/listing/listing" name="ListingActionsOpenOffCanvas" assign="snippetListingActionsOpenOffCanvas"}{/s}
-                                <a href="#" title="{$snippetListingActionsOpenOffCanvas|escape}" class="text--offcanvas-link">
+                                <a href="#" title="{$snippetListingActionsOpenOffCanvas|escapeHtml}" class="text--offcanvas-link">
                                     {s namespace="frontend/listing/listing" name="ListingActionsOpenOffCanvas"}{/s} &raquo;
                                 </a>
                             </div>
@@ -42,7 +42,7 @@
                                 {* Close Button *}
                                 {block name="frontend_listing_text_content_offcanvas_close"}
                                     {s namespace="frontend/listing/listing" name="ListingActionsCloseOffCanvas" assign="snippetListingActionsCloseOffCanvas"}{/s}
-                                    <a href="#" title="{$snippetListingActionsCloseOffCanvas|escape}" class="close--off-canvas">
+                                    <a href="#" title="{$snippetListingActionsCloseOffCanvas|escapeHtml}" class="close--off-canvas">
                                         <i class="icon--arrow-left"></i> {s namespace="frontend/listing/listing" name="ListingActionsCloseOffCanvas"}{/s}
                                     </a>
                                 {/block}

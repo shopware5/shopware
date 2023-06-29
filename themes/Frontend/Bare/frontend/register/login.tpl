@@ -40,7 +40,7 @@
 
                     <form name="sLogin" method="post" action="{$url}" id="login--form">
                         {block name='frontend_register_login_form_additional_inputs'}
-                            {if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escape}" />{/if}
+                            {if $sTarget}<input name="sTarget" type="hidden" value="{$sTarget|escapeHtml}" />{/if}
                             {if $showNoAccount}<input name="showNoAccount" type="hidden" value="true"/>{/if}
                         {/block}
 
@@ -55,7 +55,7 @@
                                        type="email"
                                        autocomplete="email"
                                        tabindex="1"
-                                       value="{$sFormData.email|escape}"
+                                       value="{$sFormData.email|escapeHtml}"
                                        id="email"
                                        class="register--login-field{if $sErrorFlag.email} has--error{/if}"
                                 />
@@ -78,7 +78,7 @@
                             <div class="register--login-lostpassword">
                                 {s name="LoginLinkLostPassword" assign="snippetLoginLinkLostPassword"}{/s}
                                 <a href="{url controller=account action=password}"
-                                   title="{$snippetLoginLinkLostPassword|escape}"
+                                   title="{$snippetLoginLinkLostPassword|escapeHtml}"
                                 >
                                     {s name="LoginLinkLostPassword"}{/s}
                                 </a>

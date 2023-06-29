@@ -63,9 +63,9 @@ class CompareTest extends Enlight_Components_Test_TestCase
 
     public function testDeleteComparison(): void
     {
-        $article = $this->getTestProductId();
-        static::assertTrue($this->Module()->sAddComparison($article));
-        $this->Module()->sDeleteComparison($article);
+        $productId = $this->getTestProductId();
+        static::assertTrue($this->Module()->sAddComparison($productId));
+        $this->Module()->sDeleteComparison($productId);
         static::assertEmpty($this->Module()->sGetComparisons());
     }
 
@@ -83,6 +83,14 @@ class CompareTest extends Enlight_Components_Test_TestCase
     {
         static::assertTrue($this->Module()->sAddComparison($this->getTestProductId()));
         static::assertNotEmpty($this->Module()->sGetComparisons());
+    }
+
+    public function testAddComparisonSameProductTwice(): void
+    {
+        $productId = $this->getTestProductId();
+        static::assertTrue($this->Module()->sAddComparison($productId));
+        static::assertTrue($this->Module()->sAddComparison($productId));
+        static::assertCount(1, $this->Module()->sGetComparisons());
     }
 
     public function testGetComparisons(): void

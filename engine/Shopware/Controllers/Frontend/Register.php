@@ -181,7 +181,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         ]));
 
         $customer->setReferer((string) $session->offsetGet('sReferer'));
-        $customer->setValidation((string) $data['register']['personal']['sValidation']);
+        $customer->setValidation((string) ($data['register']['personal']['sValidation'] ?? ''));
         $customer->setAffiliate((int) $session->offsetGet('sPartner'));
         $customer->setPaymentId((int) $session->offsetGet('sPaymentID'));
         $customer->setDoubleOptinRegister($doubleOptinRegister);
@@ -268,7 +268,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
             return;
         }
 
-        if (($data = unserialize($result, ['allowed_classes' => false])) === false || !isset($data['customerId'])) {
+        try {
+            $data = unserialize($result, ['allowed_classes' => false]);
+        } catch (Throwable $e) {
+            $data = false;
+        }
+        if ($data === false || !isset($data['customerId'])) {
             throw new InvalidArgumentException(sprintf('The data for hash \'%s\' is corrupted.', $hash));
         }
         $customerId = (int) $data['customerId'];
@@ -439,12 +444,12 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         $data = $this->request->getPost();
 
         $countryStateName = 'country_state_' . $data['register']['billing']['country'];
-        $data['register']['billing']['state'] = $data['register']['billing'][$countryStateName];
+        $data['register']['billing']['state'] = $data['register']['billing'][$countryStateName] ?? null;
 
-        $countryStateName = 'country_shipping_state_' . $data['register']['shipping']['country'];
-        $data['register']['shipping']['state'] = $data['register']['shipping'][$countryStateName];
+        $countryStateName = 'country_shipping_state_' . ($data['register']['shipping']['country'] ?? null);
+        $data['register']['shipping']['state'] = $data['register']['shipping'][$countryStateName] ?? null;
         $data['register']['billing'] += $data['register']['personal'];
-        $data['register']['shipping']['phone'] = $data['register']['personal']['phone'];
+        $data['register']['shipping']['phone'] = $data['register']['personal']['phone'] ?? null;
 
         if (!$data['register']['personal']['accountmode']) {
             $data['register']['personal']['accountmode'] = Customer::ACCOUNT_MODE_CUSTOMER;

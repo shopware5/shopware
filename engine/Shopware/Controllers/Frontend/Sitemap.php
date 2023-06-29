@@ -23,6 +23,7 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Shopware\Bundle\SitemapBundle\Service\LinkFilter;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Emotion\Emotion;
@@ -191,7 +192,7 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     private function convertSite($site, array $translations)
     {
         $site = array_merge($site, $this->fetchTranslation($site['id'], $translations));
-        $site['hideOnSitemap'] = !$this->filterLink($site['link']);
+        $site['hideOnSitemap'] = !LinkFilter::filterLink($site['link']);
 
         $site = array_merge(
             $site,
@@ -245,28 +246,6 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
     }
 
     /**
-     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
-     * Returns false, if the link is not allowed
-     */
-    private function filterLink(string $link): bool
-    {
-        if (empty($link)) {
-            return true;
-        }
-
-        $userParams = (string) parse_url($link, PHP_URL_QUERY);
-        parse_str($userParams, $userParamsArray);
-
-        $blacklist = ['', 'sitemap', 'sitemapXml'];
-
-        if (\in_array($userParamsArray['sViewport'], $blacklist, true)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Helper function to get all supplier pages
      */
     private function getSupplierPages(): array
@@ -311,9 +290,9 @@ class Shopware_Controllers_Frontend_Sitemap extends Enlight_Controller_Action
         foreach ($campaigns as &$campaign) {
             $translation = $this->fetchTranslation($campaign['id'], $translations);
 
-            $translation['seo_title'] = $translation['seoTitle'];
-            $translation['seo_keywords'] = $translation['seoKeywords'];
-            $translation['seo_description'] = $translation['seoDescription'];
+            $translation['seo_title'] = $translation['seoTitle'] ?? null;
+            $translation['seo_keywords'] = $translation['seoKeywords'] ?? null;
+            $translation['seo_description'] = $translation['seoDescription'] ?? null;
 
             $campaign = array_merge($campaign, $translation);
 

@@ -69,7 +69,7 @@ class CookieHandler implements CookieHandlerInterface
             return false;
         }
 
-        foreach ($preferences['groups'] as $cookieGroup) {
+        foreach ($preferences['groups'] ?? [] as $cookieGroup) {
             foreach ($cookieGroup['cookies'] as $cookie) {
                 if ($cookie['name'] !== $foundCookie->getName()) {
                     continue;

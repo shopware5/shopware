@@ -226,7 +226,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
             $params['enabled'] = false;
         }
 
-        if ($params['admin'] === 'on' || $params['admin'] === true || $params['admin'] === 1) {
+        if (isset($params['admin']) && ($params['admin'] === 'on' || $params['admin'] === true || $params['admin'] === 1)) {
             $params['admin'] = true;
         } else {
             $params['admin'] = false;
@@ -288,7 +288,7 @@ class Shopware_Controllers_Backend_UserManager extends Shopware_Controllers_Back
 
         // Strip roles with parent id set
         foreach ($roles as &$role) {
-            if ($role['parentID'] != null) {
+            if (!empty($role['parentID'])) {
                 unset($role);
             }
         }

@@ -81,7 +81,7 @@ class ObjectTranslator
 
         $objectIndex = $objectIndex ?: $translationIndex;
 
-        $translation = $this->translations[$object['id']];
+        $translation = $this->translations[$object['id']] ?? null;
         if ($translation && !empty($translation[$translationIndex])) {
             $object[$objectIndex] = $translation[$translationIndex];
         } elseif ($fallback) {

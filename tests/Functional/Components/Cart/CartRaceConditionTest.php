@@ -27,10 +27,10 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Tests\Functional\Components\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTestCase;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class CartRaceConditionTest extends CheckoutTest
+class CartRaceConditionTest extends CheckoutTestCase
 {
     use DatabaseTransactionBehaviour;
 
@@ -40,7 +40,7 @@ class CartRaceConditionTest extends CheckoutTest
     {
         $productNumber = $this->createProduct(5, 19.00);
 
-        $this->loginFrontendCustomer();
+        $this->loginCustomerOfGroup();
 
         $this->addProduct($productNumber);
         $this->visitConfirm();
@@ -56,7 +56,7 @@ class CartRaceConditionTest extends CheckoutTest
     {
         $productNumber1 = $this->createProduct(5, 19.00);
 
-        $this->loginFrontendCustomer();
+        $this->loginCustomerOfGroup();
 
         $this->addProduct($productNumber1);
         $this->visitConfirm();

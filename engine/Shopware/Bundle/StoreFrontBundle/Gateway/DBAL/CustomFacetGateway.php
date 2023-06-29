@@ -200,7 +200,7 @@ class CustomFacetGateway implements CustomFacetGatewayInterface
 
         return array_map(
             function ($ids) use ($allFacetIds) {
-                $ids = array_filter(explode('|', $ids));
+                $ids = array_filter(explode('|', $ids ?? ''));
 
                 if (!empty($ids)) {
                     return array_map('\intval', $ids);

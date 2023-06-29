@@ -118,7 +118,7 @@ class CustomerStreamRepositoryTest extends TestCase
     }
 
     /**
-     * @return array{name: 'Teststream', static: false, description: 'Stream created for testing purposes', conditions: '{"Shopware\Bundle\CustomerSearchBundle\Condition\HasOrderCountCondition":{"minimumOrderCount":0}}', indexStream: true}
+     * @return array{name: 'Teststream', static: false, description: 'Stream created for testing purposes', conditions: string, indexStream: true}
      */
     private static function getCustomerStreamData(): array
     {
@@ -126,7 +126,7 @@ class CustomerStreamRepositoryTest extends TestCase
             'name' => 'Teststream',
             'static' => false,
             'description' => 'Stream created for testing purposes',
-            'conditions' => '{"Shopware\\Bundle\\CustomerSearchBundle\\Condition\\HasOrderCountCondition":{"minimumOrderCount":0}}',
+            'conditions' => '{"Shopware\\\\Bundle\\\\CustomerSearchBundle\\\\Condition\\\\HasOrderCountCondition":{"minimumOrderCount":0}}',
             'indexStream' => true,
         ];
     }

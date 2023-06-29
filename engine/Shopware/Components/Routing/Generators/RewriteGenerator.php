@@ -159,7 +159,9 @@ class RewriteGenerator implements GeneratorListInterface
         $orgQuery = ['sViewport' => $query['controller']];
         switch ($query['controller']) {
             case 'detail':
-                $orgQuery['sArticle'] = $query['sArticle'];
+                if (isset($query['sArticle'])) {
+                    $orgQuery['sArticle'] = $query['sArticle'];
+                }
                 break;
             case 'blog':
                 if (isset($query['action']) && $query['action'] !== 'index') {

@@ -153,9 +153,9 @@ class Shopware_Controllers_Frontend_Blog extends Enlight_Controller_Action
         $categoryId = (int) $this->Request()->getQuery('sCategory');
         $page = (int) $this->request->getParam('sPage', 1);
         $page = $page >= 1 ? $page : 1;
-        $filterDate = urldecode($this->Request()->getParam('sFilterDate'));
-        $filterAuthor = urldecode($this->Request()->getParam('sFilterAuthor'));
-        $filterTags = urldecode($this->Request()->getParam('sFilterTags'));
+        $filterDate = urldecode($this->Request()->getParam('sFilterDate', ''));
+        $filterAuthor = urldecode($this->Request()->getParam('sFilterAuthor', ''));
+        $filterTags = urldecode($this->Request()->getParam('sFilterTags', ''));
 
         // Redirect if blog's category is not a child of the current shop's category
         $shopCategory = $this->get('shop')->getCategory();

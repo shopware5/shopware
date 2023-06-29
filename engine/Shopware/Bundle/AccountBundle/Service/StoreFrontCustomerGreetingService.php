@@ -25,30 +25,22 @@
 namespace Shopware\Bundle\AccountBundle\Service;
 
 use Doctrine\DBAL\Connection;
-use Enlight_Components_Session_Namespace;
-use Shopware_Components_Config;
+use Enlight_Components_Session_Namespace as Session;
+use Shopware\Models\Customer\Customer;
+use Shopware_Components_Config as Config;
 
 class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingServiceInterface
 {
-    /**
-     * @var Enlight_Components_Session_Namespace
-     */
-    private $session;
+    private Session $session;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Config $config;
 
     public function __construct(
-        Enlight_Components_Session_Namespace $session,
+        Session $session,
         Connection $connection,
-        Shopware_Components_Config $config
+        Config $config
     ) {
         $this->session = $session;
         $this->connection = $connection;
@@ -63,26 +55,26 @@ class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingSer
         if (!$this->config->get('useSltCookie')) {
             return null;
         }
-        if ($this->session->sOneTimeAccount) {
+        if ($this->session->get('sOneTimeAccount')) {
             return null;
         }
 
-        if (!isset($this->session->userInfo)) {
-            $this->session->userInfo = $this->fetchUserInfo();
+        if (!$this->session->get('userInfo')) {
+            $this->session->set('userInfo', $this->fetchCustomerInfo());
         }
 
-        if ($this->session->userInfo['accountmode'] == 1) {
-            $this->session->sOneTimeAccount = true;
-            $this->session->userInfo = null;
+        if ($this->session->get('userInfo') && (int) $this->session->get('userInfo')['accountmode'] === Customer::ACCOUNT_MODE_FAST_LOGIN) {
+            $this->session->set('sOneTimeAccount', true);
+            $this->session->set('userInfo', null);
         }
 
-        return $this->session->userInfo;
+        return $this->session->get('userInfo');
     }
 
     /**
-     * @return array|null
+     * @return array<string, mixed>|null
      */
-    private function fetchUserInfo()
+    private function fetchCustomerInfo(): ?array
     {
         $userId = $this->session->offsetGet('sUserId');
         if (!$userId) {
@@ -93,9 +85,13 @@ class StoreFrontCustomerGreetingService implements StoreFrontCustomerGreetingSer
             return null;
         }
 
-        return $this->connection->fetchAssoc(
-            'SELECT firstname, lastname, email, salutation, title, birthday, accountmode FROM s_user WHERE id = :id',
+        $customerInfo = $this->connection->fetchAssociative(
+            'SELECT firstname, lastname, email, salutation, title, birthday, accountmode
+             FROM s_user
+             WHERE id = :id',
             [':id' => $userId]
         );
+
+        return $customerInfo ?: null;
     }
 }

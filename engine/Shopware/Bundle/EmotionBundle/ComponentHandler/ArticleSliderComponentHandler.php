@@ -121,7 +121,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $products = $element->getConfig()->get(self::SELECTED_PRODUCTS, '');
+                $products = $element->getConfig()->get(self::SELECTED_PRODUCTS, '') ?? '';
                 $productNumbers = array_filter(explode('|', $products));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
@@ -130,7 +130,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $collection->getBatchRequest()->setProductNumbers($key, $productNumbers);
                 break;
             case self::TYPE_STATIC_VARIANT:
-                $productVariants = $element->getConfig()->get(self::SELECTED_VARIANTS, '');
+                $productVariants = $element->getConfig()->get(self::SELECTED_VARIANTS, '') ?? '';
                 $productNumbers = array_filter(explode('|', $productVariants));
                 if (empty($productNumbers)) {
                     $productNumbers = [];
@@ -161,7 +161,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 break;
 
             case self::TYPE_STATIC_PRODUCT:
-                $products = $element->getConfig()->get(self::SELECTED_PRODUCTS, '');
+                $products = $element->getConfig()->get(self::SELECTED_PRODUCTS, '') ?? '';
                 $productNumbers = array_filter(explode('|', $products));
                 $listProducts = $collection->getBatchResult()->get($key);
 
@@ -176,7 +176,7 @@ class ArticleSliderComponentHandler implements ComponentHandlerInterface
                 $element->getData()->set('products', $products);
                 break;
             case self::TYPE_STATIC_VARIANT:
-                $products = $element->getConfig()->get(self::SELECTED_VARIANTS, '');
+                $products = $element->getConfig()->get(self::SELECTED_VARIANTS, '') ?? '';
                 $productNumbers = array_filter(explode('|', $products));
                 $listProducts = $collection->getBatchResult()->get($key);
                 $listProducts = $this->additionalTextService->buildAdditionalTextLists($listProducts, $context);

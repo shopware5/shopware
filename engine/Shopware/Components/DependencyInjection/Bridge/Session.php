@@ -114,7 +114,9 @@ class Session
         $sessionOptions['cookie_path'] = empty($basePath) ? '/' : $basePath;
 
         if ($saveHandler) {
-            session_set_save_handler($saveHandler);
+            if (empty($sessionOptions['unitTestEnabled'])) {
+                session_set_save_handler($saveHandler);
+            }
             unset($sessionOptions['save_handler']);
         }
 

@@ -141,7 +141,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
         $transformer = $this->container->get(EmotionToPresetDataTransformerInterface::class);
         $data = $this->Request()->getParams();
 
-        if (!$data['emotionId']) {
+        if (empty($data['emotionId'])) {
             $this->View()->assign(['success' => false]);
 
             return;
@@ -149,7 +149,7 @@ class Shopware_Controllers_Backend_EmotionPreset extends Shopware_Controllers_Ba
 
         $data = array_merge($data, $transformer->transform($data['emotionId']));
 
-        if ($data['id']) {
+        if (!empty($data['id'])) {
             $resource->update($data['id'], $data, $this->getLocale());
         } else {
             $resource->create($data, $this->getLocale());

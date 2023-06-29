@@ -24,26 +24,30 @@
 
 namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
+use Doctrine\DBAL\DBALException;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\TableMapping;
+use Shopware\Bundle\AttributeBundle\Service\TypeMappingInterface;
 
 class SchemaOperatorTest extends TestCase
 {
     public function testDefaultValues(): void
     {
         $types = [
-            'string' => 'test123',
-            'integer' => 123,
-            'float' => 123,
-            'boolean' => 1,
-            'date' => '2010-01-01',
-            'datetime' => '2010-01-01 10:00:00',
-            'text' => 'test123',
-            'html' => 'test123',
-            'combobox' => '1',
-            'multi_selection' => '1',
-            'single_selection' => 'SW10003',
+            TypeMappingInterface::TYPE_STRING => 'test123',
+            TypeMappingInterface::TYPE_INTEGER => 123,
+            TypeMappingInterface::TYPE_FLOAT => 123,
+            TypeMappingInterface::TYPE_BOOLEAN => 1,
+            TypeMappingInterface::TYPE_DATE => '2010-01-01',
+            TypeMappingInterface::TYPE_DATETIME => '2010-01-01 10:00:00',
+            TypeMappingInterface::TYPE_TEXT => 'test123',
+            TypeMappingInterface::TYPE_HTML => 'test123',
+            TypeMappingInterface::TYPE_COMBOBOX => '1',
+            TypeMappingInterface::TYPE_MULTI_SELECTION => '1',
+            TypeMappingInterface::TYPE_SINGLE_SELECTION => 'SW10003',
         ];
 
         $this->iterateTypeArray($types);
@@ -52,17 +56,17 @@ class SchemaOperatorTest extends TestCase
     public function testNullDefaultValues(): void
     {
         $types = [
-            'string' => null,
-            'integer' => null,
-            'float' => null,
-            'boolean' => null,
-            'date' => null,
-            'datetime' => null,
-            'text' => null,
-            'html' => null,
-            'combobox' => null,
-            'multi_selection' => null,
-            'single_selection' => null,
+            TypeMappingInterface::TYPE_STRING => null,
+            TypeMappingInterface::TYPE_INTEGER => null,
+            TypeMappingInterface::TYPE_FLOAT => null,
+            TypeMappingInterface::TYPE_BOOLEAN => null,
+            TypeMappingInterface::TYPE_DATE => null,
+            TypeMappingInterface::TYPE_DATETIME => null,
+            TypeMappingInterface::TYPE_TEXT => null,
+            TypeMappingInterface::TYPE_HTML => null,
+            TypeMappingInterface::TYPE_COMBOBOX => null,
+            TypeMappingInterface::TYPE_MULTI_SELECTION => null,
+            TypeMappingInterface::TYPE_SINGLE_SELECTION => null,
         ];
 
         $this->iterateTypeArray($types);
@@ -71,17 +75,17 @@ class SchemaOperatorTest extends TestCase
     public function testNullStringDefaultValues(): void
     {
         $types = [
-            'string' => 'NULL',
-            'integer' => 'NULL',
-            'float' => 'NULL',
-            'boolean' => 'NULL',
-            'date' => 'NULL',
-            'datetime' => 'NULL',
-            'text' => 'NULL',
-            'html' => 'NULL',
-            'combobox' => 'NULL',
-            'multi_selection' => 'NULL',
-            'single_selection' => 'NULL',
+            TypeMappingInterface::TYPE_STRING => 'NULL',
+            TypeMappingInterface::TYPE_INTEGER => 'NULL',
+            TypeMappingInterface::TYPE_FLOAT => 'NULL',
+            TypeMappingInterface::TYPE_BOOLEAN => 'NULL',
+            TypeMappingInterface::TYPE_DATE => 'NULL',
+            TypeMappingInterface::TYPE_DATETIME => 'NULL',
+            TypeMappingInterface::TYPE_TEXT => 'NULL',
+            TypeMappingInterface::TYPE_HTML => 'NULL',
+            TypeMappingInterface::TYPE_COMBOBOX => 'NULL',
+            TypeMappingInterface::TYPE_MULTI_SELECTION => 'NULL',
+            TypeMappingInterface::TYPE_SINGLE_SELECTION => 'NULL',
         ];
 
         $this->iterateTypeArray($types);
@@ -92,16 +96,16 @@ class SchemaOperatorTest extends TestCase
      */
     public function testDefaultValuesBoolean(): void
     {
-        $this->iterateTypeArray(['boolean' => 1]);
-        $this->iterateTypeArray(['boolean' => 0]);
-        $this->iterateTypeArray(['boolean' => true]);
-        $this->iterateTypeArray(['boolean' => false]);
-        $this->iterateTypeArray(['boolean' => null]);
-        $this->iterateTypeArray(['boolean' => '1']);
-        $this->iterateTypeArray(['boolean' => '0']);
-        $this->iterateTypeArray(['boolean' => 'true']);
-        $this->iterateTypeArray(['boolean' => 'false']);
-        $this->iterateTypeArray(['boolean' => 'null']);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => 1]);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => 0]);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => true]);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => false]);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => null]);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => '1']);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => '0']);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => 'true']);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => 'false']);
+        $this->iterateTypeArray([TypeMappingInterface::TYPE_BOOLEAN => 'null']);
     }
 
     public function testUpdateConfiguration(): void
@@ -109,22 +113,21 @@ class SchemaOperatorTest extends TestCase
         $service = Shopware()->Container()->get('shopware_attribute.crud_service');
         $tableMapping = Shopware()->Container()->get('shopware_attribute.table_mapping');
         $table = 's_articles_attributes';
-        $columnName = 'attr_' . uniqid((string) mt_rand(), false);
+        $columnName = 'attr_' . uniqid((string) mt_rand());
 
-        $service->update($table, $columnName, 'bool');
+        $service->update($table, $columnName, TypeMappingInterface::TYPE_BOOLEAN);
         static::assertTrue($tableMapping->isTableColumn($table, $columnName));
-        $service->update($table, $columnName, 'date');
+        $service->update($table, $columnName, TypeMappingInterface::TYPE_DATE);
         static::assertTrue($tableMapping->isTableColumn($table, $columnName));
 
-        /** @var ConfigurationStruct|null $column */
         $column = $service->get($table, $columnName);
         static::assertInstanceOf(ConfigurationStruct::class, $column);
-        static::assertEquals('date', $column->getColumnType());
+        static::assertEquals(TypeMappingInterface::TYPE_DATE, $column->getColumnType());
     }
 
     public function testReinsertColumnConfigurationShouldFail(): void
     {
-        $this->expectException(\Doctrine\DBAL\DBALException::class);
+        $this->expectException(DBALException::class);
         $connection = Shopware()->Container()->get('dbal_connection');
         $attributeData = [
             'table_name' => 's_articles_attributes',
@@ -136,14 +139,14 @@ class SchemaOperatorTest extends TestCase
     }
 
     /**
-     * @param array $types
+     * @param array<string, mixed> $types
      *
      * @throws Exception
      */
-    private function iterateTypeArray($types): void
+    private function iterateTypeArray(array $types): void
     {
-        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
-        $tableMapping = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\TableMapping::class);
+        $service = Shopware()->Container()->get(CrudService::class);
+        $tableMapping = Shopware()->Container()->get(TableMapping::class);
         $table = 's_articles_attributes';
 
         foreach ($types as $type => $default) {

@@ -19,7 +19,7 @@
                                aria-required="true"
                                placeholder="{s name='RegisterPlaceholderCompany'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                id="register_billing_company"
-                               value="{$form_data.company|escape}"
+                               value="{$form_data.company|escapeHtml}"
                                class="register--field is--required{if isset($error_flags.company)} has--error{/if}" />
                     </div>
                 {/block}
@@ -32,7 +32,7 @@
                                type="text"
                                placeholder="{s name='RegisterLabelDepartment'}{/s}"
                                id="register_billing_department"
-                               value="{$form_data.department|escape}"
+                               value="{$form_data.department|escapeHtml}"
                                class="register--field{if isset($error_flags.department)} has--error{/if}" />
                     </div>
                 {/block}
@@ -44,7 +44,7 @@
                                type="text" {if {config name="vatCheckRequired"}} required="required" aria-required="true"{/if}
                                placeholder="{s name='RegisterLabelTaxId'}{/s}{if {config name="vatcheckrequired"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                id="register_billing_vatid"
-                               value="{$form_data.vatId|escape}"
+                               value="{$form_data.vatId|escapeHtml}"
                                 {if {config name="vatcheckrequired"}} required="required" aria-required="true"{/if}
                                class="register--field{if isset($error_flags.vatId)} has--error{/if}{if {config name="vatcheckrequired"}} is--required{/if}"/>
                     </div>
@@ -75,7 +75,7 @@
                                aria-required="true"
                                placeholder="{s name='RegisterBillingPlaceholderStreet'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                id="street"
-                               value="{$form_data.street|escape}"
+                               value="{$form_data.street|escapeHtml}"
                                class="register--field register--field-street is--required{if isset($error_flags.street)} has--error{/if}" />
                     </div>
                 {/block}
@@ -89,7 +89,7 @@
                                    type="text"{if {config name="requireAdditionAddressLine1"}} required="required" aria-required="true"{/if}
                                    placeholder="{s name='RegisterLabelAdditionalAddressLine1'}{/s}{if {config name="requireAdditionAddressLine1"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine1"
-                                   value="{$form_data.additionalAddressLine1|escape}"
+                                   value="{$form_data.additionalAddressLine1|escapeHtml}"
                                    class="register--field{if {config name="requireAdditionAddressLine1"}} is--required{/if}{if isset($error_flags.additionalAddressLine1) && {config name="requireAdditionAddressLine1"}} has--error{/if}" />
                         </div>
                     {/if}
@@ -104,7 +104,7 @@
                                    type="text"{if {config name="requireAdditionAddressLine2"}} required="required" aria-required="true"{/if}
                                    placeholder="{s name='RegisterLabelAdditionalAddressLine2'}{/s}{if {config name="requireAdditionAddressLine2"}}{s name="RequiredField" namespace="frontend/register/index"}{/s}{/if}"
                                    id="additionalAddressLine2"
-                                   value="{$form_data.additionalAddressLine2|escape}"
+                                   value="{$form_data.additionalAddressLine2|escapeHtml}"
                                    class="register--field{if {config name="requireAdditionAddressLine2"}} is--required{/if}{if isset($error_flags.additionalAddressLine2) && {config name="requireAdditionAddressLine2"}} has--error{/if}" />
                         </div>
                     {/if}
@@ -121,7 +121,7 @@
                                    aria-required="true"
                                    placeholder="{s name='RegisterBillingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                    id="zipcode"
-                                   value="{$form_data.zipcode|escape}"
+                                   value="{$form_data.zipcode|escapeHtml}"
                                    class="register--field register--spacer register--field-zipcode is--required{if isset($error_flags.zipcode)} has--error{/if}" />
 
                             <input autocomplete="section-billing billing address-level2"
@@ -131,7 +131,7 @@
                                    aria-required="true"
                                    placeholder="{s name='RegisterBillingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                    id="city"
-                                   value="{$form_data.city|escape}"
+                                   value="{$form_data.city|escapeHtml}"
                                    size="25"
                                    class="register--field register--field-city is--required{if isset($error_flags.city)} has--error{/if}" />
                         {else}
@@ -142,7 +142,7 @@
                                    aria-required="true"
                                    placeholder="{s name='RegisterBillingPlaceholderCity'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                    id="city"
-                                   value="{$form_data.city|escape}"
+                                   value="{$form_data.city|escapeHtml}"
                                    size="25"
                                    class="register--field register--spacer register--field-city is--required{if isset($error_flags.city)} has--error{/if}" />
 
@@ -153,7 +153,7 @@
                                    aria-required="true"
                                    placeholder="{s name='RegisterBillingPlaceholderZipcode'}{/s}{s name="RequiredField" namespace="frontend/register/index"}{/s}"
                                    id="zipcode"
-                                   value="{$form_data.zipcode|escape}"
+                                   value="{$form_data.zipcode|escapeHtml}"
                                    class="register--field register--field-zipcode is--required{if isset($error_flags.zipcode)} has--error{/if}" />
                         {/if}
                     </div>

@@ -35,11 +35,13 @@ use Shopware\Models\Attribute\Document as DocumentAttribute;
 use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Shop\Shop;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Document;
 
 class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     private ModelManager $modelManager;
 
@@ -72,6 +74,7 @@ class OrderDocumentDocumentTest extends Enlight_Components_Test_TestCase
         // Flush changed shop to the database, needed for the Document code
         $this->modelManager->flush($shop);
 
+        $document = null;
         try {
             /*
              * Used to fail with the following error before allowing inactive subshops

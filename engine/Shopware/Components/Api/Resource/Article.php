@@ -496,7 +496,7 @@ class Article extends Resource implements BatchInterface
             $article->setMainDetail($detail);
         }
 
-        if (!$data['mainDetail']) {
+        if (empty($data['mainDetail'])) {
             $data['mainDetail'] = [];
         }
 
@@ -838,7 +838,7 @@ class Article extends Resource implements BatchInterface
 
         $product = $this->getSingleResult($builder);
 
-        return $product['similar'];
+        return $product['similar'] ?? null;
     }
 
     /**
@@ -859,7 +859,7 @@ class Article extends Resource implements BatchInterface
 
         $product = $this->getSingleResult($builder);
 
-        return $product['related'];
+        return $product['related'] ?? null;
     }
 
     /**
@@ -1056,7 +1056,7 @@ class Article extends Resource implements BatchInterface
                 }
             }
 
-            if ($variantData['isMain'] || $variantData['standard']) {
+            if (!empty($variantData['isMain']) || !empty($variantData['standard'])) {
                 $newMain = $variant;
                 $newMain->setKind(1);
                 $oldMainId = $article->getMainDetail()->getId();
@@ -1510,7 +1510,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $relatedProduct = null;
-            if ($relatedData['number']) {
+            if (!empty($relatedData['number'])) {
                 $productId = $this->getManager()->getConnection()->fetchOne(
                     'SELECT articleID FROM s_articles_details WHERE ordernumber = :number',
                     [':number' => $relatedData['number']]
@@ -1539,7 +1539,7 @@ class Article extends Resource implements BatchInterface
                 throw new CustomValidationException(sprintf('Related product by number/id "%s" not found', $property));
             }
 
-            if ($relatedData['cross']) {
+            if (!empty($relatedData['cross'])) {
                 $relatedProduct->getRelated()->add($article);
             }
         }
@@ -1570,7 +1570,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $similarProduct = null;
-            if ($similarData['number']) {
+            if (!empty($similarData['number'])) {
                 $productId = $this->getManager()->getConnection()->fetchOne(
                     'SELECT articleID FROM s_articles_details WHERE ordernumber = :number',
                     [':number' => $similarData['number']]
@@ -1599,7 +1599,7 @@ class Article extends Resource implements BatchInterface
                 throw new CustomValidationException(sprintf('Similar product by number/id "%s" not found', $property));
             }
 
-            if ($similarData['cross']) {
+            if (!empty($similarData['cross'])) {
                 $similarProduct->getSimilar()->add($article);
             }
         }

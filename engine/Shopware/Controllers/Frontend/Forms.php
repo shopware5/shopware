@@ -256,7 +256,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     }
                 }
 
-                $fields[$id] = $this->_createInputElement($element, $this->_postData[$id]);
+                $fields[$id] = $this->_createInputElement($element, $this->_postData[$id] ?? null);
                 $labels[$id] = $this->_createLabelElement($element);
             }
         }
@@ -455,7 +455,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     $element['class'][0],
                     $requiredField,
                     $requiredFieldAria,
-                    $post[0],
+                    $post[0] ?? null,
                     $placeholder0,
                     $element['name'][0],
                     $element['name'][0]
@@ -465,7 +465,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                     $element['class'][1],
                     $requiredField,
                     $requiredFieldAria,
-                    $post[1],
+                    $post[1] ?? null,
                     $placeholder1,
                     $element['name'][1],
                     $element['name'][1]

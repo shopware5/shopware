@@ -36,6 +36,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
 
     /**
      * Loads auth and script renderer resource
+     *
+     * @return void
      */
     public function init()
     {
@@ -86,6 +88,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      * Backend Menu
      * Licence Information
      * Rss-Data for example
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -145,12 +149,17 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         $this->View()->assign('extJsDeveloperModeActive', $this->container->getParameter('shopware.extjs.developer_mode'));
     }
 
+    /**
+     * @return void
+     */
     public function authAction()
     {
     }
 
     /**
      * Allows changing the locale by sending a Shopware localeId or an ISO-3166 locale (e.g. de_DE)
+     *
+     * @return void
      */
     public function changeLocaleAction()
     {
@@ -207,6 +216,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      * Load action for the script renderer.
      *
      * @throws Enlight_Controller_Exception
+     *
+     * @return void
      */
     public function loadAction()
     {
@@ -226,6 +237,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      * Load action for the script renderer.
      *
      * @throws Enlight_Controller_Exception
+     *
+     * @return void
      */
     public function menuAction()
     {
@@ -253,10 +266,8 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
      * Returns if the first run wizard should be loaded in the current backend instance
      *
      * @param stdClass $identity
-     *
-     * @return bool
      */
-    private function isFirstRunWizardEnabled($identity)
+    private function isFirstRunWizardEnabled($identity): bool
     {
         // Only admins can see the wizard
         if ($identity->role->getAdmin()) {
@@ -266,12 +277,7 @@ class Shopware_Controllers_Backend_Index extends Enlight_Controller_Action imple
         return false;
     }
 
-    /**
-     * @param int|null $parentId
-     *
-     * @return array
-     */
-    private function buildTree(array $nodes, $parentId = null)
+    private function buildTree(array $nodes, ?int $parentId = null): array
     {
         $menuTree = [];
         foreach ($nodes as $key => $node) {

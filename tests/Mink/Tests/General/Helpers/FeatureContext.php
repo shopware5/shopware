@@ -172,9 +172,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public function saveScreenshot(?string $filename = null, ?string $filepath = null): void
     {
-        // Under Cygwin, uniqid with more_entropy must be set to true.
-        // No effect in other environments.
-        $generatedFilename = sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), (new DateTime())->format('Y-m-d--H-i-s'), uniqid('', true), 'png');
+        $generatedFilename = sprintf('%s_%s.%s', $this->getMinkParameter('browser_name'), $this->getDateTimeWithRandomString(), 'png');
         $filename = $filename ?: $generatedFilename;
         $filepath = $filepath ?: (ini_get('upload_tmp_dir') ?: sys_get_temp_dir());
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
@@ -264,8 +262,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             ];
             $filepath = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
-            // No effect in other environments.
-            $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
+            $filename = sprintf('errors_%s.%s', $this->getDateTimeWithRandomString(), 'log');
             $filepath .= '/' . $filename;
             file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
 
@@ -382,9 +379,7 @@ EOD;
     {
         $logDir = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
-        $currentDateAsString = date('YmdHis');
-
-        $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, 'log');
+        $path = sprintf('%s/behat-%s.%s', $logDir, $this->getDateTime(), 'log');
         if (!file_put_contents($path, $content)) {
             Helper::throwException(sprintf('Failed while trying to write log in "%s".', $path));
         }
@@ -435,5 +430,15 @@ EOD;
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
         $cacheManager->clearThemeCache();
+    }
+
+    private function getDateTimeWithRandomString(): string
+    {
+        return $this->getDateTime() . '_' . uniqid('', true);
+    }
+
+    private function getDateTime(): string
+    {
+        return (new DateTime())->format('Y-m-d--H-i-s');
     }
 }

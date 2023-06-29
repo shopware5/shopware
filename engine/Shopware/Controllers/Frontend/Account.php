@@ -104,8 +104,8 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
         $this->response->headers->addCacheControlDirective('no-store');
         $this->response->headers->addCacheControlDirective('no-cache');
 
-        $activeBillingAddressId = $customerData['additional']['user']['default_billing_address_id'];
-        $activeShippingAddressId = $customerData['additional']['user']['default_shipping_address_id'];
+        $activeBillingAddressId = $customerData['additional']['user']['default_billing_address_id'] ?? null;
+        $activeShippingAddressId = $customerData['additional']['user']['default_shipping_address_id'] ?? null;
 
         if (!empty($customerData['shippingaddress']['country']['id'])) {
             $country = $this->get(CountryGatewayInterface::class)->getCountry($customerData['shippingaddress']['country']['id'], $this->get(ContextServiceInterface::class)->getContext());
@@ -899,7 +899,12 @@ class Shopware_Controllers_Frontend_Account extends Enlight_Controller_Action
 
     private function isOneTimeAccount(): bool
     {
-        return $this->container->get('session')->offsetGet('sOneTimeAccount')
-            || (int) $this->View()->getAssign('sUserData')['additional']['user']['accountmode'] === Customer::ACCOUNT_MODE_FAST_LOGIN;
+        $customerData = $this->View()->getAssign('sUserData');
+        if (!isset($customerData['additional']['user'])) {
+            return false;
+        }
+
+        return $this->container->get('session')->get('sOneTimeAccount')
+            || (int) $customerData['additional']['user']['accountmode'] === Customer::ACCOUNT_MODE_FAST_LOGIN;
     }
 }

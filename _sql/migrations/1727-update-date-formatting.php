@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,23 +25,18 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Library;
+use Shopware\Components\Migrations\AbstractMigration;
 
-use PHPUnit\Framework\TestCase;
-use Shopware\Tests\Functional\Traits\ContainerTrait;
-use Zend_Db_Adapter_Exception;
-
-class ZendDBTest extends TestCase
+class Migrations_Migration1727 extends AbstractMigration
 {
-    use ContainerTrait;
-
-    public function testAdapterException(): void
+    public function up($modus)
     {
-        $dbConnection = $this->getContainer()->get('db');
-
-        $this->expectException(Zend_Db_Adapter_Exception::class);
-        $this->expectExceptionMessageMatches("/SQLSTATE\[42S02\]: Base table or view not found: 1146 Table '.*\.foobar' doesn't exist/");
-        $this->expectExceptionCode(0);
-        $dbConnection->exec('SELECT * FROM foobar');
+        $sql = <<<'EOD'
+UPDATE `s_core_config_mails`
+SET content = REPLACE(content, '|date_format:"%d.%m.%Y"', '|date_format:"d.m.Y"'),
+    contentHTML = REPLACE(contentHTML, '|date_format:"%d.%m.%Y"', '|date_format:"d.m.Y"')
+WHERE dirty = 0;
+EOD;
+        $this->addSql($sql);
     }
 }

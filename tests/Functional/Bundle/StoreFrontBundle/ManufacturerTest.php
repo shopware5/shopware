@@ -37,7 +37,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer([
             'name' => 'testManufacturerList-1',
-            'image' => 'Manufacturer-Cover-1',
+            'image' => 'media/image/Manufacturer-Cover-1',
             'link' => 'www.google.de?manufacturer=1',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',
@@ -47,7 +47,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer([
             'name' => 'testManufacturerList-2',
-            'image' => 'Manufacturer-Cover-2.jpg',
+            'image' => 'media/image/Manufacturer-Cover-2.jpg',
             'link' => 'www.google.de?manufacturer=2',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',
@@ -57,7 +57,7 @@ class ManufacturerTest extends TestCase
 
         $manufacturer = $this->helper->createManufacturer([
             'name' => 'testManufacturerList-2',
-            'image' => 'Manufacturer-Cover-2.jpg',
+            'image' => 'media/image/Manufacturer-Cover-2.jpg',
             'link' => 'www.google.de?manufacturer=2',
             'metaTitle' => 'Meta title',
             'description' => 'Lorem ipsum manufacturer',

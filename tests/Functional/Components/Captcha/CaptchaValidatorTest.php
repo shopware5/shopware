@@ -31,10 +31,13 @@ use Enlight_Template_Manager;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Captcha\DefaultCaptcha;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Components_Config;
 
 class CaptchaValidatorTest extends TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     private DefaultCaptcha $captcha;
 
     public function setUp(): void

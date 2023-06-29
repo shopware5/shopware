@@ -35,30 +35,28 @@ use Shopware\Components\Api\Exception\PrivilegeException;
 use Shopware\Components\Api\Exception\ValidationException;
 use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Models\Emotion\Preset;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 /**
  * @group EmotionPreset
  */
 class EmotionPresetTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
     private Connection $connection;
 
     private EmotionPreset $resource;
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(Connection::class);
-        $this->connection->beginTransaction();
+        $this->connection = $this->getContainer()->get(Connection::class);
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
-        $this->resource = Shopware()->Container()->get(EmotionPreset::class);
+        $this->resource = $this->getContainer()->get(EmotionPreset::class);
         parent::setUp();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->connection->rollBack();
-        parent::tearDown();
     }
 
     public function testCreate(): void

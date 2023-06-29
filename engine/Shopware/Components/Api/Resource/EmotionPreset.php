@@ -164,7 +164,7 @@ class EmotionPreset extends Resource
             unset($translation);
         }
 
-        if (!\is_array($data['requiredPlugins'])) {
+        if (!isset($data['requiredPlugins']) || !\is_array($data['requiredPlugins'])) {
             $data['requiredPlugins'] = [];
         }
 
@@ -241,7 +241,7 @@ class EmotionPreset extends Resource
     {
         $pluginNames = [];
         foreach ($presets as $id => $preset) {
-            $plugins = json_decode($preset['requiredPlugins'], true) ?? [];
+            $plugins = json_decode($preset['requiredPlugins'] ?? '', true) ?? [];
             $combinedPlugins = array_combine(array_column($plugins, 'name'), $plugins);
             if (!\is_array($combinedPlugins)) {
                 $preset['requiredPlugins'] = [];
@@ -263,8 +263,8 @@ class EmotionPreset extends Resource
                 'premium' => $preset['premium'],
                 'custom' => $preset['custom'],
                 'thumbnail' => $preset['thumbnail'],
-                'preview' => $preset['preview'],
-                'presetData' => $preset['presetData'],
+                'preview' => $preset['preview'] ?? null,
+                'presetData' => $preset['presetData'] ?? null,
                 'requiredPlugins' => $this->getPluginsForPreset($preset, $localPlugins),
                 'assetsImported' => $preset['assetsImported'],
             ];
@@ -336,7 +336,7 @@ class EmotionPreset extends Resource
                     'installed' => false,
                     'plugin_label' => $plugin['label'],
                     'plugin_name' => $plugin['name'],
-                    'current_version' => null,
+                    'current_version' => '',
                     'valid' => false,
                 ], $plugin);
 

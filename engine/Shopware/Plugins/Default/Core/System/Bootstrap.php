@@ -53,6 +53,8 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
     /**
      * Listener method of the Enlight_Controller_Front_DispatchLoopShutdown event.
      * If the request is from a Bot, discard the session
+     *
+     * @return void
      */
     public function onDispatchLoopShutdown(Enlight_Controller_EventArgs $args)
     {
@@ -67,7 +69,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
 
         /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
         $plugin = Shopware()->Plugins()->Frontend()->Statistics();
-        if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT'))) {
+        if ($plugin->checkIsBot($args->getRequest()->getHeader('USER_AGENT') ?: '')) {
             $this->get('session')->invalidate();
         }
     }
@@ -97,7 +99,7 @@ class Shopware_Plugins_Core_System_Bootstrap extends Shopware_Components_Plugin_
             if ($request !== null && Shopware()->Session()->get('Bot') === null) {
                 /** @var Shopware_Plugins_Frontend_Statistics_Bootstrap $plugin */
                 $plugin = Shopware()->Plugins()->Frontend()->Statistics();
-                Shopware()->Session()->set('Bot', $plugin->checkIsBot($request->getHeader('USER_AGENT')));
+                Shopware()->Session()->set('Bot', $plugin->checkIsBot($request->getHeader('USER_AGENT') ?: ''));
             }
             $system->sBotSession = Shopware()->Session()->get('Bot');
         }

@@ -31,7 +31,7 @@ class IndexTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @ticket SW-8127
      */
-    public function testShopMenu()
+    public function testShopMenu(): void
     {
         $this->dispatch('/Widgets/Index/shopMenu');
         static::assertEquals(200, $this->Response()->getHttpResponseCode());

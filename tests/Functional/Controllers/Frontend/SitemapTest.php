@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,25 +30,29 @@ use Enlight_Class;
 use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware_Controllers_Frontend_Sitemap;
 
 class SitemapTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use ContainerTrait;
+
     public static function tearDownAfterClass(): void
     {
         Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->getActiveDefault());
     }
 
     /**
-     * @param int $shopId
-     *
      * @dataProvider sitemapDataprovider
      */
-    public function testIndex($shopId, array $sitemapData)
+    public function testIndex(int $shopId, array $sitemapData): void
     {
-        Shopware()->Container()->get(ShopRegistrationServiceInterface::class)->registerShop(Shopware()->Models()->getRepository(Shop::class)->find($shopId));
+        $shop = $this->getContainer()->get(ModelManager::class)->getRepository(Shop::class)->find($shopId);
+        static::assertInstanceOf(Shop::class, $shop);
+        $this->getContainer()->get(ShopRegistrationServiceInterface::class)->registerShop($shop);
 
         $controller = $this->getController();
         $controller->indexAction();
@@ -69,10 +75,7 @@ class SitemapTest extends Enlight_Components_Test_Controller_TestCase
         }
     }
 
-    /**
-     * @return array
-     */
-    public function sitemapDataprovider()
+    public function sitemapDataprovider(): array
     {
         return [
             [
@@ -104,18 +107,15 @@ class SitemapTest extends Enlight_Components_Test_Controller_TestCase
         ];
     }
 
-    /**
-     * @return Shopware_Controllers_Frontend_Sitemap
-     */
-    private function getController()
+    private function getController(): Shopware_Controllers_Frontend_Sitemap
     {
-        /** @var Shopware_Controllers_Frontend_Sitemap $controller */
         $controller = Enlight_Class::Instance(Shopware_Controllers_Frontend_Sitemap::class, [
             $this->Request(),
             $this->Response(),
         ]);
+        static::assertInstanceOf(Shopware_Controllers_Frontend_Sitemap::class, $controller);
 
-        $controller->setContainer(Shopware()->Container());
+        $controller->setContainer($this->getContainer());
         $controller->setView(new Enlight_View_Default(new Enlight_Template_Manager()));
 
         return $controller;

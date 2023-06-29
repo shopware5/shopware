@@ -266,7 +266,7 @@ class VariantConditionWithPriceGroupTest extends TestCase
             ++$i;
         }
 
-        if ($data['priceGroup']) {
+        if (isset($data['priceGroup'])) {
             $product['priceGroupActive'] = true;
             $product['priceGroupId'] = $data['priceGroup']->getId();
         }

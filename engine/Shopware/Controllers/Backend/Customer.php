@@ -781,8 +781,8 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         $namespace = Shopware()->Container()->get('snippets')->getNamespace('frontend/salutation');
-        $data['defaultBillingAddress']['salutationSnippet'] = $namespace->get($data['defaultBillingAddress']['salutation']);
-        $data['defaultShippingAddress']['salutationSnippet'] = $namespace->get($data['defaultShippingAddress']['salutation']);
+        $data['defaultBillingAddress']['salutationSnippet'] = $namespace->get($data['defaultBillingAddress']['salutation'] ?? null);
+        $data['defaultShippingAddress']['salutationSnippet'] = $namespace->get($data['defaultShippingAddress']['salutation'] ?? null);
         $data['customerStreamIds'] = $this->fetchCustomerStreams($id);
 
         if ($data['firstLogin'] instanceof DateTimeInterface && $data['firstLogin']->getTimestamp() < 0) {
@@ -825,13 +825,13 @@ class Shopware_Controllers_Backend_Customer extends Shopware_Controllers_Backend
         }
 
         // If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
-        if ($customer->getPaymentId() !== $params['paymentId']) {
+        if (isset($params['paymentId']) && $customer->getPaymentId() !== $params['paymentId']) {
             $params['paymentPreset'] = $params['paymentId'];
         }
 
         if (empty($params['shipping'][0]['firstName']) && empty($params['shipping'][0]['lastName'])) {
             // Shipping params are empty use the billing ones
-            $params['shipping'][0] = $params['billing'][0];
+            $params['shipping'][0] = $params['billing'][0] ?? null;
         }
 
         if ($paymentData && !empty($params['paymentData'])) {

@@ -32,12 +32,17 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformer;
 use Shopware\Components\Emotion\Preset\EmotionToPresetDataTransformerInterface;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 /**
  * @group EmotionPreset
  */
 class EmotionToPresetDataTransformerTest extends TestCase
 {
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
     /**
      * @var EmotionToPresetDataTransformer
      */
@@ -50,18 +55,12 @@ class EmotionToPresetDataTransformerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(Connection::class);
-        $this->connection->beginTransaction();
+        $this->connection = $this->getContainer()->get(Connection::class);
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->transformer = Shopware()->Container()->get(EmotionToPresetDataTransformerInterface::class);
-    }
-
-    protected function tearDown(): void
-    {
-        $this->connection->rollBack();
+        $this->transformer = $this->getContainer()->get(EmotionToPresetDataTransformerInterface::class);
     }
 
     public function testShouldFailBecauseOfMissingEmotion(): void

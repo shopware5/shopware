@@ -201,7 +201,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
     public function __construct($id, $config = [])
     {
         // Test-data for preview mode
-        if ((bool) $config['_preview'] === true && (bool) $config['_previewSample'] === true) {
+        if ($config['_preview'] && ($config['_previewSample'] ?? null)) {
             $array = $this->getDemoData();
 
             $array['_order']->language = 1;
@@ -216,7 +216,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
         $this->_id = $id;
         $this->_config = $config;
         $this->_summaryNet = (bool) ($config['summaryNet'] ?? false);
-        $this->_shippingCostsAsPosition = (bool) $config['shippingCostsAsPosition'];
+        $this->_shippingCostsAsPosition = (bool) ($config['shippingCostsAsPosition'] ?? false);
 
         $this->getOrder();
 

@@ -24,8 +24,8 @@
             <form action="{url controller='note' action='add' ordernumber=$sArticle.ordernumber _seo=false}" method="post">
                 {s name="DetailLinkNotepad" namespace="frontend/detail/actions" assign="snippetDetailLinkNotepad"}{/s}
                 <button type="submit"
-                   title="{$snippetDetailLinkNotepad|escape}"
-                   aria-label="{$snippetDetailLinkNotepad|escape}"
+                   title="{$snippetDetailLinkNotepad|escapeHtml}"
+                   aria-label="{$snippetDetailLinkNotepad|escapeHtml}"
                    class="product--action action--note"
                    data-ajaxUrl="{url controller='note' action='ajaxAdd' ordernumber=$sArticle.ordernumber _seo=false}"
                    data-text="{s name="DetailNotepadMarked"}{/s}">

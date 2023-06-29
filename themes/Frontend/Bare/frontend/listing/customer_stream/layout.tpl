@@ -56,7 +56,7 @@
 
                             {if $showListingButton}
                                 <div class="{$showListingCls}{if $fullscreen} is--align-center{/if}">
-                                    <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escape}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
+                                    <a href="{url controller='cat' sPage=1 sCategory=$sCategoryContent.id}" title="{$sCategoryContent.name|escapeHtml}" class="link--show-listing{if $fullscreen} btn is--primary{/if}">
                                         {s name="ListingActionsOffersLink"}Weitere Artikel in dieser Kategorie &raquo;{/s}
                                     </a>
                                 </div>

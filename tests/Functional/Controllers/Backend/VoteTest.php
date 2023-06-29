@@ -27,9 +27,12 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class VoteTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * Standard set up for every test - just disable auth
      */
@@ -78,13 +81,12 @@ class VoteTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test method to test the answerVoteAction-method, which sets an answer to a vote
-     *
-     * @depends testGetVotes
-     *
-     * @param array<string, mixed> $data Contains the product, which is created in testGetVotes
      */
-    public function testAnswerVote(array $data): void
+    public function testAnswerVote(): void
     {
+        $data = $this->testGetVotes();
+        $this->resetRequest()->resetResponse();
+
         $data['answer'] = 'Test';
         $this->Request()->setMethod('POST')->setPost($data);
 
@@ -98,13 +100,12 @@ class VoteTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * Test method to test the acceptVoteAction-method, which sets the active-property to 1, so the vote is enabled
      * in the frontend
-     *
-     * @depends testGetVotes
-     *
-     * @param array<string, mixed> $data Contains the product, which is created in testGetVotes
      */
-    public function testAcceptVote(array $data): void
+    public function testAcceptVote(): void
     {
+        $data = $this->testGetVotes();
+        $this->resetRequest()->resetResponse();
+
         $sql = 'UPDATE s_articles_vote SET active=0 WHERE id=?';
         Shopware()->Db()->query($sql, [$data['id']]);
 
@@ -120,13 +121,12 @@ class VoteTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test method to test the deleteVoteAction-method, which deletes the product created in the testGetVotes-method
-     *
-     * @depends testGetVotes
-     *
-     * @param array<string, mixed> $data Contains the product, which is created in testGetVotes
      */
-    public function testDeleteVote(array $data): void
+    public function testDeleteVote(): void
     {
+        $data = $this->testGetVotes();
+        $this->resetRequest()->resetResponse();
+
         $this->Request()->setMethod('POST')->setPost($data);
         $this->dispatch('backend/vote/delete');
         static::assertTrue($this->View()->getAssign('success'));

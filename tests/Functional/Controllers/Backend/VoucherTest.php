@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -32,12 +34,7 @@ use Shopware\Models\Voucher\Voucher;
 class VoucherTest extends Enlight_Components_Test_Controller_TestCase
 {
     /**
-     * @var Repository
-     */
-    protected $repository;
-
-    /**
-     * Voucher dummy data
+     * @var array<string, mixed>
      */
     private array $voucherData = [
         'description' => 'description',
@@ -60,14 +57,10 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         'value' => '10',
     ];
 
-    /**
-     * @var ModelManager
-     */
-    private $manager;
+    private Repository $repository;
 
-    /**
-     * Standard set up for every test - just disable auth
-     */
+    private ModelManager $manager;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -80,10 +73,7 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
     }
 
-    /**
-     * test the voucher list
-     */
-    public function testGetVoucher()
+    public function testGetVoucher(): void
     {
         // Delete old data
         $vouchers = $this->repository->findBy(['orderCode' => '65168phpunit']);
@@ -95,10 +85,10 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         $voucher = $this->createDummy();
 
         $this->dispatch('backend/voucher/getVoucher?page=1&start=0&limit=2000');
-        static::assertTrue($this->View()->success);
-        $returnData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returnData = $this->View()->getAssign('data');
         static::assertNotEmpty($returnData);
-        static::assertGreaterThan(0, $this->View()->totalCount);
+        static::assertGreaterThan(0, $this->View()->getAssign('totalCount'));
         $lastInsert = $returnData[\count($returnData) - 1];
         static::assertEquals($voucher->getId(), $lastInsert['id']);
 
@@ -106,42 +96,31 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         $this->manager->flush();
     }
 
-    /**
-     * test adding a voucher
-     *
-     * @return string The id to for the testUpdateVoucher Method
-     */
-    public function testAddVoucher()
+    public function testAddVoucher(): int
     {
-        $this->manager->getConnection()->executeUpdate('DELETE FROM s_emarketing_vouchers WHERE ordercode = :code', [
+        $this->manager->getConnection()->executeStatement('DELETE FROM s_emarketing_vouchers WHERE ordercode = :code', [
             ':code' => $this->voucherData['orderCode'],
         ]);
 
         $params = $this->voucherData;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/saveVoucher');
-        static::assertTrue($this->View()->success);
-        static::assertEquals($params['description'], $this->View()->data['description']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertEquals($params['description'], $this->View()->getAssign('data')['description']);
 
-        return $this->View()->data['id'];
+        return $this->View()->getAssign('data')['id'];
     }
 
     /**
-     * the the getVoucherDetail Method
-     *
      * @depends testAddVoucher
-     *
-     * @param string $id
-     *
-     * @return string the id to for the testUpdateVoucher Method
      */
-    public function testGetVoucherDetail($id)
+    public function testGetVoucherDetail(int $id): int
     {
         $params['voucherID'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/getVoucherDetail');
-        static::assertTrue($this->View()->success);
-        $returningData = $this->View()->data;
+        static::assertTrue($this->View()->getAssign('success'));
+        $returningData = $this->View()->getAssign('data');
         $voucherData = $this->voucherData;
         static::assertEquals($voucherData['description'], $returningData['description']);
         static::assertEquals($voucherData['numberOfUnits'], $returningData['numberOfUnits']);
@@ -154,11 +133,9 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * test the voucherCode validation methods with the created voucher
-     *
      * @depends testAddVoucher
      */
-    public function testValidateVoucherCode()
+    public function testValidateVoucherCode(): void
     {
         $params = [];
         $voucherModel = $this->createDummy(false);
@@ -186,13 +163,9 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Test the orderCode validation methods with the created voucher
-     *
      * @depends testAddVoucher
-     *
-     * @param string $id
      */
-    public function testValidateOrderCode($id)
+    public function testValidateOrderCode(int $id): void
     {
         $params = [];
         $voucherData = $this->voucherData;
@@ -217,13 +190,9 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Test updating a voucher
-     *
      * @depends testGetVoucherDetail
-     *
-     * @param string $id
      */
-    public function testUpdateVoucher($id)
+    public function testUpdateVoucher(int $id): int
     {
         $params = $this->voucherData;
         $params['id'] = $id;
@@ -231,59 +200,47 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         $this->Request()->setParams($params);
 
         $this->dispatch('backend/voucher/saveVoucher');
-        static::assertTrue($this->View()->success);
-        static::assertEquals($params['description'], $this->View()->data['description']);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertEquals($params['description'], $this->View()->getAssign('data')['description']);
 
         return $id;
     }
 
     /**
-     * Test generating voucher codes
-     *
      * @depends testUpdateVoucher
-     *
-     * @param string $id
      */
-    public function testGenerateVoucherCodes($id)
+    public function testGenerateVoucherCodes(int $id): int
     {
         $voucherData = $this->voucherData;
         $params = [];
         $params['numberOfUnits'] = $voucherData['numberOfUnits'];
-        $params['voucherId'] = (int) $id;
+        $params['voucherId'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/createVoucherCodes');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         return $id;
     }
 
     /**
-     * Test the listing of the voucher codes
-     *
      * @depends testGenerateVoucherCodes
-     *
-     * @param string $id
      */
-    public function testGetVoucherCodes($id)
+    public function testGetVoucherCodes(int $id): int
     {
         $this->dispatch('backend/voucher/getVoucherCodes?voucherID=' . $id);
-        static::assertTrue($this->View()->success);
-        static::assertCount(50, $this->View()->data);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertCount(50, $this->View()->getAssign('data'));
 
         return $id;
     }
 
     /**
-     * Test the exportVoucherCode Method
-     *
      * @depends testGetVoucherCodes
-     *
-     * @param string $id
      */
-    public function testExportVoucherCode($id)
+    public function testExportVoucherCode(int $id): int
     {
         $params = [];
-        $params['voucherId'] = (int) $id;
+        $params['voucherId'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/exportVoucherCode');
         $header = $this->Response()->getHeaders();
@@ -299,40 +256,26 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Test the delete the voucher method
-     *
      * @depends testExportVoucherCode
-     *
-     * @param string $id
      */
-    public function testDeleteVoucher($id)
+    public function testDeleteVoucher(int $id): void
     {
         $params = [];
-        $params['id'] = (int) $id;
+        $params['id'] = $id;
         $this->Request()->setParams($params);
         $this->dispatch('backend/voucher/deleteVoucher');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         static::assertNull($this->repository->find($params['id']));
     }
 
-    /**
-     * Test getTaxConfiguration Method
-     */
-    public function testGetTaxConfiguration()
+    public function testGetTaxConfiguration(): void
     {
         $this->dispatch('backend/voucher/getTaxConfiguration');
-        static::assertTrue($this->View()->success);
-        static::assertNotEmpty($this->View()->data);
+        static::assertTrue($this->View()->getAssign('success'));
+        static::assertNotEmpty($this->View()->getAssign('data'));
     }
 
-    /**
-     * Creates the dummy voucher
-     *
-     * @param bool $individualMode
-     *
-     * @return Voucher
-     */
-    private function getDummyVoucher($individualMode = true)
+    private function getDummyVoucher(bool $individualMode = true): Voucher
     {
         $voucher = new Voucher();
         $voucherData = $this->voucherData;
@@ -345,14 +288,7 @@ class VoucherTest extends Enlight_Components_Test_Controller_TestCase
         return $voucher;
     }
 
-    /**
-     * Helper method to create the dummy object
-     *
-     * @param bool $individualMode
-     *
-     * @return Voucher
-     */
-    private function createDummy($individualMode = true)
+    private function createDummy(bool $individualMode = true): Voucher
     {
         $voucher = $this->getDummyVoucher($individualMode);
         $this->manager->persist($voucher);

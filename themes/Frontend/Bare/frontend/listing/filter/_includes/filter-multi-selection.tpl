@@ -1,17 +1,17 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_multi_selection"}
-    <div class="filter-panel filter--multi-selection filter-facet--{$filterType} facet--{$facet->getFacetName()|escape:'htmlall'}"
+    <div class="filter-panel filter--multi-selection filter-facet--{$filterType} facet--{$facet->getFacetName()|escapeHtmlAttr}"
          data-filter-type="{$filterType}"
-         data-facet-name="{$facet->getFacetName()}"
-         data-field-name="{$facet->getFieldName()|escape:'htmlall'}">
+         data-facet-name="{$facet->getFacetName()|escapeHtmlAttr}"
+         data-field-name="{$facet->getFieldName()|escapeHtmlAttr}">
 
         {block name="frontend_listing_filter_facet_multi_selection_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_multi_selection_title"}
-                    <label class="filter-panel--title" for="{$facet->getFieldName()|escape:'htmlall'}" title="{$facet->getLabel()|escape:'htmlall'}">
-                        {$facet->getLabel()|escape}
+                    <label class="filter-panel--title" for="{$facet->getFieldName()|escapeHtmlAttr}" title="{$facet->getLabel()|escapeHtmlAttr}">
+                        {$facet->getLabel()|escapeHtml}
                     </label>
                 {/block}
 
@@ -50,15 +50,15 @@
 
                                                     {block name="frontend_listing_filter_facet_multi_selection_input"}
                                                         <span class="filter-panel--input filter-panel--{$inputType}">
-                                                            {$name = "__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"}
+                                                            {$name = "__{$facet->getFieldName()|escapeHtmlAttr}__{$option->getId()|escapeHtmlAttr}"}
                                                             {if $filterType == 'radio'}
-                                                                {$name = {$facet->getFieldName()|escape:'htmlall'} }
+                                                                {$name = {$facet->getFieldName()|escapeHtmlAttr} }
                                                             {/if}
 
                                                             <input type="{$inputType}"
-                                                                   id="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}"
+                                                                   id="__{$facet->getFieldName()|escapeHtmlAttr}__{$option->getId()|escapeHtmlAttr}"
                                                                    name="{$name}"
-                                                                   value="{$option->getId()|escape:'htmlall'}"
+                                                                   value="{$option->getId()|escapeHtmlAttr}"
                                                                    {if $option->isActive()}checked="checked" {/if}/>
 
                                                             <span class="input--state {$inputType}--state">&nbsp;</span>
@@ -67,7 +67,7 @@
 
                                                     {block name="frontend_listing_filter_facet_multi_selection_label"}
                                                         <label class="filter-panel--label"
-                                                               for="__{$facet->getFieldName()|escape:'htmlall'}__{$option->getId()|escape:'htmlall'}">
+                                                               for="__{$facet->getFieldName()|escapeHtmlAttr}__{$option->getId()|escapeHtmlAttr}">
 
                                                             {if $facet|is_a:'\Shopware\Bundle\SearchBundle\FacetResult\MediaListFacetResult'}
                                                                 {$mediaFile = {link file='frontend/_public/src/img/no-picture.jpg'}}
@@ -75,9 +75,9 @@
                                                                     {$mediaFile = $option->getMedia()->getFile()}
                                                                 {/if}
 
-                                                                <img class="filter-panel--media-image" src="{$mediaFile}" alt="{$option->getLabel()|escape:'htmlall'}" />
+                                                                <img class="filter-panel--media-image" src="{$mediaFile}" alt="{$option->getLabel()|escapeHtmlAttr}" />
                                                             {else}
-                                                                {$option->getLabel()|escape}
+                                                                {$option->getLabel()|escapeHtml}
                                                             {/if}
                                                         </label>
                                                     {/block}

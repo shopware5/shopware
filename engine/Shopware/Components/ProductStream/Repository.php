@@ -48,6 +48,9 @@ class Repository implements RepositoryInterface
     public function prepareCriteria(Criteria $criteria, $productStreamId)
     {
         $productStream = $this->getStreamById($productStreamId);
+        if (!\array_key_exists('type', $productStream)) {
+            return;
+        }
 
         if ((int) $productStream['type'] === ProductStream::TYPE_CONDITION) {
             $this->prepareConditionStream($productStream, $criteria);

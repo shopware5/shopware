@@ -90,7 +90,7 @@ class SitePageMenu
                 $menu[$key] = [];
             }
 
-            if ($site['__page_translation']) {
+            if (isset($site['__page_translation'])) {
                 $translations = unserialize($site['__page_translation'], ['allowed_classes' => false]);
 
                 if ($translations) {

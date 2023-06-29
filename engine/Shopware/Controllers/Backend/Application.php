@@ -877,7 +877,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                 $column = $mapping['joinColumns'][0]['name'];
                 $field = $metaData->getFieldForColumn($column);
 
-                if ($data[$field]) {
+                if (isset($data[$field])) {
                     $associationModel = $this->getManager()->find($mapping['targetEntity'], $data[$field]);
 
                     // proxies need to be loaded, otherwise the validation will be failed.
@@ -1087,39 +1087,41 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         $conditions = [];
 
         foreach ($filters as $condition) {
-            if ($condition['property'] === 'search') {
-                foreach ($fields as $name => $field) {
+            if (isset($condition['property'])) {
+                if ($condition['property'] === 'search') {
+                    foreach ($fields as $name => $field) {
+                        // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                        if (!empty($whiteList) && !\in_array($name, $whiteList, true)) {
+                            continue;
+                        }
+
+                        $value = $this->formatSearchValue($condition['value'], $field);
+
+                        $conditions[] = [
+                            'property' => $field['alias'],
+                            'operator' => 'OR',
+                            'value' => $value,
+                        ];
+                    }
+                } elseif (\array_key_exists($condition['property'], $fields)) {
                     // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                    if (!empty($whiteList) && !\in_array($name, $whiteList, true)) {
+                    if (!empty($whiteList) && !\in_array($condition['property'], $whiteList, true)) {
                         continue;
                     }
 
-                    $value = $this->formatSearchValue($condition['value'], $field);
+                    $field = $fields[$condition['property']];
+                    $value = $this->formatSearchValue($condition['value'], $field, $condition['expression'] ?? null);
 
-                    $conditions[] = [
+                    $tmpCondition = [
                         'property' => $field['alias'],
-                        'operator' => 'OR',
+                        'operator' => $condition['operator'] ?? null,
                         'value' => $value,
                     ];
+                    if (isset($condition['expression'])) {
+                        $tmpCondition['expression'] = $condition['expression'];
+                    }
+                    $conditions[] = $tmpCondition;
                 }
-            } elseif (\array_key_exists($condition['property'], $fields)) {
-                // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                if (!empty($whiteList) && !\in_array($condition['property'], $whiteList, true)) {
-                    continue;
-                }
-
-                $field = $fields[$condition['property']];
-                $value = $this->formatSearchValue($condition['value'], $field, $condition['expression'] ?? null);
-
-                $tmpCondition = [
-                    'property' => $field['alias'],
-                    'operator' => $condition['operator'] ?? null,
-                    'value' => $value,
-                ];
-                if (isset($condition['expression'])) {
-                    $tmpCondition['expression'] = $condition['expression'];
-                }
-                $conditions[] = $tmpCondition;
             }
         }
 

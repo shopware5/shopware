@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,23 +36,25 @@ use Shopware\Bundle\PluginInstallerBundle\Service\InstallerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\LegacyPluginInstaller;
 use Shopware\Components\HttpCache\CacheTimeServiceInterface;
 use Shopware\Components\HttpCache\DynamicCacheTimeService;
-use Shopware\Models\Article\Article;
+use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Article as Product;
+use Shopware\Models\Article\Detail;
 use Shopware\Models\Blog\Blog;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Emotion\Emotion;
-use Shopware\Models\Plugin\Plugin;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class DynamicCacheTimeServiceTest extends TestCase
 {
-    /**
-     * @var CacheTimeServiceInterface
-     */
-    private $cacheTimeService;
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
-    /**
-     * @var int
-     */
-    private $defaultTime;
+    private CacheTimeServiceInterface $cacheTimeService;
+
+    private int $defaultTime;
+
+    private ModelManager $modelManager;
 
     /**
      * {@inheritdoc}
@@ -64,7 +68,6 @@ class DynamicCacheTimeServiceTest extends TestCase
 
         $pluginManager = Shopware()->Container()->get(InstallerService::class);
 
-        /** @var Plugin $plugin */
         $plugin = $pluginManager->getPluginByName('HttpCache');
 
         $pluginManager->installPlugin($plugin);
@@ -85,23 +88,23 @@ class DynamicCacheTimeServiceTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->cacheTimeService = Shopware()->Container()->get(CacheTimeServiceInterface::class);
-
+        $this->cacheTimeService = $this->getContainer()->get(CacheTimeServiceInterface::class);
         $this->defaultTime = 3600;
+        $this->modelManager = $this->getContainer()->get(ModelManager::class);
 
         Shopware()->Models()->clear();
     }
 
-    public function testServiceIsAvailable()
+    public function testServiceIsAvailable(): void
     {
         static::assertInstanceOf(DynamicCacheTimeService::class, $this->cacheTimeService);
     }
 
-    public function testProductDetailTimeCalculation()
+    public function testProductDetailTimeCalculation(): void
     {
         $product = $this->createTestProduct();
         $request = $this->getProductRequest($product);
-        Shopware()->Container()->get('front')->setRequest($request);
+        $this->getContainer()->get('front')->setRequest($request);
 
         /**
          * The release date of products only contains information about the day, not minutes or seconds,
@@ -111,14 +114,14 @@ class DynamicCacheTimeServiceTest extends TestCase
         $productCacheTime = $this->cacheTimeService->getCacheTime($request);
         static::assertLessThanOrEqual($this->defaultTime, $productCacheTime);
 
-        Shopware()->Models()->remove($product);
+        $this->modelManager->remove($product);
     }
 
-    public function testCategoryTimeCalculation()
+    public function testCategoryTimeCalculation(): void
     {
         $category = $this->createTestCategory();
-        $request = $this->getcategoryRequest($category);
-        Shopware()->Container()->get('front')->setRequest($request);
+        $request = $this->getCategoryRequest($category);
+        $this->getContainer()->get('front')->setRequest($request);
 
         /*
          * Test if the five minute time difference is correctly recognised by the CacheTimeService.
@@ -129,14 +132,14 @@ class DynamicCacheTimeServiceTest extends TestCase
         $emotionCacheTime = $this->cacheTimeService->getCacheTime($request);
         static::assertLessThan(5, abs(300 - $emotionCacheTime));
 
-        Shopware()->Models()->remove($category);
+        $this->modelManager->remove($category);
     }
 
-    public function testBlogTimeCalculation()
+    public function testBlogTimeCalculation(): void
     {
         $blog = $this->createTestBlog();
         $request = $this->getBlogRequest($blog);
-        Shopware()->Container()->get('front')->setRequest($request);
+        $this->getContainer()->get('front')->setRequest($request);
 
         /*
          * Test if the five minute time difference is correctly recognised by the CacheTimeService.
@@ -147,14 +150,14 @@ class DynamicCacheTimeServiceTest extends TestCase
         $blogCacheTime = $this->cacheTimeService->getCacheTime($request);
         static::assertLessThan(5, abs(300 - $blogCacheTime));
 
-        Shopware()->Models()->remove($blog);
+        $this->modelManager->remove($blog);
     }
 
-    public function testBlogListingTimeCalculation()
+    public function testBlogListingTimeCalculation(): void
     {
         $blog = $this->createTestBlogWithCategory();
         $request = $this->getBlogListingRequest($blog);
-        Shopware()->Container()->get('front')->setRequest($request);
+        $this->getContainer()->get('front')->setRequest($request);
 
         /*
          * Test if the five minute time difference is correctly recognised by the CacheTimeService.
@@ -165,13 +168,10 @@ class DynamicCacheTimeServiceTest extends TestCase
         $blogCacheTime = $this->cacheTimeService->getCacheTime($request);
         static::assertLessThan(5, abs(300 - $blogCacheTime));
 
-        Shopware()->Models()->remove($blog);
+        $this->modelManager->remove($blog);
     }
 
-    /**
-     * @return Enlight_Controller_Request_RequestTestCase
-     */
-    private function getBlogListingRequest(Blog $blog)
+    private function getBlogListingRequest(Blog $blog): Enlight_Controller_Request_RequestTestCase
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams([
@@ -184,10 +184,7 @@ class DynamicCacheTimeServiceTest extends TestCase
         return $request;
     }
 
-    /**
-     * @return Enlight_Controller_Request_RequestTestCase
-     */
-    private function getBlogRequest(Blog $blog)
+    private function getBlogRequest(Blog $blog): Enlight_Controller_Request_RequestTestCase
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams([
@@ -200,17 +197,14 @@ class DynamicCacheTimeServiceTest extends TestCase
         return $request;
     }
 
-    /**
-     * @return Blog|null
-     */
-    private function createTestBlog()
+    private function createTestBlog(): Blog
     {
         try {
             $blog = new Blog();
             $blog->fromArray($this->getBlogTestData());
 
-            Shopware()->Models()->persist($blog);
-            Shopware()->Models()->flush();
+            $this->modelManager->persist($blog);
+            $this->modelManager->flush();
 
             return $blog;
         } catch (Exception $e) {
@@ -218,10 +212,7 @@ class DynamicCacheTimeServiceTest extends TestCase
         }
     }
 
-    /**
-     * @return Blog|null
-     */
-    private function createTestBlogWithCategory()
+    private function createTestBlogWithCategory(): Blog
     {
         try {
             $blog = $this->createTestBlog();
@@ -229,8 +220,8 @@ class DynamicCacheTimeServiceTest extends TestCase
 
             $blog->setCategoryId($blogCategory->getId());
 
-            Shopware()->Models()->persist($blog);
-            Shopware()->Models()->flush();
+            $this->modelManager->persist($blog);
+            $this->modelManager->flush();
 
             return $blog;
         } catch (Exception $e) {
@@ -238,10 +229,7 @@ class DynamicCacheTimeServiceTest extends TestCase
         }
     }
 
-    /**
-     * @return Enlight_Controller_Request_RequestTestCase
-     */
-    private function getcategoryRequest(Category $category)
+    private function getCategoryRequest(Category $category): Enlight_Controller_Request_RequestTestCase
     {
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams([
@@ -254,17 +242,14 @@ class DynamicCacheTimeServiceTest extends TestCase
         return $request;
     }
 
-    /**
-     * @return Emotion|null
-     */
-    private function createTestEmotion()
+    private function createTestEmotion(): Emotion
     {
         try {
             $emotion = new Emotion();
             $emotion->fromArray($this->getEmotionTestData());
 
-            Shopware()->Models()->persist($emotion);
-            Shopware()->Models()->flush();
+            $this->modelManager->persist($emotion);
+            $this->modelManager->flush();
 
             return $emotion;
         } catch (Exception $e) {
@@ -272,16 +257,13 @@ class DynamicCacheTimeServiceTest extends TestCase
         }
     }
 
-    /**
-     * @return Category|null
-     */
-    private function createTestCategory()
+    private function createTestCategory(): Category
     {
         try {
             $category = new Category();
-            $category->setActive(1);
+            $category->setActive(true);
             $category->setName('MyTestCategory');
-            $category->setParent(Shopware()->Models()->getRepository(Category::class)->find(1));
+            $category->setParent($this->modelManager->getRepository(Category::class)->find(1));
 
             $emotion = $this->createTestEmotion();
 
@@ -293,8 +275,8 @@ class DynamicCacheTimeServiceTest extends TestCase
                 new ArrayCollection([$emotion])
             );
 
-            Shopware()->Models()->persist($category);
-            Shopware()->Models()->flush();
+            $this->modelManager->persist($category);
+            $this->modelManager->flush();
 
             return $category;
         } catch (Exception $e) {
@@ -302,11 +284,9 @@ class DynamicCacheTimeServiceTest extends TestCase
         }
     }
 
-    /**
-     * @return Enlight_Controller_Request_RequestTestCase
-     */
-    private function getProductRequest(Article $product)
+    private function getProductRequest(Product $product): Enlight_Controller_Request_RequestTestCase
     {
+        static::assertInstanceOf(Detail::class, $product->getMainDetail());
         $request = new Enlight_Controller_Request_RequestTestCase();
         $request->setParams([
             'module' => 'frontend',
@@ -319,13 +299,10 @@ class DynamicCacheTimeServiceTest extends TestCase
         return $request;
     }
 
-    /**
-     * @return Article|null
-     */
-    private function createTestProduct()
+    private function createTestProduct(): Product
     {
         try {
-            $product = new Article();
+            $product = new Product();
 
             $product->fromArray($this->getProductTestData());
             /*
@@ -333,12 +310,13 @@ class DynamicCacheTimeServiceTest extends TestCase
              * so the timestamp "five minutes from now" will evaluate to the previous midnight.
              * Therefore we need to add another day, so it'll evaluate to the next midnight.
              */
+            static::assertInstanceOf(Detail::class, $product->getMainDetail());
             $product->getMainDetail()->setReleaseDate((new DateTime())->add(
                 new DateInterval('P1D')
             ));
 
-            Shopware()->Models()->persist($product);
-            Shopware()->Models()->flush();
+            $this->modelManager->persist($product);
+            $this->modelManager->flush();
 
             return $product;
         } catch (Exception $e) {
@@ -347,18 +325,18 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getProductTestData()
+    private function getProductTestData(): array
     {
         return [
-            'name' => 'Testarticle',
-            'description' => 'testdescription',
+            'name' => 'Test product',
+            'description' => 'test description',
             'descriptionLong' => 'Test descriptionLong',
             'active' => true,
             'pseudoSales' => 999,
             'highlight' => true,
-            'keywords' => 'test, testarticle',
+            'keywords' => 'test, testproduct',
             'taxId' => 1,
             'mainDetail' => [
                 'active' => 1,
@@ -369,9 +347,9 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getEmotionTestData()
+    private function getEmotionTestData(): array
     {
         return [
             'active' => 1,
@@ -392,9 +370,9 @@ class DynamicCacheTimeServiceTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
-    private function getBlogTestData()
+    private function getBlogTestData(): array
     {
         return [
             'title' => 'MyTestBlog',
@@ -406,10 +384,7 @@ class DynamicCacheTimeServiceTest extends TestCase
         ];
     }
 
-    /**
-     * @return DateTime
-     */
-    private function getTimestampFiveMinutesFromNow()
+    private function getTimestampFiveMinutesFromNow(): DateTime
     {
         return (new DateTime())->add(new DateInterval('PT5M'));
     }

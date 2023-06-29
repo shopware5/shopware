@@ -359,7 +359,7 @@ class User extends Resource
         $defaultEncoderName = $passwordEncoderRegistry->getDefaultPasswordEncoderName();
         $encoder = $passwordEncoderRegistry->getEncoderByName($defaultEncoderName);
 
-        $data['password'] = $encoder->encodePassword($data['password']);
+        $data['password'] = $encoder->encodePassword($data['password'] ?? '');
         $data['encoder'] = $encoder->getName();
 
         return $data;

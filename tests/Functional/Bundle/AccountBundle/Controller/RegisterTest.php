@@ -72,6 +72,7 @@ class RegisterTest extends ControllerTestCase
             'register' => [
                 'personal' => $this->getPersonalData(),
                 'billing' => $this->getBillingData(),
+                'shipping' => $this->getShippingData(),
             ],
         ]);
 
@@ -104,6 +105,7 @@ class RegisterTest extends ControllerTestCase
             'register' => [
                 'personal' => $this->getPersonalData(),
                 'billing' => $this->getBillingData(),
+                'shipping' => $this->getShippingData(),
             ],
         ]);
 
@@ -173,6 +175,7 @@ class RegisterTest extends ControllerTestCase
                     'company' => 'company',
                     'department' => 'department',
                 ]),
+                'shipping' => $this->getShippingData(),
             ],
         ]);
 
@@ -199,6 +202,7 @@ class RegisterTest extends ControllerTestCase
                     'accountmode' => Customer::ACCOUNT_MODE_FAST_LOGIN,
                 ]),
                 'billing' => $this->getBillingData(),
+                'shipping' => $this->getShippingData(),
             ],
         ]);
 
@@ -228,6 +232,7 @@ class RegisterTest extends ControllerTestCase
             'register' => [
                 'personal' => $this->getPersonalData(),
                 'billing' => $this->getBillingData(),
+                'shipping' => $this->getShippingData(),
             ],
         ]);
 

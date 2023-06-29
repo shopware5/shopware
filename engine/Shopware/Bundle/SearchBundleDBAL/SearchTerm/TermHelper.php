@@ -71,6 +71,9 @@ class TermHelper implements TermHelperInterface
      */
     public function splitTerm($string)
     {
+        if (empty($string)) {
+            return [];
+        }
         if ($this->replaceUmlauts) {
             $string = str_replace(
                 ['Ü', 'ü', 'ä', 'Ä', 'ö', 'Ö', 'ß'],

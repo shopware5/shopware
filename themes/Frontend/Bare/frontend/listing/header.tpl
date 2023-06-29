@@ -36,7 +36,7 @@
 {/block}
 
 {* Description *}
-{block name="frontend_index_header_meta_description"}{if $sCategoryContent.metaDescription}{$sCategoryContent.metaDescription|strip_tags|escape}{else}{s name="IndexMetaDescriptionStandard"}{/s}{/if}{/block}
+{block name="frontend_index_header_meta_description"}{if $sCategoryContent.metaDescription}{$sCategoryContent.metaDescription|strip_tags|escapeHtml}{else}{s name="IndexMetaDescriptionStandard"}{/s}{/if}{/block}
 
 {* Canonical link *}
 {block name='frontend_index_header_canonical'}
@@ -47,7 +47,7 @@
         {$pages = ceil($sNumberArticles / $criteria->getLimit())}
     {/if}
 
-    {if $SeoMetaRobots|strpos:'noindex' === false}
+    {if !$SeoMetaRobots || $SeoMetaRobots|strpos:'noindex' === false}
         <link rel="canonical" href="{url params = $sCategoryContent.canonicalParams}"/>
     {/if}
 

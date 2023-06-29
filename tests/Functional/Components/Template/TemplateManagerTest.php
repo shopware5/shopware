@@ -89,14 +89,14 @@ class TemplateManagerTest extends TestCase
     public function testValidPermissionsAreSet(): void
     {
         $testDir = sys_get_temp_dir() . '/tpl-test';
+        if (!is_dir($testDir)) {
+            mkdir($testDir);
+        }
         $backendOptions = [
             'hashed_directory_perm' => 0777 & ~umask(),
             'cache_file_perm' => 0666 & ~umask(),
         ];
-        /** @var Enlight_Template_Manager $template */
-        $template = Enlight_Class::Instance('Enlight_Template_Manager', [null, $backendOptions]);
-
-        mkdir($testDir);
+        $template = Enlight_Class::Instance(Enlight_Template_Manager::class, [null, $backendOptions]);
 
         $cacheDirectory = $testDir . '/compile-test';
         $cacheFile = $cacheDirectory . '/8843d7f92416211de9ebb963ff4ce28125932878.string.php';

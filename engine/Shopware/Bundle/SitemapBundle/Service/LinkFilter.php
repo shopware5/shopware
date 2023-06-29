@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,16 +24,28 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Controllers\Frontend;
+namespace Shopware\Bundle\SitemapBundle\Service;
 
-use Enlight_Components_Test_Controller_TestCase;
-
-class SitemapXmlTest extends Enlight_Components_Test_Controller_TestCase
+class LinkFilter
 {
-    public function testIndex()
+    /**
+     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
+     * Returns false, if the link is not allowed
+     *
+     * @param array<string, mixed> $userParams
+     */
+    public static function filterLink(?string $link, array &$userParams = []): bool
     {
-        $this->dispatch('/SitemapXml');
+        if (empty($link)) {
+            return true;
+        }
+        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
+        parse_str($parsedUserParams, $userParams);
+        $blacklist = ['', 'sitemap', 'sitemapXml'];
+        if (\in_array($userParams['sViewport'] ?? [], $blacklist, true)) {
+            return false;
+        }
 
-        static::assertEquals(302, $this->Response()->getHttpResponseCode());
+        return true;
     }
 }

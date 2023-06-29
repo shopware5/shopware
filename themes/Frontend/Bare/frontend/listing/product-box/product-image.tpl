@@ -1,6 +1,6 @@
 {* Product image - uses the picture element for responsive retina images. *}
 <a href="{$sArticle.linkDetails}"
-   title="{$sArticle.articleName|escape}"
+   title="{$sArticle.articleName|escapeHtml}"
    class="product--image"
    {block name='frontend_listing_box_article_image_attributes'}{/block}
    >
@@ -9,12 +9,12 @@
             {block name='frontend_listing_box_article_image_media'}
                 <span class="image--media">
 
-                    {$desc = $sArticle.articleName|escape}
+                    {$desc = $sArticle.articleName|escapeHtml}
 
                     {if isset($sArticle.image.thumbnails)}
 
                         {if $sArticle.image.description}
-                            {$desc = $sArticle.image.description|escape}
+                            {$desc = $sArticle.image.description|escapeHtml}
                         {/if}
 
                         {block name='frontend_listing_box_article_image_picture_element'}

@@ -43,10 +43,10 @@ class ImmediateDeliveryConditionTest extends TestCase
 
         $this->search(
             [
-                'first' => ['inStock' => 0, 'minPurchase' => 1],
-                'second' => ['inStock' => 0, 'minPurchase' => 1],
-                'third' => ['inStock' => 2, 'minPurchase' => 1],
-                'fourth' => ['inStock' => 1, 'minPurchase' => 1],
+                'first' => ['inStock' => 0, 'minPurchase' => 1, 'createVariants' => false],
+                'second' => ['inStock' => 0, 'minPurchase' => 1, 'createVariants' => false],
+                'third' => ['inStock' => 2, 'minPurchase' => 1, 'createVariants' => false],
+                'fourth' => ['inStock' => 1, 'minPurchase' => 1, 'createVariants' => false],
             ],
             ['third', 'fourth'],
             null,
@@ -60,10 +60,10 @@ class ImmediateDeliveryConditionTest extends TestCase
 
         $this->search(
             [
-                'first' => ['inStock' => 0, 'minPurchase' => 1],
-                'second' => ['inStock' => 0, 'minPurchase' => 1],
-                'third' => ['inStock' => 3, 'minPurchase' => 3],
-                'fourth' => ['inStock' => 20, 'minPurchase' => 20],
+                'first' => ['inStock' => 0, 'minPurchase' => 1, 'createVariants' => false],
+                'second' => ['inStock' => 0, 'minPurchase' => 1, 'createVariants' => false],
+                'third' => ['inStock' => 3, 'minPurchase' => 3, 'createVariants' => false],
+                'fourth' => ['inStock' => 20, 'minPurchase' => 20, 'createVariants' => false],
             ],
             ['third', 'fourth'],
             null,
@@ -77,11 +77,11 @@ class ImmediateDeliveryConditionTest extends TestCase
 
         $this->search(
             [
-                'first' => ['inStock' => 0, 'minPurchase' => 1],
-                'second' => ['inStock' => 0, 'minPurchase' => 1],
-                'third' => ['inStock' => 1, 'minPurchase' => 1],
+                'first' => ['inStock' => 0, 'minPurchase' => 1, 'createVariants' => false],
+                'second' => ['inStock' => 0, 'minPurchase' => 1, 'createVariants' => false],
+                'third' => ['inStock' => 1, 'minPurchase' => 1, 'createVariants' => false],
                 'fourth' => ['inStock' => 1, 'minPurchase' => 1, 'createVariants' => true],
-                'fifth' => ['inStock' => 2, 'minPurchase' => 1],
+                'fifth' => ['inStock' => 2, 'minPurchase' => 1, 'createVariants' => false],
             ],
             ['third', 'fifth'],
             null,
@@ -118,10 +118,10 @@ class ImmediateDeliveryConditionTest extends TestCase
         $additionally
     ): Article {
         if ($additionally['createVariants'] === true) {
-            $fourth = $this->getProduct('fourth', $context, $category);
+            $fourth = $this->getProduct($number, $context, $category);
             $configurator = $this->helper->getConfigurator(
                 $context->getCurrentCustomerGroup(),
-                'fourth'
+                $number
             );
 
             $fourth = array_merge($fourth, $configurator);
