@@ -6,6 +6,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+    group: js-lint-and-jest-${{ github.ref }}-${{ github.workflow }}
+    cancel-in-progress: true
+
 jobs:
   js:
       runs-on: ubuntu-latest

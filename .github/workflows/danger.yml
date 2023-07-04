@@ -3,6 +3,10 @@ name: Danger
 on:
     pull_request:
 
+concurrency:
+    group: danger-php-${{ github.ref }}-${{ github.workflow }}
+    cancel-in-progress: true
+
 jobs:
     check:
         runs-on: ubuntu-latest
