@@ -1,0 +1,46 @@
+name: Check PHP code
+
+on:
+    workflow_call:
+
+permissions:
+    contents: read
+
+jobs:
+    php:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - uses: cachix/install-nix-action@v20
+              with:
+                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
+
+            - uses: cachix/cachix-action@v12
+              with:
+                  name: devenv
+
+            -   name: Use Shopware Cache
+                uses: cachix/cachix-action@v12
+                with:
+                    name: shopware
+                    authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+
+            - name: Install devenv.sh
+              run: nix-env -if https://github.com/cachix/devenv/tarball/main
+              shell: sh
+
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            - uses: actions/cache@v3
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
+
+            - run: devenv up &
+            - run: devenv shell init-shopware
+            - run: devenv shell check-code
