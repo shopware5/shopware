@@ -6,6 +6,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+    group: end-to-end-${{ github.ref }}-${{ github.workflow }}
+    cancel-in-progress: true
+
 jobs:
   Mink:
     strategy:
