@@ -21,11 +21,17 @@ jobs:
         uses: ./.github/workflows/check-js-code.yml
         secrets: inherit
 
+    create-code-coverage:
+        name: PhpUnit code coverage
+        uses: ./.github/workflows/code-coverage.yml
+        secrets: inherit
+        needs: [ check-php-code, check-js-code ]
+
     php-unit:
         name: PHPUnit tests
         uses: ./.github/workflows/phpunit.yml
         secrets: inherit
-        needs: [ check-php-code, check-js-code ]
+        needs: [ create-code-coverage ]
 
     e2e-tests:
         name: E2E

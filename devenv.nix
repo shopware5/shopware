@@ -115,8 +115,8 @@
       mysql -V
   '';
 
-  scripts.test-phpunit-coverage-statistic.exec= ''
-    make test-phpunit-coverage-statistic
+  scripts.test-phpunit-coverage-cobertura.exec= ''
+    make test-phpunit-coverage-cobertura
   '';
 
   scripts.test-phpunit-elasticsearch.exec= ''
