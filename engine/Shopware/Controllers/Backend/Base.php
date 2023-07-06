@@ -1043,15 +1043,20 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $email = $this->Request()->getParam('value');
+        $emails = explode(',', (string) $this->Request()->getParam('value', ''));
 
         /** @var EmailValidatorInterface $emailValidator */
         $emailValidator = $this->container->get(EmailValidator::class);
-        if ($emailValidator->isValid($email)) {
-            $this->Response()->setContent(1);
-        } else {
-            $this->Response()->setContent('');
+
+        foreach ($emails as $email) {
+            if (!$emailValidator->isValid($email)) {
+                $this->Response()->setContent('');
+
+                return;
+            }
         }
+
+        $this->Response()->setContent(1);
     }
 
     public function getSalutationsAction()
