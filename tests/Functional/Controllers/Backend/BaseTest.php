@@ -26,8 +26,10 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
 use Enlight_Controller_Request_RequestTestCase;
+use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
+use Generator;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware_Controllers_Backend_Base;
@@ -211,6 +213,42 @@ class BaseTest extends Enlight_Components_Test_Controller_TestCase
                 'additionalText' => '',
                 'price' => 9.99,
             ]],
+        ];
+    }
+
+    /**
+     * @dataProvider provideEmails
+     */
+    public function testValidateEmailAction(string $emails, bool $expectedIsValid): void
+    {
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+        $request->setParam('value', $emails);
+
+        $controller = $this->createController();
+        $controller->setRequest($request);
+        $controller->setResponse($response);
+        $controller->validateEmailAction();
+
+        static::assertSame($expectedIsValid, (bool) $response->getContent());
+    }
+
+    /**
+     * @return Generator<string, array{emails: string, expectedIsValid: bool}>
+     */
+    public function provideEmails(): Generator
+    {
+        yield '1 mail shall be valid' => [
+            'emails' => 'email@shopware.com',
+            'expectedIsValid' => true,
+        ];
+        yield '3 mails shall be valid' => [
+            'emails' => 'email@shopware.com,email2@shopware.com,email3@shopware.com',
+            'expectedIsValid' => true,
+        ];
+        yield '3 mail shall be invalid' => [
+            'emails' => 'email@shopware.com,email2@shopware.com,email3@shopware.com||test',
+            'expectedIsValid' => false,
         ];
     }
 
