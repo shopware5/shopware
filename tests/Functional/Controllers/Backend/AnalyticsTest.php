@@ -1154,7 +1154,7 @@ class AnalyticsTest extends ControllerTestCase
     {
         preg_match_all(
             '#[?&]([qp]|query|highlight|encquery|url|field-keywords|as_q|sucheall|satitle|KW)=([^&\$]+)#',
-            utf8_encode($url) . '&',
+            mb_convert_encoding($url, 'UTF-8', 'ISO-8859-1') . '&',
             $matches
         );
         if (empty($matches[0])) {

@@ -218,6 +218,10 @@ class HrefLangService implements HrefLangServiceInterface
             return true;
         }
 
+        if (!isset($parameters['controller'], $parameters['action'])) {
+            return false;
+        }
+
         if ($parameters['controller'] === 'index' && $parameters['action'] === 'index') {
             return true;
         }

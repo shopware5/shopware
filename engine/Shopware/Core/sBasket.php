@@ -426,7 +426,7 @@ class sBasket implements \Enlight_Hook
             $tax = 19;
         }
 
-        if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
+        if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && $this->sSYSTEM->sUSERGROUPDATA['id']) {
             $discountNet = $discount;
         } else {
             $discountNet = round($discount / (100 + $tax) * 100, 3);
@@ -754,7 +754,7 @@ class sBasket implements \Enlight_Hook
             return ['sErrorFlag' => true, 'sErrorMessages' => $sErrorMessages];
         }
 
-        if ($voucherDetails['id']) {
+        if (!empty($voucherDetails['id'])) {
             // If we have voucher details, it's a reusable code
             // We need to check how many times it has already been used
             $usedVoucherCount = $this->db->fetchRow(
@@ -784,10 +784,10 @@ class sBasket implements \Enlight_Hook
                 ) ?: [];
                 unset($voucherCodeDetails['voucherID']);
                 $voucherDetails = array_merge($voucherCodeDetails, $voucherDetails);
-                $individualCode = $voucherDetails && $voucherDetails['description'];
+                $individualCode = $voucherDetails && ($voucherDetails['description'] ?? null);
             }
         }
-        $streams = array_filter(explode('|', $voucherDetails['customer_stream_ids']));
+        $streams = array_filter(explode('|', $voucherDetails['customer_stream_ids'] ?? ''));
 
         if (!empty($streams)) {
             $context = $this->contextService->getShopContext();
@@ -809,7 +809,7 @@ class sBasket implements \Enlight_Hook
         // 3 - Voucher is reusable and has already been used to the limit
         if (!$voucherDetails
             || !$voucherCode
-            || ($voucherDetails['numberofunits'] <= $usedVoucherCount['vouchers'] && !$individualCode)
+            || (($voucherDetails['numberofunits'] ?? 0) <= ($usedVoucherCount['vouchers'] ?? 0) && !$individualCode)
         ) {
             $sErrorMessages[] = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
                 'VoucherFailureNotFound',
@@ -875,7 +875,7 @@ class sBasket implements \Enlight_Hook
             $voucherDetails['value'] *= $factor;
         }
 
-        $basketValue = $amount['totalAmount'] / $factor;
+        $basketValue = ($amount['totalAmount'] ?? 0) / $factor;
         // Check if the basket's value is above the voucher's
         if ($basketValue < $voucherDetails['minimumcharge']) {
             $snippet = $this->snippetManager->getNamespace('frontend/basket/internalMessages')->get(
@@ -1092,7 +1092,7 @@ class sBasket implements \Enlight_Hook
 
         if ($minimumOrder && !$this->sSYSTEM->sUSERGROUPDATA['minimumordersurcharge']) {
             $amount = $this->sGetAmount();
-            if ($amount['totalAmount'] < ($minimumOrder * $factor)) {
+            if (($amount['totalAmount'] ?? 0) < ($minimumOrder * $factor)) {
                 return $minimumOrder * $factor;
             }
         }
@@ -1149,7 +1149,7 @@ class sBasket implements \Enlight_Hook
             $tax = 19;
         }
 
-        if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
+        if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && $this->sSYSTEM->sUSERGROUPDATA['id']) {
             $discountNet = $minimumOrderSurcharge;
         } else {
             $discountNet = round($minimumOrderSurcharge / (100 + $tax) * 100, 3);
@@ -1215,13 +1215,13 @@ class sBasket implements \Enlight_Hook
     }
 
     /**
-     * Add percentual surcharge
+     * Add percentage surcharge
      * Used only internally in sBasket::sGetBasket
      *
      * @throws \Enlight_Exception
      * @throws \Zend_Db_Adapter_Exception
      *
-     * @return false|void|null False on failure, null on success
+     * @return false|null False on failure, null on success
      */
     public function sInsertSurchargePercent()
     {
@@ -1287,7 +1287,7 @@ class sBasket implements \Enlight_Hook
             $tax = 19;
         }
 
-        if (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id']) {
+        if (empty($this->sSYSTEM->sUSERGROUPDATA['tax']) && $this->sSYSTEM->sUSERGROUPDATA['id']) {
             $discountNet = $surcharge;
         } else {
             $discountNet = round($surcharge / (100 + $tax) * 100, 3);
@@ -1796,7 +1796,7 @@ class sBasket implements \Enlight_Hook
                         'price' => $grossPrice,
                         'netprice' => $netPrice,
                         'currencyFactor' => $this->sSYSTEM->sCurrency['factor'],
-                        'articlename' => $additionalInfo['name'],
+                        'articlename' => $additionalInfo['name'] ?? null,
                     ]
                 );
 
@@ -2337,7 +2337,7 @@ class sBasket implements \Enlight_Hook
     private function filterUsedVoucher($userId, $voucherDetails)
     {
         $sErrorMessages = [];
-        if ($userId && $voucherDetails['id']) {
+        if ($userId && !empty($voucherDetails['id'])) {
             $queryVoucher = $this->db->fetchAll(
                 'SELECT s_order_details.id AS id
                     FROM s_order, s_order_details
@@ -2721,7 +2721,7 @@ class sBasket implements \Enlight_Hook
                         ->round($netprice, $tax, $quantity);
 
                     // If basket comprised any discount, calculate brutto-value for the discount
-                    if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
+                    if ($this->contextService->getShopContext()->getCurrentCustomerGroup()->getPercentageDiscount() && $this->sCheckForDiscount()) {
                         $discount += ($getProducts[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
                     }
                 } elseif ($getProducts[$key]['modus'] == CartPositionsMode::CUSTOMER_GROUP_DISCOUNT) {
@@ -2737,7 +2737,7 @@ class sBasket implements \Enlight_Hook
                                  || $getProducts[$key]['modus'] == CartPositionsMode::SWAG_BUNDLE_DISCOUNT
                 ) {
                     $getProducts[$key]['amountWithTax'] = round(1 * ($price / 100 * (100 + $tax)), 2);
-                    if ($this->sSYSTEM->sUSERGROUPDATA['basketdiscount'] && $this->sCheckForDiscount()) {
+                    if (isset($this->sSYSTEM->sUSERGROUPDATA['basketdiscount']) && $this->sCheckForDiscount()) {
                         $discount += ($getProducts[$key]['amountWithTax'] / 100 * $this->sSYSTEM->sUSERGROUPDATA['basketdiscount']);
                     }
                 }
@@ -2951,22 +2951,22 @@ SQL;
             $additionalInfo = [];
             $quantity = $cartItem->getQuantity();
 
-            if ($additionalInformation[$cartItem->getId()]) {
+            if (isset($additionalInformation[$cartItem->getId()])) {
                 $additionalInfo = $additionalInformation[$cartItem->getId()];
             }
             // Check if quantity matches minimum purchase
-            if (!$additionalInfo['minpurchase']) {
+            if (empty($additionalInfo['minpurchase'])) {
                 $additionalInfo['minpurchase'] = 1;
             }
 
-            $additionalInfo['blocked_customer_groups'] = array_filter(explode('|', $additionalInfo['blocked_customer_groups']));
+            $additionalInfo['blocked_customer_groups'] = array_filter(explode('|', $additionalInfo['blocked_customer_groups'] ?? ''));
 
             if ($quantity < $additionalInfo['minpurchase']) {
                 $quantity = $additionalInfo['minpurchase'];
             }
 
             // Check if quantity matches the step requirements
-            if (!$additionalInfo['purchasesteps']) {
+            if (empty($additionalInfo['purchasesteps'])) {
                 $additionalInfo['purchasesteps'] = 1;
             }
 
@@ -2988,7 +2988,7 @@ SQL;
                 $additionalInfo['purchaseunit'] = 1;
             }
 
-            if (isset($products[$additionalInfo['ordernumber']])) {
+            if (isset($additionalInfo['ordernumber']) && isset($products[$additionalInfo['ordernumber']])) {
                 $additionalInfo['product'] = $products[$additionalInfo['ordernumber']];
 
                 $additionalInfo['name'] = $additionalInfo['product']->getName();
@@ -3048,7 +3048,7 @@ SQL;
         /** @var CartItemStruct $cartItem */
         foreach ($cartItems as $cartItem) {
             $quantity = $cartItem->getQuantity();
-            $prices = $itemPrices[$cartItem->getId()];
+            $prices = $itemPrices[$cartItem->getId()] ?? null;
             $additionalInfo = $cartItem->getAdditionalInfo();
             $priceResult = [];
 
@@ -3314,7 +3314,7 @@ SQL;
 
     private function getBasketQuantity(int $quantity, array $basketProduct, array $product): int
     {
-        $newQuantity = ($quantity + $basketProduct['quantity']) ?: 0;
+        $newQuantity = $quantity + ($basketProduct['quantity'] ?? 0);
 
         if ($product['laststock'] && $newQuantity > $product['instock']) {
             return (int) $product['instock'];

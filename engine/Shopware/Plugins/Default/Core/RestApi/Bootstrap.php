@@ -77,6 +77,8 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * Listener method for the Enlight_Controller_Front_DispatchLoopStartup event.
+     *
+     * @return void
      */
     public function onDispatchLoopStartup(Enlight_Controller_EventArgs $args)
     {
@@ -95,6 +97,8 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
 
     /**
      * This pre-dispatch event-hook checks permissions
+     *
+     * @return void
      */
     public function onFrontPreDispatch(Enlight_Controller_EventArgs $args)
     {
@@ -160,7 +164,7 @@ class Shopware_Plugins_Core_RestApi_Bootstrap extends Shopware_Components_Plugin
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {
         if (!$this->isApiCall) {
-            return;
+            return null;
         }
 
         $adapter = new Zend_Auth_Adapter_Http([

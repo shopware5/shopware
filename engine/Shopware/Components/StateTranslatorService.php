@@ -62,7 +62,7 @@ class StateTranslatorService implements StateTranslatorServiceInterface
     {
         $type = strtolower($type);
 
-        if (!$this->availableTypes[$type]) {
+        if (empty($this->availableTypes[$type])) {
             throw new RuntimeException(sprintf('Invalid type \'%s\' given.', $type));
         }
 

@@ -52,7 +52,7 @@ class DefaultRouteService
      */
     public function getDefaultNoCacheTags()
     {
-        $controllers = $this->config['noCacheControllers'];
+        $controllers = $this->config['noCacheControllers'] ?? null;
         $result = [];
 
         if (empty($controllers)) {

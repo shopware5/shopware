@@ -297,7 +297,7 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
      * @param string|array $returnColumns
      * @param string|array $omitColumns
      *
-     * @return stdClass|bool
+     * @return stdClass|false
      */
     public function getResultRowObject($returnColumns = null, $omitColumns = null)
     {
@@ -308,15 +308,16 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
         $returnObject = new stdClass();
 
         if ($returnColumns !== null) {
-            $availableColumns = array_keys($this->_resultRow);
             foreach ((array) $returnColumns as $returnColumn) {
-                if (in_array($returnColumn, $availableColumns)) {
+                if (array_key_exists($returnColumn, $this->_resultRow)) {
                     $returnObject->{$returnColumn} = $this->_resultRow[$returnColumn];
                 }
             }
 
             return $returnObject;
-        } elseif ($omitColumns !== null) {
+        }
+
+        if ($omitColumns !== null) {
             $omitColumns = (array) $omitColumns;
             foreach ($this->_resultRow as $resultColumn => $resultValue) {
                 if (!in_array($resultColumn, $omitColumns)) {

@@ -843,7 +843,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
         trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $userAgent = $this->getHeader('USER_AGENT');
-        if ($userAgent === false) {
+        if (empty($userAgent)) {
             return false;
         }
         $header = strtolower($userAgent);
@@ -869,7 +869,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
             return $this->server->get('HTTP_' . $temp);
         }
 
-        if (strpos($temp, 'CONTENT_') === 0 && $this->server->has($temp)) {
+        if (str_starts_with($temp, 'CONTENT_') && $this->server->has($temp)) {
             return $this->server->get($temp);
         }
 

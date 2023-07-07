@@ -27,11 +27,11 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Tests\Functional\Components\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTestCase;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
-class CartDatabaseViewTest extends CheckoutTest
+class CartDatabaseViewTest extends CheckoutTestCase
 {
     use ContainerTrait;
     use DatabaseTransactionBehaviour;
@@ -42,7 +42,7 @@ class CartDatabaseViewTest extends CheckoutTest
     {
         $productNumber = $this->createProduct(5, 19.00);
 
-        $this->loginFrontendCustomer();
+        $this->loginCustomerOfGroup();
 
         $this->addProduct($productNumber);
         $this->visitConfirm();

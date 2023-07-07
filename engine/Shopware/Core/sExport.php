@@ -414,7 +414,7 @@ class sExport implements Enlight_Hook
     }
 
     /**
-     * @param string      $string
+     * @param string|null $string
      * @param string      $esc_type
      * @param string|null $char_set
      *
@@ -426,14 +426,17 @@ class sExport implements Enlight_Hook
     }
 
     /**
-     * @param string      $string
+     * @param string|null $string
      * @param string      $esc_type
      * @param string|null $char_set
      *
-     * @return mixed|string
+     * @return string
      */
     public function sEscapeString($string, $esc_type = '', $char_set = null)
     {
+        if ($string === null) {
+            $string = '';
+        }
         if (empty($esc_type)) {
             if (!empty($this->sSettings['formatID']) && $this->sSettings['formatID'] == 3) {
                 $esc_type = 'html';
@@ -492,7 +495,7 @@ class sExport implements Enlight_Hook
 
             case 'quotes':
                 // Escape unescaped single quotes
-                return preg_replace("%(?<!\\\\)'%", "\\'", $string);
+                return (string) preg_replace("%(?<!\\\\)'%", "\\'", $string);
 
             case 'hex':
                 // Escape every character into hex
@@ -542,6 +545,8 @@ class sExport implements Enlight_Hook
 
                 return $_res;
         }
+
+        return $string;
     }
 
     /**

@@ -72,7 +72,9 @@ class Enlight_Components_Auth extends Zend_Auth
 
         if ($result->isValid() && method_exists($adapter, 'getResultRowObject')) {
             $user = $adapter->getResultRowObject();
-            $this->getStorage()->write($user);
+            if (\is_object($user)) {
+                $this->getStorage()->write($user);
+            }
         } else {
             $this->getStorage()->clear();
         }

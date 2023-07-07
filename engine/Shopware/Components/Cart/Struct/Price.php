@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -26,38 +28,26 @@ namespace Shopware\Components\Cart\Struct;
 
 class Price
 {
-    /**
-     * @var float
-     */
-    private $price;
+    private float $price;
+
+    private float $netPrice;
+
+    private float $taxRate;
+
+    private float $tax;
 
     /**
-     * @var float
-     */
-    private $netPrice;
-
-    /**
-     * @var float
-     */
-    private $taxRate;
-
-    /**
-     * @var float
-     */
-    private $tax;
-
-    /**
-     * @param float      $price
-     * @param float      $netPrice
-     * @param float      $taxRate
-     * @param float|null $tax
+     * @param float|numeric-string      $price
+     * @param float|numeric-string      $netPrice
+     * @param float|numeric-string      $taxRate
+     * @param float|numeric-string|null $tax
      */
     public function __construct($price, $netPrice, $taxRate, $tax)
     {
-        $this->price = $price;
-        $this->netPrice = $netPrice;
-        $this->taxRate = $taxRate;
-        $this->tax = $tax;
+        $this->price = (float) $price;
+        $this->netPrice = (float) $netPrice;
+        $this->taxRate = (float) $taxRate;
+        $this->tax = (float) $tax;
     }
 
     /**

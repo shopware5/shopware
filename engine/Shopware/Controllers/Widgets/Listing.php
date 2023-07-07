@@ -326,6 +326,8 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
 
         if ($this->Request()->getParam('loadFacets')) {
             $body['facets'] = array_values($result->getFacets());
+            $body['listing'] = false;
+            $body['pagination'] = false;
         }
         if ($this->Request()->getParam('loadProducts')) {
             $this->prepareListing($result);

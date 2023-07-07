@@ -218,7 +218,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
             $store = $values['options']['store'];
 
             // Replace the store, which may contain multiple translations, with a store with translated messages:
-            if ($values['options']['translateUsingSnippets']) {
+            if (!empty($values['options']['translateUsingSnippets'])) {
                 $values['options']['store'] = $this->translateStoreUsingSnippets($store, $values['options']['namespace']);
             } else {
                 $values['options']['store'] = $this->translateStore($language, $store, $storeFallbackLocales);
@@ -721,7 +721,7 @@ class Shopware_Controllers_Backend_Config extends Shopware_Controllers_Backend_E
                     throw new RuntimeException(sprintf('Model object is not an instance of expected class "%s"', Document::class));
                 }
 
-                if ($data['id']) {
+                if (!empty($data['id'])) {
                     $elements = new ArrayCollection();
                     foreach ($data['elements'] as $element) {
                         $elementModel = $this->getRepository('documentElement')->find($element['id']);

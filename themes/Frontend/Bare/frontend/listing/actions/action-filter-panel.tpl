@@ -35,25 +35,25 @@
 
                         {block name="frontend_listing_actions_filter_form_search"}
                             {if $term !== null}
-                                <input type="hidden" name="{$shortParameters['sSearch']}" value="{$term|escape}"/>
+                                <input type="hidden" name="{$shortParameters['sSearch']}" value="{$term|escapeHtml}"/>
                             {/if}
                         {/block}
 
                         {block name="frontend_listing_actions_filter_form_sort"}
                             {if $sSort}
-                                <input type="hidden" name="{$shortParameters['sSort']}" value="{$sSort|escape}"/>
+                                <input type="hidden" name="{$shortParameters['sSort']}" value="{$sSort|escapeHtml}"/>
                             {/if}
                         {/block}
 
                         {block name="frontend_listing_actions_filter_form_perpage"}
                             {if $criteria && $criteria->getLimit()}
-                                <input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()|escape}"/>
+                                <input type="hidden" name="{$shortParameters['sPerPage']}" value="{$criteria->getLimit()|escapeHtml}"/>
                             {/if}
                         {/block}
 
                             {block name="frontend_listing_actions_filter_form_category"}
                                 {if !$sCategoryContent && $sCategoryCurrent != $sCategoryStart && {controllerName} != 'search'}
-                                    <input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent|escape}" />
+                                    <input type="hidden" name="{$shortParameters['sCategory']}" value="{$sCategoryCurrent|escapeHtml}" />
                                 {/if}
                             {/block}
 

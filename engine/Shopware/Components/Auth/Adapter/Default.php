@@ -150,8 +150,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 
             // Reset failed login count
             $this->setFailedLogins(0);
-        } else {
-            // If more then 4 previous failed logins lock account for n * failedlogins seconds
+        } elseif ($user) {
+            // If more than 4 previous failed logins lock account for n * failedlogins seconds
             if ($user->failedlogins >= 4) {
                 $lockedUntil = new Zend_Date();
                 $lockedUntil->addSecond($this->lockSeconds * $user->failedlogins);
@@ -172,16 +172,16 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     }
 
     /**
-     * @deprecated in 5.6, will be private in 5.7
+     * @deprecated in 5.6, will be private in 5.8
      *
      * @param string $plaintext
      * @param string $hash
      * @param string $encoderName
+     *
+     * @return void
      */
     public function rehash($plaintext, $hash, $encoderName)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
 
         if ($newHash === $hash) {
@@ -203,6 +203,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      *
      * @param string $plaintext
      * @param string $defaultEncoderName
+     *
+     * @return void
      */
     public function updateHash($plaintext, $defaultEncoderName)
     {
@@ -218,6 +220,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         );
     }
 
+    /**
+     * @return void
+     */
     protected function updateExpiry()
     {
         if ($this->expiryColumn === null) {
@@ -225,6 +230,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         }
 
         $user = $this->getResultRowObject();
+        if (!\is_object($user)) {
+            return;
+        }
 
         $this->_zendDb->update(
             $this->_tableName,

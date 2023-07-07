@@ -26,7 +26,6 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Components_Session_Namespace;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Shopware_Components_Config;
@@ -127,12 +126,12 @@ class AccountTest extends ControllerTestCase
     public function testHashPostLogin(): void
     {
         // test with md5 password and without the ignoreAccountMode parameter
-        static::assertEmpty($this->session->offsetGet('sUserId'));
+        static::assertEmpty($this->session->get('sUserId'));
 
         $this->setUserDataToPost();
         $this->dispatch('/account/login');
 
-        static::assertEmpty($this->session->offsetGet('sUserId'));
+        static::assertEmpty($this->session->get('sUserId'));
 
         $this->logoutUser();
     }
@@ -222,9 +221,10 @@ class AccountTest extends ControllerTestCase
     {
         $sql = 'SELECT email, password FROM s_user WHERE id = 1';
         $database = $this->container->get('db');
-        static::assertInstanceOf(Enlight_Components_Db_Adapter_Pdo_Mysql::class, $database);
 
         $userData = $database->fetchRow($sql);
+        static::assertNotEmpty($userData['email']);
+        static::assertNotEmpty($userData['password']);
         $this->Request()->setMethod('POST')
             ->setPost('email', $userData['email'])
             ->setPost('passwordMD5', $userData['password']);

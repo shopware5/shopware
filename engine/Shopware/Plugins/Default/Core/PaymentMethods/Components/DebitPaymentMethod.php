@@ -53,7 +53,7 @@ class DebitPaymentMethod extends GenericPaymentMethod
         ];
 
         foreach ($fields as $field) {
-            $value = $paymentData[$field] ?: '';
+            $value = $paymentData[$field] ?? '';
             $value = trim($value);
 
             if (empty($value)) {

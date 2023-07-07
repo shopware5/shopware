@@ -31,21 +31,26 @@ use Shopware_Components_Config;
 use Zend_Mail_Transport_Abstract;
 use Zend_Mail_Transport_Smtp;
 
+/**
+ * @phpstan-type MailOptions = array{charset: string, type?: string|class-string<Zend_Mail_Transport_Abstract>, username?: string, password?: string, auth?: string, ssl?: string, port?: string, name?: string, host?: string, from?: array{email: string, name: string}, replyTo?: array{email: string, name: string}}
+ */
 class MailTransport
 {
     /**
-     * @return Enlight_Class|Zend_Mail_Transport_Abstract
+     * @param MailOptions $options
+     *
+     * @return Zend_Mail_Transport_Abstract
      */
     public function factory(Enlight_Loader $loader, Shopware_Components_Config $config, array $options)
     {
-        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer != 'mail') {
+        if (!isset($options['type']) && !empty($config->MailerMailer) && $config->MailerMailer !== 'mail') {
             $options['type'] = $config->MailerMailer;
         }
         if (empty($options['type'])) {
             $options['type'] = 'sendmail';
         }
 
-        if ($options['type'] == 'smtp') {
+        if ($options['type'] === 'smtp') {
             if (!isset($options['username']) && !empty($config->MailerUsername)) {
                 if (!empty($config->MailerAuth)) {
                     $options['auth'] = $config->MailerAuth;
@@ -77,16 +82,14 @@ class MailTransport
         }
         unset($options['type'], $options['charset']);
 
-        if ($transportName === 'Zend_Mail_Transport_Smtp') {
-            /** @var Zend_Mail_Transport_Smtp $transport */
-            $transport = Enlight_Class::Instance($transportName, [$options['host'], $options]);
+        if ($transportName === Zend_Mail_Transport_Smtp::class) {
+            $transport = Enlight_Class::Instance($transportName, [$options['host'] ?? null, $options]);
         } elseif (!empty($options)) {
-            /** @var Zend_Mail_Transport_Abstract $transport */
             $transport = Enlight_Class::Instance($transportName, [$options]);
         } else {
-            /** @var Zend_Mail_Transport_Abstract $transport */
             $transport = Enlight_Class::Instance($transportName);
         }
+        \assert($transport instanceof Zend_Mail_Transport_Abstract);
         Enlight_Components_Mail::setDefaultTransport($transport);
 
         if (!isset($options['from']) && !empty($config->Mail)) {

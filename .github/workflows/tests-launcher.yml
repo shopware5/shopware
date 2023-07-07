@@ -1,0 +1,30 @@
+name: Run
+
+on:
+    workflow_dispatch:
+    push:
+    schedule:
+        -   cron: '30 02 * * *'
+
+jobs:
+    check-php-code:
+        name: PHPStan and CSFixer
+        uses: ./.github/workflows/check-php-code.yml
+        secrets: inherit
+
+    check-js-code:
+        name: JsLinter and Jest tests
+        uses: ./.github/workflows/check-js-code.yml
+        secrets: inherit
+
+    php-unit:
+        name: PHPUnit tests
+        uses: ./.github/workflows/phpunit.yml
+        secrets: inherit
+        needs: [ check-php-code, check-js-code ]
+
+    e2e-tests:
+        name: E2E
+        uses: ./.github/workflows/end-to-end.yml
+        secrets: inherit
+        needs: [ php-unit ]

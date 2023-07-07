@@ -30,7 +30,7 @@ interface StoreFrontCustomerGreetingServiceInterface
      * Returns the customer information for the header greeting "hi, max"
      * In case that the slt configuration is disabled, or no customer can be detected, the function returns null.
      *
-     * @return array|null
+     * @return array<string, mixed>|null
      */
     public function fetch();
 }

@@ -1,17 +1,17 @@
 {namespace name="frontend/listing/listing_actions"}
 
 {block name="frontend_listing_filter_facet_range"}
-    <div class="filter-panel filter--range facet--{$facet->getFacetName()|escape:'htmlall'}"
+    <div class="filter-panel filter--range facet--{$facet->getFacetName()|escapeHtmlAttr}"
          data-filter-type="range"
-         data-facet-name="{$facet->getFacetName()}"
-         data-field-name="{$facet->getFacetName()|escape:'htmlall'}">
+         data-facet-name="{$facet->getFacetName()|escapeHtmlAttr}"
+         data-field-name="{$facet->getFacetName()|escapeHtmlAttr}">
 
         {block name="frontend_listing_filter_facet_range_flyout"}
             <div class="filter-panel--flyout">
 
                 {block name="frontend_listing_filter_facet_range_title"}
-                    <label class="filter-panel--title" title="{$facet->getLabel()|escape:'htmlall'}">
-                        {$facet->getLabel()|escape}
+                    <label class="filter-panel--title" title="{$facet->getLabel()|escapeHtmlAttr}">
+                        {$facet->getLabel()|escapeHtml}
                     </label>
                 {/block}
 
@@ -54,16 +54,16 @@
 
                                 {block name="frontend_listing_filter_facet_range_input_min"}
                                     <input type="hidden"
-                                           id="{$facet->getMinFieldName()|escape:'htmlall'}"
-                                           name="{$facet->getMinFieldName()|escape:'htmlall'}"
+                                           id="{$facet->getMinFieldName()|escapeHtmlAttr}"
+                                           name="{$facet->getMinFieldName()|escapeHtmlAttr}"
                                            data-range-input="min"
                                            value="{$startMin}" {if !$facet->isActive() || $startMin == 0}disabled="disabled" {/if}/>
                                 {/block}
 
                                 {block name="frontend_listing_filter_facet_range_input_max"}
                                     <input type="hidden"
-                                           id="{$facet->getMaxFieldName()|escape:'htmlall'}"
-                                           name="{$facet->getMaxFieldName()|escape:'htmlall'}"
+                                           id="{$facet->getMaxFieldName()|escapeHtmlAttr}"
+                                           name="{$facet->getMaxFieldName()|escapeHtmlAttr}"
                                            data-range-input="max"
                                            value="{$startMax}" {if !$facet->isActive() || $startMax == 0}disabled="disabled" {/if}/>
                                 {/block}
@@ -79,7 +79,7 @@
 
                                         {block name="frontend_listing_filter_facet_range_label_min"}
                                             <label class="range-info--label"
-                                                   for="{$facet->getMinFieldName()|escape:'htmlall'}"
+                                                   for="{$facet->getMinFieldName()|escapeHtmlAttr}"
                                                    data-range-label="min">
                                                 {$startMin}
                                             </label>
@@ -93,7 +93,7 @@
 
                                         {block name="frontend_listing_filter_facet_range_label_max"}
                                             <label class="range-info--label"
-                                                   for="{$facet->getMaxFieldName()|escape:'htmlall'}"
+                                                   for="{$facet->getMaxFieldName()|escapeHtmlAttr}"
                                                    data-range-label="max">
                                                 {$startMax}
                                             </label>

@@ -116,15 +116,15 @@ class DetailTest extends Enlight_Components_Test_TestCase
                 'number' => '€SW100066@1',
             ],
             [
-                'regex' => '/^[\w-_.@€]+$/',
+                'regex' => '/^[\w\-_.@€]+$/',
                 'number' => '@SW100066€1',
             ],
             [
-                'regex' => '/^[\w\s-_.@€]+$/',
+                'regex' => '/^[\w\s\-_.@€]+$/',
                 'number' => '€SW1 00 066@1',
             ],
             [
-                'regex' => '/^[\w\u-_.@€]+$/',
+                'regex' => '/^[\p{L}\p{N}\p{P}\p{S}]+$/u',
                 'number' => '€SW100💙066@1',
             ],
         ];

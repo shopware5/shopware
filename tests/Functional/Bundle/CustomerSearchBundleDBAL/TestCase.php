@@ -114,7 +114,7 @@ class TestCase extends Enlight_Components_Test_TestCase
             $customer['addresses'] = [['country_id' => 2]];
         }
 
-        $customerId = $this->insert('s_user', array_merge([
+        $customerData = array_merge([
             'firstname' => 'example',
             'lastname' => 'example',
             'customergroup' => 'EK',
@@ -123,7 +123,9 @@ class TestCase extends Enlight_Components_Test_TestCase
             'paymentpreset' => 1,
             'subshopID' => $customer['subshopID'] ?? 1000,
             'failedlogins' => 0,
-        ], $customer));
+        ], $customer);
+        unset($customerData['addresses'], $customerData['orders'], $customerData['newsletter']);
+        $customerId = $this->insert('s_user', $customerData);
 
         if (\array_key_exists('addresses', $customer)) {
             foreach ($customer['addresses'] as $address) {

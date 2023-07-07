@@ -182,7 +182,7 @@ class PresetDataSynchronizer implements PresetDataSynchronizerInterface
     private function findElementBySyncKey(array $presetData, $elementSyncKey)
     {
         foreach ($presetData['elements'] as $element) {
-            if ($element['syncKey'] === $elementSyncKey) {
+            if (isset($element['syncKey']) && $element['syncKey'] === $elementSyncKey) {
                 return $element;
             }
         }

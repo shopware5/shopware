@@ -27,7 +27,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * Array with all permissions to check in this controller
      *
-     * @var array
+     * @var array<string, array{privilege: string, errorMessage: string}>
      */
     protected $aclPermissions = [];
 
@@ -43,7 +43,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
         $this->Front()->Plugins()->JsonRequest()
             ->setParseInput()
             ->setParseParams(['group', 'sort', 'filter'])
-            ->setPadding($this->Request()->targetField);
+            ->setPadding($this->Request()->get('targetField'));
 
         // Call controller acl rules (user - defined)
         $this->initAcl();
@@ -63,7 +63,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * Returns all acl permissions
      *
-     * @return array
+     * @return array<string, array{privilege: string, errorMessage: string}>
      */
     public function getAclRules()
     {
@@ -72,6 +72,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
 
     /**
      * Needs to be present for the script renderer
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -87,6 +89,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
 
     /**
      * Needs to be present for the script renderer
+     *
+     * @return void
      */
     public function loadAction()
     {
@@ -116,6 +120,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
      * @param string $action       Name of action with or without 'Action'-suffix
      * @param string $privilege    Name of privilege as you have set in s_core_acl_privileges
      * @param string $errorMessage Optionally error message to show if permission denied
+     *
+     * @return void
      */
     protected function addAclPermission($action, $privilege, $errorMessage = '')
     {
@@ -150,7 +156,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * @param mixed|null $identity
      *
-     * @return bool|string
+     * @return string
      */
     protected function getTinyMceLang($identity)
     {

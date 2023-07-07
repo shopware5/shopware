@@ -90,7 +90,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         }
 
         $data['country'] = $data['countryId'];
-        $data['state'] = $data['stateId'];
+        $data['state'] = $data['stateId'] ?? null;
 
         $form = $this->get('shopware.form.factory')->create(AddressFormType::class, $model);
         $form->submit($data);

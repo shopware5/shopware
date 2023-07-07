@@ -1281,13 +1281,8 @@ parameters:
 			path: engine/Library/Enlight/Application.php
 
 		-
-			message: "#^Method Enlight_Class\\:\\:Instance\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Class.php
-
-		-
-			message: "#^Method Enlight_Class\\:\\:Instance\\(\\) should return Enlight_Class but returns object\\.$#"
-			count: 1
+			message: "#^Method Enlight_Class\\:\\:Instance\\(\\) should return TClass of object but returns object\\.$#"
+			count: 2
 			path: engine/Library/Enlight/Class.php
 
 		-
@@ -1332,11 +1327,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Class\\:\\:resetInstance\\(\\) has parameter \\$class with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Class.php
-
-		-
-			message: "#^Property Enlight_Class\\:\\:\\$instances type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Class.php
 
@@ -2056,16 +2046,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Front.php
 
 		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertDateTime\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertDateTime\\(\\) has parameter \\$key with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:convertToJson\\(\\) has parameter \\$data with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
@@ -2086,82 +2066,12 @@ parameters:
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
 
 		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) should return bool but empty return statement found\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_Json_Bootstrap\\:\\:onPostDispatch\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
 			message: "#^Possibly invalid array key type array\\|string\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
 
 		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$padding \\(string\\) does not accept string\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_Json_Bootstrap\\:\\:\\$renderer \\(bool\\) does not accept null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/Json/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:getPadding\\(\\) should return string but returns bool\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:onPreDispatch\\(\\) should return bool but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setPadding\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setPadding\\(\\) has parameter \\$padding with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:setParseParams\\(\\) has parameter \\$parseParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#1 \\$spec of method Enlight_Controller_Request_RequestHttp\\:\\:setPost\\(\\) expects array\\|string, bool given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Controller_Plugins_JsonRequest_Bootstrap\\:\\:\\$padding \\(bool\\) does not accept null\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Controller/Plugins/JsonRequest/Bootstrap.php
 
@@ -3196,21 +3106,6 @@ parameters:
 			path: engine/Library/Enlight/Loader.php
 
 		-
-			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
-			message: "#^Method Enlight_Plugin_Bootstrap\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
-			message: "#^Property Enlight_Plugin_Bootstrap\\:\\:\\$collection \\(Enlight_Plugin_PluginCollection\\) does not accept Enlight_Plugin_PluginCollection\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Bootstrap.php
-
-		-
 			message: "#^Method Enlight_Plugin_Bootstrap_Config\\:\\:install\\(\\) should return bool but return statement is missing\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Bootstrap/Config.php
@@ -3786,26 +3681,6 @@ parameters:
 			path: engine/Library/Enlight/Template/Plugins/modifier.array_unset.php
 
 		-
-			message: "#^Function smarty_modifier_count\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.count.php
-
-		-
-			message: "#^Function smarty_modifier_count\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.count.php
-
-		-
-			message: "#^Function smarty_modifier_currency\\(\\) has parameter \\$config with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.currency.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, float given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Template/Plugins/modifier.currency.php
-
-		-
 			message: "#^Parameter \\#1 \\$date of class Zend_Date constructor expects array\\|int\\|string\\|Zend_Date\\|null, DateTime\\|int\\|false given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Template/Plugins/modifier.date.php
@@ -4131,36 +4006,6 @@ parameters:
 			path: engine/Shopware/Bundle/AccountBundle/Service/RegisterService.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$sOneTimeAccount\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$userInfo\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetchUserInfo\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingService\\:\\:fetchUserInfo\\(\\) should return array\\|null but returns array\\<string, mixed\\>\\|false\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingService.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Service\\\\StoreFrontCustomerGreetingServiceInterface\\:\\:fetch\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Service/StoreFrontCustomerGreetingServiceInterface.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Type\\\\SalutationType\\:\\:configureOptions\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Type/SalutationType.php
@@ -4184,11 +4029,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$arrayStore of method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\ConfigurationStruct\\:\\:setArrayStore\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/AttributeData.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Attributes\\:\\:addAclPermission\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Controllers/Backend/Attributes.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Attributes\\:\\:columnNameExistsAction\\(\\) has no return type specified\\.$#"
@@ -5599,26 +5439,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderGateway\\:\\:getCustomerOrders\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderGateway.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:explodeAndFilter\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:explodeAndFilter\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:hydrate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\CustomerOrderHydrator\\:\\:hydrate\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/CustomerSearchBundleDBAL/Indexing/CustomerOrderHydrator.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\Indexing\\\\SearchIndexer\\:\\:buildData\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -14336,27 +14156,7 @@ parameters:
 			path: engine/Shopware/Components/Auth.php
 
 		-
-			message: "#^Cannot access property \\$username on bool\\|stdClass\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
 			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:_authenticateValidateResult\\(\\) has parameter \\$resultIdentity with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
-			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:rehash\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
-			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:updateExpiry\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Auth/Adapter/Default.php
-
-		-
-			message: "#^Method Shopware_Components_Auth_Adapter_Default\\:\\:updateHash\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Auth/Adapter/Default.php
 
@@ -14841,11 +14641,6 @@ parameters:
 			path: engine/Shopware/Components/Cart/Struct/DiscountContext.php
 
 		-
-			message: "#^Property Shopware\\\\Components\\\\Cart\\\\Struct\\\\Price\\:\\:\\$tax \\(float\\) does not accept float\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Cart/Struct/Price.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Cart\\\\TaxAggregator\\:\\:positionsTaxSum\\(\\) has parameter \\$cart with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Cart/TaxAggregator.php
@@ -15231,11 +15026,6 @@ parameters:
 			path: engine/Shopware/Components/ConfigLoader.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\ConfigWriter\\:\\:get\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ConfigWriter.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\ConfigWriter\\:\\:insert\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ConfigWriter.php
@@ -15426,8 +15216,8 @@ parameters:
 			path: engine/Shopware/Components/DependencyInjection/Bridge/MailTransport.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\MailTransport\\:\\:factory\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
-			count: 1
+			message: "#^Unable to resolve the template type TClass in call to method static method Enlight_Class\\:\\:Instance\\(\\)$#"
+			count: 2
 			path: engine/Shopware/Components/DependencyInjection/Bridge/MailTransport.php
 
 		-
@@ -15494,11 +15284,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$resource of method Shopware\\\\Components\\\\DependencyInjection\\\\Container\\:\\:set\\(\\) expects object\\|null, string given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/DependencyInjection/Bridge/Session.php
-
-		-
-			message: "#^Call to an undefined method Enlight_Template_Manager\\:\\:setDefaultResourceType\\(\\)\\.$#"
-			count: 1
-			path: engine/Shopware/Components/DependencyInjection/Bridge/Template.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\DependencyInjection\\\\Bridge\\\\Template\\:\\:factory\\(\\) has parameter \\$backendOptions with no value type specified in iterable type array\\.$#"
@@ -18596,17 +18381,7 @@ parameters:
 			path: engine/Shopware/Components/Plugin/FormSynchronizer.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Shop\\\\Locale\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:createMenuItem\\(\\) has parameter \\$menuItem with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:removeNotExistingEntries\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
@@ -18616,17 +18391,7 @@ parameters:
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
 		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:saveMenuTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
 			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:saveMenuTranslation\\(\\) has parameter \\$labels with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Plugin\\\\MenuSynchronizer\\:\\:synchronize\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Plugin/MenuSynchronizer.php
 
@@ -19254,11 +19019,6 @@ parameters:
 			message: "#^Method Shopware\\\\Components\\\\SitePageMenu\\:\\:overrideExisting\\(\\) has parameter \\$site with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Components/SitePageMenu.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\SitemapXMLRepository\\:\\:filterLink\\(\\) has parameter \\$userParams with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/SitemapXMLRepository.php
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\SitemapXMLRepository\\:\\:getSitemapContent\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -20777,7 +20537,7 @@ parameters:
 
 		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 4
+			count: 3
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
@@ -20787,11 +20547,6 @@ parameters:
 
 		-
 			message: "#^Cannot call method setArticle\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Cannot call method setKind\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -21216,11 +20971,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:loadStoresAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -21571,11 +21321,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Article.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:swapDetailTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Article\\:\\:uploadEsdFileAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
@@ -21592,11 +21337,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#2 \\$number of method Shopware_Controllers_Backend_Article\\:\\:increaseAutoNumber\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Article.php
-
-		-
-			message: "#^Parameter \\#2 \\$oldMainDetail of method Shopware_Controllers_Backend_Article\\:\\:swapDetailTranslations\\(\\) expects Shopware\\\\Models\\\\Article\\\\Detail, Shopware\\\\Models\\\\Article\\\\Detail\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Article.php
 
@@ -22786,36 +22526,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Export.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$targetField\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:addAclPermission\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:getAclRules\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_ExtJs\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
-			message: "#^Property Shopware_Controllers_Backend_ExtJs\\:\\:\\$aclPermissions type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ExtJs.php
-
-		-
 			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\LocaleStruct\\|null\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/FirstRunWizard.php
@@ -22951,42 +22661,12 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Form.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:authAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:buildTree\\(\\) has parameter \\$nodes with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Index.php
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:buildTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:changeLocaleAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:loadAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Index.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Index\\:\\:menuAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Index.php
 
@@ -23976,11 +23656,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Search.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Search.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Search\\:\\:resolveCategoryPath\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Search.php
@@ -24197,11 +23872,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:handleException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:indexAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
 
@@ -24974,11 +24644,6 @@ parameters:
 			message: "#^Method Shopware_Controllers_Frontend_Sitemap\\:\\:translateCategoryTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_SitemapXml\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/SitemapXml.php
 
 		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sArticle\\.$#"
@@ -26527,11 +26192,6 @@ parameters:
 
 		-
 			message: "#^Method sCore\\:\\:sBuildLink\\(\\) has parameter \\$sVariables with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCore.php
-
-		-
-			message: "#^Parameter \\#3 \\$subject of function str_replace expects array\\|string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCore.php
 
@@ -34256,16 +33916,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Backend/Auth/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Backend_SwagUpdate_Bootstrap\\:\\:onBackendIndexPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Bootstrap.php
-
-		-
 			message: "#^Class ShopwarePlugins\\\\SwagUpdate\\\\Components\\\\Archive\\\\Adapter implements generic interface SeekableIterator but does not specify its types\\: TKey, TValue$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Backend/SwagUpdate/Components/Archive/Adapter.php
@@ -34731,31 +34381,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/ErrorHandler/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:addContextCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:addSurrogateControl\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:disableControllerCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:enableControllerCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:enableControllerCache\\(\\) has parameter \\$cacheIds with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
@@ -34766,62 +34391,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:getResponseCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:installForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onClearCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onClearHttpCache\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onInvalidateCacheId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPostPersist\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:onPreDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:postFlush\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:renderEsiTag\\(\\) has parameter \\$params with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setCacheHeaders\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setCacheIdHeader\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
@@ -34831,23 +34401,8 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setNoCacheCookie\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:setNoCacheTag\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
 			message: "#^Negated boolean expression is always true\\.$#"
 			count: 1
-			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#2 \\$cacheId of method Shopware_Plugins_Core_HttpCache_Bootstrap\\:\\:invalidateWithBANRequest\\(\\) expects string, string\\|null given\\.$#"
-			count: 2
 			path: engine/Shopware/Plugins/Default/Core/HttpCache/Bootstrap.php
 
 		-
@@ -34972,21 +34527,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Plugins_Core_MarketingAggregate_Bootstrap\\:\\:incrementTopSeller\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_MarketingAggregate_Bootstrap\\:\\:initAlsoBoughtResource\\(\\) should return Shopware_Components_AlsoBought but returns Enlight_Class\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_MarketingAggregate_Bootstrap\\:\\:initSimilarShownResource\\(\\) should return Shopware_Components_SimilarShown but returns Enlight_Class\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_MarketingAggregate_Bootstrap\\:\\:initTopSellerResource\\(\\) should return Shopware_Components_TopSeller but returns Enlight_Class\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/MarketingAggregate/Bootstrap.php
 
@@ -35146,27 +34686,7 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:addPaths\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:addPaymentClass\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:onBackendCustomerPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:onBackendOrderPostDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_PaymentMethods_Bootstrap\\:\\:subscribeEvents\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/PaymentMethods/Bootstrap.php
 
@@ -35406,11 +34926,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_RebuildIndex_Bootstrap\\:\\:initSeoIndexResource\\(\\) should return Shopware_Components_SeoIndex but returns Enlight_Class\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
-
-		-
 			message: "#^Method Shopware_Plugins_Core_RebuildIndex_Bootstrap\\:\\:onAfterSendResponse\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RebuildIndex/Bootstrap.php
@@ -35541,26 +35056,6 @@ parameters:
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
 
 		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:afterInit\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onDispatchLoopStartup\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onFrontPreDispatch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_RestApi_Bootstrap\\:\\:onInitResourceAuth\\(\\) should return Zend_Auth\\|null but empty return statement found\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
-
-		-
 			message: "#^Parameter \\#1 \\$encodedValue of static method Zend_Json\\:\\:decode\\(\\) expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Bootstrap.php
@@ -35579,16 +35074,6 @@ parameters:
 			message: "#^Method ShopwarePlugins\\\\RestApi\\\\Components\\\\Router\\:\\:assembleRoute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Plugins/Default/Core/RestApi/Components/Router.php
-
-		-
-			message: "#^Method Shopware_Plugins_Core_System_Bootstrap\\:\\:onDispatchLoopShutdown\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Plugins/Default/Core/System/Bootstrap.php
-
-		-
-			message: "#^Parameter \\#1 \\$userAgent of method Shopware_Plugins_Frontend_Statistics_Bootstrap\\:\\:checkIsBot\\(\\) expects string, string\\|false given\\.$#"
-			count: 2
-			path: engine/Shopware/Plugins/Default/Core/System/Bootstrap.php
 
 		-
 			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getRequest\\(\\)\\.$#"
@@ -35934,11 +35419,6 @@ parameters:
 			message: "#^Parameter \\#2 \\$foreignKey of method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\DataLoaderInterface\\:\\:load\\(\\) expects int, string given\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/AttributeBundle/DataLoaderTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\AttributeBundle\\\\SchemaOperatorTest\\:\\:iterateTypeArray\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/AttributeBundle/SchemaOperatorTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\ContentTypeBundle\\\\Services\\\\ExtjsBuilderTest\\:\\:dataProviderColumnFields\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -37376,16 +36856,6 @@ parameters:
 			path: tests/Functional/Components/Cart/ProportionalCartCalculationCustomerGroupTest.php
 
 		-
-			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.percental\" expects value type int, got type bool$#"
-			count: 1
-			path: tests/Functional/Components/CheckoutTest.php
-
-		-
-			message: "#^Query error\\: Column \"s_emarketing_vouchers\\.taxconfig\" expects value type string, got type int$#"
-			count: 1
-			path: tests/Functional/Components/CheckoutTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\DependencyInjection\\\\Compiler\\\\ConfigureContainerAwareCommandsTest\\:\\:getShopwareCommands\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Components/DependencyInjection/Compiler/ConfigureContainerAwareCommandsTest.php
@@ -37674,36 +37144,6 @@ parameters:
 			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
 			count: 1
 			path: tests/Functional/Components/Plugin/LegacyConfigWriterTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has parameter \\$expectedQueryParameters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:executeTestAndCheckResult\\(\\) has parameter \\$menu with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:testIndexLowerCaseIsPartOfSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:testIndexNotPartOfSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\MenuSynchronizerTest\\:\\:testOtherActionIsPartOfSnippet\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/MenuSynchronizerTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Plugin\\\\PluginMigrationTest\\:\\:assertTableColumnExists\\(\\) has no return type specified\\.$#"
@@ -38077,86 +37517,6 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 5
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getAdditionalAddressLine1\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getAdditionalAddressLine2\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getCity\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getDepartment\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getFirstname\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Customer\\\\Group\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Payment\\\\Payment\\|null\\.$#"
-			count: 12
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getLastname\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getStreet\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getTitle\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getVatId\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Cannot call method getZipcode\\(\\) on Shopware\\\\Models\\\\Customer\\\\Address\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\CustomerTest\\:\\:testUpdateCustomerPaymentDataWithSepa\\(\\) has parameter \\$dummyDataId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$group of method Shopware\\\\Models\\\\Customer\\\\Customer\\:\\:setGroup\\(\\) expects array\\|Shopware\\\\Models\\\\Customer\\\\Group, Shopware\\\\Models\\\\Customer\\\\Group\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/CustomerTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
 			count: 5
 			path: tests/Functional/Controllers/Backend/FormTest.php
 
@@ -38194,36 +37554,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\FormTest\\:\\:testGetFormsWithInvalidIdShouldReturnFailure\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/FormTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Backend/LogTest.php
-
-		-
-			message: "#^Method Enlight_Controller_Request_RequestTestCase\\:\\:setClientIp\\(\\) invoked with 2 parameters, 1 required\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Backend/LogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\LogTest\\:\\:testCreateDeprecatedLog\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/LogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\LogTest\\:\\:testCreateLog\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/LogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\LogTest\\:\\:testDeleteLogs\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/LogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\LogTest\\:\\:testGetLogs\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/LogTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\MailTest\\:\\:testCreateMail\\(\\) has no return type specified\\.$#"
@@ -38299,51 +37629,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NotificationTest\\:\\:testGetCustomerList\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/NotificationTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 5
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testCreatePayments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testDeletePayment\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testDeletePayment\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testGetCountries\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testGetPayments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testUpdatePayments\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:testUpdatePayments\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\PaymentTest\\:\\:\\$testDataCreate has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/PaymentTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
@@ -38436,71 +37721,6 @@ parameters:
 			path: tests/Functional/Controllers/Backend/SupplierTest.php
 
 		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
-			count: 7
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 8
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$totalCount\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testDeleteVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testExportVoucherCode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testGenerateVoucherCodes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testGetTaxConfiguration\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testGetVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testGetVoucherCodes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testUpdateVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testValidateOrderCode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:testValidateVoucherCode\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
-			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\VoucherTest\\:\\:\\$voucherData type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/VoucherTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\WidgetsTest\\:\\:backendAuthProvider\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
@@ -38541,74 +37761,9 @@ parameters:
 			path: tests/Functional/Controllers/Backend/WidgetsTest.php
 
 		-
-			message: "#^Access to an undefined property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:\\$connection\\.$#"
-			count: 3
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Cannot call method getCode\\(\\) on Exception\\|null\\.$#"
-			count: 2
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:invalidCategoryUrlDataProvider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:testDispatchInactiveCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:testDispatchNoActiveBlogItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:testDispatchNonBlogCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:testDispatchNotExistingBlogCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\BlogTest\\:\\:testDispatchNotExistingBlogItem\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/BlogTest.php
-
-		-
 			message: "#^Query error\\: Column \"s_core_rulesets\\.value1\" expects value type string, got type 100$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/CheckoutTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:searchTermProvider\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:testAjaxSearch\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SearchTest\\:\\:testSearchEscapes\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$needle of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$haystack of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertStringContainsString\\(\\) expects string, string\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SearchTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SitemapTest\\:\\:sitemapDataprovider\\(\\) return type has no value type specified in iterable type array\\.$#"
@@ -38616,29 +37771,9 @@ parameters:
 			path: tests/Functional/Controllers/Frontend/SitemapTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SitemapTest\\:\\:testIndex\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SitemapTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SitemapTest\\:\\:testIndex\\(\\) has parameter \\$sitemapData with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Frontend/SitemapTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$shop of method Shopware\\\\Components\\\\ShopRegistrationService\\:\\:registerShop\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Shop, Shopware\\\\Models\\\\Shop\\\\Shop\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SitemapTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Frontend\\\\SitemapXmlTest\\:\\:testIndex\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Frontend/SitemapXmlTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Widgets\\\\IndexTest\\:\\:testShopMenu\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Widgets/IndexTest.php
 
 		-
 			message: "#^Query error\\: Argument \\#1 is not a constant array, got array\\<string, mixed\\>$#"
@@ -39126,16 +38261,6 @@ parameters:
 			path: tests/Functional/Core/sCoreTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Library\\\\ZendLocaleTest\\:\\:getLocales\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Library/ZendLocaleTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Library\\\\ZendLocaleTest\\:\\:testLocalCreation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Library/ZendLocaleTest.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Models\\\\Category\\\\BlogCategoryTreeListQueryTest\\:\\:\\$expected type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Models/Category/BlogCategoryTreeListQueryTest.php
@@ -39193,11 +38318,6 @@ parameters:
 		-
 			message: "#^Cannot call method setActive\\(\\) on Shopware\\\\Models\\\\Shop\\\\Shop\\|null\\.$#"
 			count: 2
-			path: tests/Functional/Models/Order/OrderDocumentDocumentTest.php
-
-		-
-			message: "#^Variable \\$document might not be defined\\.$#"
-			count: 1
 			path: tests/Functional/Models/Order/OrderDocumentDocumentTest.php
 
 		-
@@ -39399,141 +38519,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\BootstrapTest\\:\\:resetHttpCache\\(\\) has parameter \\$overrideConfig with no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Plugins/Core/HttpCache/BootstrapTest.php
-
-		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Cannot call method getNumber\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Cannot call method setCategories\\(\\) on Shopware\\\\Models\\\\Emotion\\\\Emotion\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Cannot call method setCategoryId\\(\\) on Shopware\\\\Models\\\\Blog\\\\Blog\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Cannot call method setReleaseDate\\(\\) on Shopware\\\\Models\\\\Article\\\\Detail\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:createTestBlog\\(\\) never returns null so it can be removed from the return type\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:createTestCategory\\(\\) never returns null so it can be removed from the return type\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:createTestEmotion\\(\\) never returns null so it can be removed from the return type\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:createTestProduct\\(\\) never returns null so it can be removed from the return type\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getBlogTestData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getEmotionTestData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getProductTestData\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:testBlogListingTimeCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:testBlogTimeCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:testCategoryTimeCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:testProductDetailTimeCalculation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:testServiceIsAvailable\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$active of method Shopware\\\\Models\\\\Category\\\\Category\\:\\:setActive\\(\\) expects bool, int given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$blog of method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getBlogListingRequest\\(\\) expects Shopware\\\\Models\\\\Blog\\\\Blog, Shopware\\\\Models\\\\Blog\\\\Blog\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$blog of method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getBlogRequest\\(\\) expects Shopware\\\\Models\\\\Blog\\\\Blog, Shopware\\\\Models\\\\Blog\\\\Blog\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$category of method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getcategoryRequest\\(\\) expects Shopware\\\\Models\\\\Category\\\\Category, Shopware\\\\Models\\\\Category\\\\Category\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$emotions of method Shopware\\\\Models\\\\Category\\\\Category\\:\\:setEmotions\\(\\) expects Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Emotion\\\\Emotion\\>, Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\<int, Shopware\\\\Models\\\\Emotion\\\\Emotion\\|null\\> given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Blog\\\\Blog\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\Article\\\\Article\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\Blog\\\\Blog\\|null given\\.$#"
-			count: 2
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:remove\\(\\) expects object, Shopware\\\\Models\\\\Category\\\\Category\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$product of method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\HttpCache\\\\DynamicCacheTimeServiceTest\\:\\:getProductRequest\\(\\) expects Shopware\\\\Models\\\\Article\\\\Article, Shopware\\\\Models\\\\Article\\\\Article\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Plugins/Core/HttpCache/DynamicCacheTimeServiceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Plugins\\\\Core\\\\MarketingAggregate\\\\AbstractMarketing\\:\\:assertArrayEquals\\(\\) has no return type specified\\.$#"

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -35,13 +37,13 @@ use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\PaymentData;
 use Shopware\Models\Customer\Repository;
 use Shopware\Models\Payment\Payment;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class CustomerTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var Repository
-     */
-    protected $repository;
+    use DatabaseTransactionBehaviour;
+
+    private Repository $repository;
 
     private ModelManager $manager;
 
@@ -91,6 +93,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $debit = $this->manager
             ->getRepository(Payment::class)
             ->findOneBy(['name' => 'debit']);
+        static::assertInstanceOf(Payment::class, $debit);
 
         static::assertNotNull($customer->getChanged());
         $params = [
@@ -102,7 +105,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         static::assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
         $this->manager->refresh($customer);
@@ -120,6 +123,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $debit = $this->manager
             ->getRepository(Payment::class)
             ->findOneBy(['name' => 'debit']);
+        static::assertInstanceOf(Payment::class, $debit);
 
         $params = [
             'paymentId' => $debit->getId(),
@@ -139,16 +143,16 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         static::assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
-        $dummyData = $this->repository->find($this->View()->data['id']);
-        static::assertNotNull($dummyData);
+        $customer = $this->repository->find($this->View()->getAssign('data')['id']);
+        static::assertInstanceOf(Customer::class, $customer);
 
-        static::assertEquals($debit->getId(), $dummyData->getPaymentId());
-        static::assertCount(1, $dummyData->getPaymentData()->toArray());
+        static::assertEquals($debit->getId(), $customer->getPaymentId());
+        static::assertCount(1, $customer->getPaymentData()->toArray());
 
-        $paymentDataArray = $dummyData->getPaymentData()->toArray();
+        $paymentDataArray = $customer->getPaymentData()->toArray();
         $paymentData = array_shift($paymentDataArray);
         static::assertInstanceOf(PaymentData::class, $paymentData);
         static::assertEquals('Account Holder Name', $paymentData->getAccountHolder());
@@ -159,7 +163,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEmpty($paymentData->getIban());
         static::assertFalse($paymentData->getUseBillingData());
 
-        return $dummyData->getId();
+        return $customer->getId();
     }
 
     /**
@@ -170,6 +174,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $debit = $this->manager
             ->getRepository(Payment::class)
             ->findOneBy(['name' => 'debit']);
+        static::assertInstanceOf(Payment::class, $debit);
 
         $params = [
             'paymentId' => $debit->getId(),
@@ -180,7 +185,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         static::assertEquals($debit->getId(), $jsonBody['data']['paymentId']);
 
         $params = [
@@ -188,7 +193,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
             'defaultAddress' => '',
             'setDefaultBillingAddress' => true,
             'setDefaultShippingAddress' => true,
-            'user_id' => $this->View()->data['id'],
+            'user_id' => $this->View()->getAssign('data')['id'],
             'company' => 'company',
             'department' => 'department',
             'vatId' => 'vatId',
@@ -219,54 +224,61 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/backend/Address/create');
 
-        /** @var Customer $dummyData */
-        $dummyData = $this->repository->find($params['user_id']);
+        $customer = $this->repository->find($params['user_id']);
+        static::assertInstanceOf(Customer::class, $customer);
 
-        static::assertEquals('firstname', $dummyData->getDefaultBillingAddress()->getFirstname());
-        static::assertEquals('lastname', $dummyData->getDefaultBillingAddress()->getLastname());
-        static::assertEquals('department', $dummyData->getDefaultBillingAddress()->getDepartment());
-        static::assertEquals('vatId', $dummyData->getDefaultBillingAddress()->getVatId());
-        static::assertEquals('title', $dummyData->getDefaultBillingAddress()->getTitle());
-        static::assertEquals('zipcode', $dummyData->getDefaultBillingAddress()->getZipcode());
-        static::assertEquals('city', $dummyData->getDefaultBillingAddress()->getCity());
-        static::assertEquals('street', $dummyData->getDefaultBillingAddress()->getStreet());
-        static::assertEquals('additionalAddressLine1', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine1());
-        static::assertEquals('additionalAddressLine2', $dummyData->getDefaultBillingAddress()->getAdditionalAddressLine2());
+        $billingAddress = $customer->getDefaultBillingAddress();
+        static::assertInstanceOf(Address::class, $billingAddress);
+        static::assertEquals('firstname', $billingAddress->getFirstname());
+        static::assertEquals('lastname', $billingAddress->getLastname());
+        static::assertEquals('department', $billingAddress->getDepartment());
+        static::assertEquals('vatId', $billingAddress->getVatId());
+        static::assertEquals('title', $billingAddress->getTitle());
+        static::assertEquals('zipcode', $billingAddress->getZipcode());
+        static::assertEquals('city', $billingAddress->getCity());
+        static::assertEquals('street', $billingAddress->getStreet());
+        static::assertEquals('additionalAddressLine1', $billingAddress->getAdditionalAddressLine1());
+        static::assertEquals('additionalAddressLine2', $billingAddress->getAdditionalAddressLine2());
 
-        static::assertEquals('firstname', $dummyData->getDefaultShippingAddress()->getFirstname());
-        static::assertEquals('lastname', $dummyData->getDefaultShippingAddress()->getLastname());
-        static::assertEquals('department', $dummyData->getDefaultShippingAddress()->getDepartment());
-        static::assertEquals('vatId', $dummyData->getDefaultShippingAddress()->getVatId());
-        static::assertEquals('title', $dummyData->getDefaultShippingAddress()->getTitle());
-        static::assertEquals('zipcode', $dummyData->getDefaultShippingAddress()->getZipcode());
-        static::assertEquals('city', $dummyData->getDefaultShippingAddress()->getCity());
-        static::assertEquals('street', $dummyData->getDefaultShippingAddress()->getStreet());
-        static::assertEquals('additionalAddressLine1', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine1());
-        static::assertEquals('additionalAddressLine2', $dummyData->getDefaultShippingAddress()->getAdditionalAddressLine2());
+        $shippingAddress = $customer->getDefaultShippingAddress();
+        static::assertInstanceOf(Address::class, $shippingAddress);
+        static::assertEquals('firstname', $shippingAddress->getFirstname());
+        static::assertEquals('lastname', $shippingAddress->getLastname());
+        static::assertEquals('department', $shippingAddress->getDepartment());
+        static::assertEquals('vatId', $shippingAddress->getVatId());
+        static::assertEquals('title', $shippingAddress->getTitle());
+        static::assertEquals('zipcode', $shippingAddress->getZipcode());
+        static::assertEquals('city', $shippingAddress->getCity());
+        static::assertEquals('street', $shippingAddress->getStreet());
+        static::assertEquals('additionalAddressLine1', $shippingAddress->getAdditionalAddressLine1());
+        static::assertEquals('additionalAddressLine2', $shippingAddress->getAdditionalAddressLine2());
     }
 
     /**
      * Test saveAction controller action - Update an existing customer
-     *
-     * @depends testAddCustomerPaymentDataWithDebit
      */
-    public function testUpdateCustomerPaymentDataWithSepa($dummyDataId): void
+    public function testUpdateCustomerPaymentDataWithSepa(): void
     {
-        /** @var Customer $dummyData */
-        $dummyData = $this->repository->find($dummyDataId);
+        $customerId = $this->testAddCustomerPaymentDataWithDebit();
+        $customer = $this->repository->find($customerId);
+        static::assertInstanceOf(Customer::class, $customer);
+
         $sepa = $this->manager
             ->getRepository(Payment::class)
             ->findOneBy(['name' => 'sepa']);
+        static::assertInstanceOf(Payment::class, $sepa);
+
         $debit = $this->manager
             ->getRepository(Payment::class)
             ->findOneBy(['name' => 'debit']);
+        static::assertInstanceOf(Payment::class, $debit);
 
-        static::assertEquals($debit->getId(), $dummyData->getPaymentId());
-        static::assertCount(1, $dummyData->getPaymentData()->toArray());
-        static::assertNotNull($dummyData->getChanged());
+        static::assertEquals($debit->getId(), $customer->getPaymentId());
+        static::assertCount(1, $customer->getPaymentData()->toArray());
+        static::assertNotNull($customer->getChanged());
 
         $params = [
-            'id' => $dummyData->getId(),
+            'id' => $customer->getId(),
             'paymentId' => $sepa->getId(),
             'paymentData' => [[
                 'accountHolder' => '',
@@ -277,23 +289,22 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
                 'iban' => '456iban654',
                 'useBillingData' => true,
             ]],
-            'changed' => $dummyData->getChanged()->format('c'),
+            'changed' => $customer->getChanged()->format('c'),
         ];
         $this->Request()->setMethod('POST')->setPost($params);
         $this->dispatch('/backend/Customer/save');
         $jsonBody = $this->View()->getAssign();
 
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         static::assertEquals($sepa->getId(), $jsonBody['data']['paymentId']);
 
-        $this->manager->refresh($dummyData);
+        $this->manager->refresh($customer);
 
-        static::assertEquals($sepa->getId(), $dummyData->getPaymentId());
-        $paymentDataArray = $dummyData->getPaymentData()->toArray();
+        static::assertEquals($sepa->getId(), $customer->getPaymentId());
+        $paymentDataArray = $customer->getPaymentData()->toArray();
         static::assertCount(2, $paymentDataArray);
 
         // Old debit payment data is still there, it's just not used currently
-        /** @var PaymentData $paymentData */
         $paymentData = array_shift($paymentDataArray);
         static::assertInstanceOf(PaymentData::class, $paymentData);
         static::assertEquals('Account Holder Name', $paymentData->getAccountHolder());
@@ -305,7 +316,6 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertFalse($paymentData->getUseBillingData());
 
         // New SEPA data
-        /** @var PaymentData $paymentData */
         $paymentData = array_shift($paymentDataArray);
         static::assertInstanceOf(PaymentData::class, $paymentData);
         static::assertEmpty($paymentData->getAccountHolder());
@@ -316,7 +326,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEquals('456iban654', $paymentData->getIban());
         static::assertTrue($paymentData->getUseBillingData());
 
-        $this->manager->remove($dummyData);
+        $this->manager->remove($customer);
         $this->manager->flush();
     }
 
@@ -329,8 +339,8 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->Request()->setParams(['id' => $customer->getId()]);
 
-        /** @var Enlight_Controller_Response_ResponseTestCase $response */
         $response = $this->dispatch('backend/Customer/performOrder');
+        static::assertInstanceOf(Enlight_Controller_Response_ResponseTestCase::class, $response);
 
         $headerLocation = $response->getHeader('Location');
         $this->reset();
@@ -365,7 +375,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
             ->setMethod('POST')
             ->setPost($postData);
         $this->dispatch('backend/Customer/save');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         // Now use an outdated timestamp. The controller should detect this and fail.
         $postData['changed'] = '2008-08-07 18:11:31';
@@ -373,7 +383,7 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
             ->setMethod('POST')
             ->setPost($postData);
         $this->dispatch('backend/Customer/save');
-        static::assertFalse($this->View()->success);
+        static::assertFalse($this->View()->getAssign('success'));
     }
 
     /**
@@ -386,7 +396,9 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
         $customer = Shopware()->Models()->find(Customer::class, $dummy->getId());
 
         static::assertInstanceOf(Customer::class, $customer);
-        static::assertEquals('1', $customer->getGroup()->getId());
+        $customerGroup = $customer->getGroup();
+        static::assertInstanceOf(Group::class, $customerGroup);
+        static::assertSame(1, $customerGroup->getId());
     }
 
     /**
@@ -407,7 +419,9 @@ class CustomerTest extends Enlight_Components_Test_Controller_TestCase
     {
         $dummyData = new Customer();
         $dummyData->setEmail('test@phpunit.org');
-        $dummyData->setGroup($this->manager->find(Group::class, 1));
+        $customerGroup = $this->manager->find(Group::class, 1);
+        static::assertInstanceOf(Group::class, $customerGroup);
+        $dummyData->setGroup($customerGroup);
         $this->manager->persist($dummyData);
         $this->manager->flush();
 

@@ -74,14 +74,14 @@ class DatabaseWriter
             if (!$this->update) {
                 $this->insertBatch($data, $namespace, $localeId, $shopId);
             } else {
-                $rows = $this->db->fetchAll(
+                $rows = $this->db->fetchAllAssociative(
                     'SELECT * FROM s_core_snippets WHERE shopID = :shopId AND localeID = :localeId AND namespace = :namespace',
                     [
                         'shopId' => $shopId,
                         'localeId' => $localeId,
                         'namespace' => $namespace,
                     ]
-                );
+                ) ?: [];
 
                 foreach ($data as $name => $value) {
                     $row = null;

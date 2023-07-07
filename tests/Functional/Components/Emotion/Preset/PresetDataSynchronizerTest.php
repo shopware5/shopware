@@ -32,46 +32,36 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizer;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 /**
  * @group EmotionPreset
  */
 class PresetDataSynchronizerTest extends TestCase
 {
-    /**
-     * @var PresetDataSynchronizer
-     */
-    private $synchronizerService;
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
-    /**
-     * @var EmotionPreset
-     */
-    private $presetResource;
+    private PresetDataSynchronizer $synchronizerService;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private EmotionPreset $presetResource;
+
+    private Connection $connection;
 
     private string $imageData;
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(Connection::class);
-        $this->connection->beginTransaction();
+        $this->connection = $this->getContainer()->get(Connection::class);
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->synchronizerService = Shopware()->Container()->get(PresetDataSynchronizerInterface::class);
-        $this->presetResource = Shopware()->Container()->get(EmotionPreset::class);
+        $this->synchronizerService = $this->getContainer()->get(PresetDataSynchronizerInterface::class);
+        $this->presetResource = $this->getContainer()->get(EmotionPreset::class);
 
         $this->imageData = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-    }
-
-    protected function tearDown(): void
-    {
-        $this->connection->rollBack();
     }
 
     public function testAssetImportWithPresetAlreadyImported(): void

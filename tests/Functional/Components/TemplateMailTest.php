@@ -284,26 +284,14 @@ class TemplateMailTest extends Enlight_Components_Test_TestCase
 
     private function getSmartyMailMockObject(): Mail
     {
-        $templateMock = $this->createMock(Mail::class);
+        $mail = new Mail();
+        $mail->setFromMail('{$sConfig.sMAIL}');
+        $mail->setFromName('{$sConfig.sSHOPNAME}');
+        $mail->setSubject('Ihr Bestellung bei {$sConfig.sSHOPNAME}');
+        $mail->setContent('Testbestellung bei {$sConfig.sSHOPNAME}');
+        $mail->setContentHtml('Testbestellung HTML bei {$sConfig.sSHOPNAME}');
+        $mail->setIsHtml();
 
-        $templateMock->method('getFromMail')
-            ->willReturn('{$sConfig.sMAIL}');
-
-        $templateMock->method('getFromName')
-            ->willReturn('{$sConfig.sSHOPNAME}');
-
-        $templateMock->method('getSubject')
-            ->willReturn('Ihr Bestellung bei {$sConfig.sSHOPNAME}');
-
-        $templateMock->method('getContent')
-            ->willReturn('Testbestellung bei {$sConfig.sSHOPNAME}');
-
-        $templateMock->method('getContentHtml')
-            ->willReturn('Testbestellung HTML bei {$sConfig.sSHOPNAME}');
-
-        $templateMock->method('isHtml')
-            ->willReturn(true);
-
-        return $templateMock;
+        return $mail;
     }
 }

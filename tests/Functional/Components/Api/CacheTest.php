@@ -89,7 +89,7 @@ class CacheTest extends TestCase
         $this->getResource()->delete('template');
 
         $info = $this->getResource()->getOne('template');
-        static::assertEquals(0, $info['files']);
+        static::assertFalse(isset($info['files']));
     }
 
     /**
@@ -99,10 +99,10 @@ class CacheTest extends TestCase
     {
         $this->getResource()->delete('http');
         $info = $this->getResource()->getOne('http');
-        static::assertEquals(0, $info['files']);
+        static::assertFalse(isset($info['files']));
 
         $this->getResource()->delete('template');
         $info = $this->getResource()->getOne('template');
-        static::assertEquals(0, $info['files']);
+        static::assertFalse(isset($info['files']));
     }
 }

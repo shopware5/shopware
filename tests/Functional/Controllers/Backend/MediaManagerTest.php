@@ -40,7 +40,7 @@ class MediaManagerTest extends TestCase
     /**
      * Creates a new album,
      * checks if the new album has inherited the parents settings
-     * and deletes it afterwards
+     * and deletes it afterward
      */
     public function testAlbumInheritance(): void
     {
@@ -54,7 +54,7 @@ class MediaManagerTest extends TestCase
             'parentId' => '-11',
             'position' => '',
             'text' => 'PHPUNIT_ALBUM',
-            'thumbnailSize' => '',
+            'thumbnailSize' => [],
         ];
 
         $request = new Enlight_Controller_Request_RequestTestCase();

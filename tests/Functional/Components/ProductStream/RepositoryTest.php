@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Shopware\Components\ProductStream;
+namespace Shopware\Tests\Functional\Components\ProductStream;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;

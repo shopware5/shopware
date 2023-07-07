@@ -127,7 +127,7 @@ class Shopware_Controllers_Backend_Log extends Shopware_Controllers_Backend_ExtJ
             $params = $this->Request()->getParams();
             unset($params['module'], $params['controller'], $params['action'], $params['_dc']);
 
-            if ($params[0]) {
+            if (!empty($params[0])) {
                 foreach ($params as $values) {
                     $logModel = $this->get('models')->find(Log::class, $values['id']);
 

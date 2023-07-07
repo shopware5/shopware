@@ -110,7 +110,8 @@ class RouterTest extends Enlight_Components_Test_TestCase
         static::assertIsString($url);
         $match = $router->match($url);
         static::assertIsArray($match);
-        static::assertEquals(array_intersect($match, $params), $params);
+        unset($match['module'], $match['controller'], $match['action'], $match['index']);
+        static::assertEquals($params, $match);
     }
 
     public function getTestParamsProvider(): array

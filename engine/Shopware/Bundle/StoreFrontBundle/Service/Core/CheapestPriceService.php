@@ -114,7 +114,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
                 continue;
             }
 
-            $price = $prices[$product->getNumber()];
+            $price = $prices[$product->getNumber()] ?? null;
 
             if (!$price instanceof PriceRule) {
                 continue;

@@ -163,7 +163,7 @@ parameters:
                 - engine/Shopware/Commands/ThemeCreateCommand.php
 
         - # For testing purposes the constructor of the price struct gets strings
-            message: '#Parameter .* of class Shopware\\Components\\Cart\\Struct\\Price constructor expects float.*string given#'
+            message: '#Parameter .* of class Shopware\\Components\\Cart\\Struct\\Price constructor expects float|numeric-string, .* given#'
             path: tests/Functional/Components/Cart/ProportionalTaxCalculatorTest.php
 
         # This is a bleeding edge feature and not working well since now. See https://github.com/phpstan/phpstan-doctrine/issues/332

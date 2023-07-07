@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,6 +30,11 @@ use DateTime;
 
 class CustomerOrderHydrator
 {
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @return CustomerOrder
+     */
     public function hydrate(array $data)
     {
         $struct = new CustomerOrder();
@@ -36,34 +43,37 @@ class CustomerOrderHydrator
             return $struct;
         }
 
-        $struct->setOrderCount((int) $data['count_orders']);
-        $struct->setTotalAmount((float) $data['invoice_amount_sum']);
-        $struct->setAvgAmount((float) $data['invoice_amount_avg']);
-        $struct->setMinAmount((float) $data['invoice_amount_min']);
-        $struct->setMaxAmount((float) $data['invoice_amount_max']);
-        $struct->setAvgProductPrice((float) $data['product_avg']);
-        $struct->setFirstOrderTime(new DateTime($data['first_order_time']));
-        $struct->setLastOrderTime(new DateTime($data['last_order_time']));
-        $struct->setPayments($this->explodeAndFilter($data['selected_payments']));
-        $struct->setShops($this->explodeAndFilter($data['ordered_in_shops']));
-        $struct->setDevices($this->explodeAndFilter($data['ordered_with_devices']));
-        $struct->setDispatches($this->explodeAndFilter($data['selected_dispachtes']));
-        $struct->setWeekdays($this->explodeAndFilter($data['weekdays']));
+        $struct->setOrderCount((int) ($data['count_orders'] ?? 0));
+        $struct->setTotalAmount((float) ($data['invoice_amount_sum'] ?? 0.0));
+        $struct->setAvgAmount((float) ($data['invoice_amount_avg'] ?? 0.0));
+        $struct->setMinAmount((float) ($data['invoice_amount_min'] ?? 0.0));
+        $struct->setMaxAmount((float) ($data['invoice_amount_max'] ?? 0.0));
+        $struct->setAvgProductPrice((float) ($data['product_avg'] ?? 0.0));
+        $struct->setFirstOrderTime(isset($data['first_order_time']) ? new DateTime($data['first_order_time']) : null);
+        $struct->setLastOrderTime(isset($data['last_order_time']) ? new DateTime($data['last_order_time']) : null);
+        $struct->setPayments(array_map('\intval', $this->explodeAndFilter($data['selected_payments'] ?? '')));
+        $struct->setShops(array_map('\intval', $this->explodeAndFilter($data['ordered_in_shops'] ?? '')));
+        $struct->setDevices($this->explodeAndFilter($data['ordered_with_devices'] ?? ''));
+        $struct->setDispatches(array_map('\intval', $this->explodeAndFilter($data['selected_dispachtes'] ?? '')));
+        $struct->setWeekdays($this->explodeAndFilter($data['weekdays'] ?? ''));
 
         if (\array_key_exists('product_numbers', $data)) {
-            $struct->setProducts($this->explodeAndFilter($data['product_numbers']));
+            $struct->setProducts($this->explodeAndFilter($data['product_numbers'] ?? ''));
         }
         if (\array_key_exists('category_ids', $data)) {
-            $struct->setCategories($this->explodeAndFilter($data['category_ids']));
+            $struct->setCategories(array_map('\intval', $this->explodeAndFilter($data['category_ids'] ?? '')));
         }
         if (\array_key_exists('manufacturer_ids', $data)) {
-            $struct->setManufacturers($this->explodeAndFilter($data['manufacturer_ids']));
+            $struct->setManufacturers(array_map('\intval', $this->explodeAndFilter($data['manufacturer_ids'] ?? '')));
         }
 
         return $struct;
     }
 
-    private function explodeAndFilter($value)
+    /**
+     * @return array<string|numeric-string>
+     */
+    private function explodeAndFilter(string $value): array
     {
         return array_filter(explode(',', $value));
     }

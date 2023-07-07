@@ -212,9 +212,15 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
             $this->getToDate()
         );
 
-        $turnover = array_map('reset', $turnover->getData());
-        $visitors = array_map('reset', $visitors->getData());
-        $registrations = array_map('reset', $registrations->getData());
+        $turnover = array_map(function ($turnoverItem) {
+            return reset($turnoverItem);
+        }, $turnover->getData());
+        $visitors = array_map(function ($visitorsItem) {
+            return reset($visitorsItem);
+        }, $visitors->getData());
+        $registrations = array_map(function ($registrationsItem) {
+            return reset($registrationsItem);
+        }, $registrations->getData());
 
         $data = array_merge_recursive($turnover, $visitors);
         $data = array_merge_recursive($data, $registrations);

@@ -2,11 +2,24 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.19
+
+[View all changes from v5.7.18...v5.7.19](https://github.com/shopware/shopware/compare/v5.7.18...v5.7.19)
+
+### Changes
+
+* Changed behaviour of the translation transfer while setting a product variant as the main variant
+* Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
+* Updated `google/cloud-storage` to version 1.32.0
+* Updated `doctrine/orm` to version 2.15.3
+* Updated `setasign/fpdf` to version 1.8.6
+
 ## 5.7.18
 
 [View all changes from v5.7.17...v5.7.18](https://github.com/shopware/shopware/compare/v5.7.17...v5.7.18)
 
 ### Additions
+
 * Added new input field that does not allow values, that contain URLs
 
 ### Deprecations
@@ -17,6 +30,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Changed newsletter registration so that it does not allow URLs as value for first and last name
 * Changed customer registration so that it does not allow URLs as value for first and last name
+* Changed behaviour of the translation transfer while setting a product variant as the main variant 
 * Updated `behat/behat` to version 3.13.0
 * Updated `doctrine/dbal` to version 2.13.9
 * Updated `doctrine/orm` to version 2.15.2

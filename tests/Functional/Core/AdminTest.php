@@ -2313,6 +2313,8 @@ class AdminTest extends TestCase
 
     public function testsGetPremiumShippingcosts(): void
     {
+        $this->generateBasketSession();
+
         // No basket, return false,
         static::assertFalse($this->module->sGetPremiumShippingcosts());
 
@@ -2325,7 +2327,6 @@ class AdminTest extends TestCase
         }
         static::assertIsArray($germany);
 
-        $this->generateBasketSession();
         $this->basketModule->sAddArticle('SW10010');
 
         // With country data, no dispatch method

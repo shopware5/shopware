@@ -95,8 +95,8 @@ class ProportionalCartMerger implements ProportionalCartMergerInterface
      */
     private function mergeAmount(array $item1, array $item2, string $property)
     {
-        $hasComma = str_contains($item1[$property], ',');
-        $amount = (float) str_replace(',', '.', $item1[$property]) + (float) str_replace(',', '.', $item2[$property]);
+        $hasComma = str_contains($item1[$property] ?? '', ',');
+        $amount = (float) str_replace(',', '.', $item1[$property] ?? '') + (float) str_replace(',', '.', $item2[$property] ?? '');
 
         if ($hasComma) {
             $amount = $this->modules->Articles()->sFormatPrice($amount);

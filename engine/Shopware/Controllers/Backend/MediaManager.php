@@ -717,8 +717,8 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
         }
 
         $thumbnailHighDpi = isset($data['thumbnailHighDpi']) && $data['thumbnailHighDpi'];
-        $thumbnailQuality = $data['thumbnailQuality'] ?: 90;
-        $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ?: 70;
+        $thumbnailQuality = $data['thumbnailQuality'] ?? 90;
+        $thumbnailHighDpiQuality = $data['thumbnailHighDpiQuality'] ?? 70;
 
         $albumId = $album->getId();
         if (empty($albumId) && $data['parent'] !== null) {
@@ -785,7 +785,7 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
             if (stripos($album['text'], $search) === 0) {
                 $found[] = $album;
             }
-            $children = $album['data'];
+            $children = $album['data'] ?? null;
 
             if (\is_array($children) && \count($children) > 0) {
                 $foundChildren[] = $this->filterAlbums($children, $search);

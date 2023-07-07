@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,6 +27,7 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use DateTime;
+use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Controller_TestCase;
 
 class LogTest extends Enlight_Components_Test_Controller_TestCase
@@ -44,11 +47,10 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
      * Tests the getLogsAction()
      * to test if reading the logs is working
      */
-    public function testGetLogs()
+    public function testGetLogs(): void
     {
-        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/log/getLogs');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 
@@ -61,11 +63,11 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
      * This test tests the creating of a new log.
      * This function is called before testDeleteLogs
      */
-    public function testCreateLog()
+    public function testCreateLog(): int
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
 
-        $this->Request()->setClientIp('10.0.0.3', false);
+        $this->Request()->setClientIp('10.0.0.3');
         $this->Request()->setMethod('POST')->setPost(
             [
                 'type' => 'backend',
@@ -78,7 +80,7 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
         );
 
         $this->dispatch('backend/logger/createLog');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 
@@ -93,10 +95,8 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
      * This test-method tests the deleting of a log.
      *
      * @depends testCreateLog
-     *
-     * @param string $lastId
      */
-    public function testDeleteLogs($lastId)
+    public function testDeleteLogs(int $lastId): void
     {
         $this->Request()->setMethod('POST')->setPost(['id' => $lastId]);
 
@@ -105,20 +105,21 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
         $jsonBody = $this->View()->getAssign();
 
         static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success']);
         static::assertArrayHasKey('data', $jsonBody);
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Container()->get(Connection::class)->rollBack();
     }
 
     /**
      * This test tests the creating of a new log.
      * This function is called before testDeleteLogs
      */
-    public function testCreateDeprecatedLog()
+    public function testCreateDeprecatedLog(): void
     {
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->beginTransaction();
+        Shopware()->Container()->get(Connection::class)->beginTransaction();
 
-        $this->Request()->setClientIp('10.0.0.3', false);
+        $this->Request()->setClientIp('10.0.0.3');
         $this->Request()->setMethod('POST')->setPost(
             [
                 'type' => 'backend',
@@ -130,8 +131,8 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
             ]
         );
 
-        $this->dispatch('backend/log/createLog');
-        static::assertTrue($this->View()->success);
+        $this->dispatch('backend/logger/createLog');
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 
@@ -139,7 +140,7 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('success', $jsonBody);
         static::assertArrayHasKey('id', $jsonBody['data']);
 
-        Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)->rollBack();
+        Shopware()->Container()->get(Connection::class)->rollBack();
     }
 
     public function testSystemLogList(): void
@@ -195,7 +196,6 @@ class LogTest extends Enlight_Components_Test_Controller_TestCase
         $pluginLogger->info('Running test...');
         $coreLogger->info('Running test...');
 
-        /** @var string $environment */
         $environment = $container->getParameter('kernel.environment');
 
         // test filtering

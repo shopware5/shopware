@@ -95,13 +95,13 @@ class CookieRemoveSubscriber implements SubscriberInterface
             );
         }
 
-        $allowCookie = (int) $controller->Request()->cookies->getInt('allowCookie');
+        $allowCookie = $controller->Request()->cookies->getInt('allowCookie');
         if ($this->config->get('cookie_note_mode') !== self::COOKIE_MODE_TECHNICAL) {
             if ($allowCookie === 1) {
                 return;
             }
 
-            header_remove('Set-Cookie');
+            $controller->Response()->headers->remove('Set-Cookie');
 
             return;
         }

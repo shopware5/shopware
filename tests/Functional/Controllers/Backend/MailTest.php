@@ -28,10 +28,7 @@ use Enlight_Components_Test_Controller_TestCase;
 
 class MailTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var array
-     */
-    public $testData = [
+    public array $testData = [
         'name' => 'Testmail123',
         'fromMail' => 'Shopware Demoshop',
         'fromName' => 'info@example.com',

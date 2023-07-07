@@ -27,12 +27,12 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Tests\Functional\Components\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTestCase;
 
 /**
  * @group Basket
  */
-class ProportionalCartCalculationCustomerGroupTest extends CheckoutTest
+class ProportionalCartCalculationCustomerGroupTest extends CheckoutTestCase
 {
     public function setUp(): void
     {

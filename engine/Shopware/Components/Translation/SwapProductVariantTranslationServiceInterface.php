@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -22,16 +24,15 @@
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Controllers\Frontend;
+namespace Shopware\Components\Translation;
 
-use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Models\Article\Detail as ProductVariant;
 
-class SitemapXmlTest extends Enlight_Components_Test_Controller_TestCase
+interface SwapProductVariantTranslationServiceInterface
 {
-    public function testIndex()
-    {
-        $this->dispatch('/SitemapXml');
+    public const TRANSLATION_ID_KEY = 'id';
+    public const OBJECT_TYPE_PRODUCT = 'article';
+    public const OBJECT_TYPE_VARIANT = 'variant';
 
-        static::assertEquals(302, $this->Response()->getHttpResponseCode());
-    }
+    public function swapProductVariantTranslation(ProductVariant $newMainVariant, ProductVariant $oldMainVariant): void;
 }

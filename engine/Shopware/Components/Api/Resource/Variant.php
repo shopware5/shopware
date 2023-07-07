@@ -699,8 +699,8 @@ class Variant extends Resource implements BatchInterface
 
         foreach ($data['configuratorOptions'] as $optionData) {
             $availableGroup = $this->getAvailableGroup($availableGroups, [
-                'id' => $optionData['groupId'],
-                'name' => $optionData['group'],
+                'id' => $optionData['groupId'] ?? null,
+                'name' => $optionData['group'] ?? null,
             ]);
 
             // Group is in the product configurator set configured?
@@ -710,8 +710,8 @@ class Variant extends Resource implements BatchInterface
 
             // Check if the option is available in the configured product configurator set.
             $option = $this->getAvailableOption($availableGroup->getOptions(), [
-                'id' => $optionData['optionId'],
-                'name' => $optionData['option'],
+                'id' => $optionData['optionId'] ?? null,
+                'name' => $optionData['option'] ?? null,
             ]);
 
             if (!$option) {
@@ -919,11 +919,12 @@ class Variant extends Resource implements BatchInterface
     {
         // Convert string to lower case to avoid problems with case insensitivity in database
         // vs case sensitivity in PHP
-        $groupName = mb_strtolower($groupData['name']);
+        $groupName = mb_strtolower($groupData['name'] ?? '');
 
         foreach ($availableGroups as $availableGroup) {
             if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id'])
-                || (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
+                || (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)
+            ) {
                 return $availableGroup;
             }
         }
@@ -942,11 +943,12 @@ class Variant extends Resource implements BatchInterface
     {
         // Convert string to lower case to avoid problems with case insensitivity in database
         // vs case sensitivity in PHP
-        $optionName = mb_strtolower($optionData['name']);
+        $optionName = mb_strtolower($optionData['name'] ?? '');
 
         foreach ($availableOptions as $availableOption) {
             if ((mb_strtolower($availableOption->getName()) === $optionName && $optionData['name'] !== null)
-                || ((int) $availableOption->getId() === (int) $optionData['id'] && $optionData['id'] !== null)) {
+                || ((int) $availableOption->getId() === (int) $optionData['id'] && $optionData['id'] !== null)
+            ) {
                 return $availableOption;
             }
         }

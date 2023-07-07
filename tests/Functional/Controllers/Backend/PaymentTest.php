@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,10 +27,18 @@
 namespace Shopware\Tests\Functional\Controllers\Backend;
 
 use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class PaymentTest extends Enlight_Components_Test_Controller_TestCase
 {
-    private $testDataCreate = [
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $testDataCreate = [
         'name' => 'New payment',
         'description' => 'New payment',
         'source' => 1,
@@ -55,19 +65,18 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
         parent::setUp();
 
         // Disable auth and acl
-        Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
-        Shopware()->Plugins()->Backend()->Auth()->setNoAcl();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAuth();
+        $this->getContainer()->get('plugins')->Backend()->Auth()->setNoAcl();
     }
 
     /**
      * Tests the getPaymentsAction()
      * to test if reading the payments is working
      */
-    public function testGetPayments()
+    public function testGetPayments(): void
     {
-        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getPayments');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 
@@ -79,11 +88,10 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
      * Tests the getCountriesAction()
      * to test if reading the countries is working
      */
-    public function testGetCountries()
+    public function testGetCountries(): void
     {
-        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/getCountries');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 
@@ -93,15 +101,15 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Function to test creating a new payment
+     *
+     * @return array<string, mixed>
      */
-    public function testCreatePayments()
+    public function testCreatePayments(): array
     {
-        Shopware()->Db()->exec('DELETE FROM s_core_paymentmeans WHERE name = "New payment"');
-
         $this->Request()->setMethod('POST')->setPost($this->testDataCreate);
         $this->dispatch('backend/payment/createPayments');
 
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
         $jsonBody = $this->View()->getAssign();
 
         static::assertArrayHasKey('data', $jsonBody);
@@ -112,18 +120,14 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Function to test updating a payment
-     *
-     * @param array $data Contains the data of the created payment
-     *
-     * @depends testCreatePayments
      */
-    public function testUpdatePayments($data)
+    public function testUpdatePayments(): void
     {
+        $data = $this->testCreatePayments();
         $this->Request()->setMethod('POST')->setPost(['id' => $data['id'], 'name' => 'Neue Zahlungsart']);
 
-        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/updatePayments');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 
@@ -133,18 +137,15 @@ class PaymentTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Function to test deleting a payment
-     *
-     * @param array $data Contains the data of the created payment
-     *
-     * @depends testCreatePayments
      */
-    public function testDeletePayment($data)
+    public function testDeletePayment(): void
     {
+        $data = $this->testCreatePayments();
+        $this->resetRequest();
         $this->Request()->setMethod('POST')->setPost(['id' => $data['id']]);
 
-        /* @var \Enlight_Controller_Response_ResponseTestCase */
         $this->dispatch('backend/payment/deletePayment');
-        static::assertTrue($this->View()->success);
+        static::assertTrue($this->View()->getAssign('success'));
 
         $jsonBody = $this->View()->getAssign();
 

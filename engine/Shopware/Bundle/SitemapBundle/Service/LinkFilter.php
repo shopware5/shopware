@@ -24,23 +24,28 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Functional\Library;
+namespace Shopware\Bundle\SitemapBundle\Service;
 
-use PHPUnit\Framework\TestCase;
-use Shopware\Tests\Functional\Traits\ContainerTrait;
-use Zend_Db_Adapter_Exception;
-
-class ZendDBTest extends TestCase
+class LinkFilter
 {
-    use ContainerTrait;
-
-    public function testAdapterException(): void
+    /**
+     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
+     * Returns false, if the link is not allowed
+     *
+     * @param array<string, mixed> $userParams
+     */
+    public static function filterLink(?string $link, array &$userParams = []): bool
     {
-        $dbConnection = $this->getContainer()->get('db');
+        if (empty($link)) {
+            return true;
+        }
+        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
+        parse_str($parsedUserParams, $userParams);
+        $blacklist = ['', 'sitemap', 'sitemapXml'];
+        if (\in_array($userParams['sViewport'] ?? [], $blacklist, true)) {
+            return false;
+        }
 
-        $this->expectException(Zend_Db_Adapter_Exception::class);
-        $this->expectExceptionMessageMatches("/SQLSTATE\[42S02\]: Base table or view not found: 1146 Table '.*\.foobar' doesn't exist/");
-        $this->expectExceptionCode(0);
-        $dbConnection->exec('SELECT * FROM foobar');
+        return true;
     }
 }

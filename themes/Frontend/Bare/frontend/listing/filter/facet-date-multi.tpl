@@ -23,8 +23,8 @@
         {block name="frontend_listing_filter_facet_date_multi_input"}
             <input type="text"
                    class="filter-panel--input"
-                   name="{$facet->getFieldName()|escape:'htmlall'}"
-                   id="{$facet->getFieldName()|escape:'htmlall'}"
+                   name="{$facet->getFieldName()|escapeHtmlAttr}"
+                   id="{$facet->getFieldName()|escapeHtmlAttr}"
                    placeholder="{s name="datePickerInputPlaceholder" namespace="frontend/index/datepicker"}{/s}"
                    data-datepicker="true"
                    data-mode="{$mode}"

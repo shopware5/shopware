@@ -41,6 +41,10 @@ class DetachedShop extends Shop
         $self = new self();
 
         foreach ($shop as $field => $value) {
+            if (\in_array($field, ['__initializer__', '__cloner__', '__isInitialized__'], true)) {
+                /* skip properties from Doctrine proxies @see \Doctrine\Common\Proxy\ProxyGenerator */
+                continue;
+            }
             $self->{$field} = $value;
         }
 

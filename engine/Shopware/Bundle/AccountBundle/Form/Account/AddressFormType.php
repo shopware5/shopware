@@ -87,7 +87,7 @@ class AddressFormType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
             array_walk_recursive($data, function (&$item) {
-                $item = strip_tags($item);
+                $item = strip_tags((string) $item);
             });
             $event->setData($data);
         });

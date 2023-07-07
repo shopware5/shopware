@@ -27,12 +27,12 @@ declare(strict_types=1);
 namespace Shopware\Tests\Functional\Components\Cart;
 
 use Doctrine\DBAL\Connection;
-use Shopware\Tests\Functional\Components\CheckoutTest;
+use Shopware\Tests\Functional\Components\CheckoutTestCase;
 
 /**
  * @group Basket
  */
-class ProportionalCartCalculationSurchargeTest extends CheckoutTest
+class ProportionalCartCalculationSurchargeTest extends CheckoutTestCase
 {
     /**
      * A product with 7% tax

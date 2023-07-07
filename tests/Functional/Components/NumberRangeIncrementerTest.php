@@ -31,10 +31,12 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Shopware\Components\NumberRangeIncrementer;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class NumberRangeIncrementerTest extends TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     private Connection $connection;
 

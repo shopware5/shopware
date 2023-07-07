@@ -92,7 +92,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $offset = (int) $this->Request()->getParam('start');
         $limit = (int) $this->Request()->getParam('limit');
         $filter = $this->Request()->getParam('filter');
-        $filter = $filter[0]['value'];
+        $filter = $filter[0]['value'] ?? null;
         $sqlBindings = [];
         $searchSQL = '';
 
@@ -106,8 +106,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
         // Sorting data
         $sortData = $this->Request()->getParam('sort');
-        $sortField = $sortData[0]['property'];
-        $dir = $sortData[0]['direction'];
+        $sortField = $sortData[0]['property'] ?? null;
+        $dir = $sortData[0]['direction'] ?? null;
         $sort = '';
         if ((!empty($sortField) && $dir === 'ASC') || $dir === 'DESC') {
             // To prevent sql-injections
@@ -154,7 +154,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
         $orderBy = $this->Request()->getParam('sort');
         $filter = $this->Request()->getParam('filter');
-        $filter = $filter[0]['value'];
+        $filter = $filter[0]['value'] ?? null;
         $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit');
 
@@ -321,7 +321,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function saveVoucherAction()
     {
         $params = $this->Request()->getParams();
-        $voucherId = empty($params['voucherID']) ? $params['id'] : $params['voucherID'];
+        $voucherId = empty($params['voucherID']) ? $params['id'] ?? null : $params['voucherID'];
         if (!empty($voucherId)) {
             if (!$this->_isAllowed('update', 'voucher')) {
                 return;

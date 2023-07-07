@@ -30,10 +30,12 @@ use Doctrine\DBAL\Connection;
 use Enlight_Components_Test_Plugin_TestCase;
 use Shopware\Components\Captcha\DefaultCaptcha;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class RegisterWithCaptchaTest extends Enlight_Components_Test_Plugin_TestCase
 {
     use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
     private const USER_AGENT = 'Mozilla/5.0 (Android; Tablet; rv:14.0) Gecko/14.0 Firefox/14.0';
 

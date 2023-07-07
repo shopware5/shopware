@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,11 +31,12 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Plugin\MenuSynchronizer;
+use Shopware\Models\Menu\Repository;
 use Shopware\Models\Plugin\Plugin;
 
 class MenuSynchronizerTest extends TestCase
 {
-    public function testIndexNotPartOfSnippet()
+    public function testIndexNotPartOfSnippet(): void
     {
         $this->executeTestAndCheckResult([
             [
@@ -55,7 +58,7 @@ class MenuSynchronizerTest extends TestCase
         ]);
     }
 
-    public function testIndexLowerCaseIsPartOfSnippet()
+    public function testIndexLowerCaseIsPartOfSnippet(): void
     {
         $this->executeTestAndCheckResult(
             [
@@ -80,7 +83,7 @@ class MenuSynchronizerTest extends TestCase
         );
     }
 
-    public function testOtherActionIsPartOfSnippet()
+    public function testOtherActionIsPartOfSnippet(): void
     {
         $this->executeTestAndCheckResult(
             [
@@ -105,22 +108,28 @@ class MenuSynchronizerTest extends TestCase
         );
     }
 
-    protected function executeTestAndCheckResult(array $menu, array $expectedQueryParameters)
+    /**
+     * @param array<array<string, mixed>> $menu
+     * @param array<string, string|int>   $expectedQueryParameters
+     */
+    protected function executeTestAndCheckResult(array $menu, array $expectedQueryParameters): void
     {
         $connection = $this->createMock(Connection::class);
-        $connection->method('createQueryBuilder')
-            ->willReturn($this->createMock(QueryBuilder::class));
+        $connection->method('createQueryBuilder')->willReturn($this->createMock(QueryBuilder::class));
         $connection->expects(static::once())
             ->method('insert')
-            ->with('s_core_snippets', static::callback(function ($value) use ($expectedQueryParameters) {
+            ->with('s_core_snippets', static::callback(static function ($value) use ($expectedQueryParameters) {
                 return !array_diff($expectedQueryParameters, $value);
             }));
 
         $modelManagerMock = $this->createMock(ModelManager::class);
-        $modelManagerMock->method('getConnection')
-            ->willReturn($connection);
+        $modelManagerMock->method('getConnection')->willReturn($connection);
+        $modelManagerMock->method('getRepository')->willReturn($this->createMock(Repository::class));
+
+        $plugin = new Plugin();
+        $plugin->setId(PHP_INT_MAX);
 
         $menuSynchronizer = new MenuSynchronizer($modelManagerMock);
-        $menuSynchronizer->synchronize(new Plugin(), $menu);
+        $menuSynchronizer->synchronize($plugin, $menu);
     }
 }

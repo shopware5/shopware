@@ -192,7 +192,7 @@ class VoteTest extends TestCase
         $config = Shopware()->Container()->get(Shopware_Components_Config::class);
         $originals = [];
         foreach ($configs as $key => $value) {
-            $originals = $config->get($key);
+            $originals[$key] = $config->get($key);
             $config->offsetSet($key, $value);
         }
 

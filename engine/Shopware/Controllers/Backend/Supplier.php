@@ -100,7 +100,7 @@ class Shopware_Controllers_Backend_Supplier extends Shopware_Controllers_Backend
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
 
         foreach ($suppliers as &$supplier) {
-            $supplier['description'] = strip_tags($supplier['description']);
+            $supplier['description'] = strip_tags((string) $supplier['description']);
             $supplier['image'] = $mediaService->getUrl($supplier['image']);
         }
         unset($supplier);

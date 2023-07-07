@@ -123,8 +123,9 @@ class RiskManagementTest extends Enlight_Components_Test_Controller_TestCase
 
         $jsonBody = $this->View()->getAssign();
 
-        static::assertArrayHasKey('data', $jsonBody);
         static::assertArrayHasKey('success', $jsonBody);
+        static::assertTrue($jsonBody['success'], $jsonBody['errorMsg'] ?? '');
+        static::assertArrayHasKey('data', $jsonBody);
     }
 
     /**

@@ -74,6 +74,8 @@ class Shopware_Plugins_Backend_SwagUpdate_Bootstrap extends Shopware_Components_
     /**
      * When index backend module was loaded, add our snippet- and template-directory
      * Also extend the template
+     *
+     * @return void
      */
     public function onBackendIndexPostDispatch(Enlight_Controller_ActionEventArgs $args)
     {

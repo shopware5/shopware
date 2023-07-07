@@ -26,7 +26,7 @@
                         {* Product image *}
                         {block name='frontend_listing_box_article_picture'}
                             <a href="{$sArticle.linkDetails}"
-                               title="{$productName|escape}"
+                               title="{$productName|escapeHtml}"
                                class="product--image{if $imageOnly} is--large{/if}">
 
                                 {block name='frontend_listing_box_article_image_element'}
@@ -37,10 +37,10 @@
 
                                                 {block name='frontend_listing_box_article_image_picture'}
 
-                                                    {$desc = $productName|escape}
+                                                    {$desc = $productName|escapeHtml}
 
                                                     {if $sArticle.image.description}
-                                                        {$desc = $sArticle.image.description|escape}
+                                                        {$desc = $sArticle.image.description|escapeHtml}
                                                     {/if}
 
                                                     {if $sArticle.image.thumbnails}

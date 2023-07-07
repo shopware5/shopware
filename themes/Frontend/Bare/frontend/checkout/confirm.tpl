@@ -92,7 +92,7 @@
                         {/block}
 
                         {* Hidden field for the user comment *}
-                        <textarea class="is--hidden user-comment--hidden" rows="1" cols="1" name="sComment">{$sComment|escape}</textarea>
+                        <textarea class="is--hidden user-comment--hidden" rows="1" cols="1" name="sComment">{$sComment|escapeHtml}</textarea>
 
                         <ul class="list--checkbox list--unstyled">
 

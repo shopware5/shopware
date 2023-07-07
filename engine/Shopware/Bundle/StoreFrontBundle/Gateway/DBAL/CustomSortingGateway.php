@@ -194,7 +194,7 @@ class CustomSortingGateway implements CustomSortingGatewayInterface
 
         return array_map(
             function ($ids) use ($allSortingIds) {
-                $ids = array_filter(explode('|', $ids));
+                $ids = array_filter(explode('|', $ids ?? ''));
 
                 if (!empty($ids)) {
                     return array_map('\intval', $ids);

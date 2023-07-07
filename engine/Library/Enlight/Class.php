@@ -33,7 +33,7 @@ abstract class Enlight_Class
     /**
      * Contains all initialized Enlight instances.
      *
-     * @var array
+     * @var array<class-string<Enlight_Class|object>, Enlight_Class|object>
      */
     protected static $instances = [];
 
@@ -59,7 +59,8 @@ abstract class Enlight_Class
         }
         if ($this instanceof Enlight_Hook
           && !$this instanceof Enlight_Hook_Proxy
-          && Shopware()->Hooks()->hasProxy($class)) {
+          && Shopware()->Hooks()->hasProxy($class)
+        ) {
             throw new Enlight_Exception(
                 'Class "' . \get_class($this) . '" has hooks, please use the instance method'
             );
@@ -161,12 +162,14 @@ abstract class Enlight_Class
      * Returns a class instance. If the class is already initialed the existing instance will returned.
      * Otherwise the class will be initialed with the given arguments.
      *
-     * @param class-string $class
-     * @param array        $args
+     * @template TClass of (Enlight_Class|object)
+     *
+     * @param class-string<TClass>|null $class
+     * @param array<mixed>|null         $args
      *
      * @throws \ReflectionException
      *
-     * @return Enlight_Class
+     * @return TClass
      */
     public static function Instance($class = null, $args = null)
     {

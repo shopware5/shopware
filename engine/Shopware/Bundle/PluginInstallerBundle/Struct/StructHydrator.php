@@ -333,17 +333,17 @@ class StructHydrator
      */
     public function assignLocalData(PluginStruct $plugin, $data)
     {
-        $plugin->setId((int) $data['id']);
+        $plugin->setId((int) ($data['id'] ?? 0));
         $plugin->setTechnicalName($data['name']);
-        $plugin->setLabel($data['label']);
-        $plugin->setActive((bool) $data['active']);
-        $plugin->setVersion($data['version']);
-        $plugin->setCapabilityActivate((bool) $data['capability_enable']);
-        $plugin->setCapabilityUpdate((bool) $data['capability_update']);
-        $plugin->setCapabilityInstall((bool) $data['capability_install']);
-        $plugin->setCapabilitySecureUninstall((bool) $data['capability_secure_uninstall']);
-        $plugin->setLocalUpdateAvailable($data['update_version'] !== null);
-        $plugin->setLink($data['link']);
+        $plugin->setLabel($data['label'] ?? '');
+        $plugin->setActive((bool) ($data['active'] ?? false));
+        $plugin->setVersion($data['version'] ?? '0.0.1');
+        $plugin->setCapabilityActivate((bool) ($data['capability_enable'] ?? false));
+        $plugin->setCapabilityUpdate((bool) ($data['capability_update'] ?? false));
+        $plugin->setCapabilityInstall((bool) ($data['capability_install'] ?? false));
+        $plugin->setCapabilitySecureUninstall((bool) ($data['capability_secure_uninstall'] ?? false));
+        $plugin->setLocalUpdateAvailable(isset($data['update_version']));
+        $plugin->setLink($data['link'] ?? '');
 
         if (\array_key_exists('redirectToStore', $data)) {
             $plugin->setRedirectToStore((bool) $data['redirectToStore']);
@@ -353,11 +353,11 @@ class StructHydrator
             $plugin->setLowestPrice((float) $data['lowestPriceValue']);
         }
 
-        $plugin->setSource($data['source']);
-        $plugin->setFormId($data['form_id']);
-        $plugin->setLocalIcon($data['iconPath']);
-        $plugin->setLocalDescription($data['description']);
-        $plugin->setInSafeMode((bool) $data['in_safe_mode']);
+        $plugin->setSource($data['source'] ?? '');
+        $plugin->setFormId($data['form_id'] ?? 0);
+        $plugin->setLocalIcon($data['iconPath'] ?? '');
+        $plugin->setLocalDescription($data['description'] ?? '');
+        $plugin->setInSafeMode((bool) ($data['in_safe_mode'] ?? false));
 
         if (isset($data['installation_date']) && !empty($data['installation_date'])) {
             $date = new DateTime($data['installation_date']);

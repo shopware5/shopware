@@ -244,22 +244,25 @@ class sAdmin implements \Enlight_Hook
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
         $isMobile = $this->front->Request()->getDeviceType() === 'mobile';
 
-        if (!\is_array($user)) {
-            $user = [];
+        $customer = $user;
+        if (!\is_array($customer)) {
+            $customer = [];
         }
+
+        $paymentId = $data['id'] ?? null;
 
         // Check for risk management
         // If rules match, reset to default payment mean if this payment mean was not
         // set by shop owner
 
         // Hide payment means which are not active
-        if (!$data['active'] && $data['id'] != $user['additional']['user']['paymentpreset']) {
+        if (empty($data['active']) && $paymentId != ($customer['additional']['user']['paymentpreset'] ?? null)) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
         // If esd - order, hide payment means which
         // are not available for esd
-        if (!$data['esdactive'] && $sEsd) {
+        if (empty($data['esdactive']) && $sEsd) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
@@ -270,13 +273,13 @@ class sAdmin implements \Enlight_Hook
 
         // Check additional rules
         if (
-            $this->sManageRisks($data['id'], null, $user)
-            && $data['id'] != $user['additional']['user']['paymentpreset']
+            $this->sManageRisks($paymentId, null, $customer)
+            && $paymentId != ($customer['additional']['user']['paymentpreset'] ?? null)
         ) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
         }
 
-        if (!empty($user['additional']['countryShipping']['id'])) {
+        if (!empty($customer['additional']['countryShipping']['id'])) {
             $sql = '
                 SELECT 1
                 FROM s_core_paymentmeans p
@@ -303,7 +306,7 @@ class sAdmin implements \Enlight_Hook
                 $sql,
                 [
                     $this->contextService->getShopContext()->getShop()->getId(),
-                    $user['additional']['countryShipping']['id'],
+                    $customer['additional']['countryShipping']['id'],
                     $id,
                 ]
             );
@@ -312,7 +315,7 @@ class sAdmin implements \Enlight_Hook
             }
         }
 
-        if ($resetPayment && $user['additional']['user']['id']) {
+        if ($resetPayment && ($customer['additional']['user']['id'] ?? null)) {
             $this->eventManager->notify(
                 'Shopware_Modules_Admin_Payment_Fallback',
                 $data
@@ -321,14 +324,14 @@ class sAdmin implements \Enlight_Hook
             $this->db->update(
                 's_user',
                 ['paymentID' => $resetPayment],
-                ['id = ?' => $user['additional']['user']['id']]
+                ['id = ?' => $customer['additional']['user']['id']]
             );
             $data = ['id' => $resetPayment];
         }
 
-        if (isset($data['id'])) {
+        if (isset($paymentId)) {
             $data = Shopware()->Container()->get(PaymentGatewayInterface::class)
-                ->getList([$data['id']], $this->contextService->getShopContext());
+                ->getList([$paymentId], $this->contextService->getShopContext());
 
             if (!empty($data)) {
                 $data = Shopware()->Container()->get(LegacyStructConverter::class)
@@ -336,13 +339,11 @@ class sAdmin implements \Enlight_Hook
             }
         }
 
-        $data = $this->eventManager->filter(
+        return $this->eventManager->filter(
             'Shopware_Modules_Admin_GetPaymentMeanById_DataFilter',
             $data,
-            ['subject' => $this, 'id' => $id, 'user' => $user]
+            ['subject' => $this, 'id' => $id, 'user' => $customer]
         );
-
-        return $data;
     }
 
     /**
@@ -361,7 +362,7 @@ class sAdmin implements \Enlight_Hook
 
         $sEsd = $this->moduleManager->Basket()->sCheckForESD();
 
-        $countryID = (int) $user['additional']['countryShipping']['id'];
+        $countryID = (int) ($user['additional']['countryShipping']['id'] ?? 0);
         $subShopID = (int) $this->contextService->getShopContext()->getShop()->getId();
         if (empty($countryID)) {
             $countryID = $this->db->fetchOne(
@@ -418,7 +419,7 @@ class sAdmin implements \Enlight_Hook
 
         foreach ($paymentMethods as $payKey => $payValue) {
             // Hide payment means which are not active
-            if (empty($payValue['active']) && $payValue['id'] != $user['additional']['user']['paymentpreset']) {
+            if (empty($payValue['active']) && $payValue['id'] != ($user['additional']['user']['paymentpreset'] ?? 0)) {
                 unset($paymentMethods[$payKey]);
                 continue;
             }
@@ -438,7 +439,7 @@ class sAdmin implements \Enlight_Hook
             // Check additional rules
             if (
                 $this->sManageRisks($payValue['id'], null, $user)
-                && $payValue['id'] != $user['additional']['user']['paymentpreset']
+                && $payValue['id'] != ($user['additional']['user']['paymentpreset'] ?? 0)
             ) {
                 unset($paymentMethods[$payKey]);
             }
@@ -466,7 +467,7 @@ class sAdmin implements \Enlight_Hook
     /**
      * Loads the system class of the specified payment mean
      *
-     * @param array $paymentData Array with payment data
+     * @param array|null $paymentData Array with payment data
      *
      * @throws Enlight_Exception If no payment classes were loaded
      *
@@ -477,10 +478,12 @@ class sAdmin implements \Enlight_Hook
         /** @var array<string, string> $dirs */
         $dirs = [];
 
-        if (str_ends_with($paymentData['class'], '.php')) {
-            $index = substr($paymentData['class'], 0, (int) strpos($paymentData['class'], '.php'));
-        } else {
-            $index = $paymentData['class'];
+        if (\is_array($paymentData)) {
+            if (str_ends_with($paymentData['class'], '.php')) {
+                $index = substr($paymentData['class'], 0, (int) strpos($paymentData['class'], '.php'));
+            } else {
+                $index = $paymentData['class'];
+            }
         }
 
         $dirs = $this->eventManager->filter(
@@ -489,7 +492,7 @@ class sAdmin implements \Enlight_Hook
             ['subject' => $this]
         );
 
-        $class = \array_key_exists($index, $dirs) ? $dirs[$index] : $dirs['default'];
+        $class = isset($index) && \array_key_exists($index, $dirs) ? $dirs[$index] : $dirs['default'];
         if (!$class) {
             throw new Enlight_Exception('sValidateStep3 #02: Payment classes dir not loaded');
         }
@@ -741,7 +744,7 @@ class sAdmin implements \Enlight_Hook
         $sErrorMessages = null;
 
         // If fields are not set, markup these fields
-        $email = strtolower($this->front->Request()->getPost('email'));
+        $email = strtolower($this->front->Request()->getPost('email', ''));
         if (empty($email)) {
             $sErrorFlag['email'] = true;
         }
@@ -964,7 +967,7 @@ class sAdmin implements \Enlight_Hook
         if ($translationData[$country['id']]['countryname']) {
             $country['countryname'] = $translationData[$country['id']]['countryname'];
         }
-        if ($translationData[$country['id']]['notice']) {
+        if (isset($translationData[$country['id']]['notice'])) {
             $country['notice'] = $translationData[$country['id']]['notice'];
         }
 
@@ -998,13 +1001,13 @@ class sAdmin implements \Enlight_Hook
         }
 
         // Pass (possible) translation to country
-        if ($translationData[$dispatch['id']]['dispatch_name']) {
+        if (isset($translationData[$dispatch['id']]['dispatch_name'])) {
             $dispatch['name'] = $translationData[$dispatch['id']]['dispatch_name'];
         }
-        if ($translationData[$dispatch['id']]['dispatch_description']) {
+        if (isset($translationData[$dispatch['id']]['dispatch_description'])) {
             $dispatch['description'] = $translationData[$dispatch['id']]['dispatch_description'];
         }
-        if ($translationData[$dispatch['id']]['dispatch_status_link']) {
+        if (isset($translationData[$dispatch['id']]['dispatch_status_link'])) {
             $dispatch['status_link'] = $translationData[$dispatch['id']]['dispatch_status_link'];
         }
 
@@ -1512,7 +1515,7 @@ class sAdmin implements \Enlight_Hook
 
             if (
                 $this->session->offsetGet('sCountry')
-                && $this->session->offsetGet('sCountry') != $register['billing']['country']
+                && $this->session->offsetGet('sCountry') != ($register['billing']['country'] ?? 0)
             ) {
                 $register['billing']['country'] = (int) $this->session->offsetGet('sCountry');
                 $this->session->offsetSet('sRegister', $register);
@@ -1520,7 +1523,7 @@ class sAdmin implements \Enlight_Hook
 
             $userData['additional']['country'] = $this->db->fetchRow(
                 $countryQuery,
-                [(int) $register['billing']['country']]
+                [(int) ($register['billing']['country'] ?? 0)]
             );
             $userData['additional']['country'] = $userData['additional']['country'] ?: [];
             $userData['additional']['countryShipping'] = $userData['additional']['country'];
@@ -1861,6 +1864,10 @@ class sAdmin implements \Enlight_Hook
      */
     public function sRiskNEWCUSTOMER($user, $order, $value)
     {
+        if (!isset($user['additional']['user'])) {
+            return true;
+        }
+
         return date('Y-m-d') == $user['additional']['user']['firstlogin']
             || !$user['additional']['user']['firstlogin'];
     }
@@ -2339,8 +2346,8 @@ class sAdmin implements \Enlight_Hook
             ];
         }
 
-        if (preg_match(PersonalFormType::DOMAIN_NAME_REGEX, $this->front->Request()->getPost('firstname')) === 1
-            || preg_match(PersonalFormType::DOMAIN_NAME_REGEX, $this->front->Request()->getPost('lastname')) === 1) {
+        if (preg_match(PersonalFormType::DOMAIN_NAME_REGEX, $this->front->Request()->getPost('firstname', '')) === 1
+            || preg_match(PersonalFormType::DOMAIN_NAME_REGEX, $this->front->Request()->getPost('lastname', '')) === 1) {
             return [
                 'code' => 10,
                 'message' => $this->snippetManager->getNamespace('frontend/account/internalMessages')
@@ -2724,7 +2731,7 @@ class sAdmin implements \Enlight_Hook
 
         $sqlBasket = [];
         foreach ($basket as $key => $value) {
-            $sqlBasket[] = $this->connection->quote($value) . " as `$key`";
+            $sqlBasket[] = $this->connection->quote($value ?? '') . " as `$key`";
         }
         $sqlBasket = implode(',', $sqlBasket);
 
@@ -2897,7 +2904,7 @@ class sAdmin implements \Enlight_Hook
         }
         $sql_basket = [];
         foreach ($basket as $key => $value) {
-            $sql_basket[] = $this->db->quote($value) . " as `$key`";
+            $sql_basket[] = $this->db->quote($value ?? '') . " as `$key`";
         }
         $sql_basket = implode(', ', $sql_basket);
 
@@ -3016,7 +3023,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         $this->db->delete('s_order_basket', [
-            'sessionID = ?' => $this->session->offsetGet('sessionId'),
+            'sessionID = ?' => $this->session->get('sessionId'),
             'modus IN (?)' => [3, 4],
             'ordernumber IN (?)' => array_merge(...[
                 $this->cartOrderNumberProvider->getAll(CartOrderNumberProviderInterface::PAYMENT_ABSOLUTE),
@@ -3572,7 +3579,7 @@ SQL;
         $getUser = $this->db->fetchRow($sql, [$email]);
 
         // If the verification process is active, the customer has an email sent date, but no confirm date
-        if ($getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
+        if ($getUser && $getUser['doubleOptinRegister'] && $getUser['doubleOptinEmailSentDate'] !== null && $getUser['doubleOptinConfirmDate'] === null) {
             $hash = $this->optInLoginService->refreshOptInHashForUser(
                 (int) $getUser['id'],
                 (int) $getUser['register_opt_in_id'],

@@ -438,7 +438,7 @@ class sCategories implements Enlight_Hook
             $category['description'] = $category['name'];
             $category['link'] = $category['external'] ?: $url . $category['id'];
             $category['hidetop'] = $category['hideTop'];
-            if ($category['sub']) {
+            if (isset($category['sub'])) {
                 $category['sub'] = $this->mapCategoryTree($category['sub']);
             }
         }
