@@ -52,6 +52,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `voku/anti-xss` to version 4.1.41
 * Updated `wikimedia/less.php` to version 4.1.0
 * Updated several indirect dependencies
+* Updated npm dependencies in `themes/package.json`
+* Updated npm dependencies in `themes/Frontend/Responsive/package.json`
 
 ### Removals
 
