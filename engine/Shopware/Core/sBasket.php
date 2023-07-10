@@ -3104,7 +3104,7 @@ SQL;
     private function getTaxesForUpdateProduct($quantity, array $queryNewPrice, array $queryAdditionalInfo)
     {
         // Determinate tax rate for this cart position
-        $taxRate = $this->moduleManager->Articles()->getTaxRateByConditions($queryNewPrice['taxID']);
+        $taxRate = (float) $this->moduleManager->Articles()->getTaxRateByConditions($queryNewPrice['taxID']);
 
         $netPrice = $queryNewPrice['price'];
 

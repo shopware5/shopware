@@ -535,8 +535,7 @@ class sArticles implements Enlight_Hook
      */
     public function getTaxRateByConditions($taxId)
     {
-        $context = $this->contextService->getShopContext();
-        $taxRate = $context->getTaxRule($taxId);
+        $taxRate = $this->contextService->getShopContext()->getTaxRule($taxId);
         if ($taxRate) {
             return number_format($taxRate->getTax(), 2);
         }
