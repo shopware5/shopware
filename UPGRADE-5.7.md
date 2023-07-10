@@ -12,7 +12,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
 * Updated `google/cloud-storage` to version 1.33.0
 * Updated `doctrine/orm` to version 2.15.3
+* Updated `phpunit/phpunit` to version 9.6.10
 * Updated `setasign/fpdf` to version 1.8.6
+* Updated `symfony/serializer` to version 5.4.25
+* Updated `voku/anti-xss` to version 4.1.42
+* Updated several indirect dependencies
 
 ## 5.7.18
 
