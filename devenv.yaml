@@ -9,3 +9,5 @@ inputs:
         inputs:
             nixpkgs:
                 follows: nixpkgs
+permittedInsecurePackages:
+    - openssl-1.1.1u
