@@ -246,6 +246,10 @@ class BaseTest extends Enlight_Components_Test_Controller_TestCase
             'emails' => 'email@shopware.com,email2@shopware.com,email3@shopware.com',
             'expectedIsValid' => true,
         ];
+        yield '3 mails with whitespaces shall be valid' => [
+            'emails' => 'email@shopware.com , email2@shopware.com , email3@shopware.com',
+            'expectedIsValid' => true,
+        ];
         yield '3 mail shall be invalid' => [
             'emails' => 'email@shopware.com,email2@shopware.com,email3@shopware.com||test',
             'expectedIsValid' => false,
