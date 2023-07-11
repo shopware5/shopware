@@ -1043,7 +1043,7 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
         $this->Front()->Plugins()->Json()->setRenderer(false);
 
-        $emails = explode(',', (string) $this->Request()->getParam('value', ''));
+        $emails = array_map('trim', explode(',', (string) $this->Request()->getParam('value', '')));
 
         /** @var EmailValidatorInterface $emailValidator */
         $emailValidator = $this->container->get(EmailValidator::class);
