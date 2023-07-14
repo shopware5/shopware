@@ -24,7 +24,7 @@ declare(strict_types=1);
  * our trademarks remain entirely with us.
  */
 
-namespace Shopware\Tests\Unit\Plugin\Backend\Auth;
+namespace Shopware\Tests\Unit\Plugin\Backend\SwagUpdate\Components;
 
 use PHPUnit\Framework\TestCase;
 use ShopwarePlugins\SwagUpdate\Components\Exception\ApiLimitExceededException;
