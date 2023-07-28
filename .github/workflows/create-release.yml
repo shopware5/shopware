@@ -6,6 +6,9 @@ on:
     push:
         tags:
             - "*"
+    schedule:
+        -   cron:
+                '0 0 * * *'
 
 jobs:
     create-install-package:
