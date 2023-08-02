@@ -33,17 +33,6 @@ jobs:
             run: nix profile install github:cachix/devenv/v0.5
             shell: sh
 
-          - name: Get Composer Cache Directory
-            id: composer-cache
-            run: |
-                echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-          - uses: actions/cache@v3
-            with:
-                path: ${{ steps.composer-cache.outputs.dir }}
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                    ${{ runner.os }}-composer-
-
           - run: devenv up &
           - run: devenv shell check-js-code
           - run: devenv shell test-jest
