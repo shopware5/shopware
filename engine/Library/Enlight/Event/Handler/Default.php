@@ -41,22 +41,23 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
      *
      * @param string                                      $event
      * @param callable|array<int, object|string|callable> $listener
-     * @param int                                         $position
+     * @param ?int                                        $position
      *
      * @throws Enlight_Exception
      */
     public function __construct($event, $listener, $position = null)
     {
         parent::__construct($event);
+
         $this->setListener($listener);
-        $this->setPosition($position);
+        $this->setPosition((int) $position);
     }
 
     /**
      * Checks if the given listener is callable. If it is callable the listener is set
      * in the internal property and can be accessed by using the getListener() function.
      *
-     * @param callable|array<int, object|string> $listener
+     * @param callable|array<int, object|string|callable> $listener
      *
      * @throws Enlight_Event_Exception
      *
@@ -93,7 +94,7 @@ class Enlight_Event_Handler_Default extends Enlight_Event_Handler
     /**
      * Returns the handler properties as array.
      *
-     * @return array
+     * @return array{name: string, position: int, plugin: string, listener: callable}
      */
     public function toArray()
     {

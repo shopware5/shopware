@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Unit\Components\Event;
 
+use Enlight_Config;
 use Enlight_Event_EventArgs;
 use Enlight_Event_Handler_Default;
 use Enlight_Event_Subscriber_Config;
@@ -37,8 +38,10 @@ class SubscriberConfigTest extends TestCase
 
     public function setUp(): void
     {
-        // Giving "test" as parameter sets up a test storage. Even if it is not a valid value
-        $this->eventManager = new Enlight_Event_Subscriber_Config('test');
+        $this->eventManager = new Enlight_Event_Subscriber_Config(new Enlight_Config('test', [
+            'allowModifications' => true,
+            'section' => 'production',
+        ]));
     }
 
     public function testAddSubscriber(): void

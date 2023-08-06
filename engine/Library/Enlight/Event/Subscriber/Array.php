@@ -28,6 +28,8 @@
  *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
+ * @deprecated in Shopware 5.7, will be removed in 5.8. Please use `SubscriberInterface::getSubscribedEvents` instead.
  */
 class Enlight_Event_Subscriber_Array extends Enlight_Event_Subscriber
 {

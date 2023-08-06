@@ -143,6 +143,8 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      * Returns the instance of the Enlight_Event_Subscriber_Plugin. If the subscriber
      * isn't instantiated the function will load it automatically.
      *
+     * @deprecated in Shopware 5.7, will be removed in 5.8. Please use `SubscriberInterface::getSubscribedEvents` instead.
+     *
      * @return Enlight_Event_Subscriber_Plugin
      */
     public function Subscriber()

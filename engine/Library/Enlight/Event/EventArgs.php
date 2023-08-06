@@ -49,7 +49,7 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     /**
      * The Enlight_Event_EventArgs class constructor expects the name of the event.
      *
-     * @param array|null $args
+     * @param array<string|int, mixed> $args
      */
     public function __construct(array $args = [])
     {
@@ -95,7 +95,9 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     /**
      * Setter method for the event name property.
      *
-     * @return string
+     * @param string $name
+     *
+     * @return void
      */
     public function setName($name)
     {
@@ -115,6 +117,8 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
     /**
      * Setter method for the return property.
      *
+     * @param mixed $return
+     *
      * @return void
      */
     public function setReturn($return)
@@ -124,6 +128,8 @@ class Enlight_Event_EventArgs extends Enlight_Collection_ArrayCollection
 
     /**
      * Getter method for the return property.
+     *
+     * @return mixed
      */
     public function getReturn()
     {

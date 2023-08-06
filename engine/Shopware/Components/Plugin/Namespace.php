@@ -515,10 +515,15 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
         $subscribes = $this->Subscriber()->toArray();
 
         foreach ($subscribes as $subscribe) {
+            if (!isset($subscribe['plugin'])) {
+                continue;
+            }
+
             $subscribe['pluginID'] = $this->getInfo($subscribe['plugin'], 'id');
             if (!isset($subscribe['pluginID'])) {
                 continue;
             }
+
             $subscribe['listener'] = $this->getInfo($subscribe['plugin'], 'class')
                 . '::' . $subscribe['listener'];
 

@@ -45,6 +45,8 @@ abstract class Enlight_Event_Handler
      * The Enlight_Event_Handler class constructor expects an event name. If no name is given,
      * the constructor throws an Enlight_Event_Exception.
      *
+     * @param string $event
+     *
      * @throws Enlight_Event_Exception
      */
     public function __construct($event)
@@ -98,6 +100,8 @@ abstract class Enlight_Event_Handler
 
     /**
      * Executes the event handler with the Enlight_Event_EventArgs.
+     *
+     * @return mixed|false|null
      */
     abstract public function execute(Enlight_Event_EventArgs $args);
 }

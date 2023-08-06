@@ -152,10 +152,6 @@ parameters:
             message: '#Property Shopware\\Models\\.*::\$.* is never written, only read#'
             path: engine/Shopware/Models
 
-        - # Giving "test" as construct parameter sets up a test storage
-            message: '#Parameter \#1 \$options of class Enlight_Event_Subscriber_Config constructor expects array\|null, string given#'
-            path: tests/Unit/Components/Event/SubscriberConfigTest.php
-
         - # The Symfony extension does not correctly recognize the helper type. see: https://github.com/phpstan/phpstan-symfony/issues/239
             message: '#Call to an undefined method Symfony\\Component\\Console\\Helper\\HelperInterface::ask\(\)#'
             paths:

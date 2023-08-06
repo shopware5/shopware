@@ -28,13 +28,15 @@
  *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
+ * @deprecated in Shopware 5.7, will be internal in 5.8. Please use `SubscriberInterface::getSubscribedEvents` instead.
  */
 abstract class Enlight_Event_Subscriber extends Enlight_Class
 {
     /**
      * Retrieves a list of listeners registered to a given event.
      *
-     * @return array
+     * @return list<\Enlight_Event_Handler>
      */
     abstract public function getListeners();
 

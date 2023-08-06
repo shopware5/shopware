@@ -53,13 +53,13 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
      * The Enlight_Event_Handler_Plugin class constructor expects the event name.
      * All parameters are set in the internal properties.
      *
-     * @deprecated The parameter $plugin will only accept `string` starting from Shopware 5.8
+     * @deprecated The parameter $plugin will only accept `string` starting from Shopware 5.8 and all parameters will be strongly typed will not be nullable anymore
      *
-     * @param string                          $event
-     * @param Enlight_Plugin_Namespace        $namespace
-     * @param Enlight_Plugin_Bootstrap|string $plugin
-     * @param string                          $listener
-     * @param int                             $position
+     * @param string                               $event
+     * @param ?Enlight_Plugin_Namespace            $namespace
+     * @param Enlight_Plugin_Bootstrap|string|null $plugin
+     * @param ?string                              $listener
+     * @param ?int                                 $position
      *
      * @throws Enlight_Event_Exception
      */
@@ -75,7 +75,7 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
             $this->setListener($listener);
         }
         parent::__construct($event);
-        $this->setPosition($position);
+        $this->setPosition((int) $position);
     }
 
     /**
@@ -169,7 +169,7 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
     /**
      * Returns the plugin handler properties as an array.
      *
-     * @return array
+     * @return array{name: string, position: int, plugin: ?string, listener: string}
      */
     public function toArray()
     {

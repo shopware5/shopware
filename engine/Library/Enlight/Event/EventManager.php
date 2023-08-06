@@ -153,23 +153,21 @@ class Enlight_Event_EventManager extends Enlight_Class
     /**
      * Retrieve a list of listeners registered to a given event.
      *
+     * @param string $event
+     *
      * @return Enlight_Event_Handler[]
      */
     public function getListeners($event)
     {
         $event = strtolower($event);
 
-        if (isset($this->listeners[$event])) {
-            return $this->listeners[$event];
-        }
-
-        return [];
+        return $this->listeners[$event] ?? [];
     }
 
     /**
      * Get a list of events for which this collection has listeners.
      *
-     * @return array
+     * @return string[]
      */
     public function getEvents()
     {
@@ -185,8 +183,8 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Before the listener will be executed the the flag "processed" will be set to false in the event arguments.
      * After all event listeners has been executed the "processed" flag will be set to true.
      *
-     * @param string                             $event
-     * @param Enlight_Event_EventArgs|array|null $eventArgs
+     * @param string                                                $event
+     * @param Enlight_Event_EventArgs|array<string|int, mixed>|null $eventArgs
      *
      * @throws Enlight_Event_Exception
      *
@@ -222,8 +220,8 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * The event listeners will be executed until one of the listeners return not null.
      *
-     * @param string                             $event
-     * @param Enlight_Event_EventArgs|array|null $eventArgs
+     * @param string                                                $event
+     * @param Enlight_Event_EventArgs|array<string|int, mixed>|null $eventArgs
      *
      * @throws Enlight_Exception
      *
@@ -268,9 +266,9 @@ class Enlight_Event_EventManager extends Enlight_Class
      *
      * @template TValue of mixed
      *
-     * @param string                             $event
-     * @param TValue                             $value
-     * @param Enlight_Event_EventArgs|array|null $eventArgs
+     * @param string                                                $event
+     * @param TValue                                                $value
+     * @param Enlight_Event_EventArgs|array<string|int, mixed>|null $eventArgs
      *
      * @throws Enlight_Event_Exception
      *
@@ -301,12 +299,13 @@ class Enlight_Event_EventManager extends Enlight_Class
      * Event which is fired to collect plugin parameters
      * to register additionally application components or configurations.
      *
-     * @param string     $event
-     * @param array|null $eventArgs
+     * @param string                      $event
+     * @param ArrayCollection<int, mixed> $collection
+     * @param array<string, mixed>|null   $eventArgs
      *
      * @throws Enlight_Event_Exception
      *
-     * @return ArrayCollection<mixed>
+     * @return ArrayCollection<int, mixed>
      */
     public function collect($event, ArrayCollection $collection, $eventArgs = null)
     {
@@ -359,6 +358,8 @@ class Enlight_Event_EventManager extends Enlight_Class
 
     /**
      * Registers all listeners of the given Enlight_Event_Subscriber.
+     *
+     * @return void
      */
     public function registerSubscriber(Enlight_Event_Subscriber $subscriber)
     {
@@ -382,22 +383,22 @@ class Enlight_Event_EventManager extends Enlight_Class
     }
 
     /**
-     * @param Enlight_Event_EventArgs|array|null $eventArgs
+     * @param Enlight_Event_EventArgs|array<string|int, mixed>|null $eventArgs
      *
      * @throws Enlight_Event_Exception
      *
      * @return Enlight_Event_EventArgs
      */
-    private function buildEventArgs($eventArgs = null)
+    private function buildEventArgs($eventArgs)
     {
-        if (isset($eventArgs) && \is_array($eventArgs)) {
-            return new Enlight_Event_EventArgs($eventArgs);
-        } elseif (!isset($eventArgs)) {
-            return new Enlight_Event_EventArgs();
-        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
-            throw new Enlight_Event_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
+        if ($eventArgs instanceof Enlight_Event_EventArgs) {
+            return $eventArgs;
         }
 
-        return $eventArgs;
+        if ($eventArgs === null || \is_array($eventArgs)) {
+            return new Enlight_Event_EventArgs((array) $eventArgs);
+        }
+
+        throw new Enlight_Event_Exception('Parameter "eventArgs" must be an array or instance of "Enlight_Event_EventArgs"');
     }
 }

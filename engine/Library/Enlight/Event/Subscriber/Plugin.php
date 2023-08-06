@@ -26,6 +26,8 @@
  *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
+ * @deprecated in Shopware 5.7, will be @internal in 5.8. Please use `SubscriberInterface::getSubscribedEvents` instead.
  */
 class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
 {
@@ -36,9 +38,10 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
     protected $namespace;
 
     /**
-     * The Enlight_Event_Subscriber_Plugin class constructor expects an instance of the Enlight_Plugin_Namespace.
+     * @deprecated in 5.8, the $options parameter will only accept an instance of of \Enlight_Config and all parameters are strongly typed
      *
-     * @param null $options
+     * @param \Enlight_Plugin_Namespace                                                                                                $namespace
+     * @param array{storage: \Enlight_Config|string, section: string|null, adapter: \Enlight_Config_Adapter|null}|\Enlight_Config|null $options
      */
     public function __construct($namespace, $options = null)
     {
@@ -53,7 +56,7 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
      */
     public function write()
     {
-        $this->storage->listeners = $this->toArray();
+        $this->storage->set('listeners', $this->toArray());
         $this->storage->write();
 
         return $this;
@@ -68,17 +71,19 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
     {
         $this->listeners = [];
 
-        if ($this->storage->listeners !== null) {
-            foreach ($this->storage->listeners as $entry) {
+        $listeners = $this->storage->get('listeners');
+        if ($listeners !== null) {
+            foreach ($listeners as $entry) {
                 if (!$entry instanceof Enlight_Config) {
                     continue;
                 }
+
                 $this->listeners[] = new Enlight_Event_Handler_Plugin(
-                    $entry->name,
+                    $entry->get('name'),
                     $this->namespace,
-                    $entry->plugin,
-                    $entry->listener,
-                    $entry->position
+                    $entry->get('plugin'),
+                    $entry->get('listener'),
+                    $entry->get('position')
                 );
             }
         }
@@ -89,7 +94,7 @@ class Enlight_Event_Subscriber_Plugin extends Enlight_Event_Subscriber_Config
     /**
      * Returns all listeners as array.
      *
-     * @return array
+     * @return list<array{name: string, position: int, plugin: ?string, listener: string}>
      */
     public function toArray()
     {

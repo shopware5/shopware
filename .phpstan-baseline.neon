@@ -2661,36 +2661,6 @@ parameters:
 			path: engine/Library/Enlight/Controller/Router.php
 
 		-
-			message: "#^Method Enlight_Event_EventArgs\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventArgs.php
-
-		-
-			message: "#^Method Enlight_Event_EventArgs\\:\\:getReturn\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventArgs.php
-
-		-
-			message: "#^Method Enlight_Event_EventArgs\\:\\:setName\\(\\) has parameter \\$name with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventArgs.php
-
-		-
-			message: "#^Method Enlight_Event_EventArgs\\:\\:setName\\(\\) should return string but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventArgs.php
-
-		-
-			message: "#^Method Enlight_Event_EventArgs\\:\\:setReturn\\(\\) has parameter \\$return with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventArgs.php
-
-		-
-			message: "#^PHPDoc tag @param for parameter \\$args with type array\\|null is not subtype of native type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventArgs.php
-
-		-
 			message: "#^Method Enlight_Event_EventHandler\\:\\:__construct\\(\\) has parameter \\$plugin with no type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventHandler.php
@@ -2721,109 +2691,9 @@ parameters:
 			path: engine/Library/Enlight/Event/EventHandler.php
 
 		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:buildEventArgs\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) has parameter \\$collection with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) return type with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection does not specify its types\\: TKey, T$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:filter\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:getEvents\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:getListeners\\(\\) has parameter \\$event with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:notify\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:notifyUntil\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:registerSubscriber\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
-			message: "#^Method Enlight_Event_Handler\\:\\:__construct\\(\\) has parameter \\$event with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler.php
-
-		-
-			message: "#^Method Enlight_Event_Handler\\:\\:execute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler.php
-
-		-
-			message: "#^Method Enlight_Event_Handler_Default\\:\\:execute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Default.php
-
-		-
-			message: "#^Method Enlight_Event_Handler_Default\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Default.php
-
-		-
-			message: "#^Parameter \\#1 \\$listener of method Enlight_Event_Handler_Default\\:\\:setListener\\(\\) expects array\\<int, object\\|string\\>\\|\\(callable\\(\\)\\: mixed\\), array\\<int, \\(callable\\(\\)\\: mixed\\)\\|object\\|string\\>\\|\\(callable\\(\\)\\: mixed\\) given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Default.php
-
-		-
-			message: "#^Parameter \\#1 \\$position of method Enlight_Event_Handler\\:\\:setPosition\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Default.php
-
-		-
-			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:execute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
-			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
-			message: "#^Parameter \\#1 \\$position of method Enlight_Event_Handler\\:\\:setPosition\\(\\) expects int, int\\|null given\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
-			message: "#^Method Enlight_Event_Subscriber\\:\\:getListeners\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber.php
 
 		-
 			message: "#^Method Enlight_Event_Subscriber_Array\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
@@ -2884,46 +2754,6 @@ parameters:
 			message: "#^Property Enlight_Event_Subscriber_Config\\:\\:\\$listeners type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/Subscriber/Config.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listener\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$listeners\\.$#"
-			count: 2
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$name\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$plugin\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Config\\:\\:\\$position\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Method Enlight_Event_Subscriber_Plugin\\:\\:__construct\\(\\) has parameter \\$namespace with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Method Enlight_Event_Subscriber_Plugin\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Subscriber/Plugin.php
-
-		-
-			message: "#^Method Enlight_Hook_HookArgs\\:\\:__construct\\(\\) has parameter \\$args with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Hook/HookArgs.php
 
 		-
 			message: "#^Method Enlight_Hook_HookArgs\\:\\:__construct\\(\\) has parameter \\$subject with no type specified\\.$#"
@@ -3162,11 +2992,6 @@ parameters:
 
 		-
 			message: "#^Method Enlight_Plugin_Namespace_Config\\:\\:toArray\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Plugin/Namespace/Config.php
-
-		-
-			message: "#^Parameter \\#2 \\$options of class Enlight_Event_Subscriber_Plugin constructor expects null, Enlight_Config given\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Plugin/Namespace/Config.php
 
@@ -15072,11 +14897,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\ContainerAwareEventManager\\:\\:addSubscriberService\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/ContainerAwareEventManager.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\ContainerAwareEventManager\\:\\:getListeners\\(\\) has parameter \\$eventName with no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/ContainerAwareEventManager.php
 

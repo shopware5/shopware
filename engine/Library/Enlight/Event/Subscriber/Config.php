@@ -28,6 +28,8 @@
  *
  * @copyright  Copyright (c) 2011, shopware AG (http://www.shopware.de)
  * @license    http://enlight.de/license     New BSD License
+ *
+ * @deprecated in Shopware 5.7, will be removed in 5.8. Please use `SubscriberInterface::getSubscribedEvents` instead.
  */
 class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
 {
@@ -37,7 +39,7 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
     protected $listeners;
 
     /**
-     * @var Enlight_Config Contains an instance of the Enlight_Config
+     * @var \Enlight_Config
      */
     protected $storage;
 
@@ -47,7 +49,7 @@ class Enlight_Event_Subscriber_Config extends Enlight_Event_Subscriber
      * The storage can be overwritten by the options parameter which must contain the "storage" element
      * which is an instance of the Enlight_Config.
      *
-     * @param array|null $options
+     * @param array|\Enlight_Config|null $options
      */
     public function __construct($options = null)
     {
