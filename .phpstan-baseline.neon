@@ -2801,11 +2801,6 @@ parameters:
 			path: engine/Library/Enlight/Event/Handler/Default.php
 
 		-
-			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:Plugin\\(\\) should return Enlight_Plugin_Bootstrap but returns Enlight_Plugin_Bootstrap\\|Enlight_Plugin_Namespace\\|null\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
 			message: "#^Method Enlight_Event_Handler_Plugin\\:\\:execute\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/Handler/Plugin.php
@@ -2822,11 +2817,6 @@ parameters:
 
 		-
 			message: "#^Unreachable statement \\- code above always terminates\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/Handler/Plugin.php
-
-		-
-			message: "#^Variable \\$plugin might not be defined\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Event/Handler/Plugin.php
 
