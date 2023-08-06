@@ -354,7 +354,7 @@ class sExport implements Enlight_Hook
 
         $this->shop = $shop;
 
-        $this->sSYSTEM->sCONFIG = Shopware()->Config();
+        $this->sSYSTEM->sCONFIG = $this->config;
     }
 
     /**
@@ -378,7 +378,7 @@ class sExport implements Enlight_Hook
         $this->sSmarty->registerPlugin('modifier', 'shippingcost', [$this, 'sGetArticleShippingcost']);
         $this->sSmarty->registerPlugin('modifier', 'property', [$this, 'sGetArticleProperties']);
 
-        $this->sSmarty->assign('sConfig', $this->sSYSTEM->sCONFIG);
+        $this->sSmarty->assign('sConfig', $this->config);
         $this->sSmarty->assign('shopData', $this->shopData);
         $this->sSmarty->assign('sCurrency', $this->sCurrency);
         $this->sSmarty->assign('sCustomergroup', $this->sCustomergroup);
@@ -557,7 +557,7 @@ class sExport implements Enlight_Hook
      */
     public function sGetArticleLink($articleID, $title = '')
     {
-        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
+        return Shopware()->Modules()->Core()->sRewriteLink($this->config->get('sBASEFILE') . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
     }
 
     /**
@@ -1446,8 +1446,8 @@ class sExport implements Enlight_Hook
     public function sGetDispatchBasket($article, $countryID = null, $paymentID = null)
     {
         $sql_select = '';
-        if (!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
-            $sql_select .= ', ' . $this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
+        if (!empty($this->config->get('sPREMIUMSHIPPIUNGASKETSELECT'))) {
+            $sql_select .= ', ' . $this->config->get('sPREMIUMSHIPPIUNGASKETSELECT');
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
         $calculations = $this->db->fetchPairs($sql);
