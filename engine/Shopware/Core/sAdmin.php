@@ -272,8 +272,7 @@ class sAdmin implements \Enlight_Hook
         }
 
         // Check additional rules
-        if (
-            $this->sManageRisks($paymentId, null, $customer)
+        if ($this->sManageRisks($paymentId, null, $customer)
             && $paymentId != ($customer['additional']['user']['paymentpreset'] ?? null)
         ) {
             $resetPayment = $this->config->get('sPAYMENTDEFAULT');
@@ -437,8 +436,7 @@ class sAdmin implements \Enlight_Hook
             }
 
             // Check additional rules
-            if (
-                $this->sManageRisks($payValue['id'], null, $user)
+            if ($this->sManageRisks($payValue['id'], null, $user)
                 && $payValue['id'] != ($user['additional']['user']['paymentpreset'] ?? 0)
             ) {
                 unset($paymentMethods[$payKey]);
@@ -727,16 +725,11 @@ class sAdmin implements \Enlight_Hook
      */
     public function sLogin($ignoreAccountMode = false)
     {
-        if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_Login_Start',
-                [
-                    'subject' => $this,
-                    'ignoreAccountMode' => $ignoreAccountMode,
-                    'post' => $this->front->Request()->getPost(),
-                ]
-            )
-        ) {
+        if ($this->eventManager->notifyUntil('Shopware_Modules_Admin_Login_Start', [
+            'subject' => $this,
+            'ignoreAccountMode' => $ignoreAccountMode,
+            'post' => $this->front->Request()->getPost(),
+        ])) {
             return false;
         }
 
@@ -856,12 +849,10 @@ class sAdmin implements \Enlight_Hook
      */
     public function sCheckUser()
     {
-        if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_CheckUser_Start',
-                ['subject' => $this]
-            )
-        ) {
+        if ($this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_CheckUser_Start',
+            ['subject' => $this]
+        )) {
             return false;
         }
 
@@ -1117,12 +1108,10 @@ class sAdmin implements \Enlight_Hook
      */
     public function sSaveRegisterSendConfirmation($email)
     {
-        if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
-                ['subject' => $this, 'email' => $email]
-            )
-        ) {
+        if ($this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_SaveRegisterSendConfirmation_Start',
+            ['subject' => $this, 'email' => $email]
+        )) {
             return false;
         }
 
@@ -1207,8 +1196,7 @@ class sAdmin implements \Enlight_Hook
         );
 
         foreach ($getOrders as $orderKey => $orderValue) {
-            if (
-                ($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
+            if (($this->config->get('sARTICLESOUTPUTNETTO') && !$this->sSYSTEM->sUSERGROUPDATA['tax'])
                 || (!$this->sSYSTEM->sUSERGROUPDATA['tax'] && $this->sSYSTEM->sUSERGROUPDATA['id'])
             ) {
                 $getOrders[$orderKey]['invoice_amount'] = $this->moduleManager->Articles()
@@ -1464,12 +1452,10 @@ class sAdmin implements \Enlight_Hook
      */
     public function sGetUserData()
     {
-        if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_GetUserData_Start',
-                ['subject' => $this]
-            )
-        ) {
+        if ($this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_GetUserData_Start',
+            ['subject' => $this]
+        )) {
             return false;
         }
         $register = $this->session->offsetGet('sRegister');
@@ -1513,8 +1499,7 @@ class sAdmin implements \Enlight_Hook
             // No user logged in
             $register = $this->session->offsetGet('sRegister');
 
-            if (
-                $this->session->offsetGet('sCountry')
+            if ($this->session->offsetGet('sCountry')
                 && $this->session->offsetGet('sCountry') != ($register['billing']['country'] ?? 0)
             ) {
                 $register['billing']['country'] = (int) $this->session->offsetGet('sCountry');
@@ -1578,8 +1563,7 @@ class sAdmin implements \Enlight_Hook
             } elseif ($rule['rule1'] && $rule['rule2']) {
                 $rule['rule1'] = 'sRisk' . $rule['rule1'];
                 $rule['rule2'] = 'sRisk' . $rule['rule2'];
-                if (
-                    $this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)
+                if ($this->executeRiskRule($rule['rule1'], $user, $basket, $rule['value1'], $paymentID)
                     && $this->executeRiskRule($rule['rule2'], $user, $basket, $rule['value2'], $paymentID)
                 ) {
                     return true;
@@ -1603,18 +1587,16 @@ class sAdmin implements \Enlight_Hook
      */
     public function executeRiskRule($rule, $user, $basket, $value, $paymentID = null)
     {
-        if (
-            $event = $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
-                [
-                    'rule' => $rule,
-                    'user' => $user,
-                    'basket' => $basket,
-                    'value' => $value,
-                    'paymentID' => $paymentID,
-                ]
-            )
-        ) {
+        if ($event = $this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_Execute_Risk_Rule_' . $rule,
+            [
+                'rule' => $rule,
+                'user' => $user,
+                'basket' => $basket,
+                'value' => $value,
+                'paymentID' => $paymentID,
+            ]
+        )) {
             return $event->getReturn();
         }
 
@@ -2289,8 +2271,7 @@ class sAdmin implements \Enlight_Hook
             $errorFlag = [];
             $config = Shopware()->Container()->get(Shopware_Components_Config::class);
 
-            if (
-                $this->shouldVerifyCaptcha($config)
+            if ($this->shouldVerifyCaptcha($config)
                 && (bool) $this->front->Request()->getParam('voteConfirmed', false) === false
             ) {
                 /** @var CaptchaValidator $captchaValidator */
@@ -3089,8 +3070,7 @@ class sAdmin implements \Enlight_Hook
             $dispatch['shippingfree'] = round($dispatch['shippingfree'] / (100 + $discount_tax) * 100, 2);
         }
 
-        if (
-            (!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount_display'])
+        if ((!empty($dispatch['shippingfree']) && $dispatch['shippingfree'] <= $basket['amount_display'])
             || empty($basket['count_article'])
             || (!empty($basket['shippingfree']) && empty($dispatch['bind_shippingfree']))
         ) {
@@ -3160,8 +3140,7 @@ class sAdmin implements \Enlight_Hook
         }
         $result['brutto'] *= $currencyFactor;
         $result['brutto'] = round($result['brutto'], 2);
-        if (
-            !empty($payment['surcharge'])
+        if (!empty($payment['surcharge'])
             && (int) $dispatch['surcharge_calculation'] !== Dispatch::SURCHARGE_CALCULATION_NEVER
             && (empty($basket['shippingfree']) || empty($dispatch['surcharge_calculation']))
         ) {
@@ -3365,12 +3344,10 @@ class sAdmin implements \Enlight_Hook
     {
         $oldSessionId = $this->session->getId();
 
-        if (
-            $this->eventManager->notifyUntil(
-                'Shopware_Modules_Admin_regenerateSessionId_Start',
-                ['subject' => $this, 'sessionId' => $oldSessionId]
-            )
-        ) {
+        if ($this->eventManager->notifyUntil(
+            'Shopware_Modules_Admin_regenerateSessionId_Start',
+            ['subject' => $this, 'sessionId' => $oldSessionId]
+        )) {
             return;
         }
 
@@ -3417,8 +3394,7 @@ class sAdmin implements \Enlight_Hook
     private function overwriteBillingAddress(array $userData): array
     {
         // Temporarily overwrite billing address
-        if (
-            !$this->session->offsetGet('checkoutBillingAddressId')
+        if (!$this->session->offsetGet('checkoutBillingAddressId')
             || \strtolower(Shopware()->Front()->Request()->getControllerName()) !== 'checkout'
         ) {
             return $userData;
@@ -3450,8 +3426,7 @@ class sAdmin implements \Enlight_Hook
     private function overwriteShippingAddress(array $userData): array
     {
         // Temporarily overwrite shipping address
-        if (
-            !$this->session->offsetGet('checkoutShippingAddressId')
+        if (!$this->session->offsetGet('checkoutShippingAddressId')
             || \strtolower(Shopware()->Front()->Request()->getControllerName()) !== 'checkout'
         ) {
             return $userData;
