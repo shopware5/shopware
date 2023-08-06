@@ -225,17 +225,11 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     /**
      * Load a module defined by $name
      * Possible values for $name - sBasket, sAdmin etc.
+     *
+     * @param class-string $name
      */
     private function loadModule(string $name): void
     {
-        if (isset($this->modules_container[$name])) {
-            return;
-        }
-
-        $this->modules_container[$name] = null;
-        /** @var class-string $name */
-        $name = basename($name);
-
         if ($name === 'sSystem') {
             $this->modules_container[$name] = $this->system;
 
