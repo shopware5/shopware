@@ -24646,31 +24646,6 @@ parameters:
 			path: engine/Shopware/Controllers/Frontend/Sitemap.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$sArticle\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:init\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
-			message: "#^Method Shopware_Controllers_Frontend_Tellafriend\\:\\:successAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
-			message: "#^Property Shopware_Controllers_Frontend_Tellafriend\\:\\:\\$sSYSTEM has no type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Frontend/Tellafriend.php
-
-		-
 			message: "#^Property Shopware_Controllers_Frontend_Tracking\\:\\:\\$testRepository has no type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Frontend/Tracking.php

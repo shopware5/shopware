@@ -27,8 +27,16 @@ use Shopware\Components\Validator\EmailValidator;
 
 class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Action
 {
+    /**
+     * @deprecated Will be removed in Shopware 5.8 without replacement
+     *
+     * @var \sSystem
+     */
     public $sSYSTEM;
 
+    /**
+     * @return void
+     */
     public function init()
     {
         $this->sSYSTEM = Shopware()->System();
@@ -43,82 +51,68 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
         }
     }
 
+    /**
+     * @return void
+     */
     public function successAction()
     {
         $this->View()->loadTemplate('frontend/tellafriend/index.tpl');
         $this->View()->assign('sSuccess', true);
     }
 
+    /**
+     * @return void
+     */
     public function indexAction()
     {
-        if (empty($this->Request()->sDetails)) {
-            $id = $this->Request()->sArticle;
-        } else {
-            $id = $this->Request()->sDetails;
+        $productId = (int) ($this->Request()->get('sDetails') ?? $this->Request()->get('sArticle'));
+        if ($productId === 0) {
+            $this->forward('index', 'index');
+
+            return;
         }
 
-        if (empty($id)) {
-            return $this->forward('index', 'index');
-        }
+        $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, $productId);
+        if (!isset($product['articleName']) || !isset($product['linkDetails'])
+            || !\is_string($product['articleName']) || !\is_string($product['linkDetails'])
+            || $product['articleName'] === '' || $product['linkDetails'] === '') {
+            $this->forward('index', 'index');
 
-        // Get Product-Information
-        $product = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, (int) $id);
-        if (empty($product['articleName'])) {
-            return $this->forward('index', 'index');
+            return;
         }
 
         if ($this->Request()->getPost('sMailTo')) {
-            $variables['sError'] = false;
-            if (!$this->Request()->getPost('sName')) {
-                $variables['sError'] = true;
-            }
-            if (!$this->Request()->getPost('sMail')) {
-                $variables['sError'] = true;
-            }
-            if (!$this->Request()->getPost('sRecipient')) {
-                $variables['sError'] = true;
-            }
+            $fromName = $this->Request()->getPost('sName');
+            $fromMail = $this->Request()->getPost('sMail');
+            $recipient = $this->Request()->getPost('sRecipient');
+            $comment = $this->Request()->getPost('sComment', '');
 
-            if (preg_match('/;/', $this->Request()->getPost('sRecipient')) || \strlen($this->Request()->getPost('sRecipient')) >= 50) {
-                $variables['sError'] = true;
-            }
+            $emailValidator = $this->container->get(EmailValidator::class);
 
-            $validator = $this->container->get(EmailValidator::class);
-            if (!$validator->isValid($this->Request()->getPost('sRecipient'))) {
-                $variables['sError'] = true;
-            }
+            $validInputParameters = \is_string($fromName) && \is_string($fromMail)
+                && \is_string($recipient) && \is_string($comment)
+                && !preg_match('/;/', $recipient) && \strlen($recipient) < 50
+                && $emailValidator->isValid($fromMail) && $emailValidator->isValid($recipient)
+            ;
 
-            if (!empty(Shopware()->Config()->get('CaptchaColor'))) {
+            if ($validInputParameters && !empty(Shopware()->Config()->get('CaptchaColor'))) {
                 /** @var \Shopware\Components\Captcha\CaptchaValidator $captchaValidator */
                 $captchaValidator = $this->container->get('shopware.captcha.validator');
 
-                if (!$captchaValidator->validate($this->Request())) {
-                    $variables['sError'] = true;
-                }
+                $validInputParameters = $captchaValidator->validate($this->Request());
             }
 
-            if ($variables['sError'] == false) {
-                // Prepare eMail
-                $product['linkDetails'] = $this->Front()->ensureRouter()->assemble(['sViewport' => 'detail', 'sArticle' => $product['articleID']]);
-
-                $context = [
-                    'sName' => $this->sSYSTEM->_POST['sName'],
-                    'sArticle' => html_entity_decode($product['articleName']),
+            if ($validInputParameters) {
+                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', [
+                    'sName' => strip_tags($fromName),
+                    'sArticle' => strip_tags($product['articleName']),
                     'sLink' => $product['linkDetails'],
-                ];
-
-                if ($this->sSYSTEM->_POST['sComment']) {
-                    $context['sComment'] = strip_tags(html_entity_decode($this->sSYSTEM->_POST['sComment']));
-                } else {
-                    $context['sComment'] = '';
-                }
-
-                $mail = Shopware()->TemplateMail()->createMail('sTELLAFRIEND', $context, null, [
-                    'fromMail' => $this->sSYSTEM->_POST['sMail'],
-                    'fromName' => $this->sSYSTEM->_POST['sName'],
+                    'sComment' => strip_tags($comment),
                 ]);
 
-                $mail->addTo($this->sSYSTEM->_POST['sRecipient']);
+                $mail->setFrom($fromMail, $fromName);
+                $mail->addTo($recipient);
+
                 $mail->send();
 
                 $this->View()->assign('sSuccess', true);
@@ -126,12 +120,13 @@ class Shopware_Controllers_Frontend_Tellafriend extends Enlight_Controller_Actio
                 $this->redirect($url);
             } else {
                 $this->View()->assign('sError', true);
-                $this->View()->assign('sName', $this->Request()->getPost('sName'));
-                $this->View()->assign('sMail', $this->Request()->getPost('sMail'));
-                $this->View()->assign('sRecipient', $this->Request()->getPost('sRecipient'));
-                $this->View()->assign('sComment', $this->Request()->getPost('sComment'));
+                $this->View()->assign('sName', (string) $fromName);
+                $this->View()->assign('sMail', (string) $fromMail);
+                $this->View()->assign('sRecipient', (string) $recipient);
+                $this->View()->assign('sComment', (string) $comment);
             }
         }
+
         $this->View()->assign('rand', Random::getAlphanumericString(32));
         $this->View()->assign('sArticle', $product);
     }
