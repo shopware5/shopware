@@ -161,6 +161,8 @@ class Shopware_Components_TemplateMail
     }
 
     /**
+     * @deprecated The $overrideConfig parameter will be removed with Shopware 5.8, directly apply the changes to the returned mail component
+     *
      * @param string|Mail $mailModel
      * @param array       $context
      * @param Shop        $shop
@@ -255,6 +257,8 @@ class Shopware_Components_TemplateMail
 
     /**
      * Loads values from MailModel into Mail
+     *
+     * @deprecated The $overrideConfig parameter will be removed with Shopware 5.8, directly apply the changes to the returned mail component
      *
      * @param array $overrideConfig
      *
