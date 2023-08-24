@@ -2,9 +2,12 @@ name: Run
 
 on:
     workflow_dispatch:
+    pull_request:
     push:
+        branches:
+            - "5.7"
     schedule:
-        -   cron: '30 02 * * *'
+        -   cron: '0 2 * * *'
 
 jobs:
     check-php-code:
