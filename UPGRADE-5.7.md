@@ -17,6 +17,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/serializer` to version 5.4.25
 * Updated `voku/anti-xss` to version 4.1.42
 * Updated several indirect dependencies
+* Updated npm dependencies in `themes/package.json`
+* Updated npm dependencies in `themes/Frontend/Responsive/package.json`
 
 ## 5.7.18
 
@@ -34,7 +36,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Changed newsletter registration so that it does not allow URLs as value for first and last name
 * Changed customer registration so that it does not allow URLs as value for first and last name
-* Changed behaviour of the translation transfer while setting a product variant as the main variant 
 * Updated `behat/behat` to version 3.13.0
 * Updated `doctrine/dbal` to version 2.13.9
 * Updated `doctrine/orm` to version 2.15.2
@@ -52,8 +53,6 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `voku/anti-xss` to version 4.1.41
 * Updated `wikimedia/less.php` to version 4.1.0
 * Updated several indirect dependencies
-* Updated npm dependencies in `themes/package.json`
-* Updated npm dependencies in `themes/Frontend/Responsive/package.json`
 
 ### Removals
 
