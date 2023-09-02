@@ -110,8 +110,7 @@
             {/block}
 
             {block name='frontend_register_index_cgroup_header'}
-                {if $register.personal.sValidation}
-                    {* Include information related to registration for other customergroups then guest, this block get overridden by b2b essentials plugin *}
+                {if $register.personal.sValidation && $register.personal.sValidation|lower != 'ek'}
                     <div class="panel register--supplier">
                         {block name='frontend_register_index_cgroup_header_title'}
                             <h2 class="panel--title is--underline">{$sShopname|escapeHtml} {s name='RegisterHeadlineSupplier' namespace='frontend/register/index'}{/s}</h2>

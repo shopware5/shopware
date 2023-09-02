@@ -469,7 +469,7 @@ class Shopware_Controllers_Frontend_Register extends Enlight_Controller_Action
         );
 
         if ($customerGroupKey && !$customerGroupId) {
-            throw new Enlight_Exception('Invalid customergroup');
+            return $this->get(Shopware_Components_Config::class)->get('defaultCustomerGroup', 'EK');
         }
 
         $event = Shopware()->Events()->notifyUntil(

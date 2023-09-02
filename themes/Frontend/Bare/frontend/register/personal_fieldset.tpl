@@ -14,7 +14,7 @@
             <div class="panel--body is--wide">
                 {* Customer type *}
                 {block name='frontend_register_personal_fieldset_customer_type'}
-                    {if $form_data.sValidation}
+                    {if $form_data.sValidation && $form_data.sValidation|lower != 'ek'}
                         <input type="hidden" name="register[personal][sValidation]" value="{$form_data.sValidation|escapeHtml}" />
                     {else}
                         <div class="register--customertype">

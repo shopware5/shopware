@@ -32,7 +32,7 @@
 
             <div class="panel--body is--wide">
                 {block name='frontend_register_login_form'}
-                    {if $register.personal.sValidation}
+                    {if $register.personal.sValidation && $register.personal.sValidation|lower != 'ek'}
                         {$url = {url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction sValidation=$register.personal.sValidation} }
                     {else}
                         {$url = {url controller=account action=login sTarget=$sTarget sTargetAction=$sTargetAction} }
