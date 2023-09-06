@@ -1,26 +1,29 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
+
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Components\Random;
 
 class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 {
@@ -34,7 +37,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
         $this->View()->assign('sUserLoggedIn', Shopware()->Modules()->Admin()->sCheckUser());
 
         $this->front->setParam('voteConfirmed', $this->View()->voteConfirmed);
-        $this->front->setParam('optinNow', (new \DateTime())->format('Y-m-d H:i:s'));
+        $this->front->setParam('optinNow', (new DateTime())->format('Y-m-d H:i:s'));
 
         if ($this->Request()->get('sUnsubscribe') !== null) {
             $this->View()->assign('sUnsubscribe', true);
@@ -60,7 +63,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             return;
         }
 
-        $config = $this->container->get(\Shopware_Components_Config::class);
+        $config = $this->container->get(Shopware_Components_Config::class);
         $noCaptchaAfterLogin = $config->get('noCaptchaAfterLogin');
         // redirect user if captcha is active and request is sent from the footer
         if (strtolower($config->get('newsletterCaptcha')) !== 'nocaptcha'
@@ -81,7 +84,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
             if ($this->View()->getAssign('sStatus')['code'] == 3) {
                 if ($this->View()->getAssign('sStatus')['isNewRegistration']) {
                     Shopware()->Modules()->Admin()->sNewsletterSubscription(Shopware()->System()->_POST['newsletter'], true);
-                    $hash = \Shopware\Components\Random::getAlphanumericString(32);
+                    $hash = Random::getAlphanumericString(32);
                     $data = serialize(Shopware()->System()->_POST->toArray());
 
                     $link = $this->Front()->ensureRouter()->assemble(['sViewport' => 'newsletter', 'action' => 'index', 'sConfirmation' => $hash]);
@@ -114,7 +117,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
 
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = $this->container->get(ContextServiceInterface::class)->getShopContext();
 
         $page = (int) $this->Request()->getQuery('sPage', 1);
         $perPage = (int) Shopware()->Config()->get('contentPerPage', 12);
@@ -172,7 +175,7 @@ class Shopware_Controllers_Frontend_Newsletter extends Enlight_Controller_Action
     {
         $customergroups = $this->getCustomerGroups();
         $customergroups = Shopware()->Db()->quote($customergroups);
-        $context = $this->container->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = $this->container->get(ContextServiceInterface::class)->getShopContext();
 
         $sql = "
             SELECT id, IF(datum='00-00-0000','',datum) as `date`, subject as description, sendermail, sendername
