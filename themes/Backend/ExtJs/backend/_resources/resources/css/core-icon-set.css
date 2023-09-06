@@ -2,23 +2,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 .min-all,.close-all,.sprite-application--arrow,.sprite-application-block,.sprite-application-blog,.sprite-application-form,.sprite-application-search-result,.sprite-application-text,.sprite-arrow-045-small,.sprite-arrow-225-small,.sprite-arrow-circle-315,.sprite-arrow-circle-double-135,.sprite-arrow-circle-double,.sprite-balloon--pencil,.sprite-balloon,.sprite-balloons-box,.sprite-bin-full,.sprite-block,.sprite-blue-document--minus,.sprite-blue-document--plus,.sprite-blue-document-copy,.sprite-blue-document-pdf-text,.sprite-blue-document-template,.sprite-blue-folder--exclamation,.sprite-blue-folder--minus,.sprite-blue-folder--plus,.sprite-blue-folder,.sprite-blue-folders-stack,.sprite-blueprint,.sprite-box,.sprite-briefcase--arrow,.sprite-btn_taskbar_cap_fenster_tooltip_ico1,.sprite-btn_taskbar_cap_fenster_tooltip_ico2,.sprite-btn_taskbar_cap_fenster_tooltip_ico3,.sprite-btn_taskbar_cap_fenster_tooltip_ico4,.sprite-calendar-month,.sprite-calendar-select-days,.sprite-calendar-select-week,.sprite-camera-lens,.sprite-cards-stack,.sprite-category,.sprite-chart-down-color,.sprite-chart-pie-separate,.sprite-chart-up-color,.sprite-chart,.sprite-clock--minus,.sprite-clock,.sprite-construction,.sprite-credit-cards,.sprite-cross-circle,.sprite-cross-small,.sprite-cross,.sprite-disk-return-black,.sprite-disk,.sprite-document-pdf,.sprite-document-template,.sprite-documents-stack,.sprite-documents,.sprite-drive-download,.sprite-drive-upload,.sprite-edit-shade,.sprite-edit,.sprite-envelope--arrow,.sprite-exclamation-diamond,.sprite-exclamation,.sprite-eye,.sprite-films,.sprite-folder-export,.sprite-funnel--exclamation,.sprite-gear--arrow,.sprite-gear,.sprite-globe--arrow,.sprite-globe-green,.sprite-globe,.sprite-grid,.sprite-hard-hat,.sprite-icon_taskbar_cap_fenster,.sprite-icon_taskbar_cap_fenster_active,.sprite-icon_taskbar_cap_logout,.sprite-icon_taskbar_cap_logout_active,.sprite-icon_taskbar_top_artikel,.sprite-icon_taskbar_top_artikel_active,.sprite-icon_taskbar_top_einstellungen,.sprite-icon_taskbar_top_einstellungen_active,.sprite-icon_taskbar_top_hilfe,.sprite-icon_taskbar_top_hilfe_active,.sprite-icon_taskbar_top_inhalte,.sprite-icon_taskbar_top_inhalte_active,.sprite-icon_taskbar_top_kunden,.sprite-icon_taskbar_top_kunden_active,.sprite-icon_taskbar_top_marketing,.sprite-icon_taskbar_top_marketing_active,.sprite-image--exclamation,.sprite-image-medium,.sprite-images-stack,.sprite-images,.sprite-inbox--plus,.sprite-inbox-document-music,.sprite-inbox-document-text,.sprite-inbox-download,.sprite-inbox-film,.sprite-inbox-image,.sprite-inbox-upload,.sprite-inbox,.sprite-information,.sprite-key--arrow,.sprite-key--pencil,.sprite-keyboard-command,.sprite-layer-select,.sprite-layout-header-3-mix,.sprite-layout-header,.sprite-layout-hf-3-mix,.sprite-leaf,.sprite-license-key,.sprite-lifebuoy,.sprite-lightning,.sprite-locale,.sprite-magnifier,.sprite-mail--minus,.sprite-mail--pencil,.sprite-mail--plus,.sprite-mail-open-image,.sprite-mail-send,.sprite-mails-stack,.sprite-megaphone,.sprite-minus-circle-frame,.sprite-minus-circle,.sprite-money--arrow,.sprite-money-coin,.sprite-moneys,.sprite-music-beam,.sprite-newspapers,.sprite-paper-plane,.sprite-pencil,.sprite-photo-album--minus,.sprite-photo-album--plus,.sprite-picture--arrow,.sprite-picture--minus,.sprite-picture,.sprite-pictures,.sprite-pin,.sprite-plus-circle-frame,.sprite-plus-circle,.sprite-property-blue,.sprite-puzzle--minus,.sprite-puzzle--plus,.sprite-report-paper,.sprite-sd-memory-card,.sprite-shopware-logo,.sprite-star-empty,.sprite-star-half,.sprite-star,.sprite-sticky-note--pencil,.sprite-sticky-notes-pin,.sprite-store,.sprite-table,.sprite-target,.sprite-tick-circle,.sprite-tick-small,.sprite-tick,.sprite-ticket--pencil,.sprite-toolbox,.sprite-truck-box-label,.sprite-truck,.sprite-ui-scroll-pane-detail,.sprite-ui-scroll-pane-horizontal,.sprite-ui-scroll-pane-list,.sprite-user--arrow,.sprite-user--pencil,.sprite-user--plus,.sprite-user-silhouette,.sprite-user,.sprite-users,.sprite-wrench-screwdriver,.sprite-xfn-colleague,
 .x-btn-default-toolbar-small .package_green,
