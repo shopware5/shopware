@@ -164,7 +164,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
         // - Shopware\Components\DependencyInjection\Bridge\Session::createSession()
         // In case the session is started somewhere else we need to ensure no other session is active. The same logic as
         // in Shopware's factories is used here.
-        // This behaviour is analogue to Zend: https://github.com/shopware/shopware/blob/cbc212ca4642878cac62193d3a2f41e08f4849a2/engine/Library/Zend/Session.php#L413
+        // This behaviour is analogue to Zend: https://github.com/shopware5/shopware/blob/cbc212ca4642878cac62193d3a2f41e08f4849a2/engine/Library/Zend/Session.php#L413
         $container = Shopware()->Container();
         self::ensureFrontendSessionClosed($container);
         self::ensureBackendSessionClosed($container);

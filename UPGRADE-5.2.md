@@ -4,7 +4,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 # 5.2.27
 
-[View all changes from v5.2.26...v5.2.27](https://github.com/shopware/shopware/compare/v5.2.26...v5.2.27)
+[View all changes from v5.2.26...v5.2.27](https://github.com/shopware5/shopware/compare/v5.2.26...v5.2.27)
 
 * Added config check to disable the `Tell a friend` page if it is disabled via config.
 * Fixed id collision in `themes/Backend/ExtJs/backend/base/component/Shopware.ModuleManager.js`
@@ -18,11 +18,11 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 # 5.2.26
 
-[View all changes from v5.2.25...v5.2.26](https://github.com/shopware/shopware/compare/v5.2.25...v5.2.26)
+[View all changes from v5.2.25...v5.2.26](https://github.com/shopware5/shopware/compare/v5.2.25...v5.2.26)
 
 ## 5.2.25
 
-[View all changes from v5.2.24...v5.2.25](https://github.com/shopware/shopware/compare/v5.2.24...v5.2.25)
+[View all changes from v5.2.24...v5.2.25](https://github.com/shopware5/shopware/compare/v5.2.24...v5.2.25)
 
 * Added notify event `Shopware_Modules_Basket_AddArticle_Added` in `engine/Shopware/Core/sBasket.php`
 * The event `Shopware_Modules_Export_ExportResult_Filter_Fixed` was added and now filters the processed export result. Previously with `Shopware_Modules_Export_ExportResult_Filter`, an instance of `Zend_Db_Statement_Pdo` was supplied, which could not be used to filter the actual result.
@@ -30,14 +30,14 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 # 5.2.24
 
-[View all changes from v5.2.23...v5.2.24](https://github.com/shopware/shopware/compare/v5.2.23...v5.2.24)
+[View all changes from v5.2.23...v5.2.24](https://github.com/shopware5/shopware/compare/v5.2.23...v5.2.24)
 
 * Fixed custom datefield format for articles
 * Fixed styling of image slider on tablet landscape view
 
 ## 5.2.23
 
-[View all changes from v5.2.22...v5.2.23](https://github.com/shopware/shopware/compare/v5.2.22...v5.2.23)
+[View all changes from v5.2.22...v5.2.23](https://github.com/shopware5/shopware/compare/v5.2.22...v5.2.23)
 
 * Added conditional statement in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.product-slider.js` to prevent the jquery plugin from sending ajax requests indefinitely
 * Added `limit` parameter to `createQuery` and `createOptionQuery` in `engine/Shopware/Bundle/ESIndexingBundle/Property/PropertyQueryFactory`
@@ -46,7 +46,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.22
 
-[View all changes from v5.2.21...v5.2.22](https://github.com/shopware/shopware/compare/v5.2.21...v5.2.22)
+[View all changes from v5.2.21...v5.2.22](https://github.com/shopware5/shopware/compare/v5.2.21...v5.2.22)
 
 * Fixed the picture implementation of the `box-emotion.tpl` to load the correct image sizes
 * Added new event `plugin/swAutoSubmit/onChangeSelection` in `themes/Frontend/Responsive/frontend/_public/src/js/jquery.auto-submit.js`
@@ -56,7 +56,7 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.21
 
-[View all changes from v5.2.20...v5.2.21](https://github.com/shopware/shopware/compare/v5.2.20...v5.2.21)
+[View all changes from v5.2.20...v5.2.21](https://github.com/shopware5/shopware/compare/v5.2.20...v5.2.21)
 
 * Updated Symfony to version 2.8.17
 * Added paymentID as event property in `Shopware_Modules_Admin_Execute_Risk_Rule_RuleName`
@@ -73,13 +73,13 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.20
 
-[View all changes from v5.2.19...v5.2.20](https://github.com/shopware/shopware/compare/v5.2.19...v5.2.20)
+[View all changes from v5.2.19...v5.2.20](https://github.com/shopware5/shopware/compare/v5.2.19...v5.2.20)
 
-* Reverted shopware/shopware#821 which added left joins for basket attributes in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
+* Reverted [shopware5/shopware#821](https://github.com/shopware5/shopware/pull/821) which added left joins for basket attributes in `sAdmin::sGetDispatchBasket()` and `sExport::sGetDispatchBasket()`
 
 ## 5.2.19
 
-[View all changes from v5.2.18...v5.2.19](https://github.com/shopware/shopware/compare/v5.2.18...v5.2.19)
+[View all changes from v5.2.18...v5.2.19](https://github.com/shopware5/shopware/compare/v5.2.18...v5.2.19)
 
 * Changed the loading of backend widgets to disable widgets of deactivated plugins
 * Added new Event `Shopware_Modules_Admin_regenerateSessionId_Start` in sAdmin::regenerateSessionId
@@ -98,14 +98,14 @@ This changelog references changes done in Shopware 5.2 patch versions.
 
 ## 5.2.18
 
-[View all changes from v5.2.17...v5.2.18](https://github.com/shopware/shopware/compare/v5.2.17...v5.2.18)
+[View all changes from v5.2.17...v5.2.18](https://github.com/shopware5/shopware/compare/v5.2.17...v5.2.18)
 
 * Fixed invalid permissions after running media optimizer on some hosting systems
 * Fixed session error in exports
 
 ## 5.2.17
 
-[View all changes from v5.2.16...v5.2.17](https://github.com/shopware/shopware/compare/v5.2.16...v5.2.17)
+[View all changes from v5.2.16...v5.2.17](https://github.com/shopware5/shopware/compare/v5.2.16...v5.2.17)
 
 * Deprecated Smarty modifier `rewrite`. Modifier will be removed in 5.3.0.
 * Changed default `session.gc_divisor` to `200`. To decrease session garbage collection probability.
@@ -150,13 +150,13 @@ The api resources are now available in the dependency injection container using 
 
 ## 5.2.16
 
-[View all changes from v5.2.15...v5.2.16](https://github.com/shopware/shopware/compare/v5.2.15...v5.2.16)
+[View all changes from v5.2.15...v5.2.16](https://github.com/shopware5/shopware/compare/v5.2.15...v5.2.16)
 
 * Improved form input filtering
 
 ## 5.2.15
 
-[View all changes from v5.2.14...v5.2.15](https://github.com/shopware/shopware/compare/v5.2.14...v5.2.15)
+[View all changes from v5.2.14...v5.2.15](https://github.com/shopware5/shopware/compare/v5.2.14...v5.2.15)
 
 * Fixed article api resource when creating a new article with new configurator options and an image mapping for this new options
 * Added cronjob registration via `Resources/cronjob.xml` file
@@ -165,7 +165,7 @@ The api resources are now available in the dependency injection container using 
 
 ## 5.2.14
 
-[View all changes from v5.2.13...v5.2.14](https://github.com/shopware/shopware/compare/v5.2.13...v5.2.14)
+[View all changes from v5.2.13...v5.2.14](https://github.com/shopware5/shopware/compare/v5.2.13...v5.2.14)
 
 ### Add property "valueField" to the media field.
 * The shopping world element "Media field" supports now to change the value field. All possible properties you can find in the file: `themes/Backend/ExtJs/backend/media_manager/model/media.js`
@@ -182,7 +182,7 @@ The api resources are now available in the dependency injection container using 
 
 ## 5.2.13
 
-[View all changes from v5.2.12...v5.2.13](https://github.com/shopware/shopware/compare/v5.2.12...v5.2.13)
+[View all changes from v5.2.12...v5.2.13](https://github.com/shopware5/shopware/compare/v5.2.12...v5.2.13)
 
 * Changed duplicate smarty block from `frontend_checkout_confirm_information_addresses_equal_panel_shipping_select_address` to `frontend_checkout_confirm_information_addresses_equal_panel_shipping_add_address` in `frontend/checkout/confirm.tpl`
 * Added interface `\Shopware\Bundle\ESIndexingBundle\TextMappingInterface` which handles text field mappings for different elastic search versions
@@ -209,11 +209,11 @@ Example:
 
 ## 5.2.12
 
-[View all changes from v5.2.11...v5.2.12](https://github.com/shopware/shopware/compare/v5.2.11...v5.2.12)
+[View all changes from v5.2.11...v5.2.12](https://github.com/shopware5/shopware/compare/v5.2.11...v5.2.12)
 
 ## 5.2.11
 
-[View all changes from v5.2.10...v5.2.11](https://github.com/shopware/shopware/compare/v5.2.10...v5.2.11)
+[View all changes from v5.2.10...v5.2.11](https://github.com/shopware5/shopware/compare/v5.2.10...v5.2.11)
 
 * Added new Smarty block `frontend_robots_txt_allows` to `frontend/robots_txt/index.tpl`
 * Added new Smarty block `frontend_account_order_item_availability` to `frontend/account/order_item_details.tpl`
@@ -261,7 +261,7 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.10
 
-[View all changes from v5.2.9...v5.2.10](https://github.com/shopware/shopware/compare/v5.2.9...v5.2.10)
+[View all changes from v5.2.9...v5.2.10](https://github.com/shopware5/shopware/compare/v5.2.9...v5.2.10)
 
 * Added optional `filter` option to `Shopware.apps.Base.view.element.Select`
 * Set `remoteFilter` to `true` in several *base* stores:
@@ -287,13 +287,13 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.9
 
-[View all changes from v5.2.8...v5.2.9](https://github.com/shopware/shopware/compare/v5.2.8...v5.2.9)
+[View all changes from v5.2.8...v5.2.9](https://github.com/shopware5/shopware/compare/v5.2.8...v5.2.9)
 
 * `filtergroupID` column will be set to `null` in the `s_articles` table when deleting a property set 
 
 ## 5.2.8
 
-[View all changes from v5.2.7...v5.2.8](https://github.com/shopware/shopware/compare/v5.2.7...v5.2.8)
+[View all changes from v5.2.7...v5.2.8](https://github.com/shopware5/shopware/compare/v5.2.7...v5.2.8)
 
 * Fixed a PHP 7 fatal error in the SVG rendering of mPDF
 * Added missing update of the order details' order number, when converting a cancelled order to a *normal* order in `Shopware_Controllers_Backend_CanceledOrder::convertOrderAction()`
@@ -302,7 +302,7 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.7
 
-[View all changes from v5.2.6...v5.2.7](https://github.com/shopware/shopware/compare/v5.2.6...v5.2.7)
+[View all changes from v5.2.6...v5.2.7](https://github.com/shopware5/shopware/compare/v5.2.6...v5.2.7)
 
 * Add support for third party post messages in the backend
 * getOne function of customer api resource contains now the country and state data for billing and shipping address
@@ -311,7 +311,7 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.6
 
-[View all changes from v5.2.5...v5.2.6](https://github.com/shopware/shopware/compare/v5.2.5...v5.2.6)
+[View all changes from v5.2.5...v5.2.6](https://github.com/shopware5/shopware/compare/v5.2.5...v5.2.6)
 
 * Changed visibility of sAdmin::loginUser to protected
 * Added filter events to all convert functions in `LegacyStructConverter`
@@ -340,13 +340,13 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.5
 
-[View all changes from v5.2.4...v5.2.5](https://github.com/shopware/shopware/compare/v5.2.4...v5.2.5)
+[View all changes from v5.2.4...v5.2.5](https://github.com/shopware5/shopware/compare/v5.2.4...v5.2.5)
 
 * Fixed SEO URL generation for URLs containing dots and forward slashes
 
 ## 5.2.4
 
-[View all changes from v5.2.3...v5.2.4](https://github.com/shopware/shopware/compare/v5.2.3...v5.2.4)
+[View all changes from v5.2.3...v5.2.4](https://github.com/shopware5/shopware/compare/v5.2.3...v5.2.4)
 
 * Introduced new interface `Shopware\Components\Slug\SlugInterface` to generate URL safe versions of a string
     * Service id `shopware.slug`
@@ -388,7 +388,7 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.3
 
-[View all changes from v5.2.2...v5.2.3](https://github.com/shopware/shopware/compare/v5.2.2...v5.2.3)
+[View all changes from v5.2.2...v5.2.3](https://github.com/shopware5/shopware/compare/v5.2.2...v5.2.3)
 
 * Updated `guzzlehttp/guzzle` to version 5.3.1 to mitigate [httproxy](https://httpoxy.org/) vulnerability
 * Set timeouts from install/update/(secure) uninstall operations in plugin manager to 300 seconds
@@ -405,13 +405,13 @@ There must be at least one option tag and inside each option tag where must be a
 
 ## 5.2.2 (2016-07-13)
 
-[View all changes from v5.2.0...v5.2.2](https://github.com/shopware/shopware/compare/v5.2.0...v5.2.2)
+[View all changes from v5.2.0...v5.2.2](https://github.com/shopware5/shopware/compare/v5.2.0...v5.2.2)
 
 * Add support for Symfony `console.command` service tag to register commands directly inside service container
 
 ## 5.2.0 (2016-07-01)
 
-[View all changes from v5.1.6...v5.2.0](https://github.com/shopware/shopware/compare/v5.1.6...v5.2.0)
+[View all changes from v5.1.6...v5.2.0](https://github.com/shopware5/shopware/compare/v5.1.6...v5.2.0)
 
 * Increased minimum required PHP version to PHP >= 5.6.4.
 * Added CSRF protection to frontend and backend which is enabled by default.

@@ -38,7 +38,7 @@ use Symfony\Component\Config\Util\XmlUtils;
  *
  * Use new class Shopware\Components\Plugin\XmlReader\XmlPluginInfoReader (see Shopware 5.6)
  *
- * https://github.com/shopware/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlPluginInfoReader.php
+ * https://github.com/shopware5/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlPluginInfoReader.php
  */
 class XmlPluginInfoReader
 {

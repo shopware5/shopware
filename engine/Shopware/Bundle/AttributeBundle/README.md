@@ -1,9 +1,5 @@
 # AttributeBundle
 
-- **License**: Dual license AGPL v3 / Proprietary
-- **Github Repository**: <https://github.com/shopware/shopware>
-- **Issue-Tracker**: <https://issues.shopware.com>
-
 ## Controllers
 
 There are only two controllers for handle all actions regarding attributes.

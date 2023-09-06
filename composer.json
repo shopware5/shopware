@@ -12,7 +12,7 @@
         "forum": "https://forum.shopware.com",
         "chat": "https://slack.shopware.com",
         "wiki": "https://developers.shopware.com/",
-        "source": "https://github.com/shopware/shopware",
+        "source": "https://github.com/shopware5/shopware",
         "issues": "https://issues.shopware.com"
     },
     "require": {

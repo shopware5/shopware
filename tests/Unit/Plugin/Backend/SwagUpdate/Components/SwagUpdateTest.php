@@ -203,7 +203,7 @@ class SwagUpdateTest extends TestCase
     {
         return json_encode([
                 [
-                    'html_url' => 'https://github.com/shopware/shopware/releases/tag/v5.7.17',
+                    'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
                     'body' => '',
                     'id' => 97288305,
                     'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
@@ -215,7 +215,7 @@ class SwagUpdateTest extends TestCase
                     'published_at' => '2023-03-29T09:06:24Z',
                     'assets' => [
                                 [
-                                    'url' => 'https://api.github.com/repos/shopware/shopware/releases/assets/102259279',
+                                    'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
                                     'id' => 102259279,
                                     'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
                                     'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
@@ -226,10 +226,10 @@ class SwagUpdateTest extends TestCase
                                     'download_count' => 132,
                                     'created_at' => '2023-04-04T12:14:50Z',
                                     'updated_at' => '2023-05-30T07:14:09Z',
-                                    'browser_download_url' => 'https://github.com/shopware/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                                    'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
                                 ],
                                 [
-                                    'url' => 'https://api.github.com/repos/shopware/shopware/releases/assets/102259331',
+                                    'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
                                     'id' => 102259331,
                                     'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
                                     'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
@@ -240,7 +240,7 @@ class SwagUpdateTest extends TestCase
                                     'download_count' => 12,
                                     'created_at' => '2023-04-04T12:15:18Z',
                                     'updated_at' => '2023-05-30T07:14:37Z',
-                                    'browser_download_url' => 'https://github.com/shopware/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                                    'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
                                 ],
                         ],
                 ],
@@ -251,7 +251,7 @@ class SwagUpdateTest extends TestCase
     {
         return json_encode([
             [
-                'html_url' => 'https://github.com/shopware/shopware/releases/tag/v5.7.17',
+                'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
                 'body' => '',
                 'id' => 97288305,
                 'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
@@ -263,8 +263,8 @@ class SwagUpdateTest extends TestCase
                 'published_at' => '2023-03-29T09:06:24Z',
                 'assets' => [
                     ],
-                'tarball_url' => 'https://api.github.com/repos/shopware/shopware/tarball/v5.7.17',
-                'zipball_url' => 'https://api.github.com/repos/shopware/shopware/zipball/v5.7.17',
+                'tarball_url' => 'https://api.github.com/repos/shopware5/shopware/tarball/v5.7.17',
+                'zipball_url' => 'https://api.github.com/repos/shopware5/shopware/zipball/v5.7.17',
             ],
         ], JSON_THROW_ON_ERROR);
     }
@@ -273,7 +273,7 @@ class SwagUpdateTest extends TestCase
     {
         return json_encode([
             [
-                'html_url' => 'https://github.com/shopware/shopware/releases/tag/v5.7.17',
+                'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
                 'body' => '',
                 'id' => 97288305,
                 'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
@@ -285,7 +285,7 @@ class SwagUpdateTest extends TestCase
                 'published_at' => '2023-03-29T09:06:24Z',
                 'assets' => [
                         [
-                            'url' => 'https://api.github.com/repos/shopware/shopware/releases/assets/102259279',
+                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
                             'id' => 102259279,
                             'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
                             'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
@@ -296,10 +296,10 @@ class SwagUpdateTest extends TestCase
                             'download_count' => 132,
                             'created_at' => '2023-04-04T12:14:50Z',
                             'updated_at' => '2023-05-30T07:14:09Z',
-                            'browser_download_url' => 'https://github.com/shopware/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
                         ],
                         [
-                            'url' => 'https://api.github.com/repos/shopware/shopware/releases/assets/102259331',
+                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
                             'id' => 102259331,
                             'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
                             'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
@@ -310,12 +310,12 @@ class SwagUpdateTest extends TestCase
                             'download_count' => 12,
                             'created_at' => '2023-04-04T12:15:18Z',
                             'updated_at' => '2023-05-30T07:14:37Z',
-                            'browser_download_url' => 'https://github.com/shopware/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
                         ],
                     ],
             ],
             [
-                'html_url' => 'https://github.com/shopware/shopware/releases/tag/v5.7.17',
+                'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
                 'body' => '',
                 'id' => 97288305,
                 'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
@@ -327,7 +327,7 @@ class SwagUpdateTest extends TestCase
                 'published_at' => '2023-03-29T09:06:24Z',
                 'assets' => [
                         [
-                            'url' => 'https://api.github.com/repos/shopware/shopware/releases/assets/102259279',
+                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
                             'id' => 102259279,
                             'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
                             'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
@@ -338,10 +338,10 @@ class SwagUpdateTest extends TestCase
                             'download_count' => 132,
                             'created_at' => '2023-04-04T12:14:50Z',
                             'updated_at' => '2023-05-30T07:14:09Z',
-                            'browser_download_url' => 'https://github.com/shopware/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
                         ],
                         [
-                            'url' => 'https://api.github.com/repos/shopware/shopware/releases/assets/102259331',
+                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
                             'id' => 102259331,
                             'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
                             'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
@@ -352,7 +352,7 @@ class SwagUpdateTest extends TestCase
                             'download_count' => 12,
                             'created_at' => '2023-04-04T12:15:18Z',
                             'updated_at' => '2023-05-30T07:14:37Z',
-                            'browser_download_url' => 'https://github.com/shopware/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
                         ],
                     ],
             ],

@@ -4,7 +4,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.7
 
-[View all changes from v5.3.6...v5.3.7](https://github.com/shopware/shopware/compare/v5.3.6...v5.3.7)
+[View all changes from v5.3.6...v5.3.7](https://github.com/shopware5/shopware/compare/v5.3.6...v5.3.7)
 
 ### Changes
 
@@ -17,7 +17,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.6
 
-[View all changes from v5.3.5...v5.3.6](https://github.com/shopware/shopware/compare/v5.3.5...v5.3.6)
+[View all changes from v5.3.5...v5.3.6](https://github.com/shopware5/shopware/compare/v5.3.5...v5.3.6)
 
 ### Changes
 
@@ -29,7 +29,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.5
 
-[View all changes from v5.3.4...v5.3.5](https://github.com/shopware/shopware/compare/v5.3.4...v5.3.5)
+[View all changes from v5.3.4...v5.3.5](https://github.com/shopware5/shopware/compare/v5.3.4...v5.3.5)
 
 ### Additions
 
@@ -62,7 +62,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.4
 
-[View all changes from v5.3.3...v5.3.4](https://github.com/shopware/shopware/compare/v5.3.3...v5.3.4)
+[View all changes from v5.3.3...v5.3.4](https://github.com/shopware5/shopware/compare/v5.3.3...v5.3.4)
 
 ### Additions
 
@@ -92,7 +92,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.3
 
-[View all changes from v5.3.2...v5.3.3](https://github.com/shopware/shopware/compare/v5.3.2...v5.3.3)
+[View all changes from v5.3.2...v5.3.3](https://github.com/shopware5/shopware/compare/v5.3.2...v5.3.3)
 
 ### Additions
 
@@ -111,7 +111,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.2
 
-[View all changes from v5.3.1...v5.3.2](https://github.com/shopware/shopware/compare/v5.3.1...v5.3.2)
+[View all changes from v5.3.1...v5.3.2](https://github.com/shopware5/shopware/compare/v5.3.1...v5.3.2)
 
 ### Additions
 
@@ -125,7 +125,7 @@ This changelog references changes done in Shopware 5.3 patch versions.
 
 ## 5.3.0
 
-[View all changes from v5.2.27...v5.3.0](https://github.com/shopware/shopware/compare/v5.2.27...v5.3.0)
+[View all changes from v5.2.27...v5.3.0](https://github.com/shopware5/shopware/compare/v5.2.27...v5.3.0)
 
 ### Additions
 
