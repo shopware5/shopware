@@ -1,26 +1,14 @@
-# Shopware 6
-
-<a href="https://github.com/shopware/platform"><img src="https://s3.eu-central-1.amazonaws.com/shopware-platform-assets/github-platform/readme/discover_sw6.png" align="right" height="39" /></a>
-
-<p align="center">
-<img src="https://www.shopware.com/media/image/8a/cf/98/open-commerce-platform.png" width=500>
-</p>
-
-
-The completely newly developed successor "Shopware 6" is based entirely on the Symfony Framework and VueJS and is available under MIT licence at https://github.com/shopware/platform
-
 # Shopware 5
 
-![Build Status](https://github.com/shopware/shopware/workflows/PHPUnit/badge.svg)
+![Build Status](https://github.com/shopware5/shopware/workflows/PHPUnit/badge.svg)
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/shopware/localized.svg)](https://crowdin.com/project/shopware)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/shopware/shopware/badges/quality-score.png?b=5.5)](https://scrutinizer-ci.com/g/shopware/shopware/?branch=5.5)
 [![Latest Stable Version](https://poser.pugx.org/shopware/shopware/v/stable)](https://packagist.org/packages/shopware/shopware)
 [![Total Downloads](https://poser.pugx.org/shopware/shopware/downloads)](https://packagist.org/packages/shopware/shopware)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-%23ECB22E)](http://slack.shopware.com?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 - **License**: Dual license AGPL v3 / Proprietary
-- **GitHub Repository**: <https://github.com/shopware/shopware>
-- **Issue Tracker**: <https://issues.shopware.com>
+- **GitHub Repository**: <https://github.com/shopware5/shopware>
+- **Issues**: <https://github.com/shopware5/shopware/issues>
 
 ## Overview
 
@@ -67,7 +55,7 @@ Follow the instruction below if you want to install Shopware 5 using Git.
 
 1.) Clone the git repository to the desired location using:
 
-    git clone https://github.com/shopware/shopware.git
+    git clone https://github.com/shopware5/shopware.git
 
 In case you wish to contribute to Shopware, fork the `5.7` branch rather than cloning it, and create a pull request via GitHub.
 For further information please read the section "Get involved" of this document.
@@ -152,7 +140,7 @@ Shopware is distributed under a dual license (AGPL v3 and proprietary license). 
 
 # Changelog
 
-The changelog and all available commits are located under <https://github.com/shopware/shopware>.
+The changelog and all available commits are located under <https://github.com/shopware5/shopware>.
 
 ## Further reading
 

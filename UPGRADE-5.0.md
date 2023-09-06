@@ -4,14 +4,14 @@ This changelog references changes done in Shopware 5.0 patch versions.
 
 ## 5.0.4 (2015-09-16)
 
-[View all changes from v5.0.3...v5.0.4](https://github.com/shopware/shopware/compare/v5.0.3...v5.0.4)
+[View all changes from v5.0.3...v5.0.4](https://github.com/shopware5/shopware/compare/v5.0.3...v5.0.4)
 
 * Change file extension of `Shopware_Components_Convert_Excel::generateXML` to .xls
 * Fixed jsonrenderer for backend order batchprocessing
     
 ## 5.0.3 (2015-08-24)
 
-[View all changes from v5.0.2...v5.0.3](https://github.com/shopware/shopware/compare/v5.0.2...v5.0.3)
+[View all changes from v5.0.2...v5.0.3](https://github.com/shopware5/shopware/compare/v5.0.2...v5.0.3)
 
 * The variant API resource now supports the getList method. It will return all variants with prices and attributes. You can optionally calculate the gross price by using the "considerTaxInput" parameter.
 * The getList method of the articles API resource now returns additionally the attributes of an article.
@@ -22,7 +22,7 @@ This changelog references changes done in Shopware 5.0 patch versions.
 
 ## 5.0.2 (2015-07-20)
 
-[View all changes from v5.0.1...v5.0.2](https://github.com/shopware/shopware/compare/v5.0.1...v5.0.2)
+[View all changes from v5.0.1...v5.0.2](https://github.com/shopware5/shopware/compare/v5.0.1...v5.0.2)
 
 * Method `createMenuItem` in plugin bootstrap now results in an duplicate error when passing an existing label with the same parent
 * Removed `Shopware_Controllers_Backend_Order::getStatisticAction` and statistics in the order backend module.
@@ -100,7 +100,7 @@ This changelog references changes done in Shopware 5.0 patch versions.
 
 ## 5.0.1 (2015-05-26)
 
-[View all changes from v5.0.0...v5.0.1](https://github.com/shopware/shopware/compare/v5.0.0...v5.0.1)
+[View all changes from v5.0.0...v5.0.1](https://github.com/shopware5/shopware/compare/v5.0.0...v5.0.1)
 
 * Create `sw:theme:dump:configuration` command to generate watch files for theme compiling
 * Rename \Shopware\Components\Theme\Compiler::preCompile to \Shopware\Components\Theme\Compiler::compile

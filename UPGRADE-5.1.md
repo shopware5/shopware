@@ -4,20 +4,20 @@ This changelog references changes done in Shopware 5.1 patch versions.
 
 ## 5.1.6 (2016-05-23)
 
-[View all changes from v5.1.5...v5.1.6](https://github.com/shopware/shopware/compare/v5.1.5...v5.1.6)
+[View all changes from v5.1.5...v5.1.6](https://github.com/shopware5/shopware/compare/v5.1.5...v5.1.6)
 
 * The interface `Enlight_Components_Cron_Adapter` in `engine/Library/Enlight/Components/Cron/Adapter.php` got a new method `getJobByAction`. For default implementation see `engine/Library/Enlight/Components/Cron/Adapter/DBAL.php`.
 * Fix a unserialize regression with PHP 5.6.21 and PHP 7.0.6.
     
 ## 5.1.5 (2016-04-11)
 
-[View all changes from v5.1.4...v5.1.5](https://github.com/shopware/shopware/compare/v5.1.4...v5.1.5)
+[View all changes from v5.1.4...v5.1.5](https://github.com/shopware5/shopware/compare/v5.1.4...v5.1.5)
 
 * The smarty variable `sCategoryInfo` in Listing and Blog controllers is now deprecated and will be removed soon. Use `sCategoryContent` instead, it's a drop in replacement.
 
 ## 5.1.4 (2016-03-22)
 
-[View all changes from v5.1.3...v5.1.4](https://github.com/shopware/shopware/compare/v5.1.3...v5.1.4)
+[View all changes from v5.1.3...v5.1.4](https://github.com/shopware5/shopware/compare/v5.1.3...v5.1.4)
 
 * Customer logout will now regenerate the session id and clear the customers basket.
 * Added `IsNew` condition for product streams
@@ -40,7 +40,7 @@ This changelog references changes done in Shopware 5.1 patch versions.
     
 ## 5.1.3 (2016-02-15)
 
-[View all changes from v5.1.2...v5.1.3](https://github.com/shopware/shopware/compare/v5.1.2...v5.1.3)
+[View all changes from v5.1.2...v5.1.3](https://github.com/shopware5/shopware/compare/v5.1.2...v5.1.3)
 
 * Switch Grunt to relativeUrls to unify the paths to less.php
 * Deprecated `Enlight_Application::getOption()` and `Enlight_Application::getOptions`
@@ -56,7 +56,7 @@ This changelog references changes done in Shopware 5.1 patch versions.
 
 ## 5.1.2 (2016-01-12)
 
-[View all changes from v5.1.1...v5.1.2](https://github.com/shopware/shopware/compare/v5.1.1...v5.1.2)
+[View all changes from v5.1.1...v5.1.2](https://github.com/shopware5/shopware/compare/v5.1.1...v5.1.2)
 
 * Out-of-stock variants on the detail page are now selectable
 * `ProductNumberService::getAvailableNumber()` now returns the provided product variant to allow deep linking of out-of-stock variants
@@ -99,14 +99,14 @@ This changelog references changes done in Shopware 5.1 patch versions.
     
 ## 5.1.1 (2015-10-26)
 
-[View all changes from v5.1.0...v5.1.1](https://github.com/shopware/shopware/compare/v5.1.0...v5.1.1)
+[View all changes from v5.1.0...v5.1.1](https://github.com/shopware5/shopware/compare/v5.1.0...v5.1.1)
 
 * Added new smarty block `frontend_detail_index_tabs_cross_selling` in the detail/ajax.tpl to prevent problems with custom themes
 * Renamed block `backend/order/view/detail/communication` in `backend/order/view/detail/configuration.js` to `backend/order/view/detail/configuration`. The name was duplicated in another file and was renamed to match the correct file.
 
 ## 5.1.0 (2015-10-19)
 
-[View all changes from v5.0.4...v5.1.0](https://github.com/shopware/shopware/compare/v5.0.4...v5.1.0)
+[View all changes from v5.0.4...v5.1.0](https://github.com/shopware5/shopware/compare/v5.0.4...v5.1.0)
 
 * Added event `Shopware_Plugin_Collect_MediaXTypes` to collect media related x_type fields for which the value needs to be normalized
 * Updated Behat to v3.0 and other related libraries

@@ -12,7 +12,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/shopware/shopware.git"
+        "url": "git+https://github.com/shopware5/shopware.git"
     },
     "keywords": [
         "shopware",
@@ -26,7 +26,7 @@
     "bugs": {
         "url": "https://issues.shopware.com"
     },
-    "homepage": "https://github.com/shopware/shopware#readme",
+    "homepage": "https://github.com/shopware5/shopware#readme",
     "dependencies": {
         "flatpickr": "2.6.3",
         "jquery": "3.6.0",
