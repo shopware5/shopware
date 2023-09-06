@@ -6,7 +6,7 @@
 [![Total Downloads](https://poser.pugx.org/shopware/shopware/downloads)](https://packagist.org/packages/shopware/shopware)
 [![Slack](https://img.shields.io/badge/chat-on%20slack-%23ECB22E)](http://slack.shopware.com?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-- **License**: Dual license AGPL v3 / Proprietary
+- **License**: GNU General Public License v3 (some used parts have different licenses, which can be found in the respective files or directories)
 - **GitHub Repository**: <https://github.com/shopware5/shopware>
 - **Issues**: <https://github.com/shopware5/shopware/issues>
 

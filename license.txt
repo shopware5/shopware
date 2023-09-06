@@ -1,8 +1,6 @@
 Important:
 
-  Shopware is licensed under a dual license. To check which
-license / edition of Shopware you have installed, please open
-the "About shopware" dialog in the backend.
+  Shopware is licensed under GNU General Public License 3
 
 Additional permission under AGPLv3, Sec. 7:
 
