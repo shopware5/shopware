@@ -470,7 +470,7 @@ class Repository extends ModelRepository
         $builder = $this->getCategoriesByParentBuilder($id);
         $builder->select('COUNT(categories) as categoriesCount');
 
-        return $builder->getQuery()->getSingleScalarResult();
+        return (int) $builder->getQuery()->getSingleScalarResult();
     }
 
     /**

@@ -264,7 +264,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             ],
         ]);
 
-        $customerEmail = Shopware()->Models()->createQueryBuilder()
+        $customerEmail = (string) Shopware()->Models()->createQueryBuilder()
             ->select('customer.email')
             ->from(Customer::class, 'customer')
             ->where('customer.id = ?1')

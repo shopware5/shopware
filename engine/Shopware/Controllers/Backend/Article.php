@@ -1835,9 +1835,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getFreeSerialCount($esdId)
     {
-        $query = $this->getRepository()->getFreeSerialsCountByEsdQuery($esdId);
-
-        return $query->getSingleScalarResult();
+        return (int) $this->getRepository()->getFreeSerialsCountByEsdQuery($esdId)->getSingleScalarResult();
     }
 
     /**
