@@ -34,10 +34,9 @@ class StoreException extends RuntimeException
     private $sbpCode;
 
     /**
-     * @param string    $sbpCode
-     * @param string    $message
-     * @param int       $code
-     * @param Exception $previous
+     * @param string $sbpCode
+     * @param string $message
+     * @param int    $code
      */
     public function __construct(
         $sbpCode,

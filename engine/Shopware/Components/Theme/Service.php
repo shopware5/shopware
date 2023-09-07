@@ -122,8 +122,6 @@ class Service
      * If a shop instance passed, the function selects additionally the
      * element values of the passed shop.
      *
-     * @param Shop $shop
-     *
      * @return array
      */
     public function getLayout(Template $template, ?Shop $shop = null)
@@ -148,7 +146,6 @@ class Service
      * will also be returned.
      * If provided, only option in $optionNames will be returned
      *
-     * @param Shop  $shop
      * @param array $optionNames
      *
      * @return array

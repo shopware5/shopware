@@ -31,8 +31,7 @@ use Zend_Cache_Core;
 class Config
 {
     /**
-     * @param Connection $db
-     * @param array      $config
+     * @param array $config
      *
      * @return Shopware_Components_Config|null
      */

@@ -314,7 +314,6 @@ class StoreClient
     /**
      * @param array<string, mixed>  $params
      * @param array<string, string> $headers
-     * @param AccessTokenStruct     $token
      *
      * @throws StoreException
      * @throws Exception

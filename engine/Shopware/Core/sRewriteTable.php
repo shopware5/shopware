@@ -133,17 +133,6 @@ class sRewriteTable implements Enlight_Hook
     private $translationComponent;
 
     /**
-     * @param Enlight_Components_Db_Adapter_Pdo_Mysql $db
-     * @param Shopware_Components_Config              $config
-     * @param ModelManager                            $modelManager
-     * @param sSystem                                 $systemModule
-     * @param Enlight_Template_Manager                $template
-     * @param Shopware_Components_Modules             $moduleManager
-     * @param SlugInterface                           $slug
-     * @param ContextServiceInterface                 $contextService
-     * @param ShopPageServiceInterface                $shopPageService
-     * @param Shopware_Components_Translation         $translationComponent
-     *
      * @throws Exception
      */
     public function __construct(
@@ -991,9 +980,8 @@ class sRewriteTable implements Enlight_Hook
     /**
      * Generates and inserts the form seo urls
      *
-     * @param int                  $offset
-     * @param int                  $limit
-     * @param ShopContextInterface $context
+     * @param int $offset
+     * @param int $limit
      *
      * @throws Exception
      */
@@ -1043,9 +1031,8 @@ class sRewriteTable implements Enlight_Hook
     /**
      * Generates and inserts static page urls
      *
-     * @param int                  $offset
-     * @param int                  $limit
-     * @param ShopContextInterface $context
+     * @param int $offset
+     * @param int $limit
      *
      * @throws Exception
      * @throws SmartyException

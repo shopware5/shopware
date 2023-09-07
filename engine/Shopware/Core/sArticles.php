@@ -415,7 +415,6 @@ class sArticles implements Enlight_Hook
 
     /**
      * @param int|null $categoryId
-     * @param Criteria $criteria
      *
      * @throws Enlight_Exception
      *

@@ -1100,8 +1100,6 @@ class Shopware_Controllers_Backend_MediaManager extends Shopware_Controllers_Bac
 
     /**
      * @throws NonUniqueResultException
-     *
-     * @return Settings
      */
     private function getAlbumSettings(int $albumId): ?Settings
     {

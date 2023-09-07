@@ -116,8 +116,6 @@ class Enlight_Components_Cron_Manager
     /**
      * Deactivate a given Cron Job
      *
-     * @param \Enlight_Components_Cron_Job $job
-     *
      * @throws Enlight_Exception
      *
      * @return Enlight_Components_Cron_Manager
@@ -131,8 +129,6 @@ class Enlight_Components_Cron_Manager
 
     /**
      * Updates a cron job
-     *
-     * @param \Enlight_Components_Cron_Job $job
      *
      * @throws Enlight_Exception
      *

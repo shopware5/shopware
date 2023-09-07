@@ -124,8 +124,6 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
     /**
      * Sets the current template instance into the internal property.
      *
-     * @param Enlight_Template_Default $template
-     *
      * @return Enlight_View_Default
      */
     public function setTemplate(?Enlight_Template_Default $template = null)

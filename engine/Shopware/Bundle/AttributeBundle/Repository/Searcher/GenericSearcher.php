@@ -50,7 +50,6 @@ class GenericSearcher implements SearcherInterface
 
     /**
      * @param class-string<ModelEntity> $entity
-     * @param SearchBuilder             $searchBuilder
      */
     public function __construct($entity, ModelManager $entityManager, ?SearchBuilder $searchBuilder = null)
     {

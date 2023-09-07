@@ -73,8 +73,6 @@ class ModelManager extends EntityManager
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param EventManager $eventManager
-     *
      * @throws ORMException
      *
      * @return ModelManager

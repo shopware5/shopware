@@ -40,9 +40,6 @@ class JavascriptDefinition
      * @var Theme */
     private $theme;
 
-    /**
-     * @param Theme $theme
-     */
     public function __construct(array $files = [], ?Theme $theme = null)
     {
         $this->files = $files;

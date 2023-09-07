@@ -4352,6 +4352,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $name[] = $counter;
             }
         }
+
         // Return all command results, concat with a dot
         return implode('.', $name);
     }

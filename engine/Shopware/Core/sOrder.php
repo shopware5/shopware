@@ -239,8 +239,6 @@ class sOrder implements Enlight_Hook
     /**
      * Injects all dependencies which are required for this class.
      *
-     * @param ContextServiceInterface $contextService
-     *
      * @throws Exception
      */
     public function __construct(

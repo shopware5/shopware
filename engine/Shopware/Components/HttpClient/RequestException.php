@@ -33,10 +33,9 @@ class RequestException extends Exception
     private $body;
 
     /**
-     * @param string    $message
-     * @param int       $code
-     * @param Exception $previous
-     * @param string    $body
+     * @param string $message
+     * @param int    $code
+     * @param string $body
      */
     public function __construct($message = '', $code = 0, ?Exception $previous = null, $body = null)
     {

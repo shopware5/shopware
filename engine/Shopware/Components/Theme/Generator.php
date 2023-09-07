@@ -189,8 +189,6 @@ EOD;
      * Function which generates a new shopware theme
      * into the engine/Shopware/Themes directory.
      *
-     * @param Template $parent
-     *
      * @throws Exception
      */
     public function generateTheme(array $data, ?Template $parent = null)
@@ -272,8 +270,6 @@ EOD;
 
     /**
      * Generates the Theme.php file for the theme.
-     *
-     * @param Template $parent
      */
     private function generateThemePhp(array $data, ?Template $parent = null)
     {

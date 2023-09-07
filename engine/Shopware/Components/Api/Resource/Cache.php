@@ -59,8 +59,6 @@ class Cache extends Resource implements BatchInterface
 
     /**
      * Sets the Container.
-     *
-     * @param Container $container
      */
     public function setContainer(?Container $container = null)
     {
