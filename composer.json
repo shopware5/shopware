@@ -54,7 +54,7 @@
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",
         "friendsofphp/proxy-manager-lts": "1.0.16",
-        "google/cloud-storage": "1.33.0",
+        "google/cloud-storage": "1.33.1",
         "guzzlehttp/guzzle": "~7.7.0",
         "guzzlehttp/psr7": "2.5.0",
         "laminas/laminas-code": "4.7.1 || 4.12.0",
