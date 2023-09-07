@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b7e90429b6b083093bdf74d2efa6c87b",
+    "content-hash": "02c3d7601a15fcd9d75ee07e0d24d4a7",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7407,16 +7407,16 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "v4.1.0",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "80694e356d0ea4237e7643d90e60a772b0fe4214"
+                "reference": "7c814ca156716e7b46ad84ac038bf298ff91cbb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/80694e356d0ea4237e7643d90e60a772b0fe4214",
-                "reference": "80694e356d0ea4237e7643d90e60a772b0fe4214",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/7c814ca156716e7b46ad84ac038bf298ff91cbb4",
+                "reference": "7c814ca156716e7b46ad84ac038bf298ff91cbb4",
                 "shasum": ""
             },
             "require": {
@@ -7424,7 +7424,7 @@
             },
             "require-dev": {
                 "mediawiki/mediawiki-codesniffer": "41.0.0",
-                "mediawiki/mediawiki-phan-config": "0.12.0",
+                "mediawiki/mediawiki-phan-config": "0.12.1",
                 "mediawiki/minus-x": "1.1.1",
                 "php-parallel-lint/php-console-highlighter": "1.0.0",
                 "php-parallel-lint/php-parallel-lint": "1.3.2",
@@ -7476,9 +7476,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wikimedia/less.php/issues",
-                "source": "https://github.com/wikimedia/less.php/tree/v4.1.0"
+                "source": "https://github.com/wikimedia/less.php/tree/v4.1.1"
             },
-            "time": "2023-04-10T22:43:59+00:00"
+            "time": "2023-08-01T14:54:27+00:00"
         }
     ],
     "packages-dev": [
