@@ -13,7 +13,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `google/cloud-storage` to version 1.33.0
 * Updated `doctrine/orm` to version 2.15.3
 * Updated `mpdf/mpdf` to version 8.2.0
-* Updated `phpunit/phpunit` to version 9.6.10
+* Updated `phpunit/phpuit` to version 9.6.11
 * Updated `setasign/fpdf` to version 1.8.6
 * Updated `symfony/serializer` to version 5.4.25
 * Updated `voku/anti-xss` to version 4.1.42
