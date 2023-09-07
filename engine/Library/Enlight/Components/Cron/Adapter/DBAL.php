@@ -49,10 +49,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
      */
     private $overdueJobsList;
 
-    /**
-     * @param Connection $connection
-     */
-    public function __construct(Doctrine\DBAL\Connection $connection)
+    public function __construct(Connection $connection)
     {
         $this->connection = $connection;
     }

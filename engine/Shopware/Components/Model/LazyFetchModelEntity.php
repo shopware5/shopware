@@ -57,9 +57,8 @@ abstract class LazyFetchModelEntity extends ModelEntity
     /**
      * @template TModel of object
      *
-     * @param TModel|null            $object
-     * @param array                  $condition
-     * @param EntityManagerInterface $em
+     * @param TModel|null $object
+     * @param array       $condition
      *
      * @throws Exception
      *

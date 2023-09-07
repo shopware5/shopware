@@ -37,7 +37,6 @@ class MediaListItem extends ValueListItem
      * @param int|string  $id
      * @param string      $label
      * @param bool        $active
-     * @param Media       $media
      * @param Attribute[] $attributes
      */
     public function __construct($id, $label, $active, ?Media $media = null, $attributes = [])

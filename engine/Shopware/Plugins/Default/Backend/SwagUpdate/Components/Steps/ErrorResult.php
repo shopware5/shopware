@@ -43,9 +43,8 @@ class ErrorResult
     private $args;
 
     /**
-     * @param string    $message
-     * @param Exception $exception
-     * @param array     $args
+     * @param string $message
+     * @param array  $args
      */
     public function __construct($message, ?Exception $exception = null, $args = [])
     {

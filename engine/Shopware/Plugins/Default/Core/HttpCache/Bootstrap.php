@@ -299,8 +299,6 @@ class Shopware_Plugins_Core_HttpCache_Bootstrap extends Shopware_Components_Plug
      * Fallback to auto-detection if proxy-url is not configured and $request is given.
      * Returns null if $request is not given or auto-detection fails.
      *
-     * @param Request $request
-     *
      * @return string|null
      */
     public function getProxyUrl(?Request $request = null)

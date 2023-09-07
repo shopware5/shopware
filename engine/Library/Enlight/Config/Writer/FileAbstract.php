@@ -80,9 +80,8 @@ class Enlight_Config_Writer_FileAbstract extends Enlight_Config_Writer_Writer
     /**
      * Write configuration to file.
      *
-     * @param string         $filename
-     * @param Enlight_Config $config
-     * @param bool           $exclusiveLock
+     * @param string $filename
+     * @param bool   $exclusiveLock
      *
      * @return void
      */

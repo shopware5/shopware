@@ -867,9 +867,6 @@ class ListProduct extends BaseProduct
         return $this->priceGroup;
     }
 
-    /**
-     * @param PriceGroup $priceGroup
-     */
     public function setPriceGroup(?PriceGroup $priceGroup = null)
     {
         $this->priceGroup = $priceGroup;
@@ -1011,9 +1008,6 @@ class ListProduct extends BaseProduct
         return $this->esd;
     }
 
-    /**
-     * @param Esd $esd
-     */
     public function setEsd(?Esd $esd = null)
     {
         $this->esd = $esd;

@@ -151,7 +151,6 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
      * Registers a plugin in the collection.
      *
      * @param Enlight_Plugin_Bootstrap|Shopware_Components_Plugin_Bootstrap $plugin
-     * @param DateTimeInterface                                             $refreshDate
      *
      * @return Enlight_Plugin_PluginManager|Shopware_Components_Plugin_Namespace
      */

@@ -238,7 +238,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
      * @param string $action
      * @param string $controller
      * @param string $module
-     * @param array  $params
      */
     public function forward($action, $controller = null, $module = null, ?array $params = null)
     {
@@ -294,9 +293,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
         return $this;
     }
 
-    /**
-     * @param Container $loader
-     */
     public function setContainer(?Container $loader = null)
     {
         $this->container = $loader;
@@ -304,8 +300,6 @@ abstract class Enlight_Controller_Action extends Enlight_Class implements Enligh
 
     /**
      * Set front instance
-     *
-     * @param Enlight_Controller_Front $front
      *
      * @throws Exception
      *

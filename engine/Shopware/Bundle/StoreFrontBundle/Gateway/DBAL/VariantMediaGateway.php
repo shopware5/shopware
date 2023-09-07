@@ -37,9 +37,6 @@ class VariantMediaGateway implements VariantMediaGatewayInterface
 
     private FieldHelper $fieldHelper;
 
-    /**
-     * @var Hydrator\MediaHydrator
-     */
     private MediaHydrator $hydrator;
 
     public function __construct(

@@ -213,8 +213,6 @@ class Country extends Resource
     }
 
     /**
-     * @param CountryModel $country
-     *
      * @throws ParameterMissingException
      * @throws NotFoundException
      * @throws CustomValidationException

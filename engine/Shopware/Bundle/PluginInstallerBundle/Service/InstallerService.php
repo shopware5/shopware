@@ -261,8 +261,6 @@ class InstallerService
     }
 
     /**
-     * @param Shop $shop
-     *
      * @return array
      */
     public function getPluginConfig(Plugin $plugin, ?Shop $shop = null)
@@ -272,7 +270,6 @@ class InstallerService
 
     /**
      * @param array $elements
-     * @param Shop  $shop
      */
     public function savePluginConfig(Plugin $plugin, $elements, ?Shop $shop = null)
     {
@@ -286,7 +283,6 @@ class InstallerService
 
     /**
      * @param string $name
-     * @param Shop   $shop
      *
      * @throws Exception
      */

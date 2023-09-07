@@ -162,8 +162,6 @@ class Installer
      * Helper function which iterates the engine\Shopware\Themes directory
      * and registers all stored themes within the directory as \Shopware\Models\Shop\Template.
      *
-     * @param \Shopware\Models\Plugin\Plugin $plugin
-     *
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\ORMInvalidArgumentException
      *

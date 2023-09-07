@@ -401,6 +401,7 @@ class Shopware_Controllers_Backend_Partner extends Shopware_Controllers_Backend_
         } else {
             $toDate = new DateTime($toDate);
         }
+
         // To get the right value cause 2012-02-02 is smaller than 2012-02-02 15:33:12
         return $toDate->add(new DateInterval('P1D'));
     }
