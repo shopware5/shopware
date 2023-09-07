@@ -27,10 +27,7 @@ use Cocur\Slugify\SlugifyInterface;
 
 class CocurSlugifyAdapter implements SlugInterface
 {
-    /**
-     * @var SlugifyInterface
-     */
-    private $slugify;
+    private SlugifyInterface $slugify;
 
     public function __construct(SlugifyInterface $slugify)
     {
@@ -42,6 +39,8 @@ class CocurSlugifyAdapter implements SlugInterface
      */
     public function slugify($string, $separator = null)
     {
+        $string = (string) $string;
+
         return $this->slugify->slugify($string, $separator);
     }
 }
