@@ -49,6 +49,7 @@ class XmlReaderTest extends TestCase
 
         static::assertArrayHasKey('store', $data);
         $store = $data['store'];
+        static::assertIsArray($store);
 
         // Minimum required fields
         static::assertArrayHasKey('name', $store);
