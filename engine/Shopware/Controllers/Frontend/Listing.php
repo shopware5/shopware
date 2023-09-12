@@ -495,10 +495,6 @@ class Shopware_Controllers_Frontend_Listing extends Enlight_Controller_Action
      */
     private function getDevicesWithListing(array $emotions): array
     {
-        if ($this->Request()->getParam('sPage')) {
-            return [];
-        }
-
         $visibleDevices = [0, 1, 2, 3, 4];
         $permanentVisibleDevices = [];
 
