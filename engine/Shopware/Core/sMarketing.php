@@ -402,7 +402,7 @@ class sMarketing implements Enlight_Hook
             }
 
             if ($premiumFactor != 0) {
-                $activeFactor = $activeFactor / $premiumFactor;
+                $activeFactor /= $premiumFactor;
             } else {
                 $activeFactor = 0;
             }

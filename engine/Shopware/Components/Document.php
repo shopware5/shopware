@@ -798,7 +798,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 } else {
                     // The typID is indexed with base 0, so we need increase the typID
                     if (!\in_array($typID, ['1', '2', '3'])) {
-                        $typID = $typID + 1;
+                        ++$typID;
                     }
                     $numberrange = 'doc_' . $typID;
                 }

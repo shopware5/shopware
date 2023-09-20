@@ -52,15 +52,15 @@ class PriceCalculator implements PriceCalculatorInterface
          * by the percentage discount value of the current customer group.
          */
         if ($customerGroup->useDiscount() && $customerGroup->getPercentageDiscount()) {
-            $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
+            $price -= ($price / 100 * $customerGroup->getPercentageDiscount());
         }
 
-        /**
+        /*
          * Currency calculation:
          * If the customer is currently in a sub shop with another currency, like dollar,
-         * we have to calculate the the price for the other currency.
+         * we have to calculate the price for the other currency.
          */
-        $price = $price * $context->getCurrency()->getFactor();
+        $price *= $context->getCurrency()->getFactor();
 
         /*
          * check if the customer group should see gross prices.

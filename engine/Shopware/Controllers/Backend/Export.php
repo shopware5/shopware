@@ -81,7 +81,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
 
         $diffInterval = time();
         if ($productFeed->getCacheRefreshed()) {
-            $diffInterval = $diffInterval - $productFeed->getCacheRefreshed()->getTimestamp();
+            $diffInterval -= $productFeed->getCacheRefreshed()->getTimestamp();
         }
 
         if ($diffInterval >= $productFeed->getInterval() || !file_exists($filePath)) {

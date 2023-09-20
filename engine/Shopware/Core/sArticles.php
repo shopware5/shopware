@@ -321,7 +321,7 @@ class sArticles implements Enlight_Hook
             $sVoteStars = 0;
         }
 
-        $sVoteStars = $sVoteStars / 2;
+        $sVoteStars /= 2;
 
         if ($this->config['sVOTEUNLOCK']) {
             $active = 0;
@@ -509,10 +509,10 @@ class sArticles implements Enlight_Hook
 
         // Calculate global discount
         if ($this->sSYSTEM->sUSERGROUPDATA['mode'] && $this->sSYSTEM->sUSERGROUPDATA['discount']) {
-            $price = $price - ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
+            $price -= ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
         }
         if ($this->sSYSTEM->sCurrency['factor']) {
-            $price = $price * (float) $this->sSYSTEM->sCurrency['factor'];
+            $price *= (float) $this->sSYSTEM->sCurrency['factor'];
         }
 
         // Condition Output-Netto AND NOT overwrite by customer-group
@@ -570,7 +570,7 @@ class sArticles implements Enlight_Hook
         }
         // Calculating global discount
         if ($this->sSYSTEM->sUSERGROUPDATA['mode'] && $this->sSYSTEM->sUSERGROUPDATA['discount']) {
-            $price = $price - ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
+            $price -= ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
         }
 
         // Support tax rate defined by certain conditions

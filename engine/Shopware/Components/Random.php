@@ -95,7 +95,8 @@ abstract class Random
     public static function getFloat()
     {
         $bytes = static::getBytes(7);
-        $bytes[6] = $bytes[6] | \chr(0xF0);
+        $newBytes = $bytes[6] | \chr(0xF0);
+        $bytes[6] = $newBytes;
         $bytes .= \chr(63); // exponent bias (1023)
         $unpacked = unpack('d', $bytes);
         if (!\is_array($unpacked)) {

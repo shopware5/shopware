@@ -95,7 +95,7 @@ class CheapestPriceService implements CheapestPriceServiceInterface
         );
 
         // Do not use array_merge here. Since it will reindex the numbers of fallbackPrices.
-        $prices = $prices + $fallbackPrices;
+        $prices += $fallbackPrices;
 
         return $this->calculatePriceGroupDiscounts($products, $prices, $context);
     }

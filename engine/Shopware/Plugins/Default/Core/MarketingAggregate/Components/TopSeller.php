@@ -235,9 +235,9 @@ class Shopware_Components_TopSeller extends Enlight_Class
         $sumSelect = ' SUM(IF(s_order.id, IFNULL(details.quantity, 0), 0))  ';
         if ($usePseudoSales) {
             // If this value is set to true, the articles.pseudosales column has to be added to the sales value.
-            $sumSelect = $sumSelect . ' + articles.pseudosales ';
+            $sumSelect .= ' + articles.pseudosales ';
         }
-        $sumSelect = $sumSelect . ' as sales ';
+        $sumSelect .= ' as sales ';
 
         return $sumSelect;
     }

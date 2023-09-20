@@ -3133,8 +3133,8 @@ SQL;
 
         // Recalculate price per item, if purchase unit is set
         if ($queryAdditionalInfo['purchaseunit'] != 0) {
-            $grossPrice = $grossPrice / $queryAdditionalInfo['purchaseunit'];
-            $netPrice = $netPrice / $queryAdditionalInfo['purchaseunit'];
+            $grossPrice /= $queryAdditionalInfo['purchaseunit'];
+            $netPrice /= $queryAdditionalInfo['purchaseunit'];
         }
 
         if (empty($this->sSYSTEM->sCurrency['factor'])) {
