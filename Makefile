@@ -130,7 +130,7 @@ debug-config-test: .make.config.build.debug
 	touch $@
 
 .make.install.composer-dependencies:
-	composer update laminas/laminas-code
+	composer update laminas/laminas-code cocur/slugify
 	composer install
 	composer install -d recovery/common
 	composer bin all install
