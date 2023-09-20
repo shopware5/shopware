@@ -13,7 +13,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Updated `cocur/slugify` to version 4.4.0
 * Updated `doctrine/orm` to version 2.15.5
-* Updated `google/cloud-storage` to version 1.33.1
+* Updated `google/cloud-storage` to version 1.33.2
 * Updated `guzzlehttp/guzzle` to version 7.8.0
 * Updated `guzzlehttp/psr7` to version 2.6.1
 * Updated `mpdf/mpdf` to version 8.2.0
