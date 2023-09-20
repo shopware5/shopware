@@ -51,7 +51,7 @@ jobs:
             - run: devenv shell info-setup
             - run: sudo mount -t tmpfs tmpfs $(pwd)/.devenv/profile/lib/mysql -o size=4G
             - run: devenv up &
-            - run: devenv shell composer update laminas/laminas-code
+            - run: devenv shell composer update laminas/laminas-code cocur/slugify
             - run: devenv shell test-phpunit
 
     mysql:

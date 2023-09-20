@@ -99,7 +99,7 @@
         <exec executable="${script.php}" failonerror="true">
             <arg value="composer.phar"/>
             <arg value="update"/>
-            <arg value="laminas/laminas-code"/>
+            <arg value="laminas/laminas-code cocur/slugify"/>
         </exec>
 
         <exec executable="${script.php}" failonerror="true">
