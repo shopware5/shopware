@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c7b8ea4c6787988c61c4dc4cc33bb6f",
+    "content-hash": "259ef70c88c22f304e3bde07cbfa84b2",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7909,16 +7909,16 @@
         },
         {
             "name": "friends-of-behat/mink-extension",
-            "version": "v2.7.2",
+            "version": "v2.7.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfBehat/MinkExtension.git",
-                "reference": "ffc5ee88aa8e5b430f0c417adb3f0c943ffeafed"
+                "reference": "b1ccaef9136f62c8efaad88b966345dd68374fa9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfBehat/MinkExtension/zipball/ffc5ee88aa8e5b430f0c417adb3f0c943ffeafed",
-                "reference": "ffc5ee88aa8e5b430f0c417adb3f0c943ffeafed",
+                "url": "https://api.github.com/repos/FriendsOfBehat/MinkExtension/zipball/b1ccaef9136f62c8efaad88b966345dd68374fa9",
+                "reference": "b1ccaef9136f62c8efaad88b966345dd68374fa9",
                 "shasum": ""
             },
             "require": {
@@ -7968,9 +7968,9 @@
                 "web"
             ],
             "support": {
-                "source": "https://github.com/FriendsOfBehat/MinkExtension/tree/v2.7.2"
+                "source": "https://github.com/FriendsOfBehat/MinkExtension/tree/v2.7.3"
             },
-            "time": "2022-10-17T07:23:22+00:00"
+            "time": "2023-09-12T09:50:10+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
