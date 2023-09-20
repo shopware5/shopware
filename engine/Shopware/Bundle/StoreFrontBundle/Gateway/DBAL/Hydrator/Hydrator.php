@@ -122,7 +122,7 @@ class Hydrator
         $fallback = $this->extractTranslation($data, $fallback, $id);
         $translation = $this->extractTranslation($data, $key, $id);
 
-        $translation = $translation + $fallback;
+        $translation += $fallback;
 
         if (!empty($mapping)) {
             $translation = $this->convertArrayKeys($translation, $mapping);

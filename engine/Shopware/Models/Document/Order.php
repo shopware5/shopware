@@ -399,7 +399,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                         if ($shippingTax !== null) {
                             foreach ($shippingTax as $key => $val) {
                                 if (isset($this->_tax[$key])) {
-                                    $this->_tax[$key] = $this->_tax[$key] + $val;
+                                    $this->_tax[$key] += $val;
                                 } else {
                                     $this->_tax[$key] = $val;
                                 }

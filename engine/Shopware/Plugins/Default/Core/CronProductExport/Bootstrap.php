@@ -85,7 +85,7 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
             } elseif ($feedModel->getInterval() > 0) {
                 $diffInterval = time();
                 if ($feedModel->getCacheRefreshed()) {
-                    $diffInterval = $diffInterval - $feedModel->getCacheRefreshed()->getTimestamp();
+                    $diffInterval -= $feedModel->getCacheRefreshed()->getTimestamp();
                 }
 
                 if ($diffInterval < $feedModel->getInterval() && file_exists($filePath)) {
