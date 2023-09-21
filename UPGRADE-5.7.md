@@ -6,6 +6,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 [View all changes from v5.7.19...v5.7.20](https://github.com/shopware5/shopware/compare/v5.7.19...v5.7.20)
 
+### Additions
+
+* Added compatibility with PHP 8.3
+* Added new polyfill `symfony/polyfill-php83` to be able to use PHP 8.3 features
+
 ### Changes
 
 * Changed behaviour of the translation transfer while setting a product variant as the main variant
