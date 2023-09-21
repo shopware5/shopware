@@ -117,7 +117,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     /**
      * @deprecated - Will be removed in Shopware 5.8 without a replacement
-     * Contains the dynamic receipt repository
+     * Contains the order document repository
      *
      * @var OrderDocumentRepository
      */
@@ -1950,7 +1950,17 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
         $shopContext = $this->createShopContext($order);
         $data = $this->checkTaxRule($data, $shopContext);
-        if ($this->hasProductGraduatedPrices($data['articleNumber'], $order)) {
+        $orderPosition = null;
+        foreach ($order->getDetails() as $position) {
+            if ($position->getId() === (int) $data['id']) {
+                $orderPosition = $position;
+                break;
+            }
+        }
+        // Only get graduated price if a new position should be added or quantity has changed
+        if (($orderPosition === null || $orderPosition->getQuantity() !== (int) $data['quantity'])
+            && $this->hasProductGraduatedPrices($data['articleNumber'], $order)
+        ) {
             $data = $this->checkPrice($data, $order, $shopContext);
         }
 
@@ -2106,20 +2116,15 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         return $data;
     }
 
-    private function hasProductGraduatedPrices(string $productNumber, ORDER $order): bool
+    private function hasProductGraduatedPrices(string $productNumber, Order $order): bool
     {
         $customerGroupKey = $this->getCustomerGroupKey($order);
 
-        $sql = 'SELECT
-            prices.pricegroup, count(*)
-        FROM
-            s_articles_prices AS prices
-        INNER JOIN
-            s_articles_details ON prices.articledetailsID = s_articles_details.id
-        WHERE
-            s_articles_details.ordernumber = :productNumber
-        GROUP BY
-            prices.pricegroup;';
+        $sql = 'SELECT prices.pricegroup, count(*)
+                FROM s_articles_prices AS prices
+                INNER JOIN s_articles_details ON prices.articledetailsID = s_articles_details.id
+                WHERE s_articles_details.ordernumber = :productNumber
+                GROUP BY prices.pricegroup;';
 
         $result = $this->container->get(Connection::class)->executeQuery($sql, ['productNumber' => $productNumber])->fetchAllKeyValue();
 
