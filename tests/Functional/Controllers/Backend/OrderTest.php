@@ -67,11 +67,16 @@ class OrderTest extends ControllerTestCase
     private const GERMANY_COUNTRY_ID = 2;
     private const NRW_STATE_ID = 3;
     private const GERMANY_AREA_ID = 1;
-    private const PRODUCT_GRADUATED_PRICES_DEMODATA_ORDERNUMBER = 'SW10208';
+    private const PRODUCT_GRADUATED_PRICES_DEMODATA_ORDER_NUMBER = 'SW10208';
+    private const PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_ID = 209;
+    private const PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_VARIANT_ID = 747;
     private const PRODUCT_GRADUATED_PRICES_DEMODATA_NAME = 'Staffelpreise';
-    private const PRODUCT_GRADUATED_PRICES_VARIANT1_ORDERNUMBER = 'SW10090.1';
-    private const PRODUCT_GRADUATED_PRICES_VARIANT2_ORDERNUMBER = 'SW10090.2';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT1_ORDER_NUMBER = 'SW10090.1';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT1_PRODUCT_VARIANT_ID = 153;
+    private const PRODUCT_GRADUATED_PRICES_VARIANT2_ORDER_NUMBER = 'SW10090.2';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT2_PRODUCT_VARIANT_ID = 154;
     private const PRODUCT_GRADUATED_PRICES_VARIANT_NAME = 'Teigschaber';
+    private const PRODUCT_GRADUATED_PRICES_VARIANT_PRODUCT_ID = 89;
 
     private Connection $connection;
 
@@ -242,25 +247,18 @@ class OrderTest extends ControllerTestCase
      *
      * @throws Exception
      */
-    public function testSavePositionActionReturnValuesForGraduatedPrices(array $params, array $expectedValues): void
+    public function testSavePositionActionReturnValuesForGraduatedPricesByAddingNewPositions(array $params, array $expectedValues): void
     {
-        $order = $this->modelManager->find(Order::class, $params['orderId']);
-        static::assertInstanceOf(Order::class, $order);
-
         $productPricesSql = file_get_contents(__DIR__ . '/_fixtures/article/graduatedPrices.sql');
         static::assertIsString($productPricesSql);
         $this->connection->executeQuery($productPricesSql);
 
+        $order = $this->modelManager->find(Order::class, $params['orderId']);
+        static::assertInstanceOf(Order::class, $order);
         $request = new Enlight_Controller_Request_RequestTestCase();
-        $request->setParams([
+        $request->setParams(array_merge([
             'id' => 0,
-            'orderId' => $params['orderId'],
             'mode' => 0,
-            'articleId' => 9,
-            'articleDetailId' => null,
-            'articleNumber' => $params['productNumber'],
-            'articleName' => $params['productName'],
-            'quantity' => $params['quantity'],
             'statusId' => 0,
             'statusDescription' => '',
             'taxId' => 1,
@@ -268,7 +266,7 @@ class OrderTest extends ControllerTestCase
             'taxDescription' => '',
             'inStock' => 0,
             'changed' => $order->getChanged() ? $order->getChanged()->format(DateTimeInterface::ATOM) : '',
-        ]);
+        ], $params));
 
         $controller = $this->getController();
         $controller->setRequest($request);
@@ -281,15 +279,17 @@ class OrderTest extends ControllerTestCase
     }
 
     /**
-     * @return Generator<array{params: array{orderId: int, productName: string, productName: string, quantity: int}, expectedValues: array{price: float, total: int|float}}>
+     * @return Generator<array{params: array{orderId: int, articleNumber: string, articleName: string, articleId: int, articleDetailId: int, quantity: int}, expectedValues: array{price: float, total: int|float}}>
      */
     public function provideProductParamsForSavePositionActionTestingGraduatedPrices(): Generator
     {
         yield 'customer-group H with netto-shop-price-config has to return fallback prices for EK' => [
             'params' => [
                 'orderId' => self::ORDER_ID_DEMODATA_H,
-                'productNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDERNUMBER,
-                'productName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+                'articleNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDER_NUMBER,
+                'articleName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+                'articleId' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_ID,
+                'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_VARIANT_ID,
                 'quantity' => 30,
             ],
             'expectedValues' => [
@@ -300,8 +300,10 @@ class OrderTest extends ControllerTestCase
         yield 'customer-group EK' => [
             'params' => [
                 'orderId' => self::ORDER_ID_DEMODATA_EK,
-                'productNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDERNUMBER,
-                'productName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+                'articleNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDER_NUMBER,
+                'articleName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+                'articleId' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_ID,
+                'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_VARIANT_ID,
                 'quantity' => 30,
             ],
             'expectedValues' => [
@@ -312,8 +314,10 @@ class OrderTest extends ControllerTestCase
         yield 'product with variants - variant 1 - customer-group EK' => [
             'params' => [
                 'orderId' => self::ORDER_ID_DEMODATA_EK,
-                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_ORDERNUMBER,
-                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_ORDER_NUMBER,
+                'articleName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleId' => self::PRODUCT_GRADUATED_PRICES_VARIANT_PRODUCT_ID,
+                'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_PRODUCT_VARIANT_ID,
                 'quantity' => 5,
             ],
             'expectedValues' => [
@@ -324,8 +328,10 @@ class OrderTest extends ControllerTestCase
         yield 'product with variants - variant 2 - customer-group EK' => [
             'params' => [
                 'orderId' => self::ORDER_ID_DEMODATA_EK,
-                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_ORDERNUMBER,
-                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_ORDER_NUMBER,
+                'articleName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleId' => self::PRODUCT_GRADUATED_PRICES_VARIANT_PRODUCT_ID,
+                'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_PRODUCT_VARIANT_ID,
                 'quantity' => 21,
             ],
             'expectedValues' => [
@@ -336,8 +342,10 @@ class OrderTest extends ControllerTestCase
         yield 'product with variants - variant 1 - customer-group H - netto' => [
             'params' => [
                 'orderId' => self::ORDER_ID_DEMODATA_H,
-                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_ORDERNUMBER,
-                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_ORDER_NUMBER,
+                'articleName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleId' => self::PRODUCT_GRADUATED_PRICES_VARIANT_PRODUCT_ID,
+                'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_VARIANT1_PRODUCT_VARIANT_ID,
                 'quantity' => 10,
             ],
             'expectedValues' => [
@@ -348,8 +356,10 @@ class OrderTest extends ControllerTestCase
         yield 'product with variants - variant 2 - customer-group H - netto' => [
             'params' => [
                 'orderId' => self::ORDER_ID_DEMODATA_H,
-                'productNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_ORDERNUMBER,
-                'productName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleNumber' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_ORDER_NUMBER,
+                'articleName' => self::PRODUCT_GRADUATED_PRICES_VARIANT_NAME,
+                'articleId' => self::PRODUCT_GRADUATED_PRICES_VARIANT_PRODUCT_ID,
+                'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_VARIANT2_PRODUCT_VARIANT_ID,
                 'quantity' => 42,
             ],
             'expectedValues' => [
