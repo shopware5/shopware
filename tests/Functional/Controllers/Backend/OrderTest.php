@@ -370,6 +370,104 @@ class OrderTest extends ControllerTestCase
     }
 
     /**
+     * @dataProvider provideProductParamsForSavePositionActionOnExistingPosition
+     *
+     * @param array{quantity?: int, price?: float, total?: float} $params
+     * @param array{price: float, total: float}                   $expectedValues
+     */
+    public function testSavePositionActionReturnValuesForGraduatedPricesOnExistingPosition(array $params, array $expectedValues): void
+    {
+        $order = $this->modelManager->getRepository(Order::class)->findOneBy([]);
+        static::assertInstanceOf(Order::class, $order);
+        $newPositionParams = [
+            'id' => 0,
+            'orderId' => $order->getId(),
+            'articleNumber' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_ORDER_NUMBER,
+            'articleName' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_NAME,
+            'articleId' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_ID,
+            'articleDetailId' => self::PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_VARIANT_ID,
+            'mode' => 0,
+            'quantity' => 2,
+            'statusId' => 0,
+            'statusDescription' => '',
+            'taxId' => 1,
+            'taxRate' => 19.0,
+            'taxDescription' => '',
+            'inStock' => 0,
+            'changed' => $order->getChanged() ? $order->getChanged()->format(DateTimeInterface::ATOM) : '',
+        ];
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($newPositionParams);
+
+        $controller = $this->getController();
+        $controller->setRequest($request);
+        $controller->savePositionAction();
+        $results = $controller->View()->getAssign();
+
+        static::assertTrue($results['success'], $results['message'] ?? '');
+        static::assertSame(0.84, $results['data']['price']);
+        static::assertSame(1.68, $results['data']['total']);
+
+        $this->modelManager->refresh($order);
+        $changeQuantityParams = [
+            'id' => $results['data']['id'],
+            'price' => $results['data']['price'],
+            'total' => $results['data']['total'],
+            'changed' => $order->getChanged() ? $order->getChanged()->format(DateTimeInterface::ATOM) : '',
+        ];
+        $changeQuantityParams = array_merge($newPositionParams, $changeQuantityParams, $params);
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams($changeQuantityParams);
+
+        $controller->setRequest($request);
+        $controller->savePositionAction();
+        $results = $controller->View()->getAssign();
+
+        static::assertTrue($results['success'], $results['message'] ?? '');
+        static::assertSame($expectedValues['price'], $results['data']['price']);
+        static::assertSame($expectedValues['total'], $results['data']['total']);
+    }
+
+    /**
+     * @return Generator<array{params: array{quantity?: int, price?: float, total?: float}, expectedValues: array{price: float, total: float}}>
+     */
+    public function provideProductParamsForSavePositionActionOnExistingPosition(): Generator
+    {
+        yield 'Only change quantity, graduated price should be considered' => [
+            'params' => [
+                'quantity' => 20,
+            ],
+            'expectedValues' => [
+                'price' => 0.76,
+                'total' => 15.2,
+            ],
+        ];
+        yield 'Only change price, graduated price should be ignored' => [
+            'params' => [
+                'price' => 0.15,
+                'total' => 0.30,
+            ],
+            'expectedValues' => [
+                'price' => 0.15,
+                'total' => 0.30,
+            ],
+        ];
+        yield 'Change quantity and price, graduated price should be considered' => [
+            'params' => [
+                'quantity' => 30,
+                'price' => 0.15,
+                'total' => 0.30,
+            ],
+            'expectedValues' => [
+                'price' => 0.67,
+                'total' => 20.1,
+            ],
+        ];
+    }
+
+    /**
      * @dataProvider provideTaxRuleParams
      */
     public function testSavePositionActionWithTaxRule(int $customerGroupId, string $customerGroupKey): void
