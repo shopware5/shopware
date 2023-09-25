@@ -32,7 +32,7 @@ use ShopwarePlugins\SwagUpdate\Components\UpdateCheck;
 use Zend_Http_Client;
 use Zend_Http_Response;
 
-class SwagUpdateTest extends TestCase
+class UpdateCheckTest extends TestCase
 {
     public function testCheckUpdateReturnsNullIfShopwareVersionIsDevelopment(): void
     {
@@ -59,7 +59,7 @@ class SwagUpdateTest extends TestCase
         );
 
         $this->expectException(ApiLimitExceededException::class);
-        $updateChecker->checkUpdate('v5.7.13');
+        $updateChecker->checkUpdate('5.7.13');
     }
 
     public function testCheckUpdateReturnsNoVersionOnRouteNotFound(): void
@@ -75,7 +75,7 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        static::assertNull($updateChecker->checkUpdate('v5.7.13'));
+        static::assertNull($updateChecker->checkUpdate('5.7.13'));
     }
 
     public function testCheckUpdateReturnsNoVersionOnInvalidRequestBody(): void
@@ -91,7 +91,7 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        static::assertNull($updateChecker->checkUpdate('v5.7.13'));
+        static::assertNull($updateChecker->checkUpdate('5.7.13'));
     }
 
     public function testCheckUpdateReturnsVersionNullWithoutOldRelease(): void
@@ -107,12 +107,12 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        static::assertNull($updateChecker->checkUpdate('v5.7.13'));
+        static::assertNull($updateChecker->checkUpdate('5.7.13'));
     }
 
     public function testCheckUpdateReturnsVersionNullWithoutAssets(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getSingleVersionWithoutAssets('v5.8.12'));
+        $response = new Zend_Http_Response(200, [], $this->getSingleVersionWithoutAssets('v5.7.14'));
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
@@ -123,12 +123,12 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        static::assertNull($updateChecker->checkUpdate('v5.7.13'));
+        static::assertNull($updateChecker->checkUpdate('5.7.13'));
     }
 
     public function testCheckUpdateReturnsVersionWithNewRelease(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getSingleVersionJson('v5.8.12'));
+        $response = new Zend_Http_Response(200, [], $this->getSingleVersionJson('v5.7.14'));
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
@@ -139,14 +139,14 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        $version = $updateChecker->checkUpdate('v5.7.13');
+        $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.8.12', $version->version);
+        static::assertSame('v5.7.14', $version->version);
     }
 
     public function testCheckUpdateReturnsVersionWithNewPreRelease(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getSingleVersionJson('v5.8.12', true));
+        $response = new Zend_Http_Response(200, [], $this->getSingleVersionJson('v5.7.14', true));
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
@@ -157,14 +157,14 @@ class SwagUpdateTest extends TestCase
             true
         );
 
-        $version = $updateChecker->checkUpdate('v5.7.13');
+        $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.8.12', $version->version);
+        static::assertSame('v5.7.14', $version->version);
     }
 
     public function testCheckUpdateReturnsVersionOfDraftWithDraftRelease(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson('v5.8.13', true, 'v5.8.12', false));
+        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson('v5.7.15', true, 'v5.7.14', false));
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
@@ -175,14 +175,14 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        $version = $updateChecker->checkUpdate('v5.7.13');
+        $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.8.13', $version->version);
+        static::assertSame('v5.7.15', $version->version);
     }
 
     public function testCheckUpdateReturnsVersionOfWithoutDraftRelease(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson('v5.8.13', true, 'v5.8.12', false));
+        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson('v5.7.15', true, 'v5.7.14', false));
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
@@ -193,56 +193,56 @@ class SwagUpdateTest extends TestCase
             false
         );
 
-        $version = $updateChecker->checkUpdate('v5.7.13');
+        $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.8.12', $version->version);
+        static::assertSame('v5.7.14', $version->version);
     }
 
     private function getSingleVersionJson(string $version, bool $prerelease = false): string
     {
         return json_encode([
-                [
-                    'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
-                    'body' => '',
-                    'id' => 97288305,
-                    'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
-                    'tag_name' => $version,
-                    'name' => 'Release 5.7.17',
-                    'draft' => false,
-                    'prerelease' => $prerelease,
-                    'created_at' => '2023-03-21T12:58:25Z',
-                    'published_at' => '2023-03-29T09:06:24Z',
-                    'assets' => [
-                                [
-                                    'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
-                                    'id' => 102259279,
-                                    'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
-                                    'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
-                                    'label' => null,
-                                    'content_type' => 'application/zip',
-                                    'state' => 'uploaded',
-                                    'size' => 45264378,
-                                    'download_count' => 132,
-                                    'created_at' => '2023-04-04T12:14:50Z',
-                                    'updated_at' => '2023-05-30T07:14:09Z',
-                                    'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
-                                ],
-                                [
-                                    'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
-                                    'id' => 102259331,
-                                    'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
-                                    'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
-                                    'label' => null,
-                                    'content_type' => 'application/zip',
-                                    'state' => 'uploaded',
-                                    'size' => 46082425,
-                                    'download_count' => 12,
-                                    'created_at' => '2023-04-04T12:15:18Z',
-                                    'updated_at' => '2023-05-30T07:14:37Z',
-                                    'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
-                                ],
-                        ],
+            [
+                'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
+                'body' => '',
+                'id' => 97288305,
+                'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
+                'tag_name' => $version,
+                'name' => 'Release 5.7.17',
+                'draft' => false,
+                'prerelease' => $prerelease,
+                'created_at' => '2023-03-21T12:58:25Z',
+                'published_at' => '2023-03-29T09:06:24Z',
+                'assets' => [
+                    [
+                        'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
+                        'id' => 102259279,
+                        'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
+                        'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                        'label' => null,
+                        'content_type' => 'application/zip',
+                        'state' => 'uploaded',
+                        'size' => 45264378,
+                        'download_count' => 132,
+                        'created_at' => '2023-04-04T12:14:50Z',
+                        'updated_at' => '2023-05-30T07:14:09Z',
+                        'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                    ],
+                    [
+                        'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
+                        'id' => 102259331,
+                        'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
+                        'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                        'label' => null,
+                        'content_type' => 'application/zip',
+                        'state' => 'uploaded',
+                        'size' => 46082425,
+                        'download_count' => 12,
+                        'created_at' => '2023-04-04T12:15:18Z',
+                        'updated_at' => '2023-05-30T07:14:37Z',
+                        'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                    ],
                 ],
+            ],
         ], JSON_THROW_ON_ERROR);
     }
 
@@ -260,8 +260,7 @@ class SwagUpdateTest extends TestCase
                 'prerelease' => false,
                 'created_at' => '2023-03-21T12:58:25Z',
                 'published_at' => '2023-03-29T09:06:24Z',
-                'assets' => [
-                    ],
+                'assets' => [],
                 'tarball_url' => 'https://api.github.com/repos/shopware5/shopware/tarball/v5.7.17',
                 'zipball_url' => 'https://api.github.com/repos/shopware5/shopware/zipball/v5.7.17',
             ],
@@ -283,35 +282,35 @@ class SwagUpdateTest extends TestCase
                 'created_at' => '2023-03-21T12:58:25Z',
                 'published_at' => '2023-03-29T09:06:24Z',
                 'assets' => [
-                        [
-                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
-                            'id' => 102259279,
-                            'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
-                            'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
-                            'label' => null,
-                            'content_type' => 'application/zip',
-                            'state' => 'uploaded',
-                            'size' => 45264378,
-                            'download_count' => 132,
-                            'created_at' => '2023-04-04T12:14:50Z',
-                            'updated_at' => '2023-05-30T07:14:09Z',
-                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
-                        ],
-                        [
-                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
-                            'id' => 102259331,
-                            'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
-                            'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
-                            'label' => null,
-                            'content_type' => 'application/zip',
-                            'state' => 'uploaded',
-                            'size' => 46082425,
-                            'download_count' => 12,
-                            'created_at' => '2023-04-04T12:15:18Z',
-                            'updated_at' => '2023-05-30T07:14:37Z',
-                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
-                        ],
+                    [
+                        'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
+                        'id' => 102259279,
+                        'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
+                        'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                        'label' => null,
+                        'content_type' => 'application/zip',
+                        'state' => 'uploaded',
+                        'size' => 45264378,
+                        'download_count' => 132,
+                        'created_at' => '2023-04-04T12:14:50Z',
+                        'updated_at' => '2023-05-30T07:14:09Z',
+                        'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
                     ],
+                    [
+                        'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
+                        'id' => 102259331,
+                        'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
+                        'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                        'label' => null,
+                        'content_type' => 'application/zip',
+                        'state' => 'uploaded',
+                        'size' => 46082425,
+                        'download_count' => 12,
+                        'created_at' => '2023-04-04T12:15:18Z',
+                        'updated_at' => '2023-05-30T07:14:37Z',
+                        'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                    ],
+                ],
             ],
             [
                 'html_url' => 'https://github.com/shopware5/shopware/releases/tag/v5.7.17',
@@ -325,35 +324,35 @@ class SwagUpdateTest extends TestCase
                 'created_at' => '2023-03-21T12:58:25Z',
                 'published_at' => '2023-03-29T09:06:24Z',
                 'assets' => [
-                        [
-                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
-                            'id' => 102259279,
-                            'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
-                            'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
-                            'label' => null,
-                            'content_type' => 'application/zip',
-                            'state' => 'uploaded',
-                            'size' => 45264378,
-                            'download_count' => 132,
-                            'created_at' => '2023-04-04T12:14:50Z',
-                            'updated_at' => '2023-05-30T07:14:09Z',
-                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
-                        ],
-                        [
-                            'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
-                            'id' => 102259331,
-                            'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
-                            'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
-                            'label' => null,
-                            'content_type' => 'application/zip',
-                            'state' => 'uploaded',
-                            'size' => 46082425,
-                            'download_count' => 12,
-                            'created_at' => '2023-04-04T12:15:18Z',
-                            'updated_at' => '2023-05-30T07:14:37Z',
-                            'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
-                        ],
+                    [
+                        'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259279',
+                        'id' => 102259279,
+                        'node_id' => 'RA_kwDOAFa3Gs4GGFpP',
+                        'name' => 'install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
+                        'label' => null,
+                        'content_type' => 'application/zip',
+                        'state' => 'uploaded',
+                        'size' => 45264378,
+                        'download_count' => 132,
+                        'created_at' => '2023-04-04T12:14:50Z',
+                        'updated_at' => '2023-05-30T07:14:09Z',
+                        'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/install_31b8b37fe396c41da6dfe6c5354e968ca82d890c.zip',
                     ],
+                    [
+                        'url' => 'https://api.github.com/repos/shopware5/shopware/releases/assets/102259331',
+                        'id' => 102259331,
+                        'node_id' => 'RA_kwDOAFa3Gs4GGFqD',
+                        'name' => 'update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                        'label' => null,
+                        'content_type' => 'application/zip',
+                        'state' => 'uploaded',
+                        'size' => 46082425,
+                        'download_count' => 12,
+                        'created_at' => '2023-04-04T12:15:18Z',
+                        'updated_at' => '2023-05-30T07:14:37Z',
+                        'browser_download_url' => 'https://github.com/shopware5/shopware/releases/download/v5.7.17/update_e0a7813fcbae9ecf1dd566899b02e820a0c0b3e5.zip',
+                    ],
+                ],
             ],
         ], JSON_THROW_ON_ERROR);
     }
