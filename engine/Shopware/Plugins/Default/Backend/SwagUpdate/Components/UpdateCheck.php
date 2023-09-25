@@ -40,12 +40,9 @@ class UpdateCheck
 
     private bool $preRelease;
 
-    private bool $draft;
-
-    public function __construct(Zend_Http_Client $client, bool $draft, bool $preRelease)
+    public function __construct(Zend_Http_Client $client, bool $preRelease)
     {
         $this->client = $client;
-        $this->draft = $draft;
         $this->preRelease = $preRelease;
     }
 
@@ -134,10 +131,6 @@ class UpdateCheck
     {
         foreach ($releaseInformation as $release) {
             if (version_compare($shopwareVersion, ltrim($release['tag_name'], 'v'), '>=')) {
-                continue;
-            }
-
-            if ((bool) $release['draft'] !== $this->draft) {
                 continue;
             }
 

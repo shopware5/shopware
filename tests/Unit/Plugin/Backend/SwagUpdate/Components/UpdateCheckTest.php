@@ -38,7 +38,6 @@ class UpdateCheckTest extends TestCase
     {
         $updateChecker = new UpdateCheck(
             $this->createMock(Zend_Http_Client::class),
-            false,
             false
         );
 
@@ -54,7 +53,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -71,7 +69,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -87,7 +84,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -103,7 +99,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -119,7 +114,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -135,7 +129,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -153,7 +146,6 @@ class UpdateCheckTest extends TestCase
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             true
         );
 
@@ -162,9 +154,9 @@ class UpdateCheckTest extends TestCase
         static::assertSame('v5.7.14', $version->version);
     }
 
-    public function testCheckUpdateReturnsVersionOfDraftWithDraftRelease(): void
+    public function testCheckUpdateReturnsVersionOfPreReleaseWithPreRelease(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson('v5.7.15', true, 'v5.7.14', false));
+        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson());
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
@@ -172,7 +164,6 @@ class UpdateCheckTest extends TestCase
         $updateChecker = new UpdateCheck(
             $clientMock,
             true,
-            false
         );
 
         $version = $updateChecker->checkUpdate('5.7.13');
@@ -180,16 +171,15 @@ class UpdateCheckTest extends TestCase
         static::assertSame('v5.7.15', $version->version);
     }
 
-    public function testCheckUpdateReturnsVersionOfWithoutDraftRelease(): void
+    public function testCheckUpdateReturnsVersionOfNormalReleaseWithoutPreRelease(): void
     {
-        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson('v5.7.15', true, 'v5.7.14', false));
+        $response = new Zend_Http_Response(200, [], $this->getMultiVersionJson());
 
         $clientMock = $this->getMockBuilder(Zend_Http_Client::class)->disableOriginalConstructor()->getMock();
         $clientMock->method('request')->willReturn($response);
 
         $updateChecker = new UpdateCheck(
             $clientMock,
-            false,
             false
         );
 
@@ -267,7 +257,7 @@ class UpdateCheckTest extends TestCase
         ], JSON_THROW_ON_ERROR);
     }
 
-    private function getMultiVersionJson(string $versionOne, bool $draftOne, string $versionTwo, bool $draftTwo): string
+    private function getMultiVersionJson(): string
     {
         return json_encode([
             [
@@ -275,10 +265,10 @@ class UpdateCheckTest extends TestCase
                 'body' => '',
                 'id' => 97288305,
                 'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
-                'tag_name' => $versionOne,
+                'tag_name' => 'v5.7.15',
                 'name' => 'Release 5.7.17',
-                'draft' => $draftOne,
-                'prerelease' => false,
+                'draft' => true,
+                'prerelease' => true,
                 'created_at' => '2023-03-21T12:58:25Z',
                 'published_at' => '2023-03-29T09:06:24Z',
                 'assets' => [
@@ -317,9 +307,9 @@ class UpdateCheckTest extends TestCase
                 'body' => '',
                 'id' => 97288305,
                 'node_id' => 'RE_kwDOAFa3Gs4FzIBx',
-                'tag_name' => $versionTwo,
+                'tag_name' => 'v5.7.14',
                 'name' => 'Release 5.7.17',
-                'draft' => $draftTwo,
+                'draft' => false,
                 'prerelease' => false,
                 'created_at' => '2023-03-21T12:58:25Z',
                 'published_at' => '2023-03-29T09:06:24Z',

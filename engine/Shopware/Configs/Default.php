@@ -247,7 +247,6 @@ return array_replace_recursive([
     ],
     'update' => [
         'url' => 'https://raw.githubusercontent.com/shopware5/shopware-release-cache/main/releases.json',
-        'draft' => false,
         'prerelease' => false,
     ],
     'httpcache' => [
