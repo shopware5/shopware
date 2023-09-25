@@ -169,12 +169,8 @@ class Download
         $error = curl_error($ch);
         curl_close($ch);
 
-        if ($isError && !$isHalted) {
-            throw new Exception('Wrong http code');
-        }
-
-        if ($result === false && !$isHalted) {
-            throw new Exception($error);
+        if (($result === false || $isError) && !$isHalted) {
+            throw new Exception($error ?: 'Unknown error');
         }
 
         clearstatcache(false, $partFile->getPathname());

@@ -180,7 +180,7 @@ Ext.define('Shopware.apps.SwagUpdate.view.Window', {
         var me = this;
 
         var text = Ext.String.format(
-            '<div class="swag-update-changelog"><a href="[0]">{s name="release_information"}You can access the release information of [1] here.{/s}</a></div>',
+            '<div class="swag-update-changelog"><br><a href="[0]">{s name="release_information"}{/s}</a></div>',
             me.changelog.get('changelog'),
             me.changelog.get('version')
         );
