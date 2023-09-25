@@ -133,7 +133,7 @@ class UpdateCheck
     private function getRelease(string $shopwareVersion, array $releaseInformation): array
     {
         foreach ($releaseInformation as $release) {
-            if (version_compare($shopwareVersion, $release['tag_name'], '>=')) {
+            if (version_compare($shopwareVersion, ltrim($release['tag_name'], 'v'), '>=')) {
                 continue;
             }
 

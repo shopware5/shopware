@@ -2,9 +2,9 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
-## 5.7.19
+## 5.7.20
 
-[View all changes from v5.7.18...v5.7.19](https://github.com/shopware5/shopware/compare/v5.7.18...v5.7.19)
+[View all changes from v5.7.19...v5.7.20](https://github.com/shopware5/shopware/compare/v5.7.19...v5.7.20)
 
 ### Changes
 
@@ -30,6 +30,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated several indirect dependencies
 * Updated npm dependencies in `themes/package.json`
 * Updated npm dependencies in `themes/Frontend/Responsive/package.json`
+
+
+## 5.7.19
+
+[View all changes from v5.7.18...v5.7.19](https://github.com/shopware5/shopware/compare/v5.7.18...v5.7.19)
 
 ## 5.7.18
 

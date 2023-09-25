@@ -2,7 +2,7 @@
 **.yaml export-ignore
 **.md export-ignore
 **.gitkeep export-ignore
-config.php export-ignore
+/config.php export-ignore
 .gitlab-ci.yml export-ignore
 .github/ export-ignore
 .gitignore export-ignore
@@ -22,3 +22,4 @@ snippets/backend/plugins/ export-ignore
 Makefile export-ignore
 .make* export-ignore
 vendor-bin/ export-ignore
+.danger.php export-ignore
