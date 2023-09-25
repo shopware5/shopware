@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\DBAL\Connection;
@@ -41,12 +40,13 @@ use Shopware\Components\CSRFGetProtectionAware;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Country\Country;
 use Shopware\Models\Customer\Address;
+use Shopware\Models\Customer\Customer;
 use Shopware\Models\Shop\Currency;
 use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
 /**
- * @phpstan-type CheckoutBasketArray array{content?: array<string, mixed>, Amount?: string, AmountNet?: string, Quantity?: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax?: string, AmountWithTaxNumeric?: float, sCurrencyId: int, sCurrencyName: string, sCurrencyFactor: float, sShippingcosts: float, sShippingcostsTax: float|null, sShippingcostsTaxProportional?: array<\Shopware\Components\Cart\Struct\Price>, sShippingcostsNet: float, sShippingcostsWithTax: float, sShippingcostsDifference: float|null, sTaxRates: array<string, float>, sAmount: float, sAmountTax: float, sAmountWithTax?: float}
+ * @phpstan-type CheckoutBasketArray array{content?: array<string, mixed>, Amount?: string, AmountNet?: string, Quantity?: int, AmountNumeric: float, AmountNetNumeric: float, AmountWithTax?: string, AmountWithTaxNumeric?: float, sCurrencyId: int, sCurrencyName: string, sCurrencyFactor: float, sShippingcosts: float, sShippingcostsTax: float|null, sShippingcostsTaxProportional?: array<\Shopware\Components\Cart\Struct\Price>, sShippingcostsNet: float, sShippingcostsWithTax: float, sShippingcostsDifference?: float|null, sTaxRates: array<string, float>, sAmount: float, sAmountTax: float, sAmountWithTax?: float}
  *
  * @phpstan-import-type ShippingCostArray from \sAdmin
  */
@@ -170,6 +170,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     public function cartAction()
     {
+        $accountMode = (int) ($this->View()->getAssign('sUserData')['additional']['user']['accountmode'] ?? Customer::ACCOUNT_MODE_CUSTOMER);
         $country = $this->getSelectedCountry();
         $this->View()->assign('sCountry', $country);
         $this->View()->assign('sPayment', $this->getSelectedPayment());
@@ -177,7 +178,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sCountryList', $this->getCountryList());
         $this->View()->assign('sPayments', $this->getPayments());
         $this->View()->assign('sDispatches', $this->getDispatches());
-        $this->View()->assign('sDispatchNoOrder', (int) $this->View()->getAssign('sUserData')['additional']['user']['accountmode'] === 0 && $this->getDispatchNoOrder());
+        $this->View()->assign('sDispatchNoOrder', $accountMode === Customer::ACCOUNT_MODE_CUSTOMER && $this->getDispatchNoOrder());
         $this->View()->assign('sState', $this->getSelectedState());
 
         $this->View()->assign('sUserData', $this->getUserData());
@@ -185,9 +186,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $this->View()->assign('sInvalidCartItems', $this->getInvalidProducts($this->View()->getAssign('sBasket')));
 
         $this->View()->assign(CheckoutKey::SHIPPING_COSTS, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS]);
-        $this->View()->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS_DIFFERENCE]);
+        $this->View()->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS_DIFFERENCE] ?? null);
         $this->View()->assign(CheckoutKey::AMOUNT, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT]);
-        $this->View()->assign(CheckoutKey::AMOUNT_WITH_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_WITH_TAX]);
+        $this->View()->assign(CheckoutKey::AMOUNT_WITH_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_WITH_TAX] ?? 0.0);
         $this->View()->assign(CheckoutKey::AMOUNT_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_TAX]);
         $this->View()->assign('sAmountNet', $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NET_NUMERIC]);
 
@@ -259,9 +260,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign('sLaststock', $this->basket->sCheckBasketQuantities());
         $this->View()->assign(CheckoutKey::SHIPPING_COSTS, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS]);
-        $this->View()->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS_DIFFERENCE]);
+        $this->View()->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS_DIFFERENCE] ?? null);
         $this->View()->assign(CheckoutKey::AMOUNT, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT]);
-        $this->View()->assign(CheckoutKey::AMOUNT_WITH_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_WITH_TAX]);
+        $this->View()->assign(CheckoutKey::AMOUNT_WITH_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_WITH_TAX] ?? 0.0);
         $this->View()->assign(CheckoutKey::AMOUNT_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_TAX]);
         $this->View()->assign('sAmountNet', $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NET_NUMERIC]);
 
@@ -860,9 +861,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $this->View()->assign('sLaststock', $this->basket->sCheckBasketQuantities());
         $this->View()->assign(CheckoutKey::SHIPPING_COSTS, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS]);
-        $this->View()->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS_DIFFERENCE]);
+        $this->View()->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $this->View()->getAssign('sBasket')[CheckoutKey::SHIPPING_COSTS_DIFFERENCE] ?? null);
         $this->View()->assign(CheckoutKey::AMOUNT, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT]);
-        $this->View()->assign(CheckoutKey::AMOUNT_WITH_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_WITH_TAX]);
+        $this->View()->assign(CheckoutKey::AMOUNT_WITH_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_WITH_TAX] ?? 0.0);
         $this->View()->assign(CheckoutKey::AMOUNT_TAX, $this->View()->getAssign('sBasket')[CheckoutKey::AMOUNT_TAX]);
         $this->View()->assign('sAmountNet', $this->View()->getAssign('sBasket')[CartKey::AMOUNT_NET_NUMERIC]);
         $this->View()->assign('sRegisterFinished', !empty($this->session['sRegisterFinished']));
@@ -1782,11 +1783,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $view->assign(CheckoutKey::SHIPPING_COSTS, $basket[CheckoutKey::SHIPPING_COSTS]);
         $view->assign(CheckoutKey::SHIPPING_COSTS_DIFFERENCE, $basket[CheckoutKey::SHIPPING_COSTS_DIFFERENCE] ?? null);
         $view->assign(CheckoutKey::AMOUNT, $basket[CheckoutKey::AMOUNT]);
-        $view->assign(CheckoutKey::AMOUNT_WITH_TAX, $basket[CheckoutKey::AMOUNT_WITH_TAX] ?? null);
+        $view->assign(CheckoutKey::AMOUNT_WITH_TAX, $basket[CheckoutKey::AMOUNT_WITH_TAX] ?? 0.0);
         $view->assign(CheckoutKey::AMOUNT_TAX, $basket[CheckoutKey::AMOUNT_TAX]);
         $view->assign('sAmountNet', $basket[CartKey::AMOUNT_NET_NUMERIC]);
         $view->assign('sDispatches', $this->getDispatches());
-        $accountMode = (int) $this->View()->getAssign('sUserData')['additional']['user']['accountmode'];
+        $accountMode = (int) ($this->View()->getAssign('sUserData')['additional']['user']['accountmode'] ?? null);
         $view->assign('sDispatchNoOrder', $accountMode === 0 && $this->getDispatchNoOrder());
         $view->assign('showShippingCalculation', (bool) $this->Request()->getParam('openShippingCalculations'));
         $view->assign('sMinimumSurcharge', $this->getMinimumCharge());
@@ -2005,8 +2006,11 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 continue;
             }
 
+            if (empty($attrName)) {
+                continue;
+            }
             $serviceAttr = $cartItem['additional_details'][$attrName];
-            if (empty($attrName) || ($serviceAttr && $serviceAttr != 'false')) {
+            if ($serviceAttr && $serviceAttr !== 'false') {
                 continue;
             }
 
@@ -2157,7 +2161,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
      */
     private function areAddressesEqual(array $addressA, array $addressB): bool
     {
-        foreach (['id', 'customernumber', 'phone', 'ustid'] as $key) {
+        // 'country' and 'state' are arrays, but not relevant as the IDs are also present which will then be compared
+        foreach (['id', 'userID', 'orderID', 'customernumber', 'phone', 'ustid', 'country', 'state', 'attribute'] as $key) {
             unset($addressA[$key], $addressB[$key]);
         }
 

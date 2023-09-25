@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\ORM\AbstractQuery;
@@ -92,7 +91,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         $offset = (int) $this->Request()->getParam('start');
         $limit = (int) $this->Request()->getParam('limit');
         $filter = $this->Request()->getParam('filter');
-        $filter = $filter[0]['value'];
+        $filter = $filter[0]['value'] ?? null;
         $sqlBindings = [];
         $searchSQL = '';
 
@@ -106,8 +105,8 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
         }
         // Sorting data
         $sortData = $this->Request()->getParam('sort');
-        $sortField = $sortData[0]['property'];
-        $dir = $sortData[0]['direction'];
+        $sortField = $sortData[0]['property'] ?? null;
+        $dir = $sortData[0]['direction'] ?? null;
         $sort = '';
         if ((!empty($sortField) && $dir === 'ASC') || $dir === 'DESC') {
             // To prevent sql-injections
@@ -154,7 +153,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
 
         $orderBy = $this->Request()->getParam('sort');
         $filter = $this->Request()->getParam('filter');
-        $filter = $filter[0]['value'];
+        $filter = $filter[0]['value'] ?? null;
         $offset = $this->Request()->getParam('start');
         $limit = $this->Request()->getParam('limit');
 
@@ -321,7 +320,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     public function saveVoucherAction()
     {
         $params = $this->Request()->getParams();
-        $voucherId = empty($params['voucherID']) ? $params['id'] : $params['voucherID'];
+        $voucherId = empty($params['voucherID']) ? $params['id'] ?? null : $params['voucherID'];
         if (!empty($voucherId)) {
             if (!$this->_isAllowed('update', 'voucher')) {
                 return;

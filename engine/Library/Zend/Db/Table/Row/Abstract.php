@@ -256,6 +256,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
      * @param string $offset
      * @return boolean
      */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return $this->__isset($offset);
@@ -268,6 +269,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
      * @param string $offset
      * @return string
      */
+    #[\ReturnTypeWillChange]
      public function offsetGet($offset)
      {
          return $this->__get($offset);
@@ -280,6 +282,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
       * @param string $offset
       * @param mixed $value
       */
+    #[\ReturnTypeWillChange]
      public function offsetSet($offset, $value)
      {
          $this->__set($offset, $value);
@@ -291,6 +294,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
       *
       * @param string $offset
       */
+    #[\ReturnTypeWillChange]
      public function offsetUnset($offset)
      {
          return $this->__unset($offset);
@@ -629,6 +633,7 @@ abstract class Zend_Db_Table_Row_Abstract implements ArrayAccess, IteratorAggreg
         return $result;
     }
 
+    #[\ReturnTypeWillChange]
     public function getIterator()
     {
         return new ArrayIterator((array) $this->_data);

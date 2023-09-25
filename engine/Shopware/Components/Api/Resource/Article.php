@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Components\Api\Resource;
@@ -496,7 +495,7 @@ class Article extends Resource implements BatchInterface
             $article->setMainDetail($detail);
         }
 
-        if (!$data['mainDetail']) {
+        if (empty($data['mainDetail'])) {
             $data['mainDetail'] = [];
         }
 
@@ -838,7 +837,7 @@ class Article extends Resource implements BatchInterface
 
         $product = $this->getSingleResult($builder);
 
-        return $product['similar'];
+        return $product['similar'] ?? null;
     }
 
     /**
@@ -859,7 +858,7 @@ class Article extends Resource implements BatchInterface
 
         $product = $this->getSingleResult($builder);
 
-        return $product['related'];
+        return $product['related'] ?? null;
     }
 
     /**
@@ -1056,7 +1055,7 @@ class Article extends Resource implements BatchInterface
                 }
             }
 
-            if ($variantData['isMain'] || $variantData['standard']) {
+            if (!empty($variantData['isMain']) || !empty($variantData['standard'])) {
                 $newMain = $variant;
                 $newMain->setKind(1);
                 $oldMainId = $article->getMainDetail()->getId();
@@ -1510,7 +1509,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $relatedProduct = null;
-            if ($relatedData['number']) {
+            if (!empty($relatedData['number'])) {
                 $productId = $this->getManager()->getConnection()->fetchOne(
                     'SELECT articleID FROM s_articles_details WHERE ordernumber = :number',
                     [':number' => $relatedData['number']]
@@ -1539,7 +1538,7 @@ class Article extends Resource implements BatchInterface
                 throw new CustomValidationException(sprintf('Related product by number/id "%s" not found', $property));
             }
 
-            if ($relatedData['cross']) {
+            if (!empty($relatedData['cross'])) {
                 $relatedProduct->getRelated()->add($article);
             }
         }
@@ -1570,7 +1569,7 @@ class Article extends Resource implements BatchInterface
             }
 
             $similarProduct = null;
-            if ($similarData['number']) {
+            if (!empty($similarData['number'])) {
                 $productId = $this->getManager()->getConnection()->fetchOne(
                     'SELECT articleID FROM s_articles_details WHERE ordernumber = :number',
                     [':number' => $similarData['number']]
@@ -1599,7 +1598,7 @@ class Article extends Resource implements BatchInterface
                 throw new CustomValidationException(sprintf('Similar product by number/id "%s" not found', $property));
             }
 
-            if ($similarData['cross']) {
+            if (!empty($similarData['cross'])) {
                 $similarProduct->getSimilar()->add($article);
             }
         }

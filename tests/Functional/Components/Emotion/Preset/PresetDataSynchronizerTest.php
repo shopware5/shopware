@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Functional\Components\Emotion\Preset;
@@ -32,46 +31,36 @@ use Shopware\Components\Api\Resource\EmotionPreset;
 use Shopware\Components\Emotion\Preset\Exception\PresetAssetImportException;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizer;
 use Shopware\Components\Emotion\Preset\PresetDataSynchronizerInterface;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 /**
  * @group EmotionPreset
  */
 class PresetDataSynchronizerTest extends TestCase
 {
-    /**
-     * @var PresetDataSynchronizer
-     */
-    private $synchronizerService;
+    use ContainerTrait;
+    use DatabaseTransactionBehaviour;
 
-    /**
-     * @var EmotionPreset
-     */
-    private $presetResource;
+    private PresetDataSynchronizer $synchronizerService;
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private EmotionPreset $presetResource;
+
+    private Connection $connection;
 
     private string $imageData;
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(Connection::class);
-        $this->connection->beginTransaction();
+        $this->connection = $this->getContainer()->get(Connection::class);
 
         $this->connection->executeQuery('DELETE FROM s_emotion_presets');
         $this->connection->executeQuery('DELETE FROM s_core_plugins');
 
-        $this->synchronizerService = Shopware()->Container()->get(PresetDataSynchronizerInterface::class);
-        $this->presetResource = Shopware()->Container()->get(EmotionPreset::class);
+        $this->synchronizerService = $this->getContainer()->get(PresetDataSynchronizerInterface::class);
+        $this->presetResource = $this->getContainer()->get(EmotionPreset::class);
 
         $this->imageData = 'data:image/gif;base64,R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=';
-    }
-
-    protected function tearDown(): void
-    {
-        $this->connection->rollBack();
     }
 
     public function testAssetImportWithPresetAlreadyImported(): void

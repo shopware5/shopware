@@ -18,7 +18,7 @@
             {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish" assign="snippetFinishButtonBackToShop"}{/s}
             <a href="{url controller='index'}"
                class="btn is--small btn--back-top-shop is--icon-left"
-               title="{$snippetFinishButtonBackToShop|escape}">
+               title="{$snippetFinishButtonBackToShop|escapeHtml}">
                 <i class="icon--arrow-left"></i>
                 {s name="FinishButtonBackToShop" namespace="frontend/checkout/finish"}{/s}
             </a>

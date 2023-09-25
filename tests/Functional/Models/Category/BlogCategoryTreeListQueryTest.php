@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Functional\Models\Category;
@@ -45,8 +44,6 @@ class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
                 'position' => 0,
                 'blog' => false,
                 'childrenCount' => '1',
-                'emotions' => null,
-                'articles' => null,
             ],
             1 => [
                 'id' => 39,
@@ -54,8 +51,6 @@ class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
                 'position' => 1,
                 'blog' => false,
                 'childrenCount' => '1',
-                'emotions' => null,
-                'articles' => null,
             ],
         ],
         3 => [
@@ -65,8 +60,6 @@ class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
                 'position' => 5,
                 'blog' => true,
                 'childrenCount' => '0',
-                'emotions' => null,
-                'articles' => null,
             ],
         ],
         39 => [
@@ -76,8 +69,6 @@ class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
                 'position' => 0,
                 'blog' => true,
                 'childrenCount' => '0',
-                'emotions' => null,
-                'articles' => null,
             ],
         ],
     ];
@@ -88,7 +79,7 @@ class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
             $filter = [['property' => 'c.parentId', 'value' => $id]];
             $query = $this->getRepo()->getBlogCategoryTreeListQuery($filter);
             $data = $this->removeDates($query->getArrayResult());
-            static::assertEquals($data, $expected);
+            static::assertEquals($expected, $data);
         }
     }
 
@@ -110,13 +101,17 @@ class BlogCategoryTreeListQueryTest extends Enlight_Components_Test_TestCase
     {
         foreach ($data as &$subCategory) {
             unset($subCategory['changed'], $subCategory['cmsText'], $subCategory['added']);
-            foreach ($subCategory['emotions'] as &$emotion) {
-                unset($emotion['createDate'], $emotion['modified']);
+            if (isset($subCategory['emotions'])) {
+                foreach ($subCategory['emotions'] as &$emotion) {
+                    unset($emotion['createDate'], $emotion['modified']);
+                }
             }
             unset($emotion);
 
-            foreach ($subCategory['articles'] as &$article) {
-                unset($article['added'], $article['changed'], $article['mainDetail']['releaseDate']);
+            if (isset($subCategory['articles'])) {
+                foreach ($subCategory['articles'] as &$article) {
+                    unset($article['added'], $article['changed'], $article['mainDetail']['releaseDate']);
+                }
             }
         }
 

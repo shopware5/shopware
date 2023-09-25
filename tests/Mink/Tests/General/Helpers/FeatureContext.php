@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Mink\Tests\General\Helpers;
@@ -172,9 +171,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
      */
     public function saveScreenshot(?string $filename = null, ?string $filepath = null): void
     {
-        // Under Cygwin, uniqid with more_entropy must be set to true.
-        // No effect in other environments.
-        $generatedFilename = sprintf('%s_%s_%s.%s', $this->getMinkParameter('browser_name'), (new DateTime())->format('Y-m-d--H-i-s'), uniqid('', true), 'png');
+        $generatedFilename = sprintf('%s_%s.%s', $this->getMinkParameter('browser_name'), $this->getDateTimeWithRandomString(), 'png');
         $filename = $filename ?: $generatedFilename;
         $filepath = $filepath ?: (ini_get('upload_tmp_dir') ?: sys_get_temp_dir());
         file_put_contents($filepath . '/' . $filename, $this->getSession()->getScreenshot());
@@ -264,8 +261,7 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
             ];
             $filepath = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
-            // No effect in other environments.
-            $filename = sprintf('errors_%s_%s.%s', date('c'), uniqid('', true), 'log');
+            $filename = sprintf('errors_%s.%s', $this->getDateTimeWithRandomString(), 'log');
             $filepath .= '/' . $filename;
             file_put_contents($filepath, $errorNameMap[$errno] . ': ' . $errstr, FILE_APPEND);
 
@@ -382,9 +378,7 @@ EOD;
     {
         $logDir = $this->getService(Kernel::class)->getRootDir() . '/build/logs/mink';
 
-        $currentDateAsString = date('YmdHis');
-
-        $path = sprintf('%s/behat-%s.%s', $logDir, $currentDateAsString, 'log');
+        $path = sprintf('%s/behat-%s.%s', $logDir, $this->getDateTime(), 'log');
         if (!file_put_contents($path, $content)) {
             Helper::throwException(sprintf('Failed while trying to write log in "%s".', $path));
         }
@@ -435,5 +429,15 @@ EOD;
         $cacheManager->clearConfigCache();
         $cacheManager->clearTemplateCache();
         $cacheManager->clearThemeCache();
+    }
+
+    private function getDateTimeWithRandomString(): string
+    {
+        return $this->getDateTime() . '_' . uniqid('', true);
+    }
+
+    private function getDateTime(): string
+    {
+        return (new DateTime())->format('Y-m-d--H-i-s');
     }
 }

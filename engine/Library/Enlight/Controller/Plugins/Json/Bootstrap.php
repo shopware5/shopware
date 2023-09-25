@@ -49,7 +49,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Should the JSON object be encapsulated into a javascript function
      *
-     * @var string
+     * @var bool|string|null
      */
     protected $padding;
 
@@ -62,6 +62,8 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
 
     /**
      * Initializes this plugin. This Plugin should run after the ViewRenderer Plugin
+     *
+     * @return void
      */
     public function init()
     {
@@ -79,11 +81,15 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Called from the Event Manager after the dispatch process
      *
-     * @return bool
+     * @return void
      */
     public function onPostDispatch(Enlight_Event_EventArgs $args)
     {
         $subject = $args->get('subject');
+        if (!$subject instanceof Enlight_Controller_Action) {
+            return;
+        }
+
         $response = $subject->Response();
         $request = $subject->Request();
 
@@ -100,7 +106,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         // decide if we should render the data or the whole page
         if ($this->renderer === true) {
             $content = $subject->View()->getAssign();
-        } elseif (!empty($this->padding)) {
+        } elseif (\is_string($this->padding) && $this->padding !== '') {
             $content = $response->getBody();
         } else {
             return;
@@ -109,7 +115,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         // Convert content to json
         $content = $this->convertToJson($content);
 
-        if (!empty($this->padding)) {
+        if (\is_string($this->padding) && $this->padding !== '') {
             $response->setHeader('Content-type', 'text/javascript', true);
             $response->setBody($this->addPadding($content, $this->padding));
         } elseif ($this->renderer === true) {
@@ -119,7 +125,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
 
         $this->padding = null;
         $this->encoding = 'UTF-8';
-        $this->renderer = null;
+        $this->renderer = false;
     }
 
     /**
@@ -142,7 +148,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Returns the Value set by setPadding()
      *
-     * @return string
+     * @return bool|string|null
      */
     public function getPadding()
     {
@@ -162,10 +168,13 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
         $this->renderer = (bool) $renderer;
 
         if ($this->renderer === true) {
-            /** @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer */
-            $viewRenderer = $this->Collection()->get('ViewRenderer');
-            // Disable the default renderer
-            $viewRenderer->setNoRender(true);
+            $collection = $this->Collection();
+            if ($collection !== null) {
+                /** @var Enlight_Controller_Plugins_ViewRenderer_Bootstrap $viewRenderer */
+                $viewRenderer = $collection->get('ViewRenderer');
+                // Disable the default renderer
+                $viewRenderer->setNoRender(true);
+            }
         }
 
         return $this;
@@ -241,11 +250,14 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
     /**
      * Converts date time objects
      *
-     * @param DateTime $value
+     * @param DateTimeInterface $value
+     * @param array-key         $key
+     *
+     * @return void
      */
     protected static function convertDateTime(&$value, $key)
     {
-        if ($value instanceof DateTime) {
+        if ($value instanceof DateTimeInterface) {
             $value = 'Date(' . (int) $value->getTimestamp() . '000)';
         }
     }

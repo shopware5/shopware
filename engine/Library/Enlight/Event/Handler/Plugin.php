@@ -42,6 +42,8 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
     protected $namespace;
 
     /**
+     * @deprecated Will be only `string` starting from Shopware 5.8
+     *
      * @var Enlight_Plugin_Bootstrap|string contains an instance
      *                                      of the Enlight_Plugin_Bootstrap or the plugin name
      */
@@ -51,11 +53,13 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
      * The Enlight_Event_Handler_Plugin class constructor expects the event name.
      * All parameters are set in the internal properties.
      *
-     * @param string                   $event
-     * @param Enlight_Plugin_Namespace $namespace
-     * @param Enlight_Plugin_Bootstrap $plugin
-     * @param string                   $listener
-     * @param int                      $position
+     * @deprecated The parameter $plugin will only accept `string` starting from Shopware 5.8
+     *
+     * @param string                          $event
+     * @param Enlight_Plugin_Namespace        $namespace
+     * @param Enlight_Plugin_Bootstrap|string $plugin
+     * @param string                          $listener
+     * @param int                             $position
      *
      * @throws Enlight_Event_Exception
      */
@@ -92,12 +96,19 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
      * Getter method for the internal plugin property. If the plugin property is a string,
      * enlight determines the plugin object over the namespace.
      *
-     * @return Enlight_Plugin_Bootstrap
+     * @return ?Enlight_Plugin_Bootstrap
      */
     public function Plugin()
     {
-        if (!$this->plugin instanceof Enlight_Plugin_Bootstrap) {
-            $plugin = $this->namespace->get($this->plugin);
+        // In the past always `null` was returned if $this->plugin was of instance `Enlight_Plugin_Bootstrap`
+        // therefore this bug is replicated here, can be removed once the type has been fixed to `string`
+        if ($this->plugin instanceof Enlight_Plugin_Bootstrap) {
+            return null;
+        }
+
+        $plugin = $this->namespace->get($this->plugin);
+        if (!$plugin instanceof Enlight_Plugin_Bootstrap) {
+            return null;
         }
 
         return $plugin;
@@ -145,9 +156,10 @@ class Enlight_Event_Handler_Plugin extends Enlight_Event_Handler
     public function execute(Enlight_Event_EventArgs $args)
     {
         $plugin = $this->Plugin();
-        if (!method_exists($plugin, $this->listener)) {
+        if ($plugin === null || !method_exists($plugin, $this->listener)) {
             $name = $this->plugin instanceof Enlight_Plugin_Bootstrap ? $this->plugin->getName() : $this->plugin;
             trigger_error('Listener "' . $this->listener . '" in "' . $name . '" is not callable.', E_USER_ERROR);
+
             // throw new Enlight_Exception('Listener "' . $this->listener . '" in "' . $name . '" is not callable.');
             return;
         }

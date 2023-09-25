@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Components\Api\Resource;
@@ -215,7 +214,7 @@ class Customer extends Resource
     public function create(array $params)
     {
         $this->checkPrivilege('create');
-        $this->setupContext($params['shopId']);
+        $this->setupContext($params['shopId'] ?? null);
 
         // Create models
         $customer = new CustomerModel();
@@ -237,13 +236,13 @@ class Customer extends Resource
         $customer->fromArray($params);
 
         $billing = $this->createAddress($params['billing']) ?? new AddressModel();
-        $shipping = $this->createAddress($params['shipping']);
+        $shipping = $this->createAddress($params['shipping'] ?? null);
 
         $registerService = $this->getContainer()->get(RegisterServiceInterface::class);
         $context = $this->getContainer()->get(ContextServiceInterface::class)->getShopContext()->getShop();
 
         $context->addAttribute('sendOptinMail', new Attribute([
-            'sendOptinMail' => $params['sendOptinMail'] === true,
+            'sendOptinMail' => ($params['sendOptinMail'] ?? false) === true,
         ]));
 
         $registerService->register($context, $customer, $billing, $shipping);
@@ -489,7 +488,7 @@ class Customer extends Resource
         }
 
         // If a different payment method is selected, it must also be placed in the "paymentPreset" so that the risk management that does not reset.
-        if ($customer->getId() && $customer->getPaymentId() !== $params['paymentId']) {
+        if (isset($params['paymentId']) && $customer->getId() && $customer->getPaymentId() !== $params['paymentId']) {
             $params['paymentPreset'] = $params['paymentId'];
         }
 
@@ -528,7 +527,7 @@ class Customer extends Resource
             return null;
         }
 
-        if (!$data['country']) {
+        if (empty($data['country'])) {
             throw new CustomValidationException('A country is required.');
         }
 

@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Components;
@@ -33,6 +32,7 @@ use Shopware\Bundle\SearchBundle\Condition\LastProductIdCondition;
 use Shopware\Bundle\SearchBundle\Criteria;
 use Shopware\Bundle\SearchBundle\ProductNumberSearchInterface;
 use Shopware\Bundle\SearchBundle\StoreFrontCriteriaFactoryInterface;
+use Shopware\Bundle\SitemapBundle\Service\LinkFilter;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Category\Category;
@@ -265,7 +265,7 @@ class SitemapXMLRepository
                 'sCustom' => $site['id'],
             ];
 
-            $site['show'] = $this->filterLink($site['link'], $site['urlParams']);
+            $site['show'] = LinkFilter::filterLink($site['link'], $site['urlParams']);
         }
 
         return $sites;
@@ -307,33 +307,6 @@ class SitemapXMLRepository
         }
 
         return $sites;
-    }
-
-    /**
-     * Helper function to filter predefined links, which should not be in the sitemap (external links, sitemap links itself)
-     * Returns false, if the link is not allowed
-     *
-     * @param string $link
-     * @param array  $userParams
-     *
-     * @return bool
-     */
-    private function filterLink($link, &$userParams)
-    {
-        if (empty($link)) {
-            return true;
-        }
-
-        $parsedUserParams = (string) parse_url($link, PHP_URL_QUERY);
-        parse_str($parsedUserParams, $userParams);
-
-        $blacklist = ['', 'sitemap', 'sitemapXml'];
-
-        if (\in_array($userParams['sViewport'], $blacklist, true)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

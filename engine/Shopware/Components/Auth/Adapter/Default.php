@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -150,8 +149,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
 
             // Reset failed login count
             $this->setFailedLogins(0);
-        } else {
-            // If more then 4 previous failed logins lock account for n * failedlogins seconds
+        } elseif ($user) {
+            // If more than 4 previous failed logins lock account for n * failedlogins seconds
             if ($user->failedlogins >= 4) {
                 $lockedUntil = new Zend_Date();
                 $lockedUntil->addSecond($this->lockSeconds * $user->failedlogins);
@@ -172,16 +171,16 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
     }
 
     /**
-     * @deprecated in 5.6, will be private in 5.7
+     * @deprecated in 5.6, will be private in 5.8
      *
      * @param string $plaintext
      * @param string $hash
      * @param string $encoderName
+     *
+     * @return void
      */
     public function rehash($plaintext, $hash, $encoderName)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.7.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $newHash = Shopware()->PasswordEncoder()->reencodePassword($plaintext, $hash, $encoderName);
 
         if ($newHash === $hash) {
@@ -203,6 +202,8 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
      *
      * @param string $plaintext
      * @param string $defaultEncoderName
+     *
+     * @return void
      */
     public function updateHash($plaintext, $defaultEncoderName)
     {
@@ -218,6 +219,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         );
     }
 
+    /**
+     * @return void
+     */
     protected function updateExpiry()
     {
         if ($this->expiryColumn === null) {
@@ -225,6 +229,9 @@ class Shopware_Components_Auth_Adapter_Default extends Enlight_Components_Auth_A
         }
 
         $user = $this->getResultRowObject();
+        if (!\is_object($user)) {
+            return;
+        }
 
         $this->_zendDb->update(
             $this->_tableName,

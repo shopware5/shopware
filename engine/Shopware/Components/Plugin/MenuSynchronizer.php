@@ -3,48 +3,41 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Components\Plugin;
 
 use Doctrine\DBAL\Connection;
-use Exception;
 use InvalidArgumentException;
 use RuntimeException;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Snippet\Writer\DatabaseWriter;
 use Shopware\Models\Menu\Menu;
+use Shopware\Models\Menu\Repository;
 use Shopware\Models\Plugin\Plugin;
 use Shopware\Models\Shop\Locale;
 
 class MenuSynchronizer
 {
-    /**
-     * @var ModelManager
-     */
-    private $em;
+    private ModelManager $em;
 
-    /**
-     * @var \Shopware\Models\Menu\Repository
-     */
-    private $menuRepository;
+    private Repository $menuRepository;
 
     public function __construct(ModelManager $em)
     {
@@ -53,7 +46,7 @@ class MenuSynchronizer
     }
 
     /**
-     * @throws InvalidArgumentException
+     * @return void
      */
     public function synchronize(Plugin $plugin, array $menu)
     {
@@ -74,7 +67,6 @@ class MenuSynchronizer
                 if (!isset($menuItem['parent'])) {
                     throw new InvalidArgumentException('Root Menu Item must provide parent element');
                 }
-                /** @var Menu|null $parent */
                 $parent = $this->menuRepository->findOneBy($menuItem['parent']);
                 if (!$parent) {
                     throw new InvalidArgumentException(sprintf('Unable to find parent for query %s', print_r($menuItem['parent'], true)));
@@ -88,12 +80,7 @@ class MenuSynchronizer
         $this->removeNotExistingEntries($plugin->getId(), $menuNames);
     }
 
-    /**
-     * @param string $name
-     *
-     * @throws Exception
-     */
-    private function saveMenuTranslation(array $labels, $name)
+    private function saveMenuTranslation(array $labels, string $name): void
     {
         $databaseWriter = new DatabaseWriter($this->em->getConnection());
         foreach ($labels as $locale => $text) {
@@ -106,22 +93,19 @@ class MenuSynchronizer
             }
 
             $locale = Shopware()->Models()->getRepository(Locale::class)->findOneBy(['locale' => $locale]);
+            if (!$locale instanceof Locale) {
+                continue;
+            }
 
             $databaseWriter->write([$name => $text], 'backend/index/view/main', $locale->getId(), 1);
         }
     }
 
-    /**
-     * @throws RuntimeException
-     *
-     * @return Menu
-     */
-    private function createMenuItem(Plugin $plugin, ?Menu $parent = null, array $menuItem)
+    private function createMenuItem(Plugin $plugin, ?Menu $parent, array $menuItem): Menu
     {
         $item = null;
 
         if ($plugin->getId()) {
-            /** @var Menu $item */
             $item = $this->menuRepository->findOneBy([
                 'pluginId' => $plugin->getId(),
                 'label' => $menuItem['name'],
@@ -135,26 +119,18 @@ class MenuSynchronizer
         $item->setParent($parent);
         $item->setPlugin($plugin);
 
-        if (!isset($menuItem['label']['en']) || empty($menuItem['label']['en'])) {
+        if (empty($menuItem['label']['en'])) {
             throw new RuntimeException('Label with lang en required');
         }
         $item->setLabel($menuItem['name']);
 
-        $item->setController(
-            isset($menuItem['controller']) ? $menuItem['controller'] : null
-        );
+        $item->setController($menuItem['controller'] ?? null);
 
-        $item->setAction(
-            isset($menuItem['action']) ? $menuItem['action'] : null
-        );
+        $item->setAction($menuItem['action'] ?? null);
 
-        $item->setOnclick(
-            isset($menuItem['onclick']) ? $menuItem['onclick'] : null
-        );
+        $item->setOnclick($menuItem['onclick'] ?? null);
 
-        $item->setClass(
-            isset($menuItem['class']) ? $menuItem['class'] : null
-        );
+        $item->setClass($menuItem['class'] ?? null);
 
         if (isset($menuItem['active'])) {
             $item->setActive((bool) $menuItem['active']);
@@ -188,10 +164,7 @@ class MenuSynchronizer
         return $item;
     }
 
-    /**
-     * @param int $pluginId
-     */
-    private function removeNotExistingEntries($pluginId, array $menuNames)
+    private function removeNotExistingEntries(int $pluginId, array $menuNames): void
     {
         $builder = $this->em->getConnection()->createQueryBuilder();
         $builder->delete('s_core_menu');

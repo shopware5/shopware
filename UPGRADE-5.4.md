@@ -4,7 +4,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.6
 
-[View all changes from v5.4.5...v5.4.6](https://github.com/shopware/shopware/compare/v5.4.5...v5.4.6)
+[View all changes from v5.4.5...v5.4.6](https://github.com/shopware5/shopware/compare/v5.4.5...v5.4.6)
 
 ### Additions
 
@@ -42,7 +42,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.5
 
-[View all changes from v5.4.4...v5.4.5](https://github.com/shopware/shopware/compare/v5.4.4...v5.4.5)
+[View all changes from v5.4.4...v5.4.5](https://github.com/shopware5/shopware/compare/v5.4.4...v5.4.5)
 
 ### Additions
 
@@ -80,7 +80,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.4
 
-[View all changes from v5.4.3...v5.4.4](https://github.com/shopware/shopware/compare/v5.4.3...v5.4.4)
+[View all changes from v5.4.3...v5.4.4](https://github.com/shopware5/shopware/compare/v5.4.3...v5.4.4)
 
 ### Additions
 
@@ -136,7 +136,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.3
 
-[View all changes from v5.4.2...v5.4.3](https://github.com/shopware/shopware/compare/v5.4.2...v5.4.3)
+[View all changes from v5.4.2...v5.4.3](https://github.com/shopware5/shopware/compare/v5.4.2...v5.4.3)
 
 ### Additions
 
@@ -167,7 +167,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.2
 
-[View all changes from v5.4.1...v5.4.2](https://github.com/shopware/shopware/compare/v5.4.1...v5.4.2)
+[View all changes from v5.4.1...v5.4.2](https://github.com/shopware5/shopware/compare/v5.4.1...v5.4.2)
 
 ### Additions
 
@@ -190,7 +190,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.1
 
-[View all changes from v5.4.0...v5.4.1](https://github.com/shopware/shopware/compare/v5.4.0...v5.4.1)
+[View all changes from v5.4.0...v5.4.1](https://github.com/shopware5/shopware/compare/v5.4.0...v5.4.1)
 
 ### Additions
 
@@ -237,7 +237,7 @@ This changelog references changes done in Shopware 5.4 patch versions.
 
 ## 5.4.0
 
-[View all changes from v5.3.7...v5.4.0](https://github.com/shopware/shopware/compare/v5.3.7...v5.4.0)
+[View all changes from v5.3.7...v5.4.0](https://github.com/shopware5/shopware/compare/v5.3.7...v5.4.0)
 
 ### Additions
 

@@ -1,34 +1,38 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
-namespace Shopware\Tests\Functional\Library;
+namespace Shopware\Tests\Functional\Library\Zend;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
 
 class ZendLocaleTest extends TestCase
 {
+    use ContainerTrait;
+
     public const KNOWN_FAILURE = [
         'wo_SN',
         'tt_RU',
@@ -64,22 +68,20 @@ class ZendLocaleTest extends TestCase
     ];
 
     /**
-     * @param string $localName
-     *
      * @dataProvider getLocales
      */
-    public function testLocalCreation($localName)
+    public function testLocalCreation(string $localName): void
     {
         static::assertFileExists(sprintf('%s/engine/Library/Zend/Locale/Data/%s.xml', Shopware()->DocPath(), $localName));
     }
 
     /**
-     * @return array
+     * @return array<int, array<string, mixed>>
      */
-    public function getLocales()
+    public function getLocales(): array
     {
-        $con = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $sql = 'SELECT locale FROM s_core_locales WHERE locale NOT IN(?)';
 
-        return $con->fetchAll('SELECT locale FROM s_core_locales WHERE locale NOT IN(?)', [self::KNOWN_FAILURE], [Connection::PARAM_STR_ARRAY]);
+        return $this->getContainer()->get(Connection::class)->fetchAllAssociative($sql, [self::KNOWN_FAILURE], [Connection::PARAM_STR_ARRAY]);
     }
 }

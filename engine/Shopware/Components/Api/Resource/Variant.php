@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Components\Api\Resource;
@@ -699,8 +698,8 @@ class Variant extends Resource implements BatchInterface
 
         foreach ($data['configuratorOptions'] as $optionData) {
             $availableGroup = $this->getAvailableGroup($availableGroups, [
-                'id' => $optionData['groupId'],
-                'name' => $optionData['group'],
+                'id' => $optionData['groupId'] ?? null,
+                'name' => $optionData['group'] ?? null,
             ]);
 
             // Group is in the product configurator set configured?
@@ -710,8 +709,8 @@ class Variant extends Resource implements BatchInterface
 
             // Check if the option is available in the configured product configurator set.
             $option = $this->getAvailableOption($availableGroup->getOptions(), [
-                'id' => $optionData['optionId'],
-                'name' => $optionData['option'],
+                'id' => $optionData['optionId'] ?? null,
+                'name' => $optionData['option'] ?? null,
             ]);
 
             if (!$option) {
@@ -919,11 +918,12 @@ class Variant extends Resource implements BatchInterface
     {
         // Convert string to lower case to avoid problems with case insensitivity in database
         // vs case sensitivity in PHP
-        $groupName = mb_strtolower($groupData['name']);
+        $groupName = mb_strtolower($groupData['name'] ?? '');
 
         foreach ($availableGroups as $availableGroup) {
             if (($groupData['id'] !== null && (int) $availableGroup->getId() === (int) $groupData['id'])
-                || (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)) {
+                || (mb_strtolower($availableGroup->getName()) === $groupName && $groupData['name'] !== null)
+            ) {
                 return $availableGroup;
             }
         }
@@ -942,11 +942,12 @@ class Variant extends Resource implements BatchInterface
     {
         // Convert string to lower case to avoid problems with case insensitivity in database
         // vs case sensitivity in PHP
-        $optionName = mb_strtolower($optionData['name']);
+        $optionName = mb_strtolower($optionData['name'] ?? '');
 
         foreach ($availableOptions as $availableOption) {
             if ((mb_strtolower($availableOption->getName()) === $optionName && $optionData['name'] !== null)
-                || ((int) $availableOption->getId() === (int) $optionData['id'] && $optionData['id'] !== null)) {
+                || ((int) $availableOption->getId() === (int) $optionData['id'] && $optionData['id'] !== null)
+            ) {
                 return $availableOption;
             }
         }

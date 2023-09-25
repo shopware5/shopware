@@ -1,28 +1,26 @@
 <?php
 
 declare(strict_types=1);
-
 /**
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\DBAL\Connection;
@@ -1508,10 +1506,10 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
             $order['locale'] = $order['languageSubShop']['locale'];
 
             // Deprecated: use payment instance
-            $order['debit'] = $order['customer']['debit'];
+            $order['debit'] = $order['customer']['debit'] ?? null;
             $order['customerEmail'] = $order['customer']['email'];
-            $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation']);
-            $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation']);
+            $order['billing']['salutationSnippet'] = $namespace->get($order['billing']['salutation'] ?? '');
+            $order['shipping']['salutationSnippet'] = $namespace->get($order['shipping']['salutation'] ?? '');
 
             foreach ($order['details'] as &$orderDetail) {
                 $number = $orderDetail['articleNumber'];
@@ -2427,7 +2425,7 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
 
     private function getCurrentLocale(): ?ShopLocale
     {
-        return $this->get('auth')->getIdentity()->locale;
+        return $this->get('auth')->getIdentity()->locale ?? null;
     }
 
     private function checkIfOrderHasBeenModifiedSince(DateTime $lastOrderChange, Order $order, Enlight_Components_Snippet_Namespace $namespace): bool

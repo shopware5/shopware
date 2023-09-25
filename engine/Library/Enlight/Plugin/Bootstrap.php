@@ -36,7 +36,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
     protected $name;
 
     /**
-     * @var Enlight_Plugin_PluginCollection Contains an instance of the Enlight_Plugin_PluginCollection
+     * @var Enlight_Plugin_PluginCollection|null Contains an instance of the Enlight_Plugin_PluginCollection
      */
     protected $collection;
 
@@ -54,6 +54,8 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
 
     /**
      * Is executed after the collection has been added.
+     *
+     * @return void
      */
     public function afterInit()
     {
@@ -85,7 +87,7 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
     /**
      * Getter method for the collection property.
      *
-     * @return Enlight_Plugin_PluginCollection
+     * @return Enlight_Plugin_PluginCollection|null
      */
     public function Collection()
     {
@@ -99,6 +101,10 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      */
     public function Application()
     {
+        if (!$this->collection instanceof Enlight_Plugin_PluginCollection) {
+            throw new RuntimeException('Could not get "Application". Plugin collection is not set.');
+        }
+
         return $this->collection->Application();
     }
 
@@ -106,9 +112,15 @@ abstract class Enlight_Plugin_Bootstrap extends Enlight_Class
      * Get service from resource loader
      *
      * @param string $name
+     *
+     * @return mixed|object|null
      */
     public function get($name)
     {
+        if (!$this->collection instanceof Enlight_Plugin_PluginCollection) {
+            throw new RuntimeException(sprintf('Could not get "%s". Plugin collection is not set.', $name));
+        }
+
         return $this->collection->Application()->Container()->get($name);
     }
 }

@@ -1,26 +1,4 @@
 <?php
-/**
- * Shopware 5
- * Copyright (c) shopware AG
- *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
- *
- * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
- *
- * "Shopware" is a registered trademark of shopware AG.
- * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
- */
 
 /**
  * @see Zend_Auth_Adapter_Interface
@@ -297,7 +275,7 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
      * @param string|array $returnColumns
      * @param string|array $omitColumns
      *
-     * @return stdClass|bool
+     * @return stdClass|false
      */
     public function getResultRowObject($returnColumns = null, $omitColumns = null)
     {
@@ -308,15 +286,16 @@ class Zend_Auth_Adapter_DbTable implements Zend_Auth_Adapter_Interface
         $returnObject = new stdClass();
 
         if ($returnColumns !== null) {
-            $availableColumns = array_keys($this->_resultRow);
             foreach ((array) $returnColumns as $returnColumn) {
-                if (in_array($returnColumn, $availableColumns)) {
+                if (array_key_exists($returnColumn, $this->_resultRow)) {
                     $returnObject->{$returnColumn} = $this->_resultRow[$returnColumn];
                 }
             }
 
             return $returnObject;
-        } elseif ($omitColumns !== null) {
+        }
+
+        if ($omitColumns !== null) {
             $omitColumns = (array) $omitColumns;
             foreach ($this->_resultRow as $resultColumn => $resultValue) {
                 if (!in_array($resultColumn, $omitColumns)) {

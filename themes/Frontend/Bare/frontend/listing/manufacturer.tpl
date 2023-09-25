@@ -74,7 +74,7 @@
                     {/if}
                     {if $thumbnail}
                         <div class="vendor--image-wrapper">
-                            <img class="vendor--image" src="{$thumbnail}" alt="{$manufacturer->getName()|escape}">
+                            <img class="vendor--image" src="{$thumbnail}" alt="{$manufacturer->getName()|escapeHtml}">
                         </div>
                     {/if}
                 {/if}

@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\DBAL\Connection;
@@ -38,6 +37,7 @@ use Shopware\Components\Model\ModelRepository;
 use Shopware\Components\Model\QueryBuilder;
 use Shopware\Components\ShopRegistrationServiceInterface;
 use Shopware\Components\Thumbnail\Manager;
+use Shopware\Components\Translation\SwapProductVariantTranslationService;
 use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Article\Configurator\Dependency;
 use Shopware\Models\Article\Configurator\Group;
@@ -842,8 +842,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleCategories($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $builder = $this->get('models')->createQueryBuilder();
         $builder->select(['categories.id'])
             ->from(Category::class, 'categories', 'categories.id')
@@ -880,8 +878,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleSimilars($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = $this->getRepository()
             ->getArticleSimilarsQuery($articleId)
             ->getArrayResult();
@@ -904,8 +900,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleRelatedProductStreams($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = $this->get(ModelManager::class)->getRepository(Product::class)
             ->getArticleRelatedProductStreamsQuery($articleId)
             ->getArrayResult();
@@ -927,8 +921,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleRelated($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = $this->getRepository()
             ->getArticleRelatedQuery($articleId)
             ->getArrayResult();
@@ -1015,8 +1007,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleLinks($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = $this->getRepository()
             ->getArticleLinksQuery($articleId)
             ->getArrayResult();
@@ -1047,8 +1037,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleDownloads($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = $this->getRepository()
             ->getArticleDownloadsQuery($articleId)
             ->getArrayResult();
@@ -1074,8 +1062,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleCustomerGroups($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $result = $this->getRepository()
             ->getArticleCustomerGroupsQuery($articleId)
             ->getArrayResult();
@@ -1097,12 +1083,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      *
      * @param int $articleId
      *
-     * @return array
+     * @return array|null
      */
     public function getArticleConfiguratorSet($articleId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $builder = $this->get('models')->createQueryBuilder();
         $builder->select(['configuratorSet', 'groups', 'options'])
             ->from(Set::class, 'configuratorSet')
@@ -1117,7 +1101,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
         $result = $builder->getQuery()->getArrayResult();
 
-        return $result[0];
+        return $result[0] ?? null;
     }
 
     /**
@@ -1134,8 +1118,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleDependencies($configuratorSetId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return $this->getRepository()
             ->getConfiguratorDependenciesQuery($configuratorSetId)
             ->getArrayResult();
@@ -1156,13 +1138,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getArticleConfiguratorTemplate($articleId, $tax)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $query = $this->getRepository()->getConfiguratorTemplateByArticleIdQuery($articleId);
 
         $configuratorTemplate = $query->getArrayResult();
 
-        $prices = $configuratorTemplate[0]['prices'];
+        $prices = $configuratorTemplate[0]['prices'] ?? null;
 
         if (!empty($prices)) {
             $configuratorTemplate[0]['prices'] = $this->formatPricesFromNetToGross($prices, $tax);
@@ -1855,11 +1835,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getFreeSerialCount($esdId)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
-        $query = $this->getRepository()->getFreeSerialsCountByEsdQuery($esdId);
-
-        return $query->getSingleScalarResult();
+        return (int) $this->getRepository()->getFreeSerialsCountByEsdQuery($esdId)->getSingleScalarResult();
     }
 
     /**
@@ -2099,8 +2075,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     public function getChartData()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $productId = $this->Request()->getParam('articleId');
         $dateFormat = '%Y%m';
         $limit = 12;
@@ -2416,7 +2390,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without a replacement
+     * @deprecated in 5.6, will be removed in 5.8 without a replacement
      *
      * Helper function to get access to the configuratorGroup repository.
      *
@@ -2424,7 +2398,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function getConfiguratorGroupRepository()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         if ($this->configuratorGroupRepository === null) {
             $this->configuratorGroupRepository = $this->get('models')->getRepository(Group::class);
@@ -3123,9 +3097,14 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         if (!$variant instanceof ProductVariant) {
             throw new ModelNotFoundException(ProductVariant::class, $detail->getId());
         }
+
         if ($data['standard']) {
             $product = $variant->getArticle();
             $mainDetail = $product->getMainDetail();
+            if (!$mainDetail instanceof ProductVariant) {
+                throw new ModelNotFoundException(ProductVariant::class, $detail->getId());
+            }
+
             $mainDetail->setKind(2);
             $product->setMainDetail($variant);
             $this->get('models')->persist($mainDetail);
@@ -3134,7 +3113,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             // If main variant changed, swap translations
             if ($mainDetail->getId() !== $variant->getId()) {
-                $this->swapDetailTranslations($variant, $mainDetail);
+                $this->container->get(SwapProductVariantTranslationService::class)->swapProductVariantTranslation($variant, $mainDetail);
             }
         }
 
@@ -3257,9 +3236,10 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         foreach ($prices as $key => $price) {
             $customerGroup = $price['customerGroup'];
             if ($customerGroup['taxInput']) {
-                $price['price'] = $price['price'] / 100 * (100 + $tax['tax']);
-                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $tax['tax']);
-                $price['regulationPrice'] = $price['regulationPrice'] / 100 * (100 + $tax['tax']);
+                $taxValue = $tax['tax'] ?? 0;
+                $price['price'] = $price['price'] / 100 * (100 + $taxValue);
+                $price['pseudoPrice'] = $price['pseudoPrice'] / 100 * (100 + $taxValue);
+                $price['regulationPrice'] = $price['regulationPrice'] / 100 * (100 + $taxValue);
             }
             $prices[$key] = $price;
         }
@@ -3546,11 +3526,11 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without a replacement
+     * @deprecated in 5.6, will be removed in 5.8 without a replacement
      */
     protected function getDependencyByOptionId($optionId, $dependencies)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $returnValue = [];
         foreach ($dependencies as $dependency) {
@@ -3793,7 +3773,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         $modelManger = $this->get('models');
         if (!empty($data['configuratorSetId'])) {
             $data['configuratorSet'] = $modelManger->find(Set::class, $data['configuratorSetId']);
-        } elseif ($data['isConfigurator']) {
+        } elseif (!empty($data['isConfigurator'])) {
             $set = new Set();
             $set->setName('Set-' . $data['mainDetail']['number']);
             $set->setPublic(false);
@@ -3887,9 +3867,9 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareMainDetailAssociatedData($data)
     {
-        $data['mainDetail'] = $data['mainDetail'][0];
-        $data['mainDetail']['active'] = $data['active'];
-        $data['mainDetail']['lastStock'] = (int) ($data['lastStock'] >= 0 ? $data['lastStock'] : 0);
+        $data['mainDetail'] = $data['mainDetail'][0] ?? null;
+        $data['mainDetail']['active'] = $data['active'] ?? null;
+        $data['mainDetail']['lastStock'] = max((int) ($data['lastStock'] ?? 0), 0);
 
         if (!empty($data['mainDetail']['unitId'])) {
             $data['mainDetail']['unit'] = $this->get('models')->find(Unit::class, $data['mainDetail']['unitId']);
@@ -3911,7 +3891,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareCategoryAssociatedData($data)
     {
         $categories = [];
-        foreach ($data['categories'] as $categoryData) {
+        foreach ($data['categories'] ?? [] as $categoryData) {
             if (!empty($categoryData['id'])) {
                 $model = $this->get('models')->find(Category::class, $categoryData['id']);
                 $categories[] = $model;
@@ -3987,7 +3967,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareRelatedAssociatedData($data, $article)
     {
         $related = [];
-        foreach ($data['related'] as $relatedData) {
+        foreach ($data['related'] ?? [] as $relatedData) {
             if (empty($relatedData['id'])) {
                 continue;
             }
@@ -4018,7 +3998,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareRelatedProductStreamsData($data)
     {
         $relatedStreams = [];
-        foreach ($data['streams'] as $relatedProductStreamData) {
+        foreach ($data['streams'] ?? [] as $relatedProductStreamData) {
             if (empty($relatedProductStreamData['id'])) {
                 continue;
             }
@@ -4044,7 +4024,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareSimilarAssociatedData($data, $article)
     {
         $similar = [];
-        foreach ($data['similar'] as $similarData) {
+        foreach ($data['similar'] ?? [] as $similarData) {
             if (empty($similarData['id'])) {
                 continue;
             }
@@ -4075,7 +4055,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareImageAssociatedData($data)
     {
         $position = 1;
-        foreach ($data['images'] as &$imageData) {
+        foreach ($data['images'] ?? [] as &$imageData) {
             $imageData['position'] = $position;
             if (!empty($imageData['mediaId'])) {
                 $media = $this->get('models')->find(Media::class, $imageData['mediaId']);
@@ -4104,7 +4084,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareMainPricesAssociatedData($data, $article)
     {
-        $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainPrices'], $article, $data['tax']);
+        $data['mainDetail']['prices'] = $this->preparePricesAssociatedData($data['mainPrices'] ?? [], $article, $data['tax']);
 
         return $data;
     }
@@ -4130,7 +4110,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             $priceData['to'] = (int) $priceData['to'];
 
-            // If the "to" value isn't numeric, set the place holder "beliebig"
+            // If the "to" value isn't numeric, set the placeholder "beliebig"
             if ($priceData['to'] <= 0) {
                 $priceData['to'] = 'beliebig';
             }
@@ -4159,7 +4139,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function prepareLinkAssociatedData($data)
     {
-        foreach ($data['links'] as &$linkData) {
+        foreach ($data['links'] ?? [] as &$linkData) {
             $linkData['link'] = trim($linkData['link']);
             // Map the boolean ExtJS link target to the string format which used in the database
             $linkData['target'] = ($linkData['target'] === true) ? '_blank' : '_parent';
@@ -4178,7 +4158,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     protected function prepareDownloadAssociatedData($data)
     {
         $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
-        foreach ($data['downloads'] as &$downloadData) {
+        foreach ($data['downloads'] ?? [] as &$downloadData) {
             $downloadData['file'] = $mediaService->normalize($downloadData['file']);
         }
 
@@ -4372,6 +4352,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
                 $name[] = $counter;
             }
         }
+
         // Return all command results, concat with a dot
         return implode('.', $name);
     }
@@ -4488,7 +4469,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
     }
 
     /**
-     * @deprecated in 5.6, will be removed in 5.7 without a replacement
+     * @deprecated in 5.6, will be removed in 5.8 without a replacement
      *
      * Internal helper function to get the field names of the passed violation array.
      *
@@ -4498,7 +4479,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
      */
     protected function getViolationFields($violations)
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.7. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
+        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be removed with 5.8. Will be removed without replacement.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
 
         $fields = [];
         foreach ($violations as $violation) {
@@ -4506,95 +4487,6 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
         }
 
         return $fields;
-    }
-
-    /**
-     * Helper method which swaps the translations of the newMainDetail and the oldMainDetail
-     * Needed because mainDetails' translations are stored for the product, not for the variant itself
-     *
-     * @param ProductVariant $newMainDetail
-     * @param ProductVariant $oldMainDetail
-     */
-    private function swapDetailTranslations($newMainDetail, $oldMainDetail)
-    {
-        $productId = $oldMainDetail->getArticle()->getId();
-
-        // Get available translations for the old mainDetail (stored on the product)
-        $sql = "
-            SELECT objectlanguage, objectdata
-            FROM s_core_translations
-            WHERE objecttype = 'article' AND objectkey = ?
-        ";
-        $oldTranslations = Shopware()->Db()->fetchAssoc($sql, [$productId]);
-
-        // Get available translations for the new mainDetail (stored for the detail)
-        $sql = "
-            SELECT objectlanguage, objectdata
-            FROM s_core_translations
-            WHERE objecttype='variant' AND objectkey = ?
-        ";
-        $newTranslations = Shopware()->Db()->fetchAssoc($sql, [$newMainDetail->getId()]);
-
-        // We need to determine which of the old product translations can be used for the translation of the
-        // variant which was the mainDetail before.
-        // We'll get a list of translatable variant fields from the variant which is going to become the new mainDetail
-        $translatedFields = [];
-        foreach ($newTranslations as $values) {
-            $data = $values['objectdata'];
-            $unserialized = @unserialize($data, ['allowed_classes' => false]);
-
-            if ($unserialized === false) {
-                $unserialized = [];
-            }
-
-            foreach ($unserialized as $field => $translation) {
-                if (!\array_key_exists($field, $translatedFields)) {
-                    $translatedFields[$field] = true;
-                }
-            }
-        }
-
-        // Save the old product translation as new variant translations
-        foreach ($oldTranslations as $language => $values) {
-            $data = @unserialize($values['objectdata'], ['allowed_classes' => false]);
-            if ($data === false) {
-                $data = [];
-            }
-
-            $newData = array_intersect_key($data, $translatedFields);
-            $this->getTranslationComponent()->write(
-                $language,
-                'variant',
-                $oldMainDetail->getId(),
-                $newData
-            );
-        }
-
-        // Save the new mainDetail translations as product translations
-        foreach ($newTranslations as $language => $values) {
-            $data = @unserialize($values['objectdata'], ['allowed_classes' => false]);
-            if ($data === false) {
-                $data = [];
-            }
-
-            $newData = array_intersect_key($data, $translatedFields);
-            // We need to check and include old translations, as an product
-            // translation is a superset of a variant translation
-            if ($oldValues = $oldTranslations[$language]) {
-                $oldData = @unserialize($oldValues['objectdata'], ['allowed_classes' => false]);
-                if ($oldData === false) {
-                    $oldData = [];
-                }
-
-                $newData = array_merge($oldData, $newData);
-            }
-            $this->getTranslationComponent()->write(
-                $language,
-                'article',
-                $productId,
-                $newData
-            );
-        }
     }
 
     /**

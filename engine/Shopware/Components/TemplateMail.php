@@ -3,26 +3,26 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Shopware\Bundle\MailBundle\Service\LogEntryBuilder;
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Mail\Mail;
 use Shopware\Models\Shop\Shop;
@@ -43,12 +43,12 @@ class Shopware_Components_TemplateMail
     protected $modelManager;
 
     /**
-     * @var \Shopware_Components_Translation
+     * @var Shopware_Components_Translation
      */
     protected $translationReader;
 
     /**
-     * @var \Shopware_Components_StringCompiler
+     * @var Shopware_Components_StringCompiler
      */
     protected $stringCompiler;
 
@@ -78,7 +78,7 @@ class Shopware_Components_TemplateMail
     ];
 
     /**
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_TemplateMail
      */
     public function setModelManager(ModelManager $modelManager)
     {
@@ -98,7 +98,7 @@ class Shopware_Components_TemplateMail
     /**
      * @param Shop $shop
      *
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_TemplateMail
      */
     public function setShop($shop)
     {
@@ -118,21 +118,21 @@ class Shopware_Components_TemplateMail
     /**
      * @throws \Exception
      *
-     * @return \Shopware_Components_Translation
+     * @return Shopware_Components_Translation
      */
     public function getTranslationReader()
     {
         if ($this->translationReader === null) {
-            $this->translationReader = Shopware()->Container()->get(\Shopware_Components_Translation::class);
+            $this->translationReader = Shopware()->Container()->get(Shopware_Components_Translation::class);
         }
 
         return $this->translationReader;
     }
 
     /**
-     * @param \Shopware_Components_Translation $translationReader
+     * @param Shopware_Components_Translation $translationReader
      *
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_TemplateMail
      */
     public function setTranslationReader($translationReader)
     {
@@ -142,7 +142,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @return \Shopware_Components_TemplateMail
+     * @return Shopware_Components_TemplateMail
      */
     public function setStringCompiler(Shopware_Components_StringCompiler $stringCompiler)
     {
@@ -152,7 +152,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @return \Shopware_Components_StringCompiler
+     * @return Shopware_Components_StringCompiler
      */
     public function getStringCompiler()
     {
@@ -165,9 +165,9 @@ class Shopware_Components_TemplateMail
      * @param Shop        $shop
      * @param array       $overrideConfig
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      *
-     * @return \Enlight_Components_Mail
+     * @return Enlight_Components_Mail
      */
     public function createMail($mailModel, $context = [], $shop = null, $overrideConfig = [])
     {
@@ -177,12 +177,11 @@ class Shopware_Components_TemplateMail
 
         if (!($mailModel instanceof Mail)) {
             $modelName = $mailModel;
-            /** @var Mail|null $mailModel */
             $mailModel = $this->getModelManager()->getRepository(Mail::class)->findOneBy(
                 ['name' => $modelName]
             );
-            if (!$mailModel) {
-                throw new \Enlight_Exception(sprintf('Mail-Template with name "%s" could not be found.', $modelName));
+            if (!$mailModel instanceof Mail) {
+                throw new Enlight_Exception(sprintf('Mail-Template with name "%s" could not be found.', $modelName));
             }
         }
 
@@ -258,9 +257,9 @@ class Shopware_Components_TemplateMail
      *
      * @param array $overrideConfig
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      *
-     * @return \Enlight_Components_Mail
+     * @return Enlight_Components_Mail
      */
     public function loadValues(Enlight_Components_Mail $mail, Mail $mailModel, $overrideConfig = [])
     {
@@ -296,14 +295,13 @@ class Shopware_Components_TemplateMail
             $mail->setBodyHtml($stringCompiler->compileString($mailModel->getContentHtml()));
         }
 
-        /** @var \Shopware\Models\Mail\Attachment $attachment */
         foreach ($mailModel->getAttachments() as $attachment) {
             if ($attachment->getShopId() !== null
                 && ($this->getShop() === null || $attachment->getShopId() !== $this->getShop()->getId())) {
                 continue;
             }
 
-            $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+            $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
             if (!$mediaService->has($attachment->getPath())) {
                 Shopware()->Container()->get('corelogger')->error('Could not load file: ' . $attachment->getPath());
             } else {

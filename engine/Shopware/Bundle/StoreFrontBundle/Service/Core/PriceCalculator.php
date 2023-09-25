@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Bundle\StoreFrontBundle\Service\Core;
@@ -53,15 +52,15 @@ class PriceCalculator implements PriceCalculatorInterface
          * by the percentage discount value of the current customer group.
          */
         if ($customerGroup->useDiscount() && $customerGroup->getPercentageDiscount()) {
-            $price = $price - ($price / 100 * $customerGroup->getPercentageDiscount());
+            $price -= ($price / 100 * $customerGroup->getPercentageDiscount());
         }
 
-        /**
+        /*
          * Currency calculation:
          * If the customer is currently in a sub shop with another currency, like dollar,
-         * we have to calculate the the price for the other currency.
+         * we have to calculate the price for the other currency.
          */
-        $price = $price * $context->getCurrency()->getFactor();
+        $price *= $context->getCurrency()->getFactor();
 
         /*
          * check if the customer group should see gross prices.

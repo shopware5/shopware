@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\DBAL\Connection;
@@ -322,7 +321,7 @@ class sArticles implements Enlight_Hook
             $sVoteStars = 0;
         }
 
-        $sVoteStars = $sVoteStars / 2;
+        $sVoteStars /= 2;
 
         if ($this->config['sVOTEUNLOCK']) {
             $active = 0;
@@ -416,7 +415,6 @@ class sArticles implements Enlight_Hook
 
     /**
      * @param int|null $categoryId
-     * @param Criteria $criteria
      *
      * @throws Enlight_Exception
      *
@@ -511,10 +509,10 @@ class sArticles implements Enlight_Hook
 
         // Calculate global discount
         if ($this->sSYSTEM->sUSERGROUPDATA['mode'] && $this->sSYSTEM->sUSERGROUPDATA['discount']) {
-            $price = $price - ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
+            $price -= ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
         }
         if ($this->sSYSTEM->sCurrency['factor']) {
-            $price = $price * (float) $this->sSYSTEM->sCurrency['factor'];
+            $price *= (float) $this->sSYSTEM->sCurrency['factor'];
         }
 
         // Condition Output-Netto AND NOT overwrite by customer-group
@@ -535,8 +533,7 @@ class sArticles implements Enlight_Hook
      */
     public function getTaxRateByConditions($taxId)
     {
-        $context = $this->contextService->getShopContext();
-        $taxRate = $context->getTaxRule($taxId);
+        $taxRate = $this->contextService->getShopContext()->getTaxRule($taxId);
         if ($taxRate) {
             return number_format($taxRate->getTax(), 2);
         }
@@ -573,7 +570,7 @@ class sArticles implements Enlight_Hook
         }
         // Calculating global discount
         if ($this->sSYSTEM->sUSERGROUPDATA['mode'] && $this->sSYSTEM->sUSERGROUPDATA['discount']) {
-            $price = $price - ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
+            $price -= ($price / 100 * $this->sSYSTEM->sUSERGROUPDATA['discount']);
         }
 
         // Support tax rate defined by certain conditions
@@ -1831,7 +1828,6 @@ class sArticles implements Enlight_Hook
     public function sGetConfiguratorImage($sArticle, $sCombination = '')
     {
         if (!empty($sArticle['sConfigurator']) || !empty($sCombination)) {
-            $foundImage = false;
             $configuratorImages = false;
             $mainKey = 0;
 
@@ -1839,22 +1835,23 @@ class sArticles implements Enlight_Hook
                 if (!empty($sArticle['image']['res']['description'])) {
                     $sArticle['image']['description'] = $sArticle['image']['res']['description'];
                 }
-                $sArticle['image']['relations'] = $sArticle['image']['res']['relations'];
-                foreach ($sArticle['sConfigurator'] as $key => $group) {
-                    foreach ($group['values'] as $key2 => $option) {
-                        $groupVal = $group['groupnameOrig'] ? $group['groupnameOrig'] : $group['groupname'];
+                $sArticle['image']['relations'] = $sArticle['image']['res']['relations'] ?? null;
+                foreach ($sArticle['sConfigurator'] as $group) {
+                    foreach ($group['values'] as $option) {
+                        $groupVal = $group['groupnameOrig'] ?? $group['groupname'];
                         $groupVal = str_replace(['/', ' '], '', $groupVal);
-                        $optionVal = $option['optionnameOrig'] ? $option['optionnameOrig'] : $option['optionname'];
+                        $optionVal = $option['optionnameOrig'] ?? $option['optionname'];
                         $optionVal = str_replace(['/', ' '], '', $optionVal);
                         if (!empty($option['selected'])) {
                             $replacedOptionVal = str_replace(' ', '', $optionVal);
-                            $referenceImages[strtolower($groupVal . ':' . $optionVal)] = true;
+                            \assert(\is_string($replacedOptionVal));
+                            $referenceImages[strtolower(sprintf('%s:%s', $groupVal, $replacedOptionVal))] = true;
                         }
                     }
                 }
 
                 foreach (array_merge($sArticle['images'] ?? [], [\count($sArticle['images'] ?? []) => $sArticle['image']]) as $value) {
-                    if (preg_match('/(.*){(.*)}/', $value['relations'])) {
+                    if (preg_match('/(.*){(.*)}/', $value['relations'] ?? '')) {
                         $configuratorImages = true;
 
                         break;
@@ -1940,7 +1937,8 @@ class sArticles implements Enlight_Hook
 
         if (!empty($sArticle['images'])) {
             foreach ($sArticle['images'] as $key => $image) {
-                if ($image['relations'] === '&{}' || $image['relations'] === '||{}') {
+                $relations = $image['relations'] ?? '';
+                if ($relations === '&{}' || $relations === '||{}') {
                     $sArticle['images'][$key]['relations'] = '';
                 }
             }
@@ -2269,7 +2267,7 @@ class sArticles implements Enlight_Hook
                 $size = sprintf('%sx%s', $size, $size);
             }
 
-            if ($image['type'] === Media::TYPE_IMAGE || $image['media']['type'] === Media::TYPE_IMAGE) {
+            if (isset($image['type']) && $image['type'] === Media::TYPE_IMAGE || $image['media']['type'] === Media::TYPE_IMAGE) {
                 $imageData['src'][$key] = $mediaService->getUrl('media/image/thumbnail/' . $image['path'] . '_' . $size . '.' . $image['extension']);
 
                 if ($highDpiThumbnails) {

@@ -2,15 +2,46 @@
 
 This changelog references changes done in Shopware 5.7 patch versions.
 
+## 5.7.20
+
+[View all changes from v5.7.19...v5.7.20](https://github.com/shopware5/shopware/compare/v5.7.19...v5.7.20)
+
+### Changes
+
+* Changed behaviour of the translation transfer while setting a product variant as the main variant
+* Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
+
+* Updated `cocur/slugify` to version 4.5.1 for PHP 8.0 and newer
+* Updated `doctrine/orm` to version 2.15.5
+* Updated `google/cloud-storage` to version 1.33.2
+* Updated `guzzlehttp/guzzle` to version 7.8.0
+* Updated `guzzlehttp/psr7` to version 2.6.1
+* Updated `mpdf/mpdf` to version 8.2.0
+* Updated `laminas/laminas-code` to version 4.12.0 for PHP 8.1 and newer
+* Updated `phpunit/phpuit` to version 9.6.11
+* Updated `setasign/fpdf` to version 1.8.6
+* Updated `setasign/fpdi` to version 2.4.1
+* Updated `symfony/polyfill-php80` to version 1.28.0
+* Updated `symfony/polyfill-php81` to version 1.28.0
+* Updated `symfony/polyfill-php82` to version 1.28.0
+* Updated `symfony/serializer` to version 5.4.28
+* Updated `voku/anti-xss` to version 4.1.42
+* Updated `wikimedia/less.php` to version 4.1.1
+* Updated several indirect dependencies
+* Updated npm dependencies in `themes/package.json`
+* Updated npm dependencies in `themes/Frontend/Responsive/package.json`
+
+
 ## 5.7.19
 
-[View all changes from v5.7.18...v5.7.19](https://github.com/shopware/shopware/compare/v5.7.18...v5.7.19)
+[View all changes from v5.7.18...v5.7.19](https://github.com/shopware5/shopware/compare/v5.7.18...v5.7.19)
 
 ## 5.7.18
 
-[View all changes from v5.7.17...v5.7.18](https://github.com/shopware/shopware/compare/v5.7.17...v5.7.18)
+[View all changes from v5.7.17...v5.7.18](https://github.com/shopware5/shopware/compare/v5.7.17...v5.7.18)
 
 ### Additions
+
 * Added new input field that does not allow values, that contain URLs
 
 ### Deprecations
@@ -46,7 +77,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.17
 
-[View all changes from v5.7.16...v5.7.17](https://github.com/shopware/shopware/compare/v5.7.16...v5.7.17)
+[View all changes from v5.7.16...v5.7.17](https://github.com/shopware5/shopware/compare/v5.7.16...v5.7.17)
 
 ### Additions
 
@@ -97,7 +128,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.16
 
-[View all changes from v5.7.15...v5.7.16](https://github.com/shopware/shopware/compare/v5.7.15...v5.7.16)
+[View all changes from v5.7.15...v5.7.16](https://github.com/shopware5/shopware/compare/v5.7.15...v5.7.16)
 
 ### Additions
 
@@ -193,19 +224,19 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.15
 
-[View all changes from v5.7.14...v5.7.15](https://github.com/shopware/shopware/compare/v5.7.14...v5.7.15)
+[View all changes from v5.7.14...v5.7.15](https://github.com/shopware5/shopware/compare/v5.7.14...v5.7.15)
 
 ## 5.7.14
 
-[View all changes from v5.7.13...v5.7.14](https://github.com/shopware/shopware/compare/v5.7.13...v5.7.14)
+[View all changes from v5.7.13...v5.7.14](https://github.com/shopware5/shopware/compare/v5.7.13...v5.7.14)
 
 ## 5.7.13
 
-[View all changes from v5.7.12...v5.7.13](https://github.com/shopware/shopware/compare/v5.7.12...v5.7.13)
+[View all changes from v5.7.12...v5.7.13](https://github.com/shopware5/shopware/compare/v5.7.12...v5.7.13)
 
 ## 5.7.12
 
-[View all changes from v5.7.11...v5.7.12](https://github.com/shopware/shopware/compare/v5.7.11...v5.7.12)
+[View all changes from v5.7.11...v5.7.12](https://github.com/shopware5/shopware/compare/v5.7.11...v5.7.12)
 
 ### Additions
 
@@ -254,15 +285,15 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.11
 
-[View all changes from v5.7.10...v5.7.11](https://github.com/shopware/shopware/compare/v5.7.10...v5.7.11)
+[View all changes from v5.7.10...v5.7.11](https://github.com/shopware5/shopware/compare/v5.7.10...v5.7.11)
 
 ## 5.7.10
 
-[View all changes from v5.7.9...v5.7.10](https://github.com/shopware/shopware/compare/v5.7.9...v5.7.10)
+[View all changes from v5.7.9...v5.7.10](https://github.com/shopware5/shopware/compare/v5.7.9...v5.7.10)
 
 ## 5.7.9
 
-[View all changes from v5.7.8...v5.7.9](https://github.com/shopware/shopware/compare/v5.7.8...v5.7.9)
+[View all changes from v5.7.8...v5.7.9](https://github.com/shopware5/shopware/compare/v5.7.8...v5.7.9)
 
 ### Changes
 
@@ -272,7 +303,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.8
 
-[View all changes from v5.7.7...v5.7.8](https://github.com/shopware/shopware/compare/v5.7.7...v5.7.8)
+[View all changes from v5.7.7...v5.7.8](https://github.com/shopware5/shopware/compare/v5.7.7...v5.7.8)
 
 ### Additions
 
@@ -331,7 +362,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 ## 5.7.7
 
-[View all changes from v5.7.6...v5.7.7](https://github.com/shopware/shopware/compare/v5.7.6...v5.7.7)
+[View all changes from v5.7.6...v5.7.7](https://github.com/shopware5/shopware/compare/v5.7.6...v5.7.7)
 
 ### Deprecations
 
@@ -383,7 +414,7 @@ to log in again.**
 
 ## 5.7.6
 
-[View all changes from v5.7.5...v5.7.6](https://github.com/shopware/shopware/compare/v5.7.5...v5.7.6)
+[View all changes from v5.7.5...v5.7.6](https://github.com/shopware5/shopware/compare/v5.7.5...v5.7.6)
 
 ### Additions
 
@@ -391,11 +422,11 @@ to log in again.**
 
 ## 5.7.5
 
-[View all changes from v5.7.4...v5.7.5](https://github.com/shopware/shopware/compare/v5.7.4...v5.7.5)
+[View all changes from v5.7.4...v5.7.5](https://github.com/shopware5/shopware/compare/v5.7.4...v5.7.5)
 
 ## 5.7.4
 
-[View all changes from v5.7.3...v5.7.4](https://github.com/shopware/shopware/compare/v5.7.3...v5.7.4)
+[View all changes from v5.7.3...v5.7.4](https://github.com/shopware5/shopware/compare/v5.7.3...v5.7.4)
 
 ### Deprecations
 
@@ -459,7 +490,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.3
 
-[View all changes from v5.7.2...v5.7.3](https://github.com/shopware/shopware/compare/v5.7.2...v5.7.3)
+[View all changes from v5.7.2...v5.7.3](https://github.com/shopware5/shopware/compare/v5.7.2...v5.7.3)
 
 ### Changes
 
@@ -472,7 +503,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.2
 
-[View all changes from v5.7.1...v5.7.2](https://github.com/shopware/shopware/compare/v5.7.1...v5.7.2)
+[View all changes from v5.7.1...v5.7.2](https://github.com/shopware5/shopware/compare/v5.7.1...v5.7.2)
 
 ### Changes
 
@@ -480,7 +511,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.1
 
-[View all changes from v5.7.0...v5.7.1](https://github.com/shopware/shopware/compare/v5.7.0...v5.7.1)
+[View all changes from v5.7.0...v5.7.1](https://github.com/shopware5/shopware/compare/v5.7.0...v5.7.1)
 
 ### Additions
 
@@ -497,7 +528,7 @@ please extend the `frontend_listing_actions_filter_include` block from now on in
 
 ## 5.7.0
 
-[View all changes from v5.6.10...v5.7.0](https://github.com/shopware/shopware/compare/v5.6.10...v5.7.0)
+[View all changes from v5.6.10...v5.7.0](https://github.com/shopware5/shopware/compare/v5.6.10...v5.7.0)
 
 ### Breaks
 

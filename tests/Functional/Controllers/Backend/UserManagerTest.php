@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Functional\Controllers\Backend;
@@ -29,15 +28,18 @@ namespace Shopware\Tests\Functional\Controllers\Backend;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Enlight_Components_Test_Controller_TestCase;
+use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 
 class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 {
+    use DatabaseTransactionBehaviour;
+
     /**
      * Temporary user data
      *
      * @var array{username: string, password: string, localeId: int, roleId: int, name: string, email: string, active: bool}
      */
-    protected array $temporaryUserData = [
+    private array $temporaryUserData = [
         'username' => 'UserManagerTemporaryUser',
         'password' => 'test',
         'localeId' => 1,
@@ -52,7 +54,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @var array{id: int|null, localeId: int, roleId: int, active: bool, username: string, name: string, email: string, password: string, admin: bool, encoder: string, disabledCache: bool, lockedUntil: string}
      */
-    protected array $temporaryAdminUserData = [
+    private array $temporaryAdminUserData = [
         'id' => null,
         'localeId' => 1,
         'roleId' => 1,
@@ -78,7 +80,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
     }
 
     /**
-     * Verify that we can not login with a user that doesn't exists (yet)
+     * Verify that we can not log in with a user that doesn't exist (yet)
      */
     public function testWrongAdminLogin(): void
     {
@@ -112,11 +114,10 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Verify that the previously created admin user can login with a correct password
-     *
-     * @depends testCreateAdminUser
      */
     public function testAdminLogin(): void
     {
+        $this->testCreateAdminUser();
         $this->enableAuth();
 
         $this->resetRequest();
@@ -168,11 +169,10 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test edit of users
-     *
-     * @depends testUserAdd
      */
-    public function testUserEdit(string $username): string
+    public function testUserEdit(): string
     {
+        $username = $this->testUserAdd();
         $this->resetRequest()
         ->resetResponse();
 
@@ -199,11 +199,10 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test deleting of users
-     *
-     * @depends testUserEdit
      */
-    public function testUserDelete(string $username): void
+    public function testUserDelete(): void
     {
+        $username = $this->testUserAdd();
         $user = $this->getUserByUsername($username);
 
         static::assertGreaterThan(0, $user['id']);
@@ -253,7 +252,7 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEquals($user['id'], $this->View()->getAssign('data')['id']);
 
         // Check that result does not contain passwords
-        static::assertNull($this->View()->getAssign('data')['password']);
+        static::assertFalse(isset($this->View()->getAssign('data')['password']));
     }
 
     /**
@@ -289,11 +288,10 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test editing of roles
-     *
-     * @depends testCreateRole
      */
-    public function testEditRole(string $randomRoleName): int
+    public function testEditRole(): int
     {
+        $randomRoleName = $this->testCreateRole();
         $randomRole = Shopware()->Container()
             ->get(Connection::class)
             ->createQueryBuilder()
@@ -318,11 +316,10 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
     /**
      * Test deleting of roles
-     *
-     * @depends testEditRole
      */
-    public function testDeleteRole(int $randomRoleId): void
+    public function testDeleteRole(): void
     {
+        $randomRoleId = $this->testEditRole();
         $this->Request()->setParam('id', $randomRoleId);
         $this->dispatch('backend/UserManager/deleteRole');
 

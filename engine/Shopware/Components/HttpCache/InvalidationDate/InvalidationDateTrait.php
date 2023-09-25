@@ -1,25 +1,26 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Components\HttpCache\InvalidationDate;
@@ -32,7 +33,7 @@ trait InvalidationDateTrait
     /**
      * getMostRecentDate sorts an array of DateTime objects and returns the most recent one.
      *
-     * @param array<DateTimeInterface|string> $dates
+     * @param array<DateTimeInterface|string|null> $dates
      *
      * @return DateTimeInterface|null
      */
@@ -43,7 +44,7 @@ trait InvalidationDateTrait
         // Convert all date-strings into DateTime-objects
         $dates = array_map(function ($el) use ($now) {
             if (!$el instanceof DateTimeInterface) {
-                $el = new DateTime($el);
+                $el = new DateTime($el ?? '');
             }
 
             return $now < $el ? $el : null;
@@ -56,17 +57,10 @@ trait InvalidationDateTrait
             return null;
         }
 
-        // Pop a date as reference
-        $nearest = array_pop($dates);
+        usort($dates, function (DateTimeInterface $a, DateTimeInterface $b): int {
+            return $a <=> $b;
+        });
 
-        // Find the nearest date
-        foreach ($dates as $date) {
-            if ($now->diff($nearest) < $now->diff($date)) {
-                continue;
-            }
-            $nearest = $date;
-        }
-
-        return $nearest;
+        return array_pop($dates);
     }
 }

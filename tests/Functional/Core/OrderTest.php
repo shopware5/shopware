@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Functional\Core;
@@ -91,10 +90,9 @@ class OrderTest extends TestCase
             ]
         );
 
-        // Register the event listener, so that we test the value of "$context"
         Shopware()->Events()->addListener(
-            'Shopware_Modules_Order_SendMail_Create',
-            [$this, 'validatePaymentContextData']
+            'Shopware_Modules_Order_SendMail_FilterContext',
+            [$this, 'extendPaymentContextDataToPreventFailures']
         );
 
         Shopware()->Front()->setRequest(new ShopwareRequest());
@@ -102,19 +100,55 @@ class OrderTest extends TestCase
         $variables = [
             'additional' => [
                 'payment' => Shopware()->Modules()->Admin()->sGetPaymentMeanById(
-                    Shopware()->Db()->fetchRow('SELECT * FROM s_core_paymentmeans WHERE name LIKE "debit"')
+                    (int) Shopware()->Db()->fetchOne('SELECT id FROM s_core_paymentmeans WHERE name LIKE "debit"')
                 ),
+                'country' => [
+                    'countryname' => 'Deutschland',
+                ],
+                'countryShipping' => [
+                    'countryname' => 'Deutschland',
+                ],
+            ],
+            'billingaddress' => [
+                'company' => '',
+                'firstname' => 'Test',
+                'lastname' => 'Foo',
+                'street' => 'Ebbinghoff',
+                'streetnumber' => '10',
+                'zipcode' => '48624',
+                'city' => 'Schöppingen',
+                'ustid' => '',
+            ],
+            'shippingaddress' => [
+                'company' => '',
+                'firstname' => 'Test',
+                'lastname' => 'Foo',
+                'street' => 'Ebbinghoff',
+                'streetnumber' => '10',
+                'zipcode' => '48624',
+                'city' => 'Schöppingen',
+            ],
+            'sDispatch' => [
+                'name' => 'test',
+                'description' => 'foo',
             ],
         ];
 
         $this->module->sendMail($variables);
     }
 
-    public function validatePaymentContextData(Enlight_Event_EventArgs $args): void
+    public function extendPaymentContextDataToPreventFailures(Enlight_Event_EventArgs $args): void
     {
-        $context = $args->get('context');
+        $context = $args->getReturn();
         static::assertIsArray($context['sPaymentTable']);
         static::assertCount(0, $context['sPaymentTable']);
+
+        $context['sPaymentTable']['account'] = null;
+        $context['sPaymentTable']['bankcode'] = null;
+        $context['sPaymentTable']['bankname'] = null;
+        $context['sPaymentTable']['bankholder'] = null;
+
+        $args->setReturn($context);
     }
 
     public function testTransactionExistTrue(): void
@@ -343,12 +377,12 @@ class OrderTest extends TestCase
         $billingAttr = $billing->getAttribute();
 
         if ($billingAttr !== null) {
-            static::assertSame($originalBillingAddress['text1'], $billingAttr->getText1());
-            static::assertSame($originalBillingAddress['text2'], $billingAttr->getText2());
-            static::assertSame($originalBillingAddress['text3'], $billingAttr->getText3());
-            static::assertSame($originalBillingAddress['text4'], $billingAttr->getText4());
-            static::assertSame($originalBillingAddress['text5'], $billingAttr->getText5());
-            static::assertSame($originalBillingAddress['text6'], $billingAttr->getText6());
+            static::assertSame($originalBillingAddress['text1'] ?? null, $billingAttr->getText1());
+            static::assertSame($originalBillingAddress['text2'] ?? null, $billingAttr->getText2());
+            static::assertSame($originalBillingAddress['text3'] ?? null, $billingAttr->getText3());
+            static::assertSame($originalBillingAddress['text4'] ?? null, $billingAttr->getText4());
+            static::assertSame($originalBillingAddress['text5'] ?? null, $billingAttr->getText5());
+            static::assertSame($originalBillingAddress['text6'] ?? null, $billingAttr->getText6());
             Shopware()->Models()->remove($billingAttr);
         }
         Shopware()->Models()->remove($billing);
@@ -377,12 +411,12 @@ class OrderTest extends TestCase
         $shippingAttr = $shipping->getAttribute();
 
         if ($shippingAttr !== null) {
-            static::assertSame($originalBillingAddress['text1'], $shippingAttr->getText1());
-            static::assertSame($originalBillingAddress['text2'], $shippingAttr->getText2());
-            static::assertSame($originalBillingAddress['text3'], $shippingAttr->getText3());
-            static::assertSame($originalBillingAddress['text4'], $shippingAttr->getText4());
-            static::assertSame($originalBillingAddress['text5'], $shippingAttr->getText5());
-            static::assertSame($originalBillingAddress['text6'], $shippingAttr->getText6());
+            static::assertSame($originalBillingAddress['text1'] ?? null, $shippingAttr->getText1());
+            static::assertSame($originalBillingAddress['text2'] ?? null, $shippingAttr->getText2());
+            static::assertSame($originalBillingAddress['text3'] ?? null, $shippingAttr->getText3());
+            static::assertSame($originalBillingAddress['text4'] ?? null, $shippingAttr->getText4());
+            static::assertSame($originalBillingAddress['text5'] ?? null, $shippingAttr->getText5());
+            static::assertSame($originalBillingAddress['text6'] ?? null, $shippingAttr->getText6());
             Shopware()->Models()->remove($shippingAttr);
         }
 
@@ -482,6 +516,9 @@ class OrderTest extends TestCase
                 'getVariantEsd',
                 [$basketRow['ordernumber']]
             );
+            if (!\is_array($esdArticle)) {
+                continue;
+            }
 
             $availableSerials = $this->invokeMethod(
                 $this->module,

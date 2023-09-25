@@ -3,29 +3,30 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Models\Form;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Attribute\Form as FormAttribute;
 
 /**
  * Shopware field model represents a single form
@@ -52,7 +53,7 @@ class Form extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Form\Field>
+     * @var ArrayCollection<Field>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Form\Field", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      */
@@ -61,7 +62,7 @@ class Form extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Form|null
+     * @var FormAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Form", mappedBy="form", orphanRemoval=true, cascade={"persist"})
      */
@@ -169,13 +170,13 @@ class Form extends ModelEntity
 
     public function __construct()
     {
-        $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fields = new ArrayCollection();
     }
 
     /**
      * Returns a clone of this form incl. it's fields
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function getClone()
     {
@@ -193,7 +194,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Form\Field>
+     * @return ArrayCollection<Field>
      */
     public function getFields()
     {
@@ -201,21 +202,19 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Form\Field[]|null $fields
+     * @param Field[]|null $fields
      *
      * @return Form
      */
     public function setFields($fields)
     {
-        return $this->setOneToMany($fields, \Shopware\Models\Form\Field::class, 'fields', 'form');
+        return $this->setOneToMany($fields, Field::class, 'fields', 'form');
     }
 
     /**
      * Adds a field
      *
-     * @param \Shopware\Models\Form\Field $field
-     *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function addField(Field $field)
     {
@@ -264,7 +263,7 @@ class Form extends ModelEntity
     /**
      * @param string $name
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setName($name)
     {
@@ -276,7 +275,7 @@ class Form extends ModelEntity
     /**
      * @param string $text
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setText($text)
     {
@@ -296,7 +295,7 @@ class Form extends ModelEntity
     /**
      * @param string $email
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setEmail($email)
     {
@@ -316,7 +315,7 @@ class Form extends ModelEntity
     /**
      * @param string $emailTemplate
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setEmailTemplate($emailTemplate)
     {
@@ -336,7 +335,7 @@ class Form extends ModelEntity
     /**
      * @param string $emailSubject
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setEmailSubject($emailSubject)
     {
@@ -356,7 +355,7 @@ class Form extends ModelEntity
     /**
      * @param string $text2
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setText2($text2)
     {
@@ -376,7 +375,7 @@ class Form extends ModelEntity
     /**
      * @param int $ticketTypeid
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setTicketTypeid($ticketTypeid)
     {
@@ -396,7 +395,7 @@ class Form extends ModelEntity
     /**
      * @param string $isocode
      *
-     * @return \Shopware\Models\Form\Form
+     * @return Form
      */
     public function setIsocode($isocode)
     {
@@ -462,7 +461,7 @@ class Form extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Form|null
+     * @return FormAttribute|null
      */
     public function getAttribute()
     {
@@ -470,13 +469,13 @@ class Form extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Form|array|null $attribute
+     * @param FormAttribute|array|null $attribute
      *
      * @return Form
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Form::class, 'attribute', 'form');
+        return $this->setOneToOne($attribute, FormAttribute::class, 'attribute', 'form');
     }
 
     /**

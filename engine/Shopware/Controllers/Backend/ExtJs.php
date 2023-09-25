@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Action
@@ -27,7 +26,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * Array with all permissions to check in this controller
      *
-     * @var array
+     * @var array<string, array{privilege: string, errorMessage: string}>
      */
     protected $aclPermissions = [];
 
@@ -43,7 +42,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
         $this->Front()->Plugins()->JsonRequest()
             ->setParseInput()
             ->setParseParams(['group', 'sort', 'filter'])
-            ->setPadding($this->Request()->targetField);
+            ->setPadding($this->Request()->get('targetField'));
 
         // Call controller acl rules (user - defined)
         $this->initAcl();
@@ -63,7 +62,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * Returns all acl permissions
      *
-     * @return array
+     * @return array<string, array{privilege: string, errorMessage: string}>
      */
     public function getAclRules()
     {
@@ -72,6 +71,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
 
     /**
      * Needs to be present for the script renderer
+     *
+     * @return void
      */
     public function indexAction()
     {
@@ -87,6 +88,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
 
     /**
      * Needs to be present for the script renderer
+     *
+     * @return void
      */
     public function loadAction()
     {
@@ -116,6 +119,8 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
      * @param string $action       Name of action with or without 'Action'-suffix
      * @param string $privilege    Name of privilege as you have set in s_core_acl_privileges
      * @param string $errorMessage Optionally error message to show if permission denied
+     *
+     * @return void
      */
     protected function addAclPermission($action, $privilege, $errorMessage = '')
     {
@@ -150,7 +155,7 @@ abstract class Shopware_Controllers_Backend_ExtJs extends Enlight_Controller_Act
     /**
      * @param mixed|null $identity
      *
-     * @return bool|string
+     * @return string
      */
     protected function getTinyMceLang($identity)
     {

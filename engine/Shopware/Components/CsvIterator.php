@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
@@ -77,7 +76,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     private $_header;
 
     /**
-     * This is the constructor. It try to open the CSV file.
+     * This is the constructor. It tries to open the CSV file.
      *
      * @param string           $filename  the full path of the CSV file
      * @param non-empty-string $delimiter the delimiter
@@ -111,7 +110,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     }
 
     /**
-     * This is the destructor. It close the CSV file.
+     * This is the destructor. It closes the CSV file.
      */
     public function __destruct()
     {
@@ -141,9 +140,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This method move the file pointer to the next row.
      *
-     * @return void
+     * @deprecated - Native return type will be added with Shopware 5.8
      *
-     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     * @return void
      */
     #[\ReturnTypeWillChange]
     public function next()
@@ -155,9 +154,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This method reset the file handler.
      *
-     * @return void
+     * @deprecated - Native return type will be added with Shopware 5.8
      *
-     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     * @return void
      */
     #[\ReturnTypeWillChange]
     public function rewind()
@@ -171,9 +170,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This method returns the current row number.
      *
-     * @return int|null
+     * @deprecated - Native return type will be added with Shopware 5.8
      *
-     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     * @return int|null
      */
     #[\ReturnTypeWillChange]
     public function key()
@@ -182,11 +181,11 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     }
 
     /**
-     * This methods return the current CSV row data.
+     * This method return the current CSV row data.
+     *
+     * @deprecated - Native return type will be added with Shopware 5.8
      *
      * @return array The row as a one-dimensional array
-     *
-     * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
     #[\ReturnTypeWillChange]
     public function current()
@@ -202,9 +201,9 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * This method checks if the current row is readable.
      *
-     * @return bool if the current row is readable
+     * @deprecated - Native return type will be added with Shopware 5.8
      *
-     * @deprecated - Native return and parameter type will be added with Shopware 5.8
+     * @return bool if the current row is readable
      */
     #[\ReturnTypeWillChange]
     public function valid()

@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace ShopwarePlugin\PaymentMethods\Components;
@@ -52,13 +51,13 @@ class SepaPaymentMethod extends GenericPaymentMethod
         $sErrorFlag = [];
         $sErrorMessages = [];
 
-        if (!$paymentData['sSepaIban'] || trim($paymentData['sSepaIban']) === '') {
+        if (empty($paymentData['sSepaIban']) || trim($paymentData['sSepaIban']) === '') {
             $sErrorFlag['sSepaIban'] = true;
         }
-        if (Shopware()->Config()->get('sepaShowBic') && Shopware()->Config()->get('sepaRequireBic') && (!$paymentData['sSepaBic'] || trim($paymentData['sSepaBic']) === '')) {
+        if (Shopware()->Config()->get('sepaShowBic') && Shopware()->Config()->get('sepaRequireBic') && (empty($paymentData['sSepaBic']) || trim($paymentData['sSepaBic']) === '')) {
             $sErrorFlag['sSepaBic'] = true;
         }
-        if (Shopware()->Config()->get('sepaShowBankName') && Shopware()->Config()->get('sepaRequireBankName') && (!$paymentData['sSepaBankName'] || trim($paymentData['sSepaBankName']) === '')) {
+        if (Shopware()->Config()->get('sepaShowBankName') && Shopware()->Config()->get('sepaRequireBankName') && (empty($paymentData['sSepaBankName']) || trim($paymentData['sSepaBankName']) === '')) {
             $sErrorFlag['sSepaBankName'] = true;
         }
 
@@ -71,7 +70,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/account/internalMessages')->get('ErrorFillIn', 'Please fill in all red fields');
         }
 
-        if ($paymentData['sSepaIban'] && !$this->validateIBAN((string) $paymentData['sSepaIban'])) {
+        if (isset($paymentData['sSepaIban']) && !$this->validateIBAN((string) $paymentData['sSepaIban'])) {
             $sErrorMessages[] = Shopware()->Snippets()->getNamespace('frontend/plugins/payment/sepa')->get('ErrorIBAN', 'Invalid IBAN');
             $sErrorFlag['sSepaIban'] = true;
         }
@@ -171,7 +170,12 @@ class SepaPaymentMethod extends GenericPaymentMethod
             ->find($userId)->getDefaultBillingAddress();
         $paymentData = $this->getCurrentPaymentDataAsArray($userId);
         if (!\is_array($paymentData)) {
-            $paymentData = [];
+            $paymentData = [
+                'sSepaUseBillingData' => null,
+                'sSepaBankName' => null,
+                'sSepaBic' => null,
+                'sSepaIban' => null,
+            ];
         }
 
         $date = new DateTime();
@@ -260,7 +264,7 @@ class SepaPaymentMethod extends GenericPaymentMethod
             ],
         ]);
 
-        $customerEmail = Shopware()->Models()->createQueryBuilder()
+        $customerEmail = (string) Shopware()->Models()->createQueryBuilder()
             ->select('customer.email')
             ->from(Customer::class, 'customer')
             ->where('customer.id = ?1')

@@ -5,23 +5,22 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Functional\Components\Privacy;
@@ -34,11 +33,8 @@ use Enlight_Controller_Response_ResponseTestCase;
 use Enlight_Template_Manager;
 use Enlight_View_Default;
 use PHPUnit\Framework\TestCase;
-use Shopware\Bundle\CookieBundle\CookieCollection;
 use Shopware\Bundle\CookieBundle\Services\CookieHandler;
 use Shopware\Bundle\CookieBundle\Services\CookieRemoveHandler;
-use Shopware\Bundle\CookieBundle\Structs\CookieGroupStruct;
-use Shopware\Bundle\CookieBundle\Structs\CookieStruct;
 use Shopware\Components\Privacy\CookieRemoveSubscriber;
 use Shopware_Controllers_Frontend_Index;
 
@@ -73,9 +69,8 @@ class CookieRemoveSubscriberTest extends TestCase
         Shopware()->Config()->offsetSet('cookie_note_mode', CookieRemoveSubscriber::COOKIE_MODE_ALL);
         Shopware()->Config()->offsetSet('show_cookie_note', 1);
 
-        $_COOKIE['allowCookie'] = 1;
-
         $controller = $this->getController();
+        $controller->Request()->cookies->set('allowCookie', 1);
 
         // May not be removed, since further code may not be executed
         $controller->Response()->setCookie('notRemoved', 'foo');
@@ -177,21 +172,5 @@ class CookieRemoveSubscriberTest extends TestCase
             Shopware()->Container()->get(CookieHandler::class),
             $httpCacheEnabled
         );
-    }
-}
-
-class PreserveCookieFromRemovingSubscriber
-{
-    public function addCookie(): CookieCollection
-    {
-        $cookieCollection = new CookieCollection();
-        $cookieCollection->add(new CookieStruct(
-            'keepMe',
-            '/^keepMe$/',
-            'keepMe',
-            CookieGroupStruct::PERSONALIZATION
-        ));
-
-        return $cookieCollection;
     }
 }

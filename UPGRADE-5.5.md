@@ -4,7 +4,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ## 5.5.10
 
-[View all changes from v5.5.9...v5.5.10](https://github.com/shopware/shopware/compare/v5.5.9...v5.5.10)
+[View all changes from v5.5.9...v5.5.10](https://github.com/shopware5/shopware/compare/v5.5.9...v5.5.10)
 
 ### Additions
 
@@ -20,7 +20,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ## 5.5.9
 
-[View all changes from v5.5.8...v5.5.9](https://github.com/shopware/shopware/compare/v5.5.8...v5.5.9)
+[View all changes from v5.5.8...v5.5.9](https://github.com/shopware5/shopware/compare/v5.5.8...v5.5.9)
 
 ### Additions
 
@@ -82,7 +82,7 @@ This changelog references changes done in Shopware 5.5 patch versions.
 
 ## 5.5.8
 
-[View all changes from v5.5.7...v5.5.8](https://github.com/shopware/shopware/compare/v5.5.7...v5.5.8)
+[View all changes from v5.5.7...v5.5.8](https://github.com/shopware5/shopware/compare/v5.5.7...v5.5.8)
 
 ### Additions
 
@@ -167,7 +167,7 @@ For security reasons, some extensions like php, cgi, com, exe are not allowed in
 
 ## 5.5.7
 
-[View all changes from v5.5.6...v5.5.7](https://github.com/shopware/shopware/compare/v5.5.6...v5.5.7)
+[View all changes from v5.5.6...v5.5.7](https://github.com/shopware5/shopware/compare/v5.5.6...v5.5.7)
 
 ### Additions
 
@@ -220,7 +220,7 @@ For security reasons, some extensions like php, cgi, com, exe are not allowed in
     * `\Shopware\Components\Plugin\XmlCronjobReader`
     * `\Shopware\Components\Plugin\XmlPluginInfoReader`
     * `\Shopware\Components\Plugin\XmlConfigDefinitionReader`
-    They have been replaced in Shopware 5.6 with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
+    They have been replaced in Shopware 5.6 with new implementations in the namespace [Shopware\Components\Plugin\XmlReader](https://github.com/shopware5/shopware/tree/5.6/engine/Shopware/Components/Plugin/XmlReader)
 
 ### Removals
 
@@ -289,7 +289,7 @@ return [
 
 ## 5.5.6
 
-[View all changes from v5.5.5...v5.5.6](https://github.com/shopware/shopware/compare/v5.5.5...v5.5.6)
+[View all changes from v5.5.5...v5.5.6](https://github.com/shopware5/shopware/compare/v5.5.5...v5.5.6)
 
 ### Changes
 
@@ -298,7 +298,7 @@ return [
 
 ## 5.5.5
 
-[View all changes from v5.5.4...v5.5.5](https://github.com/shopware/shopware/compare/v5.5.4...v5.5.5)
+[View all changes from v5.5.4...v5.5.5](https://github.com/shopware5/shopware/compare/v5.5.4...v5.5.5)
 
 ### Additions
 
@@ -387,7 +387,7 @@ return [
 
 ## 5.5.4
 
-[View all changes from v5.5.3...v5.5.4](https://github.com/shopware/shopware/compare/v5.5.3...v5.5.4)
+[View all changes from v5.5.3...v5.5.4](https://github.com/shopware5/shopware/compare/v5.5.3...v5.5.4)
 
 ### Additions
 
@@ -457,7 +457,7 @@ return [
 
 ## 5.5.3
 
-[View all changes from v5.5.2...v5.5.3](https://github.com/shopware/shopware/compare/v5.5.2...v5.5.3)
+[View all changes from v5.5.2...v5.5.3](https://github.com/shopware5/shopware/compare/v5.5.2...v5.5.3)
 
 ### Additions
 
@@ -485,7 +485,7 @@ return [
 
 ## 5.5.2
 
-[View all changes from v5.5.1...v5.5.2](https://github.com/shopware/shopware/compare/v5.5.1...v5.5.2)
+[View all changes from v5.5.1...v5.5.2](https://github.com/shopware5/shopware/compare/v5.5.1...v5.5.2)
 
 ### Additions
 
@@ -567,7 +567,7 @@ return [
 
 ## 5.5.1
 
-[View all changes from v5.5.0...v5.5.1](https://github.com/shopware/shopware/compare/v5.5.0...v5.5.1)
+[View all changes from v5.5.0...v5.5.1](https://github.com/shopware5/shopware/compare/v5.5.0...v5.5.1)
 
 ### Changes
 
@@ -575,7 +575,7 @@ return [
 
 ## 5.5.0
 
-[View all changes from v5.4.6...v5.5.0](https://github.com/shopware/shopware/compare/v5.4.6...v5.5.0)
+[View all changes from v5.4.6...v5.5.0](https://github.com/shopware5/shopware/compare/v5.4.6...v5.5.0)
 
 ### Additions
 

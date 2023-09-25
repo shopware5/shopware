@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\ORM\OptimisticLockException;
@@ -464,19 +463,19 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         $Document = array_merge(
             $Document,
             [
-                'comment' => $this->_config['docComment'],
+                'comment' => $this->_config['docComment'] ?? null,
                 'id' => $id,
                 'bid' => $this->_documentBid,
                 'date' => $this->_config['date'],
-                'deliveryDate' => $this->_config['delivery_date'],
+                'deliveryDate' => $this->_config['delivery_date'] ?? null,
                 // The "netto" config flag, if set to true, allows creating
                 // netto documents for brutto orders. Setting it to false,
                 // does not however create brutto documents for netto orders.
-                'netto' => $this->_order->order->taxfree ? true : $this->_config['netto'],
+                'netto' => $this->_order->order->taxfree ? true : ($this->_config['netto'] ?? null),
                 'nettoPositions' => $this->_order->order->net,
             ]
         );
-        $Document['voucher'] = $this->getVoucher($this->_config['voucher']);
+        $Document['voucher'] = $this->getVoucher($this->_config['voucher'] ?? null);
         $this->_view->assign('Document', $Document);
 
         // Translate payment and dispatch depending on the order's language
@@ -529,7 +528,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
         }
         unset($product);
 
-        if ($this->_config['_previewForcePagebreak']) {
+        if (!empty($this->_config['_previewForcePagebreak'])) {
             $positions = array_merge($positions, $positions);
         }
 
@@ -692,7 +691,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             return;
         }
 
-        $bid = $this->_config['bid'];
+        $bid = $this->_config['bid'] ?? null;
         if (!empty($bid)) {
             $this->_documentBid = $bid;
         }
@@ -713,7 +712,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
             UPDATE `s_order_documents` SET `date` = now(),`amount` = ?
             WHERE `type` = ? AND userID = ? AND orderID = ? LIMIT 1
             ';
-            $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
+            $useNet = $this->_order->order->taxfree ? true : ($this->_config['netto'] ?? null);
+            $amount = $useNet ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {
                 $amount *= -1;
             }
@@ -756,7 +756,8 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
 
             $hash = md5(uniqid((string) rand()));
 
-            $amount = ($this->_order->order->taxfree ? true : $this->_config['netto']) ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
+            $useNet = $this->_order->order->taxfree ? true : ($this->_config['netto'] ?? null);
+            $amount = $useNet ? round($this->_order->amountNetto, 2) : round($this->_order->amount, 2);
             if ($typID == 4) {
                 $amount *= -1;
             }
@@ -797,7 +798,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 } else {
                     // The typID is indexed with base 0, so we need increase the typID
                     if (!\in_array($typID, ['1', '2', '3'])) {
-                        $typID = $typID + 1;
+                        ++$typID;
                     }
                     $numberrange = 'doc_' . $typID;
                 }

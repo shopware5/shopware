@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\DBAL\Query\QueryBuilder;
@@ -80,8 +79,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getRepository()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         if ($this->repository === null) {
             $this->repository = $this->em->getRepository(Category::class);
         }
@@ -96,8 +93,6 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function getCategoryComponent()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         return Shopware()->Container()->get('categorydenormalization');
     }
 
@@ -190,7 +185,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $data = iterator_to_array($paginator);
         $data = $data[0];
 
-        $data['imagePath'] = $data['media']['id'];
+        $data['imagePath'] = $data['media']['id'] ?? null;
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -536,10 +531,8 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      */
     public function saveDetail()
     {
-        trigger_error(sprintf('%s:%s is deprecated since Shopware 5.6 and will be private with 5.8.', __CLASS__, __METHOD__), E_USER_DEPRECATED);
-
         $params = $this->Request()->getParams();
-        $categoryId = (int) $params['id'];
+        $categoryId = (int) ($params['id'] ?? 0);
 
         $repo = $this->em->getRepository(Category::class);
 
@@ -548,7 +541,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
             $this->em->persist($categoryModel);
 
             // Find parent for newly created category
-            $params['parentId'] = is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
+            $params['parentId'] = isset($params['parentId']) && is_numeric($params['parentId']) ? (int) $params['parentId'] : 1;
             /** @var Category $parentCategory */
             $parentCategory = $repo->find($params['parentId']);
             $categoryModel->setParent($parentCategory);
@@ -579,7 +572,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         }
 
         $categoryModel->setStream(null);
-        if ($params['streamId']) {
+        if (isset($params['streamId'])) {
             $params['stream'] = $this->em->find(ProductStream::class, (int) $params['streamId']);
         }
 
@@ -605,7 +598,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $paginator = $this->em->createPaginator($query);
         $data = iterator_to_array($paginator);
         $data = $data[0];
-        $data['imagePath'] = $data['media']['path'];
+        $data['imagePath'] = $data['media']['path'] ?? null;
 
         $this->View()->assign(['success' => true, 'data' => $data, 'total' => \count($data)]);
     }
@@ -932,15 +925,11 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
 
     /**
      * This method loads the customer group models for the passed ids in the "customerGroups" parameter.
-     *
-     * @param array $data
-     *
-     * @return array
      */
-    private function prepareCustomerGroupsAssociatedData($data)
+    private function prepareCustomerGroupsAssociatedData(array $data): array
     {
         $customerGroups = [];
-        foreach ($data['customerGroups'] as $customerGroupData) {
+        foreach ($data['customerGroups'] ?? [] as $customerGroupData) {
             if (!empty($customerGroupData['id'])) {
                 $model = $this->em->find(Group::class, $customerGroupData['id']);
                 $customerGroups[] = $model;

@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\DBAL\Connection;
@@ -354,7 +353,7 @@ class sExport implements Enlight_Hook
 
         $this->shop = $shop;
 
-        $this->sSYSTEM->sCONFIG = Shopware()->Config();
+        $this->sSYSTEM->sCONFIG = $this->config;
     }
 
     /**
@@ -378,7 +377,7 @@ class sExport implements Enlight_Hook
         $this->sSmarty->registerPlugin('modifier', 'shippingcost', [$this, 'sGetArticleShippingcost']);
         $this->sSmarty->registerPlugin('modifier', 'property', [$this, 'sGetArticleProperties']);
 
-        $this->sSmarty->assign('sConfig', $this->sSYSTEM->sCONFIG);
+        $this->sSmarty->assign('sConfig', $this->config);
         $this->sSmarty->assign('shopData', $this->shopData);
         $this->sSmarty->assign('sCurrency', $this->sCurrency);
         $this->sSmarty->assign('sCustomergroup', $this->sCustomergroup);
@@ -414,7 +413,7 @@ class sExport implements Enlight_Hook
     }
 
     /**
-     * @param string      $string
+     * @param string|null $string
      * @param string      $esc_type
      * @param string|null $char_set
      *
@@ -426,14 +425,17 @@ class sExport implements Enlight_Hook
     }
 
     /**
-     * @param string      $string
+     * @param string|null $string
      * @param string      $esc_type
      * @param string|null $char_set
      *
-     * @return mixed|string
+     * @return string
      */
     public function sEscapeString($string, $esc_type = '', $char_set = null)
     {
+        if ($string === null) {
+            $string = '';
+        }
         if (empty($esc_type)) {
             if (!empty($this->sSettings['formatID']) && $this->sSettings['formatID'] == 3) {
                 $esc_type = 'html';
@@ -492,7 +494,7 @@ class sExport implements Enlight_Hook
 
             case 'quotes':
                 // Escape unescaped single quotes
-                return preg_replace("%(?<!\\\\)'%", "\\'", $string);
+                return (string) preg_replace("%(?<!\\\\)'%", "\\'", $string);
 
             case 'hex':
                 // Escape every character into hex
@@ -542,6 +544,8 @@ class sExport implements Enlight_Hook
 
                 return $_res;
         }
+
+        return $string;
     }
 
     /**
@@ -552,7 +556,7 @@ class sExport implements Enlight_Hook
      */
     public function sGetArticleLink($articleID, $title = '')
     {
-        return Shopware()->Modules()->Core()->sRewriteLink($this->sSYSTEM->sCONFIG['sBASEFILE'] . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
+        return Shopware()->Modules()->Core()->sRewriteLink($this->config->get('sBASEFILE') . "?sViewport=detail&sArticle=$articleID", $title) . (empty($this->sSettings['partnerID']) ? '' : '?sPartner=' . urlencode($this->sSettings['partnerID']));
     }
 
     /**
@@ -1441,8 +1445,8 @@ class sExport implements Enlight_Hook
     public function sGetDispatchBasket($article, $countryID = null, $paymentID = null)
     {
         $sql_select = '';
-        if (!empty($this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'])) {
-            $sql_select .= ', ' . $this->sSYSTEM->sCONFIG['sPREMIUMSHIPPIUNGASKETSELECT'];
+        if (!empty($this->config->get('sPREMIUMSHIPPIUNGASKETSELECT'))) {
+            $sql_select .= ', ' . $this->config->get('sPREMIUMSHIPPIUNGASKETSELECT');
         }
         $sql = 'SELECT id, calculation_sql FROM s_premium_dispatch WHERE calculation=3';
         $calculations = $this->db->fetchPairs($sql);

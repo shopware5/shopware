@@ -5,28 +5,26 @@ declare(strict_types=1);
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Tests\Functional\Bundle\AccountBundle\Controller;
 
-use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Enlight_Components_Session_Namespace;
 use Enlight_Components_Test_Controller_TestCase as ControllerTestCase;
 use Shopware_Components_Config;
@@ -127,12 +125,12 @@ class AccountTest extends ControllerTestCase
     public function testHashPostLogin(): void
     {
         // test with md5 password and without the ignoreAccountMode parameter
-        static::assertEmpty($this->session->offsetGet('sUserId'));
+        static::assertEmpty($this->session->get('sUserId'));
 
         $this->setUserDataToPost();
         $this->dispatch('/account/login');
 
-        static::assertEmpty($this->session->offsetGet('sUserId'));
+        static::assertEmpty($this->session->get('sUserId'));
 
         $this->logoutUser();
     }
@@ -222,9 +220,10 @@ class AccountTest extends ControllerTestCase
     {
         $sql = 'SELECT email, password FROM s_user WHERE id = 1';
         $database = $this->container->get('db');
-        static::assertInstanceOf(Enlight_Components_Db_Adapter_Pdo_Mysql::class, $database);
 
         $userData = $database->fetchRow($sql);
+        static::assertNotEmpty($userData['email']);
+        static::assertNotEmpty($userData['password']);
         $this->Request()->setMethod('POST')
             ->setPost('email', $userData['email'])
             ->setPost('passwordMD5', $userData['password']);

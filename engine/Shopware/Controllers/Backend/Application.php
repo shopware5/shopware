@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 use Doctrine\ORM\AbstractQuery;
@@ -877,7 +876,7 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
                 $column = $mapping['joinColumns'][0]['name'];
                 $field = $metaData->getFieldForColumn($column);
 
-                if ($data[$field]) {
+                if (isset($data[$field])) {
                     $associationModel = $this->getManager()->find($mapping['targetEntity'], $data[$field]);
 
                     // proxies need to be loaded, otherwise the validation will be failed.
@@ -1087,39 +1086,41 @@ abstract class Shopware_Controllers_Backend_Application extends Shopware_Control
         $conditions = [];
 
         foreach ($filters as $condition) {
-            if ($condition['property'] === 'search') {
-                foreach ($fields as $name => $field) {
+            if (isset($condition['property'])) {
+                if ($condition['property'] === 'search') {
+                    foreach ($fields as $name => $field) {
+                        // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
+                        if (!empty($whiteList) && !\in_array($name, $whiteList, true)) {
+                            continue;
+                        }
+
+                        $value = $this->formatSearchValue($condition['value'], $field);
+
+                        $conditions[] = [
+                            'property' => $field['alias'],
+                            'operator' => 'OR',
+                            'value' => $value,
+                        ];
+                    }
+                } elseif (\array_key_exists($condition['property'], $fields)) {
                     // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                    if (!empty($whiteList) && !\in_array($name, $whiteList, true)) {
+                    if (!empty($whiteList) && !\in_array($condition['property'], $whiteList, true)) {
                         continue;
                     }
 
-                    $value = $this->formatSearchValue($condition['value'], $field);
+                    $field = $fields[$condition['property']];
+                    $value = $this->formatSearchValue($condition['value'], $field, $condition['expression'] ?? null);
 
-                    $conditions[] = [
+                    $tmpCondition = [
                         'property' => $field['alias'],
-                        'operator' => 'OR',
+                        'operator' => $condition['operator'] ?? null,
                         'value' => $value,
                     ];
+                    if (isset($condition['expression'])) {
+                        $tmpCondition['expression'] = $condition['expression'];
+                    }
+                    $conditions[] = $tmpCondition;
                 }
-            } elseif (\array_key_exists($condition['property'], $fields)) {
-                // check if the developer limited the filterable fields and the passed property defined in the filter fields parameter.
-                if (!empty($whiteList) && !\in_array($condition['property'], $whiteList, true)) {
-                    continue;
-                }
-
-                $field = $fields[$condition['property']];
-                $value = $this->formatSearchValue($condition['value'], $field, $condition['expression'] ?? null);
-
-                $tmpCondition = [
-                    'property' => $field['alias'],
-                    'operator' => $condition['operator'] ?? null,
-                    'value' => $value,
-                ];
-                if (isset($condition['expression'])) {
-                    $tmpCondition['expression'] = $condition['expression'];
-                }
-                $conditions[] = $tmpCondition;
             }
         }
 

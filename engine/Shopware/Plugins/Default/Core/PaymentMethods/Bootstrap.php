@@ -3,24 +3,27 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
+
+use ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod;
+use ShopwarePlugin\PaymentMethods\Components\GenericPaymentMethod;
+use ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod;
 
 class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -96,15 +99,17 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
         $this->Application()->Loader()->registerNamespace('ShopwarePlugin\PaymentMethods\Components', __DIR__ . '/Components/');
 
-        $dirs['debit'] = 'ShopwarePlugin\PaymentMethods\Components\DebitPaymentMethod';
-        $dirs['sepa'] = 'ShopwarePlugin\PaymentMethods\Components\SepaPaymentMethod';
-        $dirs['default'] = 'ShopwarePlugin\PaymentMethods\Components\GenericPaymentMethod';
+        $dirs['debit'] = DebitPaymentMethod::class;
+        $dirs['sepa'] = SepaPaymentMethod::class;
+        $dirs['default'] = GenericPaymentMethod::class;
 
         return $dirs;
     }
 
     /**
      * Add View path to Smarty
+     *
+     * @return void
      */
     public function addPaths(Enlight_Event_EventArgs $arguments)
     {
@@ -117,6 +122,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
     /**
      * Called when the BackendOrderPostDispatch Event is triggered
+     *
+     * @return void
      */
     public function onBackendOrderPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -137,6 +144,8 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
 
     /**
      * Called when the BackendCustomerPostDispatch Event is triggered
+     *
+     * @return void
      */
     public function onBackendCustomerPostDispatch(Enlight_Event_EventArgs $args)
     {
@@ -159,7 +168,7 @@ class Shopware_Plugins_Core_PaymentMethods_Bootstrap extends Shopware_Components
     /**
      * Registers all necessary events and hooks.
      */
-    private function subscribeEvents()
+    private function subscribeEvents(): void
     {
         $this->subscribeEvent(
             'Shopware_Modules_Admin_InitiatePaymentClass_AddClass',

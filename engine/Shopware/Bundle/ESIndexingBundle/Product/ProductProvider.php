@@ -3,23 +3,22 @@
  * Shopware 5
  * Copyright (c) shopware AG
  *
- * According to our dual licensing model, this program can be used either
- * under the terms of the GNU Affero General Public License, version 3,
- * or under a proprietary license.
+ * According to our licensing model, this program can be used
+ * under the terms of the GNU Affero General Public License, version 3.
  *
  * The texts of the GNU Affero General Public License with an additional
- * permission and of our proprietary license can be found at and
- * in the LICENSE file you have received along with this program.
+ * permission can be found at and in the LICENSE file you have received
+ * along with this program.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Affero General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU Affero General Public License for more details.
  *
  * "Shopware" is a registered trademark of shopware AG.
  * The licensing of the program under the AGPLv3 does not imply a
- * trademark license. Therefore any rights, title and interest in
- * our trademarks remain entirely with us.
+ * trademark license. Therefore, any rights, title and interest in
+ * our trademarks remain entirely with the shopware AG.
  */
 
 namespace Shopware\Bundle\ESIndexingBundle\Product;
@@ -368,16 +367,13 @@ class ProductProvider implements ProviderInterface
             ->where('mapping.articleID IN (:ids)')
             ->setParameter(':ids', $ids, Connection::PARAM_INT_ARRAY);
 
-        $data = $query->execute()->fetchAll(PDO::FETCH_ASSOC);
+        $data = $query->execute()->fetchAllAssociative();
 
         $result = [];
         foreach ($data as $row) {
             $productId = (int) $row['productId'];
-            $categories = [];
-            if (isset($result[$productId])) {
-                $categories = $result[$productId];
-            }
-            $temp = explode('|', $row['path']);
+            $categories = $result[$productId] ?? [];
+            $temp = explode('|', $row['path'] ?? '');
             $temp[] = $row['id'];
 
             $result[$productId] = array_merge($categories, $temp);
@@ -470,7 +466,7 @@ class ProductProvider implements ProviderInterface
                 $customerGroup = $context->getCurrentCustomerGroup()->getKey();
                 $key = $customerGroup . '_' . $context->getCurrency()->getId();
 
-                $rule = $rules[$context->getFallbackCustomerGroup()->getKey()];
+                $rule = $rules[$context->getFallbackCustomerGroup()->getKey()] ?? null;
                 if (isset($rules[$customerGroup])) {
                     $rule = $rules[$customerGroup];
                 }

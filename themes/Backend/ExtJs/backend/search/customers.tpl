@@ -14,7 +14,7 @@
         {block name="backend/search/index/result_content"}
             <div class="result-container">
                 {foreach $searchResult.customers as $item}
-                    <a onclick="openSearchResult('customers', {$item.id});return false;" href="#"{if $item@iteration is odd by 2} class="odd"{/if}>
+                    <a onclick="openSearchResult('customers', {$item.id});return false;" href="#">
                         <span class="name">
                             {if $item.company}{$item.company} {/if}{$item.firstname} {$item.lastname}
                         </span>
