@@ -22,3 +22,4 @@ snippets/backend/plugins/ export-ignore
 Makefile export-ignore
 .make* export-ignore
 vendor-bin/ export-ignore
+.danger.php export-ignore
