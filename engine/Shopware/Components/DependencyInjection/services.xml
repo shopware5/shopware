@@ -42,7 +42,6 @@
 
         <service id="swagupdateupdatecheck" class="ShopwarePlugins\SwagUpdate\Components\UpdateCheck">
             <argument type="service" id="update_api_client"/>
-            <argument>%shopware.update.draft%</argument>
             <argument>%shopware.update.prerelease%</argument>
         </service>
 
