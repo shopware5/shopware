@@ -60,10 +60,9 @@ class Zend_Translate_Adapter_XmlTm extends Zend_Translate_Adapter {
 
         $encoding    = $this->_findEncoding($filename);
         $this->_file = xml_parser_create($encoding);
-        xml_set_object($this->_file, $this);
         xml_parser_set_option($this->_file, XML_OPTION_CASE_FOLDING, 0);
-        xml_set_element_handler($this->_file, "_startElement", "_endElement");
-        xml_set_character_data_handler($this->_file, "_contentElement");
+        xml_set_element_handler($this->_file, [$this, "_startElement"], [$this, "_endElement"]);
+        xml_set_character_data_handler($this->_file, [$this, "_contentElement"]);
 
         if (!xml_parse($this->_file, file_get_contents($filename))) {
             $ex = sprintf('XML error: %s at line %d of file %s',
