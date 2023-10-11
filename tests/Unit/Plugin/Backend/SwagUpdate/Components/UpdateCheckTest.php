@@ -134,7 +134,7 @@ class UpdateCheckTest extends TestCase
 
         $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.7.14', $version->version);
+        static::assertSame('5.7.14', $version->version);
     }
 
     public function testCheckUpdateReturnsVersionWithNewPreRelease(): void
@@ -151,7 +151,7 @@ class UpdateCheckTest extends TestCase
 
         $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.7.14', $version->version);
+        static::assertSame('5.7.14', $version->version);
     }
 
     public function testCheckUpdateReturnsVersionOfPreReleaseWithPreRelease(): void
@@ -168,7 +168,7 @@ class UpdateCheckTest extends TestCase
 
         $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.7.15', $version->version);
+        static::assertSame('5.7.15', $version->version);
     }
 
     public function testCheckUpdateReturnsVersionOfNormalReleaseWithoutPreRelease(): void
@@ -185,7 +185,7 @@ class UpdateCheckTest extends TestCase
 
         $version = $updateChecker->checkUpdate('5.7.13');
         static::assertInstanceOf(Version::class, $version);
-        static::assertSame('v5.7.14', $version->version);
+        static::assertSame('5.7.14', $version->version);
     }
 
     private function getSingleVersionJson(string $version, bool $prerelease = false): string
