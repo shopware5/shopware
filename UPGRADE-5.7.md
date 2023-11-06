@@ -19,6 +19,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `monolog/monolog` to version 2.9.2
 * Updated `mpdf/mpdf` to version 8.2.0
 * Updated `laminas/laminas-code` to version 4.13.0 for PHP 8.1 and newer
+* Updated `laminas/laminas-escaper` to version 2.13.0 for PHP 8.1 and newer
 * Updated `phpunit/phpuit` to version 9.6.11
 * Updated `setasign/fpdf` to version 1.8.6
 * Updated `setasign/fpdi` to version 2.5.0
