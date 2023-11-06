@@ -1649,7 +1649,7 @@ class Article extends Resource implements BatchInterface
                 if (!$value instanceof Value) {
                     throw new CustomValidationException(sprintf('Property value by id "%s" not found', $valueData['id']));
                 }
-                // Get / create value by name
+            // Get / create value by name
             } elseif (isset($valueData['value'])) {
                 // Get option
                 if (isset($valueData['option'])) {
@@ -1668,7 +1668,7 @@ class Article extends Resource implements BatchInterface
                         if (!$relation instanceof Relation) {
                             $propertyGroup->addOption($option);
                         }
-                        // Get/create option depending on associated filter groups
+                    // Get/create option depending on associated filter groups
                     } elseif (isset($valueData['option']['name'])) {
                         // If a name is passed and there is a matching option/group relation, get this option
                         // If only a name is passed, create a new option

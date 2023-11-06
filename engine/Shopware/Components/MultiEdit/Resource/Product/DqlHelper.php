@@ -729,7 +729,7 @@ class DqlHelper
                 // Non-numeric tokens will become their quotes removed:
                 if (!is_numeric($token['token'])) {
                     $params[] = substr($token['token'], 1, -1);
-                    // Numeric tokens can simple be appended to the params array
+                // Numeric tokens can simple be appended to the params array
                 } else {
                     $params[] = $token['token'];
                 }
