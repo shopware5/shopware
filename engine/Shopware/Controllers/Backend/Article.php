@@ -4394,7 +4394,7 @@ class Shopware_Controllers_Backend_Article extends Shopware_Controllers_Backend_
 
             return implode('.', $results);
 
-            // If the result of the current command on the cursor is an object
+        // If the result of the current command on the cursor is an object
         } elseif ($result instanceof Product || $result instanceof ProductVariant) {
             // We have to execute the next command on the result
             return $this->recursiveInterpreter($result, $index, $commands);

@@ -82,7 +82,7 @@ class TaxAggregator implements TaxAggregatorInterface
                 continue;
             }
 
-            /** @var numeric-string $taxRateString */
+            /** @var numeric-string&non-empty-string $taxRateString */
             $taxRateString = number_format($taxRate, 2);
 
             if (!\array_key_exists($taxRateString, $result)) {

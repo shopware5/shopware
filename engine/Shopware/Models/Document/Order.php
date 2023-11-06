@@ -628,7 +628,7 @@ class Shopware_Models_Document_Order extends Enlight_Class implements Enlight_Ho
                 if (empty($position['tax_rate'])) {
                     if ($ticketResult['taxconfig'] === 'default' || empty($ticketResult['taxconfig'])) {
                         $position['tax'] = Shopware()->Config()->get('sVOUCHERTAX');
-                        // Pre 3.5.4 behaviour
+                    // Pre 3.5.4 behaviour
                     } elseif ($ticketResult['taxconfig'] === 'auto') {
                         // Check max. used tax-rate from basket
                         $position['tax'] = $this->getMaxTaxRate();

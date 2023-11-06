@@ -176,7 +176,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
      */
     protected function getQueryPaginator(QueryBuilder $builder, $hydrationMode = AbstractQuery::HYDRATE_ARRAY)
     {
-        /** @var Query<AddressModel> $query */
+        /** @var Query<AddressModel|array<string, mixed>> $query */
         $query = $builder->getQuery();
         $query->setHydrationMode($hydrationMode);
         $query->setHint(Query::HINT_INCLUDE_META_COLUMNS, true);
