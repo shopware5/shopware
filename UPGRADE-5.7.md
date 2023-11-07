@@ -33,6 +33,9 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated npm dependencies in `themes/package.json`
 * Updated npm dependencies in `themes/Frontend/Responsive/package.json`
 
+### Removals
+
+* Removed development dependency `phpspec/prophecy-phpunit` as it is no longer used due to a refactoring of `Shopware\Tests\Unit\Components\DependencyInjection\ContainerTest`
 
 ## 5.7.19
 

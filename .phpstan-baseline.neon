@@ -40676,46 +40676,6 @@ parameters:
 			path: tests/Unit/Components/DependencyInjection/Compiler/TagReplaceTraitTest.php
 
 		-
-			message: "#^Call to an undefined method Enlight_Event_EventArgs\\:\\:getSubject\\(\\)\\.$#"
-			count: 3
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:notify\\(\\)\\.$#"
-			count: 7
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Call to an undefined method Prophecy\\\\Prophecy\\\\ObjectProphecy\\:\\:notifyUntil\\(\\)\\.$#"
-			count: 4
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Service \"alias\" is not registered in the container\\.$#"
-			count: 1
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Service \"bar\" is not registered in the container\\.$#"
-			count: 3
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Service \"foo\" is not registered in the container\\.$#"
-			count: 5
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Service \"parent\" is not registered in the container\\.$#"
-			count: 3
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
-			message: "#^Service \"someKey\" is not registered in the container\\.$#"
-			count: 1
-			path: tests/Unit/Components/DependencyInjection/ContainerTest.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Unit\\\\Components\\\\DependencyInjection\\\\ProjectServiceContainer\\:\\:\\$__bar has no type specified\\.$#"
 			count: 1
 			path: tests/Unit/Components/DependencyInjection/ProjectServiceContainer.php
