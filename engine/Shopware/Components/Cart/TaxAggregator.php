@@ -217,13 +217,6 @@ class TaxAggregator implements TaxAggregatorInterface
             ];
         }
 
-        if (!empty($cartPosition['taxPercent'])) {
-            return [
-                $cartPosition['taxPercent'],
-                $tax,
-            ];
-        }
-
         if ($cartPosition['modus'] == CartPositionsMode::VOUCHER) {
             return [
                 $this->getVoucherTaxRate($cartPosition['ordernumber'], $maximumTaxRate) ?: 0.0,

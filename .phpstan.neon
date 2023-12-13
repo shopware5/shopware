@@ -185,11 +185,6 @@ parameters:
             count: 1
             path: tests/Functional/Components/Cart/CartToOrderAttributeTest.php
 
-        - # Bug in PHPStan. See https://github.com/phpstan/phpstan/issues/6653
-            message: "#^Method sArticles\\:\\:sGetProductByOrdernumber\\(\\) should return array\\<string, mixed\\>\\|false but returns array\\<string, mixed\\>\\|bool\\.$#"
-            count: 1
-            path: engine/Shopware/Core/sArticles.php
-
         - # In this case PHPStan does not consider the second parameter flag of \Symfony\Component\DependencyInjection\ContainerInterface::get
             message: '#Method Shopware\\Tests\\Mink\\Tests\\General\\Helpers\\SubContext::getService\(\) should return TService of object but returns object\|null#'
             count: 1

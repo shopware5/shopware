@@ -2721,11 +2721,6 @@ parameters:
 			path: engine/Library/Enlight/Event/EventHandler.php
 
 		-
-			message: "#^Method Enlight_Event_EventManager\\:\\:buildEventArgs\\(\\) has parameter \\$eventArgs with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Event/EventManager.php
-
-		-
 			message: "#^Method Enlight_Event_EventManager\\:\\:collect\\(\\) has parameter \\$collection with generic class Doctrine\\\\Common\\\\Collections\\\\ArrayCollection but does not specify its types\\: TKey, T$#"
 			count: 1
 			path: engine/Library/Enlight/Event/EventManager.php
@@ -7676,41 +7671,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/InstallerService.php
 
 		-
-			message: "#^Cannot access offset 'name' on array\\|false\\.$#"
-			count: 4
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginExtractor\\:\\:assertNoDirectoryTraversal\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginExtractor\\:\\:assertPrefix\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginExtractor\\:\\:assertValid\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginExtractor\\:\\:clearOpcodeCache\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginExtractor\\:\\:extract\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\LegacyPluginExtractor\\:\\:validatePluginZip\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginExtractor.php
-
-		-
 			message: "#^Cannot call method Collection\\(\\) on Shopware_Components_Plugin_Bootstrap\\|null\\.$#"
 			count: 3
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/LegacyPluginInstaller.php
@@ -7994,11 +7954,6 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginViewService\\:\\:getPlugins\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginViewService.php
-
-		-
-			message: "#^Cannot access offset 'name' on array\\|false\\.$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginZipDetector.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\BasketPositionStruct\\:\\:setPlugin\\(\\) has no return type specified\\.$#"
@@ -26006,7 +25961,7 @@ parameters:
 			path: engine/Shopware/Core/sBasket.php
 
 		-
-			message: "#^Parameter \\#1 \\$moneyfloat of method sArticles\\:\\:sRound\\(\\) expects float\\|string\\|null, array\\|float\\|void\\|false given\\.$#"
+			message: "#^Parameter \\#1 \\$moneyfloat of method sArticles\\:\\:sRound\\(\\) expects float\\|string\\|null, array\\|float\\|false\\|null given\\.$#"
 			count: 2
 			path: engine/Shopware/Core/sBasket.php
 

@@ -33,6 +33,9 @@ class PluginZipDetector
     public function isLegacyPlugin(ZipArchive $archive)
     {
         $entry = $archive->statIndex(0);
+        if (!\is_array($entry)) {
+            return false;
+        }
         $rootDirectory = explode('/', $entry['name'])[0];
 
         return \in_array($rootDirectory, ['Frontend', 'Backend', 'Core']);
@@ -44,6 +47,9 @@ class PluginZipDetector
     public function isPlugin(ZipArchive $archive)
     {
         $entry = $archive->statIndex(0);
+        if (!\is_array($entry)) {
+            return false;
+        }
 
         $pluginName = explode('/', $entry['name'])[0];
         $bootstrapFile = $pluginName . '/' . $pluginName . '.php';
