@@ -19,8 +19,8 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `cocur/slugify` to version 4.5.1 for PHP 8.0 and newer
 * Updated `doctrine/orm` to version 2.15.5
 * Updated `google/cloud-storage` to version 1.34.0
-* Updated `guzzlehttp/guzzle` to version 7.8.0
-* Updated `guzzlehttp/psr7` to version 2.6.1
+* Updated `guzzlehttp/guzzle` to version 7.8.1
+* Updated `guzzlehttp/psr7` to version 2.6.2
 * Updated `monolog/monolog` to version 2.9.2
 * Updated `mpdf/mpdf` to version 8.2.1
 * Updated `laminas/laminas-code` to version 4.13.0 for PHP 8.1 and newer
