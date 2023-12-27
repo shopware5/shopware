@@ -182,7 +182,7 @@ class CheckoutContext extends SubContext
 
         foreach ($items->getIterator() as $row) {
             $detailPage->open(['articleId' => $row['articleId'], 'number' => $row['number']]);
-            $detailPage->addToBasket((int) $row['quantity']);
+            $detailPage->addToBasket($row['quantity']);
         }
     }
 
