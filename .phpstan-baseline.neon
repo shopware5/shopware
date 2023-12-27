@@ -28201,6 +28201,11 @@ parameters:
 			path: engine/Shopware/Models/Blog/Repository.php
 
 		-
+			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getAverageVoteQuery\\(\\) should return Doctrine\\\\ORM\\\\Query\\<null, Shopware\\\\Models\\\\Blog\\\\Comment\\> but returns Doctrine\\\\ORM\\\\Query\\<null, array\\<string, float\\|int\\|string\\|null\\>\\>\\.$#"
+			count: 1
+			path: engine/Shopware/Models/Blog/Repository.php
+
+		-
 			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getBackedDetailQueryBuilder\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Blog/Repository.php
