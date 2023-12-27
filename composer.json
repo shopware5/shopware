@@ -68,7 +68,7 @@
         "psr/log": "1.1.4",
         "ramsey/uuid": "4.2.3",
         "setasign/fpdf": "1.8.6",
-        "setasign/fpdi": "2.5.0",
+        "setasign/fpdi": "2.6.0",
         "stecman/symfony-console-completion": "0.11.0",
         "superbalist/flysystem-google-storage": "7.2.2",
         "symfony/config": "~4.4.34",
