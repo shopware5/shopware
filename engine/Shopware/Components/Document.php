@@ -36,6 +36,7 @@ use Shopware\Models\Order\Document\Document;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException as SymfonyInvalidArgumentException;
 
 /**
  * Shopware document generator
@@ -261,7 +262,7 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
      * @param string $_renderer optional define renderer (pdf,html,return)
      *
      * @throws Enlight_Event_Exception
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws SymfonyInvalidArgumentException
      */
     public function render($_renderer = '')
     {

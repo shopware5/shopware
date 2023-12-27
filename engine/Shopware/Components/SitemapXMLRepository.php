@@ -204,7 +204,7 @@ class SitemapXMLRepository
     {
         $blogs = [];
 
-        $categoryRepository = $this->em->getRepository(\Shopware\Models\Category\Category::class);
+        $categoryRepository = $this->em->getRepository(Category::class);
         $query = $categoryRepository->getBlogCategoriesByParentQuery($parentId);
         $blogCategories = $query->getArrayResult();
 

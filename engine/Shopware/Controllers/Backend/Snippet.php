@@ -668,10 +668,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             return;
         }
 
-        /** @var \Doctrine\ORM\QueryBuilder $builder */
-        $builder = $this->get('models')
-                             ->getRepository('Shopware\Models\Snippet\Snippet')
-                             ->createQueryBuilder('snippet');
+        $builder = $this->get('models')->getRepository(Snippet::class)->createQueryBuilder('snippet');
 
         $builder->select('snippet.namespace, count(snippet.id) as snippetCount')
                 ->groupBy('snippet.namespace')
@@ -699,10 +696,9 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
             return;
         }
 
-        /** @var \Doctrine\ORM\QueryBuilder $builder */
         $builder = $this->get('models')->createQueryBuilder();
 
-        $builder->delete('Shopware\Models\Snippet\Snippet', 's')
+        $builder->delete(Snippet::class, 's')
                 ->andWhere('s.namespace LIKE :namespace')
                 ->orWhere('s.namespace LIKE :namespaceWildcard')
                 ->setParameter('namespace', $namespace)

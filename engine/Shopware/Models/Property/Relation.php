@@ -46,7 +46,7 @@ class Relation extends ModelEntity
     /**
      * The resource property is the owning side of the association between relation and group.
      *
-     * @var \Shopware\Models\Property\Group|null
+     * @var Group|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Property\Group", inversedBy="relations")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id", nullable=true)
@@ -63,7 +63,7 @@ class Relation extends ModelEntity
     /**
      * The resource property is the owning side of the association between relation and option.
      *
-     * @var \Shopware\Models\Property\Option|null
+     * @var Option|null
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Property\Option", inversedBy="relations")
      * @ORM\JoinColumn(name="optionID", referencedColumnName="id", nullable=true)
@@ -93,7 +93,7 @@ class Relation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Property\Option $option
+     * @param Option $option
      */
     public function setOption($option)
     {
@@ -101,7 +101,7 @@ class Relation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Property\Option|null
+     * @return Option|null
      */
     public function getOption()
     {
@@ -109,7 +109,7 @@ class Relation extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Property\Group $group
+     * @param Group $group
      */
     public function setGroup($group)
     {
@@ -117,7 +117,7 @@ class Relation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Property\Group|null
+     * @return Group|null
      */
     public function getGroup()
     {

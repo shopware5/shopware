@@ -359,7 +359,7 @@ class Category extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media $media
+     * @param Media $media
      */
     public function setMedia($media)
     {
@@ -367,7 +367,7 @@ class Category extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
+     * @return Media|null
      */
     public function getMedia()
     {

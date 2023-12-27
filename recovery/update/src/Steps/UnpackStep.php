@@ -33,12 +33,12 @@ use SplFileInfo;
 class UnpackStep
 {
     /**
-     * @var \Gaufrette\Filesystem
+     * @var Filesystem
      */
     private $localFilesyste;
 
     /**
-     * @var \Gaufrette\Filesystem
+     * @var Filesystem
      */
     private $remoteFilesyste;
 

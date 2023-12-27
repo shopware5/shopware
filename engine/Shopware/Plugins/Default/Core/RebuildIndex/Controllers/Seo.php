@@ -21,6 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Shop\Shop;
+
 class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -165,7 +168,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $shop = $this->SeoIndex()->registerShop($shopId);
 
         $this->RewriteTable()->baseSetup();
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+        $context = $this->get(ContextServiceInterface::class)->createShopContext($shopId);
         $this->RewriteTable()->sCreateRewriteTableBlog($offset, $limit, $context);
 
         $this->View()->assign([
@@ -266,7 +269,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+        $context = $this->get(ContextServiceInterface::class)->createShopContext($shopId);
 
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();
@@ -284,7 +287,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
 
         // Create shop
         $this->SeoIndex()->registerShop($shopId);
-        $context = $this->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->createShopContext($shopId);
+        $context = $this->get(ContextServiceInterface::class)->createShopContext($shopId);
 
         // Make sure a template is available
         $this->RewriteTable()->baseSetup();
@@ -300,9 +303,9 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
      * passed shop id. The offset and limit parameter are used
      * to update only an offset of article urls.
      *
-     * @param int                        $offset
-     * @param int                        $limit
-     * @param \Shopware\Models\Shop\Shop $shop
+     * @param int  $offset
+     * @param int  $limit
+     * @param Shop $shop
      */
     protected function seoArticle($offset, $limit, $shop)
     {
@@ -317,7 +320,7 @@ class Shopware_Controllers_Backend_Seo extends Shopware_Controllers_Backend_ExtJ
         $sql = $this->RewriteTable()->getSeoArticleQuery();
         $sql = Shopware()->Db()->limit($sql, $limit, $offset);
 
-        $shopFallbackId = ($shop->getFallback() instanceof \Shopware\Models\Shop\Shop) ? $shop->getFallback()->getId() : null;
+        $shopFallbackId = ($shop->getFallback() instanceof Shop) ? $shop->getFallback()->getId() : null;
 
         $articles = Shopware()->Db()->fetchAll($sql, [
             $shop->get('parentID'),

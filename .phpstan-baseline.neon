@@ -35456,21 +35456,6 @@ parameters:
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/AgeConditionHandlerTest.php
 
 		-
-			message: "#^Call to method delete\\(\\) on an unknown class Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CrudService\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandlerTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CustomerAttributeConditionHandlerTest\\:\\:testAttribute\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandlerTest.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$service contains unknown class Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\CrudService\\.$#"
-			count: 1
-			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/CustomerAttributeConditionHandlerTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\CustomerSearchBundleDBAL\\\\ConditionHandler\\\\HasAddressWithCountryConditionHandlerTest\\:\\:testOneCountry\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/CustomerSearchBundleDBAL/ConditionHandler/HasAddressWithCountryConditionHandlerTest.php
@@ -39131,11 +39116,6 @@ parameters:
 			path: tests/Mink/Page/Frontend/Detail/Detail.php
 
 		-
-			message: "#^Parameter \\#2 \\$value of method Behat\\\\Mink\\\\Element\\\\TraversableElement\\:\\:fillField\\(\\) expects string, int given\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Detail/Detail.php
-
-		-
 			message: "#^Strict comparison using \\=\\=\\= between '' and 'select' will always evaluate to false\\.$#"
 			count: 2
 			path: tests/Mink/Page/Frontend/Detail/Detail.php
@@ -39159,11 +39139,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$url of function parse_url expects string, string\\|null given\\.$#"
 			count: 1
 			path: tests/Mink/Page/Frontend/Generic/GenericPage.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\Banner\\:\\:click\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Page/Frontend/Homepage/Elements/Banner.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Frontend\\\\Homepage\\\\Elements\\\\Banner\\:\\:getImageProperty\\(\\) return type has no value type specified in iterable type array\\.$#"

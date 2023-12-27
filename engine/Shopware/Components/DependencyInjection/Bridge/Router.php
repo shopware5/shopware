@@ -27,7 +27,6 @@ use Enlight_Controller_EventArgs;
 use Enlight_Controller_Front;
 use Enlight_Event_EventArgs;
 use Enlight_Event_EventManager as EnlightEventManager;
-use Shopware\Components\DependencyInjection\Container;
 use Shopware\Components\Routing\Context;
 use Shopware\Components\Routing\Router as RoutingRouter;
 use Shopware\Components\Routing\RouterInterface;
@@ -71,13 +70,9 @@ class Router
 
     public function onAfterRegisterShop(Enlight_Event_EventArgs $args)
     {
-        /** @var Container $container */
         $container = $args->getSubject();
-        /** @var RouterInterface $router */
-        $router = $container->get(\Shopware\Components\Routing\RouterInterface::class);
-        /** @var \Shopware\Models\Shop\Shop $shop */
+        $router = $container->get(RouterInterface::class);
         $shop = $container->get('shop');
-        /** @var Shopware_Components_Config $config */
         $config = $container->get(Shopware_Components_Config::class);
         // Register the shop (we're too soon)
         $config->setShop($shop);

@@ -214,7 +214,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
     /**
      * Helper function to determine the newline type of the file
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string Detected new line type
      */

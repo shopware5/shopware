@@ -26,7 +26,7 @@ use Shopware\Components\Api\Resource\Cache;
 class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Cache
+     * @var Cache
      */
     protected $resource;
 

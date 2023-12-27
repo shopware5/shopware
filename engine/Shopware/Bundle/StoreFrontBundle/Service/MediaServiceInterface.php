@@ -54,7 +54,7 @@ interface MediaServiceInterface
     public function getList($ids, ShopContextInterface $context);
 
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getProductMedia()
+     * @see MediaServiceInterface::getProductMedia()
      *
      * @param BaseProduct[] $products
      *
@@ -80,7 +80,7 @@ interface MediaServiceInterface
     public function getCover(BaseProduct $product, ShopContextInterface $context);
 
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\MediaServiceInterface::getCover()
+     * @see MediaServiceInterface::getCover()
      *
      * @param BaseProduct[] $products
      *

@@ -134,7 +134,7 @@ class License extends ModelEntity
     private $pluginId;
 
     /**
-     * @var \Shopware\Models\Plugin\Plugin|null
+     * @var Plugin|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Plugin\Plugin", inversedBy="licenses")
      * @ORM\JoinColumn(name="plugin_id", referencedColumnName="id")

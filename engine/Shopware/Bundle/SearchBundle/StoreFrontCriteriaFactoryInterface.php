@@ -63,7 +63,7 @@ interface StoreFrontCriteriaFactoryInterface
     /**
      * @param int $categoryId
      *
-     * @return \Shopware\Bundle\SearchBundle\Criteria
+     * @return Criteria
      */
     public function createProductNavigationCriteria(Request $request, ShopContextInterface $context, $categoryId);
 }

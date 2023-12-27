@@ -43,7 +43,7 @@ abstract class Enlight_Class
      * If an hook proxy exist for the class, the constructor will prevent the initialization and throw an exception
      * that the instance method should be used.
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      */
     public function __construct()
     {
@@ -80,7 +80,7 @@ abstract class Enlight_Class
      * @param string $name
      * @param array  $args
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      */
     public function __call($name, $args = null)
     {
@@ -96,7 +96,7 @@ abstract class Enlight_Class
      * @param string $name
      * @param array  $args
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      */
     public static function __callStatic($name, $args = null)
     {
@@ -111,7 +111,7 @@ abstract class Enlight_Class
      *
      * @param string $name
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      */
     public function __get($name)
     {
@@ -123,7 +123,7 @@ abstract class Enlight_Class
      *
      * @param string $name
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      */
     public function __set($name, $value = null)
     {
@@ -134,7 +134,7 @@ abstract class Enlight_Class
      * Returns the class name of the given class. If no class is given, the class will drawn by
      * get_called_class(). If the given class has an hook proxy the function will return the proxy class.
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      *
      * @return class-string
      */
@@ -167,7 +167,7 @@ abstract class Enlight_Class
      * @param class-string<TClass>|null $class
      * @param array<mixed>|null         $args
      *
-     * @throws \ReflectionException
+     * @throws ReflectionException
      *
      * @return TClass
      */

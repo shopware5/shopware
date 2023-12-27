@@ -29,6 +29,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 use Shopware\Components\Security\AttributeCleanerTrait;
+use Shopware\Models\Attribute\Partner as PartnerAttribute;
 
 /**
  * Standard Export Model Entity
@@ -47,7 +48,7 @@ class Partner extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Shopware\Models\Attribute\Partner|null
+     * @var PartnerAttribute|null
      *
      * @ORM\OneToOne(targetEntity="Shopware\Models\Attribute\Partner", mappedBy="partner", orphanRemoval=true, cascade={"persist"})
      */
@@ -587,7 +588,7 @@ class Partner extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Attribute\Partner|null
+     * @return PartnerAttribute|null
      */
     public function getAttribute()
     {
@@ -595,12 +596,12 @@ class Partner extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Attribute\Partner|array|null $attribute
+     * @param PartnerAttribute|array|null $attribute
      *
-     * @return \Shopware\Models\Partner\Partner
+     * @return Partner
      */
     public function setAttribute($attribute)
     {
-        return $this->setOneToOne($attribute, \Shopware\Models\Attribute\Partner::class, 'attribute', 'partner');
+        return $this->setOneToOne($attribute, PartnerAttribute::class, 'attribute', 'partner');
     }
 }

@@ -150,7 +150,7 @@ class sBasket implements \Enlight_Hook
     private $cartOrderNumberProvider;
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(
         ?Enlight_Components_Db_Adapter_Pdo_Mysql $db = null,
@@ -332,10 +332,10 @@ class sBasket implements \Enlight_Hook
      * Update vouchers in cart
      * Used only internally in sBasket
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Exception
+     * @throws Enlight_Exception
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function sUpdateVoucher()
     {
@@ -352,9 +352,9 @@ class sBasket implements \Enlight_Hook
      * Insert basket discount
      * Used only internally in sBasket::sGetBasket()
      *
-     * @throws \Enlight_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Enlight_Exception
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function sInsertDiscount()
     {
@@ -514,7 +514,7 @@ class sBasket implements \Enlight_Hook
      * Add premium products to cart
      * Used internally in sBasket and in CheckoutController
      *
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return bool|int
      */
@@ -708,10 +708,10 @@ class sBasket implements \Enlight_Hook
      * @param string $voucherCode Voucher code
      * @param string $basket
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Exception
+     * @throws Enlight_Exception
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return array|bool True if successful, false if stopped by an event, array with error data if one occurred
      */
@@ -1102,8 +1102,8 @@ class sBasket implements \Enlight_Hook
      * Add surcharge for payment means to cart
      * Used only internally in sBasket::sGetBasket
      *
-     * @throws \Enlight_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Enlight_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return false|null False on failure, null on success
      */
@@ -1216,8 +1216,8 @@ class sBasket implements \Enlight_Hook
      * Add percentage surcharge
      * Used only internally in sBasket::sGetBasket
      *
-     * @throws \Enlight_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Enlight_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return false|null False on failure, null on success
      */
@@ -1357,10 +1357,10 @@ class sBasket implements \Enlight_Hook
     /**
      * Updates cart and returns it.
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Exception
+     * @throws Enlight_Exception
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @phpstan-return BasketArray
      *
@@ -1418,8 +1418,8 @@ class sBasket implements \Enlight_Hook
     /**
      * Returns all basket data without refresh
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception
+     * @throws Exception
+     * @throws Enlight_Exception
      *
      * @phpstan-return BasketArray
      *
@@ -1512,9 +1512,9 @@ class sBasket implements \Enlight_Hook
      * @param string $articleName
      * @param string $articleOrderNumber
      *
-     * @throws \DomainException
-     * @throws \Enlight_Exception         If entry could not be added to database
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws DomainException
+     * @throws Enlight_Exception         If entry could not be added to database
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return bool If operation was successful
      */
@@ -1572,7 +1572,7 @@ class sBasket implements \Enlight_Hook
      * Get all products current on wishlist
      * Used in the NoteController
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array Product notes
      */
@@ -1642,8 +1642,8 @@ class sBasket implements \Enlight_Hook
      *
      * @param int $id Id of the wishlist line
      *
-     * @throws \Zend_Db_Adapter_Exception
-     * @throws \Enlight_Exception         If entry could not be deleted from database
+     * @throws Zend_Db_Adapter_Exception
+     * @throws Enlight_Exception         If entry could not be deleted from database
      *
      * @return bool if the operation was successful
      */
@@ -1687,9 +1687,9 @@ class sBasket implements \Enlight_Hook
      * @param int $id       Basket entry id
      * @param int $quantity Quantity
      *
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
-     * @throws \Enlight_Exception         If database could not be updated
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
+     * @throws Enlight_Exception         If database could not be updated
      *
      * @return false|null
      */
@@ -1944,10 +1944,10 @@ class sBasket implements \Enlight_Hook
      * @param string $id       Order number (s_articles_details.ordernumber)
      * @param int    $quantity Amount
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception         If no price could be determined, or a database error occurs
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Exception
+     * @throws Enlight_Exception         If no price could be determined, or a database error occurs
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
      *
      * @return int|false Id of the inserted basket entry, or false on failure
      */
@@ -2099,10 +2099,10 @@ class sBasket implements \Enlight_Hook
      * Refresh basket after login / currency change
      * Used in multiple locations
      *
-     * @throws \Exception
-     * @throws \Enlight_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws Exception
+     * @throws Enlight_Exception
+     * @throws Enlight_Event_Exception
+     * @throws Zend_Db_Adapter_Exception
      */
     public function sRefreshBasket()
     {
@@ -2241,7 +2241,7 @@ class sBasket implements \Enlight_Hook
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array
      */
@@ -2295,7 +2295,7 @@ class sBasket implements \Enlight_Hook
      * @param string $orderNumber
      * @param string $sessionId
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array Example: ["id" => "731", "quantity" => "100"]
      */
@@ -2599,8 +2599,8 @@ class sBasket implements \Enlight_Hook
      *
      * @param array<array<string, mixed>> $getProducts
      *
-     * @throws \Exception
-     * @throws \Enlight_Event_Exception
+     * @throws Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array{0: array<array<string, mixed>>, 1: float, 2: float, 3: int, 4: float}
      */
@@ -2833,7 +2833,7 @@ class sBasket implements \Enlight_Hook
     }
 
     /**
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return array<array<string, mixed>>
      */
@@ -3006,7 +3006,7 @@ SQL;
      *
      * @param CartItemStruct[] $cartItems
      *
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      */
     private function getPricesForItemUpdates(array $cartItems)
     {
@@ -3095,7 +3095,7 @@ SQL;
      *
      * @param int $quantity
      *
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      *
      * @return array
      */
@@ -3172,7 +3172,7 @@ SQL;
     }
 
     /**
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      *
      * @return array
      */
@@ -3242,7 +3242,7 @@ SQL;
      *
      * @param string $id Product order number
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return array|false Product data, or false if none found
      */

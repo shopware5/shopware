@@ -96,7 +96,7 @@ class Set extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group[]
+     * @return Group[]
      */
     public function getGroups()
     {
@@ -104,7 +104,7 @@ class Set extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Configurator\Group[] $groups
+     * @param Group[] $groups
      */
     public function setGroups($groups)
     {

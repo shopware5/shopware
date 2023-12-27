@@ -129,12 +129,12 @@ class Area extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Country[]|null $countries
+     * @param Country[]|null $countries
      *
      * @return Area
      */
     public function setCountries($countries)
     {
-        return $this->setOneToMany($countries, \Shopware\Models\Country\Country::class, 'countries', 'area');
+        return $this->setOneToMany($countries, Country::class, 'countries', 'area');
     }
 }

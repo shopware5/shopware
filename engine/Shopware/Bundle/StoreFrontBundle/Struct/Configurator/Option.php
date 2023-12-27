@@ -110,7 +110,7 @@ class Option extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Media $media
+     * @param Media $media
      */
     public function setMedia($media)
     {

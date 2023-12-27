@@ -683,7 +683,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getEmotionComponents()
     {
@@ -691,7 +691,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $emotionComponents
+     * @param ArrayCollection $emotionComponents
      */
     public function setEmotionComponents($emotionComponents)
     {
@@ -699,7 +699,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getWidgets()
     {
@@ -707,7 +707,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $widgets
+     * @param ArrayCollection $widgets
      */
     public function setWidgets($widgets)
     {

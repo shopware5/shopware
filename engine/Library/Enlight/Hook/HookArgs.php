@@ -75,7 +75,7 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     /**
      * Sets the given property to null.
      *
-     * @return \Enlight_Hook_HookArgs
+     * @return Enlight_Hook_HookArgs
      */
     public function remove($key)
     {
@@ -87,7 +87,7 @@ class Enlight_Hook_HookArgs extends Enlight_Event_EventArgs
     /**
      * Default set function to set the value to the given property
      *
-     * @return \Enlight_Hook_HookArgs
+     * @return Enlight_Hook_HookArgs
      */
     public function set($key, $value)
     {

@@ -40,8 +40,7 @@ class Shopware_Controllers_Frontend_AjaxSearch extends Enlight_Controller_Action
     {
         $this->View()->loadTemplate('frontend/search/ajax.tpl');
 
-        /** @var SearchTermPreProcessorInterface $processor */
-        $processor = $this->get(\Shopware\Bundle\SearchBundle\SearchTermPreProcessorInterface::class);
+        $processor = $this->get(SearchTermPreProcessorInterface::class);
         $term = $processor->process($this->Request()->getParam('sSearch'));
 
         if (!$term || \strlen($term) < Shopware()->Config()->get('MinSearchLenght')) {

@@ -133,7 +133,7 @@ class Document extends ModelEntity
     /**
      * INVERSED SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element>
+     * @var ArrayCollection<Element>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Document\Element", mappedBy="document", orphanRemoval=true, cascade={"persist"})
      * @ORM\JoinColumn(name="id", referencedColumnName="documentID")
@@ -160,7 +160,7 @@ class Document extends ModelEntity
      *
      * @param string $name
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setName($name)
     {
@@ -184,7 +184,7 @@ class Document extends ModelEntity
      *
      * @param string $key
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setKey($key)
     {
@@ -208,7 +208,7 @@ class Document extends ModelEntity
      *
      * @param string $template
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setTemplate($template)
     {
@@ -232,7 +232,7 @@ class Document extends ModelEntity
      *
      * @param string $numbers
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setNumbers($numbers)
     {
@@ -256,7 +256,7 @@ class Document extends ModelEntity
      *
      * @param int $bottom
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setBottom($bottom)
     {
@@ -280,7 +280,7 @@ class Document extends ModelEntity
      *
      * @param int $left
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setLeft($left)
     {
@@ -304,7 +304,7 @@ class Document extends ModelEntity
      *
      * @param int $pageBreak
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setPageBreak($pageBreak)
     {
@@ -328,7 +328,7 @@ class Document extends ModelEntity
      *
      * @param int $right
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setRight($right)
     {
@@ -352,7 +352,7 @@ class Document extends ModelEntity
      *
      * @param int $top
      *
-     * @return \Shopware\Models\Document\Document
+     * @return Document
      */
     public function setTop($top)
     {
@@ -374,13 +374,13 @@ class Document extends ModelEntity
     /**
      * Sets the form-elements.
      *
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element>|Element[] $elements
+     * @param ArrayCollection<Element>|Element[] $elements
      *
      * @return Document
      */
     public function setElements($elements)
     {
-        $this->setOneToMany($elements, \Shopware\Models\Document\Element::class, 'elements', 'document');
+        $this->setOneToMany($elements, Element::class, 'elements', 'document');
 
         return $this;
     }
@@ -388,7 +388,7 @@ class Document extends ModelEntity
     /**
      * Gets the form-elements.
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Document\Element>
+     * @return ArrayCollection<Element>
      */
     public function getElements()
     {

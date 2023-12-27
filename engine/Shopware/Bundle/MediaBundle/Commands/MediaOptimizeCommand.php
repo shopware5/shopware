@@ -92,7 +92,7 @@ class MediaOptimizeCommand extends ShopwareCommand implements CompletionAwareInt
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $optimizerService = $this->getContainer()->get('shopware_media.cdn_optimizer_service');
-        $mediaService = $this->getContainer()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+        $mediaService = $this->getContainer()->get(MediaServiceInterface::class);
 
         if ($input->getOption('modified')) {
             $errors = date_parse($input->getOption('modified'))['errors'];

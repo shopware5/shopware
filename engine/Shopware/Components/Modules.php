@@ -26,7 +26,7 @@ declare(strict_types=1);
 class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
 {
     /**
-     * @var \sSystem
+     * @var sSystem
      */
     protected $system;
 
@@ -49,7 +49,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     /**
      * Set class property
      *
-     * @param \sSystem $system
+     * @param sSystem $system
      *
      * @return void
      */
@@ -166,7 +166,7 @@ class Shopware_Components_Modules extends Enlight_Class implements ArrayAccess
     }
 
     /**
-     * @return \sSystem
+     * @return sSystem
      */
     public function System()
     {

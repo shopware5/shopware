@@ -71,7 +71,7 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
             return false;
         }
 
-        $optinService = $this->container->get(\Shopware\Components\OptinServiceInterface::class);
+        $optinService = $this->container->get(OptinServiceInterface::class);
 
         $data = $optinService->get(OptinServiceInterface::TYPE_THEME_PREVIEW, $hash);
 

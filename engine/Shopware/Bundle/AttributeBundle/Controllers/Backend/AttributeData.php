@@ -24,6 +24,7 @@
 use Shopware\Bundle\AttributeBundle\Service\ConfigurationStruct;
 use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 
 class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Backend_ExtJs
 {
@@ -58,8 +59,7 @@ class Shopware_Controllers_Backend_AttributeData extends Shopware_Controllers_Ba
 
     public function saveDataAction()
     {
-        /** @var \Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface $dataPersister */
-        $dataPersister = $this->get(\Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface::class);
+        $dataPersister = $this->get(DataPersisterInterface::class);
 
         $data = [];
         foreach ($this->Request()->getParams() as $key => $value) {

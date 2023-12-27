@@ -665,7 +665,7 @@ class Shopware_Components_Translation
      * @param int    $articleId
      * @param string $data
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function fixArticleTranslation($languageId, $articleId, $data)
     {

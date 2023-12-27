@@ -126,7 +126,7 @@ class EmotionPreset extends Resource
      * @param int    $id
      * @param string $locale
      *
-     * @throws \Shopware\Components\Api\Exception\NotFoundException
+     * @throws NotFoundException
      *
      * @return Preset
      */

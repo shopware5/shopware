@@ -59,7 +59,7 @@ class CacheSubscriber implements SubscriberInterface
 
     public function onConfigElement(Enlight_Event_EventArgs $args): void
     {
-        /** @var \Shopware\Models\Config\Value $entity */
+        /** @var Value $entity */
         $entity = $args->get('entity');
 
         $this->addTagsConfigValue($entity);

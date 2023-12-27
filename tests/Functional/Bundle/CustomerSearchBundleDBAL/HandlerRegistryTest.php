@@ -61,8 +61,7 @@ class HandlerRegistryTest extends TestCase
 {
     public function testCoreHandlersAreRegistered()
     {
-        /** @var HandlerRegistry $registry */
-        $registry = Shopware()->Container()->get(\Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry::class);
+        $registry = Shopware()->Container()->get(HandlerRegistry::class);
 
         $handlers = $registry->getConditionHandlers();
         $classes = [];
@@ -106,8 +105,7 @@ class HandlerRegistryTest extends TestCase
     public function testNoneSupportConditionThrowsException()
     {
         $this->expectException('RuntimeException');
-        /** @var HandlerRegistry $registry */
-        $registry = Shopware()->Container()->get(\Shopware\Bundle\CustomerSearchBundleDBAL\HandlerRegistry::class);
+        $registry = Shopware()->Container()->get(HandlerRegistry::class);
         $registry->getConditionHandler(new SimpleCondition('test'));
     }
 }

@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface RelatedProductsServiceInterface
 {
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductsServiceInterface::get()
+     * @see RelatedProductsServiceInterface::get()
      * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @param BaseProduct[] $products
@@ -50,7 +50,7 @@ interface RelatedProductsServiceInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
+     * @see ListProductServiceInterface::get()
      * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @return array<string, BaseProduct>|null indexed by the product order number

@@ -31,7 +31,7 @@ use Shopware\Components\Migrations\Manager;
 class MigrationStep
 {
     /**
-     * @var \Shopware\Components\Migrations\Manager
+     * @var Manager
      */
     private $migrationManager;
 

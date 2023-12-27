@@ -41,7 +41,7 @@ class BasketQueryHelperTest extends TestCase
     public function setUp(): void
     {
         $this->queryHelper = new BasketQueryHelper(
-            Shopware()->Container()->get(\Doctrine\DBAL\Connection::class)
+            Shopware()->Container()->get(Connection::class)
         );
     }
 

@@ -31,7 +31,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface CheapestPriceServiceInterface
 {
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\Core\CheapestPriceServiceInterface::get()
+     * @see Core\CheapestPriceServiceInterface::get
      * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
      *
      * @param ListProduct[] $products

@@ -26,7 +26,7 @@ use Shopware\Components\Api\Resource\CustomerGroup;
 class Shopware_Controllers_Api_CustomerGroups extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\CustomerGroup
+     * @var CustomerGroup
      */
     protected $resource;
 

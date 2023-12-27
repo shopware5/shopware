@@ -173,7 +173,7 @@ class PriceGroup extends ModelEntity
     /**
      * @param int $netto
      *
-     * @return \Shopware\Models\Customer\PriceGroup
+     * @return PriceGroup
      */
     public function setNetto($netto)
     {
@@ -193,7 +193,7 @@ class PriceGroup extends ModelEntity
     /**
      * @param int $active
      *
-     * @return \Shopware\Models\Customer\PriceGroup
+     * @return PriceGroup
      */
     public function setActive($active)
     {

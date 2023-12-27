@@ -30,6 +30,7 @@ use IteratorAggregate;
 use League\Flysystem\AdapterInterface;
 use League\Flysystem\Filesystem;
 use Shopware\Bundle\MediaBundle\Adapters\AdapterFactoryInterface;
+use Shopware\Bundle\MediaBundle\Strategy\StrategyFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class MediaServiceFactory
@@ -77,7 +78,7 @@ class MediaServiceFactory
         $filesystem = new Filesystem($adapter, ['visibility' => AdapterInterface::VISIBILITY_PUBLIC]);
 
         // Strategy
-        $strategyFactory = $this->container->get(\Shopware\Bundle\MediaBundle\Strategy\StrategyFactory::class);
+        $strategyFactory = $this->container->get(StrategyFactory::class);
         $strategyName = isset($config['strategy']) ? $config['strategy'] : $this->cdnConfig['strategy'];
         $strategy = $strategyFactory->factory($strategyName);
 

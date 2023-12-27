@@ -52,7 +52,7 @@ function smarty_modifier_date($value, $format = null, $type = null)
     if (\is_string($value)) {
         $value = strtotime($value);
     } elseif ($value instanceof DateTime) {
-        /** @var \DateTime $value */
+        /** @var DateTime $value */
         $value = $value->getTimestamp();
     }
 

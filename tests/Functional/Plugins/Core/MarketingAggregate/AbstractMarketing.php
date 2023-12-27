@@ -114,7 +114,7 @@ class AbstractMarketing extends Enlight_Components_Test_Plugin_TestCase
 
         $shop = $shopRepository->find($shopRepository->getActiveDefault()->getId());
 
-        if (strpos($name, ':') !== false) {
+        if (str_contains($name, ':')) {
             list($formName, $name) = explode(':', $name, 2);
         }
 
@@ -124,7 +124,7 @@ class AbstractMarketing extends Enlight_Components_Test_Plugin_TestCase
             $findBy['form'] = $form;
         }
 
-        /** @var \Shopware\Models\Config\Element $element */
+        /** @var Element $element */
         $element = $elementRepository->findOneBy($findBy);
 
         $defaultValue = $element->getValue();

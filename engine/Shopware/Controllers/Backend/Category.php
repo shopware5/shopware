@@ -29,8 +29,10 @@ use Shopware\Components\Model\CategoryDenormalization;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Category\Repository as CategoryRepository;
 use Shopware\Models\Customer\Customer;
 use Shopware\Models\Customer\Group;
+use Shopware\Models\Customer\Repository as CustomerRepository;
 use Shopware\Models\Media\Media;
 use Shopware\Models\ProductStream\ProductStream;
 use Shopware_Components_Snippet_Manager as SnippetManager;
@@ -43,12 +45,12 @@ use Shopware_Components_Snippet_Manager as SnippetManager;
 class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Models\Category\Repository
+     * @var CategoryRepository
      */
     protected $repository;
 
     /**
-     * @var \Shopware\Models\Customer\Repository
+     * @var CustomerRepository
      */
     protected $customerRepository;
 
@@ -75,7 +77,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
      *
      * Helper Method to get access to the category repository.
      *
-     * @return Shopware\Models\Category\Repository
+     * @return CategoryRepository
      */
     public function getRepository()
     {
@@ -901,7 +903,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     protected function prepareMediaAssociatedData($data)
     {
         if (!empty($data['imagePath'])) {
-            $data['media'] = $this->get(\Shopware\Components\Model\ModelManager::class)->find(Media::class, $data['imagePath']);
+            $data['media'] = $this->get(ModelManager::class)->find(Media::class, $data['imagePath']);
         } else {
             $data['media'] = null;
         }
@@ -912,7 +914,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
     /**
      * Helper Method to get access to the customer repository.
      *
-     * @return \Shopware\Models\Customer\Repository
+     * @return CustomerRepository
      */
     private function getCustomerRepository()
     {

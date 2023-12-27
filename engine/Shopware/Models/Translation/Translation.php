@@ -155,7 +155,7 @@ class Translation extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Shop\Shop
+     * @return Shop
      */
     public function getShop()
     {

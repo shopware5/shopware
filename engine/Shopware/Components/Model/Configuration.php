@@ -31,8 +31,10 @@ use Doctrine\Common\Cache\CacheProvider;
 use Doctrine\Common\Cache\RedisCache;
 use Doctrine\Common\Cache\XcacheCache;
 use Doctrine\Common\Proxy\AbstractProxyFactory;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration as BaseConfiguration;
+use Doctrine\ORM\ORMException;
 use Doctrine\ORM\Repository\RepositoryFactory;
 use DoctrineExtensions\Query\Mysql\DateFormat;
 use DoctrineExtensions\Query\Mysql\GroupConcat;
@@ -44,6 +46,9 @@ use Exception;
 use Redis;
 use RuntimeException;
 use Shopware\Components\CacheManager;
+use Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType;
+use Shopware\Components\Model\DBAL\Types\DateStringType;
+use Shopware\Components\Model\DBAL\Types\DateTimeStringType;
 use Shopware\Components\ShopwareReleaseStruct;
 use Zend_Cache_Core;
 
@@ -71,8 +76,8 @@ class Configuration extends BaseConfiguration
     /**
      * @throws Exception
      * @throws RuntimeException
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws ORMException
+     * @throws DBALException
      */
     public function __construct(array $options, Zend_Cache_Core $cache, RepositoryFactory $repositoryFactory, ShopwareReleaseStruct $release)
     {
@@ -88,9 +93,9 @@ class Configuration extends BaseConfiguration
 
         $this->setAttributeDir($options['attributeDir']);
 
-        Type::overrideType('datetime', \Shopware\Components\Model\DBAL\Types\DateTimeStringType::class);
-        Type::overrideType('date', \Shopware\Components\Model\DBAL\Types\DateStringType::class);
-        Type::overrideType('array', \Shopware\Components\Model\DBAL\Types\AllowInvalidArrayType::class);
+        Type::overrideType('datetime', DateTimeStringType::class);
+        Type::overrideType('date', DateStringType::class);
+        Type::overrideType('array', AllowInvalidArrayType::class);
 
         $this->addCustomStringFunction('DATE_FORMAT', DateFormat::class);
         $this->addCustomStringFunction('IFNULL', IfNull::class);

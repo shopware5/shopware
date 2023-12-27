@@ -1117,7 +1117,6 @@ class sAdmin implements \Enlight_Hook
             return false;
         }
 
-        /** @var \Shopware\Bundle\StoreFrontBundle\Struct\Shop $shop */
         $shop = $this->contextService->getShopContext()->getShop();
         $shopUrl = 'http://' . $shop->getHost() . $shop->getUrl();
 

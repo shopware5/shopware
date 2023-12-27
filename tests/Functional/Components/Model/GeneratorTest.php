@@ -23,9 +23,13 @@
 
 namespace Shopware\Tests\Functional\Components\Model;
 
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\AttributeBundle\Service\CrudService;
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Components\Model\Generator;
+use Shopware\Components\Model\ModelManager;
 
-class GeneratorTest extends \PHPUnit\Framework\TestCase
+class GeneratorTest extends TestCase
 {
     public const TEST_TABLE_NAME = 's_articles_attributes';
     public const TEST_ATTRIBUTE_FIELD_PREFIX = 'test_';
@@ -33,24 +37,24 @@ class GeneratorTest extends \PHPUnit\Framework\TestCase
     public const TEST_ATTRIBUTE_PROPERTY_NAME = 'testNotNullDefaultValueField';
 
     /**
-     * @var \Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     public $em;
 
     /**
-     * @var \Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface
+     * @var CrudServiceInterface
      */
     public $cs;
 
     /**
-     * @var \Shopware\Components\Model\Generator
+     * @var Generator
      */
     public $generator;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->cs = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudService::class);
+        $this->cs = Shopware()->Container()->get(CrudService::class);
         $this->em = Shopware()->Models();
         $this->generator = new Generator(
             $this->em->getConnection()->getSchemaManager(),

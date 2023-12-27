@@ -21,6 +21,7 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Shopware\Models\Config\Form;
 use voku\helper\AntiXSS;
 
 /**
@@ -99,7 +100,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         );
 
         $form = $this->Form();
-        /** @var \Shopware\Models\Config\Form $parent */
+        /** @var Form $parent */
         $parent = $this->Forms()->findOneBy(['name' => 'Core']);
         $form->setParent($parent);
 
@@ -235,7 +236,7 @@ class Shopware_Plugins_Frontend_InputFilter_Bootstrap extends Shopware_Component
         $antiXss->removeEvilHtmlTags($allowedHtmlTags);
         $value = $antiXss->xss_clean($value);
 
-        return \str_replace(['&lt;', '&gt;'], ['<', '>'], $value);
+        return str_replace(['&lt;', '&gt;'], ['<', '>'], $value);
     }
 
     /**

@@ -21,6 +21,8 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Composer\Autoload\ClassLoader;
+
 if (!file_exists(__DIR__ . '/vendor/autoload.php')) {
     $template = '%s: ';
     if (PHP_SAPI !== 'cli') {
@@ -42,7 +44,7 @@ date_default_timezone_set(@date_default_timezone_get());
 
 \define('SW_PATH', realpath(__DIR__ . '/../../'));
 
-/** @var \Composer\Autoload\ClassLoader $autoloader */
+/** @var ClassLoader $autoloader */
 $autoloader = require_once __DIR__ . '/vendor/autoload.php';
 
 $autoloader->addPsr4(

@@ -75,7 +75,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * Helper Method to get access to the category repository.
      *
-     * @return Shopware\Models\Category\Repository
+     * @return CategoryRepository
      */
     public function getCategoryRepository()
     {
@@ -111,7 +111,7 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
      *
      * Helper Method to get access to the blog repository.
      *
-     * @return Shopware\Models\Blog\Repository
+     * @return BlogRepository
      */
     public function getRepository()
     {

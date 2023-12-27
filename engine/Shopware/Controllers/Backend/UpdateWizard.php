@@ -28,29 +28,29 @@ use Shopware\Bundle\PluginInstallerBundle\Exception\StoreException;
 use Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService;
 use Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService;
 use Shopware\Bundle\PluginInstallerBundle\Struct\AccessTokenStruct;
+use Shopware\Components\CacheManager;
+use ShopwarePlugins\SwagUpdate\Components\PluginCheck;
 
 class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Backend_ExtJs
 {
     public function indexAction()
     {
         /** @var Connection $connection */
-        $connection = $this->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->get(Connection::class);
         $sql = "INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
                 VALUES (NULL, '0', 'updateWizardStarted', 'b:1;', '', '', 'checkbox', '0', '0', '1');";
         $connection->executeUpdate($sql);
 
-        Shopware()->Container()->get(\Shopware\Components\CacheManager::class)->clearConfigCache();
+        Shopware()->Container()->get(CacheManager::class)->clearConfigCache();
     }
 
     public function updateAction()
     {
-        $pluginCheck = new \ShopwarePlugins\SwagUpdate\Components\PluginCheck($this->container);
+        $pluginCheck = new PluginCheck($this->container);
 
-        /** @var PluginLicenceService $licenceService */
-        $licenceService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\PluginLicenceService::class);
+        $licenceService = $this->get(PluginLicenceService::class);
 
-        /** @var AccountManagerService $accountService */
-        $accountService = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\AccountManagerService::class);
+        $accountService = $this->get(AccountManagerService::class);
 
         $request = new UpdateLicencesRequest(
             $this->getVersion(),
@@ -99,7 +99,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         $version = $this->container->getParameter('shopware.release.version');
 
         if (!\is_string($version)) {
-            throw new \RuntimeException('Parameter shopware.release.version has to be an string');
+            throw new RuntimeException('Parameter shopware.release.version has to be an string');
         }
 
         return $version;
@@ -149,7 +149,6 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
      */
     private function getExceptionMessage(StoreException $exception)
     {
-        /** @var \Enlight_Components_Snippet_Namespace $namespace */
         $namespace = $this->get('snippets')
             ->getNamespace('backend/plugin_manager/exceptions');
 

@@ -37,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Preset extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\PresetTranslation>
+     * @var ArrayCollection<PresetTranslation>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\PresetTranslation", mappedBy="preset", orphanRemoval=true, cascade={"persist"})
      */
@@ -305,17 +305,17 @@ class Preset extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Emotion\PresetTranslation[] $translations
+     * @param PresetTranslation[] $translations
      *
      * @return Preset
      */
     public function setTranslations(array $translations)
     {
-        return $this->setOneToMany($translations, \Shopware\Models\Emotion\PresetTranslation::class, 'translations', 'preset');
+        return $this->setOneToMany($translations, PresetTranslation::class, 'translations', 'preset');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\PresetTranslation>
+     * @return ArrayCollection<PresetTranslation>
      */
     public function getTranslations()
     {

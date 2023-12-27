@@ -17,6 +17,7 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Shopware\Components\DispatchFormatHelper;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -100,7 +101,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
     protected $_params = [];
 
     /**
-     * @var \Shopware\Components\DispatchFormatHelper
+     * @var DispatchFormatHelper
      */
     private $nameFormatter;
 
@@ -129,7 +130,7 @@ class Enlight_Controller_Request_RequestHttp extends Request implements Enlight_
     }
 
     /**
-     * @return \Shopware\Components\DispatchFormatHelper
+     * @return DispatchFormatHelper
      */
     public function getNameFormatter()
     {

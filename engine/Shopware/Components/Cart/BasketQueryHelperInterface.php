@@ -45,7 +45,7 @@ interface BasketQueryHelperInterface
     public function getInsertDiscountQuery(DiscountContext $discountContext);
 
     /**
-     * @return \Doctrine\DBAL\Query\QueryBuilder
+     * @return QueryBuilder
      */
     public function getInsertDiscountAttributeQuery(DiscountContext $discountContext);
 

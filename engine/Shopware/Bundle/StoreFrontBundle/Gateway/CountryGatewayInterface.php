@@ -44,7 +44,7 @@ interface CountryGatewayInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getState()
+     * @see CountryGatewayInterface::getState()
      *
      * @param int[] $ids
      *
@@ -56,7 +56,7 @@ interface CountryGatewayInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getCountry()
+     * @see CountryGatewayInterface::getCountry()
      *
      * @param int[] $ids
      *
@@ -68,7 +68,7 @@ interface CountryGatewayInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\CountryGatewayInterface::getArea()
+     * @see CountryGatewayInterface::getArea()
      *
      * @param int[] $ids
      *
