@@ -36,7 +36,7 @@ class Download extends ModelEntity
     /**
      * OWNING SIDE
      *
-     * @var \Shopware\Models\Article\Article
+     * @var Article
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Article", inversedBy="downloads")
      * @ORM\JoinColumn(name="articleID", referencedColumnName="id", nullable=false)

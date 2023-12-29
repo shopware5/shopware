@@ -44,7 +44,7 @@ interface AdditionalTextServiceInterface
     /**
      * Determines the 'additional text' value for multiple ListProduct.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\AdditionalTextServiceInterface::buildAdditionalText()
+     * @see AdditionalTextServiceInterface::buildAdditionalText()
      *
      * @param array<string, ListProduct> $products
      *

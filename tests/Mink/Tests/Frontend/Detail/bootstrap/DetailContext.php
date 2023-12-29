@@ -61,7 +61,7 @@ class DetailContext extends SubContext
      * @When /^I put the article into the basket$/
      * @When /^I put the article "(?P<quantity>[^"]*)" times into the basket$/
      */
-    public function iPutTheArticleTimesIntoTheBasket(int $quantity = 1): void
+    public function iPutTheArticleTimesIntoTheBasket(string $quantity = '1'): void
     {
         $page = $this->getPage(Detail::class);
         $page->addToBasket($quantity);

@@ -36,7 +36,7 @@ use Shopware\Components\Model\ModelEntity;
 class Group extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<Discount>
+     * @var ArrayCollection<Discount>
      *
      * @ORM\OneToMany(targetEntity="Discount", mappedBy="group", orphanRemoval=true, cascade={"all"})
      */
@@ -92,7 +92,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Price\Discount>
+     * @return ArrayCollection<Discount>
      */
     public function getDiscounts()
     {
@@ -106,6 +106,6 @@ class Group extends ModelEntity
      */
     public function setDiscounts($discounts)
     {
-        return $this->setOneToMany($discounts, \Shopware\Models\Price\Discount::class, 'discounts', 'group');
+        return $this->setOneToMany($discounts, Discount::class, 'discounts', 'group');
     }
 }

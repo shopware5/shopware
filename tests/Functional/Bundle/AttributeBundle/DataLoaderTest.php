@@ -25,10 +25,13 @@ namespace Shopware\Tests\Functional\Bundle\AttributeBundle;
 
 use Doctrine\DBAL\Connection;
 use Exception;
+use PHPUnit\Framework\TestCase;
+use Shopware\Bundle\AttributeBundle\Service\DataLoader;
 use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
+use Shopware\Bundle\AttributeBundle\Service\DataPersister;
 use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 
-class DataLoaderTest extends \PHPUnit\Framework\TestCase
+class DataLoaderTest extends TestCase
 {
     /**
      * @var DataLoaderInterface
@@ -47,11 +50,11 @@ class DataLoaderTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp(): void
     {
-        $this->connection = Shopware()->Container()->get(\Doctrine\DBAL\Connection::class);
+        $this->connection = Shopware()->Container()->get(Connection::class);
         $this->connection->beginTransaction();
 
-        $this->attributePersister = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataPersister::class);
-        $this->attributeLoader = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class);
+        $this->attributePersister = Shopware()->Container()->get(DataPersister::class);
+        $this->attributeLoader = Shopware()->Container()->get(DataLoader::class);
 
         parent::setUp();
     }

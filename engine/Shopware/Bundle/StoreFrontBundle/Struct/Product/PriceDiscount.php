@@ -65,7 +65,7 @@ class PriceDiscount extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group $customerGroup
+     * @param Group $customerGroup
      */
     public function setCustomerGroup($customerGroup)
     {
@@ -73,7 +73,7 @@ class PriceDiscount extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group
+     * @return Group
      */
     public function getCustomerGroup()
     {

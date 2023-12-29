@@ -24,6 +24,7 @@
 namespace Shopware\Models\Newsletter;
 
 use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
 
@@ -41,7 +42,7 @@ class Newsletter extends ModelEntity
      * This is the inverse side of the association between newsletters and mail-addresses which have already
      * received the given newsletter.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\Address>
+     * @var ArrayCollection<Address>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Address", mappedBy="lastNewsletter")
      */
@@ -202,7 +203,7 @@ class Newsletter extends ModelEntity
      *
      * Inverse side of the mailing-container association
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\Container>
+     * @var ArrayCollection<Container>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Newsletter\Container", mappedBy="newsletter", cascade={"persist", "remove"})
      */
@@ -210,7 +211,7 @@ class Newsletter extends ModelEntity
 
     public function __construct()
     {
-        $this->containers = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->containers = new ArrayCollection();
     }
 
     /**
@@ -454,17 +455,17 @@ class Newsletter extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Newsletter\Container[] $containers
+     * @param Container[] $containers
      *
      * @return Newsletter
      */
     public function setContainers($containers)
     {
-        return $this->setOneToMany($containers, \Shopware\Models\Newsletter\Container::class, 'containers', 'newsletter');
+        return $this->setOneToMany($containers, Container::class, 'containers', 'newsletter');
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Newsletter\Container>
+     * @return ArrayCollection<Container>
      */
     public function getContainers()
     {

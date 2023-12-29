@@ -22,6 +22,8 @@
  */
 
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMInvalidArgumentException;
 use Shopware\Components\Plugin\Configuration\ReaderInterface as ConfigurationReader;
 use Shopware\Components\Snippet\DatabaseHandler;
 use Shopware\Models\Plugin\Plugin;
@@ -436,10 +438,10 @@ class Shopware_Components_Plugin_Namespace extends Enlight_Plugin_Namespace_Conf
     /**
      * Registers a plugin in the collection.
      *
-     * @throws \Enlight_Config_Exception
-     * @throws \Enlight_Event_Exception
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\ORMInvalidArgumentException
+     * @throws Enlight_Config_Exception
+     * @throws Enlight_Event_Exception
+     * @throws OptimisticLockException
+     * @throws ORMInvalidArgumentException
      * @throws Exception
      *
      * @return bool|array

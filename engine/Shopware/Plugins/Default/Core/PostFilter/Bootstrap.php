@@ -146,7 +146,7 @@ class Shopware_Plugins_Core_PostFilter_Bootstrap extends Shopware_Components_Plu
     /**
      * Rewrite source link
      *
-     * @see \Shopware_Controllers_Backend_Newsletter::outputFilter
+     * @see Shopware_Controllers_Backend_Newsletter::outputFilter
      *
      * @param array $src
      *

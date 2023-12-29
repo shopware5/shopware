@@ -17,6 +17,11 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Doctrine\ORM\AbstractQuery;
+use Shopware\Components\Theme\PathResolver;
+use Shopware\Components\Theme\Service;
+use Shopware\Models\Theme\Settings;
+
 /**
  * @param string $template
  *
@@ -27,15 +32,13 @@ function smarty_function_compileJavascript(array $params, $template)
     $time = $params['timestamp'];
     $output = $params['output'];
 
-    /** @var \Shopware\Components\Theme\PathResolver $pathResolver */
-    $pathResolver = Shopware()->Container()->get(\Shopware\Components\Theme\PathResolver::class);
+    $pathResolver = Shopware()->Container()->get(PathResolver::class);
 
-    /** @var \Shopware\Models\Shop\Shop $shop */
     $shop = Shopware()->Container()->get('shop');
 
-    /** @var \Shopware\Models\Theme\Settings $settings */
-    $settings = Shopware()->Container()->get(\Shopware\Components\Theme\Service::class)->getSystemConfiguration(
-        \Doctrine\ORM\AbstractQuery::HYDRATE_OBJECT
+    /** @var Settings $settings */
+    $settings = Shopware()->Container()->get(Service::class)->getSystemConfiguration(
+        AbstractQuery::HYDRATE_OBJECT
     );
 
     $file = $pathResolver->getJsFilePath($shop, $time);
@@ -48,7 +51,6 @@ function smarty_function_compileJavascript(array $params, $template)
         return;
     }
 
-    /** @var \Shopware\Components\Theme\Compiler $compiler */
     $compiler = Shopware()->Container()->get('theme_compiler');
     $compiler->compileJavascript($time, $shop->getTemplate(), $shop);
     $template->assign($output, [$url]);

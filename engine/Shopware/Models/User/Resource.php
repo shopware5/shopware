@@ -74,7 +74,7 @@ class Resource extends ModelEntity implements Zend_Acl_Resource_Interface
      * The privileges property is the inverse side of the association between resource and privileges.
      * The association is joined over the s_core_acl_privileges.resourceID field and the s_core_acl_resources.id
      *
-     * @var ArrayCollection<\Shopware\Models\User\Privilege>
+     * @var ArrayCollection<Privilege>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\User\Privilege", mappedBy="resource")
      */
@@ -85,7 +85,7 @@ class Resource extends ModelEntity implements Zend_Acl_Resource_Interface
      */
     public function __construct()
     {
-        $this->privileges = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->privileges = new ArrayCollection();
     }
 
     /**
@@ -99,7 +99,7 @@ class Resource extends ModelEntity implements Zend_Acl_Resource_Interface
     /**
      * @param string $name
      *
-     * @return \Shopware\Models\User\Resource
+     * @return $this
      */
     public function setName($name)
     {

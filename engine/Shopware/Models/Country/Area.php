@@ -38,7 +38,7 @@ class Area extends ModelEntity
      * The countries property is the inverse side of the association between area and countries.
      * The association is joined over the area id field and the areaID field of the country.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
+     * @var ArrayCollection<Country>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Country\Country", mappedBy="area", orphanRemoval=true, cascade={"persist"})
      */
@@ -121,7 +121,7 @@ class Area extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Country\Country>
+     * @return ArrayCollection<Country>
      */
     public function getCountries()
     {
@@ -129,12 +129,12 @@ class Area extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Country\Country[]|null $countries
+     * @param Country[]|null $countries
      *
      * @return Area
      */
     public function setCountries($countries)
     {
-        return $this->setOneToMany($countries, \Shopware\Models\Country\Country::class, 'countries', 'area');
+        return $this->setOneToMany($countries, Country::class, 'countries', 'area');
     }
 }

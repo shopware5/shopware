@@ -153,7 +153,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection $articleDetails
+     * @param ArrayCollection $articleDetails
      */
     public function setArticleDetails($articleDetails)
     {
@@ -161,7 +161,7 @@ class Queue extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * @return ArrayCollection
      */
     public function getArticleDetails()
     {

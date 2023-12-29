@@ -554,12 +554,12 @@ EOD
      * Fills inputs of a form
      *
      * @param (Page|Element)&HelperSelectorInterface $parent
-     * @param array<array<string, string>>           $values
+     * @param array<array<string, string|int>>       $values
      */
     public static function fillForm(HelperSelectorInterface $parent, string $formKey, array $values, bool $waitForOverlays = false): void
     {
         foreach ($values as $value) {
-            $tempFieldName = $fieldName = $value['field'];
+            $tempFieldName = $fieldName = (string) $value['field'];
             unset($value['field']);
 
             foreach ($value as $key => $fieldValue) {
@@ -596,7 +596,7 @@ EOD
                 $fieldTag = $field->getTagName();
 
                 if ($fieldTag === 'textarea') {
-                    $field->setValue($fieldValue);
+                    $field->setValue((string) $fieldValue);
                     continue;
                 }
 
@@ -610,7 +610,7 @@ EOD
 
                         // Select
                         if (empty($fieldType)) {
-                            $field->selectOption($fieldValue);
+                            $field->selectOption((string) $fieldValue);
 
                             return true;
                         }
@@ -623,7 +623,7 @@ EOD
                         }
 
                         // Text
-                        $field->setValue($fieldValue);
+                        $field->setValue((string) $fieldValue);
 
                         return true;
                     } catch (StaleElementReference $e) {

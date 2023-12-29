@@ -382,19 +382,21 @@ class Enlight_Event_EventManager extends Enlight_Class
     }
 
     /**
-     * @param Enlight_Event_EventArgs|array|null $eventArgs
+     * @param Enlight_Event_EventArgs|array|mixed|null $eventArgs
      *
      * @throws Enlight_Event_Exception
-     *
-     * @return Enlight_Event_EventArgs
      */
-    private function buildEventArgs($eventArgs = null)
+    private function buildEventArgs($eventArgs = null): Enlight_Event_EventArgs
     {
         if (isset($eventArgs) && \is_array($eventArgs)) {
             return new Enlight_Event_EventArgs($eventArgs);
-        } elseif (!isset($eventArgs)) {
+        }
+
+        if (!isset($eventArgs)) {
             return new Enlight_Event_EventArgs();
-        } elseif (!$eventArgs instanceof Enlight_Event_EventArgs) {
+        }
+
+        if (!$eventArgs instanceof Enlight_Event_EventArgs) {
             throw new Enlight_Event_Exception('Parameter "eventArgs" must be an instance of "Enlight_Event_EventArgs"');
         }
 

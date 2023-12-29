@@ -23,9 +23,11 @@
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Shopware\Models\Article\Article;
+use Shopware\Models\Article\Repository as ProductRepository;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
 use Shopware\Models\ProductFeed\ProductFeed;
+use Shopware\Models\Shop\Repository as ShopRepository;
 use Shopware\Models\Shop\Shop;
 
 /**
@@ -38,12 +40,12 @@ use Shopware\Models\Shop\Shop;
 class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Backend_ExtJs
 {
     /**
-     * @var \Shopware\Models\Article\Repository
+     * @var ProductRepository
      */
     protected $articleRepository;
 
     /**
-     * @var \Shopware\Models\Shop\Repository
+     * @var ShopRepository
      */
     protected $shopRepository;
 
@@ -287,7 +289,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     /**
      * Helper function to get access to the shop repository.
      *
-     * @return \Shopware\Models\Shop\Repository
+     * @return ShopRepository
      */
     private function getShopRepository()
     {
@@ -301,7 +303,7 @@ class Shopware_Controllers_Backend_ProductFeed extends Shopware_Controllers_Back
     /**
      * Helper function to get access to the article repository.
      *
-     * @return \Shopware\Models\Article\Repository
+     * @return ProductRepository
      */
     private function getArticleRepository()
     {

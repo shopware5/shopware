@@ -131,7 +131,7 @@ class Shopware_Controllers_Backend_Login extends Shopware_Controllers_Backend_Ex
     /**
      * @deprecated in 5.6, will be private in 5.8
      *
-     * @return \Shopware_Plugins_Backend_Auth_Bootstrap
+     * @return Shopware_Plugins_Backend_Auth_Bootstrap
      */
     public function getPlugin()
     {

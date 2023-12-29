@@ -67,7 +67,7 @@ class Group extends ModelEntity
     private $active = true;
 
     /**
-     * @var \Shopware\Models\Site\Group|null
+     * @var Group|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Site\Group")
      * @ORM\JoinColumn(name="mapping_id", nullable=true, referencedColumnName="id")
@@ -115,7 +115,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Site\Group|null
+     * @return Group|null
      */
     public function getMapping()
     {
@@ -123,7 +123,7 @@ class Group extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Site\Group|null $mapping
+     * @param Group|null $mapping
      */
     public function setMapping($mapping)
     {

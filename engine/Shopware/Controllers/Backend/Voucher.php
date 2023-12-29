@@ -489,7 +489,7 @@ class Shopware_Controllers_Backend_Voucher extends Shopware_Controllers_Backend_
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     private function getManager()
     {

@@ -108,7 +108,7 @@ class Set extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Property\Group[] $groups
+     * @param Group[] $groups
      *
      * @return $this
      */
@@ -120,7 +120,7 @@ class Set extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Property\Group[]
+     * @return Group[]
      */
     public function getGroups()
     {

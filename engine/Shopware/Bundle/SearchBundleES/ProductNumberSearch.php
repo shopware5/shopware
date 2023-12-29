@@ -150,7 +150,7 @@ class ProductNumberSearch implements ProductNumberSearchInterface
     /**
      * @param array[] $data
      *
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\BaseProduct[]
+     * @return BaseProduct[]
      */
     private function createProducts(array $data): array
     {

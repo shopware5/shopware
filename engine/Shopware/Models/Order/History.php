@@ -147,7 +147,7 @@ class History extends ModelEntity
      * The $order property in this model is the owning side of the association of the order status history and the
      * order model. The $history property of the order model is the inverse side of this association.
      *
-     * @var \Shopware\Models\Order\Order
+     * @var Order
      *
      * @ORM\ManyToOne(targetEntity="\Shopware\Models\Order\Order", inversedBy="history")
      * @ORM\JoinColumn(name="orderID", referencedColumnName="id", nullable=false)
@@ -173,7 +173,7 @@ class History extends ModelEntity
      * previous order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status|null
+     * @var Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_order_status_id", referencedColumnName="id")
@@ -186,7 +186,7 @@ class History extends ModelEntity
      * current order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status|null
+     * @var Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="order_status_id", referencedColumnName="id")
@@ -199,7 +199,7 @@ class History extends ModelEntity
      * previous payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status|null
+     * @var Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="previous_payment_status_id", referencedColumnName="id")
@@ -212,7 +212,7 @@ class History extends ModelEntity
      * current payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @var \Shopware\Models\Order\Status|null
+     * @var Status|null
      *
      * @ORM\OneToOne(targetEntity="\Shopware\Models\Order\Status")
      * @ORM\JoinColumn(name="payment_status_id", referencedColumnName="id")
@@ -249,7 +249,7 @@ class History extends ModelEntity
      *
      * @param \Shopware\Models\User\User $user
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setUser($user)
     {
@@ -279,7 +279,7 @@ class History extends ModelEntity
      *
      * @param string $comment
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setComment($comment)
     {
@@ -306,9 +306,9 @@ class History extends ModelEntity
      * The $order property in this model is the owning side of the association of the order status history and the
      * order model. The $history property of the order model is the inverse side of this association.
      *
-     * @param \Shopware\Models\Order\Order $order
+     * @param Order $order
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setOrder($order)
     {
@@ -323,7 +323,7 @@ class History extends ModelEntity
      * The $order property in this model is the owning side of the association of the order status history and the
      * order model. The $history property of the order model is the inverse side of this association.
      *
-     * @return \Shopware\Models\Order\Order
+     * @return Order
      */
     public function getOrder()
     {
@@ -337,9 +337,9 @@ class History extends ModelEntity
      * current order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @param \Shopware\Models\Order\Status $orderStatus
+     * @param Status $orderStatus
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setOrderStatus($orderStatus)
     {
@@ -355,7 +355,7 @@ class History extends ModelEntity
      * current order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status|null
+     * @return Status|null
      */
     public function getOrderStatus()
     {
@@ -369,9 +369,9 @@ class History extends ModelEntity
      * current payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @param \Shopware\Models\Order\Status $paymentStatus
+     * @param Status $paymentStatus
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setPaymentStatus($paymentStatus)
     {
@@ -387,7 +387,7 @@ class History extends ModelEntity
      * current payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status|null
+     * @return Status|null
      */
     public function getPaymentStatus()
     {
@@ -401,9 +401,9 @@ class History extends ModelEntity
      * previous order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @param \Shopware\Models\Order\Status $previousOrderStatus
+     * @param Status $previousOrderStatus
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setPreviousOrderStatus($previousOrderStatus)
     {
@@ -419,7 +419,7 @@ class History extends ModelEntity
      * previous order status model. This association is an uni-directional association. That means that the order
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status|null
+     * @return Status|null
      */
     public function getPreviousOrderStatus()
     {
@@ -433,9 +433,9 @@ class History extends ModelEntity
      * previous payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @param \Shopware\Models\Order\Status $previousPaymentStatus
+     * @param Status $previousPaymentStatus
      *
-     * @return \Shopware\Models\Order\History
+     * @return History
      */
     public function setPreviousPaymentStatus($previousPaymentStatus)
     {
@@ -451,7 +451,7 @@ class History extends ModelEntity
      * previous payment status model. This association is an uni-directional association. That means that the payment
      * status model don't know anything about the order status history.
      *
-     * @return \Shopware\Models\Order\Status|null
+     * @return Status|null
      */
     public function getPreviousPaymentStatus()
     {

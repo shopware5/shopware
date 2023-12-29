@@ -182,7 +182,7 @@ class Queue
             }
 
             /** @var Detail $detail */
-            $detail = $entityManager->getReference(\Shopware\Models\Article\Detail::class, $detailId);
+            $detail = $entityManager->getReference(Detail::class, $detailId);
 
             $model = new QueueArticle();
             $model->setQueue($queue);

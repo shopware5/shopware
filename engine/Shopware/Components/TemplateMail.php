@@ -116,7 +116,7 @@ class Shopware_Components_TemplateMail
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      *
      * @return Shopware_Components_Translation
      */

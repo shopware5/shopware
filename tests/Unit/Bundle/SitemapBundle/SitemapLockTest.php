@@ -50,7 +50,7 @@ class SitemapLockTest extends TestCase
 
         $data = sprintf('Locked: %s', (new DateTime('NOW', new DateTimeZone('UTC')))->format(DateTime::ATOM));
 
-        $this->cacheMock = $this->getMockBuilder(\Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache::class)
+        $this->cacheMock = $this->getMockBuilder(CoreCache::class)
             ->disableOriginalConstructor()
             ->setMethods(['save', 'fetch'])
             ->getMock();

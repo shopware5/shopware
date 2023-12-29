@@ -27,7 +27,7 @@
 class Shopware_Components_StringCompiler
 {
     /**
-     * @var \Enlight_Template_Manager
+     * @var Enlight_Template_Manager
      */
     protected $view;
 
@@ -79,7 +79,7 @@ class Shopware_Components_StringCompiler
     /**
      * Return View Object
      *
-     * @return \Enlight_Template_Manager
+     * @return Enlight_Template_Manager
      */
     public function getView()
     {

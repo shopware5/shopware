@@ -410,10 +410,10 @@ class Shopware_Plugins_Backend_Auth_Bootstrap extends Shopware_Components_Plugin
      * database adapter by default
      *
      * @throws SmartyException
-     * @throws \Enlight_Exception
+     * @throws Enlight_Exception
      * @throws Exception
      *
-     * @return \Zend_Auth
+     * @return Zend_Auth
      */
     public function onInitResourceAuth(Enlight_Event_EventArgs $args)
     {

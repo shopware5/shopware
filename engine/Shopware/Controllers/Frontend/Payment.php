@@ -324,7 +324,6 @@ EOD;
         $content = sprintf($content, $paymentName, $orderNumber, $transactionNumber);
 
         try {
-            /** @var Enlight_Components_Mail $mail */
             $mail = $this->get('mail');
             $mail->addTo($this->get(\Shopware_Components_Config::class)->get('mail'));
             $mail->setSubject('An invalid basket signature occured');
@@ -334,7 +333,6 @@ EOD;
         } catch (Exception $e) {
         }
 
-        /** @var \Shopware\Components\Logger $logger */
         $logger = $this->get('corelogger');
         $logger->log('error', $content);
     }

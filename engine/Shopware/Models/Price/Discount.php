@@ -44,7 +44,7 @@ class Discount extends ModelEntity
     private $id;
 
     /**
-     * @var \Shopware\Models\Price\Group|null
+     * @var Group|null
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Price\Group", inversedBy="discounts")
      * @ORM\JoinColumn(name="groupID", referencedColumnName="id")

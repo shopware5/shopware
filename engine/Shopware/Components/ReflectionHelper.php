@@ -41,7 +41,7 @@ class ReflectionHelper
      * @param string               $docPath     Optional document root parameter where the class should be found
      * @param array                $directories an array of directories in which the class should be found
      *
-     * @see \Shopware\Components\ReflectionHelper::verifyClass()
+     * @see ReflectionHelper::verifyClass()
      *
      * @throws ReflectionException      Class could not be found
      * @throws InvalidArgumentException

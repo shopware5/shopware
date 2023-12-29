@@ -34,7 +34,7 @@ interface GraduatedPricesGatewayInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\GraduatedPricesGatewayInterface::get()
+     * @see GraduatedPricesGatewayInterface::get()
      *
      * @param ListProduct[] $products
      *

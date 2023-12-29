@@ -45,8 +45,7 @@ class PluginRefreshCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        $pluginManager = $this->container->get(InstallerService::class);
         $pluginManager->refreshPluginList();
 
         $output->writeln(sprintf('Successfully refreshed'));

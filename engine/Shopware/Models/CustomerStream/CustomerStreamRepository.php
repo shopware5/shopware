@@ -49,10 +49,10 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
     public function hasCustomerStreamEmotions($categoryId)
     {
         return $this->connection->fetchColumn(
-            'SELECT emotion.id 
-            FROM s_emotion emotion 
-            INNER JOIN s_emotion_categories categories 
-                ON categories.emotion_id = emotion.id 
+            'SELECT emotion.id
+            FROM s_emotion emotion
+            INNER JOIN s_emotion_categories categories
+                ON categories.emotion_id = emotion.id
                 AND categories.category_id = :id
             WHERE emotion.customer_stream_ids IS NOT NULL AND emotion.active = 1
             LIMIT 1',
@@ -67,7 +67,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
     {
         $streams = $this->fetchStreamsForCustomers($ids);
 
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select('*');
         $query->from('s_customer_search_index', 'search_index');
@@ -127,7 +126,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
             'SELECT COUNT(customers.id)
              FROM s_user customers
              WHERE customers.id NOT IN (
-                 SELECT search_index.id 
+                 SELECT search_index.id
                  FROM s_customer_search_index search_index
                  WHERE search_index.index_time >= :indexTime
              )',
@@ -160,7 +159,7 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
         } else {
             $query->andWhere(
                 'user.id NOT IN (
-                SELECT search_index.id 
+                SELECT search_index.id
                 FROM s_customer_search_index search_index
                 WHERE search_index.index_time >= :indexTime)'
             );
@@ -351,7 +350,6 @@ class CustomerStreamRepository implements CustomerStreamRepositoryInterface
      */
     private function createStreamAmountQuery(DateTime $date, $streamId = null)
     {
-        /** @var \Doctrine\DBAL\Query\QueryBuilder $query */
         $query = $this->connection->createQueryBuilder();
         $query->select([
             "DATE_FORMAT(orders.ordertime, '%Y-%m')",

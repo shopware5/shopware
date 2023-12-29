@@ -295,7 +295,7 @@ class Router extends EnlightRouter implements RouterInterface
      * Sets a global parameter.
      *
      * @see \Shopware_Controllers_Backend_Newsletter::initMailing
-     * @see \Enlight_Controller_Router::setGlobalParam
+     * @see EnlightRouter::setGlobalParam
      *
      * @param string $name
      * @param string $value

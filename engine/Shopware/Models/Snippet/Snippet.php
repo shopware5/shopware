@@ -119,7 +119,7 @@ class Snippet extends ModelEntity
     /**
      * @param string $namespace
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setNamespace($namespace)
     {
@@ -139,7 +139,7 @@ class Snippet extends ModelEntity
     /**
      * @param int $shopid
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setShopId($shopid)
     {
@@ -159,7 +159,7 @@ class Snippet extends ModelEntity
     /**
      * @param int $localeid
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setLocaleId($localeid)
     {
@@ -179,7 +179,7 @@ class Snippet extends ModelEntity
     /**
      * @param string $name
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setName($name)
     {
@@ -199,7 +199,7 @@ class Snippet extends ModelEntity
     /**
      * @param string $value
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setValue($value)
     {
@@ -219,7 +219,7 @@ class Snippet extends ModelEntity
     /**
      * @param DateTimeInterface|string $created
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setCreated($created = 'now')
     {
@@ -243,7 +243,7 @@ class Snippet extends ModelEntity
     /**
      * @param DateTimeInterface|string $updated
      *
-     * @return \Shopware\Models\Snippet\Snippet
+     * @return Snippet
      */
     public function setUpdated($updated = 'now')
     {

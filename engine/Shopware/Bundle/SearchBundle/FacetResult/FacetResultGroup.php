@@ -114,7 +114,7 @@ class FacetResultGroup extends Extendable implements FacetResultInterface, Templ
     }
 
     /**
-     * @param \Shopware\Bundle\SearchBundle\FacetResultInterface[] $facetResults
+     * @param FacetResultInterface[] $facetResults
      */
     public function setFacetResults(array $facetResults)
     {

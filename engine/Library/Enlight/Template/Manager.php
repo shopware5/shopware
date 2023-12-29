@@ -17,6 +17,8 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Shopware\Components\Theme;
+
 /**
  * The Enlight_Template_Manager is an extension of smarty to manually set the config in the class constructor.
  *
@@ -252,7 +254,7 @@ class Enlight_Template_Manager extends Smarty
     }
 
     /**
-     * @param \Enlight_Event_EventManager $eventManager
+     * @param Enlight_Event_EventManager $eventManager
      *
      * @return Enlight_Template_Manager
      */
@@ -302,7 +304,7 @@ class Enlight_Template_Manager extends Smarty
 
             $class = '\\Shopware\\Themes\\' . $name . '\\Theme';
 
-            /** @var \Shopware\Components\Theme $theme */
+            /** @var Theme $theme */
             $theme = new $class();
 
             if ($theme->injectBeforePlugins()) {

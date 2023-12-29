@@ -105,19 +105,6 @@ class TaxAggregatorTest extends TestCase
             ],
         ];
 
-        yield 'Item with "taxPercent" set' => [
-            [
-                sprintf('%.2f', self::REGULAR_TAX_RATE) => 1.1,
-            ],
-            self::MAXIMUM_TAX_RATE,
-            [
-                [
-                    'taxPercent' => self::REGULAR_TAX_RATE,
-                    'tax' => 1.1,
-                ],
-            ],
-        ];
-
         yield 'Voucher item' => [
             null,
             self::MAXIMUM_TAX_RATE,

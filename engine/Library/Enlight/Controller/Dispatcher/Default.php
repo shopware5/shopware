@@ -18,6 +18,7 @@
  */
 
 use Shopware\Components\DependencyInjection\ContainerAwareInterface;
+use Shopware\Components\DispatchFormatHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface as Container;
 
 /**
@@ -83,7 +84,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     protected $modules = ['frontend', 'api', 'widgets', 'backend'];
 
     /**
-     * @var \Shopware\Components\DispatchFormatHelper
+     * @var DispatchFormatHelper
      */
     protected $dispatchFormatHelper;
 
@@ -105,7 +106,7 @@ class Enlight_Controller_Dispatcher_Default extends Enlight_Controller_Dispatche
     }
 
     /**
-     * @return \Shopware\Components\DispatchFormatHelper
+     * @return DispatchFormatHelper
      */
     public function getDispatchFormatHelper()
     {

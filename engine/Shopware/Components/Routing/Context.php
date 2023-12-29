@@ -32,7 +32,7 @@ use Shopware_Components_Config as ShopwareConfig;
 /**
  * @see http://php.net/manual/en/reflectionclass.iscloneable.php
  * @see http://api.symfony.com/2.0/Symfony/Component/Routing/RequestContext.html
- * @see \Enlight_Controller_Request_Request
+ * @see EnlightRequest
  */
 class Context implements JsonSerializable
 {
@@ -51,7 +51,7 @@ class Context implements JsonSerializable
     protected $baseFile = 'shopware.php';
 
     /**
-     * @see \Enlight_Controller_Request_Request::getHttpHost
+     * @see EnlightRequest::getHttpHost
      *
      * @var string
      */
@@ -90,7 +90,7 @@ class Context implements JsonSerializable
     /**
      * Module keys for retrieving module from params
      *
-     * @see \Enlight_Controller_Request_Request::$_moduleKey
+     * @see EnlightRequest::$_moduleKey
      *
      * @var string
      */

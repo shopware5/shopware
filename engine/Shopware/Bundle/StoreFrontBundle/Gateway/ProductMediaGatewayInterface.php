@@ -33,7 +33,7 @@ interface ProductMediaGatewayInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::get()
+     * @see ProductMediaGatewayInterface::get()
      *
      * The passed $products array contains in some cases two variations of the same product.
      * For example:
@@ -102,7 +102,7 @@ interface ProductMediaGatewayInterface
      * To get detailed information about the selection conditions, structure and content of the returned object,
      * please refer to the linked classes.
      *
-     * @see \Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface::getCover()
+     * @see ProductMediaGatewayInterface::getCover()
      *
      * The passed $products array contains in some case two variations of the same product.
      * For example:

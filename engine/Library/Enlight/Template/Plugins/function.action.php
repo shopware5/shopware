@@ -53,7 +53,6 @@ function smarty_function_action($params, Enlight_Template_Default $template)
 
     $params = array_merge($userParams, $params);
 
-    /** @var \Shopware_Plugins_Core_HttpCache_Bootstrap $httpCache */
     $httpCache = Shopware()->Plugins()->Core()->HttpCache();
     if ($esiTag = $httpCache->renderEsiTag($request, $params)) {
         return $esiTag;

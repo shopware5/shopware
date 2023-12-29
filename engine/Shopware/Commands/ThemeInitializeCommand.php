@@ -23,6 +23,7 @@
 
 namespace Shopware\Commands;
 
+use Doctrine\DBAL\Connection;
 use RuntimeException;
 use Shopware\Components\Theme\Installer;
 use Symfony\Component\Console\Input\InputInterface;
@@ -31,7 +32,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ThemeInitializeCommand extends ShopwareCommand
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $conn;
 
@@ -50,11 +51,10 @@ class ThemeInitializeCommand extends ShopwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var Installer $themeInstaller */
-        $themeInstaller = $this->container->get(\Shopware\Components\Theme\Installer::class);
+        $themeInstaller = $this->container->get(Installer::class);
         $themeInstaller->synchronize();
 
-        $this->conn = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $this->conn = $this->container->get(Connection::class);
 
         $templateId = $this->getResponsiveTemplateId();
         $this->updateDefaultTemplateId($templateId);

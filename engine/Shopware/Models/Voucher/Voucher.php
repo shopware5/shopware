@@ -40,7 +40,7 @@ class Voucher extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>
+     * @var ArrayCollection<Code>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Voucher\Code", mappedBy="voucher", orphanRemoval=true, cascade={"persist"})
      */
@@ -651,7 +651,7 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>
+     * @return ArrayCollection<Code>
      */
     public function getCodes()
     {
@@ -659,7 +659,7 @@ class Voucher extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Voucher\Code>|array|null $codes
+     * @param ArrayCollection<Code>|array|null $codes
      *
      * @return Voucher
      */

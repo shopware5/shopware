@@ -195,7 +195,7 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      *
      * @param string $encoding
      *
-     * @return \Enlight_Controller_Plugins_Json_Bootstrap
+     * @return Enlight_Controller_Plugins_Json_Bootstrap
      */
     public function setEncoding($encoding)
     {

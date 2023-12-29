@@ -276,7 +276,7 @@ class Shop extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Category
+     * @return Category
      */
     public function getCategory()
     {
@@ -284,7 +284,7 @@ class Shop extends Extendable
     }
 
     /**
-     * @param \Shopware\Bundle\StoreFrontBundle\Struct\Category $category
+     * @param Category $category
      */
     public function setCategory($category)
     {

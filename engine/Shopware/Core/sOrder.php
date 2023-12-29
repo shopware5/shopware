@@ -22,7 +22,9 @@
  */
 
 use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+use Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface;
 use Shopware\Bundle\AttributeBundle\Service\DataPersister;
+use Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface;
 use Shopware\Bundle\CartBundle\CartKey;
 use Shopware\Bundle\CartBundle\CartPositionsMode;
 use Shopware\Bundle\CartBundle\CheckoutKey;
@@ -222,17 +224,17 @@ class sOrder implements Enlight_Hook
     private $numberRangeIncrementer;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataLoaderInterface
+     * @var DataLoaderInterface
      */
     private $attributeLoader;
 
     /**
-     * @var Shopware\Bundle\AttributeBundle\Service\DataPersisterInterface
+     * @var DataPersisterInterface
      */
     private $attributePersister;
 
     /**
-     * @var Shopware\Components\Model\ModelManager
+     * @var ModelManager
      */
     private $modelManager;
 

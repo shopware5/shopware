@@ -26,7 +26,7 @@ use Shopware\Components\Api\Resource\Order;
 class Shopware_Controllers_Api_Orders extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Order
+     * @var Order
      */
     protected $resource;
 

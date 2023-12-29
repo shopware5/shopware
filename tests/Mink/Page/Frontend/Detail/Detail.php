@@ -113,7 +113,7 @@ class Detail extends Page implements HelperSelectorInterface
     /**
      * Puts the current article <quantity> times to basket
      */
-    public function addToBasket(int $quantity = 1): void
+    public function addToBasket(string $quantity = '1'): void
     {
         $this->fillField('sQuantity', $quantity);
         $this->find('css', "button[name='In den Warenkorb']")->click();

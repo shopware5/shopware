@@ -243,7 +243,7 @@ class Element extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Config\Form $form
+     * @param Form $form
      */
     public function setForm($form)
     {

@@ -46,7 +46,7 @@ class AnalyzedCustomer extends Customer
     }
 
     /**
-     * @return \Shopware\Bundle\CustomerSearchBundleDBAL\Indexing\CustomerOrder
+     * @return CustomerOrder
      */
     public function getOrderInformation()
     {

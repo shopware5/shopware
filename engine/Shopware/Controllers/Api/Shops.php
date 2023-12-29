@@ -26,7 +26,7 @@ use Shopware\Components\Api\Resource\Shop;
 class Shopware_Controllers_Api_Shops extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Shop
+     * @var Shop
      */
     protected $resource;
 

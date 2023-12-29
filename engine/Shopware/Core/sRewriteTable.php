@@ -230,7 +230,7 @@ class sRewriteTable implements Enlight_Hook
      * @param string $lastUpdate
      *
      * @throws SmartyException
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      * @throws Zend_Db_Adapter_Exception
      * @throws Exception
      *
@@ -399,7 +399,7 @@ class sRewriteTable implements Enlight_Hook
      * @param int    $offset
      *
      * @throws Zend_Db_Adapter_Exception
-     * @throws \Enlight_Event_Exception
+     * @throws Enlight_Event_Exception
      *
      * @return string
      */

@@ -27,7 +27,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
 {
     /**
-     * @var Shopware\Components\Api\Resource\Media
+     * @var Media
      */
     protected $resource;
 

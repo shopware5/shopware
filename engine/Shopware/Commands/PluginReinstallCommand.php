@@ -89,8 +89,7 @@ class PluginReinstallCommand extends PluginCommand implements CompletionAwareInt
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var InstallerService $pluginManager */
-        $pluginManager = $this->container->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        $pluginManager = $this->container->get(InstallerService::class);
         if (!$input->getOption('no-refresh')) {
             $pluginManager->refreshPluginList();
             $output->writeln('Successfully refreshed');

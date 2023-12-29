@@ -42,7 +42,7 @@ class KeywordFinder implements KeywordFinderInterface
     private $config;
 
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $connection;
 

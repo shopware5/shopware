@@ -48,7 +48,7 @@ class PluginInstaller extends Shopware_Controllers_Backend_ExtJs
     {
         parent::preDispatch();
 
-        $this->pluginManager = $this->get(\Shopware\Bundle\PluginInstallerBundle\Service\InstallerService::class);
+        $this->pluginManager = $this->get(InstallerService::class);
     }
 
     public function installPluginAction()

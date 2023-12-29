@@ -64,7 +64,7 @@ class Enlight_Plugin_Namespace_Config extends Enlight_Plugin_Namespace
      * @param string $name
      * @param bool   $throwException
      *
-     * @return \Enlight_Plugin_Namespace_Config|\Enlight_Plugin_PluginCollection
+     * @return Enlight_Plugin_Namespace_Config|\Enlight_Plugin_PluginCollection
      */
     public function load($name, $throwException = true)
     {

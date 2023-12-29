@@ -30,7 +30,7 @@ use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 interface RelatedProductStreamsServiceInterface
 {
     /**
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\RelatedProductStreamsServiceInterface::get()
+     * @see RelatedProductStreamsServiceInterface::get()
      *
      * @param BaseProduct[] $products
      *

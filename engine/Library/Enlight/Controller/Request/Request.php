@@ -39,7 +39,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $key
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __set($key, $value);
 
@@ -626,7 +626,7 @@ interface Enlight_Controller_Request_Request
      *
      * @param string $header HTTP header name
      *
-     * @throws \Exception
+     * @throws Exception
      *
      * @return string|false|null HTTP header value, or false if not found
      */

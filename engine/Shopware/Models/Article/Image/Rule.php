@@ -37,7 +37,7 @@ class Rule extends ModelEntity
     /**
      * OWNING SIDE - BI DIRECTIONAL
      *
-     * @var \Shopware\Models\Article\Image\Mapping
+     * @var Mapping
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Article\Image\Mapping", inversedBy="rules")
      * @ORM\JoinColumn(name="mapping_id", referencedColumnName="id", nullable=false)
@@ -102,7 +102,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @return \Shopware\Models\Article\Image\Mapping
+     * @return Mapping
      */
     public function getMapping()
     {
@@ -110,7 +110,7 @@ class Rule extends ModelEntity
     }
 
     /**
-     * @param \Shopware\Models\Article\Image\Mapping $mapping
+     * @param Mapping $mapping
      */
     public function setMapping($mapping)
     {

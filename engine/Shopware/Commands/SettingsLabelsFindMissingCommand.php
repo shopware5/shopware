@@ -25,6 +25,7 @@ namespace Shopware\Commands;
 
 use Exception;
 use RuntimeException;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Shop\Locale;
 use Stecman\Component\Symfony\Console\BashCompletion\Completion\CompletionAwareInterface;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
@@ -106,8 +107,8 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
         }
 
         /** @var Locale|null $locale */
-        $locale = $this->container->get(\Shopware\Components\Model\ModelManager::class)
-            ->getRepository(\Shopware\Models\Shop\Locale::class)
+        $locale = $this->container->get(ModelManager::class)
+            ->getRepository(Locale::class)
             ->findOneByLocale($input->getArgument('locale'));
         if (!$locale) {
             $output->writeln('<error>Provided locale not found</error>');
@@ -125,14 +126,14 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
     /**
      * Exports form labels from the database into a php file containing an array
      *
-     * @param \Shopware\Models\Shop\Locale $locale
-     * @param string                       $dir
+     * @param Locale $locale
+     * @param string $dir
      *
      * @throws Exception
      */
     protected function exportFormLabels(OutputInterface $output, $locale, $dir)
     {
-        $formQueryBuilder = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getDBALQueryBuilder();
+        $formQueryBuilder = $this->container->get(ModelManager::class)->getDBALQueryBuilder();
         $statement = $formQueryBuilder
             ->select('form.name AS name', 'form.label AS label', 'form.description AS description')
             ->from('s_core_config_forms', 'form')
@@ -169,7 +170,7 @@ class SettingsLabelsFindMissingCommand extends ShopwareCommand implements Comple
      */
     protected function exportElementLabels(OutputInterface $output, $locale, $dir)
     {
-        $elementsQueryBuilder = $this->container->get(\Shopware\Components\Model\ModelManager::class)->getDBALQueryBuilder();
+        $elementsQueryBuilder = $this->container->get(ModelManager::class)->getDBALQueryBuilder();
         $statement = $elementsQueryBuilder
             ->select('form.name AS formName', 'elem.name AS elementName', 'elem.label AS label')
             ->from('s_core_config_forms', 'form')

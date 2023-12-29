@@ -35,7 +35,7 @@ use Shopware\Components\Model\ModelEntity;
 class PresetTranslation extends ModelEntity
 {
     /**
-     * @var \Shopware\Models\Emotion\Preset
+     * @var Preset
      *
      * @ORM\ManyToOne(targetEntity="Shopware\Models\Emotion\Preset", inversedBy="translations")
      * @ORM\JoinColumn(name="presetID", referencedColumnName="id", nullable=false)

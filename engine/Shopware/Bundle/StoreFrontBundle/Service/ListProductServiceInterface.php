@@ -34,7 +34,7 @@ interface ListProductServiceInterface
      * please refer to the linked classes.
      *
      * @deprecated 5.7, interface will require a ShopContextInterface in 5.8
-     * @see \Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface::get()
+     * @see ListProductServiceInterface::get()
      *
      * @param array<string> $numbers
      *

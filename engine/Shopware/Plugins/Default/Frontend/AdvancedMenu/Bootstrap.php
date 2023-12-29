@@ -88,7 +88,7 @@ class Shopware_Plugins_Frontend_AdvancedMenu_Bootstrap extends Shopware_Componen
     }
 
     /**
-     * @return ArrayCollection<int, string>
+     * @return ArrayCollection<int, literal-string&non-falsy-string>
      */
     public function onCollectJavascriptFiles(): ArrayCollection
     {

@@ -23,6 +23,7 @@
 
 namespace Shopware\Tests\Functional\Bundle\CustomerSearchBundleDBAL\ConditionHandler;
 
+use Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface;
 use Shopware\Bundle\CustomerSearchBundle\Condition\CustomerAttributeCondition;
 use Shopware\Bundle\SearchBundle\ConditionInterface;
 use Shopware\Bundle\SearchBundle\Criteria;
@@ -33,7 +34,7 @@ class CustomerAttributeConditionHandlerTest extends TestCase
 {
     protected function setUp(): void
     {
-        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
+        $service = Shopware()->Container()->get(CrudServiceInterface::class);
         $service->update('s_user_attributes', 'test', 'integer');
         parent::setUp();
     }
@@ -41,18 +42,16 @@ class CustomerAttributeConditionHandlerTest extends TestCase
     protected function tearDown(): void
     {
         parent::tearDown();
-        /** @var CrudService $service */
-        $service = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\CrudServiceInterface::class);
+        $service = Shopware()->Container()->get(CrudServiceInterface::class);
         $service->delete('s_user_attributes', 'test');
 
-        /** @var CacheManager $cache */
-        $cache = Shopware()->Container()->get(\Shopware\Components\CacheManager::class);
+        $cache = Shopware()->Container()->get(CacheManager::class);
 
         $cache->clearProxyCache();
         $cache->clearOpCache();
     }
 
-    public function testAttribute()
+    public function testAttribute(): void
     {
         $criteria = new Criteria();
         $criteria->addCondition(

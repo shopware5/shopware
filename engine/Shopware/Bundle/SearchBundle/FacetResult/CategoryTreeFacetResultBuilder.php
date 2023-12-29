@@ -118,7 +118,7 @@ class CategoryTreeFacetResultBuilder
      * @param Category[] $categories
      * @param int[]      $actives
      *
-     * @return \Shopware\Bundle\SearchBundle\FacetResult\TreeItem
+     * @return TreeItem
      */
     private function createTreeItem(array $categories, Category $category, array $actives = [])
     {

@@ -394,7 +394,7 @@ class Shopware_Controllers_Backend_Site extends Shopware_Controllers_Backend_Ext
     /**
      * Internal helper function to get access to the entity manager.
      *
-     * @return Shopware\Components\Model\ModelManager
+     * @return ModelManager
      */
     private function getManager()
     {
