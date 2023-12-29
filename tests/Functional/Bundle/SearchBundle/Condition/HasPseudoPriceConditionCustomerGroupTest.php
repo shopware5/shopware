@@ -52,7 +52,7 @@ class HasPseudoPriceConditionCustomerGroupTest extends TestCase
     protected Converter $converter;
 
     /**
-     * @var \Shopware\Models\Article\Configurator\Group[]
+     * @var Group[]
      */
     private array $groups = [];
 

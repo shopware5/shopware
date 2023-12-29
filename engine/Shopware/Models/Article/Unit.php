@@ -36,7 +36,7 @@ class Unit extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>
+     * @var ArrayCollection<Detail>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Article\Detail", mappedBy="unit")
      */
@@ -119,7 +119,7 @@ class Unit extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>
+     * @return ArrayCollection<Detail>
      */
     public function getArticles()
     {
@@ -127,7 +127,7 @@ class Unit extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Article\Detail>|null $articles
+     * @param ArrayCollection<Detail>|null $articles
      */
     public function setArticles($articles)
     {

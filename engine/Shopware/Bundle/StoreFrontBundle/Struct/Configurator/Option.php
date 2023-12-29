@@ -102,7 +102,7 @@ class Option extends Extendable
     }
 
     /**
-     * @return \Shopware\Bundle\StoreFrontBundle\Struct\Media|null
+     * @return Media|null
      */
     public function getMedia()
     {

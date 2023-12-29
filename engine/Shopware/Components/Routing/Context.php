@@ -51,7 +51,7 @@ class Context implements JsonSerializable
     protected $baseFile = 'shopware.php';
 
     /**
-     * @see \Enlight_Controller_Request_Request::getHttpHost
+     * @see EnlightRequest::getHttpHost
      *
      * @var string
      */
@@ -90,7 +90,7 @@ class Context implements JsonSerializable
     /**
      * Module keys for retrieving module from params
      *
-     * @see \Enlight_Controller_Request_Request::$_moduleKey
+     * @see EnlightRequest::$_moduleKey
      *
      * @var string
      */

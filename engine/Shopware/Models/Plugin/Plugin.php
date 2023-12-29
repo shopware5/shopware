@@ -28,6 +28,12 @@ use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Shopware\Components\Model\ModelEntity;
+use Shopware\Models\Config\Form;
+use Shopware\Models\Emotion\Library\Component;
+use Shopware\Models\Menu\Menu;
+use Shopware\Models\Payment\Payment;
+use Shopware\Models\Shop\Template;
+use Shopware\Models\Widget\Widget;
 
 /**
  * @ORM\Table(name="s_core_plugins")
@@ -36,7 +42,7 @@ use Shopware\Components\Model\ModelEntity;
 class Plugin extends ModelEntity
 {
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Emotion\Library\Component>
+     * @var ArrayCollection<Component>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Emotion\Library\Component", mappedBy="plugin", orphanRemoval=true, cascade={"all"})
      */
@@ -222,7 +228,7 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\Form>
+     * @var ArrayCollection<Form>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Config\Form", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
@@ -233,7 +239,7 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Menu\Menu>
+     * @var ArrayCollection<Menu>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Menu\Menu", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
@@ -244,7 +250,7 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     * @var ArrayCollection<Payment>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Payment\Payment", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="pluginID")
@@ -255,7 +261,7 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Template>
+     * @var ArrayCollection<Template>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Shop\Template", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
@@ -266,7 +272,7 @@ class Plugin extends ModelEntity
     /**
      * INVERSE SIDE
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Widget\Widget>
+     * @var ArrayCollection<Widget>
      *
      * @ORM\OneToMany(targetEntity="\Shopware\Models\Widget\Widget", mappedBy="plugin", cascade={"all"})
      * @ORM\JoinColumn(name="id", referencedColumnName="plugin_id")
@@ -275,7 +281,7 @@ class Plugin extends ModelEntity
     private $widgets;
 
     /**
-     * @var \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Plugin\License>
+     * @var ArrayCollection<License>
      *
      * @ORM\OneToMany(targetEntity="Shopware\Models\Plugin\License", mappedBy="plugin")
      * @ORM\OrderBy({"type" = "ASC"})
@@ -571,7 +577,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\Form>
+     * @return ArrayCollection<Form>
      */
     public function getConfigForms()
     {
@@ -579,7 +585,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Config\Form> $configForms
+     * @param ArrayCollection<Form> $configForms
      */
     public function setConfigForms($configForms)
     {
@@ -587,7 +593,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Menu\Menu>
+     * @return ArrayCollection<Menu>
      */
     public function getMenuItems()
     {
@@ -595,7 +601,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Menu\Menu> $menuItems
+     * @param ArrayCollection<Menu> $menuItems
      */
     public function setMenuItems($menuItems)
     {
@@ -603,7 +609,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment>
+     * @return ArrayCollection<Payment>
      */
     public function getPayments()
     {
@@ -611,7 +617,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Payment\Payment> $payments
+     * @param ArrayCollection<Payment> $payments
      */
     public function setPayments($payments)
     {
@@ -619,7 +625,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Template>
+     * @return ArrayCollection<Template>
      */
     public function getTemplates()
     {
@@ -627,7 +633,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Shop\Template> $templates
+     * @param ArrayCollection<Template> $templates
      */
     public function setTemplates($templates)
     {
@@ -635,7 +641,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @return \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Plugin\License>
+     * @return ArrayCollection<License>
      */
     public function getLicenses()
     {
@@ -643,7 +649,7 @@ class Plugin extends ModelEntity
     }
 
     /**
-     * @param \Doctrine\Common\Collections\ArrayCollection<\Shopware\Models\Plugin\License> $licenses
+     * @param ArrayCollection<License> $licenses
      */
     public function setLicenses($licenses)
     {
