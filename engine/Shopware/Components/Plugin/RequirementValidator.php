@@ -32,20 +32,11 @@ use Shopware\Models\Plugin\Plugin;
 
 class RequirementValidator
 {
-    /**
-     * @var ModelManager
-     */
-    private $em;
+    private ModelManager $em;
 
-    /**
-     * @var XmlPluginReader
-     */
-    private $infoReader;
+    private XmlPluginReader $infoReader;
 
-    /**
-     * @var Enlight_Components_Snippet_Namespace
-     */
-    private $namespace;
+    private Enlight_Components_Snippet_Namespace $namespace;
 
     public function __construct(ModelManager $em, XmlPluginReader $infoReader, SnippetManager $snippetManager)
     {
@@ -77,14 +68,7 @@ class RequirementValidator
         }
     }
 
-    /**
-     * @param string $version
-     * @param string $required
-     * @param string $operator
-     *
-     * @return bool
-     */
-    private function assertVersion($version, $required, $operator)
+    private function assertVersion(string $version, string $required, string $operator): bool
     {
         if ($version === '___VERSION___') {
             return true;
@@ -93,9 +77,12 @@ class RequirementValidator
         return version_compare($version, $required, $operator);
     }
 
+    /**
+     * @param array{minVersion?: string, maxVersion?: string, blacklist?: list<string>} $compatibility
+     */
     private function assertShopwareVersion(array $compatibility, string $shopwareVersion): void
     {
-        if (isset($compatibility['blacklist']) && \in_array($shopwareVersion, $compatibility['blacklist'])) {
+        if (isset($compatibility['blacklist']) && \in_array($shopwareVersion, $compatibility['blacklist'], true)) {
             throw new Exception(sprintf($this->namespace->get('shopware_version_blacklisted'), $shopwareVersion));
         }
 
@@ -114,6 +101,9 @@ class RequirementValidator
         }
     }
 
+    /**
+     * @param array<array{pluginName: string, minVersion?: string, maxVersion?: string, blacklist?: list<string>}> $requiredPlugins
+     */
     private function assertRequiredPlugins(array $requiredPlugins): void
     {
         $pluginRepository = $this->em->getRepository(Plugin::class);
@@ -135,7 +125,7 @@ class RequirementValidator
                 throw new Exception(sprintf($this->namespace->get('required_plugin_not_active'), $requiredPlugin['pluginName']));
             }
 
-            if (isset($requiredPlugin['blacklist']) && \in_array($plugin->getVersion(), $requiredPlugin['blacklist'])) {
+            if (isset($requiredPlugin['blacklist']) && \in_array($plugin->getVersion(), $requiredPlugin['blacklist'], true)) {
                 throw new Exception(sprintf($this->namespace->get('required_plugin_blacklisted'), $plugin->getName(), $plugin->getVersion()));
             }
 

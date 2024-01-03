@@ -5,19 +5,18 @@
     <xsd:element name="plugin" type="pluginType"/>
 
     <xsd:complexType name="pluginType">
-        <xsd:sequence>
+        <xsd:choice maxOccurs="unbounded">
             <xsd:element name="label" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="version" type="xsd:string"/>
             <xsd:element name="copyright" type="xsd:string" minOccurs="0"/>
             <xsd:element name="license" type="xsd:string" minOccurs="0"/>
             <xsd:element name="link" type="xsd:anyURI" minOccurs="0"/>
             <xsd:element name="author" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="compatibility" type="compatibilityType" minOccurs="0"/>
+            <xsd:element name="requiredPlugins" type="requiredPluginList" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="description" type="translatableString" minOccurs="0" maxOccurs="unbounded"/>
             <xsd:element name="changelog" type="changelogLog" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="requiredPlugins" type="requiredPluginList" minOccurs="0" maxOccurs="unbounded"/>
-            <xsd:element name="compatibility" type="compatibilityType" minOccurs="0"/>
-            <xsd:any processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </xsd:sequence>
+        </xsd:choice>
     </xsd:complexType>
 
     <xsd:complexType name="compatibilityType">

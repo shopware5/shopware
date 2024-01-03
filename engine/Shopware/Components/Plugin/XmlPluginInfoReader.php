@@ -33,11 +33,11 @@ use InvalidArgumentException;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**
- * @deprecated This class will be removed in 5.6
+ * @deprecated This class will be removed in 5.8
  *
- * Use new class Shopware\Components\Plugin\XmlReader\XmlPluginInfoReader (see Shopware 5.6)
+ * Use new class @see XmlReader\XmlPluginReader (see Shopware 5.6)
  *
- * https://github.com/shopware5/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlPluginInfoReader.php
+ * https://github.com/shopware5/shopware/blob/5.6/engine/Shopware/Components/Plugin/XmlReader/XmlPluginReader.php
  */
 class XmlPluginInfoReader
 {
@@ -72,8 +72,7 @@ class XmlPluginInfoReader
             $info['description'][$lang] = trim((string) $description->nodeValue);
         }
 
-        $simpleKeys = ['version', 'license', 'author', 'copyright', 'link'];
-        foreach ($simpleKeys as $simpleKey) {
+        foreach (['version', 'license', 'author', 'copyright', 'link'] as $simpleKey) {
             if ($names = $this->getChildren($entry, $simpleKey)) {
                 $info[$simpleKey] = $names[0]->nodeValue;
             }

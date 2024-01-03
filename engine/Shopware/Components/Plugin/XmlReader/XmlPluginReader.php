@@ -83,9 +83,8 @@ class XmlPluginReader extends XmlReaderBase
             }
         }
 
-        $simpleFields = ['version', 'license', 'author', 'copyright', 'link'];
-        foreach ($simpleFields as $simpleField) {
-            $fieldValue = self::getElementChildValueByName($pluginData, $simpleField);
+        foreach (['version', 'license', 'author', 'copyright', 'link'] as $simpleField) {
+            $fieldValue = self::getElementChildValueByName($pluginData, $simpleField, $simpleField === 'version');
             if ($fieldValue !== null) {
                 $info[$simpleField] = $fieldValue;
             }
@@ -130,9 +129,7 @@ class XmlPluginReader extends XmlReaderBase
     {
         $plugins = [];
 
-        $requiredPlugins = $requiredPluginNode->getElementsByTagName('requiredPlugin');
-
-        foreach ($requiredPlugins as $requiredPlugin) {
+        foreach ($requiredPluginNode->getElementsByTagName('requiredPlugin') as $requiredPlugin) {
             $plugin = [];
 
             $plugin['pluginName'] = $requiredPlugin->getAttribute('pluginName');

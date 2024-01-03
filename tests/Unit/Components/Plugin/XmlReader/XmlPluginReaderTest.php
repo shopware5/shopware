@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Shopware\Components\Plugin\XmlReader\XmlPluginReader;
 
@@ -102,10 +103,17 @@ class XmlPluginReaderTest extends TestCase
         static::assertArrayNotHasKey('blacklist', $secondRequiredPlugin);
     }
 
-    private function readFile(): array
+    public function testReadFileWithoutVersion(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Element with name "version" not found in file ".*\/tests\/Unit\/Components\/Plugin\/XmlReader\/examples\/plugin\/plugin_invalid\.xml"/');
+        $this->readFile('plugin_invalid');
+    }
+
+    private function readFile(string $fileName = 'plugin'): array
     {
         return $this->pluginReader->read(
-            sprintf('%s/examples/plugin/%s', __DIR__, 'plugin.xml')
+            sprintf('%s/examples/plugin/%s.xml', __DIR__, $fileName)
         );
     }
 }
