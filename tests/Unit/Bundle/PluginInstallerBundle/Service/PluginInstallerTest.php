@@ -44,6 +44,7 @@ class PluginInstallerTest extends TestCase
     public function testRefreshPluginList(): void
     {
         $dateTime = new DateTimeImmutable();
+        $dateTimeString = $dateTime->format('Y-m-d H:i:s');
 
         $expectedData = [
             'namespace' => 'ShopwarePlugins',
@@ -53,18 +54,18 @@ class PluginInstallerTest extends TestCase
             'link' => null,
             'label' => 'TestPlugin',
             'description' => null,
-            'capability_update' => true,
-            'capability_install' => true,
-            'capability_enable' => true,
-            'capability_secure_uninstall' => true,
-            'refresh_date' => $dateTime,
+            'capability_update' => 1,
+            'capability_install' => 1,
+            'capability_enable' => 1,
+            'capability_secure_uninstall' => 1,
+            'refresh_date' => $dateTimeString,
             'translations' => '{"en":{"label":"TestPlugin"}}',
             'changes' => null,
-            'added' => $dateTime,
+            'added' => $dateTimeString,
         ];
 
         $connection = $this->createMock(Connection::class);
-        $connection->expects(static::once())->method('fetchAssoc')->willReturn(null);
+        $connection->expects(static::once())->method('fetchAssociative')->willReturn(null);
         $connection->expects(static::once())->method('insert')->with('s_core_plugins', $expectedData, [
             'added' => 'datetime',
             'refresh_date' => 'datetime',
