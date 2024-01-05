@@ -64,10 +64,10 @@ class Shopware_Plugins_Core_CronProductExport_Bootstrap extends Shopware_Compone
         $cacheDir = Shopware()->Container()->getParameter('shopware.product_export.cache_dir');
         if (!is_dir($cacheDir)) {
             if (@mkdir($cacheDir, 0777, true) === false) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
+                throw new RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Productexport', $cacheDir));
             }
         } elseif (!is_writable($cacheDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
+            throw new RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Productexport', $cacheDir));
         }
 
         $export = Shopware()->Modules()->Export();

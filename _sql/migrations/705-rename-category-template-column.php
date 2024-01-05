@@ -21,7 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration705 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration705 extends AbstractMigration
 {
     public function up($modus)
     {
@@ -50,7 +52,7 @@ class Migrations_Migration705 extends Shopware\Components\Migrations\AbstractMig
             'article_listing_4col.tpl',
         ];
         $templates = $this->connection->query("SELECT vals.id, vals.value FROM `s_core_config_values` as vals INNER JOIN `s_core_config_elements` as elems ON elems.id = vals.element_id WHERE elems.name = 'categorytemplates'")
-            ->fetchAll(\PDO::FETCH_KEY_PAIR);
+            ->fetchAll(PDO::FETCH_KEY_PAIR);
 
         foreach ($templates as $valueId => $serializedValue) {
             $cleanedTemplates = [];

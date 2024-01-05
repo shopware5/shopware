@@ -88,7 +88,7 @@ INNER JOIN s_library_component_field AS libComp
     AND libComp.`name` = 'selected_articles';
 SQL;
 
-        $emotionElements = $this->getConnection()->query($emotionElementQuery)->fetchAll(\PDO::FETCH_KEY_PAIR);
+        $emotionElements = $this->getConnection()->query($emotionElementQuery)->fetchAll(PDO::FETCH_KEY_PAIR);
 
         $updateEmotionElementQuery = <<<SQL
 UPDATE s_emotion_element_value

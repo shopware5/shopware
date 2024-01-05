@@ -21,7 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration102 extends \Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration102 extends AbstractMigration
 {
     public function up($modus)
     {

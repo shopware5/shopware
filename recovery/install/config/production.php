@@ -21,6 +21,8 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Slim\Log;
+
 return [
     'shopware.root_dir' => realpath(__DIR__ . '/../../../'),
     'check.ping_url' => 'recovery/install/ping.php',
@@ -37,7 +39,7 @@ return [
     'languages' => ['de', 'en', 'nl', 'it', 'fr', 'es', 'pt', 'pl'],
 
     'slim' => [
-        'log.level' => \Slim\Log::DEBUG,
+        'log.level' => Log::DEBUG,
         'log.enabled' => true,
         'debug' => true, // set debug to false so custom error handler is used
         'templates.path' => __DIR__ . '/../templates',

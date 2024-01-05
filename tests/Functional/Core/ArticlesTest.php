@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,23 +23,31 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+namespace Shopware\Tests\Functional\Core;
+
+use Enlight_Components_Test_Controller_TestCase;
+use sArticles;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+use Shopware\Models\Category\Category;
 use Shopware\Tests\Functional\Helper\Utils;
 
-class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
+class ArticlesTest extends Enlight_Components_Test_Controller_TestCase
 {
-    public function testCanInstanciatesArticles()
+    public function testCanInstanciatesArticles(): void
     {
         $sArticles = new sArticles();
-        $categoryId = Shopware()->Shop()->getCategory()->getId();
+        $category = Shopware()->Shop()->getCategory();
+        static::assertNotNull($category);
+        $categoryId = $category->getId();
         $translationId = !Shopware()->Shop()->getDefault() ? Shopware()->Shop()->getId() : null;
-        $customerGroupId = (int) Shopware()->Modules()->System()->sUSERGROUPDATA['id'];
+        $customerGroupId = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext()->getCurrentCustomerGroup()->getId();
 
         $this->assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId);
     }
 
-    public function testCanInjectParameters()
+    public function testCanInjectParameters(): void
     {
-        $category = new \Shopware\Models\Category\Category();
+        $category = new Category();
 
         $categoryId = 1;
         $translationId = 12;
@@ -54,7 +64,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-4887
      */
-    public function testPriceGroupForMainVariant()
+    public function testPriceGroupForMainVariant(): void
     {
         // Add price group
         $sql = '
@@ -66,7 +76,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->dispatch('/');
 
-        Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->initializeShopContext();
+        Shopware()->Container()->get(ContextServiceInterface::class)->initializeShopContext();
 
         $correctPrice = '18,99';
         $article = Shopware()->Modules()->Articles()->sGetArticleById(
@@ -85,7 +95,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @ticket SW-5391
      */
-    public function testsGetPromotionByIdWithNonExistingArticle()
+    public function testsGetPromotionByIdWithNonExistingArticle(): void
     {
         $result = Shopware()->Modules()->Articles()->sGetPromotionById('fix', 0, 9999999);
 
@@ -97,7 +107,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
      * Assert that numbers that are small enough to be represented as floating points by PHP when they are converted to
      * string are rounded correctly by sArticles::sRound.
      */
-    public function testsRoundWithFloatingPointRepresentation()
+    public function testsRoundWithFloatingPointRepresentation(): void
     {
         $sArticles = new sArticles();
         $input = 0.00001; // 1.0E-5
@@ -113,7 +123,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
      * converted to string are rounded correctly by sArticles::sRound. Also assert that they are not represented as -0
      * (negative zero)
      */
-    public function testsRoundWithFloatingPointRepresentationNegative()
+    public function testsRoundWithFloatingPointRepresentationNegative(): void
     {
         $sArticles = new sArticles();
         $input = -0.00001; // -1.0E-5
@@ -130,7 +140,7 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
      * Assert that numbers that are small enough to be represented as floating points by PHP when they are converted to
      * string are rounded correctly by sArticles::sRound.
      */
-    public function testsRoundWithFloatingPointRepresentationLarge()
+    public function testsRoundWithFloatingPointRepresentationLarge(): void
     {
         $sArticles = new sArticles();
         $input = 100000000000000.0; // 1.0E14
@@ -141,9 +151,9 @@ class sArticlesTest extends Enlight_Components_Test_Controller_TestCase
         static::assertEquals(100000000000000, $result);
     }
 
-    protected function assertsArticlesState($sArticles, $categoryId, $translationId, $customerGroupId)
+    private function assertsArticlesState(sArticles $sArticles, int $categoryId, ?int $translationId, int $customerGroupId): void
     {
-        static::assertInstanceOf('Shopware\Models\Category\Category', Utils::hijackAndReadProperty($sArticles, 'category'));
+        static::assertInstanceOf(Category::class, Utils::hijackAndReadProperty($sArticles, 'category'));
         static::assertEquals($categoryId, Utils::hijackAndReadProperty($sArticles, 'categoryId'));
         static::assertEquals($translationId, Utils::hijackAndReadProperty($sArticles, 'translationId'));
         static::assertEquals($customerGroupId, Utils::hijackAndReadProperty($sArticles, 'customerGroupId'));

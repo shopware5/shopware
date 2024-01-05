@@ -21,7 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration1436 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1436 extends AbstractMigration
 {
     /**
      * {@inheritdoc}
@@ -34,7 +36,7 @@ class Migrations_Migration1436 extends Shopware\Components\Migrations\AbstractMi
 
         try {
             $installationLanguage = $this->connection->query('SELECT LOWER(TRIM(`name`)) FROM `s_core_countries_areas` WHERE `id` = 1')->fetchColumn(0);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             // Empty on purpose
         }
 

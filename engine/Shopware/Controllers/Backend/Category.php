@@ -21,6 +21,7 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
@@ -341,7 +342,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         ];
 
         /** @var QueryBuilder $builder */
-        $builder = $this->get(\Doctrine\DBAL\Connection::class)->createQueryBuilder();
+        $builder = $this->get(Connection::class)->createQueryBuilder();
         $builder->select([
             'SQL_CALC_FOUND_ROWS articles.id as articleId',
             'articles.name',
@@ -364,7 +365,7 @@ class Shopware_Controllers_Backend_Category extends Shopware_Controllers_Backend
         $builder->setParameters($params);
         $result = $builder->execute()->fetchAll();
 
-        $count = $this->get(\Doctrine\DBAL\Connection::class)->fetchColumn('SELECT FOUND_ROWS()');
+        $count = $this->get(Connection::class)->fetchColumn('SELECT FOUND_ROWS()');
 
         $this->View()->assign([
             'success' => true,

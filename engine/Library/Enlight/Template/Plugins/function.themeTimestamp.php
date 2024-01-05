@@ -17,13 +17,15 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
+
 /**
  * Returns the current time measured in the number of seconds
  * since the Unix Epoch (January 1 1970 00:00:00 GMT).
  */
 function smarty_function_themeTimestamp($params, $template)
 {
-    $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+    $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
     $shopId = $context->getShop()->getParentId();
 
     return Shopware()->Container()->get('theme_timestamp_persistor')->getCurrentTimestamp($shopId);

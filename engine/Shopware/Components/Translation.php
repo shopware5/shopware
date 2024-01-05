@@ -178,7 +178,7 @@ class Shopware_Components_Translation
             ->setParameter(':language', $language);
 
         $data = $query->execute()
-            ->fetch(\PDO::FETCH_COLUMN);
+            ->fetch(PDO::FETCH_COLUMN);
 
         return $this->unFilterData($type, $data, $merge ? $key : null);
     }

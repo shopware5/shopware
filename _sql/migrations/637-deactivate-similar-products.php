@@ -21,7 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration637 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration637 extends AbstractMigration
 {
     public function up($modus)
     {
@@ -43,7 +45,7 @@ UPDATE `s_core_config_element_translations` SET `description` = 'If no similar a
 SQL;
         $this->addSql($sql);
 
-        if ($modus == \Shopware\Components\Migrations\AbstractMigration::MODUS_UPDATE) {
+        if ($modus == AbstractMigration::MODUS_UPDATE) {
             return;
         }
 

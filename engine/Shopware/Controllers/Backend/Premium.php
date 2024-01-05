@@ -126,7 +126,7 @@ class Shopware_Controllers_Backend_Premium extends Shopware_Controllers_Backend_
 
         $params = $this->Request()->getParams();
         $params['startPrice'] = str_replace(',', '.', $params['startPrice']);
-        $premiumModel = new Shopware\Models\Premium\Premium();
+        $premiumModel = new Premium();
 
         try {
             if (empty($params['orderNumberExport'])) {

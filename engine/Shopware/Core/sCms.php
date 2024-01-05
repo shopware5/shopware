@@ -21,13 +21,15 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Shopware\Bundle\AttributeBundle\Service\DataLoader;
+
 /**
  * Shopware class that handle static shop pages and dynamic content
  * Used to handle pages such as "Help", etc
  *
  * Used by Frontend_Custom and Frontend_Content controllers
  */
-class sCms implements \Enlight_Hook
+class sCms implements Enlight_Hook
 {
     /**
      * Database connection which used for each database operation in this class.
@@ -56,7 +58,7 @@ class sCms implements \Enlight_Hook
     ) {
         $this->db = $db ?: Shopware()->Db();
         $this->front = $front ?: Shopware()->Front();
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(Shopware_Components_Translation::class);
     }
 
     /**
@@ -103,7 +105,7 @@ class sCms implements \Enlight_Hook
         }
 
         // load attributes
-        $staticPage['attribute'] = Shopware()->Container()->get(\Shopware\Bundle\AttributeBundle\Service\DataLoader::class)->load('s_cms_static_attributes', $staticId);
+        $staticPage['attribute'] = Shopware()->Container()->get(DataLoader::class)->load('s_cms_static_attributes', $staticId);
 
         if ($translations) {
             foreach ($translations as $property => $translation) {

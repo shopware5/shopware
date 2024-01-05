@@ -21441,11 +21441,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
 
 		-
-			message: "#^Parameter \\#1 \\$configuratorSet of method Shopware\\\\Models\\\\Article\\\\Configurator\\\\PriceVariation\\:\\:setConfiguratorSet\\(\\) expects Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set, Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$id\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Banner.php
@@ -38031,71 +38026,6 @@ parameters:
 			path: tests/Functional/Core/OrderTest.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$categoryId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$customerGroupId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$sArticles with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$translationId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testCanInjectParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testCanInstanciatesArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testPriceGroupForMainVariant\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsGetPromotionByIdWithNonExistingArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsRoundWithFloatingPointRepresentation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsRoundWithFloatingPointRepresentationLarge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsRoundWithFloatingPointRepresentationNegative\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
 			message: "#^Method sCategoriesTest\\:\\:getCategoryById\\(\\) has parameter \\$allCategories with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Core/sCategoriesTest.php
@@ -38314,11 +38244,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Order\\\\Shipping\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Models/Order/ShippingTest.php
-
-		-
-			message: "#^Method RemoveAndCreateResourceTest\\:\\:testRemoveAndCreateAresource\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Acl/RemoveAndCreateResourceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\SeoCategoryTest\\:\\:getSimpleTestData\\(\\) return type has no value type specified in iterable type array\\.$#"

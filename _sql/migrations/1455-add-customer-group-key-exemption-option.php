@@ -21,7 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration1455 extends \Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1455 extends AbstractMigration
 {
     /**
      * Migration to make new "Exclude Customergroup" option visible in advanced menu without reinstallation

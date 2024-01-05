@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,12 +23,16 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+namespace Shopware\Tests\Functional\Core;
+
+use Enlight_Controller_Front;
+use Enlight_Controller_Request_RequestTestCase;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\CustomerLoginTrait;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
 use Shopware\Tests\Functional\Traits\FixtureBehaviour;
 
-class sBasketSAddVoucherTest extends TestCase
+class BasketSAddVoucherTest extends TestCase
 {
     use FixtureBehaviour;
     use CustomerLoginTrait;
@@ -36,17 +42,15 @@ class sBasketSAddVoucherTest extends TestCase
     {
         $voucherCode = 'foobar01';
 
-        $this->executeFixture(__DIR__ . '/fixtures/add-expired-voucher.sql');
+        static::executeFixture(__DIR__ . '/fixtures/add-expired-voucher.sql');
 
         $this->loginCustomer();
 
         $frontendController = Shopware()->Container()->get('front');
-        static::assertInstanceOf(\Enlight_Controller_Front::class, $frontendController);
-        $frontendController->setRequest(new \Enlight_Controller_Request_RequestTestCase());
+        static::assertInstanceOf(Enlight_Controller_Front::class, $frontendController);
+        $frontendController->setRequest(new Enlight_Controller_Request_RequestTestCase());
 
-        $basket = Shopware()->Modules()->Basket();
-
-        $result = $basket->sAddVoucher($voucherCode);
+        $result = Shopware()->Modules()->Basket()->sAddVoucher($voucherCode);
 
         static::assertIsArray($result);
         static::assertTrue($result['sErrorFlag']);

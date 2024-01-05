@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,15 +23,20 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+namespace Shopware\Tests\Functional\Modules\Acl;
+
+use Enlight_Components_Test_TestCase;
+use Shopware\Components\Model\ModelManager;
 use Shopware\Tests\Functional\Traits\DatabaseTransactionBehaviour;
+use Shopware_Components_Acl;
 
 class RemoveAndCreateResourceTest extends Enlight_Components_Test_TestCase
 {
     use DatabaseTransactionBehaviour;
 
-    public function testRemoveAndCreateAresource()
+    public function testRemoveAndCreateResource(): void
     {
-        $em = Shopware()->Container()->get(\Shopware\Components\Model\ModelManager::class);
+        $em = Shopware()->Container()->get(ModelManager::class);
 
         $acl = new Shopware_Components_Acl($em);
 

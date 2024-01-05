@@ -21,14 +21,16 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration774 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration774 extends AbstractMigration
 {
     public function up($modus)
     {
         if ($modus === self::MODUS_UPDATE) {
             return;
         }
-        $today = new \DateTime();
+        $today = new DateTime();
         $installationDate = serialize($today->format('Y-m-d H:i'));
 
         $sql = <<<SQL

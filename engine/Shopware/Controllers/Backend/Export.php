@@ -125,7 +125,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
         $outputHandle = fopen($output, 'w');
 
         if (!\is_resource($outputHandle)) {
-            throw new \RuntimeException(sprintf('Output file %s can not be opened', $outputHandle));
+            throw new RuntimeException(sprintf('Output file %s can not be opened', $outputHandle));
         }
 
         $this->export->sSmarty = $this->View()->Engine();
@@ -191,7 +191,7 @@ class Shopware_Controllers_Backend_Export extends Enlight_Controller_Action impl
     {
         $dirName = $this->container->getParameter('shopware.product_export.cache_dir');
         if (!\is_string($dirName)) {
-            throw new \RuntimeException('Parameter shopware.product_export.cache_dir has to be an string');
+            throw new RuntimeException('Parameter shopware.product_export.cache_dir has to be an string');
         }
 
         if (!file_exists($dirName)) {

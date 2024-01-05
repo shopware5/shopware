@@ -161,7 +161,7 @@ class Shopware_Controllers_Backend_ArticleList extends Shopware_Controllers_Back
         $id = \is_null($this->Request()->getParam('id')) ? null : (int) $this->Request()->getParam('id');
 
         if (!\is_int($id)) {
-            throw new \DomainException('No ID was provided');
+            throw new DomainException('No ID was provided');
         }
 
         $offset = (int) $this->Request()->getParam('offset', 0);

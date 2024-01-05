@@ -474,7 +474,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $data = $this->Request()->getParams();
 
-        $groupModel = new Shopware\Models\Newsletter\Group();
+        $groupModel = new Group();
         $groupModel->fromArray($data);
         $this->get('models')->persist($groupModel);
         $this->get('models')->flush();
@@ -489,7 +489,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
     {
         $data = $this->Request()->getParams();
 
-        $senderModel = new Shopware\Models\Newsletter\Sender();
+        $senderModel = new Sender();
         $senderModel->fromArray($data);
         $this->get('models')->persist($senderModel);
         $this->get('models')->flush();
@@ -713,7 +713,7 @@ class Shopware_Controllers_Backend_NewsletterManager extends Shopware_Controller
         $modelManager = $this->get(ModelManager::class);
         $model = $modelManager->find(Newsletter::class, $id);
 
-        if ($model instanceof Shopware\Models\Newsletter\Newsletter) {
+        if ($model instanceof Newsletter) {
             $model->setStatus($active);
         } else {
             $this->View()->assign([
