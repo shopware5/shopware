@@ -273,7 +273,7 @@ class Enlight_Components_Cron_Manager
             ]);
 
             return $jobArgs;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $job->setData(['error' => $e->getMessage()]);
 
             if ($job->getDisableOnError()) {

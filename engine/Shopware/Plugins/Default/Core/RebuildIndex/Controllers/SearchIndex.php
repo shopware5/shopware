@@ -21,6 +21,8 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer;
+
 class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Backend_ExtJs
 {
     /**
@@ -30,7 +32,7 @@ class Shopware_Controllers_Backend_SearchIndex extends Shopware_Controllers_Back
     {
         @set_time_limit(1200);
 
-        $indexer = $this->get(\Shopware\Bundle\SearchBundleDBAL\SearchTerm\SearchIndexer::class);
+        $indexer = $this->get(SearchIndexer::class);
         $indexer->build();
 
         $this->View()->assign(['success' => true]);

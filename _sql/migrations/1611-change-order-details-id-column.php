@@ -21,11 +21,13 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration1611 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1611 extends AbstractMigration
 {
     public function up($modus)
     {
-        $columns = $this->connection->query('DESCRIBE `s_order_documents`')->fetchAll(\PDO::FETCH_ASSOC);
+        $columns = $this->connection->query('DESCRIBE `s_order_documents`')->fetchAll(PDO::FETCH_ASSOC);
 
         if (\in_array('id', array_column($columns, 'Field'), true)) {
             return;

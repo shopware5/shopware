@@ -71,7 +71,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      */
     public function postAction(): void
     {
-        throw new \RuntimeException('Building caches is not possible, yet. You can build the cache by calling the category/product manually.');
+        throw new RuntimeException('Building caches is not possible, yet. You can build the cache by calling the category/product manually.');
     }
 
     /**
@@ -81,7 +81,7 @@ class Shopware_Controllers_Api_Caches extends Shopware_Controllers_Api_Rest
      */
     public function putAction(): void
     {
-        throw new \RuntimeException('Updating caches is not possible, yet. After updating a product or category the cache will be invalidated automatically, if configured in the HTTP-Cache settings..');
+        throw new RuntimeException('Updating caches is not possible, yet. After updating a product or category the cache will be invalidated automatically, if configured in the HTTP-Cache settings..');
     }
 
     /**

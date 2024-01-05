@@ -21,6 +21,7 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Models\Article\Article;
 
 class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Backend_ExtJs
@@ -49,7 +50,7 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
             $totalCount = \count($dataQuery->getArrayResult());
 
             $summaryQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order, true);
-            $summaryData = $summaryQuery->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+            $summaryData = $summaryQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
             $this->View()->assign(
                 [

@@ -21,11 +21,13 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration1600 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1600 extends AbstractMigration
 {
     public function up($modus)
     {
-        if ($modus === \Shopware\Components\Migrations\AbstractMigration::MODUS_INSTALL) {
+        if ($modus === AbstractMigration::MODUS_INSTALL) {
             $this->addSql('ALTER TABLE `s_articles_attributes` DROP FOREIGN KEY `s_articles_attributes_ibfk_1`;');
             $this->addSql('ALTER TABLE `s_articles_attributes` DROP COLUMN `articleID`;');
         }

@@ -65,7 +65,7 @@ SQL;
 
     private function getConfigValue(string $name)
     {
-        $config = $this->connection->query(sprintf('SELECT id, value FROM s_core_config_elements WHERE name = "%s" LIMIT 1', $name))->fetch(\PDO::FETCH_ASSOC);
+        $config = $this->connection->query(sprintf('SELECT id, value FROM s_core_config_elements WHERE name = "%s" LIMIT 1', $name))->fetch(PDO::FETCH_ASSOC);
         $configId = (int) $config['id'];
         $default = unserialize($config['value'], ['allowed_classes' => false]);
 

@@ -35,6 +35,7 @@ use Shopware\Components\Cart\BasketHelperInterface;
 use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\Struct\CartItemStruct;
 use Shopware\Components\Cart\Struct\DiscountContext;
+use Shopware\Components\Compatibility\LegacyStructConverter;
 use Shopware\Components\Random;
 use Symfony\Component\HttpFoundation\Cookie;
 
@@ -43,7 +44,7 @@ use Symfony\Component\HttpFoundation\Cookie;
  *
  * @phpstan-type BasketArray array{content?:array<array<string, mixed>>, Amount?:string, AmountNet?:string, Quantity?:int, AmountNumeric?:float, AmountNetNumeric?:float, AmountWithTax?:string, AmountWithTaxNumeric?:float}
  */
-class sBasket implements \Enlight_Hook
+class sBasket implements Enlight_Hook
 {
     /**
      * Pointer to sSystem object
@@ -237,7 +238,7 @@ class sBasket implements \Enlight_Hook
             ]
         );
 
-        $result = $queryBuilder->execute()->fetch(\PDO::FETCH_ASSOC);
+        $result = $queryBuilder->execute()->fetch(PDO::FETCH_ASSOC);
 
         return $result === false ? [] : $result;
     }
@@ -880,7 +881,7 @@ class sBasket implements \Enlight_Hook
                 'VoucherFailureMinimumCharge',
                 'The minimum charge for this voucher is {$sMinimumCharge|currency}'
             );
-            $smarty = Shopware()->Container()->get(\Enlight_Template_Manager::class);
+            $smarty = Shopware()->Container()->get(Enlight_Template_Manager::class);
             $template = $smarty->createTemplate(sprintf('string:%s', $snippet));
             $template->assign('sMinimumCharge', $voucherDetails['minimumcharge']);
 
@@ -2247,7 +2248,7 @@ class sBasket implements \Enlight_Hook
      */
     private function convertListProductToNote(ListProduct $product, array $note)
     {
-        $structConverter = Shopware()->Container()->get(\Shopware\Components\Compatibility\LegacyStructConverter::class);
+        $structConverter = Shopware()->Container()->get(LegacyStructConverter::class);
         /** @var array $promotion */
         $promotion = $structConverter->convertListProductStruct($product);
 
@@ -2930,12 +2931,12 @@ SQL;
             ],
             [
                 'ids' => Connection::PARAM_INT_ARRAY,
-                'sessionId' => \PDO::PARAM_STR,
-                'mainCategoryId' => \PDO::PARAM_INT,
+                'sessionId' => PDO::PARAM_STR,
+                'mainCategoryId' => PDO::PARAM_INT,
             ]
         );
 
-        $additionalInformation = $stmt->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE);
+        $additionalInformation = $stmt->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE);
         $products = Shopware()->Container()->get(ListProductGatewayInterface::class)->getList(
             array_column($additionalInformation, 'ordernumber'),
             $this->contextService->getShopContext()
@@ -3040,7 +3041,7 @@ SQL;
             ]
         );
 
-        $itemPrices = $queryBuilder->execute()->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_ASSOC);
+        $itemPrices = $queryBuilder->execute()->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_ASSOC);
         $customerPriceGroup = $this->sSYSTEM->sUSERGROUP;
 
         /** @var CartItemStruct $cartItem */
@@ -3192,7 +3193,7 @@ SQL;
             ->setParameter('pricegroup', $this->sSYSTEM->sUSERGROUP)
             ->setParameter('defaultPriceGroup', $defaultPriceGroup)
             ->execute()
-            ->fetchAll(\PDO::FETCH_GROUP | \PDO::FETCH_UNIQUE | \PDO::FETCH_ASSOC);
+            ->fetchAll(PDO::FETCH_GROUP | PDO::FETCH_UNIQUE | PDO::FETCH_ASSOC);
 
         $price = $prices[$defaultPriceGroup];
 

@@ -145,7 +145,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
 
         try {
             $this->addressService->delete($model);
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             return ['success' => false, 'error' => $ex->getMessage()];
         }
 
@@ -160,7 +160,7 @@ class Shopware_Controllers_Backend_Address extends Shopware_Controllers_Backend_
         $customerId = (int) $this->Request()->get('customerId');
 
         if (!$customerId) {
-            throw new \RuntimeException('You have to provide a valid customerId.');
+            throw new RuntimeException('You have to provide a valid customerId.');
         }
 
         $query = parent::getListQuery();

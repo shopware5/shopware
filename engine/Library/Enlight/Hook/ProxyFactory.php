@@ -77,10 +77,10 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
 
         if (!is_dir($proxyDir)) {
             if (@mkdir($proxyDir, 0777, true) === false && !is_dir($proxyDir)) {
-                throw new \RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Proxy', $proxyDir));
+                throw new RuntimeException(sprintf("Unable to create the %s directory (%s)\n", 'Proxy', $proxyDir));
             }
         } elseif (!is_writable($proxyDir)) {
-            throw new \RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Proxy', $proxyDir));
+            throw new RuntimeException(sprintf("Unable to write in the %s directory (%s)\n", 'Proxy', $proxyDir));
         }
 
         $proxyDir = rtrim((string) Enlight_Loader::realpath($proxyDir), '\\/') . DIRECTORY_SEPARATOR;
@@ -112,11 +112,11 @@ class Enlight_Hook_ProxyFactory extends Enlight_Class
         if (!is_readable($proxyFile)) {
             if (!file_exists($this->proxyDir)) {
                 if (!mkdir($concurrentDirectory = $this->proxyDir) && !is_dir($concurrentDirectory)) {
-                    throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+                    throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
                 }
             }
             if (!is_writable($this->proxyDir)) {
-                throw new \RuntimeException(sprintf('The directory "%s" is not writable.', $this->proxyDir));
+                throw new RuntimeException(sprintf('The directory "%s" is not writable.', $this->proxyDir));
             }
 
             $content = $this->generateProxyClass($class);

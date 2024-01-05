@@ -70,7 +70,7 @@ class Enlight_Event_EventManager extends Enlight_Class
             $priority = null;
         }
 
-        $handler = new \Enlight_Event_Handler_Default(
+        $handler = new Enlight_Event_Handler_Default(
             $eventName,
             $listener,
             $priority

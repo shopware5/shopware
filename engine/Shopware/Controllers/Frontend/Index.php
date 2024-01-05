@@ -22,8 +22,11 @@
  */
 
 use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfiguration;
+use Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfigurationInterface;
+use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 use Shopware\Components\OptinServiceInterface;
+use Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 
 class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
@@ -40,17 +43,17 @@ class Shopware_Controllers_Frontend_Index extends Enlight_Controller_Action
         }
 
         /** @var ShopContextInterface $context */
-        $context = Shopware()->Container()->get(\Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface::class)->getShopContext();
+        $context = Shopware()->Container()->get(ContextServiceInterface::class)->getShopContext();
         $categoryId = $context->getShop()->getCategory()->getId();
 
         /** @var StoreFrontEmotionDeviceConfiguration $service */
-        $service = $this->get(\Shopware\Bundle\EmotionBundle\Service\StoreFrontEmotionDeviceConfigurationInterface::class);
+        $service = $this->get(StoreFrontEmotionDeviceConfigurationInterface::class);
         $emotions = $service->getCategoryConfiguration($categoryId, $context);
 
         $categoryContent = Shopware()->Modules()->Categories()->sGetCategoryContent($categoryId);
 
         $this->View()->assign([
-            'hasCustomerStreamEmotion' => $this->container->get(\Shopware\Models\CustomerStream\CustomerStreamRepositoryInterface::class)->hasCustomerStreamEmotions($categoryId),
+            'hasCustomerStreamEmotion' => $this->container->get(CustomerStreamRepositoryInterface::class)->hasCustomerStreamEmotions($categoryId),
             'emotions' => $emotions,
             'hasEmotion' => !empty($emotions),
             'sCategoryContent' => $categoryContent,

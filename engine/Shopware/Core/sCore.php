@@ -24,7 +24,7 @@
 /**
  * Shopware Class providing helper functions for post dispatch url rewriting
  */
-class sCore implements \Enlight_Hook
+class sCore implements Enlight_Hook
 {
     /**
      * The Front controller object

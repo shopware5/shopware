@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d18b47e38edb6a1c16f276e68d525dd7",
+    "content-hash": "0d1d2c76916deed03482601e18acf528",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -8394,16 +8394,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.50",
+            "version": "1.10.53",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "06a98513ac72c03e8366b5a0cb00750b487032e4"
+                "reference": "0c48595cce15f67d6a7faf30e9d13c775e6e9875"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/06a98513ac72c03e8366b5a0cb00750b487032e4",
-                "reference": "06a98513ac72c03e8366b5a0cb00750b487032e4",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0c48595cce15f67d6a7faf30e9d13c775e6e9875",
+                "reference": "0c48595cce15f67d6a7faf30e9d13c775e6e9875",
                 "shasum": ""
             },
             "require": {
@@ -8452,7 +8452,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-13T10:59:42+00:00"
+            "time": "2024-01-05T13:55:38+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,13 +22,15 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration476 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration476 extends AbstractMigration
 {
     public function up($modus)
     {
         $statement = $this->getConnection()->prepare('SHOW COLUMNS FROM `s_core_templates_config_elements`;');
         $statement->execute();
-        $result = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $result = $statement->fetchAll(PDO::FETCH_COLUMN);
 
         if (!\in_array('less_compatible', $result)) {
             $this->addLessCompatibleFlag();

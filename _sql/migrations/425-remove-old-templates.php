@@ -23,7 +23,7 @@
 
 use Shopware\Components\Migrations\AbstractMigration;
 
-class Migrations_Migration425 extends Shopware\Components\Migrations\AbstractMigration
+class Migrations_Migration425 extends AbstractMigration
 {
     public function up($modus)
     {

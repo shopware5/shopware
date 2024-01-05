@@ -170,7 +170,7 @@ class Shopware_Components_StringCompiler
                 $errorMessage = sprintf('Syntax Error %s', substr($errorMessage, 69));
             }
 
-            throw new \Enlight_Exception($errorMessage, 0, $e);
+            throw new Enlight_Exception($errorMessage, 0, $e);
         }
 
         return $template;

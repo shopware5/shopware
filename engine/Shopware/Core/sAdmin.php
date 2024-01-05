@@ -60,7 +60,7 @@ use ShopwarePlugin\PaymentMethods\Components\BasePaymentMethod;
  *
  * @phpstan-type ShippingCostArray array{value: string, factor: string, brutto: float, surcharge: float, taxMode: string, tax: float, netto: float, shippingfree?: float, difference?: array{float: float, formated: string}}
  */
-class sAdmin implements \Enlight_Hook
+class sAdmin implements Enlight_Hook
 {
     public const NO_SHIPPING_COSTS = [
         'value' => '0',
@@ -207,7 +207,7 @@ class sAdmin implements \Enlight_Hook
         $this->emailValidator = $emailValidator ?: Shopware()->Container()->get(EmailValidator::class);
         $this->subshopId = $this->contextService->getShopContext()->getShop()->getParentId();
         $this->attributeLoader = Shopware()->Container()->get(DataLoader::class);
-        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(\Shopware_Components_Translation::class);
+        $this->translationComponent = $translationComponent ?: Shopware()->Container()->get(Shopware_Components_Translation::class);
         $this->connection = $connection ?: Shopware()->Container()->get(Connection::class);
         $this->optInLoginService = $optInLoginService ?: Shopware()->Container()->get(OptInLoginService::class);
         $this->conditionalLineItemService = Shopware()->Container()->get(ConditionalLineItemServiceInterface::class);
@@ -3811,12 +3811,12 @@ SQL;
 
         $customer = $entityManager->find(Customer::class, $userId);
         if (!$customer instanceof Customer) {
-            throw new \InvalidArgumentException('User with provided id not found');
+            throw new InvalidArgumentException('User with provided id not found');
         }
 
         $shipping = $this->getShippingAddressData($entityManager, $customer);
         if ($shipping === null) {
-            throw new \UnexpectedValueException('No shipping address found for user with provided userId');
+            throw new UnexpectedValueException('No shipping address found for user with provided userId');
         }
 
         $userData['shippingaddress'] = $shipping;

@@ -21,9 +21,11 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Slim\Log;
+
 return [
     'slim' => [
-        'log.level' => \Slim\Log::DEBUG,
+        'log.level' => Log::DEBUG,
         'log.enabled' => true,
         'debug' => true, // set debug to false so custom error handler is used
         'check.ip' => false,

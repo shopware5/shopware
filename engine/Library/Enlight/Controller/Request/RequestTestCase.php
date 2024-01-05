@@ -187,7 +187,7 @@ class Enlight_Controller_Request_RequestTestCase extends Enlight_Controller_Requ
     {
         $type = strtoupper(trim((string) $type));
         if (!\in_array($type, $this->_validMethodTypes, true)) {
-            throw new \Exception('Invalid request method specified');
+            throw new Exception('Invalid request method specified');
         }
 
         $this->method = $type;

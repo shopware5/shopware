@@ -478,7 +478,7 @@ class Shopware_Controllers_Widgets_Listing extends Enlight_Controller_Action
             'sPage' => (int) $this->Request()->getParam('sPage'),
             'pages' => ceil($result->getTotalCount() / $sPerPage),
             'baseUrl' => $this->Request()->getBaseUrl() . $this->Request()->getPathInfo(),
-            'pageSizes' => explode('|', $this->container->get(\Shopware_Components_Config::class)->get('numberArticlesToShow')),
+            'pageSizes' => explode('|', $this->container->get(Shopware_Components_Config::class)->get('numberArticlesToShow')),
             'shortParameters' => $this->container->get(QueryAliasMapper::class)->getQueryAliases(),
             'limit' => $sPerPage,
         ]);

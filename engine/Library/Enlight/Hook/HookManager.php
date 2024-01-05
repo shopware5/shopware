@@ -64,11 +64,11 @@ class Enlight_Hook_HookManager extends Enlight_Class
         $this->eventManager = $eventManager;
 
         if (!isset($options['proxyNamespace'])) {
-            throw new \Exception('proxyNamespace has to be set.');
+            throw new Exception('proxyNamespace has to be set.');
         }
 
         if (!isset($options['proxyDir'])) {
-            throw new \Exception('proxyDir has to be set.');
+            throw new Exception('proxyDir has to be set.');
         }
 
         $this->proxyFactory = new Enlight_Hook_ProxyFactory(

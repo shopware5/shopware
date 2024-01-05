@@ -17,6 +17,8 @@
  * @license    http://enlight.de/license     New BSD License
  */
 
+use Shopware\Bundle\MediaBundle\MediaServiceInterface;
+
 /**
  * Build an full qualified image url based on the virtual path
  *
@@ -40,7 +42,7 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
     public function parseAttributes(array $attributes)
     {
         if (!empty($attributes['path'])) {
-            $mediaService = Shopware()->Container()->get(\Shopware\Bundle\MediaBundle\MediaServiceInterface::class);
+            $mediaService = Shopware()->Container()->get(MediaServiceInterface::class);
             $attributes['path'] = trim($attributes['path'], '"\'');
             $attributes['path'] = $mediaService->getUrl($attributes['path']);
         }
@@ -70,6 +72,6 @@ class Smarty_Compiler_Media extends Smarty_Internal_CompileBase
         }
 
         return '<?php '
-             . 'echo Shopware()->Container()->get(\'' . \Shopware\Bundle\MediaBundle\MediaServiceInterface::class . '\')->getUrl(' . $_attr['path'] . '); ?>';
+             . 'echo Shopware()->Container()->get(\'' . MediaServiceInterface::class . '\')->getUrl(' . $_attr['path'] . '); ?>';
     }
 }

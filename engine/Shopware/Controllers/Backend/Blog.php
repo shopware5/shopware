@@ -29,11 +29,12 @@ use Shopware\Models\Article\Article as Product;
 use Shopware\Models\Article\Repository as ProductRepository;
 use Shopware\Models\Blog\Blog;
 use Shopware\Models\Blog\Comment;
-use Shopware\Models\Blog\Media;
+use Shopware\Models\Blog\Media as BlogMedia;
 use Shopware\Models\Blog\Repository as BlogRepository;
 use Shopware\Models\Blog\Tag;
 use Shopware\Models\Category\Category;
 use Shopware\Models\Category\Repository as CategoryRepository;
+use Shopware\Models\Media\Media;
 use Shopware\Models\User\User;
 
 /**
@@ -494,8 +495,8 @@ class Shopware_Controllers_Backend_Blog extends Shopware_Controllers_Backend_Ext
     {
         $mediaModels = [];
         foreach ($mediaData as $media) {
-            $mediaModel = new Media();
-            $media['media'] = $this->getManager()->find(\Shopware\Models\Media\Media::class, $media['mediaId']);
+            $mediaModel = new BlogMedia();
+            $media['media'] = $this->getManager()->find(Media::class, $media['mediaId']);
             unset($media['mediaId']);
             $mediaModel->fromArray($media);
             $mediaModels[] = $mediaModel;

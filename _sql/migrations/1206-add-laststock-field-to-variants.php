@@ -33,7 +33,7 @@ class Migrations_Migration1206 extends AbstractMigration
         // Try/Catches are necessary to allow multiple runs of this migration
         try {
             $this->connection->exec('ALTER TABLE `s_articles_details` ADD `laststock` INT(1) NOT NULL DEFAULT 0 AFTER `stockmin`');
-        } catch (\PDOException $ex) {
+        } catch (PDOException $ex) {
             // This code says the column already exists, we want only all other exceptions to be raised
             if ($ex->getCode() !== '42S21') {
                 throw $ex;
@@ -42,7 +42,7 @@ class Migrations_Migration1206 extends AbstractMigration
 
         try {
             $this->connection->exec('ALTER TABLE `s_article_configurator_options` ADD `media_id` int(11) NULL');
-        } catch (\PDOException $ex) {
+        } catch (PDOException $ex) {
             // This code says the column already exists, we want only all other exceptions to be raised
             if ($ex->getCode() !== '42S21') {
                 throw $ex;

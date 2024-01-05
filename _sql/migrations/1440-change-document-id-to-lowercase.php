@@ -21,7 +21,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration1440 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration1440 extends AbstractMigration
 {
     public function up($modus)
     {
@@ -55,8 +57,8 @@ class Migrations_Migration1440 extends Shopware\Components\Migrations\AbstractMi
         try {
             $result = $this->connection
                 ->query('SHOW COLUMNS FROM `s_order_documents`')
-                ->fetchAll(\PDO::FETCH_ASSOC);
-        } catch (\Exception $exception) {
+                ->fetchAll(PDO::FETCH_ASSOC);
+        } catch (Exception $exception) {
             // Silent catch
         }
 

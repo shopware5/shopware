@@ -304,7 +304,7 @@ class Enlight_Controller_Plugins_ViewRenderer_Bootstrap extends Enlight_Plugin_B
     protected function initEngine()
     {
         if ($this->engine === null) {
-            $this->engine = Shopware()->Container()->get(\Enlight_Template_Manager::class);
+            $this->engine = Shopware()->Container()->get(Enlight_Template_Manager::class);
         }
     }
 

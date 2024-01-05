@@ -26,6 +26,7 @@ use Shopware\Components\CSRFWhitelistAware;
 use Shopware\Components\Model\Exception\ModelNotFoundException;
 use Shopware\Components\OptinServiceInterface;
 use Shopware\Components\ShopRegistrationServiceInterface;
+use Shopware\Components\Theme\Generator as ThemeGenerator;
 use Shopware\Components\Theme\Installer;
 use Shopware\Components\Theme\PathResolver;
 use Shopware\Components\Theme\Service;
@@ -177,7 +178,7 @@ class Shopware_Controllers_Backend_Theme extends Shopware_Controllers_Backend_Ap
             }
         }
 
-        $this->container->get(\Shopware\Components\Theme\Generator::class)->generateTheme(
+        $this->container->get(ThemeGenerator::class)->generateTheme(
             $this->Request()->getParams(),
             $parent
         );

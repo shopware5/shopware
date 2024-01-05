@@ -22,6 +22,7 @@
  */
 
 use Monolog\Handler\BufferHandler;
+use Monolog\Logger as MonologLogger;
 use Shopware\Components\CSRFTokenValidationException;
 use Shopware\Components\Log\Formatter\HtmlFormatter;
 use Shopware\Components\Log\Handler\EnlightMailHandler;
@@ -289,16 +290,16 @@ class Shopware_Plugins_Core_ErrorHandler_Bootstrap extends Shopware_Components_P
     public function createMailHandler()
     {
         /** @var Shopware_Components_Config $config */
-        $config = $this->get(\Shopware_Components_Config::class);
+        $config = $this->get(Shopware_Components_Config::class);
 
-        $logLevel = \Monolog\Logger::toMonologLevel($config->get('logMailLevel'));
+        $logLevel = MonologLogger::toMonologLevel($config->get('logMailLevel'));
         $recipients = array_filter(explode("\n", $config->get('logMailAddress')));
 
         if (\count($recipients) < 1) {
             $recipients[] = $config->get('mail');
         }
 
-        $mailer = new \Enlight_Components_Mail();
+        $mailer = new Enlight_Components_Mail();
         $mailer->addTo($recipients);
         $mailer->setSubject('Error in shop "' . $config->get('shopName') . '".');
         $mailHandler = new EnlightMailHandler($mailer, $logLevel);

@@ -21,6 +21,7 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Doctrine\DBAL\Connection;
 use Shopware\Models\Search\CustomFacet;
 
 /**
@@ -35,7 +36,7 @@ class Shopware_Controllers_Backend_CustomFacet extends Shopware_Controllers_Back
         $id = (int) $this->Request()->getParam('id');
         $position = (int) $this->Request()->getParam('position');
 
-        $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->container->get(Connection::class);
 
         $connection->executeUpdate(
             'UPDATE s_search_custom_facet SET position = position - 1 WHERE position <= :position',
@@ -54,7 +55,7 @@ class Shopware_Controllers_Backend_CustomFacet extends Shopware_Controllers_Back
     {
         $categoryId = (int) $this->Request()->getParam('categoryId');
 
-        $connection = $this->container->get(\Doctrine\DBAL\Connection::class);
+        $connection = $this->container->get(Connection::class);
 
         $data = $connection->fetchAssoc(
             'SELECT `hidefilter`, `facet_ids` FROM s_categories WHERE id = :id',

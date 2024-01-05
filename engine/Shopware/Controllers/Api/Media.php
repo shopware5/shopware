@@ -140,7 +140,7 @@ class Shopware_Controllers_Api_Media extends Shopware_Controllers_Api_Rest
             $fileName = $file->getClientOriginalName();
 
             if ($file->getError() !== UPLOAD_ERR_OK) {
-                throw new \Exception(sprintf('Could not upload file "%s"', $file->getClientOriginalName()));
+                throw new Exception(sprintf('Could not upload file "%s"', $file->getClientOriginalName()));
             }
 
             // use custom name if provided

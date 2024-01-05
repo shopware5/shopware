@@ -21,6 +21,8 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\AbstractQuery;
 use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Media\Media;
 use Shopware\Models\Property\Group;
@@ -93,14 +95,14 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         try {
             $modelManager->persist($group);
             $modelManager->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
         }
         $data = $this->getPropertyRepository()
                      ->getGroupDetailQuery($group->getId())
-                     ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                     ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -137,7 +139,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         $data = $this->getPropertyRepository()
                      ->getGroupDetailQuery($group->getId())
-                     ->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+                     ->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
 
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
@@ -204,7 +206,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         try {
             $this->get('models')->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
@@ -245,7 +247,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
 
         try {
             $this->get('models')->flush();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
 
             return;
@@ -449,7 +451,7 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $query->where('value.id = ?0')
             ->setParameter(0, $value->getId());
 
-        $data = $query->getQuery()->getOneOrNullResult(\Doctrine\ORM\AbstractQuery::HYDRATE_ARRAY);
+        $data = $query->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
         $this->View()->assign(['success' => true, 'data' => $data]);
     }
 
@@ -582,6 +584,6 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
     private function removeSetRelationsFromProducts($filterSetId)
     {
         $sql = 'UPDATE s_articles SET filtergroupID = null WHERE filtergroupID = ?';
-        $this->get(\Doctrine\DBAL\Connection::class)->executeUpdate($sql, [$filterSetId]);
+        $this->get(Connection::class)->executeUpdate($sql, [$filterSetId]);
     }
 }

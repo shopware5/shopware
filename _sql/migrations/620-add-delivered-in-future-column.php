@@ -21,13 +21,15 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration620 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration620 extends AbstractMigration
 {
     public function up($modus)
     {
         $statement = $this->getConnection()->prepare('SHOW COLUMNS FROM `s_campaigns_mailings`;');
         $statement->execute();
-        $result = $statement->fetchAll(\PDO::FETCH_COLUMN);
+        $result = $statement->fetchAll(PDO::FETCH_COLUMN);
 
         if (!\in_array('timed_delivery', $result)) {
             $this->addTimedDeliveryColumn();

@@ -21,6 +21,7 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
+use Shopware\Components\Model\ModelManager;
 use Shopware\Models\Article\Article;
 use Shopware\Models\Article\Configurator\PriceVariation;
 use Shopware\Models\Article\Configurator\Set;
@@ -56,14 +57,12 @@ class Shopware_Controllers_Backend_ArticlePriceVariation extends Shopware_Contro
         try {
             $data = $this->Request()->getPost();
 
-            /** @var PriceVariation $priceVariation */
             $priceVariation = new PriceVariation();
 
             $data = $this->implodePriceVariation($data);
 
             $priceVariation->fromArray($data);
-            $modelManager = $this->get(\Shopware\Components\Model\ModelManager::class);
-            /** @var Set|null $configuratorSet */
+            $modelManager = $this->get(ModelManager::class);
             $configuratorSet = $modelManager
                     ->getRepository(Set::class)
                     ->find($data['configuratorSetId']);

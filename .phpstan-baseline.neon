@@ -7776,116 +7776,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginCategoryService.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installCronjob\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installMenu\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installResources\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:installSnippets\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:refreshPluginList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeCrontabEntries\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeEmotionComponents\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeEventSubscribers\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeFormsAndElements\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeMenuEntries\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeSnippets\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginInstaller\\:\\:removeTemplates\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTimeInterface$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.author\" expects value type string\\|null, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.id\" expects value type int, got type mixed$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.label\" expects value type string, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.link\" expects value type string\\|null, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.refresh_date\" expects value type string\\|null, got type DateTimeInterface$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.translations\" expects value type string\\|null, got type non\\-empty\\-string\\|false\\|null$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.update_version\" expects value type string\\|null, got type mixed$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.version\" expects value type string, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginInstaller.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Service\\\\PluginLicenceService\\:\\:cleanupLocalLicenseInformation\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Service/PluginLicenceService.php
@@ -18416,11 +18306,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
 		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.author\" expects value type string\\|null, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
 			message: "#^Query error\\: Column \"s_core_plugins\\.capability_enable\" expects value type int, got type bool$#"
 			count: 2
 			path: engine/Shopware/Components/Plugin/Namespace.php
@@ -18437,11 +18322,6 @@ parameters:
 
 		-
 			message: "#^Query error\\: Column \"s_core_plugins\\.capability_update\" expects value type int, got type bool$#"
-			count: 2
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.copyright\" expects value type string\\|null, got type mixed$#"
 			count: 2
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
@@ -18466,11 +18346,6 @@ parameters:
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
 		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.source\" expects value type string, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
 			message: "#^Query error\\: Column \"s_core_plugins\\.support\" expects value type string\\|null, got type mixed$#"
 			count: 2
 			path: engine/Shopware/Components/Plugin/Namespace.php
@@ -18487,11 +18362,6 @@ parameters:
 
 		-
 			message: "#^Query error\\: Column \"s_core_plugins\\.update_version\" expects value type string\\|null, got type mixed$#"
-			count: 2
-			path: engine/Shopware/Components/Plugin/Namespace.php
-
-		-
-			message: "#^Query error\\: Column \"s_core_plugins\\.version\" expects value type string, got type mixed$#"
 			count: 2
 			path: engine/Shopware/Components/Plugin/Namespace.php
 
@@ -21437,11 +21307,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Controllers_Backend_ArticlePriceVariation\\:\\:updatePriceVariationAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
-
-		-
-			message: "#^Parameter \\#1 \\$configuratorSet of method Shopware\\\\Models\\\\Article\\\\Configurator\\\\PriceVariation\\:\\:setConfiguratorSet\\(\\) expects Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set, Shopware\\\\Models\\\\Article\\\\Configurator\\\\Set\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/ArticlePriceVariation.php
 
@@ -38031,71 +37896,6 @@ parameters:
 			path: tests/Functional/Core/OrderTest.php
 
 		-
-			message: "#^Cannot call method getId\\(\\) on Shopware\\\\Models\\\\Category\\\\Category\\|null\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$categoryId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$customerGroupId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$sArticles with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:assertsArticlesState\\(\\) has parameter \\$translationId with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testCanInjectParameters\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testCanInstanciatesArticles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testPriceGroupForMainVariant\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsGetPromotionByIdWithNonExistingArticle\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsRoundWithFloatingPointRepresentation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsRoundWithFloatingPointRepresentationLarge\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
-			message: "#^Method sArticlesTest\\:\\:testsRoundWithFloatingPointRepresentationNegative\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sArticlesTest.php
-
-		-
 			message: "#^Method sCategoriesTest\\:\\:getCategoryById\\(\\) has parameter \\$allCategories with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Core/sCategoriesTest.php
@@ -38314,11 +38114,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$entity of method Doctrine\\\\ORM\\\\EntityManager\\:\\:persist\\(\\) expects object, Shopware\\\\Models\\\\Order\\\\Shipping\\|null given\\.$#"
 			count: 1
 			path: tests/Functional/Models/Order/ShippingTest.php
-
-		-
-			message: "#^Method RemoveAndCreateResourceTest\\:\\:testRemoveAndCreateAresource\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Modules/Acl/RemoveAndCreateResourceTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Modules\\\\Articles\\\\SeoCategoryTest\\:\\:getSimpleTestData\\(\\) return type has no value type specified in iterable type array\\.$#"
