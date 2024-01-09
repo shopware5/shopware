@@ -109,13 +109,16 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         if (!empty($notificationProducts)) {
             $sql = 'SELECT `ordernumber` FROM `s_articles_details` WHERE `articleID`=?';
-            $ordernumbers = $this->get(Connection::class)->fetchColumn($sql, [$id]);
+            $ordernumbers = $this->get(Connection::class)->fetchAllAssociative($sql, [$id]);
+            $ordernumbers = array_map(function (array $product) {
+                return $product['ordernumber'];
+            }, $ordernumbers);
 
             if (!empty($ordernumbers)) {
                 foreach ($ordernumbers as $ordernumber) {
                     if (\in_array($ordernumber, $notificationProducts)) {
                         $notificationVariants[] = $ordernumber;
-                        if ($ordernumber === $sArticle) {
+                        if ($ordernumber === $sArticle['ordernumber']) {
                             $view->assign('NotifyAlreadyRegistered', true);
                         }
                     }
