@@ -109,10 +109,7 @@ class Shopware_Plugins_Frontend_Notification_Bootstrap extends Shopware_Componen
 
         if (!empty($notificationProducts)) {
             $sql = 'SELECT `ordernumber` FROM `s_articles_details` WHERE `articleID`=?';
-            $ordernumbers = $this->get(Connection::class)->fetchAllAssociative($sql, [$id]);
-            $ordernumbers = array_map(function (array $product) {
-                return $product['ordernumber'];
-            }, $ordernumbers);
+            $ordernumbers = $this->get(Connection::class)->fetchAssociative($sql, [$id]);
 
             if (!empty($ordernumbers)) {
                 foreach ($ordernumbers as $ordernumber) {

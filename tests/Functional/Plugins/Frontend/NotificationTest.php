@@ -48,6 +48,7 @@ class NotificationTest extends Enlight_Components_Test_Plugin_TestCase
     ];
 
     public const NOTIFICATION_ACTION_URL = 'genusswelten/koestlichkeiten/272/spachtelmasse?action=notify&number=SW10239';
+    public const NOTIFICATION_DETAIL_URL = 'genusswelten/koestlichkeiten/272/spachtelmasse?number=SW10239';
 
     /**
      * @throws \Doctrine\DBAL\Exception
@@ -178,6 +179,18 @@ class NotificationTest extends Enlight_Components_Test_Plugin_TestCase
         $viewVariables = $this->View()->getAssign();
 
         static::assertArrayHasKey('NotifyCaptchaError', $viewVariables);
+    }
+
+    public function testDetailPageHasVariableIfAlreadyNotified(): void
+    {
+        $this->getContainer()->get('session')->offsetSet('sNotificatedArticles', [
+            self::NOTIFY_POST_PARAMETERS['notifyOrdernumber']
+        ]);
+
+        $this->dispatch(self::NOTIFICATION_DETAIL_URL);
+        $viewVariables = $this->View()->getAssign();
+        static::assertArrayHasKey('NotifyAlreadyRegistered', $viewVariables);
+        static::assertTrue($viewVariables['NotifyAlreadyRegistered']);
     }
 
     private function saveNotifyCaptcha(string $value): void
