@@ -184,7 +184,7 @@ class NotificationTest extends Enlight_Components_Test_Plugin_TestCase
     public function testDetailPageHasVariableIfAlreadyNotified(): void
     {
         $this->getContainer()->get('session')->offsetSet('sNotificatedArticles', [
-            self::NOTIFY_POST_PARAMETERS['notifyOrdernumber']
+            self::NOTIFY_POST_PARAMETERS['notifyOrdernumber'],
         ]);
 
         $this->dispatch(self::NOTIFICATION_DETAIL_URL);
