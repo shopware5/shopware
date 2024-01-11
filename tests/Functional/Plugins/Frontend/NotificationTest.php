@@ -181,6 +181,13 @@ class NotificationTest extends Enlight_Components_Test_Plugin_TestCase
         static::assertArrayHasKey('NotifyCaptchaError', $viewVariables);
     }
 
+    public function testDetailPageHasNoVariableIfNotNotified(): void
+    {
+        $this->dispatch(self::NOTIFICATION_DETAIL_URL);
+        $viewVariables = $this->View()->getAssign();
+        static::assertArrayNotHasKey('NotifyAlreadyRegistered', $viewVariables);
+    }
+
     public function testDetailPageHasVariableIfAlreadyNotified(): void
     {
         $this->getContainer()->get('session')->offsetSet('sNotificatedArticles', [
