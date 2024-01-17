@@ -35,10 +35,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 final class KernelAwareInitializer implements ContextInitializer, EventSubscriberInterface
 {
-    /**
-     * @var Kernel
-     */
-    private $kernel;
+    private Kernel $kernel;
 
     /**
      * Initializes initializer.
@@ -51,7 +48,7 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ScenarioTested::BEFORE => ['bootKernel', 15],
@@ -62,7 +59,7 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
     /**
      * {@inheritdoc}
      */
-    public function initializeContext(Context $context)
+    public function initializeContext(Context $context): void
     {
         if (!$context instanceof KernelAwareContext) {
             return;
@@ -74,7 +71,7 @@ final class KernelAwareInitializer implements ContextInitializer, EventSubscribe
     /**
      * Boots HttpKernel before each scenario.
      */
-    public function bootKernel()
+    public function bootKernel(): void
     {
         $this->kernel->boot();
     }

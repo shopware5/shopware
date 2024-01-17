@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -49,15 +51,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class AddressFormType extends AbstractType
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
-    /**
-     * @var ModelManager
-     */
-    private $models;
+    private ModelManager $models;
 
     public function __construct(Shopware_Components_Config $config, ModelManager $models)
     {
@@ -65,6 +61,9 @@ class AddressFormType extends AbstractType
         $this->models = $models;
     }
 
+    /**
+     * @return void
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
@@ -81,11 +80,14 @@ class AddressFormType extends AbstractType
         return 'address';
     }
 
+    /**
+     * @return void
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event) {
             $data = $event->getData();
-            array_walk_recursive($data, function (&$item) {
+            array_walk_recursive($data, static function (&$item) {
                 $item = strip_tags((string) $item);
             });
             $event->setData($data);
@@ -132,11 +134,11 @@ class AddressFormType extends AbstractType
         ]);
 
         $builder->add('additionalAddressLine1', TextType::class, [
-            'constraints' => $this->getAdditionalAddressline1Constraints(),
+            'constraints' => $this->getAdditionalAddressLine1Constraints(),
         ]);
 
         $builder->add('additionalAddressLine2', TextType::class, [
-            'constraints' => $this->getAdditionalAddressline2Constraints(),
+            'constraints' => $this->getAdditionalAddressLine2Constraints(),
         ]);
 
         // convert IDs to entities
@@ -165,19 +167,19 @@ class AddressFormType extends AbstractType
         $this->addCountryStateValidation($builder);
         $this->addCompanyValidation($builder);
 
-        if ($this->config->offsetGet('vatcheckrequired')) {
+        if ($this->config->get('vatcheckrequired')) {
             $this->addVatIdValidation($builder);
         }
     }
 
     /**
-     * @return Constraint[]
+     * @return list<Constraint>
      */
-    private function getPhoneConstraints()
+    private function getPhoneConstraints(): array
     {
         $constraints = [];
 
-        if ($this->config->offsetGet('showphonenumberfield') && $this->config->offsetGet('requirePhoneField')) {
+        if ($this->config->get('showphonenumberfield') && $this->config->get('requirePhoneField')) {
             $constraints[] = new NotBlank(['message' => null]);
         }
 
@@ -185,13 +187,13 @@ class AddressFormType extends AbstractType
     }
 
     /**
-     * @return Constraint[]
+     * @return list<Constraint>
      */
-    private function getAdditionalAddressline1Constraints()
+    private function getAdditionalAddressLine1Constraints(): array
     {
         $constraints = [];
 
-        if ($this->config->offsetGet('showAdditionAddressLine1') && $this->config->offsetGet('requireAdditionAddressLine1')) {
+        if ($this->config->get('showAdditionAddressLine1') && $this->config->get('requireAdditionAddressLine1')) {
             $constraints[] = new NotBlank(['message' => null]);
         }
 
@@ -199,20 +201,23 @@ class AddressFormType extends AbstractType
     }
 
     /**
-     * @return Constraint[]
+     * @return list<Constraint>
      */
-    private function getAdditionalAddressline2Constraints()
+    private function getAdditionalAddressLine2Constraints(): array
     {
         $constraints = [];
 
-        if ($this->config->offsetGet('showAdditionAddressLine2') && $this->config->offsetGet('requireAdditionAddressLine2')) {
+        if ($this->config->get('showAdditionAddressLine2') && $this->config->get('requireAdditionAddressLine2')) {
             $constraints[] = new NotBlank(['message' => null]);
         }
 
         return $constraints;
     }
 
-    private function addCompanyValidation(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface<Address|null> $builder
+     */
+    private function addCompanyValidation(FormBuilderInterface $builder): void
     {
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
@@ -232,7 +237,10 @@ class AddressFormType extends AbstractType
         });
     }
 
-    private function addVatIdValidation(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface<Address|null> $builder
+     */
+    private function addVatIdValidation(FormBuilderInterface $builder): void
     {
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
@@ -252,7 +260,10 @@ class AddressFormType extends AbstractType
         });
     }
 
-    private function addCountryStateValidation(FormBuilderInterface $builder)
+    /**
+     * @param FormBuilderInterface<Address|null> $builder
+     */
+    private function addCountryStateValidation(FormBuilderInterface $builder): void
     {
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
             $form = $event->getForm();
