@@ -29,7 +29,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\ProductMediaGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Gateway\VariantMediaGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ProductServiceInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContext;
 use Shopware\Components\Routing\Context;
@@ -161,7 +160,7 @@ class ProductMediaTest extends TestCase
     /**
      * @return array<string, mixed>
      */
-    private function getVariantImageProduct(string $number, Struct\ShopContext $context, int $imageCount = 2): array
+    private function getVariantImageProduct(string $number, ShopContext $context, int $imageCount = 2): array
     {
         $data = $this->getProduct(
             $number,

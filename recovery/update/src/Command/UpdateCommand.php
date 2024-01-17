@@ -133,8 +133,7 @@ class UpdateCommand extends Command
         /** @var PathBuilder $pathBuilder */
         $pathBuilder = $this->container->get('path.builder');
 
-        $debug = false;
-        $step = new UnpackStep($localFilesytem, $remoteFilesystem, $pathBuilder, $debug);
+        $step = new UnpackStep($localFilesytem, $remoteFilesystem, $pathBuilder, false);
 
         $offset = 0;
         $total = 0;

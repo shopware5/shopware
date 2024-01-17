@@ -40,7 +40,6 @@ use Shopware\Bundle\SearchBundle\FacetResultInterface;
 use Shopware\Bundle\SearchBundleDBAL\PartialFacetHandlerInterface;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilder;
 use Shopware\Bundle\SearchBundleDBAL\QueryBuilderFactoryInterface;
-use Shopware\Bundle\StoreFrontBundle\Struct;
 use Shopware\Bundle\StoreFrontBundle\Struct\ShopContextInterface;
 
 class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
@@ -136,7 +135,7 @@ class ProductAttributeFacetHandler implements PartialFacetHandlerInterface
         QueryBuilder $query,
         ProductAttributeFacet $facet,
         Criteria $criteria,
-        Struct\ShopContextInterface $context
+        ShopContextInterface $context
     ): ?FacetResultInterface {
         $sqlField = 'productAttribute.' . $facet->getField();
 

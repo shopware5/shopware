@@ -23,14 +23,14 @@
 
 namespace Shopware\Components\Form\Interfaces;
 
-use Shopware\Components\Form;
+use Shopware\Models\Shop\Template;
 
 interface Persister
 {
     /**
      * Saves the given container to the database, files or wherever.
      *
-     * @param \Shopware\Models\Shop\Template $reference
+     * @param Template $reference
      */
-    public function save(Form\Interfaces\Container $container, $reference);
+    public function save(Container $container, $reference);
 }

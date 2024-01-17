@@ -125,7 +125,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return \count($this->_elements);
@@ -192,7 +192,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return $this->containsKey($key);
@@ -207,7 +207,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         $this->remove($key);
@@ -222,7 +222,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->get($key);
@@ -238,7 +238,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         $this->set($key, $value);
@@ -251,7 +251,7 @@ class Enlight_Collection_ArrayCollection implements Enlight_Collection_Collectio
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         $ref = &$this->_elements;

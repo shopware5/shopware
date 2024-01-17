@@ -254,7 +254,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return $this->_count;
@@ -267,7 +267,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         $this->_skipNextIteration = false;
@@ -282,7 +282,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return key($this->_data);
@@ -295,7 +295,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next()
     {
         if ($this->_skipNextIteration) {
@@ -314,7 +314,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         $this->_skipNextIteration = false;
@@ -329,7 +329,7 @@ class Enlight_Config_BaseConfig implements Countable, Iterator
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return $this->_index < $this->_count;

@@ -620,7 +620,7 @@ class sBasket implements Enlight_Hook
                 'variant'
             );
 
-            $product = new StoreFrontBundle\Struct\ListProduct(
+            $product = new ListProduct(
                 $premium['articleID'],
                 $premium['variantID'],
                 $premium['ordernumber']

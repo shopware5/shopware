@@ -131,8 +131,7 @@ class BatchController
         /** @var PathBuilder $pathBuilder */
         $pathBuilder = $this->container->get('path.builder');
 
-        $debug = false;
-        $step = new UnpackStep($localFilesystem, $remoteFilesystem, $pathBuilder, $debug);
+        $step = new UnpackStep($localFilesystem, $remoteFilesystem, $pathBuilder, false);
 
         $result = $step->run($offset, $total);
 

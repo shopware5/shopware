@@ -87,7 +87,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($key)
     {
         return $this->has($key);
@@ -102,7 +102,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($key)
     {
         $this->remove($key);
@@ -117,7 +117,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($key)
     {
         return $this->get($key);
@@ -133,7 +133,7 @@ class Enlight_Components_Session_Namespace extends Session implements ArrayAcces
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($key, $value)
     {
         $this->set($key, $value);
