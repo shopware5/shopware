@@ -58,7 +58,7 @@ jobs:
         strategy:
             matrix:
                 php: ['8.1']
-                mysql: ['pkgs.mysql80', 'pkgs.mariadb', 'pkgs.mariadb_104', 'config.nur.repos.pascalthesing.mysql57']
+                mysql: ['pkgs.mariadb', 'pkgs.mariadb_104', 'config.nur.repos.pascalthesing.mysql57']
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v3
