@@ -65,7 +65,7 @@ class RegexOrderNumberValidatorTest extends TestCase
 
             try {
                 $this->validator->validate($ordernumber);
-            } catch (InvalidOrdernumberException $exception) {
+            } catch (InvalidOrderNumberException $exception) {
                 $catch = $ordernumber;
             }
 
@@ -91,7 +91,7 @@ class RegexOrderNumberValidatorTest extends TestCase
         foreach ($ordernumbers as $ordernumber) {
             try {
                 $this->validator->validate($ordernumber);
-            } catch (InvalidOrdernumberException $exception) {
+            } catch (InvalidOrderNumberException $exception) {
                 $ordernumber = null;
             }
 

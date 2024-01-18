@@ -33,5 +33,5 @@ interface KernelAwareContext extends Context
     /**
      * Sets Kernel instance.
      */
-    public function setKernel(Kernel $kernel);
+    public function setKernel(Kernel $kernel): void;
 }

@@ -776,8 +776,8 @@ class Shopware_Controllers_Backend_Performance extends Shopware_Controllers_Back
             'sitemapLastRefresh',
         ]);
 
-        $sitemapConfig['customUrls'] = $this->get(ConfigHandler::class)->get(Confighandler::CUSTOM_URLS_KEY);
-        $sitemapConfig['excludedUrls'] = $this->get(ConfigHandler::class)->get(Confighandler::EXCLUDED_URLS_KEY);
+        $sitemapConfig['customUrls'] = $this->get(ConfigHandler::class)->get(ConfigHandler::CUSTOM_URLS_KEY);
+        $sitemapConfig['excludedUrls'] = $this->get(ConfigHandler::class)->get(ConfigHandler::EXCLUDED_URLS_KEY);
 
         $sitemapConfig['excludedUrls'] = array_map(function ($excludeUrl) {
             $excludeUrl['resource'] = $this->convertModelToResource($excludeUrl['resource']);

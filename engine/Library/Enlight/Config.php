@@ -247,7 +247,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetSet($name, $value)
     {
         $this->__set($name, $value);
@@ -262,7 +262,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetExists($name)
     {
         return $this->__isset($name);
@@ -277,7 +277,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetUnset($name)
     {
         $this->__unset($name);
@@ -292,7 +292,7 @@ class Enlight_Config extends Enlight_Config_BaseConfig implements ArrayAccess
      *
      * @deprecated - Native return and parameter type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function offsetGet($name)
     {
         return $this->get($name);

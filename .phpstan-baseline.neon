@@ -3886,31 +3886,6 @@ parameters:
 			path: engine/Shopware/Bundle/AccountBundle/Constraint/PasswordValidator.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AddressFormType\\:\\:addCompanyValidation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AddressFormType.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AddressFormType\\:\\:addCountryStateValidation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AddressFormType.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AddressFormType\\:\\:addVatIdValidation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AddressFormType.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AddressFormType\\:\\:buildForm\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AddressFormType.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AddressFormType\\:\\:configureOptions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AddressFormType.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AccountBundle\\\\Form\\\\Account\\\\AttributeFormType\\:\\:configureOptions\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AccountBundle/Form/Account/AttributeFormType.php
@@ -38379,21 +38354,6 @@ parameters:
 			message: "#^Variable \\$this might not be defined\\.$#"
 			count: 3
 			path: tests/Functional/config.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\Context\\\\Initializer\\\\KernelAwareInitializer\\:\\:bootKernel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/Context/Initializer/KernelAwareInitializer.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\Context\\\\Initializer\\\\KernelAwareInitializer\\:\\:initializeContext\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/Context/Initializer/KernelAwareInitializer.php
-
-		-
-			message: "#^Method Shopware\\\\Behat\\\\ShopwareExtension\\\\Context\\\\KernelAwareContext\\:\\:setKernel\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Mink/Extension/ShopwareExtension/Context/KernelAwareContext.php
 
 		-
 			message: "#^Cannot call method click\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"

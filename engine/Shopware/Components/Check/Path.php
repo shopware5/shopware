@@ -78,7 +78,7 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
      *
      * @return Iterator
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function getIterator()
     {
         return $this->getList();
@@ -101,7 +101,7 @@ class Shopware_Components_Check_Path implements IteratorAggregate, Countable
      *
      * @deprecated - Native return type will be added with Shopware 5.8
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function count()
     {
         return $this->getList()->count();

@@ -40,40 +40,19 @@ use Shopware\Models\Article\Price;
  */
 class Product implements ResourceInterface
 {
-    /**
-     * @var Product\DqlHelper
-     */
-    private $dqlHelper;
+    private DqlHelper $dqlHelper;
 
-    /**
-     * @var Product\Grammar
-     */
-    private $grammar;
+    private Grammar $grammar;
 
-    /**
-     * @var Product\Value
-     */
-    private $value;
+    private Value $value;
 
-    /**
-     * @var Product\Filter
-     */
-    private $filter;
+    private Filter $filter;
 
-    /**
-     * @var Product\BatchProcess
-     */
-    private $batchProcess;
+    private BatchProcess $batchProcess;
 
-    /**
-     * @var Product\Queue
-     */
-    private $queue;
+    private Queue $queue;
 
-    /**
-     * @var Product\Backup
-     */
-    private $backup;
+    private Backup $backup;
 
     public function __construct(DqlHelper $dqlHelper, Grammar $grammar, Value $value, Filter $filter, BatchProcess $batchProcess, Queue $queue, Backup $backup)
     {

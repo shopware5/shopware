@@ -825,7 +825,7 @@ class Repository extends ModelRepository
      * @param int     $articleId
      * @param int     $firstOptionId
      * @param int     $secondOptionId
-     * @param Article $article
+     * @param Product $article
      * @param string  $customerGroupKey
      *
      * @return Query<Detail>
@@ -886,7 +886,7 @@ class Repository extends ModelRepository
                 ->setParameter(2, $firstOptionId)
                 ->setParameter(3, $secondOptionId);
 
-        if ($article instanceof Article && $article->getLastStock()) {
+        if ($article instanceof Product && $article->getLastStock()) {
             $builder->andWhere('details.inStock > 0');
         } elseif (\is_array($article) && $article['lastStock']) {
             $builder->andWhere('details.inStock > 0');
@@ -971,7 +971,7 @@ class Repository extends ModelRepository
                 ->setParameter('key', $customerGroupKey)
                 ->setParameter(1, $articleId);
 
-        if ($article instanceof Article && $article->getLastStock()) {
+        if ($article instanceof Product && $article->getLastStock()) {
             $builder->andWhere('details.inStock > 0');
         } elseif (\is_array($article) && $article['lastStock']) {
             $builder->andWhere('details.inStock > 0');

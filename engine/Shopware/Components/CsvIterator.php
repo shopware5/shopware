@@ -144,7 +144,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function next()
     {
         $this->_read();
@@ -158,7 +158,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function rewind()
     {
         rewind($this->_handler);
@@ -174,7 +174,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @return int|null
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function key()
     {
         return $this->_key;
@@ -187,7 +187,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @return array The row as a one-dimensional array
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function current()
     {
         $data = [];
@@ -205,7 +205,7 @@ class Shopware_Components_CsvIterator extends Enlight_Class implements Iterator
      *
      * @return bool if the current row is readable
      */
-    #[\ReturnTypeWillChange]
+    #[ReturnTypeWillChange]
     public function valid()
     {
         return $this->_current !== false;

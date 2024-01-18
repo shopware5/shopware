@@ -54,7 +54,7 @@ class ManufacturerGateway implements ManufacturerGatewayInterface
     public function __construct(
         Connection $connection,
         FieldHelper $fieldHelper,
-        Hydrator\ManufacturerHydrator $manufacturerHydrator,
+        ManufacturerHydrator $manufacturerHydrator,
         MediaServiceInterface $mediaService
     ) {
         $this->connection = $connection;

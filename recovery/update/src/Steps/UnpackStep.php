@@ -23,42 +23,31 @@
 
 namespace Shopware\Recovery\Update\Steps;
 
-use Gaufrette\Filesystem;
+use Gaufrette\FilesystemInterface;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RuntimeException;
-use Shopware\Recovery\Update\pathBuilder;
+use Shopware\Recovery\Update\PathBuilder;
 use SplFileInfo;
 
 class UnpackStep
 {
-    /**
-     * @var Filesystem
-     */
-    private $localFilesyste;
+    private FilesystemInterface $localFilesystem;
 
-    /**
-     * @var Filesystem
-     */
-    private $remoteFilesyste;
+    private FilesystemInterface $remoteFilesystem;
 
-    /**
-     * @var PathBuilder
-     */
-    private $pathBuilder;
+    private PathBuilder $pathBuilder;
 
-    /**
-     * @var bool
-     */
-    private $isDebug;
+    private bool $isDebug;
 
-    /**
-     * @param bool $isDebug
-     */
-    public function __construct(Filesystem $localFilesyste, Filesystem $remoteFilesyste, PathBuilder $pathBuilder, $isDebug = false)
-    {
-        $this->localFilesyste = $localFilesyste;
-        $this->remoteFilesyste = $remoteFilesyste;
+    public function __construct(
+        FilesystemInterface $localFilesystem,
+        FilesystemInterface $remoteFilesystem,
+        PathBuilder $pathBuilder,
+        bool $isDebug = false
+    ) {
+        $this->localFilesystem = $localFilesystem;
+        $this->remoteFilesystem = $remoteFilesystem;
         $this->pathBuilder = $pathBuilder;
         $this->isDebug = $isDebug;
     }
@@ -75,8 +64,8 @@ class UnpackStep
     {
         $inflector = $this->pathBuilder;
 
-        $remoteFs = $this->remoteFilesyste;
-        $localFs = $this->localFilesyste;
+        $remoteFs = $this->remoteFilesystem;
+        $localFs = $this->localFilesystem;
 
         $backupDirRelative = $inflector->getBackupDirRelative();
 

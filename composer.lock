@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0d1d2c76916deed03482601e18acf528",
+    "content-hash": "3630f05cac525b99010552bef25586c6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1863,16 +1863,16 @@
         },
         {
             "name": "google/auth",
-            "version": "v1.33.0",
+            "version": "v1.34.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "682dc6c30bb509953c9e43bb0960d901582da00b"
+                "reference": "155daeadfd2f09743f611ea493b828d382519575"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/682dc6c30bb509953c9e43bb0960d901582da00b",
-                "reference": "682dc6c30bb509953c9e43bb0960d901582da00b",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/155daeadfd2f09743f611ea493b828d382519575",
+                "reference": "155daeadfd2f09743f611ea493b828d382519575",
                 "shasum": ""
             },
             "require": {
@@ -1915,30 +1915,30 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.33.0"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.34.0"
             },
-            "time": "2023-11-30T15:49:27+00:00"
+            "time": "2024-01-03T20:45:15+00:00"
         },
         {
             "name": "google/cloud-core",
-            "version": "v1.52.10",
+            "version": "v1.53.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-core.git",
-                "reference": "5e34556498ecadee2161402fd1024bec7ce33186"
+                "reference": "1899ea5306a20c4fb64f00f542e8895e7aa0e8cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/5e34556498ecadee2161402fd1024bec7ce33186",
-                "reference": "5e34556498ecadee2161402fd1024bec7ce33186",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-core/zipball/1899ea5306a20c4fb64f00f542e8895e7aa0e8cd",
+                "reference": "1899ea5306a20c4fb64f00f542e8895e7aa0e8cd",
                 "shasum": ""
             },
             "require": {
-                "google/auth": "^1.18",
+                "google/auth": "^1.34",
                 "guzzlehttp/guzzle": "^6.5.8|^7.4.4",
                 "guzzlehttp/promises": "^1.4||^2.0",
-                "guzzlehttp/psr7": "^1.7|^2.0",
-                "monolog/monolog": "^1.1|^2.0|^3.0",
+                "guzzlehttp/psr7": "^2.6",
+                "monolog/monolog": "^2.9|^3.0",
                 "php": ">=7.4",
                 "psr/http-message": "^1.0|^2.0",
                 "rize/uri-template": "~0.3"
@@ -1946,7 +1946,7 @@
             "require-dev": {
                 "erusev/parsedown": "^1.6",
                 "google/cloud-common-protos": "^0.4",
-                "google/gax": "^1.24.0",
+                "google/gax": "^1.26.0",
                 "opis/closure": "^3",
                 "phpdocumentor/reflection": "^5.0",
                 "phpspec/prophecy-phpunit": "^2.0",
@@ -1980,26 +1980,26 @@
             ],
             "description": "Google Cloud PHP shared dependency, providing functionality useful to all components.",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.52.10"
+                "source": "https://github.com/googleapis/google-cloud-php-core/tree/v1.53.0"
             },
-            "time": "2023-12-08T22:36:35+00:00"
+            "time": "2024-01-12T19:18:38+00:00"
         },
         {
             "name": "google/cloud-storage",
-            "version": "v1.36.0",
+            "version": "v1.37.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-cloud-php-storage.git",
-                "reference": "94215228fd03e548590134d1e521a34ec727460c"
+                "reference": "48489319d931262def899a5b2337b8e514c39d34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/94215228fd03e548590134d1e521a34ec727460c",
-                "reference": "94215228fd03e548590134d1e521a34ec727460c",
+                "url": "https://api.github.com/repos/googleapis/google-cloud-php-storage/zipball/48489319d931262def899a5b2337b8e514c39d34",
+                "reference": "48489319d931262def899a5b2337b8e514c39d34",
                 "shasum": ""
             },
             "require": {
-                "google/cloud-core": "^1.52.7",
+                "google/cloud-core": "^1.53",
                 "php": ">=7.4",
                 "ramsey/uuid": "^4.2.3"
             },
@@ -2036,9 +2036,9 @@
             ],
             "description": "Cloud Storage Client for PHP",
             "support": {
-                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.36.0"
+                "source": "https://github.com/googleapis/google-cloud-php-storage/tree/v1.37.0"
             },
-            "time": "2023-12-08T22:36:35+00:00"
+            "time": "2024-01-12T19:18:38+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -7586,16 +7586,16 @@
         },
         {
             "name": "behat/behat",
-            "version": "v3.13.0",
+            "version": "v3.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "9dd7cdb309e464ddeab095cd1a5151c2dccba4ab"
+                "reference": "2a3832d9cb853a794af3a576f9e524ae460f3340"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/9dd7cdb309e464ddeab095cd1a5151c2dccba4ab",
-                "reference": "9dd7cdb309e464ddeab095cd1a5151c2dccba4ab",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/2a3832d9cb853a794af3a576f9e524ae460f3340",
+                "reference": "2a3832d9cb853a794af3a576f9e524ae460f3340",
                 "shasum": ""
             },
             "require": {
@@ -7604,18 +7604,18 @@
                 "ext-mbstring": "*",
                 "php": "^7.2 || ^8.0",
                 "psr/container": "^1.0 || ^2.0",
-                "symfony/config": "^4.4 || ^5.0 || ^6.0",
-                "symfony/console": "^4.4 || ^5.0 || ^6.0",
-                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0",
-                "symfony/event-dispatcher": "^4.4 || ^5.0 || ^6.0",
-                "symfony/translation": "^4.4 || ^5.0 || ^6.0",
-                "symfony/yaml": "^4.4 || ^5.0 || ^6.0"
+                "symfony/config": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/console": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/dependency-injection": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/event-dispatcher": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/translation": "^4.4 || ^5.0 || ^6.0 || ^7.0",
+                "symfony/yaml": "^4.4 || ^5.0 || ^6.0 || ^7.0"
             },
             "require-dev": {
                 "herrera-io/box": "~1.6.1",
                 "phpspec/prophecy": "^1.15",
                 "phpunit/phpunit": "^8.5 || ^9.0",
-                "symfony/process": "^4.4 || ^5.0 || ^6.0",
+                "symfony/process": "^4.4 || ^5.0 || ^6.0 || ^7.0",
                 "vimeo/psalm": "^4.8"
             },
             "suggest": {
@@ -7667,9 +7667,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/v3.13.0"
+                "source": "https://github.com/Behat/Behat/tree/v3.14.0"
             },
-            "time": "2023-04-18T15:40:53+00:00"
+            "time": "2023-12-09T13:55:02+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -8002,23 +8002,23 @@
         },
         {
             "name": "friends-of-behat/mink-extension",
-            "version": "v2.7.4",
+            "version": "v2.7.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfBehat/MinkExtension.git",
-                "reference": "18d5a53dff3e2c8934c53e2db8b02b7ea345fe85"
+                "reference": "854336030e11983f580f49faad1b49a1238f9846"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfBehat/MinkExtension/zipball/18d5a53dff3e2c8934c53e2db8b02b7ea345fe85",
-                "reference": "18d5a53dff3e2c8934c53e2db8b02b7ea345fe85",
+                "url": "https://api.github.com/repos/FriendsOfBehat/MinkExtension/zipball/854336030e11983f580f49faad1b49a1238f9846",
+                "reference": "854336030e11983f580f49faad1b49a1238f9846",
                 "shasum": ""
             },
             "require": {
                 "behat/behat": "^3.0.5",
                 "behat/mink": "^1.5",
                 "php": ">=7.4",
-                "symfony/config": "^4.4 || ^5.0 || ^6.0"
+                "symfony/config": "^4.4 || ^5.0 || ^6.0 || ^7.0"
             },
             "replace": {
                 "behat/mink-extension": "self.version"
@@ -8061,9 +8061,10 @@
                 "web"
             ],
             "support": {
-                "source": "https://github.com/FriendsOfBehat/MinkExtension/tree/v2.7.4"
+                "issues": "https://github.com/FriendsOfBehat/MinkExtension/issues",
+                "source": "https://github.com/FriendsOfBehat/MinkExtension/tree/v2.7.5"
             },
-            "time": "2023-10-03T13:15:12+00:00"
+            "time": "2024-01-11T09:12:02+00:00"
         },
         {
             "name": "instaclick/php-webdriver",
@@ -8394,16 +8395,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.53",
+            "version": "1.10.56",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "0c48595cce15f67d6a7faf30e9d13c775e6e9875"
+                "reference": "27816a01aea996191ee14d010f325434c0ee76fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/0c48595cce15f67d6a7faf30e9d13c775e6e9875",
-                "reference": "0c48595cce15f67d6a7faf30e9d13c775e6e9875",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/27816a01aea996191ee14d010f325434c0ee76fa",
+                "reference": "27816a01aea996191ee14d010f325434c0ee76fa",
                 "shasum": ""
             },
             "require": {
@@ -8452,25 +8453,25 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-05T13:55:38+00:00"
+            "time": "2024-01-15T10:43:00+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
-            "version": "1.3.53",
+            "version": "1.3.57",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-doctrine.git",
-                "reference": "85def57e5db6ac6c8a512200c0cfadf7b6621b10"
+                "reference": "b3e7d2d45edf5e423132901a5563f30c391990a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/85def57e5db6ac6c8a512200c0cfadf7b6621b10",
-                "reference": "85def57e5db6ac6c8a512200c0cfadf7b6621b10",
+                "url": "https://api.github.com/repos/phpstan/phpstan-doctrine/zipball/b3e7d2d45edf5e423132901a5563f30c391990a0",
+                "reference": "b3e7d2d45edf5e423132901a5563f30c391990a0",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.10.12"
+                "phpstan/phpstan": "^1.10.48"
             },
             "conflict": {
                 "doctrine/collections": "<1.0",
@@ -8487,7 +8488,7 @@
                 "doctrine/dbal": "^2.13.8 || ^3.3.3",
                 "doctrine/lexer": "^1.2.1",
                 "doctrine/mongodb-odm": "^1.3 || ^2.1",
-                "doctrine/orm": "^2.11.0",
+                "doctrine/orm": "^2.14.0",
                 "doctrine/persistence": "^1.3.8 || ^2.2.1",
                 "gedmo/doctrine-extensions": "^3.8",
                 "nesbot/carbon": "^2.49",
@@ -8520,9 +8521,9 @@
             "description": "Doctrine extensions for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-doctrine/issues",
-                "source": "https://github.com/phpstan/phpstan-doctrine/tree/1.3.53"
+                "source": "https://github.com/phpstan/phpstan-doctrine/tree/1.3.57"
             },
-            "time": "2023-11-21T10:31:58+00:00"
+            "time": "2024-01-16T12:26:37+00:00"
         },
         {
             "name": "phpstan/phpstan-phpunit",
@@ -8578,16 +8579,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.3.6",
+            "version": "1.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "34b3c43684834f6a20aa51af8d455480d9de8b88"
+                "reference": "ef7db637be9b85fa00278fc3477ac66abe8eb7d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/34b3c43684834f6a20aa51af8d455480d9de8b88",
-                "reference": "34b3c43684834f6a20aa51af8d455480d9de8b88",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/ef7db637be9b85fa00278fc3477ac66abe8eb7d1",
+                "reference": "ef7db637be9b85fa00278fc3477ac66abe8eb7d1",
                 "shasum": ""
             },
             "require": {
@@ -8644,9 +8645,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.3.6"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.3.7"
             },
-            "time": "2023-12-22T11:22:34+00:00"
+            "time": "2024-01-10T21:54:42+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
