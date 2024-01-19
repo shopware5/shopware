@@ -146,9 +146,7 @@ class Repository extends ModelRepository
      */
     public function getVoucherCodeDeleteByVoucherIdQuery($voucherId)
     {
-        $builder = $this->getVoucherCodeDeleteByVoucherIdQueryBuilder($voucherId);
-
-        return $builder->getQuery();
+        return $this->getVoucherCodeDeleteByVoucherIdQueryBuilder($voucherId)->getQuery();
     }
 
     /**

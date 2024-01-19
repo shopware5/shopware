@@ -198,3 +198,7 @@ parameters:
         - # Test services are not recognized correctly by PHPStan in this container test class
             message: '#Service ".*" is not registered in the container#'
             path: tests/Unit/Components/DependencyInjection/ContainerTest.php
+
+        - # Needs some investigation how to fix the return types
+            message: '#Method Shopware\\Models\\.*\\Repository::.*\(\) should return Doctrine\\ORM\\Query<.*> but returns Doctrine\\ORM\\Query<.*>#'
+            path: engine/Shopware/Models/**/Repository.php

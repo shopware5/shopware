@@ -240,9 +240,10 @@ class Repository extends ModelRepository
      */
     public function getSetAssignsQuery($setId)
     {
-        $builder = $this->getSetAssignsQueryBuilder($setId);
+        /** @var Query<Option> $query */
+        $query = $this->getSetAssignsQueryBuilder($setId)->getQuery();
 
-        return $this->getForceIndexQuery($builder->getQuery(), null, true);
+        return $this->getForceIndexQuery($query, null, true);
     }
 
     /**
