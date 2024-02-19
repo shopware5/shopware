@@ -10,11 +10,18 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Added compatibility with PHP 8.3
 * Added new polyfill `symfony/polyfill-php83` to be able to use PHP 8.3 features
+* Added fallback to image name for `alt` and `title` attributes if image description is not available in following templates:
+  * `themes/Frontend/Bare/frontend/content_type/detail_head.tpl` in block `frontend_content_type_detail_head`
+  * `themes/Frontend/Bare/frontend/content_type/field/media-grid.tpl` in block `frontend_content_type_field_mediagrid_slider_slide`
+  * `themes/Frontend/Bare/frontend/content_type/field/media.tpl` in block `frontend_content_type_field_base_content`
+  * `themes/Frontend/Bare/frontend/index/index.tpl` in block `frontend_index_header_javascript`, variable `$lastSeenProductsConfig.currentArticle.imageTitle`
 
 ### Changes
 
 * Changed behaviour of the translation transfer while setting a product variant as the main variant
 * Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
+* Changed `Shopware\Bundle\StoreFrontBundle\Gateway\DBAL\Hydrator\MediaHydrator::hydrateProductImage` to correctly hydrate media entity with image name and description
+* Changed `Shopware\Components\Compatibility\LegacyStructConverter::convertMediaStruct` to correctly convert media name and description
 
 * Updated `cocur/slugify` to version 4.5.1 for PHP 8.0 and newer
 * Updated `doctrine/orm` to version 2.15.5

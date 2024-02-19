@@ -33,6 +33,7 @@ use Shopware\Bundle\StoreFrontBundle\Service\CategoryServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group;
 use Shopware\Bundle\StoreFrontBundle\Struct\ListProduct;
+use Shopware\Bundle\StoreFrontBundle\Struct\Media;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\Price;
 use Shopware\Bundle\StoreFrontBundle\Struct\Product\PriceRule;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
@@ -93,6 +94,31 @@ class LegacyStructConverterTest extends TestCase
         $tomorrowString = $tomorrow->format('Y-m-d');
         static::assertSame($tomorrowString, $convertedProduct['sReleasedate']);
         static::assertSame($tomorrowString, $convertedProduct['sReleaseDate']);
+    }
+
+    public function testConvertMediaStruct(): void
+    {
+        $converter = $this->createConverter();
+
+        $media = new Media();
+        $media->setId(1);
+        $media->setName('sasse');
+        $media->setDescription('');
+        $media->setFile('http://localhost/media/image/52/5b/a1/sasse.png');
+        $media->setExtension('png');
+        $media->setWidth(1920);
+        $media->setHeight(1080);
+
+        $convertedMedia = $converter->convertMediaStruct($media);
+
+        static::assertSame($media->getId(), $convertedMedia['id']);
+        static::assertSame($media->getName(), $convertedMedia['name']);
+        static::assertSame($media->getDescription(), $convertedMedia['description']);
+        static::assertSame($media->isPreview(), $convertedMedia['main']);
+        static::assertSame($media->getFile(), $convertedMedia['source']);
+        static::assertSame($media->getExtension(), $convertedMedia['extension']);
+        static::assertSame($media->getWidth(), $convertedMedia['width']);
+        static::assertSame($media->getHeight(), $convertedMedia['height']);
     }
 
     private function createConverter(): LegacyStructConverter

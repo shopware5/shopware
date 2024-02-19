@@ -1,6 +1,10 @@
 {block name='frontend_content_type_detail_head'}
-    {$imageDescription = $image.description|escape|truncate:160}
+    {$imageDescription = $image.name|escape}
     {$largeThumbnail = null}
+
+    {if $image.description}
+        {$imageDescription = $image.description|escape|truncate:160}
+    {/if}
 
     {if $image.thumbnails|count > 0}
         {$largeThumbnail = $image.thumbnails[$image.thumbnails|count - 1]}

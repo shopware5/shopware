@@ -206,7 +206,10 @@
             {if $sArticle.additionaltext}
                 {$lastSeenProductsConfig.currentArticle.articleName = $lastSeenProductsConfig.currentArticle.articleName|cat:' ':$sArticle.additionaltext}
             {/if}
-            {$lastSeenProductsConfig.currentArticle.imageTitle = $sArticle.image.description}
+            {$lastSeenProductsConfig.currentArticle.imageTitle = $sArticle.image.name}
+            {if $sArticle.image.description}
+                {$lastSeenProductsConfig.currentArticle.imageTitle = $sArticle.image.description}
+            {/if}
             {$lastSeenProductsConfig.currentArticle.images = []}
 
             {foreach $sArticle.image.thumbnails as $key => $image}
