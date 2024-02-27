@@ -855,7 +855,7 @@ class Repository extends ModelRepository
      * @param int           $articleId
      * @param int           $firstOptionId
      * @param int           $secondOptionId
-     * @param array|Article $article
+     * @param array|Product $article
      * @param string        $customerGroupKey
      *
      * @return QueryBuilder
@@ -934,7 +934,7 @@ class Repository extends ModelRepository
      *
      * @param int           $articleId
      * @param string        $customerGroupKey
-     * @param array|Article $article
+     * @param array|Product $article
      *
      * @return Query<Detail>
      */
@@ -951,7 +951,7 @@ class Repository extends ModelRepository
      *
      * @param int           $articleId
      * @param string        $customerGroupKey
-     * @param array|Article $article
+     * @param array|Product $article
      *
      * @return QueryBuilder
      */
