@@ -3086,6 +3086,11 @@ parameters:
 			path: engine/Library/Enlight/Loader.php
 
 		-
+			message: "#^Parameter \\#2 \\$callback of function array_filter expects \\(callable\\(string\\)\\: bool\\)\\|null, 'strlen' given\\.$#"
+			count: 1
+			path: engine/Library/Enlight/Loader.php
+
+		-
 			message: "#^Property Enlight_Loader\\:\\:\\$namespaces type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Loader.php
@@ -11806,7 +11811,7 @@ parameters:
 			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/ShopPage.php
 
 		-
-			message: "#^Argument of an invalid type Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Struct supplied for foreach, only iterables are supported\\.$#"
+			message: "#^Argument of an invalid type \\$this\\(Shopware\\\\Bundle\\\\StoreFrontBundle\\\\Struct\\\\Struct\\) supplied for foreach, only iterables are supported\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/StoreFrontBundle/Struct/Struct.php
 
@@ -18967,11 +18972,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Components\\\\Snippet\\\\Writer\\\\QueryWriter\\:\\:generateInsertQueries\\(\\) has parameter \\$data with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Snippet/Writer/QueryWriter.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Snippet\\\\Writer\\\\QueryWriter\\:\\:generateUpdateInsertQueries\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Snippet/Writer/QueryWriter.php
 
@@ -28037,11 +28037,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getAuthorFilterQueryBuilder\\(\\) has parameter \\$filter with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Blog/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Blog\\\\Repository\\:\\:getAverageVoteQuery\\(\\) should return Doctrine\\\\ORM\\\\Query\\<null, Shopware\\\\Models\\\\Blog\\\\Comment\\> but returns Doctrine\\\\ORM\\\\Query\\<null, array\\<string, float\\|int\\|string\\|null\\>\\>\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Blog/Repository.php
 
@@ -41047,12 +41042,12 @@ parameters:
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_GET\\.$#"
-			count: 11
+			count: 12
 			path: tests/Unit/Components/LegacyRequestWrapper/GetWrapperTest.php
 
 		-
 			message: "#^Access to an undefined property sSystem\\:\\:\\$_POST\\.$#"
-			count: 11
+			count: 12
 			path: tests/Unit/Components/LegacyRequestWrapper/PostWrapperTest.php
 
 		-
@@ -41134,136 +41129,6 @@ parameters:
 			message: "#^Parameter \\#3 \\$offset of method Shopware\\\\Components\\\\Model\\\\CategoryDenormalization\\:\\:limit\\(\\) expects int, null given\\.$#"
 			count: 1
 			path: tests/Unit/Components/Model/CategoryDenormalizationTest.php
-
-		-
-			message: "#^Cannot call method getName\\(\\) on Shopware\\\\Models\\\\Article\\\\Supplier\\|null\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:setProperty\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:setProperty\\(\\) has parameter \\$value with no type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanAssignManyToOne\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanAssignManyToOneByInstance\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanAssignOneToMany\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanAssignOneToManyByInstance\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanAssignProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanEmptyArrayDoesNotOverrideManyToOne\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanOverWriteAssignOneToMany\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanReAssignManyToOne\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanReAssignProperties\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanReAssignWithAnotherIdThrowsExceptionManyToOne\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanRemoveManyToOne\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanRemoveOneToMany\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanSetCodesOnVoucher\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanSetCodesOnVoucherWithArrayCollection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanSetCountriesOnArea\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanSetElementsOnDocument\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanSetElementsOnDocumentWithArrayCollection\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanUpdateOneToMany\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelEntityTest\\:\\:testCanUpdateOneToManyById\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$codes of method Shopware\\\\Models\\\\Voucher\\\\Voucher\\:\\:setCodes\\(\\) expects array\\|\\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Voucher\\\\Code\\>\\)\\|null, Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\<int, array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$countries of method Shopware\\\\Models\\\\Country\\\\Area\\:\\:setCountries\\(\\) expects array\\<Shopware\\\\Models\\\\Country\\\\Country\\>\\|null, array\\<int, array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$elements of method Shopware\\\\Models\\\\Document\\\\Document\\:\\:setElements\\(\\) expects array\\<Shopware\\\\Models\\\\Document\\\\Element\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Document\\\\Element\\>\\), Doctrine\\\\Common\\\\Collections\\\\ArrayCollection\\<int, array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$elements of method Shopware\\\\Models\\\\Document\\\\Document\\:\\:setElements\\(\\) expects array\\<Shopware\\\\Models\\\\Document\\\\Element\\>\\|\\(Doctrine\\\\Common\\\\Collections\\\\ArrayCollection&iterable\\<Shopware\\\\Models\\\\Document\\\\Element\\>\\), array\\<int, array\\<string, string\\>\\> given\\.$#"
-			count: 1
-			path: tests/Unit/Components/Model/ModelEntityTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Components\\\\Model\\\\ModelManagerTest\\:\\:getSqlTypes\\(\\) return type has no value type specified in iterable type array\\.$#"

@@ -34,7 +34,7 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
     public function generateSignature(array $basket, $customerId)
     {
         $items = array_map(
-            function (array $item) {
+            static function (array $item) {
                 return [
                     'ordernumber' => (string) $item['ordernumber'],
                     'quantity' => (float) $item['quantity'],
@@ -58,15 +58,15 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
     }
 
     /**
-     * @param array<array{ordernumber: string, quantity: float, tax_rate: float, price: float}> $items
+     * @param array<string, array{ordernumber: string, quantity: float, tax_rate: float, price: float}> $items
      *
-     * @return array<array{ordernumber: string, quantity: float, tax_rate: float, price: float}>
+     * @return list<array{ordernumber: string, quantity: float, tax_rate: float, price: float}>
      */
     private function sortItems(array $items): array
     {
         usort(
             $items,
-            function (array $a, array $b) {
+            static function (array $a, array $b) {
                 if ($a['price'] < $b['price']) {
                     return 1;
                 }
@@ -95,6 +95,6 @@ class BasketSignatureGenerator implements BasketSignatureGeneratorInterface
             }
         );
 
-        return array_values($items);
+        return $items;
     }
 }

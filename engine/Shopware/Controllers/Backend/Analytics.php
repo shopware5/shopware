@@ -398,7 +398,7 @@ class Shopware_Controllers_Backend_Analytics extends Shopware_Controllers_Backen
         });
 
         $this->send(
-            array_values($referrer),
+            $referrer,
             (int) $this->Request()->getParam('limit', 25)
         );
     }

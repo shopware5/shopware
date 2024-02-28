@@ -572,15 +572,15 @@ class ProductListingVariationLoader
             // size combination => only consider prices with same size
             // size + color combination => only consider prices with same size and color like the current product
             // Only consider prices without the groups which should not expand
-            $tmp = array_values(array_keys(
+            $tmp = array_keys(
                 array_intersect(array_intersect(array_flip($options), $combination), $expandGroupIds)
-            ));
+            );
             sort($tmp, SORT_NUMERIC);
 
             // Get the options of the groups which should not expand
-            $excludedOptions = array_values(array_keys(
+            $excludedOptions = array_keys(
                 array_diff(array_intersect(array_flip($options), $combination), $expandGroupIds)
-            ));
+            );
 
             // filter prices which has configuration matches the current variant configuration
             $affected = array_filter($prices, function (array $price) use ($tmp, $excludedOptions) {
@@ -625,14 +625,14 @@ class ProductListingVariationLoader
         foreach ($combinations as $combination) {
             sort($combination, SORT_NUMERIC);
 
-            $tmp = array_values(array_keys(
+            $tmp = array_keys(
                 array_intersect(array_intersect(array_flip($options), $combination), $expandGroupIds)
-            ));
+            );
             sort($tmp, SORT_NUMERIC);
 
-            $excludedOptions = array_values(array_keys(
+            $excludedOptions = array_keys(
                 array_diff(array_intersect(array_flip($options), $combination), $expandGroupIds)
-            ));
+            );
 
             $affected = array_filter($availabilities, function (array $price) use ($tmp, $excludedOptions) {
                 $diff = array_values(array_intersect(array_diff($price['options'], $excludedOptions), $tmp));
