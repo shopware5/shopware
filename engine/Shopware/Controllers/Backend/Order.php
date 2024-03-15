@@ -1967,8 +1967,9 @@ class Shopware_Controllers_Backend_Order extends Shopware_Controllers_Backend_Ex
         $variant = $this->getManager()->getRepository(ProductVariant::class)
             ->findOneBy(['number' => $data['articleNumber']]);
 
-        // Load ean, unit and pack unit (translate if needed)
+        // Load articleDetailId, ean, unit and pack unit (translate if needed)
         if ($variant instanceof ProductVariant) {
+            $data['articleDetail'] = $variant;
             $mainVariant = $variant->getArticle()->getMainDetail();
             $data['ean'] = $variant->getEan();
             if (!\is_string($data['ean']) && $mainVariant instanceof ProductVariant) {
