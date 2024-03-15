@@ -37,6 +37,7 @@ use Enlight_View_Default;
 use Generator;
 use RuntimeException;
 use Shopware\Components\Model\ModelManager;
+use Shopware\Models\Article\Detail as ArticleDetail;
 use Shopware\Models\Order\Detail;
 use Shopware\Models\Order\Order;
 use Shopware\Models\Shop\Locale;
@@ -67,6 +68,9 @@ class OrderTest extends ControllerTestCase
     private const GERMANY_COUNTRY_ID = 2;
     private const NRW_STATE_ID = 3;
     private const GERMANY_AREA_ID = 1;
+    private const ARTICLE_ID = 29;
+    private const ARTICLE_DETAIL_ID = 35;
+    private const ARTICLE_DETAIL_NUMBER = 'SW10028';
     private const PRODUCT_GRADUATED_PRICES_DEMODATA_ORDER_NUMBER = 'SW10208';
     private const PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_ID = 209;
     private const PRODUCT_GRADUATED_PRICES_DEMODATA_PRODUCT_VARIANT_ID = 747;
@@ -565,6 +569,52 @@ class OrderTest extends ControllerTestCase
         static::assertInstanceOf(Tax::class, $tax);
 
         static::assertSame(self::NEW_TAX_ID, $tax->getId());
+    }
+
+    public function testSaveOrderPositionActionWithArticleDetailRelation(): void
+    {
+        $this->prepareTestSaveOrderPositionActionWithArticleDetailRelation();
+
+        $order = $this->modelManager->find(Order::class, self::ORDER_ID);
+        static::assertInstanceOf(Order::class, $order);
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setParams([
+            'id' => 0,
+            'orderId' => self::ORDER_ID,
+            'mode' => 0,
+            'articleId' => self::ARTICLE_ID,
+            'articleDetailId' => null,
+            'articleNumber' => self::ARTICLE_DETAIL_NUMBER,
+            'articleName' => '',
+            'quantity' => 1,
+            'statusId' => 0,
+            'statusDescription' => '',
+            'price' => 27.00,
+            'taxId' => 1,
+            'taxRate' => 0,
+            'taxDescription' => '',
+            'inStock' => 0,
+            'total' => 27.00,
+            'changed' => $order->getChanged()->format(DateTimeInterface::ATOM),
+        ]);
+
+        $this->authPlugin->setNoAuth();
+        $controller = $this->getController();
+        $controller->setRequest($request);
+        $controller->savePositionAction();
+
+        $orderDetail = $this->modelManager->getRepository(Detail::class)->findOneBy([
+            'orderId' => self::ORDER_ID,
+            'articleNumber' => self::ARTICLE_DETAIL_NUMBER,
+        ]);
+
+        static::assertInstanceOf(Detail::class, $orderDetail);
+        $articleDetail = $orderDetail->getArticleDetail();
+        static::assertInstanceOf(ArticleDetail::class, $articleDetail);
+
+        static::assertSame(self::ARTICLE_DETAIL_ID, $articleDetail->getId());
+        static::assertSame(self::ARTICLE_DETAIL_NUMBER, $articleDetail->getNumber());
     }
 
     /**
@@ -1137,6 +1187,27 @@ class OrderTest extends ControllerTestCase
             'taxRuleId' => self::NEW_TAX_ID,
         ]);
 
+        $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
+        static::assertIsString($customerSql);
+        $this->connection->executeStatement($customerSql, [
+            'customerId' => self::CUSTOMER_ID,
+            'customerGroup' => self::CUSTOMER_GROUP_KEY_DEFAULT,
+        ]);
+
+        $orderSql = file_get_contents(__DIR__ . '/_fixtures/order/order.sql');
+        static::assertIsString($orderSql);
+        $this->connection->executeStatement($orderSql, [
+            'orderDetailId' => self::ORDER_DETAIL_ID,
+            'orderId' => self::ORDER_ID,
+            'customerId' => self::CUSTOMER_ID,
+            'countryId' => self::GERMANY_COUNTRY_ID,
+            'stateId' => null,
+            'areaId' => null,
+        ]);
+    }
+
+    private function prepareTestSaveOrderPositionActionWithArticleDetailRelation(): void
+    {
         $customerSql = file_get_contents(__DIR__ . '/_fixtures/order/customer.sql');
         static::assertIsString($customerSql);
         $this->connection->executeStatement($customerSql, [
