@@ -308,6 +308,6 @@ class Shopware_Controllers_Backend_CustomerQuickView extends Shopware_Controller
             }
         }
 
-        return ['success' => true, 'data' => array_values($sortedData), 'total' => $result->getCount()];
+        return ['success' => true, 'data' => $sortedData, 'total' => $result->getCount()];
     }
 }

@@ -251,7 +251,10 @@ class Enlight_Controller_Plugins_Json_Bootstrap extends Enlight_Plugin_Bootstrap
      * Converts date time objects
      *
      * @param DateTimeInterface $value
-     * @param array-key         $key
+     *
+     * @param-out string $value
+     *
+     * @param array-key $key
      *
      * @return void
      */

@@ -93,7 +93,7 @@ class QueryWriter
         return $this->update;
     }
 
-    private function generateUpdateInsertQueries($data, $namespace, $localeId, $shopId)
+    private function generateUpdateInsertQueries($data, $namespace, $localeId, $shopId): void
     {
         foreach ($data as $name => $value) {
             $queryData = [
@@ -102,21 +102,21 @@ class QueryWriter
                 'localeID' => $localeId,
                 'name' => '\'' . addslashes($name) . '\'',
                 'value' => '\'' . addslashes($value) . '\'',
-                'created' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
-                'updated' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                'created' => '\'' . date('Y-m-d H:i:s') . '\'',
+                'updated' => '\'' . date('Y-m-d H:i:s') . '\'',
                 'dirty' => 0,
             ];
 
             $updateData = [
-                'updated=IF(dirty = 1, updated, \'' . date('Y-m-d H:i:s', time()) . '\')',
+                'updated=IF(dirty = 1, updated, \'' . date('Y-m-d H:i:s') . '\')',
                 'value=IF(dirty = 1, value, \'' . addslashes($value) . '\')',
                 'dirty=IF(value = \'' . addslashes($value) . '\', 0, 1)',
             ];
 
             $this->queries[] = 'INSERT INTO s_core_snippets'
                 . ' (' . implode(', ', array_keys($queryData)) . ')'
-                . ' VALUES (' . implode(', ', array_values($queryData)) . ')'
-                . ' ON DUPLICATE KEY UPDATE ' . implode(', ', array_values($updateData)) . ';';
+                . ' VALUES (' . implode(', ', $queryData) . ')'
+                . ' ON DUPLICATE KEY UPDATE ' . implode(', ', $updateData) . ';';
         }
     }
 

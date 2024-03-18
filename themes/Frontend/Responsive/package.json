@@ -29,7 +29,7 @@
     "homepage": "https://github.com/shopware5/shopware#readme",
     "dependencies": {
         "flatpickr": "2.6.3",
-        "jquery": "3.6.0",
+        "jquery": "3.7.1",
         "jquery.event.move": "git+https://github.com/stephband/jquery.event.move.git",
         "jquery.event.swipe": "0.5.4",
         "jquery.transit": "0.9.12",
@@ -39,11 +39,11 @@
         "pocketgrid-less": "1.0.1"
     },
     "devDependencies": {
-        "grunt": "^1.4.0",
+        "grunt": "^1.6.1",
         "grunt-contrib-clean": "^2.0.1",
         "grunt-contrib-copy": "1.0.0",
-        "grunt-modernizr": "^3.0.3",
-        "jest": "^29.6.1",
-        "jest-environment-jsdom": "^29.6.1"
+        "grunt-modernizr": "^4.0.1",
+        "jest": "^29.7.0",
+        "jest-environment-jsdom": "^29.7.0"
     }
 }

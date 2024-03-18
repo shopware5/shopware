@@ -32,6 +32,8 @@ class LinkFilter
      * Returns false, if the link is not allowed
      *
      * @param array<string, mixed> $userParams
+     *
+     * @param-out array<int|string, array|string> $userParams
      */
     public static function filterLink(?string $link, array &$userParams = []): bool
     {

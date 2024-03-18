@@ -1,7 +1,15 @@
 {
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "3.47.1",
-        "kubawerlos/php-cs-fixer-custom-fixers": "3.19.0"
+        "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+        "ext-ctype": "*",
+        "ext-mbstring": "*",
+        "friendsofphp/php-cs-fixer": "3.51.0",
+        "kubawerlos/php-cs-fixer-custom-fixers": "3.21.0"
+    },
+    "replace": {
+        "symfony/polyfill-php73": "*",
+        "symfony/polyfill-ctype": "*",
+        "symfony/polyfill-mbstring": "*"
     },
     "sort-packages": true
 }

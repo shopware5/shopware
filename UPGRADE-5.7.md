@@ -16,9 +16,11 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed behaviour of the translation transfer while setting a product variant as the main variant
 * Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
 
+* Updated `beberlei/doctrineextensions` to version 1.4.0
 * Updated `cocur/slugify` to version 4.5.1 for PHP 8.0 and newer
 * Updated `doctrine/orm` to version 2.15.5
-* Updated `google/cloud-storage` to version 1.37.0
+* Updated `doctrine/persistence` to version 3.3.2
+* Updated `google/cloud-storage` to version 1.39.0
 * Updated `guzzlehttp/guzzle` to version 7.8.1
 * Updated `guzzlehttp/psr7` to version 2.6.2
 * Updated `monolog/monolog` to version 2.9.2

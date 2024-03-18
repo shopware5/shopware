@@ -282,7 +282,7 @@ class Enlight_Components_Cron_Job
     /**
      * Sets the next date when the cronjob is due
      *
-     * @param string|\Zend_Date $next
+     * @param string|Zend_Date $next
      *
      * @return Enlight_Components_Cron_Job
      */
@@ -309,7 +309,7 @@ class Enlight_Components_Cron_Job
     /**
      * Sets the date and time when the cronjob has been started
      *
-     * @param string|\Zend_Date $start
+     * @param string|Zend_Date $start
      *
      * @return Enlight_Components_Cron_Job
      */

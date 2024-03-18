@@ -222,7 +222,7 @@ class Enlight_View_Default extends Enlight_View implements Enlight_View_Cache
      * @param bool|null    $nocache
      * @param int|null     $scope
      *
-     * @return Enlight_View|\Enlight_View_Default
+     * @return Enlight_View|Enlight_View_Default
      */
     public function assign($spec, $value = null, $nocache = null, $scope = null)
     {
