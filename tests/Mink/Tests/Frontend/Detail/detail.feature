@@ -58,27 +58,28 @@ Feature: Detail page
         When  I select "Deutsch" from "__shop"
         Then  I should see "Magnete London"
 
-    @captchaInactive @evaluations
-    Scenario: I can write an evaluation
-        Given I am on the detail page for article 100
-        Then  I follow "Bewertungen"
-        And   I should see "Bewertung schreiben"
-        When  I write an evaluation:
-            | field        | value           |
-            | sVoteName    | Max Mustermann  |
-            | sVoteStars   | 3               |
-            | sVoteSummary | Neue Bewertung  |
-            | sVoteComment | Hallo Welt      |
-        Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
-        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
-        But   I should not see "Hallo Welt"
-
-        When  the shop owner activates my latest evaluation
-        And   I am on the detail page for article 100
-        Then  I follow "Bewertungen"
-        Then  I should see an average customer evaluation of 3 from following evaluations:
-            | author         | stars | headline       | comment    |
-            | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |
+#    TODO: This tests is deactivated, because is is flaky. See https://github.com/shopware5/shopware/issues/2634
+#    @captchaInactive @evaluations
+#    Scenario: I can write an evaluation
+#        Given I am on the detail page for article 100
+#        Then  I follow "Bewertungen"
+#        And   I should see "Bewertung schreiben"
+#        When  I write an evaluation:
+#            | field        | value           |
+#            | sVoteName    | Max Mustermann  |
+#            | sVoteStars   | 3               |
+#            | sVoteSummary | Neue Bewertung  |
+#            | sVoteComment | Hallo Welt      |
+#        Then  I should not see "Bitte füllen Sie alle rot markierten Felder aus"
+#        But   I should see "Vielen Dank für die Abgabe Ihrer Bewertung! Ihre Bewertung wird nach Überprüfung freigeschaltet."
+#        But   I should not see "Hallo Welt"
+#
+#        When  the shop owner activates my latest evaluation
+#        And   I am on the detail page for article 100
+#        Then  I follow "Bewertungen"
+#        Then  I should see an average customer evaluation of 3 from following evaluations:
+#            | author         | stars | headline       | comment    |
+#            | Max Mustermann | 3     | Neue Bewertung | Hallo Welt |
 
     @graduatedPrices
     Scenario Outline: An article can have graduated prices
