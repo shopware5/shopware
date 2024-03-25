@@ -19,7 +19,7 @@ jobs:
             with:
                 github_access_token: ${{ secrets.GITHUB_TOKEN }}
 
-          - uses: cachix/cachix-action@v12
+          - uses: cachix/cachix-action@v14
             with:
                 name: devenv
 
