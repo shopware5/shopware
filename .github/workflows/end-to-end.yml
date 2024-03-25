@@ -4,59 +4,141 @@ on:
     workflow_call:
 
 permissions:
-  contents: read
+    contents: read
 
 concurrency:
     group: end-to-end-${{ github.ref }}-${{ github.workflow }}
     cancel-in-progress: true
 
 jobs:
-  Mink:
-    strategy:
-      matrix:
-          MINK_TAG: [ 'account', 'checkout1', 'checkout2', 'detail', 'listing', 'note', 'sitemap', 'misc', 'backend' ]
-    runs-on: ubuntu-latest
-    steps:
-        - uses: actions/checkout@v3
-        - uses: cachix/install-nix-action@v22
-          with:
-            github_access_token: ${{ secrets.GITHUB_TOKEN }}
+    Mink:
+        strategy:
+            matrix:
+                MINK_TAG: [
+                    'account',
+                    'checkout1',
+                    'checkout2',
+                    'detail',
+                    'listing',
+                    'note',
+                    'sitemap',
+                    'misc',
+                    'backend'
+                ]
+        runs-on: ubuntu-latest
+        env:
+            SW_HOST: localhost:8080
+            DB_HOST: 127.0.0.1
+            DB_PORT: 3306
+            DB_USER: root
+            DB_PASSWORD: root
+            DB_NAME: shopware
+            MAILER_DSN: smtp://localhost:1025
+            SW_BASE_PATH: ''
+            SELENIUM_HOST: localhost
+            SMTP_HOST: localhost
+        services:
+            database:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: shopware
+                options: '--mount="type=tmpfs,destination=/var/lib/mysql" --health-cmd="mysqladmin ping -h 127.0.0.1" --health-interval=5s --health-timeout=2s --health-retries=3'
+                ports:
+                    - "3306:3306"
+            mail:
+                image: axllent/mailpit
+                ports:
+                    - "1025:1025"
+        steps:
+            -   uses: actions/checkout@v4
 
-        -   uses: cachix/cachix-action@v12
-            with:
-                name: devenv
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.2'
 
-        -   name: Use Shopware Cache
-            uses: cachix/cachix-action@v12
-            with:
-                name: shopware5-shopware
-                authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+            -   name: Install Caddy
+                run: |
+                    set -e
+                    wget -q https://github.com/caddyserver/caddy/releases/download/v2.7.6/caddy_2.7.6_linux_amd64.tar.gz
+                    tar xfv caddy_2.7.6_linux_amd64.tar.gz
+                    sudo mv caddy /usr/local/bin
 
-        - name: Install devenv.sh
-          run: nix-env -if https://github.com/cachix/devenv/tarball/main
+            -   name: Start PHP-FPM
+                run: |
+                    set -e
+                    set -x
+                    cat <<EOF > fpm.conf
+                    [global]
+                    error_log = /dev/fd/2
+                    daemonize = no
 
-        - run: docker run -d --network host --shm-size 3g selenium/standalone-chrome:94.0
-        - name: Get Composer Cache Directory
-          id: composer-cache
-          run: |
-              echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-        - uses: actions/cache@v3
-          with:
-              path: ${{ steps.composer-cache.outputs.dir }}
-              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-              restore-keys: |
-                  ${{ runner.os }}-composer-
+                    [www]
+                    listen = 127.0.0.1:5068
+                    listen.allowed_clients = 127.0.0.1
+                    pm = dynamic
+                    pm.max_children = 5
+                    pm.start_servers = 2
+                    pm.min_spare_servers = 1
+                    pm.max_spare_servers = 3
+                    pm.status_path = /__php-fpm-status__
 
-        - run: export SW_HOST=$(hostname -i)
-        - run: devenv shell info-setup
-        - run: devenv up &
-        - run: devenv shell ./.github/check-mysql.sh
-        - run: devenv shell init-shopware
-        - run: devenv shell prepare-mink
-        - run: devenv shell vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --tags ${{ matrix.MINK_TAG }}
-        - name: Archive results
-          if: always()
-          uses: actions/upload-artifact@v3
-          with:
-              name: build data
-              path: build/logs
+                    ; Ensure worker stdout and stderr are sent to the main error log
+                    catch_workers_output = yes
+
+                    php_admin_value[error_log] = /dev/fd/2
+                    php_admin_flag[log_errors] = on
+
+                    ; we want to expose env vars (like in FOO=bar symfony server:start)
+                    clear_env = no
+
+                    env['PGGSSENCMODE'] = disable
+                    env['LC_ALL'] = C
+                    EOF
+                    php-fpm --nodaemonize --fpm-config fpm.conf &
+
+            -   name: Start Caddy
+                run: |
+                    cat <<EOF > Caddyfile
+                    :8080 {
+                        root * .
+                        php_fastcgi 127.0.0.1:5068 {
+                            index shopware.php
+                        }
+                        file_server
+                    }
+                    EOF
+                    caddy run --config Caddyfile &
+
+            -   name: Start Selenium
+                run: docker run -d --network host --shm-size 3g selenium/standalone-chrome:94.0
+
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            -   name: Cache Composer dependencies
+                uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   name: Install Shopware
+                run: make init
+
+            -   name: Prepare Mink tests
+                run: make prepare-mink
+
+            -   name: Run Mink tests
+                run: vendor/bin/behat -vv --config=tests/Mink/behat.yml --format=pretty --out=std --tags ${{ matrix.MINK_TAG }}
+
+            -   name: Archive results
+                if: always()
+                uses: actions/upload-artifact@v3
+                with:
+                    name: build data
+                    path: build/logs
