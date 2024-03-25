@@ -1,13 +1,13 @@
 allowUnfree: true
 inputs:
-    nixpkgs:
-        url: github:NixOS/nixpkgs/nixpkgs-unstable
-    nur:
-        url: github:nix-community/NUR
-    phps:
-        url: github:fossar/nix-phps
-        inputs:
-            nixpkgs:
-                follows: nixpkgs
+  nixpkgs:
+    url: github:NixOS/nixpkgs/nixpkgs-unstable
+  nur:
+    url: github:nix-community/NUR
+  phps:
+    url: github:fossar/nix-phps
+    inputs:
+      nixpkgs:
+        follows: nixpkgs
 permittedInsecurePackages:
-    - openssl-1.1.1u
+  - openssl-1.1.1u
