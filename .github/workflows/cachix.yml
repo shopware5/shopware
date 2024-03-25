@@ -29,12 +29,12 @@ jobs:
                     extra_nix_config: |
                         access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
             -   name: Use Devenv Cache
-                uses: cachix/cachix-action@v12
+                uses: cachix/cachix-action@v14
                 with:
                     name: devenv
 
             -   name: Use Shopware Cache
-                uses: cachix/cachix-action@v12
+                uses: cachix/cachix-action@v14
                 with:
                     name: shopware5-shopware
                     authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
