@@ -65,7 +65,7 @@
         "mpdf/mpdf": "8.2.1",
         "ongr/elasticsearch-dsl": "7.2.2",
         "psr/link": "1.0.0",
-        "psr/log": "1.1.4",
+        "psr/log": "2.0.0",
         "ramsey/uuid": "4.2.3",
         "setasign/fpdf": "1.8.6",
         "setasign/fpdi": "2.6.0",
