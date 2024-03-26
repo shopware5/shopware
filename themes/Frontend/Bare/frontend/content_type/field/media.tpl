@@ -1,8 +1,12 @@
 {extends file="frontend/content_type/field/base.tpl"}
 
 {block name='frontend_content_type_field_base_content'}
-    {$description = $content.description|escape|truncate:160}
+    {$description = $content.name|escape}
     {$title = $content.title|escape|truncate:160}
+
+    {if $content.description}
+        {$description = $content.description|escape|truncate:160}
+    {/if}
 
     {block name='frontend_content_type_field_media_link'}
         <a href="{$content.source}"

@@ -14,8 +14,12 @@
                         {block name='frontend_content_type_field_mediagrid_slider_slide'}
 
                             {foreach $content as $image}
-                                {$description = $image.description|escape|truncate:160}
+                                {$description = $image.name|escape}
                                 {$largeThumbnail = null}
+
+                                {if $image.description}
+                                    {$description = $image.description|escape|truncate:160}
+                                {/if}
 
                                 {if $image.thumbnails|count > 0}
                                     {$largeThumbnail = $image.thumbnails[$image.thumbnails|count - 1]}
@@ -51,7 +55,11 @@
                         {block name='frontend_content_type_field_mediagrid_thumbnail_slider_slide'}
 
                             {foreach $content as $image}
-                                {$description = $image.description|escape|truncate:160}
+                                {$description = $image.name|escape}
+
+                                {if $image.description}
+                                    {$description = $image.description|escape|truncate:160}
+                                {/if}
 
                                 <div class="thumbnail--link">
                                     {block name='frontend_content_type_field_mediagrid_thumbnail_slider_item'}

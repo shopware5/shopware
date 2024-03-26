@@ -126,8 +126,9 @@ class MediaHydrator extends Hydrator
         $translation = $this->getTranslation($data, '__image');
         $data = array_merge($data, $translation);
 
-        $media->setName($data['__image_description']);
+        $media->setName($data['__image_img']);
         $media->setPreview($data['__image_main'] == 1);
+        $media->setDescription($data['__image_description']);
 
         if (!empty($data['__imageAttribute_id'])) {
             $this->attributeHydrator->addAttribute($media, $data, 'imageAttribute', 'image', 'image');

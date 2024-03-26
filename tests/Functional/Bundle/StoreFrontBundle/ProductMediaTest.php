@@ -188,6 +188,8 @@ class ProductMediaTest extends TestCase
     {
         static::assertNotEmpty($media->getThumbnails());
         static::assertStringContainsString($expected, $media->getFile());
+        static::assertStringStartsWith($expected, $media->getName());
+        static::assertEmpty($media->getDescription());
 
         foreach ($media->getThumbnails() as $thumbnail) {
             static::assertStringContainsString($expected, $thumbnail->getSource());
