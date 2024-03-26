@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -25,5 +26,9 @@ namespace Shopware\Components\Plugin\XmlReader;
 
 interface XmlReaderInterface
 {
+    /**
+     * @param string $xmlFile
+     * @return array<string, mixed>
+     */
     public function read(string $xmlFile): array;
 }

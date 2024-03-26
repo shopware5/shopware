@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -42,7 +43,7 @@ class XmlMenuReader extends XmlReaderBase
         $entries = (new DOMXPath($xml))->query('//entries/entry');
 
         if (!$entries instanceof DOMNodeList || $entries->length === 0) {
-            throw new RuntimeException('Required element "entry" is missing.');
+            throw new RuntimeException(sprintf('Required element "entry" is missing in file "%s".', static::$xmlFile));
         }
 
         $menu = [];

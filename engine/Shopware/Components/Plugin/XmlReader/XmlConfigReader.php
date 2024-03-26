@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -43,7 +44,7 @@ class XmlConfigReader extends XmlReaderBase
             return self::SCOPE_SHOP;
         }
 
-        throw new InvalidArgumentException(sprintf('Invalid scope "%s"', $scope));
+        throw new InvalidArgumentException(sprintf('Invalid config scope "%s" in file "%s"', $scope, static::$xmlFile));
     }
 
     protected function parseFile(DOMDocument $xml): array

@@ -48,10 +48,4 @@
         <blacklist>5.1.2</blacklist>
         <blacklist>5.1.3</blacklist>
     </compatibility>
-
-    <foobar>asdf</foobar>
-    <asdfasd>asdf</asdfasd>
-    <foobasdfasdfar>
-        <some>asbasdf</some>
-    </foobasdfasdfar>
 </plugin>
