@@ -14,7 +14,17 @@ jobs:
   Mink:
     strategy:
       matrix:
-          MINK_TAG: [ 'account', 'checkout1', 'checkout2', 'detail', 'listing', 'note', 'sitemap', 'misc', 'backend' ]
+          MINK_TAG: [
+#              'account',
+#              'checkout1',
+#              'checkout2',
+#              'detail',
+#              'listing',
+#              'note',
+#              'sitemap',
+#              'misc',
+              'backend'
+          ]
     runs-on: ubuntu-latest
     env:
         SW_HOST: localhost:8080

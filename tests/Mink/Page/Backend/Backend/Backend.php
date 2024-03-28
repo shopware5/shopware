@@ -37,24 +37,25 @@ class Backend extends Page
      */
     protected $path = '/backend/';
 
-    /**
-     * @return array<string, string|array>
-     */
-    public function getXPathSelectors(): array
-    {
-        return [
-            'loginUsernameInput' => "//input[@name='username']",
-            'loginUsernamepassword' => "//input[@name='password']",
-            'loginLoginButton' => "//button[@data-action='login']",
-        ];
-    }
-
     public function login(string $user, string $password): void
     {
-        $xpath = $this->getXPathSelectors();
-        $this->find('xpath', $xpath['loginUsernameInput'])->setValue($user);
-        $this->find('xpath', $xpath['loginUsernamepassword'])->setValue($password);
-        $this->find('xpath', $xpath['loginLoginButton'])->click();
+        $userNameInput = $this->find('xpath', "//input[@name='username']");
+        if ($userNameInput === null) {
+            Helper::throwException('No user name input element found');
+        }
+        $userNameInput->setValue($user);
+
+        $passwordInput = $this->find('xpath', "//input[@name='password']");
+        if ($passwordInput === null) {
+            Helper::throwException('No password input element found');
+        }
+        $passwordInput->setValue($password);
+
+        $loginButton = $this->find('xpath', "//button[@data-action='login']");
+        if ($loginButton === null) {
+            Helper::throwException('No login button found');
+        }
+        $loginButton->click();
     }
 
     public function openModule(string $moduleName): void
