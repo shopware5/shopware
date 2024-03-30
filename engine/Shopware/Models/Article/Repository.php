@@ -2086,7 +2086,7 @@ class Repository extends ModelRepository
         $summarize = null
     ) {
         $builder = $this->getArticlesWithRegisteredNotificationsBuilder($filter, $order, $summarize);
-        if (empty($summarize) && !empty($limit) && !empty($offset)) {
+        if (empty($summarize) && !empty($limit) && $offset !== null) {
             $builder->setFirstResult($offset)
                 ->setMaxResults($limit);
         }
@@ -2141,6 +2141,19 @@ class Repository extends ModelRepository
     }
 
     /**
+     * @return Query<Notification>
+     */
+    public function getProductsWithNotificationsCountQuery(): Query
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+        $builder->select('COUNT(DISTINCT notification.articleNumber)');
+
+        $builder->from(Notification::class, 'notification');
+
+        return $builder->getQuery();
+    }
+
+    /**
      * Returns an instance of the \Doctrine\ORM\Query object which selects all notification customers by the given articleOrderNumber
      *
      * @param string $articleOrderNumber
@@ -2156,7 +2169,7 @@ class Repository extends ModelRepository
     public function getNotificationCustomerByArticleQuery($articleOrderNumber, $filter, $offset, $limit, $order)
     {
         $builder = $this->getNotificationCustomerByArticleBuilder($articleOrderNumber, $filter, $order);
-        if (!empty($limit) && !empty($offset)) {
+        if (!empty($limit) && $offset !== null) {
             $builder->setFirstResult($offset)
                     ->setMaxResults($limit);
         }

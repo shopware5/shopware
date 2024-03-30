@@ -22861,36 +22861,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/NewsletterManager.php
 
 		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$limit\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$orderNumber\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^Access to an undefined property Enlight_Controller_Request_RequestHttp\\:\\:\\$start\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Notification\\:\\:getArticleListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_Notification\\:\\:getCustomerListAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
-			message: "#^PHPDoc tag @var for variable \\$filter has no value type specified in iterable type array\\.$#"
-			count: 2
-			path: engine/Shopware/Controllers/Backend/Notification.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Overview\\:\\:getOrderSummaryAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Overview.php
@@ -37379,26 +37349,6 @@ parameters:
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\MailTest\\:\\:\\$testData type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Controllers/Backend/MailTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$data\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/NotificationTest.php
-
-		-
-			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/NotificationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NotificationTest\\:\\:testGetArticleList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/NotificationTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Controllers\\\\Backend\\\\NotificationTest\\:\\:testGetCustomerList\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Controllers/Backend/NotificationTest.php
 
 		-
 			message: "#^Access to an undefined property Enlight_View_Default\\:\\:\\$success\\.$#"
