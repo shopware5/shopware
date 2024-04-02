@@ -54,30 +54,31 @@
     '';
   };
 
-  services.mysql.enable = lib.mkDefault true;
-
-  services.mysql.initialDatabases = [
-    { name = "shopware"; }
-  ];
-  services.mysql.ensureUsers = [
-    {
-      name = "shopware";
-      password = "shopware";
-      ensurePermissions = {
-        "shopware.*" = "ALL PRIVILEGES";
+  services.mysql = {
+    enable = true;
+    initialDatabases = lib.mkDefault [
+        { name = "shopware"; }
+    ];
+    ensureUsers = lib.mkDefault [
+      {
+        name = "shopware";
+        password = "shopware";
+        ensurePermissions = {
+          "shopware.*" = "ALL PRIVILEGES";
+        };
+      }
+    ];
+    settings = {
+      mysqld = {
+        log_bin_trust_function_creators = 1;
       };
-    }
-  ];
-  services.mysql.settings = {
-    mysqld = {
-      log_bin_trust_function_creators = 1;
     };
   };
 
   services.redis.enable = lib.mkDefault true;
   services.adminer.enable = lib.mkDefault true;
   services.adminer.listen = lib.mkDefault "127.0.0.1:9080";
-  services.mailhog.enable = lib.mkDefault true;
+  services.mailpit.enable = lib.mkDefault true;
 
   env.SW_HOST = lib.mkDefault "localhost:8000";
   env.DB_USER = lib.mkDefault "shopware";
