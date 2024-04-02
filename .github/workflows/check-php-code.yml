@@ -42,7 +42,7 @@ jobs:
                     php-version: '8.1'
 
             -   name: Cache CS-Fixer
-                uses: actions/cache@v3
+                uses: actions/cache@v4
                 with:
                     path: var/cache/php-cs-fixer
                     key: ${{ runner.os }}-php-cs-fixer-${{ hashFiles('vendor-bin/cs-fixer/composer.lock') }}
@@ -50,7 +50,7 @@ jobs:
                         ${{ runner.os }}-php-cs-fixer-
 
             -   name: Cache PHPStan
-                uses: actions/cache@v3
+                uses: actions/cache@v4
                 with:
                     path: var/cache/phpstan
                     key: ${{ runner.os }}-phpstan-${{ hashFiles('composer.lock') }}
@@ -62,7 +62,7 @@ jobs:
                 run: |
                     echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v4
                 with:
                     path: ${{ steps.composer-cache.outputs.dir }}
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
