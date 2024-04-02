@@ -55,9 +55,8 @@ class BackendContext extends SubContext
      */
     public function iOpenTheModule(string $moduleName): void
     {
-        Helper::spin(function (BackendContext $context) use ($moduleName) {
+        Helper::spin(static function (BackendContext $context) use ($moduleName) {
             $backendPage = $context->getPage(Backend::class);
-            \assert($backendPage instanceof Backend);
             $backendPage->openModule($moduleName);
 
             return true;
@@ -69,11 +68,8 @@ class BackendContext extends SubContext
      */
     public function theModuleShouldOpenAWindow(): void
     {
-        $this->getPage(Backend::class);
-
-        Helper::spin(function (BackendContext $context) {
+        Helper::spin(static function (BackendContext $context) {
             $backendPage = $context->getPage(Backend::class);
-            \assert($backendPage instanceof Backend);
             $backendPage->verifyModule();
 
             return true;
@@ -85,7 +81,7 @@ class BackendContext extends SubContext
      */
     public function iShouldSeeADropdownAppear(): void
     {
-        Helper::spin(function (BackendContext $context) {
+        Helper::spin(static function (BackendContext $context) {
             return $context->getPage(Backend::class)->find('css', '.x-boundlist-item') !== null;
         }, Helper::DEFAULT_WAIT_TIME, $this);
     }
@@ -136,7 +132,7 @@ JS;
     }
 
     /**
-     * Checks via spin function if a string exists, with sleep at the beginning (default 2)
+     * Checks via spin function if a string exists, with sleep at the beginning (default 5)
      */
     protected function waitIfThereIsText(string $text, int $wait = 5): bool
     {

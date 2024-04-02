@@ -38351,21 +38351,6 @@ parameters:
 			path: tests/Functional/config.php
 
 		-
-			message: "#^Cannot call method click\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
-			message: "#^Cannot call method setValue\\(\\) on Behat\\\\Mink\\\\Element\\\\NodeElement\\|null\\.$#"
-			count: 2
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\Backend\\\\Backend\\:\\:getXPathSelectors\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Mink/Page/Backend/Backend/Backend.php
-
-		-
 			message: "#^Property Shopware\\\\Tests\\\\Mink\\\\Page\\\\Backend\\\\ContentTypeManager\\\\Elements\\\\ContentTypeManagerDetailWindow\\:\\:\\$elements type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Mink/Page/Backend/ContentTypeManager/Elements/ContentTypeManagerDetailWindow.php

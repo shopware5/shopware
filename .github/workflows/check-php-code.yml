@@ -13,39 +13,61 @@ concurrency:
 jobs:
     php:
         runs-on: ubuntu-latest
+        env:
+            SW_HOST: localhost:8000
+            DB_HOST: 127.0.0.1
+            DB_PORT: 3306
+            DB_USER: root
+            DB_PASSWORD: root
+            DB_NAME: shopware
+            MAILER_DSN: smtp://localhost:1025
+            SW_BASE_PATH: ''
+            SELENIUM_HOST: localhost
+            SMTP_HOST: localhost
+        services:
+            database:
+                image: mysql:8.0
+                env:
+                    MYSQL_ROOT_PASSWORD: root
+                    MYSQL_DATABASE: shopware
+                options: '--mount="type=tmpfs,destination=/var/lib/mysql" --health-cmd="mysqladmin ping -h 127.0.0.1" --health-interval=5s --health-timeout=2s --health-retries=3'
+                ports:
+                    - "3306:3306"
         steps:
-            - uses: actions/checkout@v3
-            - uses: cachix/install-nix-action@v22
-              with:
-                  github_access_token: ${{ secrets.GITHUB_TOKEN }}
+            -   uses: actions/checkout@v4
 
-            - uses: cachix/cachix-action@v12
-              with:
-                  name: devenv
-
-            -   name: Use Shopware Cache
-                uses: cachix/cachix-action@v12
+            -   name: Setup PHP
+                uses: shivammathur/setup-php@v2
                 with:
-                    name: shopware5-shopware
-                    authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+                    php-version: '8.1'
 
+            -   name: Cache CS-Fixer
+                uses: actions/cache@v3
+                with:
+                    path: var/cache/php-cs-fixer
+                    key: ${{ runner.os }}-php-cs-fixer-${{ hashFiles('vendor-bin/cs-fixer/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-php-cs-fixer-
 
-            - name: Install devenv.sh
-              run: nix-env -if https://github.com/cachix/devenv/tarball/main
-              shell: sh
+            -   name: Cache PHPStan
+                uses: actions/cache@v3
+                with:
+                    path: var/cache/phpstan
+                    key: ${{ runner.os }}-phpstan-${{ hashFiles('composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-phpstan-
 
-            - name: Get Composer Cache Directory
-              id: composer-cache
-              run: |
-                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-            - uses: actions/cache@v3
-              with:
-                  path: ${{ steps.composer-cache.outputs.dir }}
-                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-            - run: devenv up &
-            - run: devenv shell ./.github/check-mysql.sh
-            - run: devenv shell init-shopware
-            - run: devenv shell check-code
+            -   uses: actions/cache@v3
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
+
+            -   run: make init
+            -   run: make check-code
