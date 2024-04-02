@@ -39,7 +39,7 @@ jobs:
                 shell: bash
 
             -   name: Clone
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
 
             -   name: Set current date as env variable
                 run: echo "REVISION=$(git log -1 --format="%at" | xargs -I{} date -d @{} +'%Y%m%d%H%M')" >> $GITHUB_ENV
