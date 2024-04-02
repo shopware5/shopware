@@ -20,6 +20,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `cocur/slugify` to version 4.5.1 for PHP 8.0 and newer
 * Updated `doctrine/orm` to version 2.15.5
 * Updated `doctrine/persistence` to version 3.3.2
+* Updated `friendsofphp/proxy-manager-lts` to version 1.0.18
 * Updated `google/cloud-storage` to version 1.39.0
 * Updated `guzzlehttp/guzzle` to version 7.8.1
 * Updated `guzzlehttp/psr7` to version 2.6.2
@@ -40,6 +41,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated several indirect dependencies
 * Updated npm dependencies in `themes/package.json`
 * Updated npm dependencies in `themes/Frontend/Responsive/package.json`
+* Updated devenv dependencies
 
 ### Removals
 
