@@ -88,7 +88,7 @@
         "symfony/process": "~4.4.34",
         "symfony/serializer": "~5.4.0",
         "symfony/validator": "~4.4.34",
-        "symfony/web-link": "~4.4.27",
+        "symfony/web-link": "~5.2.12",
         "voku/anti-xss": "~4.1.41",
         "wikimedia/less.php": "4.1.1"
     },
