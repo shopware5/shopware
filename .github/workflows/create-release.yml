@@ -132,7 +132,7 @@ jobs:
                     path: ${{ env.PACKAGE_PREFIX }}${{ env.PACKAGE_DELIMITER }}${{ env.SHA }}.zip
 
             -   name: Push to release
-                uses: xresloader/upload-to-github-release@v1.3.12
+                uses: xresloader/upload-to-github-release@v1.5.0
                 env:
                     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 with:
