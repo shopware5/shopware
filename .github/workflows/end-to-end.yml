@@ -140,5 +140,5 @@ jobs:
                 if: always()
                 uses: actions/upload-artifact@v4
                 with:
-                    name: build data
+                    name: build-data-${{ matrix.MINK_TAG }}
                     path: build/logs
