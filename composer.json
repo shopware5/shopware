@@ -80,7 +80,7 @@
         "symfony/form": "~4.4.34",
         "symfony/http-foundation": "~4.4.34",
         "symfony/http-kernel": "~4.4.34",
-        "symfony/options-resolver": "~4.4.30",
+        "symfony/options-resolver": "~5.4.21",
         "symfony/polyfill-php80": "^1.23",
         "symfony/polyfill-php81": "^1.23",
         "symfony/polyfill-php82": "^1.26",
