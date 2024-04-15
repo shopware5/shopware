@@ -76,7 +76,7 @@
         "symfony/dependency-injection": "~4.4.34",
         "symfony/expression-language": "~4.4.34",
         "symfony/filesystem": "~4.4.27",
-        "symfony/finder": "~4.4.30",
+        "symfony/finder": "~5.4.35",
         "symfony/form": "~4.4.34",
         "symfony/http-foundation": "~4.4.34",
         "symfony/http-kernel": "~4.4.34",
