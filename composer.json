@@ -49,7 +49,7 @@
         "doctrine/dbal": "2.13.9",
         "doctrine/event-manager": "1.2.0",
         "doctrine/inflector": "2.0.4",
-        "doctrine/orm": "2.15.5",
+        "doctrine/orm": "2.19.4",
         "doctrine/persistence": "3.3.2",
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",
