@@ -120,7 +120,7 @@
         "phpunit/phpunit": "^9.6",
         "sensiolabs/behat-page-object-extension": "2.3.7",
         "staabm/phpstan-dba": "0.2.79",
-        "symfony/browser-kit": "~4.4.27",
+        "symfony/browser-kit": "~5.4.35",
         "symfony/dom-crawler": "~5.4.35"
     },
     "include-path": [
