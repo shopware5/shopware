@@ -166,11 +166,15 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
             scope: this,
             callback: function (records, operation, success) {
                 var record = records[0],
-                    mode = record.data.modus;
+                    mode = record.data.modus,
+                    codeStore = me.getStore('Code');
+
+                codeStore.clearData();
+                codeStore.currentPage = 1;
 
                 me.getView('voucher.Window').create({
                     record: record,
-                    codeStore: me.getStore('Code'),
+                    codeStore: codeStore,
                     taxStore: me.getStore('Tax')
                 });
 
