@@ -10460,16 +10460,16 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v5.4.35",
+            "version": "v5.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
-                "reference": "2f6f979b579ed1c051465c3c2fb81daf5bb4a002"
+                "reference": "4c5d1a88ceee2b1c5c0b400b0137989ec34f70fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/2f6f979b579ed1c051465c3c2fb81daf5bb4a002",
-                "reference": "2f6f979b579ed1c051465c3c2fb81daf5bb4a002",
+                "url": "https://api.github.com/repos/symfony/browser-kit/zipball/4c5d1a88ceee2b1c5c0b400b0137989ec34f70fa",
+                "reference": "4c5d1a88ceee2b1c5c0b400b0137989ec34f70fa",
                 "shasum": ""
             },
             "require": {
@@ -10512,7 +10512,7 @@
             "description": "Simulates the behavior of a web browser, allowing you to make requests, click on links and submit forms programmatically",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/browser-kit/tree/v5.4.35"
+                "source": "https://github.com/symfony/browser-kit/tree/v5.4.39"
             },
             "funding": [
                 {
@@ -10528,7 +10528,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T13:51:25+00:00"
+            "time": "2024-04-18T08:26:06+00:00"
         },
         {
             "name": "symfony/css-selector",
@@ -10598,16 +10598,16 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v5.4.35",
+            "version": "v5.4.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "e3b4806f88abf106a411847a78619a542e71de29"
+                "reference": "1dffb111b038412b028caba029240e379fda85b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/e3b4806f88abf106a411847a78619a542e71de29",
-                "reference": "e3b4806f88abf106a411847a78619a542e71de29",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/1dffb111b038412b028caba029240e379fda85b2",
+                "reference": "1dffb111b038412b028caba029240e379fda85b2",
                 "shasum": ""
             },
             "require": {
@@ -10653,7 +10653,7 @@
             "description": "Eases DOM navigation for HTML and XML documents",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/dom-crawler/tree/v5.4.35"
+                "source": "https://github.com/symfony/dom-crawler/tree/v5.4.39"
             },
             "funding": [
                 {
@@ -10669,7 +10669,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-23T13:51:25+00:00"
+            "time": "2024-04-18T08:26:06+00:00"
         },
         {
             "name": "symfony/translation",
