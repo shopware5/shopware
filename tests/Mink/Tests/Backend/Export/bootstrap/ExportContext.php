@@ -119,11 +119,11 @@ SQL;
     public function createSubshop(): void
     {
         $dbal = Shopware()->Container()->get(Connection::class);
-        $dbal->executeStatement('INSERT INTO s_core_shops
+        $dbal->executeStatement("INSERT INTO s_core_shops
             (id, main_id, name, title, position, host, base_path, base_url, hosts, secure, template_id, document_template_id, category_id, locale_id, currency_id, customer_group_id, fallback_id, customer_scope, `default`, active) VALUES
-            ("3", NULL, "Export Testshop", "Export Testshop", "0", "' . $this->subShopDomain . '", NULL, NULL, "", "0", "23", "23", "3", "1", "1", "1", "1", "0", "0", "1");');
+            ('3', NULL, 'Export Testshop', 'Export Testshop', '0', :subShopDomain, NULL, NULL, '', '0', '23', '23', '3', '1', '1', '1', '1', '0', '0', '1');", ['subShopDomain' => $this->subShopDomain]);
 
-        $dbal->executeStatement('UPDATE s_export SET languageID=3 WHERE id in (4711, 4712, 4713, 4714)');
+        $dbal->executeStatement('UPDATE s_export SET languageID = 3 WHERE id in (4711, 4712, 4713, 4714)');
     }
 
     /**

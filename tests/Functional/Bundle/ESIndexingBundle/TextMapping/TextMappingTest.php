@@ -66,7 +66,7 @@ class TextMappingTest extends TestCase
 
         $this->helper->updateProduct($productNumber, ['mainDetail' => [
             'ean' => 444,
-        ], ]);
+        ]]);
 
         $client = Shopware()->Container()->get(Client::class);
         $indexFactory = Shopware()->Container()->get(IndexFactory::class);

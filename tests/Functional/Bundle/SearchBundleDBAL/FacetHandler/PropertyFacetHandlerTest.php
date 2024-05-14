@@ -108,7 +108,7 @@ class PropertyFacetHandlerTest extends TestCase
         )->fetchAllKeyValue());
 
         foreach ($reversedBottleProperties as $position => $bottlePropertyId) {
-            $connection->update('s_filter_values', ['position' => $position], ['id' => $bottlePropertyId]);
+            $connection->update('s_filter_values', ['position' => (int) $position], ['id' => (int) $bottlePropertyId]);
         }
 
         return $reversedBottleProperties;
@@ -117,7 +117,7 @@ class PropertyFacetHandlerTest extends TestCase
     private function changeSetSortMode(): void
     {
         $connection = $this->getContainer()->get(Connection::class);
-        $setId = $connection->executeQuery(
+        $setId = (int) $connection->executeQuery(
             'SELECT f.id
              FROM s_filter AS f
              INNER JOIN s_filter_relations AS fr

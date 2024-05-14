@@ -53,7 +53,7 @@ class StringRendererService implements StringRendererServiceInterface
 
         $placeholders = array_shift($placeholders);
 
-        foreach ($placeholders as $placeholder) {
+        foreach ($placeholders ?? [] as $placeholder) {
             $placeholderString = preg_replace($this->functionRegEx, '', $placeholder);
 
             if (!\is_string($placeholderString) || $placeholderString === '') {

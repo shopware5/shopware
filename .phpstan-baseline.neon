@@ -4391,21 +4391,6 @@ parameters:
 			path: engine/Shopware/Bundle/AttributeBundle/Service/DataPersisterInterface.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\SchemaOperator\\:\\:validate\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/SchemaOperator.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\SchemaOperator\\:\\:validateField\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/SchemaOperator.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\SchemaOperator\\:\\:\\$nameBlacklist type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/AttributeBundle/Service/SchemaOperator.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\AttributeBundle\\\\Service\\\\TableMapping\\:\\:__construct\\(\\) has parameter \\$tableMapping with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/AttributeBundle/Service/TableMapping.php
@@ -9144,6 +9129,11 @@ parameters:
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\FilterContainerFactory\\:\\:selectFiltersForResource\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/SitemapBundle/Service/FilterContainerFactory.php
+
+		-
+			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\LinkFilter\\:\\:filterLink\\(\\) has @param\\-out PHPDoc tag for parameter \\$userParams with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: engine/Shopware/Bundle/SitemapBundle/Service/LinkFilter.php
 
 		-
 			message: "#^Method Shopware\\\\Bundle\\\\SitemapBundle\\\\Service\\\\SitemapWriter\\:\\:moveFiles\\(\\) has no return type specified\\.$#"
@@ -35939,21 +35929,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Bundle\\\\SearchBundle\\\\Sorting\\\\ReleaseDateSortingTest\\:\\:search\\(\\) has parameter \\$products with no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Bundle/SearchBundle/Sorting/ReleaseDateSortingTest.php
-
-		-
-			message: "#^Query error\\: Column \"s_filter\\.id\" expects value type int, got type mixed$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundleDBAL/FacetHandler/PropertyFacetHandlerTest.php
-
-		-
-			message: "#^Query error\\: Column \"s_filter_values\\.id\" expects value type int, got type mixed$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundleDBAL/FacetHandler/PropertyFacetHandlerTest.php
-
-		-
-			message: "#^Query error\\: Column \"s_filter_values\\.position\" expects value type int, got type int\\|string$#"
-			count: 1
-			path: tests/Functional/Bundle/SearchBundleDBAL/FacetHandler/PropertyFacetHandlerTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$sql of method Doctrine\\\\DBAL\\\\Connection\\:\\:exec\\(\\) expects string, string\\|false given\\.$#"
