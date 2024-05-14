@@ -94,9 +94,9 @@ abstract class AbstractShopConfigurationLayer implements ConfigurationLayerInter
         $builder = $this->configureQuery($builder, $shopId, $pluginName);
 
         $values = $builder->select([
-                'coreConfigElements.name',
-                'coreConfigValues.value',
-            ])
+            'coreConfigElements.name',
+            'coreConfigValues.value',
+        ])
             ->execute()
             ->fetchAll(PDO::FETCH_KEY_PAIR)
         ;

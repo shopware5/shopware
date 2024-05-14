@@ -100,10 +100,10 @@ class StatisticsTest extends Enlight_Components_Test_Plugin_TestCase
     public function providerReferer(): array
     {
         return [
-          ['http://google.de/', '123', 'http://google.de/$123', true],
-          ['http://google.de/', null, 'http://google.de/', true],
-          ['http://google.de/', null, 'www.google.de/', false],
-          ['http://google.de/', null, 'http://' . Shopware()->Config()->get('Host') . '/', false],
+            ['http://google.de/', '123', 'http://google.de/$123', true],
+            ['http://google.de/', null, 'http://google.de/', true],
+            ['http://google.de/', null, 'www.google.de/', false],
+            ['http://google.de/', null, 'http://' . Shopware()->Config()->get('Host') . '/', false],
         ];
     }
 

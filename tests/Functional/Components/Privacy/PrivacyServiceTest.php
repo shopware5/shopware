@@ -183,20 +183,20 @@ class PrivacyServiceTest extends TestCase
         $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_user', [
-                'password' => '098f6bcd4621d373cade4e832627b4f6',
-                'encoder' => 'md5',
-                'email' => uniqid('test', true) . '@test.com',
-                'accountmode' => 1,
-                'active' => '1',
-                'firstlogin' => $date,
-                'lastlogin' => $date,
-                'subshopID' => '1',
-                'customergroup' => 'EK',
-                'salutation' => 'mr',
-                'firstname' => '',
-                'lastname' => '',
-                'birthday' => '1990-01-01',
-            ]);
+            'password' => '098f6bcd4621d373cade4e832627b4f6',
+            'encoder' => 'md5',
+            'email' => uniqid('test', true) . '@test.com',
+            'accountmode' => 1,
+            'active' => '1',
+            'firstlogin' => $date,
+            'lastlogin' => $date,
+            'subshopID' => '1',
+            'customergroup' => 'EK',
+            'salutation' => 'mr',
+            'firstname' => '',
+            'lastname' => '',
+            'birthday' => '1990-01-01',
+        ]);
 
         return (int) $this->connection->lastInsertId();
     }

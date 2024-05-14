@@ -143,11 +143,11 @@ class SupplierTest extends Enlight_Components_Test_Controller_TestCase
         Shopware()->Plugins()->Backend()->Auth()->setNoAuth();
         $this->Request()->setMethod('GET');
         $filter = json_encode([
-                    'property' => 'name',
-                    'value' => 'thismanufacturerdoesnotexist',
-                    'operator' => null,
-                    'expression' => null,
-                ]);
+            'property' => 'name',
+            'value' => 'thismanufacturerdoesnotexist',
+            'operator' => null,
+            'expression' => null,
+        ]);
         $query_params = urlencode(sprintf('[%s]', $filter));
         $this->dispatch('backend/supplier/getSuppliers?filter=' . $query_params);
         static::assertTrue($this->View()->getAssign('success'));

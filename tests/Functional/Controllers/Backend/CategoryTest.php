@@ -44,9 +44,9 @@ class CategoryTest extends ControllerTestCase
      * @var array{parentId: int, name: string, active: bool}
      */
     private array $dummyData = [
-         'parentId' => 1,
-         'name' => 'unitTestCategory',
-         'active' => true,
+        'parentId' => 1,
+        'name' => 'unitTestCategory',
+        'active' => true,
     ];
 
     private string $updateMetaDescription = 'testMetaDescription';

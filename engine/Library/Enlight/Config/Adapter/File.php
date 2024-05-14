@@ -112,7 +112,7 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
                 try {
                     /** @var Enlight_Config_Format_Ini $reader */
                     $reader = new $reader($name, $section, [
-                            'skipExtends' => $this->_skipExtends, ]
+                        'skipExtends' => $this->_skipExtends, ]
                     );
                     $config->setData($reader->toArray());
                     break;
@@ -232,9 +232,9 @@ class Enlight_Config_Adapter_File extends Enlight_Config_Adapter
             /** @var class-string<Enlight_Config> $reader */
             $reader = 'Enlight_Config_Format_' . ucfirst($this->_configType);
             $base = new $reader($filename, null, [
-                    'skipExtends' => true,
-                    'allowModifications' => true, ]
-            );
+                'skipExtends' => true,
+                'allowModifications' => true,
+            ]);
         } else {
             $base = new Enlight_Config([], true);
         }

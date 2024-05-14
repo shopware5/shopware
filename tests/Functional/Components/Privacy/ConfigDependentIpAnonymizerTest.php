@@ -89,12 +89,12 @@ class ConfigDependentIpAnonymizerTest extends Enlight_Components_Test_Controller
             ->setClientIp('127.0.0.1')
             ->setMethod('POST')
             ->setPost([
-            'type' => 'backend',
-            'key' => 'Shopcache',
-            'text' => 'Shopcache wurde geleert',
-            'user' => 'Demo user',
-            'value4' => '',
-        ]);
+                'type' => 'backend',
+                'key' => 'Shopcache',
+                'text' => 'Shopcache wurde geleert',
+                'user' => 'Demo user',
+                'value4' => '',
+            ]);
         $this->dispatch('/backend/Logger/createLog');
         $data = $this->View()->getAssign('data');
 

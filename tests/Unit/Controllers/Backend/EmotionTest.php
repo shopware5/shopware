@@ -49,23 +49,23 @@ class EmotionTest extends TestCase
         $field = new Field();
         $field->setValueType(Field::VALUE_TYPE_JSON);
         $initialValue = [
-                [
-                    'position' => 1,
-                    'path' => 'http://localhost/path/to/media.jpg',
-                    'mediaId' => 1,
-                    'link' => '',
-                ],
-                [
-                    'position' => 2,
-                    'mediaId' => 2,
-                    'link' => '',
-                ],
-                [
-                    'position' => 3,
-                    'path' => 'http://localhost/path/to/media.jpg',
-                    'mediaId' => 3,
-                    'link' => '',
-                ],
+            [
+                'position' => 1,
+                'path' => 'http://localhost/path/to/media.jpg',
+                'mediaId' => 1,
+                'link' => '',
+            ],
+            [
+                'position' => 2,
+                'mediaId' => 2,
+                'link' => '',
+            ],
+            [
+                'position' => 3,
+                'path' => 'http://localhost/path/to/media.jpg',
+                'mediaId' => 3,
+                'link' => '',
+            ],
         ];
 
         $processedValue = $processDataFieldValueMethod->invoke($controller, $field, $initialValue);

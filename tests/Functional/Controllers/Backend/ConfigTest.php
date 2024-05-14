@@ -304,8 +304,8 @@ class ConfigTest extends ControllerTestCase
                         'id' => null,
                         'shopId' => 2,
                         'value' => [
-                                'one',
-                            ],
+                            'one',
+                        ],
                     ],
                 ],
             ],

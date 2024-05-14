@@ -87,10 +87,10 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             AND status!=-1 AND userID=?
         ';
         $orderNumber = Shopware()->Db()->fetchOne($sql, [
-                $transactionId,
-                $paymentUniqueId,
-                Shopware()->Session()->get('sUserId'),
-            ]);
+            $transactionId,
+            $paymentUniqueId,
+            Shopware()->Session()->get('sUserId'),
+        ]);
 
         if (empty($orderNumber)) {
             $user = $this->getUser();
@@ -140,9 +140,9 @@ abstract class Shopware_Controllers_Frontend_Payment extends Enlight_Controller_
             AND status!=-1
         ';
         $orderId = (int) Shopware()->Db()->fetchOne($sql, [
-                $transactionId,
-                $paymentUniqueId,
-            ]);
+            $transactionId,
+            $paymentUniqueId,
+        ]);
         $order = Shopware()->Modules()->Order();
         $order->setPaymentStatus($orderId, $paymentStatusId, $sendStatusMail);
     }

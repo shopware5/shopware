@@ -72,10 +72,10 @@ class PluginLoggerCompilerPass implements CompilerPassInterface
     protected function createLoggerHandler(string $servicePrefix): Definition
     {
         return (new Definition(RotatingFileHandler::class, [
-                sprintf('%%kernel.logs_dir%%/%s_%%kernel.environment%%.log', $servicePrefix),
-                sprintf('%%%s%%', $this->getParameterNameLoggerMaxFiles($servicePrefix)),
-                sprintf('%%%s%%', $this->getParameterNameLogLevel($servicePrefix)),
-            ]))
+            sprintf('%%kernel.logs_dir%%/%s_%%kernel.environment%%.log', $servicePrefix),
+            sprintf('%%%s%%', $this->getParameterNameLoggerMaxFiles($servicePrefix)),
+            sprintf('%%%s%%', $this->getParameterNameLogLevel($servicePrefix)),
+        ]))
             ->addMethodCall('pushProcessor', [new Reference('monolog.processor.uid')])
             ->setPublic(false)
         ;

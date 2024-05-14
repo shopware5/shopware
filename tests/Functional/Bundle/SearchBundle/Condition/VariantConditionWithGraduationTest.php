@@ -72,16 +72,16 @@ class VariantConditionWithGraduationTest extends TestCase
                     ],
                 ],
                 'B' => ['groups' => $this->buildConfigurator(['color' => ['green'], 'size' => ['xl']]),
-                        'graduationPrices' => [
-                            [60, 50],
-                        ],
+                    'graduationPrices' => [
+                        [60, 50],
                     ],
+                ],
                 'C' => ['groups' => $this->buildConfigurator(['color' => ['red', 'green'], 'size' => ['xl']]),
-                        'graduationPrices' => [
-                            [100, 50],
-                            [110, 20],
-                        ],
+                    'graduationPrices' => [
+                        [100, 50],
+                        [110, 20],
                     ],
+                ],
             ],
             ['B1', 'A1', 'C1'],
             null,

@@ -528,9 +528,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
 
         $sql = 'UPDATE s_order SET userID = :userId WHERE id = :orderId;';
         $this->connection->executeQuery($sql, [
-                'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
-                'userId' => self::CUSTOMER_ID_NOT_EXIST,
-            ]
+            'orderId' => self::ORDER_ID_CUSTOMER_GROUP_MERCHANT,
+            'userId' => self::CUSTOMER_ID_NOT_EXIST,
+        ]
         );
 
         $request = new Enlight_Controller_Request_RequestTestCase();
@@ -556,9 +556,9 @@ class OrderProductSearchTest extends Enlight_Components_Test_Controller_TestCase
 
         $sql = 'UPDATE s_order_shippingaddress SET orderID = :orderIdNotExist WHERE orderID = :orderId;';
         $this->connection->executeQuery($sql, [
-                'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
-                'orderIdNotExist' => self::ORDER_ID_NOT_EXIST,
-            ]
+            'orderId' => self::ORDER_ID_CUSTOMER_GROUP_DEFAULT,
+            'orderIdNotExist' => self::ORDER_ID_NOT_EXIST,
+        ]
         );
 
         $request = new Enlight_Controller_Request_RequestTestCase();

@@ -1636,9 +1636,9 @@ class ArticleTest extends TestCase
 
         $builder = Shopware()->Models()->createQueryBuilder();
         $builder->select([
-                'media.id as mediaId',
-                '2 as main',
-            ])
+            'media.id as mediaId',
+            '2 as main',
+        ])
             ->from(Media::class, 'media')
             ->addOrderBy('media.id', 'ASC')
             ->setFirstResult(5)
@@ -2669,33 +2669,33 @@ class ArticleTest extends TestCase
             ],
             'filterGroupId' => null,
             'images' => [
-                    [
-                        'position' => 0,
-                        'main' => 1,
-                        'mediaId' => 2,
-                        'description' => '147quad1809 603994396334907 1063748094 n',
-                        'options' => [
+                [
+                    'position' => 0,
+                    'main' => 1,
+                    'mediaId' => 2,
+                    'description' => '147quad1809 603994396334907 1063748094 n',
+                    'options' => [
+                        [
                             [
-                                [
-                                    'name' => 'NewVal1',
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'position' => 0,
-                        'main' => 2,
-                        'mediaId' => 3,
-                        'description' => 'IMG 7228',
-                        'options' => [
-                            [
-                                [
-                                    'name' => 'Newval2',
-                                ],
+                                'name' => 'NewVal1',
                             ],
                         ],
                     ],
                 ],
+                [
+                    'position' => 0,
+                    'main' => 2,
+                    'mediaId' => 3,
+                    'description' => 'IMG 7228',
+                    'options' => [
+                        [
+                            [
+                                'name' => 'Newval2',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
             'lastStock' => true,
             'variants' => [
                 [

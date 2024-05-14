@@ -1952,7 +1952,7 @@ class AdminTest extends TestCase
             'street' => 'teststraße 1',
             'zipcode' => '12345',
             'city' => 'test',
-            ]);
+        ]);
 
         $result = $this->module->sNewsletterSubscription('test@example.org');
 

@@ -76,12 +76,12 @@ class PHPExtensionCheck implements CheckInterface
         }
 
         return [
-                'type' => self::CHECK_TYPE,
-                'errorLevel' => $requirement['level'],
-                'message' => sprintf(
-                    $failMessage,
-                    $requiredExtension
-                ),
-            ];
+            'type' => self::CHECK_TYPE,
+            'errorLevel' => $requirement['level'],
+            'message' => sprintf(
+                $failMessage,
+                $requiredExtension
+            ),
+        ];
     }
 }

@@ -47,7 +47,7 @@ class ConfiguratorServiceTest extends TestCase
         $configurationGateway->method('getAvailableConfigurations')->willReturn([
             11 => [[
                 11, 22, 33, 35,
-           ]],
+            ]],
             22 => [[
                 22, 11, 12, 33, 35,
             ]],

@@ -77,10 +77,10 @@ class AccountTest extends ControllerTestCase
         $request->setMethod(Request::METHOD_POST);
         $request->setPost([
             'hash' => $hash,
-                'password' => [
-                    'password' => 'shopware1',
-                    'passwordConfirmation' => 'shopware1',
-                ],
+            'password' => [
+                'password' => 'shopware1',
+                'passwordConfirmation' => 'shopware1',
+            ],
         ]);
 
         $controller->setFront($front);

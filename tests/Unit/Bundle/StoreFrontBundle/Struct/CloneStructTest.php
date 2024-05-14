@@ -65,8 +65,8 @@ class CloneStructTest extends TestCase
     {
         $simple = new SimpleStruct(
             [
-               new SimpleStruct('struct 1'),
-               new SimpleStruct('struct 2'),
+                new SimpleStruct('struct 1'),
+                new SimpleStruct('struct 2'),
             ]
         );
 

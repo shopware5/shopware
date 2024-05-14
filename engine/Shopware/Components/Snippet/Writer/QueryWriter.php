@@ -135,14 +135,14 @@ class QueryWriter
         $counter = 0;
         foreach ($data as $name => $value) {
             $queryData = [
-                    'namespace' => '\'' . addslashes($namespace) . '\'',
-                    'shopID' => $shopId,
-                    'localeID' => $localeId,
-                    'name' => '\'' . addslashes($name) . '\'',
-                    'value' => '\'' . addslashes($value) . '\'',
-                    'created' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
-                    'updated' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
-                    'dirty' => 0,
+                'namespace' => '\'' . addslashes($namespace) . '\'',
+                'shopID' => $shopId,
+                'localeID' => $localeId,
+                'name' => '\'' . addslashes($name) . '\'',
+                'value' => '\'' . addslashes($value) . '\'',
+                'created' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                'updated' => '\'' . date('Y-m-d H:i:s', time()) . '\'',
+                'dirty' => 0,
             ];
 
             $values[] = '(' . implode(', ', array_values($queryData)) . ')';

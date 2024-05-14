@@ -719,11 +719,11 @@ class Shopware_Components_Document extends Enlight_Class implements Enlight_Hook
                 $amount *= -1;
             }
             Shopware()->Db()->query($update, [
-                    $amount,
-                    $typID,
-                    $this->_order->userID,
-                    $this->_order->id,
-                ]);
+                $amount,
+                $typID,
+                $this->_order->userID,
+                $this->_order->id,
+            ]);
 
             if (!empty($this->_config['attributes'])) {
                 // Get the updated document

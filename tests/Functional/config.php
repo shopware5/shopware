@@ -22,7 +22,7 @@
  */
 
 return array_replace_recursive($this->loadConfig($this->AppPath() . 'Configs/Default.php'), [
-     'front' => [
+    'front' => [
         'throwExceptions' => true,
         'disableOutputBuffering' => false,
         'showException' => true,
