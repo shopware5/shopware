@@ -35,7 +35,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/polyfill-php81` to version 1.28.0
 * Updated `symfony/polyfill-php82` to version 1.28.0
 * Updated `symfony/http-kernel` to version 4.4.51
-* Updated `symfony/serializer` to version 5.4.38
+* Updated `symfony/serializer` to version 5.4.39
 * Updated `voku/anti-xss` to version 4.1.42
 * Updated `wikimedia/less.php` to version 4.1.1
 * Updated several indirect dependencies
