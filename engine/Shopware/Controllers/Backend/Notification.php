@@ -28,26 +28,24 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
 {
     /**
      * returns a JSON string to with all found articles for the backend listing
+     *
+     * @return void
      */
     public function getArticleListAction()
     {
         try {
-            $limit = (int) $this->Request()->limit;
-            $offset = (int) $this->Request()->start;
-
-            /** @var array $filter */
-            $filter = $this->Request()->getParam('filter', []);
+            $limit = (int) $this->Request()->get('limit', 20);
+            $offset = (int) $this->Request()->get('start', 0);
+            $filter = (array) $this->Request()->getParam('filter', []);
 
             // order data
             $order = (array) $this->Request()->getParam('sort', []);
 
             $repository = $this->get('models')->getRepository(Article::class);
             $dataQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order);
-            $data = $dataQuery->getArrayResult();
 
-            // manually calc the totalAmount cause the paginate($this->get('models')->getQueryCount) doesn't work with this query
-            $dataQuery->setFirstResult(0);
-            $totalCount = \count($dataQuery->getArrayResult());
+            $data = $dataQuery->getResult(AbstractQuery::HYDRATE_ARRAY);
+            $totalCount = (int) $repository->getProductsWithNotificationsCountQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR);
 
             $summaryQuery = $repository->getArticlesWithRegisteredNotificationsQuery($filter, $offset, $limit, $order, true);
             $summaryData = $summaryQuery->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
@@ -68,16 +66,17 @@ class Shopware_Controllers_Backend_Notification extends Shopware_Controllers_Bac
 
     /**
      * returns a JSON string to with all found customers for the backend listing
+     *
+     * @return void
      */
     public function getCustomerListAction()
     {
         try {
-            $limit = (int) $this->Request()->limit;
-            $offset = (int) $this->Request()->start;
-            $productOrderNumber = $this->Request()->orderNumber;
+            $limit = (int) $this->Request()->get('limit', 20);
+            $offset = (int) $this->Request()->get('start', 0);
+            $productOrderNumber = $this->Request()->get('orderNumber');
 
-            /** @var array $filter */
-            $filter = $this->Request()->getParam('filter', []);
+            $filter = (array) $this->Request()->getParam('filter', []);
 
             // order data
             $order = (array) $this->Request()->getParam('sort', []);
