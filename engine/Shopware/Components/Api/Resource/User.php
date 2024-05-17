@@ -135,7 +135,9 @@ class User extends Resource
         if (!$this->hasPrivilege('create', 'usermanager')
             && !$this->hasPrivilege('update', 'usermanager')) {
             foreach ($users as &$user) {
-                unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+                if (\is_array($user)) {
+                    unset($user['apiKey'], $user['sessionId'], $user['password'], $user['encoder']);
+                }
             }
         }
 

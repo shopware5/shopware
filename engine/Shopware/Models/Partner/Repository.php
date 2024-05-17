@@ -76,14 +76,14 @@ class Repository extends ModelRepository
         /** @var QueryBuilder $builder */
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
-                'partner.id',
-                'partner.company as company',
-                'partner.active as active',
-                'partner.date as date',
-                'partner.idCode as idCode',
-                '(' . $this->getDatePartListDQL('o') . ') as yearlyAmount',
-                '(' . $this->getDatePartListDQL('om', true) . ') as monthlyAmount',
-            ])
+            'partner.id',
+            'partner.company as company',
+            'partner.active as active',
+            'partner.date as date',
+            'partner.idCode as idCode',
+            '(' . $this->getDatePartListDQL('o') . ') as yearlyAmount',
+            '(' . $this->getDatePartListDQL('om', true) . ') as monthlyAmount',
+        ])
             ->from(Partner::class, 'partner');
 
         if (!empty($order)) {
@@ -169,19 +169,19 @@ class Repository extends ModelRepository
         $expr = $this->getEntityManager()->getExpressionBuilder();
 
         $builder->select([
-                'o.orderTime as orderTime',
-                'o.id as id',
-                'o.number as number',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
-                'customer.email as customerEmail',
-                'billing.company as customerCompany',
-                'customer.firstname as customerFirstName',
-                'customer.lastname as customerLastName',
-                'customer.number as customerNumber',
-                'orderState.name as orderStatus',
-                'orderState.id as orderStatusId',
-            ])
+            'o.orderTime as orderTime',
+            'o.id as id',
+            'o.number as number',
+            'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
+            'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
+            'customer.email as customerEmail',
+            'billing.company as customerCompany',
+            'customer.firstname as customerFirstName',
+            'customer.lastname as customerLastName',
+            'customer.number as customerNumber',
+            'orderState.name as orderStatus',
+            'orderState.id as orderStatusId',
+        ])
             ->from(Order::class, 'o')
             ->leftJoin('o.partner', 'partner')
             ->leftJoin('o.orderStatus', 'orderState')
@@ -240,11 +240,11 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
-                'o.orderTime as date',
-                'DATE_FORMAT(o.orderTime,\'%Y-%V\') as timeScale',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
-                'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
-            ])
+            'o.orderTime as date',
+            'DATE_FORMAT(o.orderTime,\'%Y-%V\') as timeScale',
+            'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor)) as netTurnOver',
+            'SUM((o.invoiceAmountNet - o.invoiceShippingNet) / (o.currencyFactor / :userCurrencyFactor) / 100 * partner.percent) as provision',
+        ])
             ->from(Order::class, 'o')
             ->leftJoin('o.partner', 'partner')
             ->where('partner.id = ?0')

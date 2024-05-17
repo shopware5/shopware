@@ -514,7 +514,7 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
                     $translation['shopID'],
                     $value,
                     $dirty,
-                 ]);
+                ]);
 
                 ++$counter;
             }
@@ -679,9 +679,9 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $result = $this->prepareNamespaceTree($result);
 
         $this->View()->assign([
-           'success' => true,
-           'data' => $result,
-           'total' => \count($result),
+            'success' => true,
+            'data' => $result,
+            'total' => \count($result),
         ]);
     }
 
@@ -707,8 +707,8 @@ class Shopware_Controllers_Backend_Snippet extends Shopware_Controllers_Backend_
         $result = $result = $builder->getQuery()->execute();
 
         $this->View()->assign([
-           'success' => true,
-           'data' => $result,
+            'success' => true,
+            'data' => $result,
         ]);
     }
 

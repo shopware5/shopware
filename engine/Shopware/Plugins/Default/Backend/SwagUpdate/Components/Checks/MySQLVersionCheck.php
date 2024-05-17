@@ -83,13 +83,13 @@ class MySQLVersionCheck implements CheckInterface
         }
 
         return [
-                'type' => self::CHECK_TYPE,
-                'errorLevel' => $requirement['level'],
-                'message' => sprintf(
-                    $failMessage,
-                    $minMySQLVersion,
-                    $version
-                ),
-            ];
+            'type' => self::CHECK_TYPE,
+            'errorLevel' => $requirement['level'],
+            'message' => sprintf(
+                $failMessage,
+                $minMySQLVersion,
+                $version
+            ),
+        ];
     }
 }

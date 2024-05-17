@@ -19,3 +19,7 @@ e04304b7987986a9d7e35750fba62263978b8405
 
 # SW-20660 - use typecast instead of intval, strval, doubleval and floatval
 e1d0b23fba81d3c80e80f2881ab38bf9d7f6397a
+
+# New license header
+3a73921085d70b87f9a71ff46c4c9035beec8ca0
+633e5ec44fabdbbbf73580a0ec857a4fb14030f9

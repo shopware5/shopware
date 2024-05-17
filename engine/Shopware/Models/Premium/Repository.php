@@ -60,7 +60,7 @@ class Repository extends ModelRepository
             'premium.shopId as shopId',
             'subshop.name as subShopName',
             'article.name as name',
-            ])
+        ])
             ->from($this->getEntityName(), 'premium')
             ->leftJoin('premium.shop', 'subshop')
             ->leftJoin('premium.articleDetail', 'detail')

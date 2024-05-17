@@ -395,15 +395,15 @@ class Account extends Page implements HelperSelectorInterface
     protected function verifyPageDashboard()
     {
         return (Helper::hasNamedLinks($this, [
-                'myAccountLink',
-                'profileLink',
-                'addressesLink',
-                'myOrdersLink',
-                'myEsdDownloadsLink',
-                'changePaymentLink',
-                'noteLink',
-                'logoutLink',
-            ]) === true) ?: false;
+            'myAccountLink',
+            'profileLink',
+            'addressesLink',
+            'myOrdersLink',
+            'myEsdDownloadsLink',
+            'changePaymentLink',
+            'noteLink',
+            'logoutLink',
+        ]) === true) ?: false;
     }
 
     /**

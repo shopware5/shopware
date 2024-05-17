@@ -228,6 +228,7 @@ class CategoryTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
 
         $categoryResult = $this->resource->getOne($category->getId());
+        static::assertIsArray($categoryResult);
 
         if (isset($categoryResult['translations'])) {
             static::assertEquals($categoryData['translations'], $categoryResult['translations']);
@@ -263,6 +264,7 @@ class CategoryTest extends TestCase
         $this->resource->setResultMode(Resource::HYDRATE_ARRAY);
 
         $categoryResult = $this->resource->getOne($category->getId());
+        static::assertIsArray($categoryResult);
 
         if (isset($categoryResult['translations'])) {
             static::assertEquals($categoryData['translations'], $categoryResult['translations']);
@@ -286,6 +288,7 @@ class CategoryTest extends TestCase
         $category = $this->resource->update($category->getId(), $categoryData);
 
         $categoryResult = $this->resource->getOne($category->getId());
+        static::assertIsArray($categoryResult);
 
         if (isset($categoryResult['translations'])) {
             static::assertEquals($categoryData['translations'], $categoryResult['translations']);

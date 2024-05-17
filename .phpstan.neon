@@ -202,3 +202,31 @@ parameters:
         - # Needs some investigation how to fix the return types
             message: '#Method Shopware\\Models\\.*\\Repository::.*\(\) should return Doctrine\\ORM\\Query<.*> but returns Doctrine\\ORM\\Query<.*>#'
             path: engine/Shopware/Models/**/Repository.php
+
+        - # SQL statements should be literal strings, but this is not always possible or are SQL statements in extra files in tests
+            message: '#Parameter \#1 \$sql of method Doctrine\\DBAL\\Connection::execute(Query|Statement)\(\) expects literal-string, (non-falsy-)?string given#'
+            paths:
+                - engine/Shopware/Bundle/AttributeBundle/Service/SchemaOperator.php
+                - engine/Shopware/Bundle/ContentTypeBundle/Services/SynchronizerService.php
+                - engine/Shopware/Bundle/MediaBundle/GarbageCollector.php
+                - engine/Shopware/Bundle/SearchBundleDBAL/SearchTerm/SearchIndexer.php
+                - engine/Shopware/Core/sMarketing.php
+                - tests/Functional/Bundle/AttributeBundle/Repository/OrderRepositoryTest.php
+                - tests/Functional/Bundle/AttributeBundle/Repository/Reader/OrderReaderTest.php
+                - tests/Functional/Bundle/EmotionBundle/ComponentHandler/ContentTypeComponentHandlerTest.php
+                - tests/Functional/Bundle/StoreFrontBundle/Gateway/Dbal/ConfiguratorGatewayTest.php
+                - tests/Functional/Bundle/StoreFrontBundle/Gateway/Dbal/CountryGatewayTest.php
+                - tests/Functional/Components/Migrations/Migrations_Migration1607Test.php
+                - tests/Functional/Components/MultiEdit/Resource/Product/BackupTest.php
+                - tests/Functional/Components/Translation/SwapProductVariantTranslationServiceTest.php
+                - tests/Functional/Controllers/Backend/NewsletterTest.php
+                - tests/Functional/Controllers/Backend/OrderProductSearchTest.php
+                - tests/Functional/Controllers/Backend/OrderTest.php
+                - tests/Functional/Controllers/Frontend/ExpectResourceNotFoundExceptionTest.php
+                - tests/Functional/Controllers/Frontend/ListingTest.php
+                - tests/Functional/Core/AdminSGetUserDataTest.php
+                - tests/Functional/Core/BasketAddBasketAttributesTest.php
+                - tests/Functional/Core/ExportTest.php
+                - tests/Functional/Regressions/Ticket4609Test.php
+                - tests/Functional/Traits/FixtureBehaviour.php
+                - tests/Mink/Tests/Frontend/Detail/bootstrap/DetailContext.php

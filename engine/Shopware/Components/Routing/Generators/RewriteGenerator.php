@@ -37,15 +37,9 @@ class RewriteGenerator implements GeneratorListInterface
      */
     protected $connection;
 
-    /**
-     * @var QueryAliasMapper
-     */
-    private $queryAliasMapper;
+    private QueryAliasMapper $queryAliasMapper;
 
-    /**
-     * @var Enlight_Event_EventManager
-     */
-    private $eventManager;
+    private Enlight_Event_EventManager $eventManager;
 
     public function __construct(
         Connection $connection,
@@ -141,7 +135,7 @@ class RewriteGenerator implements GeneratorListInterface
     }
 
     /**
-     * @return string
+     * @return literal-string
      */
     protected function getAssembleQuery()
     {
@@ -267,7 +261,7 @@ class RewriteGenerator implements GeneratorListInterface
             ]
         );
 
-        $rows = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+        $rows = $statement->fetchAllKeyValue();
 
         foreach ($list as $key => $orgPath) {
             if (isset($rows[$orgPath])) {

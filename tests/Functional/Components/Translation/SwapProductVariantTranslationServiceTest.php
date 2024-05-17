@@ -50,7 +50,6 @@ class SwapProductVariantTranslationServiceTest extends TestCase
         $sql = file_get_contents(__DIR__ . '/_fixtures/variant_product_with_attribute_translations.sql');
         static::assertIsString($sql);
 
-        /** @var Connection $connection */
         $connection = $this->getContainer()->get('dbal_connection');
         $connection->executeStatement(
             $sql,
@@ -62,8 +61,8 @@ class SwapProductVariantTranslationServiceTest extends TestCase
             ]
         );
 
-        /** @var Product $product */
         $product = $this->getContainer()->get('models')->find(Product::class, self::PRODUCT_ID);
+        static::assertInstanceOf(Product::class, $product);
 
         $swapTranslationService = $this->getSwapTranslationService();
 

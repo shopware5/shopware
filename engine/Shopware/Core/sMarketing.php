@@ -467,18 +467,18 @@ class sMarketing implements Enlight_Hook
             FROM s_articles a
             INNER JOIN s_articles_categories_ro ac
                 ON  ac.articleID = a.id
-                AND ac.categoryID = $categoryId
+                AND ac.categoryID = :categoryId
             INNER JOIN s_categories c
                 ON  c.id = ac.categoryID
                 AND c.active = 1
 
             LEFT JOIN s_emarketing_lastarticles r
             ON a.id = r.articleID
-            AND r.time >= DATE_SUB(NOW(),INTERVAL $tagTime DAY)
+            AND r.time >= DATE_SUB(NOW(),INTERVAL :tagTime DAY)
 
             LEFT JOIN s_articles_avoid_customergroups ag
             ON ag.articleID=a.id
-            AND ag.customergroupID={$this->customerGroupId}
+            AND ag.customergroupID=:customerGroupId
 
             WHERE a.active = 1
             AND ag.articleID IS NULL
@@ -488,12 +488,18 @@ class sMarketing implements Enlight_Hook
             LIMIT $tagSize
         ";
 
-        $products = $this->connection->executeQuery($sql)->fetchAllAssociativeIndexed();
+        $products = $this->connection->executeQuery($sql, [
+            'categoryId' => $categoryId,
+            'tagTime' => $tagTime,
+            'customerGroupId' => $this->customerGroupId,
+        ])->fetchAllAssociativeIndexed();
 
         if (empty($products)) {
             return [];
         }
-        $products = $this->productModule->sGetTranslations($products, 'article');
+        foreach ($products as $id => &$product) {
+            $product = $this->productModule->sGetTranslation($product, $id, 'article');
+        }
 
         $pos = 1;
         $productCount = \count($products);

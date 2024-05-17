@@ -141,8 +141,8 @@ class Enlight_Config_Adapter_DbTable extends Enlight_Config_Adapter
     {
         if ($name !== null) {
             return new Enlight_Components_Table([
-               'name' => $name,
-               'db' => $this->_db, ]
+                'name' => $name,
+                'db' => $this->_db, ]
             );
         }
         if (!$this->_table instanceof Enlight_Components_Table) {

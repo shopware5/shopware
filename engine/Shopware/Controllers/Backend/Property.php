@@ -269,9 +269,9 @@ class Shopware_Controllers_Backend_Property extends Shopware_Controllers_Backend
         $options = $query->getArrayResult();
 
         $this->View()->assign([
-           'success' => true,
-           'data' => $options,
-           'total' => $totalCount,
+            'success' => true,
+            'data' => $options,
+            'total' => $totalCount,
         ]);
     }
 

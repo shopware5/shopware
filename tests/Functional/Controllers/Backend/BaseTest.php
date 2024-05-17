@@ -74,10 +74,10 @@ class BaseTest extends Enlight_Components_Test_Controller_TestCase
             'start' => 0,
             'limit' => 10,
             'filter' => [[
-                    'property' => 'free',
-                    'value' => '%' . $searchTerm . '%',
-                    'operator' => null,
-                    'expression' => null,
+                'property' => 'free',
+                'value' => '%' . $searchTerm . '%',
+                'operator' => null,
+                'expression' => null,
             ]],
         ];
 

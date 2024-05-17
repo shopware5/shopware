@@ -99,12 +99,10 @@ class HolidayTableUpdater
             }
             $calculation = str_replace(['EASTERDATE()', 'YEAR()'], ["'$easterDate'", "'$year'"], $calculation);
 
-            $sql = <<<SQL
-UPDATE s_premium_holidays
-set `date` = $calculation
-WHERE id = ?
-SQL;
-            $this->db->executeStatement($sql, [$id]);
+            $sql = 'UPDATE s_premium_holidays
+                    SET `date` = :calculation
+                    WHERE id = :id';
+            $this->db->executeStatement($sql, ['calculation' => $calculation, 'id' => $id]);
         }
     }
 

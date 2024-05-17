@@ -218,8 +218,8 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         $dirtyElements = implode(',', $this->dirtyConfigElements);
         $this->dirtyConfigElements = [];
 
-        $sql = sprintf('DELETE FROM `s_core_config_values` WHERE `element_id` IN (%s)', $dirtyElements);
-        $this->getService(Connection::class)->executeStatement($sql);
+        $sql = 'DELETE FROM `s_core_config_values` WHERE `element_id` IN (:dirtyElements)';
+        $this->getService(Connection::class)->executeStatement($sql, ['dirtyElements' => $dirtyElements]);
 
         $this->clearCache();
     }
@@ -325,11 +325,9 @@ class FeatureContext extends SubContext implements SnippetAcceptingContext
         }
 
         // set the template for shop "Deutsch" and activate SEPA payment method
-        $sql = <<<"EOD"
-            UPDATE `s_core_shops` SET `template_id`= $templateId WHERE `id` = 1;
-            UPDATE `s_core_paymentmeans` SET `active`= 1;
-EOD;
-        $this->getService(Connection::class)->executeStatement($sql);
+        $sql = 'UPDATE `s_core_shops` SET `template_id`= :templateId WHERE `id` = 1;
+                UPDATE `s_core_paymentmeans` SET `active`= 1;';
+        $this->getService(Connection::class)->executeStatement($sql, ['templateId' => $templateId]);
 
         Helper::setCurrentLanguage('de');
 
@@ -349,8 +347,7 @@ EOD;
     {
         $password = md5('shopware');
 
-        $sql = <<<"EOD"
-            UPDATE s_user SET password = "$password", encoder = "md5", paymentID = 5, failedlogins = 0, lockeduntil = NULL;
+        $sql = "UPDATE s_user SET password = :password, encoder = 'md5', paymentID = 5, failedlogins = 0, lockeduntil = NULL;
 
             SET FOREIGN_KEY_CHECKS = 0;
 
@@ -360,9 +357,8 @@ EOD;
             TRUNCATE s_order_comparisons;
             DELETE FROM s_user WHERE id > 2;
 
-            SET FOREIGN_KEY_CHECKS = 1;
-EOD;
-        $this->getService(Connection::class)->executeStatement($sql);
+            SET FOREIGN_KEY_CHECKS = 1;";
+        $this->getService(Connection::class)->executeStatement($sql, ['password' => $password]);
     }
 
     private function logRequest(): void

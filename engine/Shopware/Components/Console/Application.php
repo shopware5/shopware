@@ -120,11 +120,11 @@ class Application extends BaseApplication
         $exitCode = parent::doRunCommand($command, $input, $output);
 
         $eventManager->notify('Shopware_Command_After_Run', [
-           'exitCode' => $exitCode,
-           'command' => $command,
-           'input' => $input,
-           'output' => $output,
-       ]);
+            'exitCode' => $exitCode,
+            'command' => $command,
+            'input' => $input,
+            'output' => $output,
+        ]);
 
         return $exitCode;
     }

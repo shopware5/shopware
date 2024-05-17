@@ -48,14 +48,10 @@ class SpecialContext extends SubContext
      */
     public function theArticlesFromHaveTaxId(string $supplier, int $taxId): void
     {
-        $sql = sprintf(
-            'UPDATE s_articles SET taxID = %d WHERE supplierID =
-                (SELECT id FROM s_articles_supplier WHERE name = "%s")',
-            $taxId,
-            $supplier
-        );
+        $sql = 'UPDATE s_articles SET taxID = :taxId WHERE supplierID =
+                (SELECT id FROM s_articles_supplier WHERE name = :supplier)';
 
-        $this->getService(Connection::class)->executeStatement($sql);
+        $this->getService(Connection::class)->executeStatement($sql, ['taxId' => $taxId, 'supplier' => $supplier]);
     }
 
     /**

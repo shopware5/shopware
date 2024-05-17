@@ -64,13 +64,13 @@ class EmotionToPresetDataTransformer implements EmotionToPresetDataTransformerIn
         $builder = $this->modelManager->createQueryBuilder();
 
         return $builder->select([
-                'emotion',
-                'elements',
-                'viewports',
-                'component',
-                'data',
-                'fields',
-            ])
+            'emotion',
+            'elements',
+            'viewports',
+            'component',
+            'data',
+            'fields',
+        ])
             ->from(Emotion::class, 'emotion')
             ->leftJoin('emotion.elements', 'elements')
             ->leftJoin('elements.viewports', 'viewports')

@@ -94,7 +94,7 @@ class MediaOptimizeCommandTest extends TestCase
             ],
             1,
             ['media/image/39/c9/ee/grafik-20220712-084133RI1xVeZ6gUpof_1280x1280.png'],
-            ]
+        ]
         ;
 
         yield 'Past date' => [
@@ -110,6 +110,6 @@ class MediaOptimizeCommandTest extends TestCase
             ],
             0,
             [],
-            ];
+        ];
     }
 }

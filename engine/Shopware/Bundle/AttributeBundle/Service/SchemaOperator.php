@@ -24,24 +24,19 @@
 namespace Shopware\Bundle\AttributeBundle\Service;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Exception;
 
 class SchemaOperator implements SchemaOperatorInterface
 {
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
+
+    private TableMappingInterface $tableMapping;
 
     /**
-     * @var TableMappingInterface
+     * @var list<string>
      */
-    private $tableMapping;
-
-    /**
-     * @var array
-     */
-    private $nameBlacklist;
+    private array $nameBlacklist;
 
     public function __construct(Connection $connection, TableMappingInterface $tableMapping)
     {
@@ -53,7 +48,7 @@ class SchemaOperator implements SchemaOperatorInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      * @throws Exception
      */
     public function createColumn($table, $column, $type, $defaultValue = null)
@@ -79,7 +74,7 @@ class SchemaOperator implements SchemaOperatorInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      * @throws Exception
      */
     public function changeColumn($table, $originalName, $newName, $type, $defaultValue = null)
@@ -111,7 +106,7 @@ class SchemaOperator implements SchemaOperatorInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      * @throws Exception
      */
     public function dropColumn($table, $column)
@@ -129,7 +124,7 @@ class SchemaOperator implements SchemaOperatorInterface
     /**
      * {@inheritdoc}
      *
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      * @throws Exception
      */
     public function resetColumn($table, $column)
@@ -150,7 +145,7 @@ class SchemaOperator implements SchemaOperatorInterface
      *
      * @throws Exception
      */
-    private function validate($table, $name)
+    private function validate($table, $name): void
     {
         if (!$table) {
             throw new Exception('No table name provided');
@@ -170,7 +165,7 @@ class SchemaOperator implements SchemaOperatorInterface
         }
 
         $lowerCaseName = strtolower($name);
-        if (\in_array($lowerCaseName, $this->nameBlacklist)) {
+        if (\in_array($lowerCaseName, $this->nameBlacklist, true)) {
             throw new Exception(sprintf('Provided name %s is a reserved keyword.', $name));
         }
     }
@@ -180,7 +175,7 @@ class SchemaOperator implements SchemaOperatorInterface
      *
      * @throws Exception
      */
-    private function validateField($field)
+    private function validateField($field): void
     {
         if (\strlen($field) > 64) {
             throw new Exception('Maximum length: 64 chars');

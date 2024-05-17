@@ -95,12 +95,12 @@ class WritableCheck implements CheckInterface
         }
 
         return [
-                'type' => self::CHECK_TYPE,
-                'errorLevel' => $requirement['level'],
-                'message' => sprintf(
-                    $failMessage,
-                    implode('<br>', $directories)
-                ),
-            ];
+            'type' => self::CHECK_TYPE,
+            'errorLevel' => $requirement['level'],
+            'message' => sprintf(
+                $failMessage,
+                implode('<br>', $directories)
+            ),
+        ];
     }
 }

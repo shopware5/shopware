@@ -18,13 +18,14 @@ This changelog references changes done in Shopware 5.7 patch versions.
 
 * Updated `beberlei/doctrineextensions` to version 1.4.0
 * Updated `cocur/slugify` to version 4.5.1 for PHP 8.0 and newer
+* Updated `doctrine/common` to version 3.4.4
 * Updated `doctrine/orm` to version 2.15.5
 * Updated `doctrine/persistence` to version 3.3.2
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.18
 * Updated `google/cloud-storage` to version 1.39.0
 * Updated `guzzlehttp/guzzle` to version 7.8.1
 * Updated `guzzlehttp/psr7` to version 2.6.2
-* Updated `monolog/monolog` to version 2.9.2
+* Updated `monolog/monolog` to version 2.9.3
 * Updated `mpdf/mpdf` to version 8.2.3
 * Updated `laminas/laminas-code` to version 4.13.0 for PHP 8.1 and newer
 * Updated `laminas/laminas-escaper` to version 2.13.0 for PHP 8.1 and newer
@@ -33,7 +34,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `setasign/fpdi` to version 2.6.0
 * Updated `symfony/polyfill-php80` to version 1.28.0
 * Updated `symfony/polyfill-php81` to version 1.28.0
-* Updated `symfony/polyfill-php82` to version 1.28.0
+* Updated `symfony/polyfill-php82` to version 1.29.0
 * Updated `symfony/polyfill-php83` to version 1.29.0
 * Updated `symfony/http-kernel` to version 4.4.51
 * Updated `symfony/serializer` to version 5.4.39

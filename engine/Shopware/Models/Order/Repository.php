@@ -393,12 +393,12 @@ class Repository extends ModelRepository
         $builder = Shopware()->Models()->createQueryBuilder();
 
         return $builder->select([
-                'voucher.id',
-                'voucher.description',
-                'voucher.voucherCode',
-                'voucher.value',
-                'voucher.minimumCharge',
-            ])
+            'voucher.id',
+            'voucher.description',
+            'voucher.voucherCode',
+            'voucher.value',
+            'voucher.minimumCharge',
+        ])
            ->from(Voucher::class, 'voucher')
            ->join('voucher.codes', 'codes')
            ->where('(voucher.validTo>= :today OR voucher.validTo IS NULL)')

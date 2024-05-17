@@ -147,7 +147,7 @@ class PrivacyServiceTest extends TestCase
      */
     private function getUserFromDb(int $id)
     {
-        return $this->connection->executeQuery('SELECT id FROM s_user WHERE id = ' . $id)->fetchAssociative();
+        return $this->connection->executeQuery('SELECT id FROM s_user WHERE id = :id', ['id' => $id])->fetchAssociative();
     }
 
     /**
@@ -157,7 +157,7 @@ class PrivacyServiceTest extends TestCase
      */
     private function getOrdersByCustomerIdFromDb(int $customerId): array
     {
-        return $this->connection->executeQuery('SELECT id FROM s_order WHERE userID = "' . $customerId . '"')->fetchAllAssociative();
+        return $this->connection->executeQuery('SELECT id FROM s_order WHERE userID = :customerId', ['customerId' => $customerId])->fetchAllAssociative();
     }
 
     /**
@@ -167,7 +167,7 @@ class PrivacyServiceTest extends TestCase
      */
     private function getBasketsByCustomerIdFromDb(int $customerId): array
     {
-        return $this->connection->executeQuery('SELECT id FROM s_order_basket WHERE userID = "' . $customerId . '"')->fetchAllAssociative();
+        return $this->connection->executeQuery('SELECT id FROM s_order_basket WHERE userID = :customerId', ['customerId' => $customerId])->fetchAllAssociative();
     }
 
     /**
@@ -183,20 +183,20 @@ class PrivacyServiceTest extends TestCase
         $date = (new DateTime($sqlDate))->format('Y-m-d');
 
         $this->connection->insert('s_user', [
-                'password' => '098f6bcd4621d373cade4e832627b4f6',
-                'encoder' => 'md5',
-                'email' => uniqid('test', true) . '@test.com',
-                'accountmode' => 1,
-                'active' => '1',
-                'firstlogin' => $date,
-                'lastlogin' => $date,
-                'subshopID' => '1',
-                'customergroup' => 'EK',
-                'salutation' => 'mr',
-                'firstname' => '',
-                'lastname' => '',
-                'birthday' => '1990-01-01',
-            ]);
+            'password' => '098f6bcd4621d373cade4e832627b4f6',
+            'encoder' => 'md5',
+            'email' => uniqid('test', true) . '@test.com',
+            'accountmode' => 1,
+            'active' => '1',
+            'firstlogin' => $date,
+            'lastlogin' => $date,
+            'subshopID' => '1',
+            'customergroup' => 'EK',
+            'salutation' => 'mr',
+            'firstname' => '',
+            'lastname' => '',
+            'birthday' => '1990-01-01',
+        ]);
 
         return (int) $this->connection->lastInsertId();
     }

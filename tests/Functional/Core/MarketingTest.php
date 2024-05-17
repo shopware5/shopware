@@ -48,6 +48,24 @@ class MarketingTest extends TestCase
         static::assertSame("&lt;script&gt;alert('XSS')&lt;/script&gt;", $newsletter['containers'][0]['description']);
     }
 
+    public function testBuildTagCloud(): void
+    {
+        $marketingModule = $this->getContainer()->get('modules')->getModule('Marketing');
+        static::assertInstanceOf(sMarketing::class, $marketingModule);
+
+        $tagCloud = $marketingModule->sBuildTagCloud();
+        static::assertTrue(array_is_list($tagCloud));
+        $firstTag = $tagCloud[0];
+        static::assertIsArray($firstTag);
+        static::assertArrayHasKey('articleName', $firstTag);
+        static::assertArrayHasKey('relevance', $firstTag);
+        static::assertArrayHasKey('articleID', $firstTag);
+        static::assertArrayHasKey('name', $firstTag);
+        static::assertArrayHasKey('class', $firstTag);
+        static::assertArrayHasKey('link', $firstTag);
+        static::assertStringStartsWith('shopware.php?sViewport=detail&sArticle=', $firstTag['link']);
+    }
+
     private function prepareNewsletter(): int
     {
         $connection = $this->getContainer()->get(Connection::class);

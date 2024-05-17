@@ -155,12 +155,12 @@ class Repository extends ModelRepository
     {
         $builder = $this->getEntityManager()->createQueryBuilder();
         $builder->select([
-                'category',
-                'attribute',
-                'emotions',
-                'customerGroups',
-                'media',
-            ])
+            'category',
+            'attribute',
+            'emotions',
+            'customerGroups',
+            'media',
+        ])
             ->from($this->getEntityName(), 'category')
             ->leftJoin('category.attribute', 'attribute')
             ->leftJoin('category.emotions', 'emotions')

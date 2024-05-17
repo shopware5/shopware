@@ -481,83 +481,83 @@ class ArticleTest extends AbstractApiTestCase
     public function getSimpleArticleData(): array
     {
         return [
-              'name' => 'Simple test article',
-              'description' => 'Test description',
-              'descriptionLong' => 'Test descriptionLong',
-              'active' => true,
-              'pseudoSales' => 999,
-              'highlight' => true,
-              'keywords' => 'test, testarticle',
+            'name' => 'Simple test article',
+            'description' => 'Test description',
+            'descriptionLong' => 'Test descriptionLong',
+            'active' => true,
+            'pseudoSales' => 999,
+            'highlight' => true,
+            'keywords' => 'test, testarticle',
 
-              'filterGroupId' => 1,
+            'filterGroupId' => 1,
 
-              'propertyValues' => [
-                  [
-                      'value' => 'grün',
-                      'option' => [
-                          'name' => 'Farbe',
-                      ],
-                  ],
-                  [
-                      'value' => 'testWert',
-                      'option' => [
-                          'name' => 'neueOption' . uniqid((string) mt_rand(), true),
-                      ],
-                  ],
-              ],
+            'propertyValues' => [
+                [
+                    'value' => 'grün',
+                    'option' => [
+                        'name' => 'Farbe',
+                    ],
+                ],
+                [
+                    'value' => 'testWert',
+                    'option' => [
+                        'name' => 'neueOption' . uniqid((string) mt_rand(), true),
+                    ],
+                ],
+            ],
 
-              'mainDetail' => [
-                  'number' => 'swTEST' . uniqid((string) mt_rand(), true),
-                  'inStock' => 15,
-                  'unitId' => 1,
+            'mainDetail' => [
+                'number' => 'swTEST' . uniqid((string) mt_rand(), true),
+                'inStock' => 15,
+                'unitId' => 1,
 
-                  'attribute' => [
-                      'attr1' => 'Freitext1',
-                      'attr2' => 'Freitext2',
-                  ],
+                'attribute' => [
+                    'attr1' => 'Freitext1',
+                    'attr2' => 'Freitext2',
+                ],
 
-                  'minPurchase' => 5,
-                  'purchaseSteps' => 2,
+                'minPurchase' => 5,
+                'purchaseSteps' => 2,
 
-                  'prices' => [
-                      [
-                          'customerGroupKey' => 'EK',
-                          'from' => 1,
-                          'to' => 20,
-                          'price' => 500,
-                      ],
-                      [
-                          'customerGroupKey' => 'EK',
-                          'from' => 21,
-                          'to' => '-',
-                          'price' => 400,
-                      ],
-                  ],
-              ],
+                'prices' => [
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 1,
+                        'to' => 20,
+                        'price' => 500,
+                    ],
+                    [
+                        'customerGroupKey' => 'EK',
+                        'from' => 21,
+                        'to' => '-',
+                        'price' => 400,
+                    ],
+                ],
+            ],
 
-              'taxId' => 1,
-              'supplierId' => 2,
+            'taxId' => 1,
+            'supplierId' => 2,
 
-              'similar' => [
-                  ['id' => 5],
-                  ['id' => 6],
-              ],
+            'similar' => [
+                ['id' => 5],
+                ['id' => 6],
+            ],
 
-              'categories' => [
-                  ['id' => 15],
-                  ['id' => 10],
-              ],
+            'categories' => [
+                ['id' => 15],
+                ['id' => 10],
+            ],
 
-              'related' => [
-                  ['id' => 3, 'cross' => true],
-                  ['id' => 4],
-              ],
+            'related' => [
+                ['id' => 3, 'cross' => true],
+                ['id' => 4],
+            ],
 
-              'links' => [
-                  ['name' => 'foobar', 'link' => 'http://example.org'],
-                  ['name' => 'Video', 'link' => 'http://example.org'],
-              ],
-          ];
+            'links' => [
+                ['name' => 'foobar', 'link' => 'http://example.org'],
+                ['name' => 'Video', 'link' => 'http://example.org'],
+            ],
+        ];
     }
 
     public function testBatchModeShouldBeSuccessful(): void

@@ -79,13 +79,13 @@ class PHPVersionCheck implements CheckInterface
         }
 
         return [
-                'type' => self::CHECK_TYPE,
-                'errorLevel' => $requirement['level'],
-                'message' => sprintf(
-                    $failMessage,
-                    $minPHPVersion,
-                    PHP_VERSION
-                ),
-            ];
+            'type' => self::CHECK_TYPE,
+            'errorLevel' => $requirement['level'],
+            'message' => sprintf(
+                $failMessage,
+                $minPHPVersion,
+                PHP_VERSION
+            ),
+        ];
     }
 }

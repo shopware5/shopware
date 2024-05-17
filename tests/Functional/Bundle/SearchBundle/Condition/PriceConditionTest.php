@@ -217,10 +217,10 @@ class PriceConditionTest extends TestCase
             }
 
             $product['mainDetail']['prices'][] = [
-                 'from' => 1,
-                 'to' => 'beliebig',
-                 'price' => $price,
-                 'customerGroupKey' => $customerGroup,
+                'from' => 1,
+                'to' => 'beliebig',
+                'price' => $price,
+                'customerGroupKey' => $customerGroup,
             ];
         }
 

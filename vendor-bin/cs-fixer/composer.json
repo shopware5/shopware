@@ -3,7 +3,7 @@
         "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
         "ext-ctype": "*",
         "ext-mbstring": "*",
-        "friendsofphp/php-cs-fixer": "3.51.0",
+        "friendsofphp/php-cs-fixer": "3.57.1",
         "kubawerlos/php-cs-fixer-custom-fixers": "3.21.0"
     },
     "replace": {

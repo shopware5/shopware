@@ -122,8 +122,8 @@ class UserManagerTest extends Enlight_Components_Test_Controller_TestCase
 
         $this->resetRequest();
         $this->Request()->setParams([
-           'username' => $this->temporaryAdminUserData['username'],
-           'password' => $this->temporaryAdminUserData['password'],
+            'username' => $this->temporaryAdminUserData['username'],
+            'password' => $this->temporaryAdminUserData['password'],
         ]);
 
         $this->dispatch('/backend/Login/login');

@@ -155,7 +155,13 @@ class RewriteTest extends Enlight_Components_Test_TestCase
         $this->createCustomProductAttribute();
 
         $this->connection->beginTransaction();
-        $this->connection->executeStatement('UPDATE s_articles SET changetime = "' . $this->date->modify('-1 days')->format('Y:m:d H:i:s') . '" WHERE id = ' . self::PRODUCT_ID . ';');
+        $this->connection->executeStatement(
+            'UPDATE s_articles SET changetime = :changeTime WHERE id = :productId;',
+            [
+                'changeTime' => $this->date->modify('-1 days')->format('Y:m:d H:i:s'),
+                'productId' => self::PRODUCT_ID,
+            ]
+        );
 
         $this->enterDataToNewAttribute();
 

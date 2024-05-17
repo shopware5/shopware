@@ -56,8 +56,8 @@ class StoreListDomainsCommand extends StoreCommand
 
         foreach ($shops as $shop) {
             $domains[] = [
-               $shop['domain'],
-               number_format($shop['balance'], 2),
+                $shop['domain'],
+                number_format($shop['balance'], 2),
             ];
         }
 
