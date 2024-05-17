@@ -23,6 +23,7 @@
  */
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessDirnameCallFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessParenthesisFixer;
@@ -74,6 +75,7 @@ return (new Config())
     ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
     ->setCacheFile('var/cache/php-cs-fixer')
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRules([
         '@PSR12' => true,
         '@Symfony' => true,
