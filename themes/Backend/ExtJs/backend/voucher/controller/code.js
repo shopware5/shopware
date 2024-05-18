@@ -264,8 +264,15 @@ Ext.define('Shopware.apps.Voucher.controller.Code', {
         var me = this,
             searchString = Ext.String.trim(value),
             store = me.subApplication.getStore('Code');
-        store.filter('filter', searchString);
+
         store.filters.clear();
+
+        if (searchString.length <= 0) {
+            store.load();
+            return;
+        }
+
+        store.filter('filter', searchString);
     },
 
     /**
