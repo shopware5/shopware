@@ -169,6 +169,7 @@ Ext.define('Shopware.apps.Voucher.controller.Voucher', {
                     mode = record.data.modus,
                     codeStore = me.getStore('Code');
 
+                codeStore.filters.clear();
                 codeStore.clearData();
                 codeStore.currentPage = 1;
 
