@@ -98,8 +98,11 @@ abstract class Shopware_Components_Plugin_Bootstrap extends Enlight_Plugin_Boots
     public function hasInfoNewerVersion(Enlight_Config $updatePluginInfo, Enlight_Config $currentPluginInfo)
     {
         $currentVersion = $currentPluginInfo->get('version');
-        $updateVersion = $updatePluginInfo->get('version');
+        if ($currentVersion === null) {
+            return true;
+        }
 
+        $updateVersion = $updatePluginInfo->get('version');
         if (empty($updateVersion)) {
             return false;
         }
