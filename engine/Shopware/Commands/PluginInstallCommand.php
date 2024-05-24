@@ -83,7 +83,7 @@ class PluginInstallCommand extends PluginCommand implements CompletionAwareInter
                 'activate',
                 null,
                 InputOption::VALUE_NONE,
-                'Activate plugin after intallation.'
+                'Activate plugin after installation.'
             )
             ->addOption(
                 'no-refresh',
