@@ -164,7 +164,7 @@ class XmlConfigReaderTest extends TestCase
     public function testValidateAttributeScopeThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid scope "invalid value"');
+        $this->expectExceptionMessageMatches('/Invalid config scope "invalid value" in file ".*\/tests\/Unit\/Components\/Plugin\/XmlReader\/examples\/config\/config_store_extjs\.xml"/');
         XmlConfigReader::validateAttributeScope('invalid value');
     }
 
