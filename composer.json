@@ -90,7 +90,7 @@
         "symfony/validator": "~4.4.34",
         "symfony/web-link": "~4.4.27",
         "voku/anti-xss": "~4.1.41",
-        "wikimedia/less.php": "4.1.1"
+        "wikimedia/less.php": "4.4.0"
     },
     "replace": {
         "paragonie/random_compat": "*",
