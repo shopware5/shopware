@@ -33,17 +33,23 @@ use ShopwarePlugins\SwagUpdate\Components\PluginCheck;
 
 class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Backend_ExtJs
 {
+    /**
+     * @return void
+     */
     public function indexAction()
     {
         /** @var Connection $connection */
         $connection = $this->get(Connection::class);
         $sql = "INSERT IGNORE INTO `s_core_config_elements` (`id`, `form_id`, `name`, `value`, `label`, `description`, `type`, `required`, `position`, `scope`)
                 VALUES (NULL, '0', 'updateWizardStarted', 'b:1;', '', '', 'checkbox', '0', '0', '1');";
-        $connection->executeUpdate($sql);
+        $connection->executeStatement($sql);
 
         Shopware()->Container()->get(CacheManager::class)->clearConfigCache();
     }
 
+    /**
+     * @return void
+     */
     public function updateAction()
     {
         $pluginCheck = new PluginCheck($this->container);
@@ -69,12 +75,12 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
 
         $plugins = $pluginCheck->checkInstalledPluginsAvailableForNewVersion($this->getVersion());
 
-        $updatable = array_filter($plugins, function ($plugin) {
-            return $plugin['updatable'];
+        $updatable = array_filter($plugins, static function ($plugin) {
+            return (bool) $plugin['updatable'];
         });
 
-        $notUpdatable = array_filter($plugins, function ($plugin) {
-            return $plugin['inStore'] == false;
+        $notUpdatable = array_filter($plugins, static function ($plugin) {
+            return !(bool) $plugin['inStore'];
         });
 
         $this->View()->assign([
@@ -86,10 +92,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         ]);
     }
 
-    /**
-     * @return string
-     */
-    private function getLocale()
+    private function getLocale(): string
     {
         return $this->container->get('auth')->getIdentity()->locale->getLocale();
     }
@@ -105,13 +108,10 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         return $version;
     }
 
-    /**
-     * @return AccessTokenStruct|null
-     */
-    private function getAccessToken()
+    private function getAccessToken(): AccessTokenStruct
     {
         if (!$this->get('backendsession')->offsetExists('store_token')) {
-            return null;
+            throw new RuntimeException('Store token not found. Please log into the account in the plugin manager.');
         }
 
         $allowedClassList = [
@@ -124,7 +124,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         );
     }
 
-    private function handleException(Exception $e)
+    private function handleException(Exception $e): void
     {
         if (!($e instanceof StoreException)) {
             $this->View()->assign(['success' => false, 'message' => $e->getMessage()]);
@@ -144,10 +144,7 @@ class Shopware_Controllers_Backend_UpdateWizard extends Shopware_Controllers_Bac
         ]);
     }
 
-    /**
-     * @return mixed|string
-     */
-    private function getExceptionMessage(StoreException $exception)
+    private function getExceptionMessage(StoreException $exception): string
     {
         $namespace = $this->get('snippets')
             ->getNamespace('backend/plugin_manager/exceptions');

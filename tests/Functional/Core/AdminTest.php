@@ -2409,10 +2409,8 @@ class AdminTest extends TestCase
         ]);
         $this->module->sLogin();
 
-        $csrfCookies = array_filter($this->getResponse()->headers->getCookies(), function ($cookie) {
-            if ($cookie->getName() === '__csrf_token-1') {
-                return $cookie;
-            }
+        $csrfCookies = array_filter($this->getResponse()->headers->getCookies(), static function ($cookie) {
+            return $cookie->getName() === '__csrf_token-1';
         });
         $cookie = array_pop($csrfCookies);
         static::assertInstanceOf(Cookie::class, $cookie);
@@ -2423,10 +2421,8 @@ class AdminTest extends TestCase
 
         $this->module->logout();
 
-        $csrfCookies = array_filter($this->getResponse()->headers->getCookies(), function ($cookie) {
-            if ($cookie->getName() === '__csrf_token-1') {
-                return $cookie;
-            }
+        $csrfCookies = array_filter($this->getResponse()->headers->getCookies(), static function ($cookie) {
+            return $cookie->getName() === '__csrf_token-1';
         });
         $cookie = array_pop($csrfCookies);
         static::assertInstanceOf(Cookie::class, $cookie);
