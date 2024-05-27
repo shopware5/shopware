@@ -28,6 +28,7 @@ use DOMElement;
 use DOMNode;
 use DOMNodeList;
 use DOMXPath;
+use InvalidArgumentException;
 
 class XmlPluginReader extends XmlReaderBase
 {
@@ -83,9 +84,8 @@ class XmlPluginReader extends XmlReaderBase
             }
         }
 
-        $simpleFields = ['version', 'license', 'author', 'copyright', 'link'];
-        foreach ($simpleFields as $simpleField) {
-            $fieldValue = self::getElementChildValueByName($pluginData, $simpleField);
+        foreach (['version', 'license', 'author', 'copyright', 'link'] as $simpleField) {
+            $fieldValue = self::getElementChildValueByName($pluginData, $simpleField, $simpleField === 'version');
             if ($fieldValue !== null) {
                 $info[$simpleField] = $fieldValue;
             }
@@ -102,6 +102,9 @@ class XmlPluginReader extends XmlReaderBase
 
         $compatibility = $xpath->query('//plugin/compatibility');
         if ($compatibility instanceof DOMNodeList) {
+            if (\count($compatibility) > 1) {
+                throw new InvalidArgumentException(sprintf('Element with name "compatibility" found multiple times in file "%s", but expected to be there only once', static::$xmlFile));
+            }
             $compatibility = $compatibility->item(0);
             if ($compatibility instanceof DOMNode) {
                 $info['compatibility'] = [
@@ -130,9 +133,7 @@ class XmlPluginReader extends XmlReaderBase
     {
         $plugins = [];
 
-        $requiredPlugins = $requiredPluginNode->getElementsByTagName('requiredPlugin');
-
-        foreach ($requiredPlugins as $requiredPlugin) {
+        foreach ($requiredPluginNode->getElementsByTagName('requiredPlugin') as $requiredPlugin) {
             $plugin = [];
 
             $plugin['pluginName'] = $requiredPlugin->getAttribute('pluginName');

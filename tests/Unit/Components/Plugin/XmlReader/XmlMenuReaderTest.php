@@ -27,9 +27,9 @@ namespace Shopware\Tests\Unit\Components\Plugin\XmlReader;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 use RuntimeException;
 use Shopware\Components\Plugin\XmlReader\XmlMenuReader;
+use Shopware\Tests\TestReflectionHelper;
 
 class XmlMenuReaderTest extends TestCase
 {
@@ -42,16 +42,12 @@ class XmlMenuReaderTest extends TestCase
 
     public function testThatEmptyEntriesThrowException(): void
     {
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Required element "entry" is missing.');
-
         $dom = new DOMDocument();
         $dom->loadXML('<entries></entries>');
+        $method = TestReflectionHelper::getMethod(\get_class($this->menuReader), 'parseFile');
 
-        $reflection = new ReflectionClass(\get_class($this->menuReader));
-        $method = $reflection->getMethod('parseFile');
-        $method->setAccessible(true);
-
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageMatches('/Required element "entry" is missing in file ".*\/tests\/Unit\/Components\/Plugin\/XmlReader\/examples\/cronjob\/cronjob\.xml"\./');
         $method->invokeArgs($this->menuReader, [$dom]);
     }
 

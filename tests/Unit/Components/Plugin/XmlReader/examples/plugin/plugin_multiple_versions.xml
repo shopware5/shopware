@@ -3,5 +3,6 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../engine/Shopware/Components/Plugin/schema/plugin.xsd">
 
     <label>My plugin</label>
-    <version>0.1.0-dev</version>
+    <version>1.2.3</version>
+    <version>4.5.6</version>
 </plugin>

@@ -242,13 +242,13 @@ class XmlReaderBaseTest extends TestCase
 
     public function testGetElementChildValueByNameThrowsException(): void
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('Element with invalid not found');
-
         $options = $this->xpath->query('//config/elements/element[6]/options');
         static::assertInstanceOf(DOMNodeList::class, $options);
         $option = $options->item(0);
         static::assertInstanceOf(DOMElement::class, $option);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/Element with name "invalid" not found in file ".*\/tests\/Unit\/Components\/Plugin\/XmlReader\/examples\/base\/config_invalid\.xml"/');
         XmlReaderBase::getElementChildValueByName($option, 'invalid', true);
     }
 

@@ -83,7 +83,7 @@ class PluginInstaller
     private PDO $pdo;
 
     /**
-     * @var string[]
+     * @var array<string, string>
      */
     private array $pluginDirectories;
 
@@ -96,7 +96,7 @@ class PluginInstaller
     private Kernel $kernel;
 
     /**
-     * @param string|string[] $pluginDirectories
+     * @param array<string, string> $pluginDirectories
      */
     public function __construct(
         ModelManager $em,
@@ -104,7 +104,7 @@ class PluginInstaller
         RequirementValidator $requirementValidator,
         PDO $pdo,
         Enlight_Event_EventManager $events,
-        $pluginDirectories,
+        array $pluginDirectories,
         ShopwareReleaseStruct $release,
         LoggerInterface $logger,
         Kernel $kernel
@@ -115,7 +115,7 @@ class PluginInstaller
         $this->requirementValidator = $requirementValidator;
         $this->pdo = $pdo;
         $this->events = $events;
-        $this->pluginDirectories = (array) $pluginDirectories;
+        $this->pluginDirectories = $pluginDirectories;
         $this->release = $release;
         $this->logger = $logger;
         $this->kernel = $kernel;
