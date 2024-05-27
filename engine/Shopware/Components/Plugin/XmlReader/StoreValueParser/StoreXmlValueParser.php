@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -28,6 +30,9 @@ use Shopware\Components\Plugin\XmlReader\XmlReaderBase;
 
 class StoreXmlValueParser implements StoreValueParserInterface
 {
+    /**
+     * @return list<array{0: string, 1: array<string, string>|null}>
+     */
     public function parse(DOMElement $element)
     {
         $storeOptions = $element->getElementsByTagName('option');
@@ -42,7 +47,7 @@ class StoreXmlValueParser implements StoreValueParserInterface
         foreach ($storeOptions as $storeOption) {
             $value = '';
             if ($optionValue = $storeOption->getElementsByTagName('value')->item(0)) {
-                $value = $optionValue->nodeValue;
+                $value = (string) $optionValue->nodeValue;
             }
 
             $label = XmlReaderBase::parseTranslatableNodeList(

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,6 +26,7 @@
 namespace Shopware\Components\Plugin\XmlReader;
 
 use DOMDocument;
+use DOMElement;
 use DOMNodeList;
 use DOMXPath;
 use InvalidArgumentException;
@@ -66,6 +69,7 @@ class XmlConfigReader extends XmlReaderBase
             $form['description'] = self::parseTranslatableNodeList($description);
         }
 
+        /** @var DOMNodeList<DOMElement>|false $elements */
         $elements = $xpath->query('//config/elements/element');
         if ($elements instanceof DOMNodeList) {
             $form['elements'] = $this->parseElementNodeList($elements);
@@ -74,6 +78,11 @@ class XmlConfigReader extends XmlReaderBase
         return $form;
     }
 
+    /**
+     * @param DOMNodeList<DOMElement> $list
+     *
+     * @return list<array{scope: int, isRequired: bool, type: string, name?: string|null, value?: mixed, label: array<string, string>|null, description: array<string, string>|null, options: array<string, mixed>|null, store?: array<array{0: string, 1: array<string, string>|null}>|string|null}>
+     */
     private function parseElementNodeList(DOMNodeList $list): array
     {
         if ($list->length === 0) {
@@ -86,14 +95,9 @@ class XmlConfigReader extends XmlReaderBase
             $element = [];
 
             // attributes
-            $element['scope'] = self::validateAttributeScope(
-                $item->getAttribute('scope')
-            );
+            $element['scope'] = self::validateAttributeScope($item->getAttribute('scope'));
 
-            $element['isRequired'] = self::validateBooleanAttribute(
-                $item->getAttribute('required'),
-                false
-            );
+            $element['isRequired'] = self::validateBooleanAttribute($item->getAttribute('required'));
 
             $element['type'] = self::validateTextAttribute(
                 $item->getAttribute('type'),
@@ -106,25 +110,27 @@ class XmlConfigReader extends XmlReaderBase
             }
 
             if ($item->getElementsByTagName('value')->length) {
-                $element['value'] = XmlUtils::phpize($item->getElementsByTagName('value')->item(0)->nodeValue);
+                $valueItem = $item->getElementsByTagName('value')->item(0);
+                if ($valueItem instanceof DOMElement) {
+                    $element['value'] = XmlUtils::phpize($valueItem->nodeValue);
+                }
             }
 
             $element['label'] = self::parseTranslatableElement($item, 'label');
             $element['description'] = self::parseTranslatableElement($item, 'description');
 
             $element['options'] = [];
-            if ($options = self::parseOptionsNodeList(
-                $item->getElementsByTagName('options')
-            )) {
+            if ($options = self::parseOptionsNodeList($item->getElementsByTagName('options'))) {
                 $element['options'] = $options;
             }
 
-            if ($store = self::parseStoreNodeList(
-                $item->getElementsByTagName('store')
-            )) {
+            if ($store = self::parseStoreNodeList($item->getElementsByTagName('store'))) {
                 $element['store'] = $store;
             } elseif ($item->getElementsByTagName('store')->length) {
-                $element['store'] = $item->getElementsByTagName('store')->item(0)->nodeValue;
+                $storeItem = $item->getElementsByTagName('store')->item(0);
+                if ($storeItem instanceof DOMElement) {
+                    $element['store'] = $storeItem->nodeValue;
+                }
             }
 
             $elements[] = $element;
