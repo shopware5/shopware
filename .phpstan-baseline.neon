@@ -23616,21 +23616,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Translation.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:handleException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
-			message: "#^Method Shopware_Controllers_Backend_UpdateWizard\\:\\:updateAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
-			message: "#^Parameter \\#4 \\$token of class Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Context\\\\UpdateLicencesRequest constructor expects Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\AccessTokenStruct, Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\AccessTokenStruct\\|null given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/UpdateWizard.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_UserConfig\\:\\:getAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/UserConfig.php
