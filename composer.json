@@ -73,7 +73,7 @@
         "symfony/config": "~4.4.34",
         "symfony/console": "~4.4.34",
         "symfony/dependency-injection": "~4.4.34",
-        "symfony/expression-language": "~4.4.34",
+        "symfony/expression-language": "~5.4.40",
         "symfony/filesystem": "~4.4.27",
         "symfony/finder": "~4.4.30",
         "symfony/form": "~4.4.34",
