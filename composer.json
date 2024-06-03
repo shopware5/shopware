@@ -1,19 +1,18 @@
 {
     "name": "shopware/shopware",
-    "description": "Shopware is the next generation of open source e-commerce software made in Germany",
+    "description": "Shopware 5 is an open source e-commerce software made in Germany",
     "keywords": ["shopware", "shop"],
-    "homepage": "https://www.shopware.com",
+    "homepage": "https://github.com/shopware5",
     "type": "project",
     "license": [
-        "AGPL-3.0",
-        "proprietary"
+        "AGPL-3.0"
     ],
     "support": {
-        "forum": "https://forum.shopware.com",
+        "forum": "https://forum.shopware.com/c/shopware-5/7",
         "chat": "https://slack.shopware.com",
         "wiki": "https://developers.shopware.com/",
         "source": "https://github.com/shopware5/shopware",
-        "issues": "https://issues.shopware.com"
+        "issues": "https://github.com/shopware5/shopware/issues"
     },
     "require": {
         "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
@@ -169,11 +168,7 @@
         }
     },
     "scripts": {
-        "cs-check": "make check-php-cs-fixer",
-        "cs-fix": "make fix-code-style",
         "post-install-cmd": "./build/composer-post-install-cmd.sh",
-        "post-update-cmd": "./build/composer-post-update-cmd.sh",
-        "test": "phpunit -c tests/ --colors=always",
-        "test-unit": "phpunit -c tests/phpunit_unit.xml.dist --colors=always"
+        "post-update-cmd": "./build/composer-post-update-cmd.sh"
     }
 }
