@@ -79,6 +79,7 @@ Ext.define('Shopware.apps.Notification.controller.Notification', {
         customerStore.getProxy().extraParams = {
             orderNumber: record.get("number")
         };
+        customerStore.currentPage = 1;
         customerStore.load();
     },
 
