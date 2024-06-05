@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace Shopware\Tests\Functional\Components\Plugin;
 
+use Enlight_Config;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Components\Plugin\fixtures\TestPlugin;
 
@@ -36,5 +37,62 @@ class BootstrapTest extends TestCase
         $pluginInstance = new TestPlugin($expectedPluginName);
         $pluginName = $pluginInstance->getName();
         static::assertSame($expectedPluginName, $pluginName);
+    }
+
+    /**
+     * @dataProvider pluginVersionProvider
+     */
+    public function testHasNewerVersion(?string $currentVersion, ?string $updateVersion, bool $isNewer): void
+    {
+        $currentPluginConfig = new Enlight_Config(['version' => $currentVersion]);
+        $updatePluginConfig = new Enlight_Config(['version' => $updateVersion]);
+
+        $pluginBootstrap = new TestPlugin('test');
+
+        static::assertSame($isNewer, $pluginBootstrap->hasInfoNewerVersion($updatePluginConfig, $currentPluginConfig));
+    }
+
+    /**
+     * @return list<array{currentVersion: ?string, updateVersion: ?string, isNewer: bool}>
+     */
+    public function pluginVersionProvider(): array
+    {
+        return [
+            [
+                'currentVersion' => '2.0.0',
+                'updateVersion' => '2.0.0',
+                'isNewer' => false,
+            ],
+            [
+                'currentVersion' => '1.0.0',
+                'updateVersion' => '2.0.0',
+                'isNewer' => true,
+            ],
+            [
+                'currentVersion' => null,
+                'updateVersion' => '2.0.0',
+                'isNewer' => true,
+            ],
+            [
+                'currentVersion' => '2.0.0',
+                'updateVersion' => null,
+                'isNewer' => false,
+            ],
+            [
+                'currentVersion' => '1',
+                'updateVersion' => '1.0.0',
+                'isNewer' => false,
+            ],
+            [
+                'currentVersion' => '0',
+                'updateVersion' => '0.0.1',
+                'isNewer' => true,
+            ],
+            [
+                'currentVersion' => '0',
+                'updateVersion' => '0',
+                'isNewer' => false,
+            ],
+        ];
     }
 }
