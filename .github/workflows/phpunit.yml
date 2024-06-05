@@ -62,6 +62,7 @@ jobs:
                     - 'mariadb:10.4'
                     - 'mariadb:10.11'
                     - 'mysql:5.7'
+                    - 'mysql:8.4'
         env:
             SW_HOST: localhost:8000
             DB_HOST: 127.0.0.1
