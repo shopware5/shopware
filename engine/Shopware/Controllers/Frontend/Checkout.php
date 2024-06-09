@@ -373,8 +373,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
                 $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
                 if (!empty($orderVariables['sOrderNumber'])) {
-                    $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
-                    $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+                    $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], Shopware()->Session()->get('sUserId'), 'billing');
+                    $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], Shopware()->Session()->get('sUserId'), 'shipping');
                     $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
                 }
 
@@ -407,8 +407,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
         $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
         if (!empty($orderVariables['sOrderNumber'])) {
-            $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
-            $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+            $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], Shopware()->Session()->get('sUserId'), 'billing');
+            $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], Shopware()->Session()->get('sUserId'), 'shipping');
             $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
         }
 
@@ -503,8 +503,8 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $orderVariables = $this->session['sOrderVariables']->getArrayCopy();
 
-        $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'billing');
-        $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], 'shipping');
+        $orderVariables['sAddresses']['billing'] = $this->getOrderAddress($orderVariables['sOrderNumber'], Shopware()->Session()->get('sUserId'), 'billing');
+        $orderVariables['sAddresses']['shipping'] = $this->getOrderAddress($orderVariables['sOrderNumber'], Shopware()->Session()->get('sUserId'), 'shipping');
         $orderVariables['sAddresses']['equal'] = $this->areAddressesEqual($orderVariables['sAddresses']['billing'], $orderVariables['sAddresses']['shipping']);
 
         $this->View()->assign($orderVariables);
@@ -2131,7 +2131,7 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
     /**
      * @return array<string, mixed>
      */
-    private function getOrderAddress(string $orderNumber, string $source): array
+    private function getOrderAddress(string $orderNumber, int $userId, string $source): array
     {
         $builder = $this->get(Connection::class)->createQueryBuilder();
         $context = $this->get(ContextServiceInterface::class)->getShopContext();
@@ -2140,8 +2140,9 @@ class Shopware_Controllers_Frontend_Checkout extends Enlight_Controller_Action i
 
         $address = $builder->select(['address.*'])
             ->from($sourceTable, 'address')
-            ->join('address', 's_order', '', 'address.orderID = s_order.id AND s_order.ordernumber = :orderNumber')
+            ->join('address', 's_order', '', 'address.orderID = s_order.id AND s_order.ordernumber = :orderNumber AND s_order.userID = :userID')
             ->setParameter('orderNumber', $orderNumber)
+            ->setParameter('userID', $userId)
             ->execute()
             ->fetch();
 
