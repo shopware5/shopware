@@ -112,7 +112,7 @@
         "friends-of-behat/mink-extension": "2.7.5",
         "php-parallel-lint/php-var-dump-check": "^0.5",
         "phpstan/extension-installer": "1.4.1",
-        "phpstan/phpstan": "1.11.3",
+        "phpstan/phpstan": "1.11.4",
         "phpstan/phpstan-doctrine": "1.4.3",
         "phpstan/phpstan-phpunit": "1.4.0",
         "phpstan/phpstan-symfony": "1.4.4",
