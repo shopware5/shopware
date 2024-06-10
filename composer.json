@@ -115,7 +115,7 @@
         "phpstan/phpstan": "1.11.3",
         "phpstan/phpstan-doctrine": "1.4.3",
         "phpstan/phpstan-phpunit": "1.4.0",
-        "phpstan/phpstan-symfony": "1.4.0",
+        "phpstan/phpstan-symfony": "1.4.4",
         "phpunit/phpunit": "^9.6",
         "sensiolabs/behat-page-object-extension": "2.3.7",
         "staabm/phpstan-dba": "0.2.79",
