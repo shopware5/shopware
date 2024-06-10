@@ -13511,11 +13511,6 @@ parameters:
 			path: engine/Shopware/Components/Api/Resource/Media.php
 
 		-
-			message: "#^Parameter \\#1 \\$filename of function unlink expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Api/Resource/Media.php
-
-		-
 			message: "#^Parameter \\#1 \\$path of method Shopware\\\\Models\\\\Media\\\\Media\\:\\:setPath\\(\\) expects string, string\\|null given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Api/Resource/Media.php
@@ -15327,16 +15322,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware_Components_Document\\:\\:setTranslationComponent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Document.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function fopen expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Components/Document.php
-
-		-
-			message: "#^Parameter \\#1 \\$filename of function unlink expects string, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Components/Document.php
 
@@ -23132,16 +23117,6 @@ parameters:
 
 		-
 			message: "#^Parameter \\#1 \\$path of function dirname expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
-
-		-
-			message: "#^Parameter \\#1 \\$path of function realpath expects string, string\\|false given\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
-
-		-
-			message: "#^Parameter \\#2 \\$name of method Symfony\\\\Component\\\\HttpFoundation\\\\File\\\\UploadedFile\\:\\:move\\(\\) expects string\\|null, string\\|false given\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/PluginInstaller.php
 
