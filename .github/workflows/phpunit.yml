@@ -36,6 +36,7 @@ jobs:
                     - '8.1'
                     - '8.2'
                     - '8.3'
+                    - '8.4'
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v4
@@ -53,8 +54,9 @@ jobs:
                     key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
                     restore-keys: |
                         ${{ runner.os }}-composer-
-            -   run: composer update 'laminas/*' cocur/slugify
-            -   run: make test-phpunit
+            -   name: Run tests
+                run: make test-phpunit
+
     mysql:
         strategy:
             matrix:
@@ -101,6 +103,7 @@ jobs:
                     restore-keys: |
                         ${{ runner.os }}-composer-
             -   run: make test-phpunit
+
     Code-Coverage:
         runs-on: ubuntu-latest
         env:
@@ -142,6 +145,7 @@ jobs:
                     restore-keys: |
                         ${{ runner.os }}-composer-
             -   run: make test-phpunit-coverage-statistic
+
     es:
         runs-on: ubuntu-latest
         env:
