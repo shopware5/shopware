@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e3ee8612e2ff0806b6d4e5664fbc4b94",
+    "content-hash": "c7e60fd538d68d102436987426fe29f6",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -10393,16 +10393,16 @@
         },
         {
             "name": "staabm/phpstan-dba",
-            "version": "0.2.79",
+            "version": "0.2.81",
             "source": {
                 "type": "git",
                 "url": "https://github.com/staabm/phpstan-dba.git",
-                "reference": "14d9afd28413e9964a9a33d30bafa1683d044542"
+                "reference": "9b3f8f25efa262f5b5da9b86e20b74002019f5bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/14d9afd28413e9964a9a33d30bafa1683d044542",
-                "reference": "14d9afd28413e9964a9a33d30bafa1683d044542",
+                "url": "https://api.github.com/repos/staabm/phpstan-dba/zipball/9b3f8f25efa262f5b5da9b86e20b74002019f5bc",
+                "reference": "9b3f8f25efa262f5b5da9b86e20b74002019f5bc",
                 "shasum": ""
             },
             "require": {
@@ -10456,9 +10456,15 @@
             ],
             "support": {
                 "issues": "https://github.com/staabm/phpstan-dba/issues",
-                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.79"
+                "source": "https://github.com/staabm/phpstan-dba/tree/0.2.81"
             },
-            "time": "2023-10-12T07:23:58+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/staabm",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-06-04T12:11:49+00:00"
         },
         {
             "name": "symfony/browser-kit",
