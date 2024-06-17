@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "52b4c3cc2fdfd7593526616176faee53",
+    "content-hash": "e3ee8612e2ff0806b6d4e5664fbc4b94",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7726,16 +7726,16 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "4.4.0",
+            "version": "v4.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "c9b9cb1dae59be07183e27c7074f8568e7407c80"
+                "reference": "7d66ab6d38af72f80a0c0a3598d7feac04bbc7b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/c9b9cb1dae59be07183e27c7074f8568e7407c80",
-                "reference": "c9b9cb1dae59be07183e27c7074f8568e7407c80",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/7d66ab6d38af72f80a0c0a3598d7feac04bbc7b7",
+                "reference": "7d66ab6d38af72f80a0c0a3598d7feac04bbc7b7",
                 "shasum": ""
             },
             "require": {
@@ -7795,9 +7795,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wikimedia/less.php/issues",
-                "source": "https://github.com/wikimedia/less.php/tree/4.4.0"
+                "source": "https://github.com/wikimedia/less.php/tree/v4.4.1"
             },
-            "time": "2024-05-25T17:34:29+00:00"
+            "time": "2024-05-27T14:47:49+00:00"
         }
     ],
     "packages-dev": [
