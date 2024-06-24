@@ -34,12 +34,12 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `phpunit/phpuit` to version 9.6.11
 * Updated `setasign/fpdf` to version 1.8.6
 * Updated `setasign/fpdi` to version 2.6.0
-* Updated `symfony/polyfill-php80` to version 1.28.0
-* Updated `symfony/polyfill-php81` to version 1.28.0
-* Updated `symfony/polyfill-php82` to version 1.29.0
-* Updated `symfony/polyfill-php83` to version 1.29.0
+* Updated `symfony/polyfill-php80` to version 1.30.0
+* Updated `symfony/polyfill-php81` to version 1.30.0
+* Updated `symfony/polyfill-php82` to version 1.30.0
+* Updated `symfony/polyfill-php83` to version 1.30.0
 * Updated `symfony/http-kernel` to version 4.4.51
-* Updated `symfony/serializer` to version 5.4.39
+* Updated `symfony/serializer` to version 5.4.40
 * Updated `voku/anti-xss` to version 4.1.42
 * Updated `wikimedia/less.php` to version 4.4.1
 * Updated several indirect dependencies
