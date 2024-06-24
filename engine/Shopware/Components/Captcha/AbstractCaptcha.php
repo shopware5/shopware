@@ -38,15 +38,9 @@ abstract class AbstractCaptcha implements CaptchaInterface
     private const PATH_CAPTCHA_FONT = 'frontend/_public/src/fonts/captcha.ttf';
     private const PATH_CAPTCHA_FONT_FALLBACK = 'frontend/_resources/images/captcha/font.ttf';
 
-    /**
-     * @var Shopware_Components_Config
-     */
-    protected $config;
+    protected Shopware_Components_Config $config;
 
-    /**
-     * @var Enlight_Template_Manager
-     */
-    private $templateManager;
+    private Enlight_Template_Manager $templateManager;
 
     public function __construct(
         Shopware_Components_Config $config,
@@ -88,11 +82,19 @@ abstract class AbstractCaptcha implements CaptchaInterface
 
         if (!empty($this->config->get('CaptchaColor'))) {
             $colors = explode(',', $this->config->get('CaptchaColor'));
+            $colors = array_map(static function ($color): int {
+                $color = (int) $color;
+                if ($color < 0 || $color > 255) {
+                    return 0;
+                }
+
+                return $color;
+            }, $colors);
         } else {
-            $colors = explode(',', '255,0,0');
+            $colors = [255, 0, 0];
         }
 
-        $black = (int) imagecolorallocate($im, (int) $colors[0], (int) $colors[1], (int) $colors[2]);
+        $black = (int) imagecolorallocate($im, $colors[0], $colors[1], $colors[2]);
 
         $string = implode(' ', str_split($string));
 

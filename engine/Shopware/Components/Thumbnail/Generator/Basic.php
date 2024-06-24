@@ -38,24 +38,15 @@ use Shopware_Components_Config;
  */
 class Basic implements GeneratorInterface
 {
-    /**
-     * @var bool
-     */
-    private $fixGdImageBlur;
+    private bool $fixGdImageBlur;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
-    /**
-     * @var OptimizerServiceInterface
-     */
-    private $optimizerService;
+    private OptimizerServiceInterface $optimizerService;
 
     public function __construct(Shopware_Components_Config $config, MediaServiceInterface $mediaService, OptimizerServiceInterface $optimizerService)
     {
-        $this->fixGdImageBlur = $config->get('thumbnailNoiseFilter');
+        $this->fixGdImageBlur = (bool) $config->get('thumbnailNoiseFilter');
         $this->mediaService = $mediaService;
         $this->optimizerService = $optimizerService;
     }
@@ -115,13 +106,13 @@ class Basic implements GeneratorInterface
      *
      * @param resource $imageResource
      *
-     * @return array{width: int, height: int}
+     * @return array{width: int<1, max>, height: int<1, max>}
      */
     private function getOriginalImageSize($imageResource): array
     {
         return [
-            'width' => (int) imagesx($imageResource),
-            'height' => (int) imagesy($imageResource),
+            'width' => imagesx($imageResource),
+            'height' => imagesy($imageResource),
         ];
     }
 
@@ -155,9 +146,9 @@ class Basic implements GeneratorInterface
     /**
      * Calculate image proportion and set the new resolution
      *
-     * @param array{width: int, height: int} $originalSize
+     * @param array{width: int<1, max>, height: int<1, max>} $originalSize
      *
-     * @return array{width: int, height: int, proportion: float}
+     * @return array{width: int<1, max>, height: int<1, max>, proportion: float}
      */
     private function calculateProportionalThumbnailSize(array $originalSize, int $width, int $height): array
     {
@@ -184,17 +175,20 @@ class Basic implements GeneratorInterface
             $dstHeight = round($srcHeight * $factor);
         }
 
+        $dstWidth = max(1, (int) $dstWidth);
+        $dstHeight = max(1, (int) $dstHeight);
+
         return [
-            'width' => (int) $dstWidth,
-            'height' => (int) $dstHeight,
+            'width' => $dstWidth,
+            'height' => $dstHeight,
             'proportion' => $factor,
         ];
     }
 
     /**
-     * @param resource                       $image
-     * @param array{width: int, height: int} $originalSize
-     * @param array{width: int, height: int} $newSize
+     * @param resource                                       $image
+     * @param array{width: int<1, max>, height: int<1, max>} $originalSize
+     * @param array{width: int<1, max>, height: int<1, max>} $newSize
      *
      * @return resource
      */
