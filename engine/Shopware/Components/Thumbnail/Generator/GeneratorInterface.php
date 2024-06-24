@@ -39,12 +39,12 @@ interface GeneratorInterface
      * This function creates a thumbnail from the given image path
      * and saves it to the defined destination with the given size
      *
-     * @param string $image           - original image path
-     * @param string $destination     - full path of the generated thumbnail
-     * @param int    $maxWidth        - width in pixel
-     * @param int    $maxHeight       - height in pixel
-     * @param bool   $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
-     * @param int    $quality         - JPEG quality
+     * @param string      $image           - original image path
+     * @param string      $destination     - full path of the generated thumbnail
+     * @param int<1, max> $maxWidth        - width in pixel
+     * @param int<1, max> $maxHeight       - height in pixel
+     * @param bool        $keepProportions - Whether or not keeping the proportions of the original image, the size can be affected when true
+     * @param int         $quality         - JPEG quality
      *
      * @return void
      */

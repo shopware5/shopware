@@ -56,10 +56,7 @@ class Manager
      */
     protected $eventManager;
 
-    /**
-     * @var MediaServiceInterface
-     */
-    private $mediaService;
+    private MediaServiceInterface $mediaService;
 
     /**
      * The constructor for the thumbnail manager.
@@ -143,11 +140,13 @@ class Manager
 
             $destinations = $this->getDestination($media, $suffix);
             foreach ($destinations as $destination) {
+                $width = max(1, (int) $size['width']);
+                $height = max(1, (int) $size['height']);
                 $this->generator->createThumbnail(
                     $parameters['path'],
                     $destination,
-                    $size['width'],
-                    $size['height'],
+                    $width,
+                    $height,
                     $parameters['keepProportions'],
                     $standardQuality
                 );
@@ -163,11 +162,13 @@ class Manager
 
             $destinations = $this->getDestination($media, $suffix);
             foreach ($destinations as $destination) {
+                $width = max(1, (int) ($size['width'] * 2));
+                $height = max(1, (int) ($size['height'] * 2));
                 $this->generator->createThumbnail(
                     $parameters['path'],
                     $destination,
-                    $size['width'] * 2,
-                    $size['height'] * 2,
+                    $width,
+                    $height,
                     $parameters['keepProportions'],
                     $highDpiQuality
                 );
