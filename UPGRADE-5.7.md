@@ -28,7 +28,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `guzzlehttp/guzzle` to version 7.8.1
 * Updated `guzzlehttp/psr7` to version 2.6.2
 * Updated `monolog/monolog` to version 2.9.3
-* Updated `mpdf/mpdf` to version 8.2.3
+* Updated `mpdf/mpdf` to version 8.2.4
 * Updated `laminas/laminas-code` to version 4.14.0 for PHP 8.1 and newer
 * Updated `laminas/laminas-escaper` to version 2.13.0 for PHP 8.1 and newer
 * Updated `phpunit/phpuit` to version 9.6.11
