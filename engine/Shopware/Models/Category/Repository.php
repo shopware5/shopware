@@ -386,7 +386,7 @@ class Repository extends ModelRepository
      * @param int|null $depth
      * @param int|null $shopId
      *
-     * @return array
+     * @return list<array<string, mixed>>
      */
     public function getActiveChildrenTree($id, $customerGroupId = null, $depth = null, $shopId = null)
     {

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,35 +23,49 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Core;
+
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase;
+use sCategories;
+use Shopware\Models\Shop\Shop;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+
+class CategoriesTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var sCategories
-     */
-    private $module;
+    use ContainerTrait;
+
+    private sCategories $module;
+
+    private Connection $connection;
+
+    private Shop $shop;
 
     public function setUp(): void
     {
-        $this->module = Shopware()->Modules()->Categories();
+        $this->module = $this->getContainer()->get('modules')->Categories();
+        $this->connection = $this->getContainer()->get(Connection::class);
+        $this->shop = $this->getContainer()->get('shop');
         parent::setUp();
     }
 
     /**
      * @covers \sCategories::sGetCategories
      */
-    public function testGetCategoriesWithShopCategory()
+    public function testGetCategoriesWithShopCategory(): void
     {
-        $categoryTree = $this->module->sGetCategories(Shopware()->Shop()->get('parentID'));
+        $categoryTree = $this->module->sGetCategories($this->shop->get('parentID'));
 
-        $ids = Shopware()->Db()->fetchCol("SELECT id from s_categories WHERE path LIKE '|" . Shopware()->Shop()->get('parentID') . "|'");
+        $ids = $this->connection->fetchFirstColumn("SELECT id from s_categories WHERE path LIKE '|" . $this->shop->get('parentID') . "|'");
         $ids = array_map('\intval', $ids);
 
         foreach ($categoryTree as $key => $category) {
+            static::assertIsArray($category);
             static::assertContains($key, $ids);
             static::assertArrayHasKey('subcategories', $category);
             static::assertCount(0, $category['subcategories']);
             static::assertArrayHasKey('id', $category);
-            static::assertEquals($key, $category['id']);
+            static::assertSame($key, $category['id']);
             $this->validateCategory($category);
         }
     }
@@ -57,13 +73,12 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @covers \sCategories::sGetCategories
      */
-    public function testGetCategoriesWithSubcategory()
+    public function testGetCategoriesWithSubcategory(): void
     {
-        $categoryTree = $this->module->sGetCategories(13);
-
-        foreach ($categoryTree as $key => $category) {
+        foreach ($this->module->sGetCategories(13) as $key => $category) {
+            static::assertIsArray($category);
             static::assertArrayHasKey('id', $category);
-            static::assertEquals($key, $category['id']);
+            static::assertSame($key, $category['id']);
             $this->validateCategory($category, 'subcategories');
         }
     }
@@ -71,37 +86,37 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @covers \sCategories::sGetCategoryIdByArticleId
      */
-    public function testsGetCategoryIdByArticleId()
+    public function testsGetCategoryIdByArticleId(): void
     {
         // first category which assigned to the product 2
-        static::assertEquals(14, $this->module->sGetCategoryIdByArticleId(2));
+        static::assertSame(14, $this->module->sGetCategoryIdByArticleId(2));
 
         // Check that searching in default category or with null is the same
-        static::assertEquals(
-            $this->module->sGetCategoryIdByArticleId(2, Shopware()->Shop()->get('parentID')),
+        static::assertSame(
+            $this->module->sGetCategoryIdByArticleId(2, $this->shop->get('parentID')),
             $this->module->sGetCategoryIdByArticleId(2)
         );
 
         // Check that searching in different trees gives different results
         static::assertNotEquals(
-            $this->module->sGetCategoryIdByArticleId(2, Shopware()->Shop()->get('parentID')),
+            $this->module->sGetCategoryIdByArticleId(2, $this->shop->get('parentID')),
             $this->module->sGetCategoryIdByArticleId(2, 39)
         );
 
         // provide own parent id to filter returned category id
-        static::assertEquals(
+        static::assertSame(
             21,
             $this->module->sGetCategoryIdByArticleId(2, 10)
         );
 
         // Check that searching for an article where it doesn't exist returns 0
-        static::assertEquals(0, $this->module->sGetCategoryIdByArticleId(75, 39));
+        static::assertSame(0, $this->module->sGetCategoryIdByArticleId(75, 39));
     }
 
     /**
      * @covers \sCategories::sGetCategoriesByParent
      */
-    public function testsGetCategoriesByParent()
+    public function testsGetCategoriesByParent(): void
     {
         // Calling on subcategory return path
         $path = $this->module->sGetCategoriesByParent(21);
@@ -114,7 +129,7 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         // Calling on shop category return empty array
-        static::assertCount(0, $this->module->sGetCategoriesByParent(Shopware()->Shop()->get('parentID')));
+        static::assertCount(0, $this->module->sGetCategoriesByParent($this->shop->get('parentID')));
 
         // Assert root category
         $path = $this->module->sGetCategoriesByParent(1);
@@ -124,15 +139,15 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
             static::assertArrayHasKey('name', $category);
             static::assertArrayHasKey('blog', $category);
             static::assertArrayHasKey('link', $category);
-            static::assertEquals('Root', $category['name']);
-            static::assertEquals(1, $category['id']);
+            static::assertSame('Root', $category['name']);
+            static::assertSame(1, $category['id']);
         }
     }
 
     /**
      * @covers \sCategories::sGetWholeCategoryTree
      */
-    public function testsGetWholeCategoryTree()
+    public function testsGetWholeCategoryTree(): void
     {
         // Calling on leaf node should return empty array
         static::assertCount(0, $this->module->sGetWholeCategoryTree(21));
@@ -140,12 +155,13 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         // Default arguments should work
         static::assertEquals(
             $this->module->sGetWholeCategoryTree(),
-            $this->module->sGetWholeCategoryTree(Shopware()->Shop()->get('parentID'))
+            $this->module->sGetWholeCategoryTree($this->shop->get('parentID'))
         );
 
         // Calling on root node should return a complete tree
         $categoryTree = $this->module->sGetWholeCategoryTree(1);
         foreach ($categoryTree as $category) {
+            static::assertIsArray($category);
             static::assertArrayHasKey('id', $category);
             static::assertArrayHasKey('sub', $category);
             static::assertGreaterThan(0, \count($category['sub']));
@@ -153,9 +169,8 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         }
 
         // Inactive categories are not loaded
-        $inactive = Shopware()->Db()->fetchOne('SELECT parent FROM s_categories WHERE active = 0');
-        $inactiveParentCategory = $this->module->sGetWholeCategoryTree($inactive);
-        foreach ($inactiveParentCategory as $category) {
+        $inactive = $this->connection->fetchOne('SELECT parent FROM s_categories WHERE active = 0');
+        foreach ($this->module->sGetWholeCategoryTree($inactive) as $category) {
             $this->validateCategory($category, 'sub');
             static::assertNotEquals($inactive, $category['id']);
         }
@@ -180,18 +195,19 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @covers \sCategories::sGetCategoryContent
      */
-    public function testsGetCategoryContent()
+    public function testsGetCategoryContent(): void
     {
         // Call dispatch as we need the Router to be available inside sCore
         $this->dispatch('/');
 
         // Default arguments should work
         static::assertEquals(
-            $this->module->sGetCategoryContent(null),
-            $this->module->sGetCategoryContent(Shopware()->Shop()->get('parentID'))
+            $this->module->sGetCategoryContent(0),
+            $this->module->sGetCategoryContent($this->shop->get('parentID'))
         );
 
         $categoryArray = $this->module->sGetCategoryContent(21);
+        static::assertIsArray($categoryArray);
         static::assertArrayHasKey('id', $categoryArray);
         static::assertArrayHasKey('parentId', $categoryArray);
         static::assertArrayHasKey('name', $categoryArray);
@@ -207,12 +223,12 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
     /**
      * @covers \sCategories::sGetCategoryPath
      */
-    public function testsGetCategoryPath()
+    public function testsGetCategoryPath(): void
     {
         // Default arguments should work
-        static::assertEquals(
+        static::assertSame(
             $this->module->sGetCategoryPath(21),
-            $this->module->sGetCategoryPath(21, Shopware()->Shop()->get('parentID'))
+            $this->module->sGetCategoryPath(21, $this->shop->get('parentID'))
         );
 
         // Looking for elements in root gives full path
@@ -228,11 +244,11 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
      *
      * @ticket SW-5098
      */
-    public function testGetWholeCategoryTree()
+    public function testGetWholeCategoryTree(): void
     {
-        // set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        // set Category "Tees und Zubehör" to inactive so the children should not be displayed
         $sql = "UPDATE `s_categories` SET `active` = '0' WHERE `id` =11";
-        Shopware()->Db()->exec($sql);
+        $this->connection->executeStatement($sql);
 
         $allCategories = $this->module->sGetWholeCategoryTree(3, 3);
 
@@ -251,18 +267,20 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         $result = $this->getCategoryById($category['sub'], 13);
         static::assertEmpty($result);
 
-        // set Category "Tees und Zubehör" to inactive so the childs should not be displayed
+        // set Category "Tees und Zubehör" to inactive so the children should not be displayed
         $sql = "UPDATE `s_categories` SET `active` = '1' WHERE `id` = 11";
-        Shopware()->Db()->exec($sql);
+        $this->connection->executeStatement($sql);
     }
 
     /**
-     * Returns a category by the category id
+     * @param list<array<string, mixed>> $allCategories
+     *
+     * @return array<string, mixed>|null
      */
     private function getCategoryById(array $allCategories, int $categoryId): ?array
     {
         foreach ($allCategories as $category) {
-            if ($category['id'] == $categoryId) {
+            if ((int) $category['id'] === $categoryId) {
                 return $category;
             }
         }
@@ -270,7 +288,10 @@ class sCategoriesTest extends Enlight_Components_Test_Controller_TestCase
         return null;
     }
 
-    private function validateCategory($categoryArray, $subcategoriesIndex = null)
+    /**
+     * @param array<string, mixed> $categoryArray
+     */
+    private function validateCategory(array $categoryArray, ?string $subcategoriesIndex = null): void
     {
         static::assertArrayHasKey('id', $categoryArray);
         static::assertArrayHasKey('name', $categoryArray);

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,18 +25,19 @@
 
 namespace Shopware\Themes\TestBare;
 
+use Shopware\Components\Form\Container\Tab;
+use Shopware\Components\Form\Container\TabContainer;
+
 class Theme extends \Shopware\Components\Theme
 {
-    protected $extends;
-
     protected $javascript = ['bare_1.js', 'bare_2.js'];
 
     protected $css = ['bare_1.css', 'bare_2.css'];
 
     protected $injectBeforePlugins = true;
 
-    public function createConfig(\Shopware\Components\Form\Container\TabContainer $container)
+    public function createConfig(TabContainer $container): void
     {
-        $container->addTab(new \Shopware\Components\Form\Container\Tab('bare', 'bare'));
+        $container->addTab(new Tab('bare', 'bare'));
     }
 }

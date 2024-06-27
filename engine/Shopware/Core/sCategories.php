@@ -308,7 +308,7 @@ class sCategories implements Enlight_Hook
      * @param int $depth    Depth to use, defaults to null (unlimited depth)
      * @param int $shopId   Needed for shop limitation
      *
-     * @return array Category tree for the provided args
+     * @return list<array<string, mixed>> Category tree for the provided args
      */
     public function sGetWholeCategoryTree($parentId = null, $depth = null, $shopId = null)
     {
@@ -426,9 +426,9 @@ class sCategories implements Enlight_Hook
     }
 
     /**
-     * @param array $categories
+     * @param list<array<string, mixed>> $categories
      *
-     * @return array
+     * @return list<array<string, mixed>>
      */
     protected function mapCategoryTree($categories)
     {

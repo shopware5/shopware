@@ -137,7 +137,8 @@
         "files": ["engine/Shopware/Shopware.php"],
         "classmap": [
             "engine/Shopware/",
-            "engine/Library/Smarty/"
+            "engine/Library/Smarty/",
+            "engine/Library/Enlight/Template/Plugins/"
         ],
         "exclude-from-classmap": [
             "engine/Shopware/Plugins/Community/",
@@ -148,8 +149,15 @@
     "autoload-dev": {
         "psr-4": {
             "Shopware\\Behat\\ShopwareExtension\\": "tests/Mink/Extension/ShopwareExtension",
-            "Shopware\\Tests\\": "tests/"
-        }
+            "Shopware\\Tests\\": "tests/",
+            "TestPlugin\\": "tests/Unit/Bundle/PluginInstallerBundle/Fixtures/TestPlugin",
+            "SwagTest\\": "tests/Functional/Components/Plugin/fixtures/SwagTest",
+            "Shopware\\Themes\\": "tests/Functional/Components/Theme/Themes"
+        },
+        "classmap": [
+            "tests/Unit/Components/DependencyInjection/Compiler/RegisterControllerExamplePlugins",
+            "tests/Functional/Components/Plugin/fixtures"
+        ]
     },
     "config": {
         "autoloader-suffix": "Shopware",
