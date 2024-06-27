@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,24 +23,30 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class sCmsTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Core;
+
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase;
+use sCms;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+
+class CmsTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var sCms
-     */
-    private $module;
+    use ContainerTrait;
+
+    private sCms $module;
 
     public function setUp(): void
     {
         $this->Front()->setRequest($this->Request());
-        $this->module = Shopware()->Modules()->Cms();
+        $this->module = $this->getContainer()->get('modules')->Cms();
         parent::setUp();
     }
 
     /**
      * @covers \sCms::sGetStaticPage
      */
-    public function testsGetStaticPage()
+    public function testsGetStaticPage(): void
     {
         // Without argument, returns false
         static::assertFalse($this->module->sGetStaticPage());
@@ -46,10 +54,10 @@ class sCmsTest extends Enlight_Components_Test_Controller_TestCase
         // Non-existent id returns false
         static::assertFalse($this->module->sGetStaticPage(0));
 
-        $pageIds = Shopware()->Db()->fetchCol('SELECT id FROM s_cms_static  LIMIT 10');
-
+        $pageIds = $this->getContainer()->get(Connection::class)->fetchFirstColumn('SELECT id FROM s_cms_static  LIMIT 10');
         foreach ($pageIds as $pageId) {
             $page = $this->module->sGetStaticPage($pageId);
+            static::assertIsArray($page);
 
             static::assertArrayHasKey('id', $page);
             static::assertArrayHasKey('description', $page);

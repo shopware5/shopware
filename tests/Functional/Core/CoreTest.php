@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,27 +23,34 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class sCoreTest extends Enlight_Components_Test_Controller_TestCase
+namespace Shopware\Tests\Functional\Core;
+
+use Doctrine\DBAL\Connection;
+use Enlight_Components_Test_Controller_TestCase;
+use sCore;
+use Shopware\Tests\Functional\Traits\ContainerTrait;
+
+class CoreTest extends Enlight_Components_Test_Controller_TestCase
 {
-    /**
-     * @var sCore
-     */
-    private $module;
+    use ContainerTrait;
+
+    private sCore $module;
 
     public function setUp(): void
     {
-        $this->module = Shopware()->Modules()->Core();
+        parent::setUp();
+        $this->module = $this->getContainer()->get('modules')->Core();
     }
 
     /**
      * @covers \sCore::sBuildLink
      */
-    public function testsBuildLink()
+    public function testsBuildLink(): void
     {
         // Empty data will return empty string
         $request = $this->Request()->setParams([]);
         $this->Front()->setRequest($request);
-        static::assertEquals('', $this->module->sBuildLink([]));
+        static::assertSame('', $this->module->sBuildLink([]));
 
         // Provided sVariables are passed into the url, except 'coreID' and 'sPartner'
         $sVariablesTestResult = $this->module->sBuildLink([
@@ -61,9 +70,9 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('variables', $resultArray);
         static::assertArrayNotHasKey('coreID', $resultArray);
         static::assertArrayNotHasKey('sPartner', $resultArray);
-        static::assertEquals('with', $resultArray['some']);
-        static::assertEquals('test', $resultArray['other']);
-        static::assertEquals('values', $resultArray['variables']);
+        static::assertSame('with', $resultArray['some']);
+        static::assertSame('test', $resultArray['other']);
+        static::assertSame('values', $resultArray['variables']);
 
         // Provided sVariables override _GET, not overlapping get included from both
         // Also test that null values don't get passed on
@@ -90,13 +99,13 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('variables', $resultArray);
         static::assertArrayNotHasKey('nullVariables', $resultArray);
         static::assertArrayNotHasKey('nullGet', $resultArray);
-        static::assertEquals('used', $resultArray['just']);
-        static::assertEquals('for', $resultArray['some']);
-        static::assertEquals('with', $resultArray['other']);
-        static::assertEquals('values', $resultArray['variables']);
+        static::assertSame('used', $resultArray['just']);
+        static::assertSame('for', $resultArray['some']);
+        static::assertSame('with', $resultArray['other']);
+        static::assertSame('values', $resultArray['variables']);
 
         // Test that sViewport=cat only keeps sCategory and sPage from GET
-        // Test that they can still be overwriten by sVariables
+        // Test that they can still be overwritten by sVariables
         $request = $this->Request()->setParams([
             'sViewport' => 'cat',
             'sCategory' => 'getCategory',
@@ -120,11 +129,11 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('other', $resultArray);
         static::assertArrayHasKey('variables', $resultArray);
         static::assertArrayNotHasKey('foo', $resultArray);
-        static::assertEquals('cat', $resultArray['sViewport']);
-        static::assertEquals('sVariablesCategory', $resultArray['sCategory']);
-        static::assertEquals('getPage', $resultArray['sPage']);
-        static::assertEquals('with', $resultArray['other']);
-        static::assertEquals('values', $resultArray['variables']);
+        static::assertSame('cat', $resultArray['sViewport']);
+        static::assertSame('sVariablesCategory', $resultArray['sCategory']);
+        static::assertSame('getPage', $resultArray['sPage']);
+        static::assertSame('with', $resultArray['other']);
+        static::assertSame('values', $resultArray['variables']);
 
         // Test that overriding sViewport doesn't override the special behavior
         $request = $this->Request()->setParams([
@@ -151,17 +160,17 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         static::assertArrayHasKey('other', $resultArray);
         static::assertArrayHasKey('variables', $resultArray);
         static::assertArrayNotHasKey('foo', $resultArray);
-        static::assertEquals('test', $resultArray['sViewport']);
-        static::assertEquals('sVariablesCategory', $resultArray['sCategory']);
-        static::assertEquals('getPage', $resultArray['sPage']);
-        static::assertEquals('with', $resultArray['other']);
-        static::assertEquals('values', $resultArray['variables']);
+        static::assertSame('test', $resultArray['sViewport']);
+        static::assertSame('sVariablesCategory', $resultArray['sCategory']);
+        static::assertSame('getPage', $resultArray['sPage']);
+        static::assertSame('with', $resultArray['other']);
+        static::assertSame('values', $resultArray['variables']);
     }
 
     /**
      * @covers \sCore::sRewriteLink
      */
-    public function testsRewriteLink()
+    public function testsRewriteLink(): void
     {
         // Call dispatch as we need the Router to be available inside sCore
         $this->dispatch('/');
@@ -172,19 +181,21 @@ class sCoreTest extends Enlight_Components_Test_Controller_TestCase
         static::assertIsString($baseUrl);
         static::assertGreaterThan(0, \strlen($baseUrl));
 
+        $connection = $this->getContainer()->get(Connection::class);
+        $shopId = $this->getContainer()->get('shop')->getId();
         // Fetch all rows and test them
-        $paths = Shopware()->Db()->fetchCol(
+        $paths = $connection->fetchFirstColumn(
             'SELECT org_path FROM s_core_rewrite_urls WHERE subshopID = ?',
-            [Shopware()->Shop()->getId()]
+            [$shopId]
         );
         foreach ($paths as $path) {
-            $expectedPath = Shopware()->Db()->fetchOne(
+            $expectedPath = $connection->fetchOne(
                 'SELECT path FROM s_core_rewrite_urls WHERE subshopID = ? AND org_path = ? ORDER BY main DESC LIMIT 1',
-                [Shopware()->Shop()->getId(), $path]
+                [$shopId, $path]
             );
 
-            static::assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path));
-            static::assertEquals(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path, 'testTitle'));
+            static::assertSame(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path));
+            static::assertSame(strtolower($baseUrl . $expectedPath), $this->module->sRewriteLink('?' . $path, 'testTitle'));
         }
     }
 }

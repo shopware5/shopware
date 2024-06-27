@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,26 +25,25 @@
 
 namespace Shopware\Themes\TestResponsive;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Shopware\Components\Form\Container\Tab;
+use Shopware\Components\Form\Container\TabContainer;
 use Shopware\Components\Theme\ConfigSet;
 
 class Theme extends \Shopware\Components\Theme
 {
     protected $extend = 'TestBare';
 
-    protected $inheritanceConfig = true;
-
     protected $javascript = ['responsive_1.js', 'responsive_2.js'];
 
     protected $css = ['responsive_1.css', 'responsive_2.css'];
 
-    protected $injectBeforePlugins = false;
-
-    public function createConfig(\Shopware\Components\Form\Container\TabContainer $container)
+    public function createConfig(TabContainer $container): void
     {
-        $container->addTab(new \Shopware\Components\Form\Container\Tab('responsive', 'responsive'));
+        $container->addTab(new Tab('responsive', 'responsive'));
     }
 
-    public function createConfigSets(\Doctrine\Common\Collections\ArrayCollection $collection)
+    public function createConfigSets(ArrayCollection $collection): void
     {
         $collection->add(new ConfigSet('set1', ['value1' => 1]));
         $collection->add(new ConfigSet('set2', ['value1' => 2]));

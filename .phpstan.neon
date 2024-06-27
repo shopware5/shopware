@@ -144,7 +144,6 @@ parameters:
         - # Parent setUp method is not called on purpose
             message: '#Missing call to parent::setUp\(\) method#'
             paths:
-                - tests/Functional/Core/sCoreTest.php
                 - tests/Functional/Controllers/Backend/OrderTest.php
                 - tests/Functional/Controllers/Backend/UserManagerTest.php
 

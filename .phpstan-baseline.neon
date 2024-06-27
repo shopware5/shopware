@@ -25801,16 +25801,6 @@ parameters:
 			path: engine/Shopware/Core/sCategories.php
 
 		-
-			message: "#^Method sCategories\\:\\:mapCategoryTree\\(\\) has parameter \\$categories with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
-			message: "#^Method sCategories\\:\\:mapCategoryTree\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
 			message: "#^Method sCategories\\:\\:sGetCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCategories.php
@@ -25837,11 +25827,6 @@ parameters:
 
 		-
 			message: "#^Method sCategories\\:\\:sGetMainCategories\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sCategories.php
-
-		-
-			message: "#^Method sCategories\\:\\:sGetWholeCategoryTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sCategories.php
 
@@ -28182,11 +28167,6 @@ parameters:
 
 		-
 			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getActiveChildrenList\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Models/Category/Repository.php
-
-		-
-			message: "#^Method Shopware\\\\Models\\\\Category\\\\Repository\\:\\:getActiveChildrenTree\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Models/Category/Repository.php
 
@@ -36781,11 +36761,6 @@ parameters:
 			path: tests/Functional/Components/Plugin/FormSynchronizerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$em of class Shopware\\\\Components\\\\Plugin\\\\FormSynchronizer constructor expects Shopware\\\\Components\\\\Model\\\\ModelManager, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Plugin/FormSynchronizerTest.php
-
-		-
 			message: "#^Query error\\: Column \"s_core_config_elements\\.form_id\" expects value type int, got type int\\|string\\|false$#"
 			count: 1
 			path: tests/Functional/Components/Plugin/LegacyConfigReaderTest.php
@@ -36961,11 +36936,6 @@ parameters:
 			path: tests/Functional/Components/Router/RouterTest.php
 
 		-
-			message: "#^Property Functional\\\\Components\\\\Router\\\\RouterTestObject\\:\\:\\$errorHandler has no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Router/RouterTestObject.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\StateTranslatorServiceTest\\:\\:testTranslateStateDifferentLocale\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/StateTranslatorServiceTest.php
@@ -37006,16 +36976,6 @@ parameters:
 			path: tests/Functional/Components/StreamProtocolValidatorTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\Base\\:\\:getSnippetHandler\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Base.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\Base\\:\\:invokeMethod\\(\\) has parameter \\$parameters with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Base.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Theme\\\\InheritanceTest\\:\\:getDummyTemplates\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Theme/InheritanceTest.php
@@ -37051,28 +37011,8 @@ parameters:
 			path: tests/Functional/Components/Theme/InheritanceTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$entityManager of class Shopware\\\\Components\\\\Theme\\\\Inheritance constructor expects Shopware\\\\Components\\\\Model\\\\ModelManager, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/InheritanceTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$template of method Shopware\\\\Components\\\\Theme\\\\Inheritance\\:\\:buildConfig\\(\\) expects Shopware\\\\Models\\\\Shop\\\\Template, Shopware\\\\Models\\\\Shop\\\\Template\\|null given\\.$#"
 			count: 2
-			path: tests/Functional/Components/Theme/InheritanceTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$util of class Shopware\\\\Components\\\\Theme\\\\Inheritance constructor expects Shopware\\\\Components\\\\Theme\\\\Util, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 2
-			path: tests/Functional/Components/Theme/InheritanceTest.php
-
-		-
-			message: "#^Parameter \\#3 \\$pathResolver of class Shopware\\\\Components\\\\Theme\\\\Inheritance constructor expects Shopware\\\\Components\\\\Theme\\\\PathResolver, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/InheritanceTest.php
-
-		-
-			message: "#^Parameter \\#4 \\$eventManager of class Shopware\\\\Components\\\\Theme\\\\Inheritance constructor expects Enlight_Event_EventManager, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 1
 			path: tests/Functional/Components/Theme/InheritanceTest.php
 
 		-
@@ -37081,22 +37021,7 @@ parameters:
 			path: tests/Functional/Components/Theme/InstallerTest.php
 
 		-
-			message: "#^Parameter \\#1 \\$entityManager of class Shopware\\\\Components\\\\Theme\\\\Installer constructor expects Shopware\\\\Components\\\\Model\\\\ModelManager, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/InstallerTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$configurator of class Shopware\\\\Components\\\\Theme\\\\Installer constructor expects Shopware\\\\Components\\\\Theme\\\\Configurator, PHPUnit\\\\Framework\\\\MockObject\\\\MockObject given\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/InstallerTest.php
-
-		-
 			message: "#^Property Shopware\\\\Themes\\\\TestBare\\\\Theme\\:\\:\\$css type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Components/Theme/Themes/TestBare/Theme.php
-
-		-
-			message: "#^Property Shopware\\\\Themes\\\\TestBare\\\\Theme\\:\\:\\$extends has no type specified\\.$#"
 			count: 1
 			path: tests/Functional/Components/Theme/Themes/TestBare/Theme.php
 
@@ -37749,106 +37674,6 @@ parameters:
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Core\\\\OrderTest\\:\\:getRandomUser\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: tests/Functional/Core/OrderTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:getCategoryById\\(\\) has parameter \\$allCategories with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:getCategoryById\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testGetCategoriesWithShopCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testGetCategoriesWithSubcategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testGetWholeCategoryTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testsGetCategoriesByParent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testsGetCategoryContent\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testsGetCategoryIdByArticleId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testsGetCategoryPath\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:testsGetWholeCategoryTree\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:validateCategory\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:validateCategory\\(\\) has parameter \\$categoryArray with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCategoriesTest\\:\\:validateCategory\\(\\) has parameter \\$subcategoriesIndex with no type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$id of method sCategories\\:\\:sGetCategoryContent\\(\\) expects int, null given\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$parentId of method sCategories\\:\\:sGetWholeCategoryTree\\(\\) expects int\\|null, string\\|false\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertArrayHasKey\\(\\) expects array\\|ArrayAccess, array\\|null given\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCategoriesTest.php
-
-		-
-			message: "#^Method sCmsTest\\:\\:testsGetStaticPage\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCmsTest.php
-
-		-
-			message: "#^Parameter \\#2 \\$array of static method PHPUnit\\\\Framework\\\\Assert\\:\\:assertArrayHasKey\\(\\) expects array\\|ArrayAccess, array\\|false given\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCmsTest.php
-
-		-
-			message: "#^Method sCoreTest\\:\\:testsBuildLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCoreTest.php
-
-		-
-			message: "#^Method sCoreTest\\:\\:testsRewriteLink\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Core/sCoreTest.php
 
 		-
 			message: "#^Property Shopware\\\\Tests\\\\Functional\\\\Models\\\\Category\\\\BlogCategoryTreeListQueryTest\\:\\:\\$expected type has no value type specified in iterable type array\\.$#"
@@ -41199,11 +41024,6 @@ parameters:
 			message: "#^Parameter \\#1 \\$value of function smarty_modifier_tax expects float\\|int\\|string, bool\\|string\\|null given\\.$#"
 			count: 1
 			path: tests/Unit/Components/Template/SmartyTaxModifierTest.php
-
-		-
-			message: "#^Method Shopware\\\\Components\\\\Test\\\\Theme\\\\PathResolverTest\\:\\:testFiles\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Components/Theme/PathResolverTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Core\\\\sArticlesTest\\:\\:provideData\\(\\) has no return type specified\\.$#"
