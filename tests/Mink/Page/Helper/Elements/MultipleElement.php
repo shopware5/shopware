@@ -65,7 +65,7 @@ abstract class MultipleElement extends Element implements Countable, Iterator, H
         preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
 
         if (!$property) {
-            parent::__call($name, $arguments);
+            return parent::__call($name, $arguments);
         }
 
         return $this->getProperty(lcfirst($property[1]));
