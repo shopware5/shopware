@@ -44,7 +44,7 @@ class SliderElement extends MultipleElement
         preg_match('/^get([A-Z]{1}[a-zA-Z]+)Property$/', $name, $property);
 
         if (!$property) {
-            parent::__call($name, $arguments);
+            return parent::__call($name, $arguments);
         }
 
         return $this->getSlideProperty($arguments[0], lcfirst($property[1]));

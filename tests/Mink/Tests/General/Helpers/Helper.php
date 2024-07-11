@@ -115,7 +115,7 @@ class Helper
         $float = str_replace([' ', '.', ','], ['', '', '.'], $value);
         preg_match('/([0-9]+[\\.]?[0-9]*)/', $float, $matches);
 
-        return (float) $matches[0];
+        return (float) ($matches[0] ?? 0.0);
     }
 
     /**

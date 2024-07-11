@@ -1895,11 +1895,11 @@ class sArticles implements Enlight_Hook
 
                     preg_match('/(.*){(.*)}/', $string, $stringParsed);
 
-                    $relation = $stringParsed[1];
-                    $available = explode('/', $stringParsed[2]);
+                    $relation = $stringParsed[1] ?? '';
+                    $available = explode('/', $stringParsed[2] ?? '');
 
                     if (!@\count($available)) {
-                        $available = [0 => $stringParsed[2]];
+                        $available = [0 => $stringParsed[2] ?? ''];
                     }
 
                     $imageFailedCheck = [];

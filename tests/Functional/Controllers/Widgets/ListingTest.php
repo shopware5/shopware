@@ -64,7 +64,7 @@ class ListingTest extends TestCase
         $html = $controller->View()->fetch('widgets/listing/listing_count.tpl');
 
         preg_match('/<div id="facets">(.*?)<\/div>/s', $html, $match);
-        $facetsJson = trim($match[1]);
+        $facetsJson = trim($match[1] ?? '');
         $facets = json_decode(htmlspecialchars_decode($facetsJson, ENT_QUOTES), true);
         static::assertIsArray($facets);
 

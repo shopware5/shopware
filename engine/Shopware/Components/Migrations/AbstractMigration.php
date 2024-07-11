@@ -74,7 +74,7 @@ abstract class AbstractMigration
 
         preg_match($regexPattern, $fileName, $result);
 
-        return $result[1];
+        return (string) ($result[1] ?? '');
     }
 
     public function getVersion(): int
@@ -84,7 +84,7 @@ abstract class AbstractMigration
 
         preg_match($regexPattern, \get_class($this), $result);
 
-        return (int) $result[0];
+        return (int) ($result[0] ?? 0);
     }
 
     /**

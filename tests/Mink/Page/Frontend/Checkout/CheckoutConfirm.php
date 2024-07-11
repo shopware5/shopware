@@ -115,7 +115,7 @@ class CheckoutConfirm extends Page implements HelperSelectorInterface
 
         preg_match("/\d+/", $orderDetails, $orderNumber);
 
-        return (string) $orderNumber[0];
+        return (string) ($orderNumber[0] ?? '');
     }
 
     /**
