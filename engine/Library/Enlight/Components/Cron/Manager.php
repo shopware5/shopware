@@ -104,13 +104,13 @@ class Enlight_Components_Cron_Manager
     /**
      * Deactivate a given Cron Job in the crontab
      *
-     * @return Enlight_Components_Cron_Adapter
+     * @return void
      */
     public function disableJob(Enlight_Components_Cron_Job $job)
     {
         $job->setActive(false);
 
-        return $this->adapter->updateJob($job);
+        $this->adapter->updateJob($job);
     }
 
     /**

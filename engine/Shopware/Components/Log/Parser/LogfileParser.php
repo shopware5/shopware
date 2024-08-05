@@ -29,6 +29,9 @@ use Bcremer\LineReader\LineReader;
 use LimitIterator;
 use SplFileObject;
 
+/**
+ * @phpstan-type Log array{date?: string, channel?: string, level?: string, message?: string, context?: string, extra?: string, raw: string}
+ */
 class LogfileParser
 {
     /**
@@ -37,7 +40,7 @@ class LogfileParser
      * @param int|null $limit
      * @param bool     $reverse
      *
-     * @return array<array{data?: string, channel?: string, level?: string, message?: string, context?: string, extra?: string, raw: string}>
+     * @return list<Log>
      */
     public function parseLogFile($file, $offset = null, $limit = null, $reverse = false)
     {
@@ -78,7 +81,7 @@ class LogfileParser
     }
 
     /**
-     * @return array{data?: string, channel?: string, level?: string, message?: string, context?: string, extra?: string, raw: string}
+     * @return Log
      */
     private function parseLine(string $log): array
     {
@@ -93,12 +96,12 @@ class LogfileParser
         }
 
         return [
-            'date' => (string) $data['date'],
-            'channel' => (string) $data['channel'],
-            'level' => (string) $data['level'],
-            'message' => (string) $data['message'],
-            'context' => json_decode($data['context'], true),
-            'extra' => json_decode($data['extra'], true),
+            'date' => $data['date'],
+            'channel' => $data['channel'] ?? '',
+            'level' => $data['level'] ?? '',
+            'message' => $data['message'] ?? '',
+            'context' => json_decode($data['context'] ?? '', true),
+            'extra' => json_decode($data['extra'] ?? '', true),
             'raw' => $log,
         ];
     }

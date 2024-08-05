@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Enlight
  *
@@ -34,20 +36,17 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
      */
     protected $tableName = 's_crontab';
 
-    /**
-     * @var Connection
-     */
-    private $connection;
+    private Connection $connection;
 
     /**
-     * @var Enlight_Components_Cron_Job[]|null
+     * @var array<int, Enlight_Components_Cron_Job>|null
      */
-    private $allJobsList;
+    private ?array $allJobsList = null;
 
     /**
-     * @var Enlight_Components_Cron_Job[]|null
+     * @var array<int, Enlight_Components_Cron_Job>|null
      */
-    private $overdueJobsList;
+    private ?array $overdueJobsList = null;
 
     public function __construct(Connection $connection)
     {
@@ -106,17 +105,12 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $qb->select('*')
             ->from($this->tableName, 'c');
 
-        $ignoreActive = true;
-        if (!$ignoreActive) {
-            $qb->andWhere('c.active = true');
-        }
-
-        $rows = $qb->execute()->fetchAll();
+        $rows = $qb->execute()->fetchAllAssociative();
 
         $jobs = [];
         foreach ($rows as $row) {
             $row['data'] = unserialize($row['data'], ['allowed_classes' => false]);
-            $jobs[$row['id']] = new Enlight_Components_Cron_Job($row);
+            $jobs[(int) $row['id']] = new Enlight_Components_Cron_Job($row);
         }
 
         return $jobs;
@@ -140,7 +134,7 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         }
 
         while (($nextJob = array_pop($this->overdueJobsList)) !== null) {
-            if ($this->isJobStillOverdue($nextJob->getId())) {
+            if ($this->isJobStillOverdue((int) $nextJob->getId())) {
                 return $nextJob;
             }
         }
@@ -194,12 +188,9 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     /**
      * Internal helper method to grep data based on a given column name.
      *
-     * @param string $column
-     * @param string $value
-     *
-     * @return Enlight_Components_Cron_Job|null
+     * @param string|int $value
      */
-    private function getJobByColumn($column, $value)
+    private function getJobByColumn(string $column, $value): ?Enlight_Components_Cron_Job
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -222,9 +213,9 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
     }
 
     /**
-     * @return Enlight_Components_Cron_Job[]
+     * @return array<int, Enlight_Components_Cron_Job>
      */
-    private function getOverdueJobs()
+    private function getOverdueJobs(): array
     {
         $qb = $this->connection->createQueryBuilder();
 
@@ -241,16 +232,13 @@ class Enlight_Components_Cron_Adapter_DBAL implements Enlight_Components_Cron_Ad
         $overdueJobsList = [];
         foreach ($rows as $row) {
             $row['data'] = unserialize($row['data'], ['allowed_classes' => false]);
-            $overdueJobsList[$row['id']] = new Enlight_Components_Cron_Job($row);
+            $overdueJobsList[(int) $row['id']] = new Enlight_Components_Cron_Job($row);
         }
 
         return $overdueJobsList;
     }
 
-    /**
-     * @return bool
-     */
-    private function isJobStillOverdue($jobId)
+    private function isJobStillOverdue(int $jobId): bool
     {
         $qb = $this->connection->createQueryBuilder();
         $qb->select('*')

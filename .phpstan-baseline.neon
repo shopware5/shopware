@@ -1381,38 +1381,8 @@ parameters:
 			path: engine/Library/Enlight/Components/Auth/Adapter/DbTable.php
 
 		-
-			message: "#^Method Enlight_Components_Cron_Adapter\\:\\:startJob\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter.php
-
-		-
 			message: "#^Argument \\#0 expects a constant string, got string$#"
 			count: 4
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:isJobStillOverdue\\(\\) has parameter \\$jobId with no type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:startJob\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Method Enlight_Components_Cron_Adapter_DBAL\\:\\:updateJob\\(\\) should return Enlight_Components_Cron_Manager but return statement is missing\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Negated boolean expression is always false\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
-
-		-
-			message: "#^Parameter \\#2 \\$value of method Enlight_Components_Cron_Adapter_DBAL\\:\\:getJobByColumn\\(\\) expects string, int given\\.$#"
-			count: 1
 			path: engine/Library/Enlight/Components/Cron/Adapter/DBAL.php
 
 		-
@@ -1499,11 +1469,6 @@ parameters:
 			message: "#^Property Enlight_Components_Cron_Job\\:\\:\\$options type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Library/Enlight/Components/Cron/Job.php
-
-		-
-			message: "#^Method Enlight_Components_Cron_Manager\\:\\:disableJob\\(\\) should return Enlight_Components_Cron_Adapter but returns Enlight_Components_Cron_Manager\\.$#"
-			count: 1
-			path: engine/Library/Enlight/Components/Cron/Manager.php
 
 		-
 			message: "#^Method Enlight_Components_Cron_Manager\\:\\:endJob\\(\\) has no return type specified\\.$#"
