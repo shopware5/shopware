@@ -33,16 +33,19 @@ interface Enlight_Components_Cron_Adapter
     /**
      * Updates a cron job in the cron tab
      *
-     * @return Enlight_Components_Cron_Manager
+     * @return void
      */
     public function updateJob(Enlight_Components_Cron_Job $job);
 
+    /**
+     * @return bool
+     */
     public function startJob(Enlight_Components_Cron_Job $job);
 
     /**
      * Returns an array of Enlight_Components_Cron_Job from the crontab
      *
-     * @return Enlight_Components_Cron_Job[]
+     * @return array<int, Enlight_Components_Cron_Job>
      */
     public function getAllJobs();
 

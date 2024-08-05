@@ -18,6 +18,7 @@
  */
 
 use PhpCsFixer\Config;
+use PhpCsFixer\Runner\Parallel\ParallelConfigFactory;
 use PhpCsFixerCustomFixers\Fixer\NoSuperfluousConcatenationFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessCommentFixer;
 use PhpCsFixerCustomFixers\Fixer\NoUselessDirnameCallFixer;
@@ -56,6 +57,7 @@ return (new Config())
     ->registerCustomFixers(new Fixers())
     ->setRiskyAllowed(true)
     ->setCacheFile('var/cache/php-cs-fixer-enlight')
+    ->setParallelConfig(ParallelConfigFactory::detect())
     ->setRules([
         '@PSR12' => true,
         '@Symfony' => true,
