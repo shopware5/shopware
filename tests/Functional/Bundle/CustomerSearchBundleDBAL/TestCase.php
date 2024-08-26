@@ -126,20 +126,18 @@ class TestCase extends Enlight_Components_Test_TestCase
         unset($customerData['addresses'], $customerData['orders'], $customerData['newsletter']);
         $customerId = $this->insert('s_user', $customerData);
 
-        if (\array_key_exists('addresses', $customer)) {
-            foreach ($customer['addresses'] as $address) {
-                $address['user_id'] = $customerId;
-                $addressId = $this->insert('s_user_addresses', $address);
+        foreach ($customer['addresses'] as $address) {
+            $address['user_id'] = $customerId;
+            $addressId = $this->insert('s_user_addresses', $address);
 
-                $this->connection->update(
-                    's_user',
-                    [
-                        'default_billing_address_id' => $addressId,
-                        'default_shipping_address_id' => $addressId,
-                    ],
-                    ['id' => $customerId]
-                );
-            }
+            $this->connection->update(
+                's_user',
+                [
+                    'default_billing_address_id' => $addressId,
+                    'default_shipping_address_id' => $addressId,
+                ],
+                ['id' => $customerId]
+            );
         }
 
         if (\array_key_exists('orders', $customer)) {
@@ -159,11 +157,9 @@ class TestCase extends Enlight_Components_Test_TestCase
                 $order['userID'] = $customerId;
                 $orderId = $this->insert('s_order', $order);
 
-                if (\array_key_exists('details', $order)) {
-                    foreach ($order['details'] as $detail) {
-                        $detail['orderID'] = $orderId;
-                        $this->insert('s_order_details', $detail);
-                    }
+                foreach ($order['details'] as $detail) {
+                    $detail['orderID'] = $orderId;
+                    $this->insert('s_order_details', $detail);
                 }
             }
         }
