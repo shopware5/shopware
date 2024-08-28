@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -23,14 +25,13 @@
 
 namespace Shopware\Tests\Functional\Components\Captcha;
 
-use Shopware\Components\Captcha\CaptchaRepository;
+use PHPUnit\Framework\TestCase;
 use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 
-class CaptchaRepositoryTest extends \PHPUnit\Framework\TestCase
+class CaptchaRepositoryTest extends TestCase
 {
-    public function testThrowCaptchaNotFoundException()
+    public function testThrowCaptchaNotFoundException(): void
     {
-        /** @var CaptchaRepository $captchaRepository */
         $captchaRepository = Shopware()->Container()->get('shopware.captcha.repository');
         $this->expectException(CaptchaNotFoundException::class);
         $captchaRepository->getCaptchaByName('nameIsNotInCaptchaRepository');

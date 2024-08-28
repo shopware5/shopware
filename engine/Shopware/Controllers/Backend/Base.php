@@ -968,10 +968,13 @@ class Shopware_Controllers_Backend_Base extends Shopware_Controllers_Backend_Ext
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function getAvailableCaptchasAction()
     {
         $captchaRepository = $this->get('shopware.captcha.repository');
-        $namespace = $namespace = Shopware()->Snippets()->getNamespace('backend/captcha/display_names');
+        $namespace = Shopware()->Snippets()->getNamespace('backend/captcha/display_names');
         $availableCaptchas = $captchaRepository->getList();
         $result = [];
 

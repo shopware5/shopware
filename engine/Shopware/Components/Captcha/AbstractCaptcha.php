@@ -33,10 +33,8 @@ use Shopware_Components_Config;
 abstract class AbstractCaptcha implements CaptchaInterface
 {
     private const PATH_CAPTCHA_IMAGE = 'frontend/_public/src/img/bg--captcha.jpg';
-    private const PATH_CAPTCHA_IMAGE_FALLBACK = 'frontend/_resources/images/captcha/background.jpg';
 
     private const PATH_CAPTCHA_FONT = 'frontend/_public/src/fonts/captcha.ttf';
-    private const PATH_CAPTCHA_FONT_FALLBACK = 'frontend/_resources/images/captcha/font.ttf';
 
     protected Shopware_Components_Config $config;
 
@@ -61,14 +59,6 @@ abstract class AbstractCaptcha implements CaptchaInterface
     {
         $captcha = $this->getCaptchaFile(self::PATH_CAPTCHA_IMAGE);
         $font = $this->getCaptchaFile(self::PATH_CAPTCHA_FONT);
-
-        if (empty($captcha)) {
-            $captcha = $this->getCaptchaFile(self::PATH_CAPTCHA_IMAGE_FALLBACK);
-        }
-
-        if (empty($font)) {
-            $font = $this->getCaptchaFile(self::PATH_CAPTCHA_FONT_FALLBACK);
-        }
 
         if (!empty($captcha)) {
             $im = imagecreatefromjpeg($captcha);
@@ -107,10 +97,8 @@ abstract class AbstractCaptcha implements CaptchaInterface
                 imagettftext($im, $rand1, $rand2, (($i + 1) * 15) + 2, $rand3 + 2, $black, $font, $string[$i]);
             }
             for ($i = 0; $i < 8; ++$i) {
-                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150),
-                    Random::getInteger(20, 100), $black);
-                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150),
-                    Random::getInteger(20, 100), $black);
+                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150), Random::getInteger(20, 100), $black);
+                imageline($im, Random::getInteger(30, 70), Random::getInteger(0, 50), Random::getInteger(100, 150), Random::getInteger(20, 100), $black);
             }
         } else {
             $white = (int) imagecolorallocate($im, 255, 255, 255);

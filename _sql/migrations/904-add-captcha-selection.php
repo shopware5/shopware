@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -21,7 +23,9 @@
  * our trademarks remain entirely with the shopware AG.
  */
 
-class Migrations_Migration904 extends Shopware\Components\Migrations\AbstractMigration
+use Shopware\Components\Migrations\AbstractMigration;
+
+class Migrations_Migration904 extends AbstractMigration
 {
     public function up($modus)
     {
@@ -30,7 +34,7 @@ class Migrations_Migration904 extends Shopware\Components\Migrations\AbstractMig
         $this->createAdditionalCaptchaOptionsTranslations();
     }
 
-    private function moveExistingCaptchaOptions()
+    private function moveExistingCaptchaOptions(): void
     {
         $this->addSql("SET @help_parent = (SELECT id FROM s_core_config_forms WHERE name='Frontend' LIMIT 1)");
 
@@ -44,7 +48,7 @@ EOD;
         $this->addSql("UPDATE s_core_config_elements SET form_id=@parent WHERE name='captchaColor'");
     }
 
-    private function createAdditionalCaptchaOptionsTranslations()
+    private function createAdditionalCaptchaOptionsTranslations(): void
     {
         $this->addSql("SET @captchaMethod = (SELECT id FROM s_core_config_elements WHERE name = 'captchaMethod' LIMIT 1)");
         $this->addSql("SET @noCaptchaAfterLogin = (SELECT id FROM s_core_config_elements WHERE name = 'noCaptchaAfterLogin' LIMIT 1)");
@@ -59,9 +63,9 @@ EOD;
     }
 
     /**
-     * @param string $modus
+     * @param self::MODUS_* $modus
      */
-    private function createAdditionalCaptchaOptions($modus)
+    private function createAdditionalCaptchaOptions(string $modus): void
     {
         $captchaMethod = 'default';
         if ($modus === self::MODUS_UPDATE) {
