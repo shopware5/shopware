@@ -35,7 +35,6 @@ use Shopware\Bundle\StoreFrontBundle\Gateway\PaymentGatewayInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ContextServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Tax;
-use Shopware\Components\Captcha\CaptchaValidator;
 use Shopware\Components\Cart\CartOrderNumberProviderInterface;
 use Shopware\Components\Cart\CartPersistServiceInterface;
 use Shopware\Components\Cart\ConditionalLineItemServiceInterface;
@@ -2258,9 +2257,9 @@ class sAdmin implements Enlight_Hook
      *
      * @param string $email       Email address
      * @param bool   $unsubscribe If true, remove email address from mailing list
-     * @param int    $groupID     Id of the mailing list group
+     * @param int    $groupID     ID of the mailing list group
      *
-     * @return array Array with the result of the operation
+     * @return array{code: int, message?: string, sErrorFlag?: array<string, true>, isNewRegistration?: bool} Array with the result of the operation
      */
     public function sNewsletterSubscription($email, $unsubscribe = false, $groupID = null)
     {
@@ -2271,10 +2270,9 @@ class sAdmin implements Enlight_Hook
             if ($this->shouldVerifyCaptcha($config)
                 && (bool) $this->front->Request()->getParam('voteConfirmed', false) === false
             ) {
-                /** @var CaptchaValidator $captchaValidator */
                 $captchaValidator = Shopware()->Container()->get('shopware.captcha.validator');
 
-                if (!$captchaValidator->validateByName($config->get('newsletterCaptcha'), $this->front->Request())) {
+                if (!$captchaValidator->validateByName($config->get('newsletterCaptcha'), $this->front->ensureRequest())) {
                     return [
                         'code' => 7,
                     ];
@@ -3890,7 +3888,7 @@ SQL;
      * Helper method for sAdmin::sNewsletterSubscription
      * Subscribes the provided email address to the newsletter group
      *
-     * @return array<string, mixed>
+     * @return array{code: int, message: string, isNewRegistration?: bool}
      */
     private function subscribeNewsletter(string $email, int $groupID): array
     {

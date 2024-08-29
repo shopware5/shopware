@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -34,10 +36,7 @@ class DefaultCaptcha extends AbstractCaptcha
     public const SESSION_KEY = __CLASS__ . '_sRandom';
     public const CAPTCHA_METHOD = 'default';
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(
         ContainerInterface $container,
@@ -65,7 +64,7 @@ class DefaultCaptcha extends AbstractCaptcha
 
         unset($captchaArray[$request->get('sCaptcha')]);
 
-        $this->container->get('session')->offsetSet(self::SESSION_KEY, $captchaArray);
+        $this->container->get('session')->set(self::SESSION_KEY, $captchaArray);
 
         return true;
     }
@@ -85,7 +84,6 @@ class DefaultCaptcha extends AbstractCaptcha
         imagedestroy($imgResource);
         $img = base64_encode($img);
 
-        /** @var string[] $sRandArray */
         $sRandArray = $this->container->get('session')->get(self::SESSION_KEY, []);
 
         $threshold = 51;
@@ -95,7 +93,7 @@ class DefaultCaptcha extends AbstractCaptcha
 
         $sRandArray[$string] = true;
 
-        $this->container->get('session')->offsetSet(self::SESSION_KEY, $sRandArray);
+        $this->container->get('session')->set(self::SESSION_KEY, $sRandArray);
 
         return ['img' => $img];
     }

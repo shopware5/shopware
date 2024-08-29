@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,13 +26,11 @@
 namespace Shopware\Components\Captcha;
 
 use Enlight_Controller_Request_Request;
+use Shopware\Components\Captcha\Exception\CaptchaNotFoundException;
 
 class CaptchaValidator
 {
-    /**
-     * @var CaptchaRepository
-     */
-    private $repository;
+    private CaptchaRepository $repository;
 
     public function __construct(CaptchaRepository $repository)
     {
@@ -39,6 +39,8 @@ class CaptchaValidator
 
     /**
      * Validates a Request using the currently configured captcha
+     *
+     * @throws CaptchaNotFoundException
      *
      * @return bool
      */
@@ -55,12 +57,12 @@ class CaptchaValidator
      *
      * @param string $name
      *
+     * @throws CaptchaNotFoundException
+     *
      * @return bool
      */
     public function validateByName($name, Enlight_Controller_Request_Request $request)
     {
-        $captcha = $this->repository->getCaptchaByName($name);
-
-        return $captcha->validate($request);
+        return $this->repository->getCaptchaByName($name)->validate($request);
     }
 }

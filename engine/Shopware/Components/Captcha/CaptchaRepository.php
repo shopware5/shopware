@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -31,20 +33,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class CaptchaRepository
 {
-    /**
-     * @var Shopware_Components_Config
-     */
-    private $config;
+    private Shopware_Components_Config $config;
 
     /**
-     * @var CaptchaInterface[]
+     * @var list<CaptchaInterface>
      */
-    private $captchas;
+    private array $captchas;
 
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
+    private ContainerInterface $container;
 
     public function __construct(
         IteratorAggregate $captchas,
@@ -79,7 +75,7 @@ class CaptchaRepository
     }
 
     /**
-     * @return CaptchaInterface[]
+     * @return list<CaptchaInterface>
      */
     public function getList()
     {
@@ -98,7 +94,7 @@ class CaptchaRepository
     public function getCaptchaByName($captchaName)
     {
         foreach ($this->captchas as $captcha) {
-            if ($captcha->getName() == $captchaName) {
+            if ($captcha->getName() === $captchaName) {
                 return $captcha;
             }
         }
@@ -106,23 +102,17 @@ class CaptchaRepository
         throw new CaptchaNotFoundException(sprintf("The captcha with id '%s' is configured, but could not be found", $captchaName));
     }
 
-    /**
-     * @return bool
-     */
-    private function isCaptchaDisabled()
+    private function isCaptchaDisabled(): bool
     {
-        $userIsLoggedIn = !empty($this->container->get('session')->get('sUserId'));
+        $isCustomerLoggedIn = !empty($this->container->get('session')->get('sUserId'));
 
-        if ($this->config->get('noCaptchaAfterLogin') && $userIsLoggedIn) {
+        if ($this->config->get('noCaptchaAfterLogin') && $isCustomerLoggedIn) {
             return true;
         }
 
         // legacy way to disable the captcha
         $captchaColor = $this->config->get('CaptchaColor');
-        if (empty($captchaColor)) {
-            return true;
-        }
 
-        return false;
+        return empty($captchaColor);
     }
 }

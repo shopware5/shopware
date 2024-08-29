@@ -476,36 +476,6 @@ parameters:
 			path: _sql/migrations/440-fix-sorder-email-template.php
 
 		-
-			message: "#^Method Migrations_Migration443\\:\\:disableFirstRunWizard\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/443-add-wizard-configuration-value.php
-
-		-
-			message: "#^Method Migrations_Migration443\\:\\:fetchElementId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/443-add-wizard-configuration-value.php
-
-		-
-			message: "#^Method Migrations_Migration443\\:\\:fetchFormId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/443-add-wizard-configuration-value.php
-
-		-
-			message: "#^Method Migrations_Migration443\\:\\:fixCaptchaColor\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/443-add-wizard-configuration-value.php
-
-		-
-			message: "#^Method Migrations_Migration443\\:\\:insertFormElement\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/443-add-wizard-configuration-value.php
-
-		-
-			message: "#^Method Migrations_Migration443\\:\\:insertFormTranslation\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/443-add-wizard-configuration-value.php
-
-		-
 			message: "#^Method Migrations_Migration444\\:\\:addImprintToBottomGroup\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: _sql/migrations/444-add-imprint-to-bottom-shop-group.php
@@ -1014,21 +984,6 @@ parameters:
 			message: "#^Method Migrations_Migration903\\:\\:fetchContentMenuId\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: _sql/migrations/903-add-menu-import-export-advanced.php
-
-		-
-			message: "#^Method Migrations_Migration904\\:\\:createAdditionalCaptchaOptions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/904-add-captcha-selection.php
-
-		-
-			message: "#^Method Migrations_Migration904\\:\\:createAdditionalCaptchaOptionsTranslations\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/904-add-captcha-selection.php
-
-		-
-			message: "#^Method Migrations_Migration904\\:\\:moveExistingCaptchaOptions\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: _sql/migrations/904-add-captcha-selection.php
 
 		-
 			message: "#^Method Migrations_Migration917\\:\\:addCategorySortings\\(\\) has no return type specified\\.$#"
@@ -21316,11 +21271,6 @@ parameters:
 			path: engine/Shopware/Controllers/Backend/Base.php
 
 		-
-			message: "#^Method Shopware_Controllers_Backend_Base\\:\\:getAvailableCaptchasAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Backend/Base.php
-
-		-
 			message: "#^Method Shopware_Controllers_Backend_Base\\:\\:getAvailableHashesAction\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Backend/Base.php
@@ -24356,21 +24306,6 @@ parameters:
 			path: engine/Shopware/Controllers/Widgets/Campaign.php
 
 		-
-			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:getCaptchaByNameAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Captcha.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:indexAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Captcha.php
-
-		-
-			message: "#^Method Shopware_Controllers_Widgets_Captcha\\:\\:refreshCaptchaAction\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Controllers/Widgets/Captcha.php
-
-		-
 			message: "#^Access to an undefined property Enlight_Components_Session_Namespace\\:\\:\\$sOneTimeAccount\\.$#"
 			count: 1
 			path: engine/Shopware/Controllers/Widgets/Checkout.php
@@ -24637,11 +24572,6 @@ parameters:
 
 		-
 			message: "#^Method sAdmin\\:\\:sManageRisks\\(\\) has parameter \\$user with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Method sAdmin\\:\\:sNewsletterSubscription\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
@@ -25053,11 +24983,6 @@ parameters:
 		-
 			message: "#^Parameter \\#2 \\$numberOfPages of method sAdmin\\:\\:getPagerStructure\\(\\) expects int, float\\|int given\\.$#"
 			count: 2
-			path: engine/Shopware/Core/sAdmin.php
-
-		-
-			message: "#^Parameter \\#2 \\$request of method Shopware\\\\Components\\\\Captcha\\\\CaptchaValidator\\:\\:validateByName\\(\\) expects Enlight_Controller_Request_Request, Enlight_Controller_Request_Request\\|null given\\.$#"
-			count: 1
 			path: engine/Shopware/Core/sAdmin.php
 
 		-
@@ -36409,11 +36334,6 @@ parameters:
 			message: "#^Query error\\: Column \"s_core_plugins\\.added\" expects value type string, got type DateTime$#"
 			count: 1
 			path: tests/Functional/Components/CacheSubscriberTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Captcha\\\\CaptchaRepositoryTest\\:\\:testThrowCaptchaNotFoundException\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Functional/Components/Captcha/CaptchaRepositoryTest.php
 
 		-
 			message: "#^Method Shopware\\\\Tests\\\\Functional\\\\Components\\\\Cart\\\\BasketQueryHelperTest\\:\\:testGetInsertDiscountAttributeQuery\\(\\) has no return type specified\\.$#"

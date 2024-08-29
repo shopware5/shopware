@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -33,12 +35,14 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
         $this->Response()->setHeader('x-robots-tag', 'noindex');
     }
 
+    /**
+     * @return void
+     */
     public function refreshCaptchaAction()
     {
         $this->Front()->Plugins()->ViewRenderer()->setNoRender();
 
-        $legacyCaptcha = $this->container->get('shopware.captcha.legacy_captcha');
-        $templateData = $legacyCaptcha->getTemplateData();
+        $templateData = $this->container->get('shopware.captcha.legacy_captcha')->getTemplateData();
 
         $img = $templateData['img'];
         $rand = $templateData['sRand'];
@@ -50,15 +54,13 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
     }
 
     /**
-     * Index action method
+     * Creates the captcha images and delivers it as a PNG with the proper HTTP header.
      *
-     * Creates the captcha images and delivers it as a PNG
-     * with the proper HTTP header.
+     * @return void
      */
     public function indexAction()
     {
-        $captchaRepository = $this->container->get('shopware.captcha.repository');
-        $captcha = $captchaRepository->getConfiguredCaptcha();
+        $captcha = $this->container->get('shopware.captcha.repository')->getConfiguredCaptcha();
 
         $captchaName = $captcha->getName();
         $this->View()->loadTemplate(sprintf('widgets/captcha/%s.tpl', $captchaName));
@@ -67,7 +69,9 @@ class Shopware_Controllers_Widgets_Captcha extends Enlight_Controller_Action
 
     /**
      * Assigns a captcha by the passed name in the request to the view.
-     * If no name assign noCaptcha
+     * If no name is given, "noCaptcha" is used.
+     *
+     * @return void
      */
     public function getCaptchaByNameAction()
     {
