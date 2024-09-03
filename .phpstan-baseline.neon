@@ -7736,46 +7736,6 @@ parameters:
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/BasketPositionStruct.php
 
 		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:getName\\(\\) return type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:getName\\(\\) should return array but returns array\\|string\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:setChildren\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:setId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:setName\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:setName\\(\\) has parameter \\$name with no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:setParentId\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
-			message: "#^Property Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CategoryStruct\\:\\:\\$name type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CategoryStruct.php
-
-		-
 			message: "#^Method Shopware\\\\Bundle\\\\PluginInstallerBundle\\\\Struct\\\\CommentStruct\\:\\:setAuthor\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: engine/Shopware/Bundle/PluginInstallerBundle/Struct/CommentStruct.php

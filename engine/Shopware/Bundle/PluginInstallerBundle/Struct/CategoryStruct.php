@@ -36,7 +36,7 @@ class CategoryStruct implements JsonSerializable
     private $id;
 
     /**
-     * @var array|string
+     * @var array<string, string>
      */
     private $name;
 
@@ -60,6 +60,8 @@ class CategoryStruct implements JsonSerializable
 
     /**
      * @param int $id
+     *
+     * @return void
      */
     public function setId($id)
     {
@@ -67,7 +69,7 @@ class CategoryStruct implements JsonSerializable
     }
 
     /**
-     * @return array
+     * @return array<string, string>
      */
     public function getName()
     {
@@ -75,7 +77,9 @@ class CategoryStruct implements JsonSerializable
     }
 
     /**
-     * @param array $name
+     * @param array<string, string> $name
+     *
+     * @return void
      */
     public function setName($name)
     {
@@ -92,6 +96,8 @@ class CategoryStruct implements JsonSerializable
 
     /**
      * @param int $parentId
+     *
+     * @return void
      */
     public function setParentId($parentId)
     {
@@ -108,6 +114,8 @@ class CategoryStruct implements JsonSerializable
 
     /**
      * @param CategoryStruct[] $children
+     *
+     * @return void
      */
     public function setChildren($children)
     {
