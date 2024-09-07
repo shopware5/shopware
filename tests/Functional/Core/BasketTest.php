@@ -40,6 +40,9 @@ use Shopware\Components\Model\ModelManager;
 use Shopware\Components\Random;
 use Shopware\Models\Article\Detail;
 use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Discount as CustomerGroupDiscount;
+use Shopware\Models\Customer\Group as CustomerGroup;
+use Shopware\Models\Tax\Rule as TaxRule;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper;
 use Shopware\Tests\Functional\Helper\Utils;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
@@ -154,6 +157,44 @@ class BasketTest extends TestCase
         static::assertFalse($result['hideBasket']);
         static::assertArrayHasKey($inStockProduct['ordernumber'], $result['articles']);
         static::assertFalse($result['articles'][$inStockProduct['ordernumber']]['OutOfStock']);
+    }
+
+    public function testInsertDiscountWithTaxFreeTaxRule(): void
+    {
+        $this->generateBasketSession();
+
+        $customerGroupRepo = $this->getContainer()->get('models')->getRepository(CustomerGroup::class);
+        $customerGroup = $customerGroupRepo->findOneBy(['key' => 'EK']);
+        static::assertInstanceOf(CustomerGroup::class, $customerGroup);
+
+        $taxRule = $this->createTaxFreeTaxRule($customerGroup);
+        $customerGroupDiscount = $this->createCustomerGroupDiscount($customerGroup);
+
+        $this->module->sAddArticle('SW10003');
+        $this->module->sInsertDiscount();
+
+        $discount = $this->connection->fetchAssociative(
+            'SELECT * FROM s_order_basket WHERE sessionID = :sessionId AND ordernumber = :ordernumber',
+            [
+                'sessionId' => $this->getSessionId(),
+                'ordernumber' => 'sw-discount',
+            ]
+        );
+
+        static::assertIsArray($discount);
+        static::assertSame(0, (int) $discount['tax_rate']);
+
+        // Housekeeping
+        $this->connection->delete(
+            's_order_basket',
+            ['sessionID' => $this->getSessionId()]
+        );
+
+        $modelManager = $this->getContainer()->get('models');
+        $modelManager->remove($taxRule);
+        $modelManager->remove($customerGroupDiscount);
+
+        $modelManager->flush();
     }
 
     public function testsCheckBasketQuantitiesWithHigherQuantityThanAvailable(): void
@@ -2676,5 +2717,28 @@ class BasketTest extends TestCase
     private function getSessionId(): string
     {
         return $this->session->get('sessionId');
+    }
+
+    private function createTaxFreeTaxRule(CustomerGroup $group): TaxRule
+    {
+        $resourceHelper = new Helper($this->getContainer());
+
+        return $resourceHelper->createTaxRule([
+            'name' => 'PHPUNIT-TAX-FREE',
+            'active' => true,
+            'customerGroup' => $group,
+            'groupId' => 1,
+        ]);
+    }
+
+    private function createCustomerGroupDiscount(CustomerGroup $group): CustomerGroupDiscount
+    {
+        $resourceHelper = new Helper($this->getContainer());
+
+        return $resourceHelper->createCustomerGroupDiscount([
+            'group' => $group,
+            'discount' => 1,
+            'value' => 2,
+        ]);
     }
 }
