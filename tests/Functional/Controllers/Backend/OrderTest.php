@@ -224,7 +224,7 @@ class OrderTest extends ControllerTestCase
 
         $orderTime = $data['orderTime'];
         $oldDate = clone $orderTime;
-        $orderTime->setTimezone(new DateTimeZone('US/Alaska'));
+        $orderTime->setTimezone(new DateTimeZone('America/Anchorage'));
 
         $data['orderTime'] = new DateTime($orderTime->format(DateTime::ATOM));
         if (isset($data['changed'])) {
