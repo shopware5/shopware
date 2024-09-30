@@ -7,7 +7,7 @@ root_dir="$script_dir"/..
 
 set -x
 
-rm -rf -- "$root_dir"/vendor/mpdf/mpdf/ttfonts
+find -- "$root_dir"/vendor/mpdf/mpdf/ttfonts -type f ! -name 'DejaVu*' -exec rm {} +
 rm -rf -- "$root_dir"/vendor/google/protobuf/src
 rm -rf -- "$root_dir"/vendor/google/protobuf/java
 rm -rf -- "$root_dir"/vendor/google/protobuf/objectivec
