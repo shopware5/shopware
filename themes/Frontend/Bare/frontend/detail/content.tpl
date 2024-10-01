@@ -32,7 +32,7 @@
                     data-image-gallery="true"
                     data-maxZoom="{$theme.lightboxZoomFactor}"
                     data-thumbnails=".image--thumbnails"
-                    {/if}>
+                    {/if} style="z-index: unset;">
                     {block name="frontend_detail_index_image"}
                         {include file="frontend/detail/image.tpl"}
                     {/block}
