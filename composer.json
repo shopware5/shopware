@@ -41,7 +41,7 @@
         "beberlei/assert": "3.3.2",
         "beberlei/doctrineextensions": "1.4.0",
         "cocur/slugify": "4.3.0 || 4.5.1",
-        "doctrine/annotations": "1.14.3",
+        "doctrine/annotations": "1.14.4",
         "doctrine/cache": "1.13.0",
         "doctrine/collections": "1.8.0",
         "doctrine/common": "3.4.4",
