@@ -453,10 +453,12 @@ class Shopware_Controllers_Backend_SwagUpdate extends Shopware_Controllers_Backe
 
     private function getUserLanguage(stdClass $user): string
     {
-        $locale = $user->locale;
-        $locale = strtolower($locale->getLocale());
+        $locale = substr(strtolower($user->locale->getLocale()), 0, 2);
+        if ($locale === false) {
+            throw new Exception('Could not get user language');
+        }
 
-        return substr($locale, 0, 2);
+        return $locale;
     }
 
     private function checkSecurityPlugin(): bool

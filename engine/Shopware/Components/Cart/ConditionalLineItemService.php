@@ -68,7 +68,7 @@ class ConditionalLineItemService implements ConditionalLineItemServiceInterface
 
     public function addConditionalLineItem(string $name, string $orderNumber, float $price, float $tax, int $mode): void
     {
-        $currencyFactor = empty($this->system->sCurrency['factor']) ? 1 : $this->system->sCurrency['factor'];
+        $currencyFactor = empty($this->system->sCurrency['factor']) ? 1 : (float) $this->system->sCurrency['factor'];
         $taxFree = empty($this->system->sUSERGROUPDATA['tax']) && !empty($this->system->sUSERGROUPDATA['id']);
         $sessionId = $this->session->get('sessionId');
 
