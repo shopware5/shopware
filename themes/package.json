@@ -16,7 +16,7 @@
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-jest": "^26.1.1",
         "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "^5.2.0",
+        "eslint-plugin-promise": "^7.1.0",
         "eslint-plugin-standard": "^5.0.0",
         "grunt": "^1.4.0",
         "grunt-chokidar": "^1.0.2",
