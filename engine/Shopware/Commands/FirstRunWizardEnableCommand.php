@@ -23,15 +23,13 @@
 
 namespace Shopware\Commands;
 
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class FirstRunWizardEnableCommand extends ShopwareCommand
 {
-    /**
-     * {@inheritdoc}
-     */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('sw:firstrunwizard:enable')
@@ -46,7 +44,13 @@ class FirstRunWizardEnableCommand extends ShopwareCommand
     {
         $conn = $this->container->get(\Doctrine\DBAL\Connection::class);
         $elementId = $conn->fetchColumn('SELECT id FROM s_core_config_elements WHERE name LIKE "firstRunWizardEnabled"');
+        $elementId = is_numeric($elementId) ? (int) $elementId : 0;
+        if ($elementId <= 0) {
+            throw new RuntimeException('Cannot find config element `firstRunWizardEnabled`');
+        }
+
         $valueid = $conn->fetchColumn('SELECT id FROM s_core_config_values WHERE element_id = :elementId', ['elementId' => $elementId]);
+        $valueid = is_numeric($valueid) ? (int) $valueid : 0;
 
         $data = [
             'element_id' => $elementId,
@@ -54,7 +58,7 @@ class FirstRunWizardEnableCommand extends ShopwareCommand
             'value' => serialize(true),
         ];
 
-        if ($valueid) {
+        if ($valueid > 0) {
             $conn->update(
                 's_core_config_values',
                 $data,

@@ -29,7 +29,6 @@ use Enlight_Controller_Response_Response;
 use Enlight_Event_EventArgs;
 use Psr\Link\LinkProviderInterface;
 use Symfony\Component\WebLink\HttpHeaderSerializer;
-use Traversable;
 
 class AddLinkHeaderSubscriber implements SubscriberInterface
 {
@@ -88,11 +87,7 @@ class AddLinkHeaderSubscriber implements SubscriberInterface
         }
 
         $links = $linkProvider->getLinks();
-        if (is_countable($links) && \count($links) === 0) {
-            return;
-        }
-
-        if ($links instanceof Traversable && iterator_count($links) === 0) {
+        if (is_countable($links) && \count($links) === 0 || iterator_count($links) === 0) {
             return;
         }
 

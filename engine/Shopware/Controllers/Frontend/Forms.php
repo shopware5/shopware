@@ -40,21 +40,21 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Contains the validated post data
      *
-     * @var array
+     * @var array<mixed>
      */
     public $_postData;
 
     /**
      * Contains the errors
      *
-     * @var array
+     * @var array{v?: list<array-key>, e?: array<array-key, bool>}
      */
     public $_errors;
 
     /**
      * Contains the form elements
      *
-     * @var array
+     * @var array<array-key, array<array-key, mixed>>
      */
     protected $_elements;
 
@@ -148,7 +148,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      * @throws Enlight_Exception
      * @throws Exception
      *
-     * @return array
+     * @return array{id: string, active: bool, name: string, text: string, text2: string, email: string, email_template: string, email_subject: string, metaTitle: ?string, metaDescription: ?string, metaKeywords: ?string, attribute: array<mixed>, sErrors: array{v?: list<array-key>, e?: array<array-key, bool>}, sElements: array<array-key, array<string, mixed>>, sFields: array<array-key, string>, sLabels: array<array-key, string>}
      */
     protected function getContent($formId)
     {
@@ -287,7 +287,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Create label element
      *
-     * @param array $element
+     * @param array<string, mixed> $element
      *
      * @return string
      */
@@ -310,6 +310,7 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     /**
      * Create input element method
      *
+     * @param array<string, mixed>      $element
      * @param array<string>|string|null $post
      *
      * @return string
@@ -575,9 +576,12 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
      *
      * Populates $this->_postData
      *
+     * @param array<string, mixed>        $inputs
+     * @param array<array<string, mixed>> $elements
+     *
      * @throws Exception
      *
-     * @return array
+     * @return array{v?: list<array-key>, e?: array<array-key, bool>}
      */
     protected function _validateInput(array $inputs, array $elements)
     {
@@ -636,8 +640,16 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
                             $valid = false;
                             break;
                         }
-                        $host = trim(substr($value, strpos($value, '@') + 1));
-                        if (empty($host) || !gethostbyname($host)) {
+
+                        $host = substr($value, strpos($value, '@') + 1);
+                        if ($host === false) {
+                            unset($value);
+                            $valid = false;
+                            break;
+                        }
+
+                        $host = trim($host);
+                        if ($host === '' || !gethostbyname($host)) {
                             unset($value);
                             $valid = false;
                         }
@@ -687,6 +699,8 @@ class Shopware_Controllers_Frontend_Forms extends Enlight_Controller_Action
     }
 
     /**
+     * @param array<array-key, array<array-key, mixed>> $fields
+     *
      * @return Form
      */
     protected function translateForm(Form $form, array &$fields)

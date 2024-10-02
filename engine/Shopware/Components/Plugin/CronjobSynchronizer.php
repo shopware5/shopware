@@ -41,7 +41,11 @@ class CronjobSynchronizer
     }
 
     /**
+     * @param array<array<string, mixed>> $cronjobs
+     *
      * @throws InvalidArgumentException
+     *
+     * @return void
      */
     public function synchronize(Plugin $plugin, array $cronjobs)
     {
@@ -53,9 +57,9 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param array $cronjob
+     * @param array<string, mixed> $cronjob
      */
-    private function addCronjob(Plugin $plugin, $cronjob)
+    private function addCronjob(Plugin $plugin, $cronjob): void
     {
         $cronjob['pluginID'] = $plugin->getId();
 
@@ -84,7 +88,8 @@ class CronjobSynchronizer
             $id = $this->connection->fetchColumn($selectStatement, $params);
         }
 
-        if ($id) {
+        $id = is_numeric($id) ? (int) $id : 0;
+        if ($id !== 0) {
             // Don't overwrite user cronjob state
             unset($cronjob['active']);
 
@@ -97,9 +102,9 @@ class CronjobSynchronizer
     }
 
     /**
-     * @param int $pluginId
+     * @param array<string> $cronjobActions
      */
-    private function removeNotExistingEntries($pluginId, array $cronjobActions)
+    private function removeNotExistingEntries(int $pluginId, array $cronjobActions): void
     {
         $builder = $this->connection->createQueryBuilder();
         $builder->delete('s_crontab');

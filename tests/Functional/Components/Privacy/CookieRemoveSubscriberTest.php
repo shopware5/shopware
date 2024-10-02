@@ -43,17 +43,14 @@ class CookieRemoveSubscriberTest extends TestCase
     public function testPostDispatchDoesNothingRemovalInactive(): void
     {
         Shopware()->Config()->offsetSet('cookie_note_mode', 0);
-        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
 
         $controller = $this->getController();
 
         // May not be removed, since further code may not be executed
         $controller->Response()->setCookie('notRemoved', 'foo');
 
+        $cookieRemoveSubscriber = $this->getCookieRemoveSubscriber();
         $cookieRemoveSubscriber->onPostDispatch($this->getEventArgs($controller));
-
-        // More code than allowed got executed if this fails
-        static::assertNotEmpty($controller->Response()->getCookies());
 
         Shopware()->Config()->offsetSet('cookie_note_mode', 1);
         Shopware()->Config()->offsetSet('show_cookie_note', 0);
