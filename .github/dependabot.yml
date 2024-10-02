@@ -1,14 +1,18 @@
 version: 2
 updates:
-  - package-ecosystem: "composer"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "github-actions"
-    directory: "/"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "weekly"
+    -   package-ecosystem: "composer"
+        directories:
+            - "/"
+            - "/recovery/common"
+        schedule:
+            interval: "weekly"
+    -   package-ecosystem: "github-actions"
+        directory: "/.github/workflows"
+        schedule:
+            interval: "weekly"
+    -   package-ecosystem: "npm"
+        directories:
+            - "/themes"
+            - "/themes/Frontend/Responsive"
+        schedule:
+            interval: "weekly"
