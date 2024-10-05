@@ -99,7 +99,8 @@
         <exec executable="${script.php}" failonerror="true">
             <arg value="composer.phar"/>
             <arg value="update"/>
-            <arg value="'laminas/*' cocur/slugify"/>
+            <arg value="'laminas/*' cocur/slugify google/cloud-storage"/>
+            <arg value="-W"/>
         </exec>
 
         <exec executable="${script.php}" failonerror="true">

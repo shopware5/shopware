@@ -130,8 +130,8 @@ debug-config-test: .make.config.build.debug
 	touch $@
 
 .make.install.composer-dependencies:
-	composer update 'laminas/*' cocur/slugify
-	composer install
+	composer update 'laminas/*' cocur/slugify google/cloud-storage -W --ignore-platform-req=php+
+	composer install --ignore-platform-req=php+
 	composer install -d recovery/common
 	composer bin all install
 	cp .htaccess.dist .htaccess

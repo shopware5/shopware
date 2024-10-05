@@ -15,7 +15,7 @@
         "issues": "https://github.com/shopware5/shopware/issues"
     },
     "require": {
-        "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
+        "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0",
         "ext-ctype": "*",
         "ext-curl": "*",
         "ext-date": "*",
@@ -53,7 +53,7 @@
         "elasticsearch/elasticsearch": "^7",
         "fig/link-util": "1.1.2",
         "friendsofphp/proxy-manager-lts": "1.0.18",
-        "google/cloud-storage": "1.39.0",
+        "google/cloud-storage": "1.39.0 || 1.42.0",
         "guzzlehttp/guzzle": "~7.9.0",
         "guzzlehttp/psr7": "~2.7.0",
         "laminas/laminas-code": "4.7.1 || 4.14.0",
