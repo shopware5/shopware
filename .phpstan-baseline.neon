@@ -39626,16 +39626,6 @@ parameters:
 			path: tests/Unit/Bundle/SitemapBundle/Service/UrlFilterTest.php
 
 		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapLockTest\\:\\:testAcquireLockDefaultFalse\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/SitemapLockTest.php
-
-		-
-			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapLockTest\\:\\:testAcquireLockWorks\\(\\) has no return type specified\\.$#"
-			count: 1
-			path: tests/Unit/Bundle/SitemapBundle/SitemapLockTest.php
-
-		-
 			message: "#^Method Shopware\\\\Tests\\\\Unit\\\\Bundle\\\\SitemapBundle\\\\SitemapNameGeneratorTest\\:\\:testPathGeneration\\(\\) has no return type specified\\.$#"
 			count: 1
 			path: tests/Unit/Bundle/SitemapBundle/SitemapNameGeneratorTest.php

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -24,7 +26,9 @@
 namespace Shopware\Tests\Unit\Bundle\SitemapBundle;
 
 use DateTime;
+use DateTimeInterface;
 use DateTimeZone;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Shopware\Bundle\SitemapBundle\Service\SitemapLock;
 use Shopware\Bundle\StoreFrontBundle\Service\Core\CoreCache;
@@ -33,14 +37,11 @@ use Shopware\Models\Shop\Shop;
 class SitemapLockTest extends TestCase
 {
     /**
-     * @var CoreCache
+     * @var CoreCache&MockObject
      */
-    private $cacheMock;
+    private CoreCache $cacheMock;
 
-    /**
-     * @var int
-     */
-    private $lifeTime;
+    private int $lifeTime;
 
     public function setUp(): void
     {
@@ -48,23 +49,16 @@ class SitemapLockTest extends TestCase
 
         $this->lifeTime = 3600;
 
-        $data = sprintf('Locked: %s', (new DateTime('NOW', new DateTimeZone('UTC')))->format(DateTime::ATOM));
-
         $this->cacheMock = $this->getMockBuilder(CoreCache::class)
             ->disableOriginalConstructor()
-            ->setMethods(['save', 'fetch'])
             ->getMock();
 
         $this->cacheMock->method('fetch')
             ->with('sitemap-exporter-running-1')
             ->willReturn(false);
-
-        $this->cacheMock->method('save')
-            ->with('sitemap-exporter-running-1', $data, $this->lifeTime)
-            ->willReturn(false);
     }
 
-    public function testAcquireLockDefaultFalse()
+    public function testAcquireLockDefaultFalse(): void
     {
         $shop = new ShopMock();
         $shop->id = 1;
@@ -73,8 +67,13 @@ class SitemapLockTest extends TestCase
         static::assertFalse($lock->isLocked($shop));
     }
 
-    public function testAcquireLockWorks()
+    public function testAcquireLockWorks(): void
     {
+        $data = sprintf('Locked: %s', (new DateTime('NOW', new DateTimeZone('UTC')))->format(DateTimeInterface::ATOM));
+        $this->cacheMock->method('save')
+            ->with('sitemap-exporter-running-1', $data, $this->lifeTime)
+            ->willReturn(false);
+
         $shop = new ShopMock();
         $shop->id = 1;
 
