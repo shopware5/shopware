@@ -135,7 +135,6 @@ class GenericSearcher implements SearcherInterface
     {
         $arguments = [
             'index' => $this->indexFactory->createIndexConfiguration($this->domainName)->getAlias(),
-            'type' => $this->domainName,
             'body' => $search->toArray(),
             'rest_total_hits_as_int' => true,
             'track_total_hits' => true,
