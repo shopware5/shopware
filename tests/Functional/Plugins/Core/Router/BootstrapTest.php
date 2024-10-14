@@ -30,6 +30,7 @@ use Enlight_Controller_Request_RequestTestCase;
 use Enlight_Controller_Response_ResponseTestCase;
 use PHPUnit\Framework\TestCase;
 use Shopware\Tests\Functional\Traits\ContainerTrait;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 
 class BootstrapTest extends TestCase
@@ -51,5 +52,33 @@ class BootstrapTest extends TestCase
 
         static::assertSame(Response::HTTP_MOVED_PERMANENTLY, $response->getStatusCode());
         static::assertSame('shopware.php/www.test.de', $response->getHeader('location'));
+    }
+
+    public function testOnRouteStartupClearShopCookie(): void
+    {
+        $pluginBootstrap = $this->getContainer()->get('plugins')->Core()->Router();
+
+        $request = new Enlight_Controller_Request_RequestTestCase();
+        $request->setRequestUri('shopware.php/www.test.de');
+        $request->setCookie('shop', 2);
+        $response = new Enlight_Controller_Response_ResponseTestCase();
+        $args = new Enlight_Controller_EventArgs([
+            'request' => $request,
+            'response' => $response,
+        ]);
+        $pluginBootstrap->onRouteStartup($args);
+
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        // Option A
+        static::assertIsString($response->headers->get('Set-Cookie'));
+        static::assertStringContainsString('shop=deleted', $response->headers->get('Set-Cookie'));
+
+        // Option B
+        $cookie = $response->headers->getCookies();
+        static::assertCount(1, $cookie);
+        static::assertInstanceOf(Cookie::class, $cookie[0]);
+        static::assertSame('shop', $cookie[0]->getName());
+        static::assertTrue($cookie[0]->isCleared());
     }
 }
