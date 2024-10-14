@@ -32,7 +32,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `mpdf/mpdf` to version 8.2.4
 * Updated `laminas/laminas-code` to version 4.14.0 for PHP 8.1 and newer
 * Updated `laminas/laminas-escaper` to version 2.13.0 for PHP 8.1 and newer
-* Updated `phpunit/phpuit` to version 9.6.11
+* Updated `phpunit/phpunit` to version 9.6.21
 * Updated `setasign/fpdf` to version 1.8.6
 * Updated `setasign/fpdi` to version 2.6.1
 * Updated `symfony/polyfill-php80` to version 1.31.0
@@ -40,7 +40,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `symfony/polyfill-php82` to version 1.31.0
 * Updated `symfony/polyfill-php83` to version 1.31.0
 * Updated `symfony/http-kernel` to version 4.4.51
-* Updated `symfony/serializer` to version 5.4.41
+* Updated `symfony/serializer` to version 5.4.44
 * Updated `voku/anti-xss` to version 4.1.42
 * Updated `wikimedia/less.php` to version 5.1.1
 * Updated several indirect dependencies
