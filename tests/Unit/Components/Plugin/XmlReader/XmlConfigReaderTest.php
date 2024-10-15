@@ -168,6 +168,9 @@ class XmlConfigReaderTest extends TestCase
         XmlConfigReader::validateAttributeScope('invalid value');
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     private function readFile(string $file): array
     {
         return $this->configReader->read(

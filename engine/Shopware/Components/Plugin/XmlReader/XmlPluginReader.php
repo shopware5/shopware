@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -37,6 +39,11 @@ class XmlPluginReader extends XmlReaderBase
      */
     protected $xsdFile = __DIR__ . '/../schema/plugin.xsd';
 
+    /**
+     * @param DOMNodeList<DOMNode> $items
+     *
+     * @return list<string|null>|null
+     */
     public static function parseBlacklist(DOMNodeList $items): ?array
     {
         if ($items->length === 0) {
@@ -106,7 +113,7 @@ class XmlPluginReader extends XmlReaderBase
                 throw new InvalidArgumentException(sprintf('Element with name "compatibility" found multiple times in file "%s", but expected to be there only once', static::$xmlFile));
             }
             $compatibility = $compatibility->item(0);
-            if ($compatibility instanceof DOMNode) {
+            if ($compatibility instanceof DOMElement) {
                 $info['compatibility'] = [
                     'minVersion' => $compatibility->getAttribute('minVersion'),
                     'maxVersion' => $compatibility->getAttribute('maxVersion'),
@@ -129,6 +136,9 @@ class XmlPluginReader extends XmlReaderBase
         return $info;
     }
 
+    /**
+     * @return list<array{pluginName: string, minVersion?: string, maxVersion?: string, blacklist?: list<string|null>}>
+     */
     private function parseRequiredPlugins(DOMElement $requiredPluginNode): array
     {
         $plugins = [];

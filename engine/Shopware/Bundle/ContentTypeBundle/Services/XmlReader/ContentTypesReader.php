@@ -39,6 +39,11 @@ class ContentTypesReader extends XmlReaderBase
      */
     protected $xsdFile = __DIR__ . '/../../Resources/contenttypes.xsd';
 
+    /**
+     * @param array{file: string, type: string} $xmlFile
+     *
+     * @return array<array<string, mixed>>
+     */
     public function readType(array $xmlFile): array
     {
         $data = $this->read($xmlFile['file']);
@@ -53,6 +58,7 @@ class ContentTypesReader extends XmlReaderBase
 
     protected function parseFile(DOMDocument $xml): array
     {
+        /** @var DOMNodeList<DOMElement>|false $nodeList */
         $nodeList = (new DOMXPath($xml))->query('//types/type');
         if (!$nodeList instanceof DOMNodeList) {
             return [];
@@ -61,6 +67,11 @@ class ContentTypesReader extends XmlReaderBase
         return self::parseList($nodeList);
     }
 
+    /**
+     * @param DOMNodeList<DOMElement> $list
+     *
+     * @return array<array<string, mixed>>
+     */
     private static function parseList(DOMNodeList $list): array
     {
         if ($list->length === 0) {
@@ -68,7 +79,6 @@ class ContentTypesReader extends XmlReaderBase
         }
         $items = [];
 
-        /** @var DOMElement $item */
         foreach ($list as $item) {
             $item = self::parseItem($item);
             $items[$item['typeName']] = $item;
@@ -78,6 +88,9 @@ class ContentTypesReader extends XmlReaderBase
         return $items;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function parseItem(DOMElement $element): array
     {
         $item = [];
@@ -148,6 +161,9 @@ class ContentTypesReader extends XmlReaderBase
         return $item;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function parseField(DOMElement $element): array
     {
         $item = [];
@@ -172,17 +188,17 @@ class ContentTypesReader extends XmlReaderBase
         $item['custom'] = self::parseCustom($element);
         $item['options'] = self::parseCustom($element, 'options');
 
-        $store = $element->getElementsByTagName('store');
-
-        if ($store->length) {
-            /** @var DOMElement $storeElement */
-            $storeElement = $store->item(0);
-            $item['store'] = self::parseComboboStoreList($storeElement);
+        $storeItem = $element->getElementsByTagName('store')->item(0);
+        if ($storeItem) {
+            $item['store'] = self::parseComboStoreList($storeItem);
         }
 
         return $item;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function parseFieldset(DOMElement $element): array
     {
         $fieldSet = [];
@@ -202,6 +218,9 @@ class ContentTypesReader extends XmlReaderBase
         return $fieldSet;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private static function parseCustom(DOMElement $element, string $fieldName = 'custom'): array
     {
         $elements = $element->getElementsByTagName($fieldName);
@@ -209,32 +228,38 @@ class ContentTypesReader extends XmlReaderBase
             return [];
         }
 
-        return self::cleanArray(self::xmlToArray($elements->item(0)));
+        $elementsItem = $elements->item(0);
+        if (!$elementsItem instanceof DOMNode) {
+            return [];
+        }
+
+        return self::cleanArray(self::xmlToArray($elementsItem));
     }
 
     /**
      * @see https://stackoverflow.com/questions/14553547/what-is-the-best-php-dom-2-array-function
+     *
+     * @return array<array-key, mixed>
      */
-    private static function xmlToArray(DOMNode $root)
+    private static function xmlToArray(DOMNode $root): array
     {
         $result = [];
 
-        if ($root->hasAttributes()) {
-            foreach ($root->attributes as $attr) {
+        $attributes = $root->attributes;
+        if ($attributes) {
+            foreach ($attributes as $attr) {
                 $result['@attributes'][$attr->name] = $attr->value;
             }
         }
 
         if ($root->hasChildNodes()) {
             $children = $root->childNodes;
-            if ($children->length == 1) {
+            if ($children->length === 1) {
                 $child = $children->item(0);
-                if ($child->nodeType == XML_TEXT_NODE) {
+                if ($child && $child->nodeType === XML_TEXT_NODE) {
                     $result['_value'] = $child->nodeValue;
 
-                    return \count($result) == 1
-                        ? $result['_value']
-                        : $result;
+                    return \count($result) === 1 ? $result['_value'] : $result;
                 }
             }
             $groups = [];
@@ -254,6 +279,11 @@ class ContentTypesReader extends XmlReaderBase
         return $result;
     }
 
+    /**
+     * @param array<string, mixed> $haystack
+     *
+     * @return array<string, mixed>
+     */
     private static function cleanArray(array $haystack): array
     {
         foreach ($haystack as $key => $value) {
@@ -269,22 +299,24 @@ class ContentTypesReader extends XmlReaderBase
         return $haystack;
     }
 
-    private static function parseComboboStoreList(DOMElement $element): array
+    /**
+     * @return list<array{id: string, name: string}>
+     */
+    private static function parseComboStoreList(DOMElement $element): array
     {
         $storeOptions = $element->getElementsByTagName('option');
         if ($storeOptions->length === 0) {
             return [];
         }
         $options = [];
-        /** @var DOMElement $storeOption */
         foreach ($storeOptions as $storeOption) {
             $value = '';
             $label = '';
             if ($optionValue = $storeOption->getElementsByTagName('value')->item(0)) {
-                $value = $optionValue->nodeValue;
+                $value = (string) $optionValue->nodeValue;
             }
             if ($labelNode = $storeOption->getElementsByTagName('label')->item(0)) {
-                $label = $labelNode->nodeValue;
+                $label = (string) $labelNode->nodeValue;
             }
             $options[] = [
                 'id' => $value,

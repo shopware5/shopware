@@ -117,6 +117,9 @@ class XmlPluginReaderTest extends TestCase
         $this->readFile('plugin_multiple_versions');
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     private function readFile(string $fileName = 'plugin'): array
     {
         return $this->pluginReader->read(

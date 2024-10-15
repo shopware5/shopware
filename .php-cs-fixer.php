@@ -94,7 +94,7 @@ return (new Config())
         'no_alias_functions' => true,
         'no_useless_else' => true,
         'no_useless_return' => true,
-        'no_superfluous_phpdoc_tags' => true,
+        'no_superfluous_phpdoc_tags' => ['allow_mixed' => true],
         'nullable_type_declaration_for_default_null_value' => true,
         'operator_linebreak' => ['only_booleans' => true],
         'ordered_class_elements' => true,
