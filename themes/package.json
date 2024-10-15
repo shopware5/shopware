@@ -21,7 +21,7 @@
         "grunt": "^1.4.0",
         "grunt-chokidar": "^1.0.2",
         "grunt-contrib-eslint": "0.0.5",
-        "grunt-contrib-less": "^2.0.0",
+        "grunt-contrib-less": "^3.0.0",
         "grunt-contrib-uglify": "5.0.0",
         "grunt-file-exists": "0.1.4",
         "grunt-subgrunt": "github:tusbar/grunt-subgrunt#master",
