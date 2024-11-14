@@ -17,6 +17,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Changed the test kernel, so PHPUnit tests do no longer ignore PHP warnings and notices and are failing instead
 * Changed the `plugin.xsd` complexType `pluginType` so it could be validated again with newer `libxml2` versions
 
+* Updated `beberlei/assert` to version 3.3.3
 * Updated `beberlei/doctrineextensions` to version 1.4.0
 * Updated `cocur/slugify` to version 4.6.0 for PHP 8.0 and newer
 * Updated `doctrine/annotations` to version 1.14.4
