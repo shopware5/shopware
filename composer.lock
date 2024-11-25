@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9548dda81c609699ce106baaf01c6bdb",
+    "content-hash": "d0b840bd2675f0cb43952d46dad75be8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7727,23 +7727,23 @@
         },
         {
             "name": "wikimedia/less.php",
-            "version": "v5.1.1",
+            "version": "v5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wikimedia/less.php.git",
-                "reference": "29e14517d40b321bdbf8823eae1c327fc6b227f5"
+                "reference": "39b1fbbdd3d95c5279f231d2298f3866fa869fcd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/29e14517d40b321bdbf8823eae1c327fc6b227f5",
-                "reference": "29e14517d40b321bdbf8823eae1c327fc6b227f5",
+                "url": "https://api.github.com/repos/wikimedia/less.php/zipball/39b1fbbdd3d95c5279f231d2298f3866fa869fcd",
+                "reference": "39b1fbbdd3d95c5279f231d2298f3866fa869fcd",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.4.3"
             },
             "require-dev": {
-                "mediawiki/mediawiki-codesniffer": "43.0.0",
+                "mediawiki/mediawiki-codesniffer": "45.0.0",
                 "mediawiki/mediawiki-phan-config": "0.14.0",
                 "mediawiki/minus-x": "1.1.3",
                 "php-parallel-lint/php-console-highlighter": "1.0.0",
@@ -7796,9 +7796,9 @@
             ],
             "support": {
                 "issues": "https://github.com/wikimedia/less.php/issues",
-                "source": "https://github.com/wikimedia/less.php/tree/v5.1.1"
+                "source": "https://github.com/wikimedia/less.php/tree/v5.1.2"
             },
-            "time": "2024-08-09T13:59:17+00:00"
+            "time": "2024-11-13T15:44:20+00:00"
         }
     ],
     "packages-dev": [
