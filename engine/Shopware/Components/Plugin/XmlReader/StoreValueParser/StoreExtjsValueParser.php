@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -27,6 +29,9 @@ use DOMElement;
 
 class StoreExtjsValueParser implements StoreValueParserInterface
 {
+    /**
+     * @return string
+     */
     public function parse(DOMElement $element)
     {
         return $element->nodeValue ?: '';

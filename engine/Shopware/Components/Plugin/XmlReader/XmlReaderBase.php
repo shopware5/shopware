@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -154,7 +156,7 @@ abstract class XmlReaderBase implements XmlReaderInterface
      * - string if it is an extjs store
      * - array if it is a xml store
      *
-     * @return array|string|null
+     * @return list<array{0: string, 1: array<string, string>|null}>|string|null
      */
     public static function parseStoreNodeList(DOMNodeList $list)
     {
@@ -172,13 +174,17 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return StoreValueParserFactory::create($type)->parse($storeItem);
     }
 
+    /**
+     * @return array<string, mixed>|null
+     */
     public static function parseOptionsNodeList(DOMNodeList $optionsList): ?array
     {
-        if ($optionsList->length === 0) {
+        $optionsListItem = $optionsList->item(0);
+        if ($optionsListItem === null) {
             return null;
         }
 
-        $optionList = $optionsList->item(0)->childNodes;
+        $optionList = $optionsListItem->childNodes;
 
         if ($optionList->length === 0) {
             return null;
@@ -223,5 +229,8 @@ abstract class XmlReaderBase implements XmlReaderInterface
         return $type;
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     abstract protected function parseFile(DOMDocument $xml): array;
 }

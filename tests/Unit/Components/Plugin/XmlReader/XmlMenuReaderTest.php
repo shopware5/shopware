@@ -97,6 +97,9 @@ class XmlMenuReaderTest extends TestCase
         static::assertEquals('PaypalUnifiedSettings', $result[0]['children'][1]['controller']);
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     private function readFile(string $file): array
     {
         return $this->menuReader->read(

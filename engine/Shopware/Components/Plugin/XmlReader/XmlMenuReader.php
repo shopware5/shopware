@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -55,6 +57,9 @@ class XmlMenuReader extends XmlReaderBase
         return $menu;
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function parseEntry(DOMElement $entry): array
     {
         $menuEntry = [];
@@ -81,9 +86,7 @@ class XmlMenuReader extends XmlReaderBase
                 'controller'
             );
 
-            $menuEntry['parent'] = [
-                $identifiedBy => $parent->nodeValue,
-            ];
+            $menuEntry['parent'] = [$identifiedBy => $parent->nodeValue];
         }
 
         $active = self::getElementChildValueByName($entry, 'active');
@@ -99,9 +102,11 @@ class XmlMenuReader extends XmlReaderBase
         $children = $entry->getElementsByTagName('children');
         if ($children !== null && $children->length) {
             $children = $children->item(0);
-            $menuEntry['children'] = [];
-            foreach (self::getChildren($children, 'entry') as $child) {
-                $menuEntry['children'][] = $this->parseEntry($child);
+            if ($children !== null) {
+                $menuEntry['children'] = [];
+                foreach (self::getChildren($children, 'entry') as $child) {
+                    $menuEntry['children'][] = $this->parseEntry($child);
+                }
             }
         }
 

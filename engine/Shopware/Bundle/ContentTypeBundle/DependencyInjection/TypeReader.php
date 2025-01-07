@@ -47,6 +47,9 @@ class TypeReader
         return $result;
     }
 
+    /**
+     * @return list<array{file: string, type: string}>
+     */
     private function getConfigPaths(array $activePlugins, array $pluginDirectories): array
     {
         $configs = [];

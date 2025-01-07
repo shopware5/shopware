@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -30,7 +32,7 @@ interface StoreValueParserInterface
     /**
      * Parses store options.
      *
-     * @return string|array
+     * @return mixed
      */
     public function parse(DOMElement $element);
 }

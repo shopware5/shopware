@@ -23,7 +23,6 @@
 
 namespace Shopware\Tests\Unit\Components\Plugin\XmlReader\StoreValueParser;
 
-use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use DOMXPath;
@@ -34,20 +33,9 @@ use Symfony\Component\Config\Util\XmlUtils;
 
 class StoreXmlValueParserTest extends TestCase
 {
-    /**
-     * @var StoreXmlValueParser
-     */
-    private $parser;
+    private StoreXmlValueParser $parser;
 
-    /**
-     * @var DOMDocument
-     */
-    private $xmlFile;
-
-    /**
-     * @var DOMXPath
-     */
-    private $xpath;
+    private DOMXPath $xpath;
 
     /**
      * {@inheritdoc}
@@ -56,12 +44,10 @@ class StoreXmlValueParserTest extends TestCase
     {
         parent::__construct($name, $data, $dataName);
 
-        $this->xmlFile = XmlUtils::loadFile(
+        $this->xpath = new DOMXPath(XmlUtils::loadFile(
             __DIR__ . '/../examples/config/config_store_xml.xml',
             __DIR__ . '/../../../../../../engine/Shopware/Components/Plugin/schema/config.xsd'
-        );
-
-        $this->xpath = new DOMXPath($this->xmlFile);
+        ));
     }
 
     protected function setUp(): void
@@ -126,6 +112,9 @@ class StoreXmlValueParserTest extends TestCase
         );
         static::assertInstanceOf(DOMNodeList::class, $stores);
 
-        return $stores->item(0);
+        $item = $stores->item(0);
+        static::assertInstanceOf(DOMElement::class, $item);
+
+        return $item;
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Shopware 5
  * Copyright (c) shopware AG
@@ -29,12 +31,16 @@ use DOMNodeList;
 use DOMXPath;
 use Symfony\Component\Config\Util\XmlUtils;
 
+/**
+ * @phpstan-type Cronjob array{name?: string, action?: string, active?: bool, interval?: int, disable_on_error?: bool}
+ */
 class XmlCronjobReader extends XmlReaderBase
 {
     protected $xsdFile = __DIR__ . '/../schema/cronjob.xsd';
 
     protected function parseFile(DOMDocument $xml): array
     {
+        /** @var DOMNodeList<DOMElement>|false $nodeList */
         $nodeList = (new DOMXPath($xml))->query('//cronjobs/cronjob');
         if (!$nodeList instanceof DOMNodeList) {
             return [];
@@ -43,6 +49,11 @@ class XmlCronjobReader extends XmlReaderBase
         return $this->parseList($nodeList);
     }
 
+    /**
+     * @param DOMNodeList<DOMElement> $list
+     *
+     * @return list<Cronjob>
+     */
     private function parseList(DOMNodeList $list): array
     {
         if ($list->length === 0) {
@@ -58,6 +69,9 @@ class XmlCronjobReader extends XmlReaderBase
         return $items;
     }
 
+    /**
+     * @return Cronjob
+     */
     private function parseItem(DOMElement $element): array
     {
         $item = [];

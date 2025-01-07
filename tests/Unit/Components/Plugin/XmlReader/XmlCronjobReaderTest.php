@@ -86,6 +86,9 @@ class XmlCronjobReaderTest extends TestCase
         static::assertCount(0, $result);
     }
 
+    /**
+     * @return array<array-key, mixed>
+     */
     private function readFile(): array
     {
         return $this->cronjobReader->read(
