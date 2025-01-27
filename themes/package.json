@@ -28,6 +28,6 @@
         "gruntify-eslint": "5.0.0",
         "jit-grunt": "0.10.0",
         "load-grunt-config": "^4.0.1",
-        "md5-file": "^4.0.0"
+        "md5-file": "^5.0.0"
     }
 }
