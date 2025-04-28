@@ -28,7 +28,7 @@
     },
     "homepage": "https://github.com/shopware5/shopware#readme",
     "dependencies": {
-        "flatpickr": "2.6.3",
+        "flatpickr": "4.6.13",
         "jquery": "3.7.1",
         "jquery.event.move": "git+https://github.com/stephband/jquery.event.move.git",
         "jquery.event.swipe": "0.5.4",
