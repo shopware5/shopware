@@ -7,7 +7,6 @@ namespace Doctrine\ORM\Persisters\Entity;
 use BackedEnum;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Expr\Comparison;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -16,6 +15,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\Deprecations\Deprecation;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Internal\CriteriaOrderings;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use Doctrine\ORM\Mapping\QuoteStrategy;
@@ -26,11 +26,13 @@ use Doctrine\ORM\Persisters\Exception\InvalidOrientation;
 use Doctrine\ORM\Persisters\Exception\UnrecognizedField;
 use Doctrine\ORM\Persisters\SqlExpressionVisitor;
 use Doctrine\ORM\Persisters\SqlValueVisitor;
+use Doctrine\ORM\Proxy\DefaultProxyClassNameResolver;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\QueryException;
 use Doctrine\ORM\Repository\Exception\InvalidFindByCall;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Utility\IdentifierFlattener;
+use Doctrine\ORM\Utility\LockSqlHelper;
 use Doctrine\ORM\Utility\PersisterHelper;
 use LengthException;
 
@@ -88,10 +90,13 @@ use function trim;
  * Subclasses can be created to provide custom persisting and querying strategies,
  * i.e. spanning multiple tables.
  *
- * @psalm-import-type AssociationMapping from ClassMetadata
+ * @phpstan-import-type AssociationMapping from ClassMetadata
  */
 class BasicEntityPersister implements EntityPersister
 {
+    use CriteriaOrderings;
+    use LockSqlHelper;
+
     /** @var array<string,string> */
     private static $comparisonMap = [
         Comparison::EQ          => '= %s',
@@ -138,7 +143,7 @@ class BasicEntityPersister implements EntityPersister
     /**
      * Queued inserts.
      *
-     * @psalm-var array<int, object>
+     * @phpstan-var array<int, object>
      */
     protected $queuedInserts = [];
 
@@ -183,7 +188,7 @@ class BasicEntityPersister implements EntityPersister
      *
      * @var IdentifierFlattener
      */
-    private $identifierFlattener;
+    protected $identifierFlattener;
 
     /** @var CachedPersisterContext */
     protected $currentPersisterContext;
@@ -193,6 +198,9 @@ class BasicEntityPersister implements EntityPersister
 
     /** @var CachedPersisterContext */
     private $noLimitsContext;
+
+    /** @var ?string */
+    private $filterHash = null;
 
     /**
      * Initializes a new <tt>BasicEntityPersister</tt> that uses the given EntityManager
@@ -256,17 +264,17 @@ class BasicEntityPersister implements EntityPersister
     public function executeInserts()
     {
         if (! $this->queuedInserts) {
-            return [];
+            return;
         }
 
-        $postInsertIds  = [];
+        $uow            = $this->em->getUnitOfWork();
         $idGenerator    = $this->class->idGenerator;
         $isPostInsertId = $idGenerator->isPostInsertGenerator();
 
         $stmt      = $this->conn->prepare($this->getInsertSQL());
         $tableName = $this->class->getTableName();
 
-        foreach ($this->queuedInserts as $entity) {
+        foreach ($this->queuedInserts as $key => $entity) {
             $insertData = $this->prepareInsertData($entity);
 
             if (isset($insertData[$tableName])) {
@@ -280,12 +288,10 @@ class BasicEntityPersister implements EntityPersister
             $stmt->executeStatement();
 
             if ($isPostInsertId) {
-                $generatedId     = $idGenerator->generateId($this->em, $entity);
-                $id              = [$this->class->identifier[0] => $generatedId];
-                $postInsertIds[] = [
-                    'generatedId' => $generatedId,
-                    'entity' => $entity,
-                ];
+                $generatedId = $idGenerator->generateId($this->em, $entity);
+                $id          = [$this->class->identifier[0] => $generatedId];
+
+                $uow->assignPostInsertId($entity, $generatedId);
             } else {
                 $id = $this->class->getIdentifierValues($entity);
             }
@@ -293,11 +299,16 @@ class BasicEntityPersister implements EntityPersister
             if ($this->class->requiresFetchAfterChange) {
                 $this->assignDefaultVersionAndUpsertableValues($entity, $id);
             }
+
+            // Unset this queued insert, so that the prepareUpdateData() method knows right away
+            // (for the next entity already) that the current entity has been written to the database
+            // and no extra updates need to be scheduled to refer to it.
+            //
+            // In \Doctrine\ORM\UnitOfWork::executeInserts(), the UoW already removed entities
+            // from its own list (\Doctrine\ORM\UnitOfWork::$entityInsertions) right after they
+            // were given to our addInsert() method.
+            unset($this->queuedInserts[$key]);
         }
-
-        $this->queuedInserts = [];
-
-        return $postInsertIds;
     }
 
     /**
@@ -374,9 +385,9 @@ class BasicEntityPersister implements EntityPersister
      * @param mixed[] $id
      *
      * @return int[]|null[]|string[]
-     * @psalm-return list<int|string|null>
+     * @phpstan-return list<int|string|null>
      */
-    private function extractIdentifierTypes(array $id, ClassMetadata $versionedClass): array
+    final protected function extractIdentifierTypes(array $id, ClassMetadata $versionedClass): array
     {
         $types = [];
 
@@ -622,7 +633,7 @@ class BasicEntityPersister implements EntityPersister
      * @param bool   $isInsert Whether the data to be prepared refers to an insert statement.
      *
      * @return mixed[][] The prepared data.
-     * @psalm-return array<string, array<array-key, mixed|null>>
+     * @phpstan-return array<string, array<array-key, mixed|null>>
      */
     protected function prepareUpdateData($entity, bool $isInsert = false)
     {
@@ -675,10 +686,30 @@ class BasicEntityPersister implements EntityPersister
             if ($newVal !== null) {
                 $oid = spl_object_id($newVal);
 
-                if (isset($this->queuedInserts[$oid]) || $uow->isScheduledForInsert($newVal)) {
-                    // The associated entity $newVal is not yet persisted, so we must
-                    // set $newVal = null, in order to insert a null value and schedule an
-                    // extra update on the UnitOfWork.
+                // If the associated entity $newVal is not yet persisted and/or does not yet have
+                // an ID assigned, we must set $newVal = null. This will insert a null value and
+                // schedule an extra update on the UnitOfWork.
+                //
+                // This gives us extra time to a) possibly obtain a database-generated identifier
+                // value for $newVal, and b) insert $newVal into the database before the foreign
+                // key reference is being made.
+                //
+                // When looking at $this->queuedInserts and $uow->isScheduledForInsert, be aware
+                // of the implementation details that our own executeInserts() method will remove
+                // entities from the former as soon as the insert statement has been executed and
+                // a post-insert ID has been assigned (if necessary), and that the UnitOfWork has
+                // already removed entities from its own list at the time they were passed to our
+                // addInsert() method.
+                //
+                // Then, there is one extra exception we can make: An entity that references back to itself
+                // _and_ uses an application-provided ID (the "NONE" generator strategy) also does not
+                // need the extra update, although it is still in the list of insertions itself.
+                // This looks like a minor optimization at first, but is the capstone for being able to
+                // use non-NULLable, self-referencing associations in applications that provide IDs (like UUIDs).
+                if (
+                    (isset($this->queuedInserts[$oid]) || $uow->isScheduledForInsert($newVal))
+                    && ! ($newVal === $entity && $this->class->isIdentifierNatural())
+                ) {
                     $uow->scheduleExtraUpdate($entity, [$field => [null, $newVal]]);
 
                     $newVal = null;
@@ -767,7 +798,7 @@ class BasicEntityPersister implements EntityPersister
      * @param object $entity The entity for which to prepare the data.
      *
      * @return mixed[][] The prepared data for the tables to update.
-     * @psalm-return array<string, mixed[]>
+     * @phpstan-return array<string, mixed[]>
      */
     protected function prepareInsertData($entity)
     {
@@ -850,17 +881,42 @@ class BasicEntityPersister implements EntityPersister
 
         $computedIdentifier = [];
 
+        /** @var array<string,mixed>|null $sourceEntityData */
+        $sourceEntityData = null;
+
         // TRICKY: since the association is specular source and target are flipped
         foreach ($owningAssoc['targetToSourceKeyColumns'] as $sourceKeyColumn => $targetKeyColumn) {
             if (! isset($sourceClass->fieldNames[$sourceKeyColumn])) {
-                throw MappingException::joinColumnMustPointToMappedField(
-                    $sourceClass->name,
-                    $sourceKeyColumn
-                );
-            }
+                // The likely case here is that the column is a join column
+                // in an association mapping. However, there is no guarantee
+                // at this point that a corresponding (generally identifying)
+                // association has been mapped in the source entity. To handle
+                // this case we directly reference the column-keyed data used
+                // to initialize the source entity before throwing an exception.
+                $resolvedSourceData = false;
+                if (! isset($sourceEntityData)) {
+                    $sourceEntityData = $this->em->getUnitOfWork()->getOriginalEntityData($sourceEntity);
+                }
 
-            $computedIdentifier[$targetClass->getFieldForColumn($targetKeyColumn)] =
-                $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
+                if (isset($sourceEntityData[$sourceKeyColumn])) {
+                    $dataValue = $sourceEntityData[$sourceKeyColumn];
+                    if ($dataValue !== null) {
+                        $resolvedSourceData                                                    = true;
+                        $computedIdentifier[$targetClass->getFieldForColumn($targetKeyColumn)] =
+                            $dataValue;
+                    }
+                }
+
+                if (! $resolvedSourceData) {
+                    throw MappingException::joinColumnMustPointToMappedField(
+                        $sourceClass->name,
+                        $sourceKeyColumn
+                    );
+                }
+            } else {
+                $computedIdentifier[$targetClass->getFieldForColumn($targetKeyColumn)] =
+                    $sourceClass->reflFields[$sourceClass->fieldNames[$sourceKeyColumn]]->getValue($sourceEntity);
+            }
         }
 
         $targetEntity = $this->load($computedIdentifier, null, $assoc);
@@ -904,7 +960,7 @@ class BasicEntityPersister implements EntityPersister
      */
     public function loadCriteria(Criteria $criteria)
     {
-        $orderBy = $criteria->getOrderings();
+        $orderBy = self::getCriteriaOrderings($criteria);
         $limit   = $criteria->getMaxResults();
         $offset  = $criteria->getFirstResult();
         $query   = $this->getSelectSQL($criteria, null, null, $limit, $offset, $orderBy);
@@ -1036,7 +1092,7 @@ class BasicEntityPersister implements EntityPersister
 
     /**
      * @param object $sourceEntity
-     * @psalm-param array<string, mixed> $assoc
+     * @phpstan-param array<string, mixed> $assoc
      *
      * @return Result
      *
@@ -1139,11 +1195,11 @@ class BasicEntityPersister implements EntityPersister
 
         switch ($lockMode) {
             case LockMode::PESSIMISTIC_READ:
-                $lockSql = ' ' . $this->platform->getReadLockSQL();
+                $lockSql = ' ' . $this->getReadLockSQL($this->platform);
                 break;
 
             case LockMode::PESSIMISTIC_WRITE:
-                $lockSql = ' ' . $this->platform->getWriteLockSQL();
+                $lockSql = ' ' . $this->getWriteLockSQL($this->platform);
                 break;
         }
 
@@ -1200,7 +1256,7 @@ class BasicEntityPersister implements EntityPersister
     /**
      * Gets the ORDER BY SQL snippet for ordered collections.
      *
-     * @psalm-param array<string, string> $orderBy
+     * @phpstan-param array<string, string> $orderBy
      *
      * @throws InvalidOrientation
      * @throws InvalidFindByCall
@@ -1264,7 +1320,7 @@ class BasicEntityPersister implements EntityPersister
      */
     protected function getSelectColumnsSQL()
     {
-        if ($this->currentPersisterContext->selectColumnListSql !== null) {
+        if ($this->currentPersisterContext->selectColumnListSql !== null && $this->filterHash === $this->em->getFilters()->getHash()) {
             return $this->currentPersisterContext->selectColumnListSql;
         }
 
@@ -1287,7 +1343,7 @@ class BasicEntityPersister implements EntityPersister
             }
 
             $isAssocToOneInverseSide = $assoc['type'] & ClassMetadata::TO_ONE && ! $assoc['isOwningSide'];
-            $isAssocFromOneEager     = $assoc['type'] !== ClassMetadata::MANY_TO_MANY && $assoc['fetch'] === ClassMetadata::FETCH_EAGER;
+            $isAssocFromOneEager     = $assoc['type'] & ClassMetadata::TO_ONE && $assoc['fetch'] === ClassMetadata::FETCH_EAGER;
 
             if (! ($isAssocFromOneEager || $isAssocToOneInverseSide)) {
                 continue;
@@ -1371,6 +1427,7 @@ class BasicEntityPersister implements EntityPersister
         }
 
         $this->currentPersisterContext->selectColumnListSql = implode(', ', $columnList);
+        $this->filterHash                                   = $this->em->getFilters()->getHash();
 
         return $this->currentPersisterContext->selectColumnListSql;
     }
@@ -1412,7 +1469,7 @@ class BasicEntityPersister implements EntityPersister
      * Gets the SQL join fragment used when selecting entities from a
      * many-to-many association.
      *
-     * @psalm-param AssociationMapping $manyToMany
+     * @phpstan-param AssociationMapping $manyToMany
      *
      * @return string
      */
@@ -1493,7 +1550,7 @@ class BasicEntityPersister implements EntityPersister
      * columns placed in the INSERT statements used by the persister.
      *
      * @return string[] The list of columns.
-     * @psalm-return list<string>
+     * @phpstan-return list<string>
      */
     protected function getInsertColumnList()
     {
@@ -1549,7 +1606,15 @@ class BasicEntityPersister implements EntityPersister
         $tableAlias   = $this->getSQLTableAlias($class->name, $root);
         $fieldMapping = $class->fieldMappings[$field];
         $sql          = sprintf('%s.%s', $tableAlias, $this->quoteStrategy->getColumnName($field, $class, $this->platform));
-        $columnAlias  = $this->getSQLColumnAlias($fieldMapping['columnName']);
+
+        $columnAlias = null;
+        if ($this->currentPersisterContext->rsm->hasColumnAliasByField($alias, $field)) {
+            $columnAlias = $this->currentPersisterContext->rsm->getColumnAliasByField($alias, $field);
+        }
+
+        if ($columnAlias === null) {
+            $columnAlias = $this->getSQLColumnAlias($fieldMapping['columnName']);
+        }
 
         $this->currentPersisterContext->rsm->addFieldResult($alias, $columnAlias, $field);
         if (! empty($fieldMapping['enumType'])) {
@@ -1601,11 +1666,11 @@ class BasicEntityPersister implements EntityPersister
 
         switch ($lockMode) {
             case LockMode::PESSIMISTIC_READ:
-                $lockSql = $this->platform->getReadLockSQL();
+                $lockSql = $this->getReadLockSQL($this->platform);
 
                 break;
             case LockMode::PESSIMISTIC_WRITE:
-                $lockSql = $this->platform->getWriteLockSQL();
+                $lockSql = $this->getWriteLockSQL($this->platform);
                 break;
         }
 
@@ -1625,7 +1690,7 @@ class BasicEntityPersister implements EntityPersister
      * Gets the FROM and optionally JOIN conditions to lock the entity managed by this persister.
      *
      * @param int|null $lockMode One of the Doctrine\DBAL\LockMode::* constants.
-     * @psalm-param LockMode::*|null $lockMode
+     * @phpstan-param LockMode::*|null $lockMode
      *
      * @return string
      */
@@ -1740,10 +1805,10 @@ class BasicEntityPersister implements EntityPersister
     /**
      * Builds the left-hand-side of a where condition statement.
      *
-     * @psalm-param AssociationMapping|null $assoc
+     * @phpstan-param AssociationMapping|null $assoc
      *
      * @return string[]
-     * @psalm-return list<string>
+     * @phpstan-return list<string>
      *
      * @throws InvalidFindByCall
      * @throws UnrecognizedField
@@ -1814,8 +1879,8 @@ class BasicEntityPersister implements EntityPersister
      * or alter the criteria by which entities are selected.
      *
      * @param AssociationMapping|null $assoc
-     * @psalm-param array<string, mixed> $criteria
-     * @psalm-param array<string, mixed>|null $assoc
+     * @phpstan-param array<string, mixed> $criteria
+     * @phpstan-param array<string, mixed>|null $assoc
      *
      * @return string
      */
@@ -1856,7 +1921,7 @@ class BasicEntityPersister implements EntityPersister
      * Builds criteria and execute SQL statement to fetch the one to many entities from.
      *
      * @param object $sourceEntity
-     * @psalm-param AssociationMapping $assoc
+     * @phpstan-param AssociationMapping $assoc
      */
     private function getOneToManyStatement(
         array $assoc,
@@ -1939,7 +2004,7 @@ class BasicEntityPersister implements EntityPersister
      *                             - class to which the field belongs to
      *
      * @return mixed[][]
-     * @psalm-return array{0: array, 1: list<int|string|null>}
+     * @phpstan-return array{0: array, 1: list<int|string|null>}
      */
     private function expandToManyParameters(array $criteria): array
     {
@@ -1964,7 +2029,7 @@ class BasicEntityPersister implements EntityPersister
      * @param mixed $value
      *
      * @return int[]|null[]|string[]
-     * @psalm-return list<int|string|null>
+     * @phpstan-return list<int|string|null>
      *
      * @throws QueryException
      */
@@ -2039,7 +2104,7 @@ class BasicEntityPersister implements EntityPersister
      *
      * @param mixed $value
      *
-     * @psalm-return list<mixed>
+     * @phpstan-return list<mixed>
      */
     private function getIndividualValue($value): array
     {
@@ -2051,7 +2116,7 @@ class BasicEntityPersister implements EntityPersister
             return [$value->value];
         }
 
-        $valueClass = ClassUtils::getClass($value);
+        $valueClass = DefaultProxyClassNameResolver::getClass($value);
 
         if ($this->em->getMetadataFactory()->isTransient($valueClass)) {
             return [$value];
@@ -2111,7 +2176,7 @@ class BasicEntityPersister implements EntityPersister
      * Generates the appropriate join SQL for the given join column.
      *
      * @param array[] $joinColumns The join columns definition of an association.
-     * @psalm-param array<array<string, mixed>> $joinColumns
+     * @phpstan-param array<array<string, mixed>> $joinColumns
      *
      * @return string LEFT JOIN if one of the columns is nullable, INNER JOIN otherwise.
      */
@@ -2184,7 +2249,7 @@ class BasicEntityPersister implements EntityPersister
 
     /**
      * @return string[]
-     * @psalm-return list<string>
+     * @phpstan-return list<string>
      */
     protected function getClassIdentifiersTypes(ClassMetadata $class): array
     {
