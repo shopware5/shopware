@@ -1,10 +1,16 @@
 { pkgs, lib, inputs, config, ... }:
-
+let
+  # Use an older nixpkgs-version, containing Node 18.
+  oldPkgs = import (fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/nixos-23.11.tar.gz";
+    sha256 = "1f5d2g1p6nfwycpmrnnmc2xmcszp804adp16knjvdkj8nz36y1fg";
+  }) {
+  system = pkgs.system;
+  };
+in
 {
-  imports = [ inputs.nur.nixosModules.nur ];
-
   languages.javascript.enable = true;
-  languages.javascript.package = lib.mkDefault pkgs.nodejs-18_x;
+  languages.javascript.package = lib.mkDefault oldPkgs.nodejs-18_x;
 
     languages.php = {
         enable = lib.mkDefault true;
@@ -47,6 +53,13 @@
   services.caddy.virtualHosts."http://localhost:8000" = {
     extraConfig = ''
       root * .
+
+      handle /recovery/* {
+        php_fastcgi unix/${config.languages.php.fpm.pools.web.socket} {
+          index {path}/index.php
+        }
+      }
+
       php_fastcgi unix/${config.languages.php.fpm.pools.web.socket} {
         index shopware.php
       }
