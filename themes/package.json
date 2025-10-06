@@ -11,7 +11,7 @@
         "configBackend": "eslint --print-config Backend/ExtJs/backend"
     },
     "devDependencies": {
-        "eslint": "^7.0.0",
+        "eslint": "^9.37.0",
         "eslint-config-standard": "^16.0.3",
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-jest": "^26.1.1",
