@@ -138,7 +138,7 @@ jobs:
 
             -   name: Archive results
                 if: always()
-                uses: actions/upload-artifact@v4
+                uses: actions/upload-artifact@v5
                 with:
                     name: build-data-${{ matrix.MINK_TAG }}
                     path: build/logs
