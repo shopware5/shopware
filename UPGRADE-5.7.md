@@ -25,6 +25,7 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `doctrine/inflector` to version 2.0.10
 * Updated `doctrine/orm` to version 2.15.5
 * Updated `doctrine/persistence` to version 3.4.0
+* Updated `elasticsearch/elasticsearch` to version 7.17.3
 * Updated `friendsofphp/proxy-manager-lts` to version 1.0.18
 * Updated `google/cloud-storage` to version 1.39.0
 * Updated `guzzlehttp/guzzle` to version 7.9.2
@@ -33,13 +34,13 @@ This changelog references changes done in Shopware 5.7 patch versions.
 * Updated `mpdf/mpdf` to version 8.2.5
 * Updated `laminas/laminas-code` to version 4.16.0 for PHP 8.1 and newer
 * Updated `laminas/laminas-escaper` to version 2.16.0 for PHP 8.1 and newer
-* Updated `phpunit/phpunit` to version 9.6.21
+* Updated `phpunit/phpunit` to version 9.6.29
 * Updated `setasign/fpdf` to version 1.8.6
-* Updated `setasign/fpdi` to version 2.6.3
-* Updated `symfony/polyfill-php80` to version 1.31.0
-* Updated `symfony/polyfill-php81` to version 1.31.0
-* Updated `symfony/polyfill-php82` to version 1.31.0
-* Updated `symfony/polyfill-php83` to version 1.31.0
+* Updated `setasign/fpdi` to version 2.6.4
+* Updated `symfony/polyfill-php80` to version 1.33.0
+* Updated `symfony/polyfill-php81` to version 1.33.0
+* Updated `symfony/polyfill-php82` to version 1.33.0
+* Updated `symfony/polyfill-php83` to version 1.33.0
 * Updated `symfony/process` to version 5.4.47
 * Updated `symfony/http-kernel` to version 4.4.51
 * Updated `symfony/serializer` to version 5.4.45
