@@ -38,7 +38,7 @@ jobs:
                     - '8.3'
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
@@ -85,7 +85,7 @@ jobs:
                     - "3306:3306"
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
@@ -125,7 +125,7 @@ jobs:
                 ports:
                     - "3306:3306"
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
             -   name: Setup PHP
                 uses: shivammathur/setup-php@v2
                 with:
@@ -172,7 +172,7 @@ jobs:
                 ports:
                     - "3306:3306"
         steps:
-            -   uses: actions/checkout@v5
+            -   uses: actions/checkout@v6
             -   name: Get Composer Cache Directory
                 id: composer-cache
                 run: |
