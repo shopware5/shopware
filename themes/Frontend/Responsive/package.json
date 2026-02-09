@@ -42,7 +42,7 @@
         "grunt": "^1.6.1",
         "grunt-contrib-clean": "^2.0.1",
         "grunt-contrib-copy": "1.0.0",
-        "grunt-modernizr": "^4.0.1",
+        "grunt-modernizr": "^5.0.3",
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0"
     }
