@@ -126,7 +126,7 @@ jobs:
 
             -   name: Archive results
                 if: always()
-                uses: actions/upload-artifact@v6
+                uses: actions/upload-artifact@v7
                 with:
                     path: ${{ env.PACKAGE_PREFIX }}${{ env.PACKAGE_DELIMITER }}${{ env.SHA }}.zip
 
