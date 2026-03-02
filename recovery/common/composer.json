@@ -2,7 +2,7 @@
     "require": {
         "php": "~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0",
         "knplabs/gaufrette": "0.11.1",
-        "pimple/pimple": "3.6.1",
+        "pimple/pimple": "3.6.2",
         "slim/slim": "2.6.3",
         "symfony/console": "~4.4.34",
         "symfony/finder": "~4.4.30",
