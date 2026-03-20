@@ -44,6 +44,6 @@
         "grunt-contrib-copy": "1.0.0",
         "grunt-modernizr": "^4.0.1",
         "jest": "^29.7.0",
-        "jest-environment-jsdom": "^29.7.0"
+        "jest-environment-jsdom": "^30.3.0"
     }
 }
