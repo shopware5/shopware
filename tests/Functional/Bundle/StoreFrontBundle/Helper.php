@@ -27,6 +27,8 @@ namespace Shopware\Tests\Functional\Bundle\StoreFrontBundle;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
+use Doctrine\ORM\Exception\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Enlight_Components_Db_Adapter_Pdo_Mysql;
 use Shopware\Bundle\StoreFrontBundle\Service\ListProductServiceInterface;
 use Shopware\Bundle\StoreFrontBundle\Struct\Customer\Group as CustomerGroupStruct;
@@ -45,11 +47,15 @@ use Shopware\Models\Article\Configurator\Group as ConfiguratorGroup;
 use Shopware\Models\Article\Configurator\Option;
 use Shopware\Models\Article\Supplier;
 use Shopware\Models\Category\Category;
+use Shopware\Models\Customer\Customer;
+use Shopware\Models\Customer\Discount as CustomerDiscount;
+use Shopware\Models\Customer\Group;
 use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Price\Discount;
 use Shopware\Models\Price\Group as PriceGroup;
 use Shopware\Models\Shop\Currency;
 use Shopware\Models\Shop\Shop as ShopModel;
+use Shopware\Models\Tax\Rule as TaxRule;
 use Shopware\Models\Tax\Tax as TaxModel;
 use Shopware\Tests\Functional\Bundle\StoreFrontBundle\Helper\ProgressHelper;
 use Shopware_Components_Config;
@@ -359,6 +365,40 @@ class Helper
         $this->entityManager->clear();
 
         return $tax;
+    }
+
+    /**
+     * @param array<string, string|int|Customer|Group|bool> $data
+     *
+     * @throws ORMException
+     * @throws OptimisticLockException
+     */
+    public function createTaxRule(array $data): TaxRule
+    {
+        $taxRule = new TaxRule();
+        $taxRule->fromArray($data);
+
+        $this->entityManager->persist($taxRule);
+        $this->entityManager->flush();
+
+        return $taxRule;
+    }
+
+    /**
+     * @param array<string, string|int|Customer|Group|bool> $data
+     *
+     * @throws OptimisticLockException
+     * @throws ORMException
+     */
+    public function createCustomerGroupDiscount(array $data): CustomerDiscount
+    {
+        $customerDiscount = new CustomerDiscount();
+        $customerDiscount->fromArray($data);
+
+        $this->entityManager->persist($customerDiscount);
+        $this->entityManager->flush();
+
+        return $customerDiscount;
     }
 
     public function createCurrency(array $data = []): Currency
