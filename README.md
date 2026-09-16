@@ -1,3 +1,10 @@
+# Repository No Longer Maintained
+
+⚠️ Please note that this repository is no longer actively monitored or maintained. Updates may occur occasionally, but this cannot be guaranteed.
+
+ℹ️ Safefive offers a Shopware 5 version with ongoing infrastructure compatibility updates. You can find this version of Shopware 5 here: https://github.com/safefive/shopware/
+
+
 # Shopware 5
 
 ![Build Status](https://github.com/shopware5/shopware/workflows/PHPUnit/badge.svg)
