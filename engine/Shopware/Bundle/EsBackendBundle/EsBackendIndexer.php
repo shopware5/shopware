@@ -148,7 +148,6 @@ class EsBackendIndexer
         $this->client->bulk(
             [
                 'index' => $index,
-                'type' => $repository->getDomainName(),
                 'body' => $documents,
             ]
         );
@@ -258,9 +257,7 @@ class EsBackendIndexer
 
         $arguments = [
             'index' => $index,
-            'type' => $entity->getDomainName(),
             'body' => $merged,
-            'include_type_name' => true,
         ];
 
         $this->client->indices()->putMapping(
