@@ -30,6 +30,7 @@ use Shopware\Models\Customer\Group as CustomerGroup;
 use Shopware\Models\Shop\Shop;
 use Shopware\Models\Shop\Template;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 
 class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_Bootstrap
 {
@@ -54,6 +55,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
     public function onRouteStartup(Enlight_Controller_EventArgs $args)
     {
         $request = $args->getRequest();
+        $response = $args->getResponse();
 
         if (str_starts_with($request->getPathInfo(), '/backend')
             || str_starts_with($request->getPathInfo(), '/api/')
@@ -61,7 +63,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
             return;
         }
 
-        $shop = $this->getShopByRequest($request);
+        $shop = $this->getShopByRequest($request, $response);
 
         if (!$shop->getHost()) {
             $shop->setHost($request->getHttpHost());
@@ -307,7 +309,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
      *
      * @return Shop
      */
-    protected function getShopByRequest(Request $request)
+    protected function getShopByRequest(Request $request, Response $response)
     {
         $repository = $this->get(ModelManager::class)->getRepository(Shop::class);
 
@@ -318,6 +320,7 @@ class Shopware_Plugins_Core_Router_Bootstrap extends Shopware_Components_Plugin_
 
         if ($shop === null && $request->getCookie('shop') !== null) {
             $shop = $repository->getActiveById($request->getCookie('shop'));
+            $response->headers->clearCookie('shop');
         }
 
         if ($shop && $request->getCookie('shop') !== null && $request->getPost('__shop') === null) {
